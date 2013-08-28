@@ -1,0 +1,48 @@
+<div class="wrap">
+    <div class="topnavbar">
+        <div class="loginbox">
+            <div class="login"><script type="text/javascript">document.write(UserManager.build());</script></div>
+        </div>
+        <div class="ctrlpanel"><a class="home">home</a><a class="favorite">favorite</a><a class="contact">contactus</a><a class="sitemap">sitemap</a></div>
+    </div>
+    <div class="shadow"></div>
+</div>
+<div class="wrap">
+    <div class="logo">
+        <p class="center">&mdash; test &mdash;</p>
+        <p><a href="${contextPath}"><img src="${resource}/images/logo.gif"/></a></p>
+        <p class="link"><a href="http://www.shufa518.com">test1</a>|<a href="http://guoxue.mmzh.com">test1</a>|<a href="http://zhuanke.shufa518.com">test1</a></p>
+    </div>
+    <div class="menu">
+        <div class="ad" style="width: 720px; height: 80px; background-color: #c0c0c0; color: #ffffff;">720 * 80</div>
+        <div class="main">
+            <a href="http://www.shufa518.com" class="current">home</a>|<a href="http://www.mmzh.com">test</a>|<a href="http://book.shufa518.com/store.html">test</a>|<a href="http://comic.shufa518.com">test</a>|<a href="http://book.shufa518.com/rank.html">test</a>|<a href="http://news.shufa518.com">test</a>|<a href="http://author.shufa518.com">test</a>|<a href="http://home.shufa518.com">test</a>|<a href="http://bbs.shufa518.com">test</a>
+        </div>
+    </div>
+</div>
+<div class="wrap">
+    <div class="searchbar">
+        <script type="text/javascript" src="${resource}/js/laba.js"></script>
+        <div class="search">
+            <form name="searchForm" action="http://search.shufa518.com" method="get" target="_blank">
+                <input type="hidden" value="all" name="searchType"/>
+                <input type="button" class="button" value="search"/>
+                <div id="search" class="dropdown" style="float: right;">
+                    <span class="text" selected="0" value="AL"><a href="javascript:void(0)">test</a></span>
+                    <em></em>
+                    <div class="list" style="height: auto; display: none;">
+                        <ul>
+                            <li value="AL" index="0" class="selected"><a href="javascript:void(0)">test</a></li>
+                            <li value="32" index="1"><a href="javascript:void(0)">test</a></li>
+                            <li value="31" index="2"><a href="javascript:void(0)">test</a></li>
+                            <li value="33" index="3"><a href="javascript:void(0)">test</a></li>
+                            <li value="34" index="4"><a href="javascript:void(0)">test</a></li>
+                            <li value="35" index="5"><a href="javascript:void(0)">test</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <input type="text" name="keyword" class="text" value=""/>
+            </form>
+        </div>
+    </div>
+</div>

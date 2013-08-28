@@ -1,0 +1,34 @@
+/*
+ * $RCSfile: StackTraceTag.java,v $$
+ * $Revision: 1.1  $
+ * $Date: 2013-2-26  $
+ *
+ * Copyright (C) 2008 Skin, Inc. All rights reserved.
+ *
+ * This software is the proprietary information of Skin, Inc.
+ * Use is subject to license terms.
+ */
+package com.skin.ayada.jstl.core;
+
+import java.io.PrintWriter;
+
+import com.skin.ayada.tagext.Tag;
+import com.skin.ayada.tagext.TagSupport;
+
+/**
+ * <p>Title: StackTraceTag</p>
+ * <p>Description: </p>
+ * <p>Copyright: Copyright (c) 2006</p>
+ * @author xuesong.net
+ * @version 1.0
+ */
+public class StackTraceTag extends TagSupport
+{
+    public int doStartTag()
+    {
+        PrintWriter out = new PrintWriter(this.pageContext.getOut());
+        new RuntimeException().printStackTrace(out);
+        out.flush();
+        return Tag.SKIP_BODY;
+    }
+}
