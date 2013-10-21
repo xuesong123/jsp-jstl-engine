@@ -48,7 +48,7 @@ public class MemMonitor
 
     /**
      * @param out
-     * @author chenyankui
+     * @author xuesong.net
      */
     public void test(PrintWriter out)
     {
@@ -161,7 +161,7 @@ public class MemMonitor
     /**
      * @param millis
      * @return String
-     * @author chenyankui
+     * @author xuesong.net
      */
     protected static String format(long millis)
     {
