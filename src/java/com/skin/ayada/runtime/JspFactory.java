@@ -10,7 +10,6 @@
  */
 package com.skin.ayada.runtime;
 
-import java.io.BufferedWriter;
 import java.io.Writer;
 
 import com.skin.ayada.jstl.TagLibrary;
@@ -32,7 +31,7 @@ public class JspFactory
      */
     public static PageContext getPageContext(Writer out)
     {
-        JspWriter jspWriter = new JspWriter(new BufferedWriter(out, 4096));
+        JspWriter jspWriter = new JspWriter(out);
         DefaultPageContext pageContext = new DefaultPageContext(jspWriter);
         ExpressionContext expressionContext = ExpressionFactory.getExpressionContext(pageContext);
         TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();
@@ -47,7 +46,7 @@ public class JspFactory
      */
     public static PageContext getPageContext(TemplateContext templateContext, Writer out)
     {
-        JspWriter jspWriter = new JspWriter(new BufferedWriter(out, 4096));
+        JspWriter jspWriter = new JspWriter(out);
         DefaultPageContext pageContext = new DefaultPageContext(jspWriter);
         ExpressionContext expressionContext = ExpressionFactory.getExpressionContext(pageContext);
         TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();
