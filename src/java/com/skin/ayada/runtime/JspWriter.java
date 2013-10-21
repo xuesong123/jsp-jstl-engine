@@ -31,13 +31,21 @@ public class JspWriter extends Writer
      */
     public JspWriter(Writer out)
     {
+        this(out, 4096);
+    }
+
+    /**
+     * @param out
+     */
+    public JspWriter(Writer out, int bufferSize)
+    {
         this.out = out;
     }
 
     @Override
-    public void write(char[] cbuf, int off, int len) throws IOException
+    public void write(char[] cbuf, int offset, int length) throws IOException
     {
-        this.out.write(cbuf, off, len);
+        this.out.write(cbuf, offset, length);
     }
 
     /**

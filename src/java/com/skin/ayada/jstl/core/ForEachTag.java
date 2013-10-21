@@ -39,9 +39,7 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
      */
     public int doStartTag()
     {
-        System.out.println("x1 index: " + this.getIndex());
         super.doStartTag();
-        System.out.println("x2 index: " + this.getIndex());
 
         if(this.hasItems == false)
         {
@@ -63,9 +61,7 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
 
         if(this.hasNext())
         {
-            System.out.println("x3 index: " + this.getIndex());
             this.setCurrent(this.next());
-            System.out.println("x4 index: " + this.getIndex());
         }
         else
         {
@@ -308,8 +304,22 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
 
     protected ForEachIterator toForEachIterator(String s)
     {
+        String value = null;
+        List<String> list = new ArrayList<String>();
         StringTokenizer st = new StringTokenizer(s, ",");
-        return toForEachIterator(((Enumeration<?>)(st)));
+
+        while(st.hasMoreElements())
+        {
+            value = (String)(st.nextElement());
+            value = value.trim();
+
+            if(value.length() > 0)
+            {
+                list.add(value);
+            }
+        }
+
+        return toForEachIterator(list);
     }
 
     protected interface ForEachIterator

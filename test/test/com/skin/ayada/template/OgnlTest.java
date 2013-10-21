@@ -19,8 +19,7 @@ import ognl.OgnlException;
 import test.com.skin.ayada.handler.UserHandler;
 import test.com.skin.ayada.model.User;
 
-import com.skin.ayada.ognl.util.OgnlUtil;
-
+import com.skin.ayada.jstl.util.BeanUtil;
 
 /**
  * <p>Title: OgnlTest</p>
@@ -35,7 +34,7 @@ public class OgnlTest
     {
         try
         {
-            OgnlUtil ognlUtil = new OgnlUtil();
+            BeanUtil ognlUtil = new BeanUtil();
             Map<Object, Object> map = new HashMap<Object, Object>();
             map.put("util", ognlUtil);
             map.put("stringValue", "  ");

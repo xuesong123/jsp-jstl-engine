@@ -34,5 +34,6 @@ public class ForEachTagTest
         forEachTag.setItems("1, 2, 3");
         int flag = forEachTag.doStartTag();
         System.out.println("index: " + forEachTag.getIndex());
+        System.out.println("flag: " + flag);
     }
 }

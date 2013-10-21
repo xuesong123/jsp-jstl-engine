@@ -17,7 +17,6 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.skin.ayada.jstl.TagLibraryFactory;
 import com.skin.ayada.util.ClassUtil;
 
 /**
@@ -29,7 +28,7 @@ import com.skin.ayada.util.ClassUtil;
  */
 public class ExpressionFactory
 {
-    private static final Map<String, Object> attributes = getAttributes("tools.properties", "UTF-8");
+    private static final Map<String, Object> attributes = getAttributes("UTF-8");
 
     /**
      * @param pageContext
@@ -50,18 +49,19 @@ public class ExpressionFactory
     }
 
     /**
-     * @param resource
      * @param charset
      * @return Map<String, Object>
      */
-    private static Map<String, Object> getAttributes(String resource, String charset)
+    private static Map<String, Object> getAttributes(String charset)
     {
         Map<String, Object> attributes = new HashMap<String, Object>();
-        Map<String, String> map = load(resource, charset);
+        Map<String, String> map1 = load("tools-default.properties", charset);
+        Map<String, String> map2 = load("tools.properties", charset);
+        map1.putAll(map2);
 
-        if(map != null && map.size() > 0)
+        if(map1 != null && map1.size() > 0)
         {
-            for(Map.Entry<String, String> entry : map.entrySet())
+            for(Map.Entry<String, String> entry : map1.entrySet())
             {
                 String name = entry.getKey();
                 String className = entry.getValue();
@@ -97,7 +97,7 @@ public class ExpressionFactory
      */
     private static Map<String, String> load(String resource, String charset)
     {
-        return load(TagLibraryFactory.class.getClassLoader().getResourceAsStream(resource), charset);
+        return load(ExpressionFactory.class.getClassLoader().getResourceAsStream(resource), charset);
     }
 
     /**

@@ -1,97 +1,71 @@
 /*
  * $RCSfile: OgnlUtil.java,v $$
- * $Revision: 1.1  $
- * $Date: 2013-2-27  $
+ * $Revision: 1.1 $
+ * $Date: 2013-10-21 $
  *
- * Copyright (C) 2008 Skin, Inc. All rights reserved.
+ * Copyright (C) 2008 WanMei, Inc. All rights reserved.
  *
- * This software is the proprietary information of Skin, Inc.
+ * This software is the proprietary information of WanMei, Inc.
  * Use is subject to license terms.
  */
 package com.skin.ayada.ognl.util;
 
-import java.lang.reflect.Array;
-import java.util.Collection;
-import java.util.Map;
+import java.util.HashMap;
+
+import ognl.Ognl;
+import ognl.OgnlContext;
+import ognl.OgnlException;
 
 /**
  * <p>Title: OgnlUtil</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2006</p>
- * @author xuesong.net
  * @version 1.0
  */
 public class OgnlUtil
 {
-    /**
-     * @param value
-     * @return boolean
-     */
-    public boolean isEmpty(Object value)
-    {
-        if(value == null)
-        {
-            return true;
-        }
+    private static HashMap<String, Object> expressions = new HashMap<String, Object>();
 
-        if(value instanceof String)
+    private OgnlUtil()
+    {
+    }
+
+    /**
+     * @param expression
+     * @param context
+     * @param root
+     * @return Object
+     */
+    public static Object getValue(String expression, OgnlContext context, Object root)
+    {
+        try
         {
-            return (((String)value).trim().length() < 1);
+            return Ognl.getValue(compile(expression), context, root);
         }
-        else if(value instanceof Collection<?>)
+        catch(Exception e)
         {
-            return ((Collection<?>)value).isEmpty();
-        }
-        else if(value.getClass().isArray())
-        {
-            return (Array.getLength(value) == 0);
-        }
-        else if(value instanceof Map<?, ?>)
-        {
-            return ((Map<?, ?>)value).isEmpty();
-        }
-        else
-        {
-            return false;
+            throw new RuntimeException(e);
         }
     }
 
     /**
-     * @param value
-     * @return boolean
+     * @param expression
+     * @return Object
+     * @throws OgnlException
      */
-    public boolean notEmpty(Object value)
+    public static Object compile(String expression) throws OgnlException
     {
-        return (this.isEmpty(value) == false);
-    }
-    
-    /**
-     * @param source
-     * @param target
-     * @return boolean
-     */
-    public boolean equals(Object source, Object target)
-    {
-        if(source != null && target != null)
+        synchronized(expressions)
         {
-            return source.equals(target);
+            Object tree = expressions.get(expression);
+
+            if(tree == null)
+            {
+                tree = Ognl.parseExpression(expression);
+                expressions.put(expression, tree);
+            }
+
+            return tree;
         }
-
-        return (source == target);
-    }
-
-    /**
-     * @param value
-     */
-    public void print(Object value)
-    {
-        if(value == null)
-        {
-            System.out.println("null");
-        }
-
-        System.out.println();
-        System.out.println(value.getClass().getName());
-        System.out.println(value.toString());
     }
 }

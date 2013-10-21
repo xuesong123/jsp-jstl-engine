@@ -12,11 +12,9 @@ package com.skin.ayada.runtime;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import ognl.Ognl;
 import ognl.OgnlContext;
-
-import com.skin.ayada.ognl.util.EmptyMap;
+import com.skin.ayada.ognl.util.Empty;
+import com.skin.ayada.ognl.util.OgnlUtil;
 
 /**
  * <p>Title: ExpressionContext</p>
@@ -29,7 +27,7 @@ public class ExpressionContext extends OgnlContext
 {
     private PageContext pageContext;
     private Map<String, Object> tools = new HashMap<String, Object>();
-    private static final Map<Object, Object> EMPTY = new EmptyMap<Object, Object>();
+    private static final Object EMPTY = new Empty<String, Object>();
 
     /**
      * @param pageContext
@@ -45,14 +43,7 @@ public class ExpressionContext extends OgnlContext
      */
     public Object evaluate(String expression)
     {
-        try
-        {
-            return Ognl.getValue(expression, this, this);
-        }
-        catch(Exception e)
-        {
-            throw new RuntimeException(e);
-        }
+        return OgnlUtil.getValue(expression, this, this);
     }
 
     /**
@@ -102,7 +93,7 @@ public class ExpressionContext extends OgnlContext
 
         return (value != null ? value : EMPTY);
     }
-    
+
     public void release()
     {
         this.pageContext = null;

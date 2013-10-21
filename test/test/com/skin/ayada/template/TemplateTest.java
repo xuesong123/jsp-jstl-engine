@@ -54,9 +54,13 @@ public class TemplateTest
 
     public static void main(String[] args)
     {
+        // System.out.println(Object.class.isAssignableFrom(String.class));
+        // compareTest(new Object(), "test");
+        // compareTest("test", new Object());
+
         // test1();
         // test("webapp", "/whenTest.html");
-        test("webapp", "/includeTest.html");
+        test("webapp", "/emptyTest.html");
         // test("webapp", "/eachTest.html");
         // test("webapp", "/stacktrace.html");
         // test("E:\\WorkSpace\\fmbak\\webapps\\template", "/category.html");
@@ -216,5 +220,21 @@ public class TemplateTest
 
     public static void testTag(Tag tag)
     {
+    }
+    
+    public static void compareTest(Object v1, Object v2)
+    {
+        System.out.println((v1 instanceof Comparable<?>));
+        Class<?> t1 = v1.getClass();
+        Class<?> t2 = v2.getClass();
+
+        if (t1.isAssignableFrom(t2))
+        {
+            System.out.println("compareable");
+        }
+        else
+        {
+            System.out.println("error");
+        }
     }
 }

@@ -26,7 +26,7 @@ import java.util.Map;
  */
 public class TagLibraryFactory
 {
-    private static final Map<String, String> map = load("taglib.tld", "UTF-8");
+    private static final Map<String, String> map = load("UTF-8");
 
     /**
      * @return TagLibrary
@@ -39,13 +39,16 @@ public class TagLibraryFactory
     };
 
     /**
-     * @param resource
      * @param charset
      * @return Map<String, String>
      */
-    private static Map<String, String> load(String resource, String charset)
+    private static Map<String, String> load(String charset)
     {
-        return load(TagLibraryFactory.class.getClassLoader().getResourceAsStream(resource), charset);
+        ClassLoader classLoader = TagLibraryFactory.class.getClassLoader();
+        Map<String, String> map1 = load(classLoader.getResourceAsStream("taglib-default.tld"), charset);
+        Map<String, String> map2 = load(classLoader.getResourceAsStream("taglib.tld"), charset);
+        map1.putAll(map2);
+        return map1;
     }
 
     /**
