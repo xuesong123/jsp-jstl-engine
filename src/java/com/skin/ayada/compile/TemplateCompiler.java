@@ -164,7 +164,8 @@ public class TemplateCompiler extends PageCompiler
     }
 
     /**
-     * @param document
+     * @param stack
+     * @param list
      */
     public void startTag(Stack<Node> stack, List<Node> list)
     {
@@ -322,7 +323,7 @@ public class TemplateCompiler extends PageCompiler
 
     /**
      * @param stack
-     * @param document
+     * @param list
      * @param node
      */
     private void pushNode(Stack<Node> stack, List<Node> list, Node node)
@@ -345,7 +346,7 @@ public class TemplateCompiler extends PageCompiler
 
     /**
      * @param stack
-     * @param document
+     * @param list
      * @param nodeName
      */
     private void popNode(Stack<Node> stack, List<Node> list, String nodeName)
@@ -375,11 +376,11 @@ public class TemplateCompiler extends PageCompiler
         }
     }
 
-
     /**
      * @param stack
-     * @param document
+     * @param list
      * @param text
+     * @param lineNumber
      */
     private void pushTextNode(Stack<Node> stack, List<Node> list, String text, int lineNumber)
     {
@@ -423,6 +424,8 @@ public class TemplateCompiler extends PageCompiler
     }
 
     /**
+     * @param stack
+     * @param list
      * @param path
      * @param encoding
      */
@@ -554,8 +557,9 @@ public class TemplateCompiler extends PageCompiler
             tagLibrary.setup(name, className);
         }
     }
-    
+
     /**
+     * @param prefix
      * @param node
      * @return String
      */

@@ -27,7 +27,6 @@ public class PageCompiler
     protected StringStream stream;
 
     /**
-     * @param source
      */
     public PageCompiler()
     {
