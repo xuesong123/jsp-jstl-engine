@@ -19,6 +19,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.skin.ayada.config.TemplateConfig;
 import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.statement.Expression;
 import com.skin.ayada.statement.Node;
@@ -42,6 +43,7 @@ public class TemplateCompiler extends PageCompiler
     private String file = null;
     private int lineNumber = 1;
     private TagLibrary tagLibrary = null;
+    private static final boolean ignoreJspTag = TemplateConfig.getInstance().getBoolean("ayada.compile.ignore-jsptag");
 
     /**
      * @param source
@@ -170,8 +172,9 @@ public class TemplateCompiler extends PageCompiler
     public void startTag(Stack<Node> stack, List<Node> list)
     {
         int i;
+        int n = this.stream.peek();
 
-        if(this.stream.peek() == '/')
+        if(n == '/')
         {
             this.stream.read();
             String nodeName = this.getNodeName();
@@ -207,7 +210,7 @@ public class TemplateCompiler extends PageCompiler
                 this.pushTextNode(stack, list, "</", this.lineNumber);
             }
         }
-        else if(this.stream.peek() != '!')
+        else if(n != '!' && n != '%')
         {
             String nodeName = this.getNodeName();
 
@@ -317,7 +320,33 @@ public class TemplateCompiler extends PageCompiler
         }
         else
         {
-            this.pushTextNode(stack, list, "<", this.lineNumber);
+            if(ignoreJspTag && n == '%')
+            {
+                this.stream.read();
+
+                while((i = this.stream.read()) != -1)
+                {
+                    if(i == '%' && this.stream.peek() == '>')
+                    {
+                        this.stream.read();
+                        break;
+                    }
+                }
+
+                while(this.stream.peek() == '\r')
+                {
+                    this.stream.read();
+                }
+
+                while(this.stream.peek() == '\n')
+                {
+                    this.stream.read();
+                }
+            }
+            else
+            {
+                this.pushTextNode(stack, list, "<", this.lineNumber);
+            }
         }
     }
 

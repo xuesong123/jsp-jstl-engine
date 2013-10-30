@@ -14,6 +14,8 @@ import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Map;
 
+import com.skin.ayada.ognl.util.Empty;
+
 /**
  * <p>Title: BeanUtil</p>
  * <p>Description: </p>
@@ -23,6 +25,53 @@ import java.util.Map;
  */
 public class BeanUtil
 {
+    /**
+     * @param value
+     * @return boolean
+     */
+    public int size(Object value)
+    {
+        if(value == null)
+        {
+            return 0;
+        }
+
+        if(value.getClass().isArray())
+        {
+            return ((Object[])value).length;
+        }
+
+        if(value instanceof Collection<?>)
+        {
+            return ((Collection<?>)value).size();
+        }
+
+        if(value instanceof Map<?, ?>)
+        {
+            return ((Map<?, ?>)value).size();
+        }
+
+        return 0;
+    }
+
+    /**
+     * @param value
+     * @return boolean
+     */
+    public boolean isNull(Object value)
+    {
+        return (value == null || value instanceof Empty<?, ?>);
+    }
+
+    /**
+     * @param value
+     * @return boolean
+     */
+    public boolean notNull(Object value)
+    {
+        return (this.isNull(value) == false);
+    }
+
     /**
      * @param value
      * @return boolean

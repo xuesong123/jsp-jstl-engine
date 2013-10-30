@@ -26,6 +26,7 @@ import test.com.skin.ayada.handler.UserHandler;
 import test.com.skin.ayada.model.User;
 
 import com.skin.ayada.compile.TemplateCompiler;
+import com.skin.ayada.config.TemplateConfig;
 import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.jstl.TagLibraryFactory;
 import com.skin.ayada.jstl.core.IfTag;
@@ -60,10 +61,15 @@ public class TemplateTest
 
         // test1();
         // test("webapp", "/whenTest.html");
-        test("webapp", "/emptyTest.html");
+        // test("webapp", "/emptyTest.html");
+        test("webapp", "/jspTagTest.html");
         // test("webapp", "/eachTest.html");
         // test("webapp", "/stacktrace.html");
         // test("E:\\WorkSpace\\fmbak\\webapps\\template", "/category.html");
+        
+        boolean b = TemplateConfig.getInstance().getBoolean("ayada.compile.ignore-jsptag");
+        System.out.println(b);
+        System.out.println(TemplateConfig.getInstance().getString("ayada.compile.ignore-jsptag"));
     }
 
     public static void test(String home, String file)
