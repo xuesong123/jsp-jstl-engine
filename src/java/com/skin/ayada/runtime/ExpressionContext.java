@@ -100,7 +100,7 @@ public class ExpressionContext extends OgnlContext
             value = this.tools.get(key);
         }
 
-        return value; // (value != null ? value : EMPTY);
+        return (value != null ? value : EMPTY);
     }
 
     public void release()
