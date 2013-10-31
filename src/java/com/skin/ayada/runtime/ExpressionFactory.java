@@ -55,8 +55,8 @@ public class ExpressionFactory
     private static Map<String, Object> getAttributes(String charset)
     {
         Map<String, Object> attributes = new HashMap<String, Object>();
-        Map<String, String> map1 = load("tools-default.properties", charset);
-        Map<String, String> map2 = load("tools.properties", charset);
+        Map<String, String> map1 = load("ayada-tools-default.properties", charset);
+        Map<String, String> map2 = load("ayada-tools.properties", charset);
         map1.putAll(map2);
 
         if(map1 != null && map1.size() > 0)
@@ -88,6 +88,15 @@ public class ExpressionFactory
     public static void setAttribute(String name, Object value)
     {
         attributes.put(name, value);
+    }
+
+    /**
+     * @param name
+     * @return Object
+     */
+    public static Object getAttribute(String name)
+    {
+        return attributes.get(name);
     }
 
     /**

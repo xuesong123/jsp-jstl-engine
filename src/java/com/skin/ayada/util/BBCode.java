@@ -387,7 +387,7 @@ public class BBCode
 
         try
         {
-            inputStream = BBCode.class.getClassLoader().getResourceAsStream("bbcode.properties");
+            inputStream = BBCode.class.getClassLoader().getResourceAsStream("ayada-bbcode.properties");
             inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
             bufferedReader = new BufferedReader(inputStreamReader);
             

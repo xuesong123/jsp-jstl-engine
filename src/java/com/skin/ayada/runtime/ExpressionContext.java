@@ -63,11 +63,20 @@ public class ExpressionContext extends OgnlContext
     }
 
     /**
-     * @return the tools
+     * @param name
+     * @param tools
      */
     public void addTools(String name, Object tools)
     {
         this.tools.put(name, tools);
+    }
+
+    /**
+     * @return the tools
+     */
+    public Map<String, Object> getTools()
+    {
+        return this.tools;
     }
 
     @Override
@@ -91,7 +100,7 @@ public class ExpressionContext extends OgnlContext
             value = this.tools.get(key);
         }
 
-        return (value != null ? value : EMPTY);
+        return value; // (value != null ? value : EMPTY);
     }
 
     public void release()

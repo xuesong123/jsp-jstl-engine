@@ -30,8 +30,8 @@ public class TemplateConfig extends Config
 
     public static TemplateConfig create()
     {
-        TemplateConfig c1 = ConfigFactory.getConfig("config-default.properties", TemplateConfig.class);
-        TemplateConfig c2 = ConfigFactory.getConfig("config.properties", TemplateConfig.class);
+        TemplateConfig c1 = ConfigFactory.getConfig("ayada-default.properties", TemplateConfig.class);
+        TemplateConfig c2 = ConfigFactory.getConfig("ayada.properties", TemplateConfig.class);
 
         if(c1 == null)
         {

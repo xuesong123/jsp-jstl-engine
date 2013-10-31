@@ -45,8 +45,8 @@ public class TagLibraryFactory
     private static Map<String, String> load(String charset)
     {
         ClassLoader classLoader = TagLibraryFactory.class.getClassLoader();
-        Map<String, String> map1 = load(classLoader.getResourceAsStream("taglib-default.tld"), charset);
-        Map<String, String> map2 = load(classLoader.getResourceAsStream("taglib.tld"), charset);
+        Map<String, String> map1 = load(classLoader.getResourceAsStream("ayada-taglib-default.tld"), charset);
+        Map<String, String> map2 = load(classLoader.getResourceAsStream("ayada-taglib.tld"), charset);
         map1.putAll(map2);
         return map1;
     }

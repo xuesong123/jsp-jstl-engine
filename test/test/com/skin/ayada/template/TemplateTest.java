@@ -61,8 +61,8 @@ public class TemplateTest
 
         // test1();
         // test("webapp", "/whenTest.html");
-        // test("webapp", "/emptyTest.html");
-        test("webapp", "/jspTagTest.html");
+        test("webapp", "/emptyTest.html");
+        // test("webapp", "/jspTagTest.html");
         // test("webapp", "/eachTest.html");
         // test("webapp", "/stacktrace.html");
         // test("E:\\WorkSpace\\fmbak\\webapps\\template", "/category.html");

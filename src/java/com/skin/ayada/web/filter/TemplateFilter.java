@@ -76,18 +76,6 @@ public class TemplateFilter implements Filter
             }
         }
 
-        java.util.Enumeration<?> enu = servletContext.getAttributeNames();
-
-        while(enu.hasMoreElements())
-        {
-            String name = (String)(enu.nextElement());
-
-            if(name != null)
-            {
-                ExpressionFactory.setAttribute(name, servletContext.getAttribute(name));
-            }
-        }
-
         if(logger.isDebugEnabled())
         {
             logger.debug("home: " + this.home + ", expire: " + timeout);
@@ -120,6 +108,7 @@ public class TemplateFilter implements Filter
             }
         }
 
+        request.setAttribute("TemplateFilter$servletContext", this.servletContext);
         TemplateDispatcher.dispatch(templateContext, request, response, requestURI);
     }
 

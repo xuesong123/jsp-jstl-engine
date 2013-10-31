@@ -35,7 +35,7 @@ public class DefaultPageContext implements PageContext
 
     protected DefaultPageContext()
     {
-        this.attributes = new HashMap<String, Object>();
+        this(null);
     }
 
     /**
@@ -45,6 +45,7 @@ public class DefaultPageContext implements PageContext
     {
         this.out = out;
         this.attributes = new HashMap<String, Object>();
+        this.setAttribute("pageContext", this);
     }
 
     /**

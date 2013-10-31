@@ -15,6 +15,7 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.skin.ayada.runtime.ExpressionFactory;
 import com.skin.ayada.template.Template;
 import com.skin.ayada.template.TemplateContext;
 
@@ -59,38 +61,31 @@ public class TemplateDispatcher
         }
 
         HttpSession session = request.getSession(false);
+        ServletContext servletContext = getServletContext(session, request);
         Map<String, Object> context = new HashMap<String, Object>();
 
-        context.put("request", request);
-        context.put("response", response);
+        // priority: request > session > servletContext 
+        if(servletContext != null)
+        {
+            context.put("servletContext", servletContext);
+
+            if(request.getAttribute("TemplateFilter$servletContext") == null)
+            {
+                request.setAttribute("TemplateFilter$servletContext", servletContext);
+            }
+
+            TemplateDispatcher.setAttributes(servletContext, context);
+        }
 
         if(session != null)
         {
             context.put("session", session);
-
-            java.util.Enumeration<?> enu = session.getAttributeNames();
-
-            if(enu != null)
-            {
-                while(enu.hasMoreElements())
-                {
-                    String key = (String)(enu.nextElement());
-                    context.put(key, session.getAttribute(key));
-                }
-            }
+            TemplateDispatcher.setAttributes(session, context);
         }
 
-        java.util.Enumeration<?> enu = request.getAttributeNames();
-
-        if(enu != null)
-        {
-            while(enu.hasMoreElements())
-            {
-                String key = (String)(enu.nextElement());
-                context.put(key, request.getAttribute(key));
-            }
-        }
-
+        context.put("request", request);
+        context.put("response", response);
+        TemplateDispatcher.setAttributes(request, context);
         Writer writer = (Writer)(request.getAttribute("template_writer"));
 
         if(writer == null)
@@ -99,5 +94,96 @@ public class TemplateDispatcher
         }
 
         templateContext.execute(template, context, writer);
+    }
+
+    /**
+     * @param session
+     * @param enumeration
+     */
+    public static void setAttributes(HttpSession session, Map<String, Object> context)
+    {
+        java.util.Enumeration<?> enumeration = session.getAttributeNames();
+
+        if(enumeration != null)
+        {
+            while(enumeration.hasMoreElements())
+            {
+                String key = (String)(enumeration.nextElement());
+                context.put(key, session.getAttribute(key));
+            }
+        }
+    }
+
+    /**
+     * @param servletContext
+     * @param enumeration
+     */
+    public static void setAttributes(ServletContext servletContext, Map<String, Object> context)
+    {
+        java.util.Enumeration<?> enumeration = servletContext.getAttributeNames();
+
+        if(enumeration != null)
+        {
+            while(enumeration.hasMoreElements())
+            {
+                String key = (String)(enumeration.nextElement());
+                context.put(key, servletContext.getAttribute(key));
+            }
+        }
+    }
+
+    /**
+     * @param request
+     * @param enumeration
+     */
+    public static void setAttributes(HttpServletRequest request, Map<String, Object> context)
+    {
+        java.util.Enumeration<?> enumeration = request.getAttributeNames();
+
+        if(enumeration != null)
+        {
+            while(enumeration.hasMoreElements())
+            {
+                String key = (String)(enumeration.nextElement());
+                context.put(key, request.getAttribute(key));
+            }
+        }
+    }
+
+    /**
+     * @param session
+     * @param request
+     * @return ServletContext
+     */
+    public static ServletContext getServletContext(HttpSession session, HttpServletRequest request)
+    {
+        ServletContext servletContext = null;
+
+        if(session != null)
+        {
+            servletContext = session.getServletContext();
+        }
+
+        if(servletContext == null)
+        {
+            Object value = request.getAttribute("TemplateFilter$servletContext");
+
+            if(value != null && value instanceof ServletContext)
+            {
+                servletContext = (ServletContext)(value);
+            }
+        }
+
+        if(servletContext == null)
+        {
+            Object value = ExpressionFactory.getAttribute("servletContext");
+
+            if(value != null && value instanceof ServletContext)
+            {
+                servletContext = (ServletContext)(value);
+            }
+        }
+
+        return servletContext;
     }
 }

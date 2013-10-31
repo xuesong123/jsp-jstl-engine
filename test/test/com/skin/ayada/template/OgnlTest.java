@@ -45,6 +45,7 @@ public class OgnlTest
 
             Object result = Ognl.getValue("((userList.size() + 1) / 2).intValue()", map);
             System.out.println(result.getClass().getName() + ": " + result);
+            System.out.println(Ognl.getValue("@java.lang.System@out.println(\"123\")", map));
         }
         catch(OgnlException e)
         {
