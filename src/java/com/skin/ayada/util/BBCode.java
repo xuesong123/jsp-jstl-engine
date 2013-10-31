@@ -377,7 +377,7 @@ public class BBCode
 
         return HtmlUtil.encode(buffer.toString());
     }
-    
+
     private static Map<String, String> load()
     {
         InputStream inputStream = null;
@@ -390,7 +390,7 @@ public class BBCode
             inputStream = BBCode.class.getClassLoader().getResourceAsStream("ayada-bbcode.properties");
             inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
             bufferedReader = new BufferedReader(inputStreamReader);
-            
+
             int k = 0;
             String key = null;
             String line = null;
@@ -398,7 +398,7 @@ public class BBCode
             while((line = bufferedReader.readLine()) != null)
             {
                 line = line.trim();
-                
+
                 if(line.length() < 1)
                 {
                     continue;
@@ -408,7 +408,7 @@ public class BBCode
                 {
                     continue;
                 }
-                
+
                 k = line.indexOf(" ");
 
                 if(k > -1)

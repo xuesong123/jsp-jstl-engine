@@ -112,7 +112,7 @@ public class StringUtil
             while(true)
             {
                 e = source.indexOf(search, s);
-    
+
                 if(e == -1)
                 {
                     buffer.append(source.substring(s));

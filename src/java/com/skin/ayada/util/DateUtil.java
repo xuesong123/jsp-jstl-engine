@@ -65,7 +65,7 @@ public class DateUtil
         DateFormat dateFormat = new SimpleDateFormat(pattern);
         return dateFormat.format(date);
     }
-    
+
     /**
      * @param date
      * @return int
@@ -76,7 +76,7 @@ public class DateUtil
         calendar.setTime(date);
         return calendar.get(Calendar.YEAR);
     }
-    
+
     /**
      * @param date
      * @return int
@@ -87,7 +87,7 @@ public class DateUtil
         calendar.setTime(date);
         return calendar.get(Calendar.MONTH);
     }
-    
+
     /**
      * @param date
      * @return int
@@ -161,7 +161,7 @@ public class DateUtil
             c1.setTimeInMillis(offsetTimeMillis);
             Calendar c2 = Calendar.getInstance();
             c2.setTime(date);
-            
+
             int y1 = c1.get(Calendar.YEAR);
             int y2 = c2.get(Calendar.YEAR);
             int m1 = c1.get(Calendar.MONTH);

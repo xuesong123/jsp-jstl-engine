@@ -149,7 +149,7 @@ public class BeanUtil
     {
         return (b.toString());
     }
-    
+
     /**
      * @param b
      */
@@ -157,7 +157,7 @@ public class BeanUtil
     {
         return (b.toString());
     }
-    
+
     /**
      * @param s
      */
@@ -223,7 +223,7 @@ public class BeanUtil
         {
             return "null";
         }
-        
+
         Class<?> clazz = object.getClass();
         String className = clazz.getName();
 
@@ -261,7 +261,7 @@ public class BeanUtil
         buffer.append(line);
         return buffer.toString();
     }
-    
+
     /**
      * @param c
      */
@@ -309,7 +309,7 @@ public class BeanUtil
             return buffer.toString();
         }
     }
-    
+
     /**
      * @param map
      */
@@ -337,7 +337,7 @@ public class BeanUtil
             String line = "\r\n";
             StringBuilder buffer = new StringBuilder();
             buffer.append("map.size: " + map.size()).append(line);
-            
+
             for(Map.Entry<?, ?> entry : map.entrySet())
             {
                 Object key = entry.getKey();

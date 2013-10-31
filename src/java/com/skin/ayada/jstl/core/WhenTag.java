@@ -35,7 +35,7 @@ public class WhenTag extends ConditionalTagSupport
         }
 
         ChooseTag chooseTag = (ChooseTag)parent;
-        
+
         if(chooseTag.complete())
         {
             return SKIP_BODY;

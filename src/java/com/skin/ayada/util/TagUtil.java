@@ -161,7 +161,7 @@ public class TagUtil
                     Object value = null;
                     String result = node.toString();
                     int flag = getNumberType(result);
-                    
+
                     if(flag == 0)
                     {
                         return result;

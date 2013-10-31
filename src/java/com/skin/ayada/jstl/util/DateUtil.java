@@ -50,7 +50,7 @@ public class DateUtil
     {
         return com.skin.ayada.util.DateUtil.format(date, pattern);
     }
-    
+
     /**
      * @param date
      * @return int
@@ -59,7 +59,7 @@ public class DateUtil
     {
         return com.skin.ayada.util.DateUtil.year(date);
     }
-    
+
     /**
      * @param date
      * @return int
@@ -68,7 +68,7 @@ public class DateUtil
     {
         return com.skin.ayada.util.DateUtil.month(date);
     }
-    
+
     /**
      * @param date
      * @return int

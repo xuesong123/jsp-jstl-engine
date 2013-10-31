@@ -97,7 +97,7 @@ public class DefaultPageContext implements PageContext
     {
         return this.attributes.remove(key);
     }
-    
+
     /**
      * @return the templateContext
      */

@@ -75,7 +75,7 @@ public class Template
     {
         this.file = file;
     }
-    
+
     /**
      * @return the file
      */

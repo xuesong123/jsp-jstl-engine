@@ -674,7 +674,7 @@ public class TemplateCompiler extends PageCompiler
     {
         this.file = file;
     }
-    
+
     /**
      * @return the file
      */

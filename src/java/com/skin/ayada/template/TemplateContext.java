@@ -216,7 +216,7 @@ public class TemplateContext
                 if(timeMillis - template.getUpdateTime() > this.expire * 1000L)
                 {
                     String key = entry.getKey();
-                    
+
                     if(logger.isDebugEnabled())
                     {
                         logger.debug("template.remove: " + key);

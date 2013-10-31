@@ -81,7 +81,7 @@ public class TagLibrary
 
         System.out.println();
     }
-    
+
     public void release()
     {
         this.library.clear();

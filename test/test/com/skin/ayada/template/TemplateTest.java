@@ -66,7 +66,7 @@ public class TemplateTest
         // test("webapp", "/eachTest.html");
         // test("webapp", "/stacktrace.html");
         // test("E:\\WorkSpace\\fmbak\\webapps\\template", "/category.html");
-        
+
         boolean b = TemplateConfig.getInstance().getBoolean("ayada.compile.ignore-jsptag");
         System.out.println(b);
         System.out.println(TemplateConfig.getInstance().getString("ayada.compile.ignore-jsptag"));
@@ -227,7 +227,7 @@ public class TemplateTest
     public static void testTag(Tag tag)
     {
     }
-    
+
     public static void compareTest(Object v1, Object v2)
     {
         System.out.println((v1 instanceof Comparable<?>));
