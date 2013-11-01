@@ -11,7 +11,7 @@
 package com.skin.ayada.ognl.util;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,16 +24,8 @@ import java.util.Set;
  */
 public class Empty<K, V> implements Map<K, V>
 {
-    private Set<Map.Entry<K, V>> entrySet;
-    private Set<K> keySet;
-    private Collection<V> valueList;
-
     public Empty()
     {
-        Map<K, V> map = new HashMap<K, V>();
-        this.entrySet = map.entrySet();
-        this.keySet = map.keySet();
-        this.valueList = map.values();
     }
 
     @Override
@@ -54,9 +46,10 @@ public class Empty<K, V> implements Map<K, V>
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Set<Map.Entry<K, V>> entrySet()
     {
-        return this.entrySet;
+        return Collections.EMPTY_SET;
     }
 
     @Override
@@ -72,9 +65,10 @@ public class Empty<K, V> implements Map<K, V>
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Set<K> keySet()
     {
-        return this.keySet;
+        return Collections.EMPTY_SET;
     }
 
     @Override
@@ -101,9 +95,10 @@ public class Empty<K, V> implements Map<K, V>
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Collection<V> values()
     {
-        return this.valueList;
+        return Collections.EMPTY_LIST;
     }
 
     @Override
