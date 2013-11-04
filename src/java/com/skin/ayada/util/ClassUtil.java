@@ -30,6 +30,29 @@ public class ClassUtil
 
     /**
      * @param className
+     * @param parent
+     * @return Object
+     * @throws Exception
+     */
+    public static Object getInstance(String className, Class<?> parent) throws Exception
+    {
+        Class<?> clazz = getClass(className);
+
+        if(parent == null)
+        {
+            parent = Object.class;
+        }
+
+        if(!parent.isAssignableFrom(clazz))
+        {
+            throw new ClassCastException(className + " class must be implement the " + parent.getName() + " interface.");
+        }
+
+        return clazz.newInstance();
+    }
+
+    /**
+     * @param className
      * @return Class<?>
      * @throws ClassNotFoundException
      */
@@ -55,29 +78,6 @@ public class ClassUtil
         }
 
         return clazz;
-    }
-
-    /**
-     * @param className
-     * @param parent
-     * @return Object
-     * @throws Exception
-     */
-    public static Object getInstance(String className, Class<?> parent) throws Exception
-    {
-        Class<?> clazz = ClassUtil.getClass(className);
-
-        if(parent == null)
-        {
-            parent = Object.class;
-        }
-
-        if(!parent.isAssignableFrom(clazz))
-        {
-            throw new ClassCastException(className + " class must be implement the " + parent.getName() + " interface.");
-        }
-
-        return clazz.newInstance();
     }
 
     /**

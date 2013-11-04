@@ -10,8 +10,6 @@
  */
 package com.skin.ayada.compile;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,13 +18,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.skin.ayada.config.TemplateConfig;
+import com.skin.ayada.io.StringStream;
 import com.skin.ayada.jstl.TagLibrary;
+import com.skin.ayada.source.Source;
+import com.skin.ayada.source.SourceFactory;
 import com.skin.ayada.statement.Expression;
 import com.skin.ayada.statement.Node;
 import com.skin.ayada.statement.NodeType;
 import com.skin.ayada.statement.TextNode;
 import com.skin.ayada.template.Template;
-import com.skin.ayada.util.IO;
+import com.skin.ayada.util.NodeUtil;
 import com.skin.ayada.util.Stack;
 
 /**
@@ -39,27 +40,45 @@ import com.skin.ayada.util.Stack;
 public class TemplateCompiler extends PageCompiler
 {
     private static final Logger logger = LoggerFactory.getLogger(TemplateCompiler.class);
-    private String home = null;
-    private String file = null;
     private int lineNumber = 1;
+    private SourceFactory sourceFactory;
     private TagLibrary tagLibrary = null;
     private static final boolean ignoreJspTag = TemplateConfig.getInstance().getBoolean("ayada.compile.ignore-jsptag");
 
     /**
      * @param source
      */
-    public TemplateCompiler(String source)
+    public TemplateCompiler(SourceFactory sourceFactory)
     {
-        super(source);
+        this.sourceFactory = sourceFactory;
     }
 
     /**
+     * @param path
+     * @param encoding
      * @return Template
      */
-    public Template compile()
+    public Template compile(String path, String encoding)
     {
+        Source source = this.getSourceFactory().getSource(path, encoding);
+
+        if(source.getType() == 1)
+        {
+            TextNode textNode = new TextNode();
+            textNode.setLineNumber(lineNumber);
+            textNode.setOffset(0);
+            textNode.setLength(1);
+            textNode.setParent(null);
+            textNode.append(source.getSource());
+
+            List<Node> list = new ArrayList<Node>();
+            list.add(textNode);
+            return new Template(list);
+        }
+
         int i;
         char c;
+        this.stream = new StringStream(source.getSource());
 
         while((i = this.stream.read()) != -1)
         {
@@ -152,17 +171,11 @@ public class TemplateCompiler extends PageCompiler
 
         if(stack.peek() != null)
         {
-            throw new RuntimeException(toString("Exception at ", stack.peek()) + " not match !");
+            Node node = stack.peek();
+            throw new RuntimeException("Exception at line # " + node.getLineNumber() + " " + NodeUtil.toString(node) + " not match !");
         }
 
-        Template template = new Template(list);
-
-        if(this.getFile() != null)
-        {
-            template.setFile(this.getFile());
-        }
-
-        return template;
+        return new Template(list);
     }
 
     /**
@@ -231,9 +244,10 @@ public class TemplateCompiler extends PageCompiler
                     throw new RuntimeException("The 't:include' direction must be self-closed!");
                 }
 
+                String type = attributes.get("type");
                 String file = attributes.get("file");
                 String encoding = attributes.get("encoding");
-                this.include(stack, list, file, encoding);
+                this.include(stack, list, type, file, encoding);
                 return;
             }
 
@@ -401,7 +415,7 @@ public class TemplateCompiler extends PageCompiler
         }
         else
         {
-            throw new RuntimeException(toString("Exception at line", node) + " not match !");
+            throw new RuntimeException("Exception at line # " + node.getLineNumber() + " " + NodeUtil.toString(node) + " not match !");
         }
     }
 
@@ -458,21 +472,16 @@ public class TemplateCompiler extends PageCompiler
      * @param path
      * @param encoding
      */
-    public void include(Stack<Node> stack, List<Node> list, String path, String encoding)
+    public void include(Stack<Node> stack, List<Node> list, String type, String path, String encoding)
     {
         if(path == null)
         {
             throw new RuntimeException("t:include error: attribute 'file' not exists !");
         }
 
-        if(this.file == null && path.charAt(0) != '/')
+        if(path.charAt(0) != '/')
         {
             throw new RuntimeException("t:include error: file must be starts with '/'");
-        }
-
-        if(this.home == null)
-        {
-            this.home = ".";
         }
 
         if(encoding == null)
@@ -480,63 +489,26 @@ public class TemplateCompiler extends PageCompiler
             encoding = "UTF-8";
         }
 
-        File root = new File(this.home);
-
-        try
-        {
-            this.home = root.getCanonicalPath();
-        }
-        catch(IOException e)
-        {
-            throw new RuntimeException(e);
-        }
-
-        File file = null;
-
-        if(path.charAt(0) == '/')
-        {
-            file = new File(this.home, path);
-        }
-        else
-        {
-            file = new File(this.getFile(), path);
-        }
-
-        try
-        {
-            if(file.getCanonicalPath().startsWith(root.getCanonicalPath()) == false)
-            {
-                throw new RuntimeException("t:include error: " + file.getAbsolutePath() + " can't access !");
-            }
-        }
-        catch(RuntimeException e)
-        {
-            throw e;
-        }
-        catch(Exception e)
-        {
-            throw new RuntimeException("t:include error: " + file.getAbsolutePath() + " can't access !");
-        }
-
-        if(file.exists() == false)
-        {
-            throw new RuntimeException("t:include error: " + file.getAbsolutePath() + " not exists !");
-        }
-
-        if(file.isFile() == false)
-        {
-            throw new RuntimeException("t:include error: " + file.getAbsolutePath() + " not file !");
-        }
-
-        String source = IO.read(file, encoding, 4096);
-        TemplateCompiler compiler = new TemplateCompiler(source);
-        compiler.setHome(this.getHome());
-        compiler.setTagLibrary(this.getTagLibrary());
-        Template template = compiler.compile();
-        List<Node> nodes = template.getNodes();
-
         int index = list.size();
         Node parent = stack.peek();
+        Source source = this.getSourceFactory().getSource(path, encoding);
+
+        if(type != null && type.equals("static"))
+        {
+            TextNode textNode = new TextNode();
+            textNode.setLineNumber(lineNumber);
+            textNode.setOffset(list.size());
+            textNode.setLength(1);
+            textNode.setParent(parent);
+            textNode.append(source.getSource());
+            list.add(textNode);
+            return;
+        }
+
+        TemplateCompiler compiler = new TemplateCompiler(this.sourceFactory);
+        compiler.setTagLibrary(this.getTagLibrary());
+        Template template = compiler.compile(path, encoding);
+        List<Node> nodes = template.getNodes();
 
         for(Node node : nodes)
         {
@@ -588,102 +560,6 @@ public class TemplateCompiler extends PageCompiler
     }
 
     /**
-     * @param prefix
-     * @param node
-     * @return String
-     */
-    private static String toString(String prefix, Node node)
-    {
-        StringBuilder buffer = new StringBuilder();
-        buffer.append(prefix);
-        buffer.append("line #");
-        buffer.append(node.getLineNumber());
-        buffer.append(" ");
-
-        if(node.getNodeType() == NodeType.TEXT)
-        {
-            buffer.append(node.toString());
-            return buffer.toString();
-        }
-
-        if(node.getNodeType() == NodeType.COMMENT)
-        {
-            buffer.append(node.toString());
-            return buffer.toString();
-        }
-
-        if(node.getNodeType() == NodeType.EXPRESSION)
-        {
-            buffer.append("${");
-            buffer.append(node.toString());
-            buffer.append("}");
-            return buffer.toString();
-        }
-
-        buffer.append("<");
-        buffer.append(node.getNodeName());
-        Map<String, String> attributes = node.getAttributes();
-
-        if(attributes != null && attributes.size() > 0)
-        {
-            for(Map.Entry<String, String> entrySet : attributes.entrySet())
-            {
-                buffer.append(" ");
-                buffer.append(entrySet.getKey());
-                buffer.append("=\"");
-                buffer.append(entrySet.getValue());
-                buffer.append("\"");
-            }
-        }
-
-        if(node.getClosed() == NodeType.PAIR_CLOSED)
-        {
-            buffer.append(">...");
-            buffer.append("</");
-            buffer.append(node.getNodeName());
-            buffer.append(">");
-        }
-        else
-        {
-            buffer.append("/>");
-        }
-
-        return buffer.toString();
-    }
-
-    /**
-     * @param home
-     */
-    public void setHome(String home)
-    {
-        this.home = home;
-    }
-
-    /**
-     * @return String
-     */
-    public String getHome()
-    {
-        return home;
-    }
-
-    /**
-     * @param file the file to set
-     */
-    public void setFile(String file)
-    {
-        this.file = file;
-    }
-
-    /**
-     * @return the file
-     */
-    public String getFile()
-    {
-        return this.file;
-    }
-
-    /**
      * @return int
      */
     public int getLineNumber()
@@ -697,6 +573,22 @@ public class TemplateCompiler extends PageCompiler
     public void setLineNumber(int lineNumber)
     {
         this.lineNumber = lineNumber;
+    }
+    
+    /**
+     * @return the sourceFactory
+     */
+    public SourceFactory getSourceFactory()
+    {
+        return this.sourceFactory;
+    }
+
+    /**
+     * @param sourceFactory the sourceFactory to set
+     */
+    public void setSourceFactory(SourceFactory sourceFactory)
+    {
+        this.sourceFactory = sourceFactory;
     }
 
     /**

@@ -12,7 +12,6 @@ package com.skin.ayada.runtime;
 
 import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.tagext.Tag;
-import com.skin.ayada.util.ClassUtil;
 
 /**
  * <p>Title: TagFactory</p>
@@ -45,36 +44,6 @@ public class TagFactory
 
     /**
      * @param className
-     * @return Class<?>
-     * @throws ClassNotFoundException
-     */
-    private static Class<?> getClass(String className) throws ClassNotFoundException
-    {
-        Class<?> clazz = null;
-
-        try
-        {
-            clazz = Thread.currentThread().getContextClassLoader().loadClass(className);
-        }
-        catch(Exception e)
-        {
-        }
-
-        if(clazz == null)
-        {
-            clazz = ClassUtil.class.getClassLoader().loadClass(className);
-        }
-
-        if(clazz == null)
-        {
-            clazz = Class.forName(className);
-        }
-
-        return clazz;
-    }
-
-    /**
-     * @param className
      * @param parent
      * @return Object
      * @throws Exception
@@ -94,5 +63,35 @@ public class TagFactory
         }
 
         return clazz.newInstance();
+    }
+
+    /**
+     * @param className
+     * @return Class<?>
+     * @throws ClassNotFoundException
+     */
+    private static Class<?> getClass(String className) throws ClassNotFoundException
+    {
+        Class<?> clazz = null;
+
+        try
+        {
+            clazz = Thread.currentThread().getContextClassLoader().loadClass(className);
+        }
+        catch(Exception e)
+        {
+        }
+
+        if(clazz == null)
+        {
+            clazz = TagFactory.class.getClassLoader().loadClass(className);
+        }
+
+        if(clazz == null)
+        {
+            clazz = Class.forName(className);
+        }
+
+        return clazz;
     }
 }

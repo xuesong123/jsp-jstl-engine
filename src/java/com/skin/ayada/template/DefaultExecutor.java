@@ -13,7 +13,6 @@ package com.skin.ayada.template;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.skin.ayada.runtime.ExpressionContext;
 import com.skin.ayada.runtime.JspWriter;
@@ -26,6 +25,7 @@ import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTag;
 import com.skin.ayada.tagext.IterationTag;
 import com.skin.ayada.tagext.Tag;
+import com.skin.ayada.util.NodeUtil;
 import com.skin.ayada.util.TagUtil;
 
 /**
@@ -84,7 +84,7 @@ public class DefaultExecutor
 
                 if(node.getLength() == 0)
                 {
-                    throw new RuntimeException(toString("Exception at ", node));
+                    throw new RuntimeException("Exception at line # " + node.getLineNumber() + " " + NodeUtil.toString(node) + " not match !");
                 }
 
                 if(node.getOffset() == index)
@@ -122,7 +122,7 @@ public class DefaultExecutor
         }
         catch(Throwable t)
         {
-            throw new RuntimeException(toString("Exception at " + template.getFile() + " ", node), t);
+            throw new RuntimeException("Exception at " + template.getFile() + node.getLineNumber() + " " + NodeUtil.toString(node), t);
         }
 
         pageContext.setOut(jspWriter);
@@ -292,71 +292,5 @@ public class DefaultExecutor
                 System.out.println(index + " $" + node.getLineNumber() + " #node: </" + node.getNodeName() + ">");
             }
         }
-    }
-
-    /**
-     * @param node
-     * @return String
-     */
-    private static String toString(String prefix, Node node)
-    {
-        StringBuilder buffer = new StringBuilder();
-        if(prefix != null)
-        {
-            buffer.append(prefix);
-        }
-
-        buffer.append("line #");
-        buffer.append(node.getLineNumber());
-        buffer.append(" ");
-
-        if(node.getNodeType() == NodeType.TEXT)
-        {
-            buffer.append(node.toString());
-            return buffer.toString();
-        }
-
-        if(node.getNodeType() == NodeType.COMMENT)
-        {
-            buffer.append(node.toString());
-            return buffer.toString();
-        }
-
-        if(node.getNodeType() == NodeType.EXPRESSION)
-        {
-            buffer.append("${");
-            buffer.append(node.toString());
-            buffer.append("}");
-            return buffer.toString();
-        }
-
-        buffer.append("<");
-        buffer.append(node.getNodeName());
-        Map<String, String> attributes = node.getAttributes();
-
-        if(attributes != null && attributes.size() > 0)
-        {
-            for(Map.Entry<String, String> entrySet : attributes.entrySet())
-            {
-                buffer.append(" ");
-                buffer.append(entrySet.getKey());
-                buffer.append("=\"");
-                buffer.append(entrySet.getValue());
-                buffer.append("\"");
-            }
-        }
-
-        if(node.getClosed() == NodeType.PAIR_CLOSED)
-        {
-            buffer.append(">...");
-            buffer.append("</");
-            buffer.append(node.getNodeName());
-            buffer.append(">");
-        }
-        else
-        {
-            buffer.append("/>");
-        }
-        return buffer.toString();
     }
 }

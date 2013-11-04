@@ -1,7 +1,1 @@
-<div style="height: 200px;">
-    <ul>
-        <c:forEach items="1,2,3" var="varValue">
-        <li>${varValue}</li>
-        </c:forEach>
-    </ul>
-</div>
+<div class="wrap">footer</div>

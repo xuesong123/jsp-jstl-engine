@@ -244,28 +244,48 @@ public class Node
      */
     public String toString()
     {
-        StringBuilder buffer = new StringBuilder();
-        buffer.append("<");
-        buffer.append(this.getNodeName());
-        buffer.append(" offset=\"");
-        buffer.append(this.getOffset());
-        buffer.append("\" length=\"");
-        buffer.append(this.getLength());
-        buffer.append("\"");
+        return this.toString(this.getOffset());
+    }
 
-        if(this.attributes != null && this.attributes.size() > 0)
+    /**
+     * @param index
+     * @return String
+     */
+    public String toString(int index)
+    {
+        StringBuilder buffer = new StringBuilder();
+        
+        if(index == this.getOffset())
         {
-            for(Map.Entry<String, String> entry : this.attributes.entrySet())
+            buffer.append("<");
+            buffer.append(this.getNodeName());
+            buffer.append(" offset=\"");
+            buffer.append(this.getOffset());
+            buffer.append("\" length=\"");
+            buffer.append(this.getLength());
+            buffer.append("\"");
+    
+            if(this.attributes != null && this.attributes.size() > 0)
             {
-                buffer.append(" ");
-                buffer.append(entry.getKey());
-                buffer.append("=\"");
-                buffer.append(entry.getValue());
-                buffer.append("\"");
+                for(Map.Entry<String, String> entry : this.attributes.entrySet())
+                {
+                    buffer.append(" ");
+                    buffer.append(entry.getKey());
+                    buffer.append("=\"");
+                    buffer.append(entry.getValue());
+                    buffer.append("\"");
+                }
             }
+
+            buffer.append("/>");
+        }
+        else
+        {
+            buffer.append("</");
+            buffer.append(this.getNodeName());
+            buffer.append(">");
         }
 
-        buffer.append("/>");
         return buffer.toString();
     }
 }

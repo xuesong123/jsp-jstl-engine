@@ -32,15 +32,35 @@ public class IO
      * @param file
      * @param charset
      * @return String
+     * @throws IOException 
      */
-    public static String read(File file, String charset, int bufferSize)
+    public static String read(File file, String charset, int bufferSize) throws IOException
     {
         InputStream inputStream = null;
-        InputStreamReader inputStreamReader = null;
 
         try
         {
             inputStream = new FileInputStream(file);
+            return read(inputStream, charset, bufferSize);
+        }
+        finally
+        {
+            close(inputStream);
+        }
+    }
+
+    /**
+     * @param file
+     * @param charset
+     * @return String
+     * @throws IOException 
+     */
+    public static String read(InputStream inputStream, String charset, int bufferSize) throws IOException
+    {
+        InputStreamReader inputStreamReader = null;
+
+        try
+        {
             inputStreamReader = new InputStreamReader(inputStream, charset);
 
             int length = 0;
@@ -54,14 +74,9 @@ public class IO
 
             return result.toString();
         }
-        catch(IOException e)
-        {
-            throw new RuntimeException(e);
-        }
         finally
         {
             close(inputStreamReader);
-            close(inputStream);
         }
     }
 

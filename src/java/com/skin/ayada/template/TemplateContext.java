@@ -10,8 +10,6 @@
  */
 package com.skin.ayada.template;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -25,7 +23,8 @@ import org.slf4j.LoggerFactory;
 
 import com.skin.ayada.runtime.JspFactory;
 import com.skin.ayada.runtime.PageContext;
-import com.skin.ayada.util.IO;
+import com.skin.ayada.source.DefaultSourceFactory;
+import com.skin.ayada.source.SourceFactory;
 import com.skin.ayada.util.StringUtil;
 
 /**
@@ -37,9 +36,11 @@ import com.skin.ayada.util.StringUtil;
  */
 public class TemplateContext
 {
+    private static final Logger logger = LoggerFactory.getLogger(TemplateContext.class);
     private String home;
     private int expire;
-    private static final Logger logger = LoggerFactory.getLogger(TemplateContext.class);
+    private String charset;
+    private SourceFactory sourceFactory;
     private ConcurrentHashMap<String, FutureTask<Template>> cache;
 
     /**
@@ -55,15 +56,9 @@ public class TemplateContext
      */
     public TemplateContext(String home, int expire)
     {
-        try
-        {
-            this.home = new File(home).getCanonicalPath();
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
-        }
+        this.home = home;
         this.expire = expire;
+        this.sourceFactory = new DefaultSourceFactory(this.home);
         this.cache = new ConcurrentHashMap<String, FutureTask<Template>>();
     }
 
@@ -127,7 +122,7 @@ public class TemplateContext
 
         if(this.expire == 0)
         {
-            return this.load(path);
+            return TemplateFactory.create(this.getSourceFactory(), path, this.charset);
         }
 
         if(this.cache.size() > 256)
@@ -146,7 +141,7 @@ public class TemplateContext
                 Callable<Template> callable = new Callable<Template>(){
                     public Template call() throws InterruptedException
                     {
-                        return TemplateContext.this.load(temp);
+                        return TemplateFactory.create(TemplateContext.this.getSourceFactory(), temp, TemplateContext.this.charset);
                     }
                 };
 
@@ -237,55 +232,6 @@ public class TemplateContext
     }
 
     /**
-     * @param path
-     * @return Template
-     */
-    public Template load(final String path)
-    {
-        String realPath = this.getRealPath(path);
-
-        if(logger.isDebugEnabled())
-        {
-            logger.debug("load template from: "  + path);
-        }
-
-        File file = new File(realPath);
-
-        if(file.exists() == false || file.isFile() == false)
-        {
-            return null;
-        }
-
-        String source = IO.read(new File(realPath), "UTF-8", 4096);
-        Template template = TemplateFactory.create(TemplateContext.this.getHome(), realPath, source);
-        template.setUpdateTime(System.currentTimeMillis());
-        return template;
-    }
-
-    /**
-     * @param uri
-     * @return String
-     */
-    public String getRealPath(String path)
-    {
-        File file = new File(this.home, path);
-
-        try
-        {
-            if(file.getCanonicalPath().startsWith(this.home) == false)
-            {
-                throw new RuntimeException(file.getAbsolutePath() + " can't access !");
-            }
-
-            return file.getCanonicalPath();
-        }
-        catch(IOException e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
      * @return String
      */
     public String getHome()
@@ -307,6 +253,22 @@ public class TemplateContext
     public void setExpire(int expire)
     {
         this.expire = expire;
+    }
+
+    /**
+     * @return the sourceFactory
+     */
+    public SourceFactory getSourceFactory()
+    {
+        return this.sourceFactory;
+    }
+
+    /**
+     * @param sourceFactory the sourceFactory to set
+     */
+    public void setSourceFactory(SourceFactory sourceFactory)
+    {
+        this.sourceFactory = sourceFactory;
     }
 
     public void destory()

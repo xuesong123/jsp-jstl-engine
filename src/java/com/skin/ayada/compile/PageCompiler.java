@@ -33,14 +33,6 @@ public class PageCompiler
     }
 
     /**
-     * @param source
-     */
-    public PageCompiler(String source)
-    {
-        this.stream = new StringStream(source);
-    }
-
-    /**
      * read node name, after read '<'
      * @return String
      */

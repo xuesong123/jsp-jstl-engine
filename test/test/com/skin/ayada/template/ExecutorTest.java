@@ -10,7 +10,6 @@
  */
 package test.com.skin.ayada.template;
 
-import java.io.File;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
@@ -23,9 +22,10 @@ import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.jstl.TagLibraryFactory;
 import com.skin.ayada.runtime.JspFactory;
 import com.skin.ayada.runtime.PageContext;
+import com.skin.ayada.source.DefaultSourceFactory;
+import com.skin.ayada.source.SourceFactory;
 import com.skin.ayada.template.DefaultExecutor;
 import com.skin.ayada.template.Template;
-import com.skin.ayada.util.IO;
 
 /**
  * <p>Title: ExecutorTest</p>
@@ -52,13 +52,13 @@ public class ExecutorTest
 
     public static void main(String[] args)
     {
-        String source = IO.read(new File("webapp\\whenTest.html"), "UTF-8", 4096);
-        TemplateCompiler compiler = new TemplateCompiler(source);
+        SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
+        TemplateCompiler compiler = new TemplateCompiler(sourceFactory);
         TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();
         compiler.setTagLibrary(tagLibrary);
 
         long t1 = System.currentTimeMillis();
-        Template template = compiler.compile();
+        Template template = compiler.compile("whenTest.html", "UTF-8");
         long t2 = System.currentTimeMillis();
 
         System.out.println("compile time: " + (t2 - t1));
