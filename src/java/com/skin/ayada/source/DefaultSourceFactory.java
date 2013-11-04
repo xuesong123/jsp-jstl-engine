@@ -21,7 +21,7 @@ import com.skin.ayada.util.IO;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class DefaultSourceFactory implements SourceFactory
+public class DefaultSourceFactory extends SourceFactory
 {
     private String home;
 
@@ -99,7 +99,7 @@ public class DefaultSourceFactory implements SourceFactory
 
         try
         {
-            return new Source(home, IO.read(file, encoding, 4096), 0);
+            return new Source(home, IO.read(file, encoding, 4096), this.getSourceType(file.getName()));
         }
         catch(IOException e)
         {

@@ -11,6 +11,8 @@
 package com.skin.ayada.config;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * <p>Title: Config</p>
@@ -19,9 +21,31 @@ import java.util.LinkedHashMap;
  * @author xuesong.net
  * @version 1.0
  */
-public abstract class Config extends LinkedHashMap<String, String>
+public abstract class Config
 {
     public static final long serialVersionUID = 1L;
+    private Map<String, String> parameters = new LinkedHashMap<String, String>();
+
+    public Config()
+    {
+    }
+
+    /**
+     * @param map
+     */
+    public Config(Map<String, String> map)
+    {
+        parameters.putAll(map);
+    }
+
+    /**
+     * @param name
+     * @param value
+     */
+    public void setValue(String name, String value)
+    {
+        this.parameters.put(name, value);
+    }
 
     /**
      * @param name
@@ -29,7 +53,7 @@ public abstract class Config extends LinkedHashMap<String, String>
      */
     public String getValue(String name)
     {
-        return this.get(name);
+        return parameters.get(name);
     }
 
     /**
@@ -38,7 +62,7 @@ public abstract class Config extends LinkedHashMap<String, String>
      */
     public String getValue(String name, String defaultValue)
     {
-        String value = this.get(name);
+        String value = parameters.get(name);
         return (value != null ? value : defaultValue);
     }
 
@@ -633,5 +657,75 @@ public abstract class Config extends LinkedHashMap<String, String>
         }
 
         return (T)value;
+    }
+
+    /**
+     * @param name
+     * @return boolean
+     */
+    public boolean has(String name)
+    {
+        return this.parameters.containsKey(name);
+    }
+
+    /**
+     * @param name
+     * @param value
+     * @return boolean
+     */
+    public boolean contains(String name, String value)
+    {
+        String content = this.getString(name);
+
+        if(content != null)
+        {
+            String[] array = content.split(",");
+    
+            for(int i = 0; i < array.length; i++)
+            {
+                array[i] = array[i].trim();
+                
+                if(array[i].equals(value))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return Set<String>
+     */
+    public Set<String> getNames()
+    {
+        return this.parameters.keySet();
+    }
+
+    /**
+     * @param map
+     */
+    public void setValues(Map<String, String> map)
+    {
+        parameters.putAll(map);
+    }
+
+    /**
+     * @param map
+     */
+    public void clear()
+    {
+        parameters.clear();
+    }
+
+    /**
+     * @return Map<String, String>
+     */
+    public Map<String, String> getMap()
+    {
+        Map<String, String> map = new LinkedHashMap<String, String>();
+        map.putAll(this.parameters);
+        return map;
     }
 }

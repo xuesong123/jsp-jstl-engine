@@ -493,7 +493,7 @@ public class TemplateCompiler extends PageCompiler
         Node parent = stack.peek();
         Source source = this.getSourceFactory().getSource(path, encoding);
 
-        if(type != null && type.equals("static"))
+        if(source.getType() == 1 || (type != null && type.equals("static")))
         {
             TextNode textNode = new TextNode();
             textNode.setLineNumber(lineNumber);

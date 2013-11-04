@@ -17,6 +17,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.skin.ayada.resource.ClassPathResource;
 import com.skin.ayada.resource.PropertyResource;
@@ -49,8 +51,10 @@ public class ConfigFactory
                 return null;
             }
 
+            Map<String, String> map = new HashMap<String, String>();
+            PropertyResource.load(inputStream, map);
             T config = type.newInstance();
-            PropertyResource.load(inputStream, config);
+            config.setValues(map);
             return config;
         }
         catch(InstantiationException e)
@@ -130,7 +134,7 @@ public class ConfigFactory
         try
         {
             writer = new OutputStreamWriter(outputStream, "UTF-8");
-            PropertyResource.save(config, writer);
+            PropertyResource.save(config.getMap(), writer);
             outputStream.flush();
         }
         catch(IOException e)
@@ -161,7 +165,7 @@ public class ConfigFactory
     {
         try
         {
-            PropertyResource.save(config, writer);
+            PropertyResource.save(config.getMap(), writer);
             writer.flush();
         }
         catch(IOException e)

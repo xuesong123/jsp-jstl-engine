@@ -10,7 +10,7 @@
  */
 package com.skin.ayada.config;
 
-import java.util.Map;
+import java.util.Set;
 
 /**
  * <p>Title: TemplateConfig</p>
@@ -40,9 +40,11 @@ public class TemplateConfig extends Config
 
         if(c2 != null)
         {
-            for(Map.Entry<String, String> entry : c2.entrySet())
+            Set<String> set = c2.getNames();
+
+            for(String name : set)
             {
-                c1.put(entry.getKey(), entry.getValue());
+                c1.setValue(name, c2.getValue(name));
             }
         }
 

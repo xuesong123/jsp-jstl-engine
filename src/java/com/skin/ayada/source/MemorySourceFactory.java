@@ -16,7 +16,7 @@ package com.skin.ayada.source;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class MemorySourceFactory implements SourceFactory
+public class MemorySourceFactory extends SourceFactory
 {
     private Source source;
 

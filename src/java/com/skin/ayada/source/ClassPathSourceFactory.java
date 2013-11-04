@@ -22,7 +22,7 @@ import com.skin.ayada.util.IO;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class ClassPathSourceFactory implements SourceFactory
+public class ClassPathSourceFactory extends SourceFactory
 {
     private String home;
 
@@ -110,7 +110,7 @@ public class ClassPathSourceFactory implements SourceFactory
         try
         {
             inputStream = tempUrl.openStream();
-            return new Source(this.home, IO.read(inputStream, encoding, 4096), 0);
+            return new Source(this.home, IO.read(inputStream, encoding, 4096), this.getSourceType(realPath));
         }
         catch(IOException e)
         {
