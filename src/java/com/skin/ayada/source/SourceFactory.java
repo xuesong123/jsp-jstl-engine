@@ -45,7 +45,7 @@ public abstract class SourceFactory
 
         return type;
     }
-
+    
     /**
      * @param path
      * @return String
@@ -73,7 +73,7 @@ public abstract class SourceFactory
 
             if(c == '.')
             {
-                path.substring(i + 1);
+                return path.substring(i + 1);
             }
 
             return "";

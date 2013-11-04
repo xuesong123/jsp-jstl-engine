@@ -62,10 +62,10 @@ public class TemplateTest
         // compareTest(new Object(), "test");
         // compareTest("test", new Object());
 
-        classPathTest();
+        // classPathTest();
 
         // test1();
-        // test("webapp", "/includeTest.html");
+        test("webapp", "/includeTest.jsp");
         // test("webapp", "/whenTest.html");
         // test("webapp", "/emptyTest.html");
         // test("webapp", "/jspTagTest.html");
