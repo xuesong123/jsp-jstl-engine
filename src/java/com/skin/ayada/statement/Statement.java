@@ -27,7 +27,7 @@ public class Statement
     private int startTagFlag;
 
     /**
-     * @param node2
+     * @param node
      */
     public Statement(Node node)
     {

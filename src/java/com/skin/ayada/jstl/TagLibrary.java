@@ -58,6 +58,14 @@ public class TagLibrary
         this.library.putAll(library);
     }
 
+    /**
+     * @return Map<String, String>
+     */
+    public Map<String, String> getLibrary()
+    {
+        return this.library;
+    }
+
     public void println()
     {
         this.println("taglib");

@@ -18,8 +18,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.skin.ayada.config.TemplateConfig;
+import com.skin.ayada.factory.TagFactoryManager;
 import com.skin.ayada.io.StringStream;
 import com.skin.ayada.jstl.TagLibrary;
+import com.skin.ayada.runtime.TagFactory;
 import com.skin.ayada.source.Source;
 import com.skin.ayada.source.SourceFactory;
 import com.skin.ayada.statement.Expression;
@@ -175,7 +177,7 @@ public class TemplateCompiler extends PageCompiler
             throw new RuntimeException("Exception at line # " + node.getLineNumber() + " " + NodeUtil.toString(node) + " not match !");
         }
 
-        return new Template(list);
+        return this.getTemplate(list, this.tagLibrary);
     }
 
     /**
@@ -557,6 +559,49 @@ public class TemplateCompiler extends PageCompiler
         {
             tagLibrary.setup(name, className);
         }
+    }
+
+    /**
+     * @param list
+     * @param tagLibrary
+     * @return Template
+     */
+    public Template getTemplate(List<Node> list, TagLibrary tagLibrary)
+    {
+        TagFactoryManager tagFactoryManager = TagFactoryManager.getInstance();
+
+        for(int i = 0, size = list.size(); i < size; i++)
+        {
+            Node node = list.get(i);
+
+            if(node.getNodeType() == NodeType.TEXT)
+            {
+                continue;
+            }
+
+            if(node.getNodeType() == NodeType.EXPRESSION)
+            {
+                continue;
+            }
+
+            if(node.getLength() == 0)
+            {
+                throw new RuntimeException("Exception at line # " + node.getLineNumber() + " " + NodeUtil.toString(node) + " not match !");
+            }
+
+            if(i == node.getOffset())
+            {
+                String tagName = node.getNodeName();
+                String className = tagLibrary.getTagClassName(tagName);
+                TagFactory tagFactory = tagFactoryManager.getTagFactory(tagName, className);
+                node.setTagFactory(tagFactory);
+            }
+            else
+            {
+            }
+        }
+
+        return new Template(list);
     }
 
     /**

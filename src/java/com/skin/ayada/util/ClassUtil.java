@@ -65,7 +65,8 @@ public class ClassUtil
             clazz = Thread.currentThread().getContextClassLoader().loadClass(className);
         }
         catch(Exception e)
-        {}
+        {
+        }
 
         if(clazz == null)
         {

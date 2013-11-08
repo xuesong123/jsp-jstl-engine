@@ -27,17 +27,14 @@ import test.com.skin.ayada.model.User;
 import com.skin.ayada.compile.TemplateCompiler;
 import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.jstl.TagLibraryFactory;
-import com.skin.ayada.jstl.core.IfTag;
 import com.skin.ayada.runtime.JspFactory;
 import com.skin.ayada.runtime.JspWriter;
 import com.skin.ayada.runtime.PageContext;
-import com.skin.ayada.runtime.TagFactory;
 import com.skin.ayada.source.ClassPathSourceFactory;
 import com.skin.ayada.source.DefaultSourceFactory;
 import com.skin.ayada.source.MemorySourceFactory;
 import com.skin.ayada.source.Source;
 import com.skin.ayada.source.SourceFactory;
-import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.template.DefaultExecutor;
 import com.skin.ayada.template.Template;
 import com.skin.ayada.template.TemplateContext;
@@ -65,15 +62,15 @@ public class TemplateTest
         // classPathTest();
 
         // test1();
-        test("webapp", "/includeTest.jsp");
-        // test("webapp", "/whenTest.html");
-        // test("webapp", "/emptyTest.html");
-        // test("webapp", "/jspTagTest.html");
-        // test("webapp", "/eachTest.html");
-        // test("webapp", "/stacktrace.html");
-        // test("E:\\WorkSpace\\fmbak\\webapps\\template", "/category.html");
+        // test("webapp", "/includeTest.jsp");
+        test("webapp", "/whenTest.jsp");
+        // test("webapp", "/emptyTest.jsp");
+        // test("webapp", "/jspTagTest.jsp");
+        // test("webapp", "/eachTest.jsp");
+        // test("webapp", "/stacktrace.jsp");
+        // test("E:\\WorkSpace\\fmbak\\webapps\\template", "/category.jsp");
         // noFileTest();
-        
+
         /*
         boolean b = TemplateConfig.getInstance().getBoolean("ayada.compile.ignore-jsptag");
         System.out.println(b);
@@ -243,35 +240,6 @@ public class TemplateTest
 
         System.out.println("-------------- run result --------------");
         System.out.println(writer.toString());
-    }
-
-    public static void reflectTest()
-    {
-        StringWriter out = new StringWriter();
-        PageContext pageContext = JspFactory.getPageContext(out);
-
-        long t1 = System.currentTimeMillis();
-        for(int i = 0; i < 100000; i++)
-        {
-            testTag(TagFactory.create(pageContext, "c:if"));
-        }
-        long t2 = System.currentTimeMillis();
-        System.out.println(t2 - t1);
-    }
-
-    public static void newInstanceTest()
-    {
-        long t1 = System.currentTimeMillis();
-        for(int i = 0; i < 10000000; i++)
-        {
-            testTag(new IfTag());
-        }
-        long t2 = System.currentTimeMillis();
-        System.out.println(t2 - t1);
-    }
-
-    public static void testTag(Tag tag)
-    {
     }
 
     public static void compareTest(Object v1, Object v2)

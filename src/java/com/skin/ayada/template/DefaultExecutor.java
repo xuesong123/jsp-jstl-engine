@@ -17,7 +17,6 @@ import java.util.List;
 import com.skin.ayada.runtime.ExpressionContext;
 import com.skin.ayada.runtime.JspWriter;
 import com.skin.ayada.runtime.PageContext;
-import com.skin.ayada.runtime.TagFactory;
 import com.skin.ayada.statement.Node;
 import com.skin.ayada.statement.NodeType;
 import com.skin.ayada.statement.Statement;
@@ -147,7 +146,7 @@ public class DefaultExecutor
 
         if(tag == null)
         {
-            tag = TagFactory.create(pageContext, node.getNodeName());
+            tag = node.getTagFactory().create();
             tag.setPageContext(pageContext);
             statement.setTag(tag);
 

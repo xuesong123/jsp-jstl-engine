@@ -10,7 +10,6 @@
  */
 package com.skin.ayada.runtime;
 
-import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.tagext.Tag;
 
 /**
@@ -20,78 +19,30 @@ import com.skin.ayada.tagext.Tag;
  * @author xuesong.net
  * @version 1.0
  */
-public class TagFactory
+public interface TagFactory
 {
     /**
-     * @param tagName
      * @return Tag
-     * @throws Exception
      */
-    public static Tag create(PageContext pageContext, String tagName)
-    {
-        TagLibrary tagLibrary = pageContext.getTagLibrary();
-        String className = tagLibrary.getTagClassName(tagName);
+    public Tag create();
 
-        try
-        {
-            return (Tag)(getInstance(className, Tag.class));
-        }
-        catch(Exception e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
+    /**
+     * @param tagName
+     */
+    public void setTagName(String tagName);
+
+    /**
+     * @return String
+     */
+    public String getTagName();
 
     /**
      * @param className
-     * @param parent
-     * @return Object
-     * @throws Exception
      */
-    private static Object getInstance(String className, Class<?> parent) throws Exception
-    {
-        Class<?> clazz = getClass(className);
-
-        if(parent == null)
-        {
-            parent = Object.class;
-        }
-
-        if(!parent.isAssignableFrom(clazz))
-        {
-            throw new ClassCastException(className + " class must be implement the " + parent.getName() + " interface.");
-        }
-
-        return clazz.newInstance();
-    }
+    public void setClassName(String className);
 
     /**
-     * @param className
-     * @return Class<?>
-     * @throws ClassNotFoundException
+     * @return String
      */
-    private static Class<?> getClass(String className) throws ClassNotFoundException
-    {
-        Class<?> clazz = null;
-
-        try
-        {
-            clazz = Thread.currentThread().getContextClassLoader().loadClass(className);
-        }
-        catch(Exception e)
-        {
-        }
-
-        if(clazz == null)
-        {
-            clazz = TagFactory.class.getClassLoader().loadClass(className);
-        }
-
-        if(clazz == null)
-        {
-            clazz = Class.forName(className);
-        }
-
-        return clazz;
-    }
+    public String getClassName();
 }

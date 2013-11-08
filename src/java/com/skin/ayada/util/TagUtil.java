@@ -16,7 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.runtime.ExpressionContext;
+import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.statement.Expression;
 import com.skin.ayada.statement.Node;
 import com.skin.ayada.statement.TextNode;
@@ -33,6 +35,43 @@ public class TagUtil
 {
     private TagUtil()
     {
+    }
+
+    /**
+     * @param className
+     * @return Tag
+     * @throws Exception
+     */
+    public static Tag create(String className)
+    {
+        try
+        {
+            return (Tag)(ClassUtil.getInstance(className, Tag.class));
+        }
+        catch(Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * @param tagName
+     * @return Tag
+     * @throws Exception
+     */
+    public static Tag create(PageContext pageContext, String tagName)
+    {
+        TagLibrary tagLibrary = pageContext.getTagLibrary();
+        String className = tagLibrary.getTagClassName(tagName);
+
+        try
+        {
+            return (Tag)(ClassUtil.getInstance(className, Tag.class));
+        }
+        catch(Exception e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

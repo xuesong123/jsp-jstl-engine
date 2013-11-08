@@ -13,6 +13,8 @@ package com.skin.ayada.statement;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.skin.ayada.runtime.TagFactory;
+
 /**
  * <p>Title: Node</p>
  * <p>Description: </p>
@@ -30,6 +32,7 @@ public class Node
     private int closed;
     private Node parent;
     private Map<String, String> attributes;
+    private TagFactory tagFactory;
 
     /**
      * @param nodeName
@@ -240,6 +243,22 @@ public class Node
     }
 
     /**
+     * @return the tagFactory
+     */
+    public TagFactory getTagFactory()
+    {
+        return this.tagFactory;
+    }
+
+    /**
+     * @param tagFactory the tagFactory to set
+     */
+    public void setTagFactory(TagFactory tagFactory)
+    {
+        this.tagFactory = tagFactory;
+    }
+
+    /**
      * @return String
      */
     public String toString()
@@ -254,7 +273,7 @@ public class Node
     public String toString(int index)
     {
         StringBuilder buffer = new StringBuilder();
-        
+
         if(index == this.getOffset())
         {
             buffer.append("<");
@@ -267,6 +286,20 @@ public class Node
     
             if(this.attributes != null && this.attributes.size() > 0)
             {
+                if(this.tagFactory != null)
+                {
+                    buffer.append(" tagFactory=\"");
+                    buffer.append(this.tagFactory.getClass().getName());
+                    buffer.append("\" tagClass=\"");
+                    buffer.append(this.tagFactory.getClassName());
+                    buffer.append("\"");
+                }
+                else
+                {
+                    buffer.append(" tagFactory=\"null\"");
+                    buffer.append(" tagClass=\"null\"");
+                }
+
                 for(Map.Entry<String, String> entry : this.attributes.entrySet())
                 {
                     buffer.append(" ");
