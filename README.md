@@ -127,18 +127,12 @@ API Example
     TemplateCompiler compiler = new TemplateCompiler(sourceFactory);
     compiler.setTagLibrary(tagLibrary);
 
-    long t1 = System.currentTimeMillis();
     Template template = compiler.compile("/large.html", "UTF-8");
-    long t2 = System.currentTimeMillis();
-    System.out.println("compile time: " + (t2 - t1));
 
-    long t3 = System.currentTimeMillis();
     StringWriter writer = new StringWriter();
     PageContext pageContext = getPageContext(writer);
     DefaultExecutor.execute(template, pageContext);
 
-    long t4 = System.currentTimeMillis();
-    System.out.println("run time: " + (t4 - t3));
     System.out.println("------------- result -------------");
     System.out.println(writer.toString());
 
@@ -152,13 +146,13 @@ API Example
     StringWriter writer = new StringWriter();
     PageContext pageContext = JspFactory.getPageContext(writer);
 
-    System.out.println("-------------- source result --------------");
+    System.out.println("-------------- source --------------");
     System.out.println(TemplateUtil.toString(template));
 
     System.out.println("-------------- System.out.print --------------");
     DefaultExecutor.execute(template, pageContext);
 
-    System.out.println("-------------- run result --------------");
+    System.out.println("-------------- result --------------");
     System.out.println(writer.toString());
 
 
