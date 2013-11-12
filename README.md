@@ -94,17 +94,90 @@ include a page
 API Example
 ===================
 
-    // scope: global
-    com.skin.ayada.jstl.TagLibraryFactory.setup("app:scrollpage", com.mytest.taglib.ScrollPageTag);
+    // demo1
+    Source source = new Source("", "<c:out value=\"123\"/>", 0);
+    SourceFactory sourceFactory = new MemorySourceFactory(source);
+    TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();
+    TemplateCompiler compiler = new TemplateCompiler(sourceFactory);
+    compiler.setTagLibrary(tagLibrary);
+    Template template = compiler.compile("", "UTF-8");
+    StringWriter writer = new StringWriter();
 
-     * @param home - work directory
-     * @param expire
-    var templateContext = new com.skin.ayada.template.TemplateContext("/", 300);
+    TemplateContext templateContext = new TemplateContext("");
+    PageContext pageContext = JspFactory.getPageContext(templateContext, writer);
+    List<User> userList = UserHandler.getUserList(16);
+    pageContext.setAttribute("userList", userList);
+    DefaultExecutor.execute(template, pageContext);  
+    System.out.println(writer.toString()); 
 
-    var writer = var writer = new com.skin.io.StringWriter();
-    var context = {userList: [{userName: "test", userAge: 20}]};
-    templateContext.execute("source1", context, writer);
-    alert(writer.toString());
+    // demo2
+    TemplateContext templateContext = new TemplateContext(home);
+    Template template = templateContext.getTemplate(file);
+    StringWriter writer = new StringWriter();
+    PageContext pageContext = getPageContext(writer);
+    DefaultExecutor.execute(template, pageContext);
+    System.out.println("-------------- source --------------");
+    System.out.println(TemplateUtil.toString(template));
+    System.out.println("-------------- result --------------");
+    System.out.println(writer.toString());
+
+    // demo3
+    SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
+    TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();
+    TemplateCompiler compiler = new TemplateCompiler(sourceFactory);
+    compiler.setTagLibrary(tagLibrary);
+
+    long t1 = System.currentTimeMillis();
+    Template template = compiler.compile("/large.html", "UTF-8");
+    long t2 = System.currentTimeMillis();
+    System.out.println("compile time: " + (t2 - t1));
+
+    long t3 = System.currentTimeMillis();
+    StringWriter writer = new StringWriter();
+    PageContext pageContext = getPageContext(writer);
+    DefaultExecutor.execute(template, pageContext);
+
+    long t4 = System.currentTimeMillis();
+    System.out.println("run time: " + (t4 - t3));
+    System.out.println("------------- result -------------");
+    System.out.println(writer.toString());
+
+    // demo4
+    String home = "com/skin/ayada/demo";
+    SourceFactory sourceFactory = new ClassPathSourceFactory(home);
+    TemplateContext templateContext = new TemplateContext(home);
+    templateContext.setSourceFactory(sourceFactory);
+
+    Template template = templateContext.getTemplate("/hello.jsp");
+    StringWriter writer = new StringWriter();
+    PageContext pageContext = JspFactory.getPageContext(writer);
+
+    System.out.println("-------------- source result --------------");
+    System.out.println(TemplateUtil.toString(template));
+
+    System.out.println("-------------- System.out.print --------------");
+    DefaultExecutor.execute(template, pageContext);
+
+    System.out.println("-------------- run result --------------");
+    System.out.println(writer.toString());
+
+
+    <!-- TemplateFilter -->
+    <filter>
+        <filter-name>TemplateFilter</filter-name>
+        <filter-class>com.skin.ayada.filter.TemplateFilter</filter-class>
+        <init-param>
+            <param-name>home</param-name>
+            <param-value>/template</param-value>
+        </init-param>
+    </filter>
+
+    <!-- filter mapping -->
+    <filter-mapping>
+        <filter-name>TemplateFilter</filter-name>
+        <url-pattern>/template/*</url-pattern>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
 
 java: https://github.com/xuesong123/ayada
 javascript: https://github.com/xuesong123/javascript-template
