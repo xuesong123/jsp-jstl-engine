@@ -65,9 +65,6 @@ public class ClassPathClassLoader extends ClassLoader
         {
             int i = 0;
             String classFile = getClassFile(className);
-            
-            System.out.println("classFile: " + classFile);
-            
             fileInputStream = new FileInputStream(classFile);
             FileChannel fileChannel = fileInputStream.getChannel();
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

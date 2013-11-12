@@ -10,10 +10,12 @@
  */
 package com.skin.ayada.runtime;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 
 import com.skin.ayada.jstl.TagLibrary;
+import com.skin.ayada.tagext.BodyContent;
 
 /**
  * <p>Title: PageContext</p>
@@ -80,6 +82,12 @@ public interface PageContext
      * @return JspWriter
      */
     public JspWriter popBody();
+
+    /**
+     * @param bodyContent
+     * @param escapeXml
+     */
+    public void printBodyContent(BodyContent bodyContent, boolean escapeXml) throws IOException;
 
     /**
      * @param page

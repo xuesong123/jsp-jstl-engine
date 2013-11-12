@@ -10,6 +10,7 @@
  */
 package com.skin.ayada.runtime;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -163,6 +164,78 @@ public class DefaultPageContext implements PageContext
         BodyContent bodyContent = (BodyContent)(this.out);
         this.out = (JspWriter)(bodyContent.getOut());
         return this.out;
+    }
+
+    /**
+     * @param bodyContent
+     * @param escapeXml
+     * @throws IOException 
+     */
+    public void printBodyContent(BodyContent bodyContent, boolean escapeXml) throws IOException
+    {
+        String content = bodyContent.getString().trim();
+
+        if(escapeXml)
+        {
+            content = this.escape(content);
+        }
+
+        bodyContent.getEnclosingWriter().write(content);
+    }
+
+    /**
+     * @param source
+     * @return String
+     */
+    private String escape(String source)
+    {
+        if(source == null)
+        {
+            return "";
+        }
+
+        char c;
+        StringBuilder buffer = new StringBuilder();
+
+        for(int i = 0, size = source.length(); i < size; i++)
+        {
+            c = source.charAt(i);
+
+            switch (c)
+            {
+                case '&':
+                {
+                    buffer.append("&amp;");
+                    break;
+                }
+                case '"':
+                {
+                    buffer.append("&quot;");
+                    break;
+                }
+                case '<':
+                {
+                    buffer.append("&lt;");
+                    break;
+                }
+                case '>':
+                {
+                    buffer.append("&gt;");
+                    break;
+                }
+                case '\'':
+                {
+                    buffer.append("&#39;");
+                }
+                default :
+                {
+                    buffer.append(c);
+                    break;
+                }
+            }
+        }
+
+        return buffer.toString();
     }
 
     /**

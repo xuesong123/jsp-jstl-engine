@@ -75,7 +75,6 @@ public class StringStream
 
         int len = (length > this.position ? this.position : length);
         this.position -= len;
-
         return len;
     }
 

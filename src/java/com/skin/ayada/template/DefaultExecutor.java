@@ -71,12 +71,18 @@ public class DefaultExecutor
 
                 if(node.getNodeType() == NodeType.EXPRESSION)
                 {
-                    Object value = expressionContext.evaluate(node.toString());
+                    Object value = expressionContext.getValue(node.toString());
 
                     if(value != null)
                     {
                         out.write(value.toString());
                     }
+                    index++;
+                    continue;
+                }
+
+                if(node.getNodeType() != NodeType.NODE)
+                {
                     index++;
                     continue;
                 }
@@ -121,7 +127,7 @@ public class DefaultExecutor
         }
         catch(Throwable t)
         {
-            throw new RuntimeException("Exception at " + template.getFile() + node.getLineNumber() + " " + NodeUtil.toString(node), t);
+            throw new RuntimeException("\"" + template.getFile() + "\" Exception at line #" + node.getLineNumber() + " " + NodeUtil.toString(node), t);
         }
 
         pageContext.setOut(jspWriter);

@@ -76,8 +76,14 @@ public class PageCompiler
         {
             c = (char)i;
 
-            if(c == '>' || i == '/')
+            if(i == '>' || i == '/')
             {
+                break;
+            }
+
+            if(i == '%' && this.stream.peek(1) == '>')
+            {
+                this.stream.read();
                 break;
             }
 
@@ -86,7 +92,7 @@ public class PageCompiler
             {
                 c = (char)i;
 
-                if(c != ' ')
+                if(Character.isLetter(c) || Character.isDigit(c) || c == ':' || c == '-' || c == '_')
                 {
                     this.stream.back();
                     break;

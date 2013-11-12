@@ -1,0 +1,189 @@
+html解析器工作原理
+
+先看一个简单的html文档
+<html>
+    <head>
+        <title>test</title>
+    </head>
+    <body>
+        <div style="height: 100px; border: 1px solid #ff0000; font-size: 24px; font-weight: bold;">Hello World!</div>
+    </body>
+</html>
+
+1. 首先用一个类来描述一个节点
+public class Node{
+    private String nodeName;
+    private int nodeType;
+    private Map<String, String> attributes;
+    private List<Node> childNodes;
+    private Node parent;
+
+    // getter & setter
+    ...
+}
+然后我们开始对输入内容进行解析，解析的过程其实就是解析字符串的过程，为了便于解析先把源字符串封装成一个HtmlStream对象.
+String source = IO.read(new File("test.html"), "UTF-8");
+HtmlStream stream = new HtmlStream(source);
+
+char c;
+int i = 0;
+
+// 忽略掉文档开头的空格
+while((i == stream.read()) != -1)
+{
+    if(i != ' ')
+    {
+        // 回退一个字符
+        stream.back();
+        break;
+    }
+}
+
+Stack<Node> stack = new Stack<Node>();
+StringBuilder buffer = new StringBuilder();
+
+// 为了便于程序阅读，先分成两部分
+// 第一部分解析节点，通过startTag来完成
+// 第二部分读取文本内容，遇到<的时候终止
+while((i == stream.read()) != -1)
+{
+    if(i == '<'){
+        this.startTag();
+    }
+    else if{
+        buffer.append((char)i);
+
+        while((i == stream.read()) != -1)
+        {
+            if(i == '<')
+            {
+                stream.back();
+                break;
+            }
+
+            buffer.append((char)i);
+        }
+
+        this.pushTextNode(stack, buffer.toString());
+        buffer.setLength(0);
+    }
+}
+
+再来看startTag
+public void startTag(Stack<Node> stack)
+{
+    int i = this.stream.peek();
+
+    if(i == '/')
+    {
+        String nodeName = this.readNodeName();
+        this.endTag(stack, nodeName);
+    }
+    else if(i == '!')
+    {
+        // 注释...
+    }
+    else
+    {
+        String nodeName = this.readNodeName();
+
+        if(nodeName.length > 0)
+        {
+            Node node = new Node(nodeName);
+            this.readAttributes(node.getAttributes());
+            this.pushNode(stack, node);
+        }
+        else
+        {
+            this.pushTextNode(stack, "<");
+        }
+    }
+}
+
+// 当标签结束时
+public void endTag(Stack<Node> stack, String nodeName){
+    Node node = stack.peek();
+
+    if(node == null)
+    {
+        // 读取到>, 并写入文本节点, 略去
+        this.pushTextNode(stack, "<" + nodeName + ...);
+        return;
+    }
+
+    if(node.getNodeName().equalsIgnoreCase(nodeName))
+    {
+        stack.pop();
+        // 其他处理...
+    }
+}
+
+先说一下栈的结构, 这个是html解析中一个很重要的东西.
+当我们用Node这个类来描述一个节点的时候，很容易把一个树形结构的数据串起来, 只需要建立父子关系即可。
+但是当解析一个html文件的时候，怎么把读取到的一个结束节点跟之前读取的n个开始节点中的某一对应呢？
+为了简单的说明这个问题，可以用类json格式的数据来表示一下：
+var array = []; // 定义一个数组
+现在假设这个数组里面有4个节点，它描述了下面的一个html片段
+<html><head><title>test</title></head><body></body></html>
+现在整个数组是这样:
+[{node: html}, {node: head}, {node: title}, {text: test}, {node: /title}, {node: /head}, {node: body}, {node: /body}, {node: /html}]
+这样看起来它其实跟原始的数据没什么区别，只不过变了中描述方式。
+现在我们用一个指针指向这个数组的末端, 并且始终指向末端, 就变成了一种栈结构. 当某一个节点结束时，取指针位置的元素，正常情况下，这个元素一定是这个结束节点对应的开始节点.
+如果结束节点的节点名跟指针位置对应的节点的节点名不一致，那就说明某一个节点没有正确闭合, 这个时候需要一些容错处理, 如果是xml解析直接抛异常即可.
+
+现在详细的描述一下这个步骤:
+先解析第一个节点, 这个节点是<html>, 并且是开始节点, 把它压入栈, 现在的栈中的数组元素应该是这样的: 
+[{node: html}]
+只有一个节点，指针指向0
+然后是第二个节点, 它也是一个开始节点，因此也压入栈, 现在的栈中的数组元素应该是这样的: 
+[{node: html}, {node: head}]
+依次类推, 直到遇到文本节点和结束节点, 当遇到文本节点的时候, 栈中的元素如下：
+[{node: html}, {node: head}, {node: title}]
+现在处理下一个，发现是个文本节点, 节点内容是: test, 先从栈顶弹出一个节点，如果是文本节点，直接把该文本追加，如果是元素节点
+Node node = stack.pop();
+
+// 文本节点
+if(node.nodeType == TEXT){
+    node.append("test");
+}
+else if(node.nodeType == NODE){
+    TextNode textNode = new TextNode('test');
+    stack.push(node);
+    stack.push(textNode);
+    node.appendChild(textNode);
+}
+现在的栈结构如下：
+[{node: html}, {node: head}, {node: title}, {text: test}]
+
+接着下一步，下一个节点是一个结束节点</title>, 首先弹出所有的文本节点, 直到遇到元素节点
+void popNode(Stack<Node> stack, String nodeName){
+    Node node = null;
+    // 如果是文本节点
+    while((node = stack.pop()) != null && node.nodeType == TEXT);
+
+    if(node != null)
+    {
+        if(node.nodeName.equalsIgnoreCase(nodeName))
+        {
+            stack.pop();
+        }
+    }
+    else
+    {
+        // 容错处理, 说明遇到了一个没有开始节点的结束节点
+    }
+}
+
+正常情况下现在的栈应该是这样的:
+[{node: html}, {node: head}]
+接着下一步，下一个节点仍然是一个结束节点</head>, 跟上一步的处理一样, 处理完之后的栈应该是这样的:
+[{node: html}]
+下一步, 节点是一个开始节点<body>, 压入栈:
+[{node: html}, {node: body}]
+接着下一步，下一个节点仍然是一个结束节点</body>, 跟上面的处理一样, 处理完之后的栈应该是这样的:
+[{node: html}]
+接着下一步，下一个节点仍然是一个结束节点</html>, 跟上面的处理一样, 处理完之后的栈应该是这样的:
+[]
+正常情况下，所有的节点处理完, 栈应该是空的.
+为了尽可能的说明处理流程，尽可能的省去了一些容错处理的代码. 另外自己编码实现的时候还有很多其他的问题需要考虑。
+最后这种处理方式性能稍微有点差, 以后有时间再介绍另外一种方式。

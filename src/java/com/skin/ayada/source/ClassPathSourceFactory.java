@@ -46,7 +46,7 @@ public class ClassPathSourceFactory extends SourceFactory
         {
             this.home = this.home.substring(0, this.home.length() - 1);
         }
-
+        
         URL url = ClassPathSourceFactory.class.getClassLoader().getResource(this.home);
 
         if(url == null)

@@ -38,8 +38,8 @@ import com.skin.ayada.source.SourceFactory;
 import com.skin.ayada.template.DefaultExecutor;
 import com.skin.ayada.template.Template;
 import com.skin.ayada.template.TemplateContext;
+import com.skin.ayada.util.ExpressionUtil;
 import com.skin.ayada.util.MemMonitor;
-import com.skin.ayada.util.TagUtil;
 import com.skin.ayada.util.TemplateUtil;
 
 /**
@@ -187,7 +187,7 @@ public class TemplateTest
         pageContext.setAttribute("user", user);
         pageContext.setAttribute("userList", userList);
 
-        Object result = TagUtil.evaluate(pageContext.getExpressionContext(), "a${user.userName}#");
+        Object result = ExpressionUtil.evaluate(pageContext.getExpressionContext(), "a${user.userName}#");
         System.out.println(result.getClass().getName() + ": " + result);
     }
 

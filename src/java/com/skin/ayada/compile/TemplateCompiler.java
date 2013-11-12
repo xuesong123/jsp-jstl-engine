@@ -25,6 +25,9 @@ import com.skin.ayada.runtime.TagFactory;
 import com.skin.ayada.source.Source;
 import com.skin.ayada.source.SourceFactory;
 import com.skin.ayada.statement.Expression;
+import com.skin.ayada.statement.JspDeclaration;
+import com.skin.ayada.statement.JspExpression;
+import com.skin.ayada.statement.JspScriptlet;
 import com.skin.ayada.statement.Node;
 import com.skin.ayada.statement.NodeType;
 import com.skin.ayada.statement.TextNode;
@@ -75,7 +78,7 @@ public class TemplateCompiler extends PageCompiler
 
             List<Node> list = new ArrayList<Node>();
             list.add(textNode);
-            return new Template(list);
+            return new Template(path, list);
         }
 
         int i;
@@ -177,7 +180,7 @@ public class TemplateCompiler extends PageCompiler
             throw new RuntimeException("Exception at line # " + node.getLineNumber() + " " + NodeUtil.toString(node) + " not match !");
         }
 
-        return this.getTemplate(list, this.tagLibrary);
+        return this.getTemplate(path, list, this.tagLibrary);
     }
 
     /**
@@ -211,6 +214,10 @@ public class TemplateCompiler extends PageCompiler
                         {
                             break;
                         }
+                        else if(i == '\n')
+                        {
+                            this.lineNumber++;
+                        }
                     }
 
                     this.popNode(stack, list, nodeName);
@@ -225,7 +232,34 @@ public class TemplateCompiler extends PageCompiler
                 this.pushTextNode(stack, list, "</", this.lineNumber);
             }
         }
-        else if(n != '!' && n != '%')
+        else if(n == '%')
+        {
+            if(ignoreJspTag)
+            {
+                this.stream.read();
+
+                while((i = this.stream.read()) != -1)
+                {
+                    if(i == '%' && this.stream.peek() == '>')
+                    {
+                        this.stream.read();
+                        break;
+                    }
+
+                    if(i == '\n')
+                    {
+                        this.lineNumber++;
+                    }
+                }
+
+                this.skipCRLF();
+            }
+            else
+            {
+                this.jspCompile(stack, list);
+            }
+        }
+        else if(n != '!')
         {
             String nodeName = this.getNodeName();
 
@@ -245,6 +279,8 @@ public class TemplateCompiler extends PageCompiler
                 {
                     throw new RuntimeException("The 't:include' direction must be self-closed!");
                 }
+
+                this.skipCRLF();
 
                 String type = attributes.get("type");
                 String file = attributes.get("file");
@@ -275,9 +311,11 @@ public class TemplateCompiler extends PageCompiler
                     throw new RuntimeException("The 't:import' direction must be self-closed!");
                 }
 
+                this.skipCRLF();
                 String name = attributes.get("name");
                 String className = attributes.get("className");
                 this.setupTagLibrary(name, className);
+                this.popNode(stack, list, "t:import");
                 return;
             }
 
@@ -336,34 +374,132 @@ public class TemplateCompiler extends PageCompiler
         }
         else
         {
-            if(ignoreJspTag && n == '%')
+            this.pushTextNode(stack, list, "<", this.lineNumber);
+        }
+    }
+
+    /**
+     * 
+     */
+    public void skipCRLF()
+    {
+        while(this.stream.peek() == '\r')
+        {
+            this.stream.read();
+        }
+
+        while(this.stream.peek() == '\n')
+        {
+            this.lineNumber++;
+            this.stream.read();
+        }
+    }
+
+    /**
+     * @param stack
+     * @param list
+     */
+    private void jspCompile(Stack<Node> stack, List<Node> list)
+    {
+        int i = this.stream.read();
+        i = this.stream.read();
+
+        if(i == '@')
+        {
+            i = this.stream.read();
+            Map<String, String> attributes = this.getAttributes();
+
+            while((i = this.stream.read()) != -1)
             {
-                this.stream.read();
-
-                while((i = this.stream.read()) != -1)
+                if(i == '>')
                 {
-                    if(i == '%' && this.stream.peek() == '>')
-                    {
-                        this.stream.read();
-                        break;
-                    }
+                    break;
                 }
+            }
 
-                while(this.stream.peek() == '\r')
-                {
-                    this.stream.read();
-                }
-
-                while(this.stream.peek() == '\n')
-                {
-                    this.stream.read();
-                }
+            if(attributes.get("page") != null)
+            {
+                
+            }
+            else if(attributes.get("taglib") != null)
+            {
+                
+            }
+            else if(attributes.get("include") != null)
+            {
+                
             }
             else
             {
-                this.pushTextNode(stack, list, "<", this.lineNumber);
+                throw new RuntimeException("Unknown jsp directive at line #" + this.lineNumber + " - <%@ " + NodeUtil.toString(attributes));
             }
         }
+        else
+        {
+            int t = i;
+            StringBuilder buffer = new StringBuilder();
+
+            if(i != '!' && i != '=' && i != '\r' && i != '\n')
+            {
+                buffer.append((char)i);
+            }
+
+            this.skipCRLF();
+
+            while((i = this.stream.read()) != -1)
+            {
+                if(i == '%' && this.stream.peek() == '>')
+                {
+                    this.stream.read();
+                    break;
+                }
+                else
+                {
+                    if(i == '\n')
+                    {
+                        this.lineNumber++;
+                    }
+
+                    buffer.append((char)i);
+                }
+            }
+
+            if(t == '!')
+            {
+                JspDeclaration node = new JspDeclaration();
+                node.append(buffer.toString());
+                node.setOffset(list.size());
+                node.setLineNumber(this.lineNumber);
+                node.setClosed(NodeType.SELF_CLOSED);
+
+                this.pushNode(stack, list, node);
+                this.popNode(stack, list, node.getNodeName());
+            }
+            else if(t == '=')
+            {
+                JspExpression node = new JspExpression();
+                node.append(buffer.toString());
+                node.setOffset(list.size());
+                node.setLineNumber(this.lineNumber);
+                node.setClosed(NodeType.SELF_CLOSED);
+
+                this.pushNode(stack, list, node);
+                this.popNode(stack, list, node.getNodeName());
+            }
+            else
+            {
+                JspScriptlet node = new JspScriptlet();
+                node.append(buffer.toString());
+                node.setOffset(list.size());
+                node.setLineNumber(this.lineNumber);
+                node.setClosed(NodeType.SELF_CLOSED);
+
+                this.pushNode(stack, list, node);
+                this.popNode(stack, list, node.getNodeName());
+            }
+        }
+
+        this.skipCRLF();
     }
 
     /**
@@ -566,7 +702,7 @@ public class TemplateCompiler extends PageCompiler
      * @param tagLibrary
      * @return Template
      */
-    public Template getTemplate(List<Node> list, TagLibrary tagLibrary)
+    public Template getTemplate(String path, List<Node> list, TagLibrary tagLibrary)
     {
         TagFactoryManager tagFactoryManager = TagFactoryManager.getInstance();
 
@@ -580,6 +716,16 @@ public class TemplateCompiler extends PageCompiler
             }
 
             if(node.getNodeType() == NodeType.EXPRESSION)
+            {
+                continue;
+            }
+
+            if(node.getNodeType() == NodeType.JSP_DECLARATION 
+                    || node.getNodeType() == NodeType.JSP_SCRIPTLET
+                    || node.getNodeType() == NodeType.JSP_EXPRESSION
+                    || node.getNodeType() == NodeType.JSP_DIRECTIVE_PAGE
+                    || node.getNodeType() == NodeType.JSP_DIRECTIVE_TAGLIB
+                    || node.getNodeType() == NodeType.JSP_DIRECTIVE_INCLUDE)
             {
                 continue;
             }
@@ -601,7 +747,7 @@ public class TemplateCompiler extends PageCompiler
             }
         }
 
-        return new Template(list);
+        return new Template(path, list);
     }
 
     /**

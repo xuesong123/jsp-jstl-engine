@@ -81,4 +81,31 @@ public class NodeUtil
 
         return buffer.toString();
     }
+    /**
+     * @param node
+     * @return String
+     */
+    public static String toString(Map<String, String> attributes)
+    {
+        StringBuilder buffer = new StringBuilder();
+
+        if(attributes != null && attributes.size() > 0)
+        {
+            for(Map.Entry<String, String> entrySet : attributes.entrySet())
+            {
+                buffer.append(entrySet.getKey());
+                buffer.append("=\"");
+                buffer.append(entrySet.getValue());
+                buffer.append("\"");
+                buffer.append(" ");
+            }
+        }
+
+        if(buffer.length() > 0)
+        {
+            buffer.deleteCharAt(buffer.length() - 1);
+        }
+
+        return buffer.toString();
+    }
 }

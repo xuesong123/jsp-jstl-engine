@@ -28,10 +28,12 @@ public class Template
     private List<Node> nodes;
 
     /**
-     * @param document
+     * @param file
+     * @param nodes
      */
-    public Template(List<Node> nodes)
+    public Template(String file, List<Node> nodes)
     {
+        this.file = file;
         this.nodes = nodes;
         this.updateTime = System.currentTimeMillis();
     }

@@ -36,8 +36,6 @@ public class Node
 
     /**
      * @param nodeName
-     * @param nodeType
-     * @param nodeHtml
      */
     public Node(String nodeName)
     {
@@ -47,7 +45,6 @@ public class Node
     /**
      * @param nodeName
      * @param nodeType
-     * @param nodeHtml
      */
     public Node(String nodeName, int nodeType)
     {
@@ -78,7 +75,7 @@ public class Node
      */
     public int getNodeType()
     {
-        return nodeType;
+        return this.nodeType;
     }
 
     /**
@@ -168,7 +165,7 @@ public class Node
      */
     public String getAttribute(String name)
     {
-        return this.attributes.get(name.toLowerCase());
+        return this.attributes.get(name);
     }
 
     /**
