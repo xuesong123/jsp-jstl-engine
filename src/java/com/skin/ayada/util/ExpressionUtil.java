@@ -262,39 +262,8 @@ public class ExpressionUtil
                 }
                 else
                 {
-                    Object value = null;
-                    String result = node.toString();
-                    int flag = getNumberType(result);
-
-                    if(flag == 0)
-                    {
-                        return result;
-                    }
-                    else
-                    {
-                        if(flag == 1)
-                        {
-                            try
-                            {
-                                value = Integer.valueOf(result);
-                            }
-                            catch(NumberFormatException e)
-                            {
-                            }
-                        }
-                        else if(flag == 2)
-                        {
-                            try
-                            {
-                                value = Double.valueOf(result);
-                            }
-                            catch(NumberFormatException e)
-                            {
-                            }
-                        }
-                    }
-
-                    return (value != null ? value : result);
+                    Object value = getValue(node.toString());
+                    return (value != null ? value : node.toString());
                 }
             }
             else
@@ -328,23 +297,110 @@ public class ExpressionUtil
 
     /**
      * @param source
+     * @return Object
+     */
+    public static Object getValue(String source)
+    {
+        Object value = source;
+        int type = getNumberType(source);
+
+        switch(type)
+        {
+            case 0:
+            {
+                break;
+            }
+            case 1:
+            {
+                try
+                {
+                    value = Integer.parseInt(source);
+                }
+                catch(NumberFormatException e)
+                {
+                }
+
+                break;
+            }
+            case 2:
+            {
+                try
+                {
+                    value = Float.parseFloat(source);
+                }
+                catch(NumberFormatException e)
+                {
+                }
+                break;
+            }
+            case 3:
+            {
+                try
+                {
+                    value = Double.parseDouble(source);
+                }
+                catch(NumberFormatException e)
+                {
+                }
+                break;
+            }
+            case 4:
+            {
+                try
+                {
+                    source = source.trim();
+                    if(source.endsWith("l") || source.endsWith("L"))
+                    {
+                        source = source.substring(0, source.length() - 1);
+                    }
+                    value = Long.parseLong(source);
+                }
+                catch(NumberFormatException e)
+                {
+                }
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+
+        return value;
+    }
+
+    /**
+     * 0 - String
+     * 1 - Integer
+     * 2 - Float
+     * 3 - Double
+     * 4 - Long
+     * @param source
      * @return int
      */
-    public static int getNumberType(String source)
+    public static int getNumberType(String content)
     {
+        String source = content.trim();
+
+        if(source.length() < 1)
+        {
+            return 0;
+        }
+
         char c;
         int d = 0;
         int type = 1;
+        int length = source.length();
 
-        for(int i = 0, length = source.length(); i < length; i++)
+        for(int i = 0; i < length; i++)
         {
             c = source.charAt(i);
 
-            if(i > 0 && c == '.')
+            if(c == '.')
             {
                 if(d == 0)
                 {
-                    d = 2;
+                    d = 3;
                     continue;
                 }
                 else
@@ -355,10 +411,87 @@ public class ExpressionUtil
 
             if(c < 48 || c > 57)
             {
+                if(i == length - 1)
+                {
+                    if(c == 'f' || c == 'F')
+                    {
+                        return 2;
+                    }
+                    else if(c == 'd' || c == 'D')
+                    {
+                        return 3;
+                    }
+                    else if(c == 'l' || c == 'L')
+                    {
+                        return (d == 0 ? 4 : 0);
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
+
+                if(i == length - 2 && (c == 'e' || c == 'E') && Character.isDigit(source.charAt(length - 1)))
+                {
+                    return 3;
+                }
+
                 return 0;
             }
         }
 
         return (d == 0 ? type : d);
+    }
+
+    public static void main(String[] args)
+    {
+        /*
+        float floatValue = 2.0f;
+        double doubleValue = 2.0d;
+        long longValue = 2L;
+        double doubleValue2 = 1E3;
+        */
+
+        String[] source = {"ae2", "1", "1.0", "1.0f", "1.0F", "1.0d", "1.0D", "1.0L", "1L", "1e3", "1.2e3"};
+
+        for(int i = 0; i < source.length; i++)
+        {
+            int type = getNumberType(source[i]);
+            Object value = getValue(source[i]);
+    
+            switch(type)
+            {
+                case 0:
+                {
+                    System.out.println("String: " + source[i] + " - " + value.getClass().getName() + " - " + value);
+                    break;
+                }
+                case 1:
+                {
+                    System.out.println("Integer: " + source[i] + " - " + value.getClass().getName() + " - " + value);
+                    break;
+                }
+                case 2:
+                {
+                    System.out.println("Float: " + source[i] + " - " + value.getClass().getName() + " - " + value);
+                    break;
+                }
+                case 3:
+                {
+                    System.out.println("Double: " + source[i] + " - " + value.getClass().getName() + " - " + value);
+                    break;
+                }
+                case 4:
+                {
+                    System.out.println("Long: " + source[i] + " - " + value.getClass().getName() + " - " + value);
+                    break;
+                }
+                default:
+                {
+                    System.out.println("String: " + source[i] + " - " + value.getClass().getName() + " - " + value);
+                    break;
+                }
+            }
+        }
     }
 }

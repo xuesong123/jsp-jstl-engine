@@ -13,7 +13,6 @@ package com.skin.ayada.compile;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +26,7 @@ import com.skin.ayada.tagext.IterationTag;
 import com.skin.ayada.template.Template;
 import com.skin.ayada.util.ClassUtil;
 import com.skin.ayada.util.NodeUtil;
+import com.skin.ayada.util.TagUtil;
 
 /**
  * <p>Title: ClassCompiler</p>
@@ -486,63 +486,56 @@ public class JspCompiler
                 String name = entry.getKey();
                 String value = entry.getValue();
                 String methodName = "set" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
-                Method method = getSetMethod(clazz, methodName);
+                Method method = TagUtil.getSetMethod(clazz, methodName);
 
                 if(method != null)
                 {
                     Class<?>[] parameterTypes = method.getParameterTypes();
+                    Class<?> parameterType = parameterTypes[0];
 
-                    if(parameterTypes.length > 0)
+                    if(parameterType == char.class || parameterType == Character.class)
                     {
-                        Class<?> parameterType = parameterTypes[0];
-
-                        if(parameterType == char.class || parameterType == Character.class)
-                        {
-                            writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getInteger(expressionContext, \"" + this.escape(value) + "\"));");
-                        }
-                        else if(parameterType == boolean.class || parameterType == Boolean.class)
-                        {
-                            writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getBoolean(expressionContext, \"" + this.escape(value) + "\"));");
-                        }
-                        else if(parameterType == byte.class || parameterType == Byte.class)
-                        {
-                            writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getByte(expressionContext, \"" + this.escape(value) + "\"));");
-                        }
-                        else if(parameterType == short.class || parameterType == Short.class)
-                        {
-                            writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getShort(expressionContext, \"" + this.escape(value) + "\"));");
-                        }
-                        else if(parameterType == int.class || parameterType == Integer.class)
-                        {
-                            writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getInteger(expressionContext, \"" + this.escape(value) + "\"));");
-                        }
-                        else if(parameterType == float.class || parameterType == Float.class)
-                        {
-                            writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getFloat(expressionContext, \"" + this.escape(value) + "\"));");
-                        }
-                        else if(parameterType == double.class || parameterType == Double.class)
-                        {
-                            writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getDouble(expressionContext, \"" + this.escape(value) + "\"));");
-                        }
-                        else if(parameterType == long.class || parameterType == Long.class)
-                        {
-                            writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getLong(expressionContext, \"" + this.escape(value) + "\"));");
-                        }
-                        else if(parameterType == String.class)
-                        {
-                            writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getString(expressionContext, \"" + this.escape(value) + "\"));");
-                        }
-                        else if(parameterType == java.util.Date.class)
-                        {
-                            writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getDate(expressionContext, \"" + this.escape(value) + "\"));");
-                        }
-                        else if(parameterType == Object.class)
-                        {
-                            writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.evaluate(expressionContext, \"" + this.escape(value) + "\"));");
-                        }
+                        writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getInteger(expressionContext, \"" + this.escape(value) + "\"));");
                     }
-                    else
+                    else if(parameterType == boolean.class || parameterType == Boolean.class)
                     {
+                        writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getBoolean(expressionContext, \"" + this.escape(value) + "\"));");
+                    }
+                    else if(parameterType == byte.class || parameterType == Byte.class)
+                    {
+                        writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getByte(expressionContext, \"" + this.escape(value) + "\"));");
+                    }
+                    else if(parameterType == short.class || parameterType == Short.class)
+                    {
+                        writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getShort(expressionContext, \"" + this.escape(value) + "\"));");
+                    }
+                    else if(parameterType == int.class || parameterType == Integer.class)
+                    {
+                        writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getInteger(expressionContext, \"" + this.escape(value) + "\"));");
+                    }
+                    else if(parameterType == float.class || parameterType == Float.class)
+                    {
+                        writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getFloat(expressionContext, \"" + this.escape(value) + "\"));");
+                    }
+                    else if(parameterType == double.class || parameterType == Double.class)
+                    {
+                        writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getDouble(expressionContext, \"" + this.escape(value) + "\"));");
+                    }
+                    else if(parameterType == long.class || parameterType == Long.class)
+                    {
+                        writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getLong(expressionContext, \"" + this.escape(value) + "\"));");
+                    }
+                    else if(parameterType == String.class)
+                    {
+                        writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getString(expressionContext, \"" + this.escape(value) + "\"));");
+                    }
+                    else if(parameterType == java.util.Date.class)
+                    {
+                        writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getDate(expressionContext, \"" + this.escape(value) + "\"));");
+                    }
+                    else if(parameterType == Object.class)
+                    {
+                        writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.evaluate(expressionContext, \"" + this.escape(value) + "\"));");
                     }
                 }
             }
@@ -551,34 +544,6 @@ public class JspCompiler
         {
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * @param type
-     * @param methodName
-     * @return Method
-     */
-    public static Method getSetMethod(Class<?> type, String methodName)
-    {
-        Method[] methods = type.getMethods();
-
-        for(Method method : methods)
-        {
-            if(method.getModifiers() != Modifier.PUBLIC)
-            {
-                continue;
-            }
-
-            if(method.getName().equals(methodName))
-            {
-                if(method.getParameterTypes().length == 1)
-                {
-                    return method;
-                }
-            }
-        }
-
-        return null;
     }
 
     /**

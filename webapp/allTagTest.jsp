@@ -33,10 +33,10 @@
 <c:forEach items="${userList}" var="user" varStatus="status">
     <p>user: ${user.userName}</p>
     <c:choose>
-        <c:when test="${1 == 1}">1</c:when>
-        <c:when test="${2 == 2}">2</c:when>
-        <c:when test="${3 == 3}">3</c:when>
-        <c:otherwise>otherwise</c:otherwise>
+        <c:when test="${user.userName == 'test1'}"><p>test1, good man !</p></c:when>
+        <c:when test="${user.userName == 'test2'}"><p>test2, good man !</p></c:when>
+        <c:when test="${user.userName == 'test3'}"><p>test3, good man !</p></c:when>
+        <c:otherwise><p>unknown user! Do you known 'bad egg'? You! Are!</p></c:otherwise>
     </c:choose>
 </c:forEach>
 
