@@ -79,7 +79,14 @@ public class DefaultPageContext implements PageContext
      */
     public Object setAttribute(String key, Object value)
     {
-        return this.attributes.put(key, value);
+        if(value != null)
+        {
+            return this.attributes.put(key, value);
+        }
+        else
+        {
+            return this.attributes.remove(key);
+        }
     }
 
     /**

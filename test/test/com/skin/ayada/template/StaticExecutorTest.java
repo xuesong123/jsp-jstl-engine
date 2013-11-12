@@ -48,42 +48,6 @@ public class StaticExecutorTest
     {
         test1();
     }
-
-    public static String format(String source)
-    {
-        StringReader stringReader = new StringReader(source);
-        StringWriter stringWriter = new StringWriter();
-        BufferedReader buffer = new BufferedReader(stringReader);
-
-        int prev = 0;
-        String line = null;
-
-        try
-        {
-            while((line = buffer.readLine()) != null)
-            {
-                if(line.trim().length() > 0)
-                {
-                    prev = 1;
-                    stringWriter.write(line);
-                    stringWriter.write("\r\n");
-                }
-                else
-                {
-                    if(prev == 1)
-                    {
-                        stringWriter.write("\r\n");
-                        prev = 0;
-                    }
-                }
-            }
-        }
-        catch(Exception e)
-        {
-        }
-
-        return stringWriter.toString();
-    }
     
     public static Template getTemplate()
     {
@@ -181,6 +145,46 @@ public class StaticExecutorTest
     public String toString(Node node)
     {
         return NodeUtil.toString(node);
+    }
+
+    /**
+     * @param source
+     * @return String
+     */
+    public static String format(String source)
+    {
+        StringReader stringReader = new StringReader(source);
+        StringWriter stringWriter = new StringWriter();
+        BufferedReader buffer = new BufferedReader(stringReader);
+
+        int prev = 0;
+        String line = null;
+
+        try
+        {
+            while((line = buffer.readLine()) != null)
+            {
+                if(line.trim().length() > 0)
+                {
+                    prev = 1;
+                    stringWriter.write(line);
+                    stringWriter.write("\r\n");
+                }
+                else
+                {
+                    if(prev == 1)
+                    {
+                        stringWriter.write("\r\n");
+                        prev = 0;
+                    }
+                }
+            }
+        }
+        catch(Exception e)
+        {
+        }
+
+        return stringWriter.toString();
     }
     
     /**

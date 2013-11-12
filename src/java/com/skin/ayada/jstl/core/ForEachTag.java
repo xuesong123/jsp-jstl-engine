@@ -76,7 +76,7 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
      */
     public void setItems(Object object)
     {
-        this.items = this.getIterator(object);
+        this.items = getIterator(object);
         this.hasItems = true;
     }
 
@@ -97,10 +97,40 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
         return this.items.next();
     }
 
+    @Override
+    public LoopTagStatus getLoopStatus()
+    {
+        return this;
+    }
+
+    /**
+     * @param begin
+     * @param end
+     * @param step
+     * @return ForEachIterator
+     */
+    public static ForEachIterator getIterator(Integer begin, Integer end, Integer step)
+    {
+        List<Integer> list = new ArrayList<Integer>();
+
+        if(begin != null && end != null)
+        {
+            int x = end.intValue();
+            int k = (step != null ? step.intValue() : 1);
+
+            for(int i = 0, j = begin.intValue(); j <= x; i++, j += k)
+            {
+                list.add(Integer.valueOf(j));
+            }
+        }
+
+        return new SimpleForEachIterator(list.iterator());
+    }
+
     /**
      * @param items
      */
-    public ForEachIterator getIterator(Object object)
+    public static ForEachIterator getIterator(Object object)
     {
         ForEachIterator items = null;
 
@@ -110,39 +140,39 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
         }
         else if(object instanceof Object[])
         {
-            items = toForEachIterator((Object[])(Object[])object);
+            items = toForEachIterator((Object[])object);
         }
         else if(object instanceof boolean[])
         {
-            items = toForEachIterator((boolean[])(boolean[])object);
+            items = toForEachIterator((boolean[])object);
         }
         else if(object instanceof byte[])
         {
-            items = toForEachIterator((byte[])(byte[])object);
+            items = toForEachIterator((byte[])object);
         }
         else if(object instanceof char[])
         {
-            items = toForEachIterator((char[])(char[])object);
+            items = toForEachIterator((char[])object);
         }
         else if(object instanceof short[])
         {
-            items = toForEachIterator((short[])(short[])object);
+            items = toForEachIterator((short[])object);
         }
         else  if(object instanceof int[])
         {
-            items = toForEachIterator((int[])(int[])object);
+            items = toForEachIterator((int[])object);
         }
         else  if(object instanceof long[])
         {
-            items = toForEachIterator((long[])(long[])object);
+            items = toForEachIterator((long[])object);
         }
         else  if(object instanceof float[])
         {
-            items = toForEachIterator((float[])(float[])object);
+            items = toForEachIterator((float[])object);
         }
         else if(object instanceof double[])
         {
-            items = toForEachIterator((double[])(double[])object);
+            items = toForEachIterator((double[])object);
         }
         else if(object instanceof Collection<?>)
         {
@@ -180,17 +210,17 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
         return this.items;
     };
 
-    protected ForEachIterator toForEachIterator(Object o)
+    public static ForEachIterator toForEachIterator(Object o)
     {
         throw new RuntimeException("Can't cast to iterator !");
     }
 
-    protected ForEachIterator toForEachIterator(Object a[])
+    public static ForEachIterator toForEachIterator(Object a[])
     {
         return new SimpleForEachIterator(Arrays.asList(a).iterator());
     }
 
-    protected ForEachIterator toForEachIterator(boolean a[])
+    public static ForEachIterator toForEachIterator(boolean a[])
     {
         Boolean wrapped[] = new Boolean[a.length];
         for(int i = 0; i < a.length; i++)
@@ -199,7 +229,7 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
         return new SimpleForEachIterator(Arrays.asList(wrapped).iterator());
     }
 
-    protected ForEachIterator toForEachIterator(byte a[])
+    public static ForEachIterator toForEachIterator(byte a[])
     {
         Byte wrapped[] = new Byte[a.length];
         for(int i = 0; i < a.length; i++)
@@ -208,7 +238,7 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
         return new SimpleForEachIterator(Arrays.asList(wrapped).iterator());
     }
 
-    protected ForEachIterator toForEachIterator(char a[])
+    public static ForEachIterator toForEachIterator(char a[])
     {
         Character wrapped[] = new Character[a.length];
         for(int i = 0; i < a.length; i++)
@@ -217,7 +247,7 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
         return new SimpleForEachIterator(Arrays.asList(wrapped).iterator());
     }
 
-    protected ForEachIterator toForEachIterator(short a[])
+    public static ForEachIterator toForEachIterator(short a[])
     {
         Short wrapped[] = new Short[a.length];
         for(int i = 0; i < a.length; i++)
@@ -226,7 +256,7 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
         return new SimpleForEachIterator(Arrays.asList(wrapped).iterator());
     }
 
-    protected ForEachIterator toForEachIterator(int a[])
+    public static ForEachIterator toForEachIterator(int a[])
     {
         Integer wrapped[] = new Integer[a.length];
         for(int i = 0; i < a.length; i++)
@@ -235,7 +265,7 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
         return new SimpleForEachIterator(Arrays.asList(wrapped).iterator());
     }
 
-    protected ForEachIterator toForEachIterator(long a[])
+    public static ForEachIterator toForEachIterator(long a[])
     {
         Long wrapped[] = new Long[a.length];
         for(int i = 0; i < a.length; i++)
@@ -244,7 +274,7 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
         return new SimpleForEachIterator(Arrays.asList(wrapped).iterator());
     }
 
-    protected ForEachIterator toForEachIterator(float a[])
+    public static ForEachIterator toForEachIterator(float a[])
     {
         Float wrapped[] = new Float[a.length];
         for(int i = 0; i < a.length; i++)
@@ -253,7 +283,7 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
         return new SimpleForEachIterator(Arrays.asList(wrapped).iterator());
     }
 
-    protected ForEachIterator toForEachIterator(double a[])
+    public static ForEachIterator toForEachIterator(double a[])
     {
         Double wrapped[] = new Double[a.length];
         for(int i = 0; i < a.length; i++)
@@ -262,17 +292,17 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
         return new SimpleForEachIterator(Arrays.asList(wrapped).iterator());
     }
 
-    protected ForEachIterator toForEachIterator(Collection<?> c)
+    public static ForEachIterator toForEachIterator(Collection<?> c)
     {
         return new SimpleForEachIterator(c.iterator());
     }
 
-    protected ForEachIterator toForEachIterator(Iterator<?> i)
+    public static ForEachIterator toForEachIterator(Iterator<?> i)
     {
         return new SimpleForEachIterator(i);
     }
 
-    protected ForEachIterator toForEachIterator(Enumeration<?> e)
+    public static ForEachIterator toForEachIterator(Enumeration<?> e)
     {
         class EnumerationAdapter implements ForEachIterator
         {
@@ -297,12 +327,12 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
         return new EnumerationAdapter(e);
     }
 
-    protected ForEachIterator toForEachIterator(Map<?, ?> m)
+    public static ForEachIterator toForEachIterator(Map<?, ?> m)
     {
         return new SimpleForEachIterator(m.entrySet().iterator());
     }
 
-    protected ForEachIterator toForEachIterator(String s)
+    public static ForEachIterator toForEachIterator(String s)
     {
         String value = null;
         List<String> list = new ArrayList<String>();
@@ -320,32 +350,6 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
         }
 
         return toForEachIterator(list);
-    }
-
-    protected interface ForEachIterator
-    {
-        public boolean hasNext();
-        public Object next();
-    }
-
-    protected class SimpleForEachIterator implements ForEachIterator
-    {
-        private Iterator<?> iterator;
-
-        public SimpleForEachIterator(Iterator<?> iterator)
-        {
-            this.iterator = iterator;
-        }
-
-        public boolean hasNext()
-        {
-            return this.iterator.hasNext();
-        }
-
-        public Object next()
-        {
-            return this.iterator.next();
-        }
     }
 
     public static void main(String[] args)

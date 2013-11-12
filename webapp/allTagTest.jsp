@@ -30,8 +30,14 @@
 
 <c:if test="${1 == 1}">c:if test</c:if>
 
-<c:forEach items="${userList}" var="user">
-user: ${user.userName}
+<c:forEach items="${userList}" var="user" varStatus="status">
+    <p>user: ${user.userName}</p>
+    <c:choose>
+        <c:when test="${1 == 1}">1</c:when>
+        <c:when test="${2 == 2}">2</c:when>
+        <c:when test="${3 == 3}">3</c:when>
+        <c:otherwise>otherwise</c:otherwise>
+    </c:choose>
 </c:forEach>
 
 <c:choose>
