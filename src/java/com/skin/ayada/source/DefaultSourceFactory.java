@@ -59,47 +59,18 @@ public class DefaultSourceFactory extends SourceFactory
     @Override
     public Source getSource(String path, String encoding)
     {
-        if(path == null)
-        {
-            throw new RuntimeException("t:include error: attribute 'file' not exists !");
-        }
-
         if(encoding == null)
         {
             encoding = "UTF-8";
         }
 
-        File file = new File(this.home, path);
+        File file = this.getFile(path);
 
         try
         {
-            if(file.getCanonicalPath().startsWith(this.home) == false)
-            {
-                throw new RuntimeException("t:include error: " + file.getAbsolutePath() + " can't access !");
-            }
-        }
-        catch(RuntimeException e)
-        {
-            throw e;
-        }
-        catch(Exception e)
-        {
-            throw new RuntimeException("t:include error: " + file.getAbsolutePath() + " can't access !", e);
-        }
-
-        if(file.exists() == false)
-        {
-            throw new RuntimeException("t:include error: " + file.getAbsolutePath() + " not exists !");
-        }
-
-        if(file.isFile() == false)
-        {
-            throw new RuntimeException("t:include error: " + file.getAbsolutePath() + " not file !");
-        }
-
-        try
-        {
-            return new Source(home, IO.read(file, encoding, 4096), this.getSourceType(file.getName()));
+            Source source = new Source(home, path, IO.read(file, encoding, 4096), this.getSourceType(file.getName()));
+            source.setLastModified(file.lastModified());
+            return source;
         }
         catch(IOException e)
         {
@@ -108,18 +79,61 @@ public class DefaultSourceFactory extends SourceFactory
     }
 
     /**
-     * @return the home
+     * @param path
+     * @return long
      */
-    public String getHome()
+    public long getLastModified(String path)
     {
-        return this.home;
+        return this.getFile(path).lastModified();
     }
 
+    public File getFile(String path)
+    {
+        if(path == null)
+        {
+            throw new NullPointerException("path must be not null !");
+        }
+
+        File file = new File(this.home, path);
+
+        try
+        {
+            if(file.getCanonicalPath().startsWith(this.home) == false)
+            {
+                throw new RuntimeException(file.getAbsolutePath() + " can't access !");
+            }
+        }
+        catch(Exception e)
+        {
+            throw new RuntimeException(file.getAbsolutePath() + " can't access !");
+        }
+
+        if(file.exists() == false)
+        {
+            throw new RuntimeException(file.getAbsolutePath() + " can't access !");
+        }
+
+        if(file.isFile() == false)
+        {
+            throw new RuntimeException(file.getAbsolutePath() + " can't access !");
+        }
+        
+        return file;
+    }
+    
     /**
      * @param home the home to set
      */
     public void setHome(String home)
     {
         this.home = home;
+    }
+
+    /**
+     * @return the home
+     */
+    public String getHome()
+    {
+        return this.home;
     }
 }

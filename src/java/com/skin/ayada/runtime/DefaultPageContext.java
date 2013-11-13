@@ -249,16 +249,17 @@ public class DefaultPageContext implements PageContext
      * @param page
      */
     @Override
-    public void include(String page)
+    public void include(String page) throws Exception
     {
         this.include(page, null);
     }
 
     /**
      * @param page
+     * @throws Exception 
      */
     @Override
-    public void include(String page, Map<String, Object> context)
+    public void include(String page, Map<String, Object> context) throws Exception
     {
         this.templateContext.execute(page, context, this.getOut());
     }

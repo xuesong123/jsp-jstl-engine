@@ -24,7 +24,6 @@ import com.skin.ayada.runtime.JspFactory;
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.source.DefaultSourceFactory;
 import com.skin.ayada.source.SourceFactory;
-import com.skin.ayada.template.DefaultExecutor;
 import com.skin.ayada.template.Template;
 
 /**
@@ -67,7 +66,14 @@ public class ExecutorTest
         PageContext pageContext = getPageContext(writer);
 
         long t3 = System.currentTimeMillis();
-        DefaultExecutor.execute(template, pageContext);
+        try
+        {
+            template.execute(pageContext);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
         long t4 = System.currentTimeMillis();
         System.out.println("run time: " + (t4 - t3));
         System.out.println(writer.toString());

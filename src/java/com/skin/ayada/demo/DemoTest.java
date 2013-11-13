@@ -16,7 +16,6 @@ import com.skin.ayada.runtime.JspFactory;
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.source.ClassPathSourceFactory;
 import com.skin.ayada.source.SourceFactory;
-import com.skin.ayada.template.DefaultExecutor;
 import com.skin.ayada.template.Template;
 import com.skin.ayada.template.TemplateContext;
 import com.skin.ayada.util.TemplateUtil;
@@ -52,7 +51,15 @@ public class DemoTest
         System.out.println(TemplateUtil.toString(template));
 
         System.out.println("-------------- System.out.print --------------");
-        DefaultExecutor.execute(template, pageContext);
+
+        try
+        {
+            template.execute(pageContext);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
 
         System.out.println("-------------- run result --------------");
         System.out.println(writer.toString());

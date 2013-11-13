@@ -92,12 +92,12 @@ public interface PageContext
     /**
      * @param page
      */
-    public void include(String page);
+    public void include(String page) throws Exception;
 
     /**
      * @param page
      */
-    public void include(String page, Map<String, Object> context);
+    public void include(String page, Map<String, Object> context) throws Exception;
 
     /**
      * release

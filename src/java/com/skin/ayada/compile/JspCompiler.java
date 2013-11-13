@@ -3,9 +3,9 @@
  * $Revision: 1.1 $
  * $Date: 2013-11-8 $
  *
- * Copyright (C) 2008 WanMei, Inc. All rights reserved.
+ * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
- * This software is the proprietary information of WanMei, Inc.
+ * This software is the proprietary information of Skin, Inc.
  * Use is subject to license terms.
  */
 package com.skin.ayada.compile;
@@ -55,15 +55,14 @@ public class JspCompiler
         writer.println(" */");
         writer.println("package " + packageName + ";");
         writer.println();
-        writer.println("import java.io.IOException;");
-        writer.println();
+        
         writer.println("import com.skin.ayada.runtime.ExpressionContext;");
         writer.println("import com.skin.ayada.runtime.JspWriter;");
         writer.println("import com.skin.ayada.runtime.PageContext;");
         writer.println("import com.skin.ayada.tagext.BodyContent;");
-        writer.println("import com.skin.ayada.tagext.Tag;");
         writer.println("import com.skin.ayada.tagext.IterationTag;");
-        writer.println("import com.skin.ayada.template.TemplateHandler;");
+        writer.println("import com.skin.ayada.tagext.Tag;");
+        writer.println("import com.skin.ayada.template.JspTemplate;");
         writer.println("import com.skin.ayada.util.ExpressionUtil;");
         writer.println();
         writer.println("/**");
@@ -73,7 +72,7 @@ public class JspCompiler
         writer.println(" * @author JspCompiler");
         writer.println(" * @version 1.0");
         writer.println(" */");
-        writer.println("public class " + className + " extends TemplateHandler");
+        writer.println("public class " + className + " extends JspTemplate");
         writer.println("{");
 
         Node node = null;
@@ -115,9 +114,10 @@ public class JspCompiler
 
         writer.println("    /**");
         writer.println("     * @param pageContext");
-        writer.println("     * @throws IOException");
+        writer.println("     * @throws Exception");
         writer.println("     */");
-        writer.println("    public void execute(PageContext pageContext) throws java.io.IOException");
+        writer.println("    @Override");
+        writer.println("    public void execute(final PageContext pageContext) throws Exception");
         writer.println("    {");
         writer.println("        JspWriter out = pageContext.getOut();");
         writer.println("        ExpressionContext expressionContext = pageContext.getExpressionContext();");
@@ -155,6 +155,25 @@ public class JspCompiler
             String bodyContentInstanceName = this.getVariableName(node, "_body_content_");
             String forEachOldVar = this.getVariableName(node, "_for_each_old_var_");
             String forEachOldVarStatus = this.getVariableName(node, "_for_each_old_var_status_");
+
+            boolean hasParent = (parent != null);
+
+            if(parent != null)
+            {
+                String parentTagName = parent.getNodeName();
+
+                if(parentTagName.equals("c:if")
+                        || parentTagName.equals("c:out")
+                        || parentTagName.equals("c:set")
+                        || parentTagName.equals("c:each")
+                        || parentTagName.equals("c:forEach")
+                        || parentTagName.equals("c:choose")
+                        || parentTagName.equals("c:when")
+                        || parentTagName.equals("c:otherwise"))
+                {
+                    hasParent = false;
+                }
+            }
 
             if(node.getOffset() == index)
             {
@@ -254,7 +273,7 @@ public class JspCompiler
                     writer.println(indent + tagClassName + " " + tagInstanceName + " = new " + tagClassName + "();");
                     writer.println();
 
-                    if(parent != null)
+                    if(hasParent)
                     {
                         writer.println(indent + tagInstanceName + ".setParent(" + parentTagInstanceName + ");");
                     }
@@ -310,7 +329,7 @@ public class JspCompiler
                 {
                     writer.println(indent + tagClassName + " " + tagInstanceName + " = new " + tagClassName + "();");
 
-                    if(parent != null)
+                    if(hasParent)
                     {
                         writer.println(indent + tagInstanceName + ".setParent(" + parentTagInstanceName + ");");
                     }

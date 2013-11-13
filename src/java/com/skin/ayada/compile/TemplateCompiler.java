@@ -67,7 +67,7 @@ public class TemplateCompiler extends PageCompiler
     {
         Source source = this.getSourceFactory().getSource(path, encoding);
 
-        if(source.getType() == 1)
+        if(source.getType() == Source.STATIC)
         {
             TextNode textNode = new TextNode();
             textNode.setLineNumber(lineNumber);
@@ -78,7 +78,7 @@ public class TemplateCompiler extends PageCompiler
 
             List<Node> list = new ArrayList<Node>();
             list.add(textNode);
-            return new Template(path, list);
+            return this.getTemplate(source, list, this.tagLibrary);
         }
 
         int i;
@@ -180,7 +180,7 @@ public class TemplateCompiler extends PageCompiler
             throw new RuntimeException("Exception at line # " + node.getLineNumber() + " " + NodeUtil.toString(node) + " not match !");
         }
 
-        return this.getTemplate(path, list, this.tagLibrary);
+        return this.getTemplate(source, list, this.tagLibrary);
     }
 
     /**
@@ -631,7 +631,7 @@ public class TemplateCompiler extends PageCompiler
         Node parent = stack.peek();
         Source source = this.getSourceFactory().getSource(path, encoding);
 
-        if(source.getType() == 1 || (type != null && type.equals("static")))
+        if(source.getType() == Source.STATIC || (type != null && type.equals("static")))
         {
             TextNode textNode = new TextNode();
             textNode.setLineNumber(lineNumber);
@@ -702,7 +702,7 @@ public class TemplateCompiler extends PageCompiler
      * @param tagLibrary
      * @return Template
      */
-    public Template getTemplate(String path, List<Node> list, TagLibrary tagLibrary)
+    public Template getTemplate(Source source, List<Node> list, TagLibrary tagLibrary)
     {
         TagFactoryManager tagFactoryManager = TagFactoryManager.getInstance();
 
@@ -742,12 +742,12 @@ public class TemplateCompiler extends PageCompiler
                 TagFactory tagFactory = tagFactoryManager.getTagFactory(tagName, className);
                 node.setTagFactory(tagFactory);
             }
-            else
-            {
-            }
         }
 
-        return new Template(path, list);
+        Template template = new Template(source.getHome(), source.getPath(), list);
+        template.setLastModified(source.getLastModified());
+        template.setUpdateTime(System.currentTimeMillis());
+        return template;
     }
 
     /**

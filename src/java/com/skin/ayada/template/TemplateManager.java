@@ -13,6 +13,9 @@ package com.skin.ayada.template;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.skin.ayada.source.DefaultSourceFactory;
+import com.skin.ayada.source.SourceFactory;
+
 /**
  * <p>Title: TemplateManager</p>
  * <p>Description: </p>
@@ -59,7 +62,12 @@ public class TemplateManager
      */
     public static TemplateContext create(String home, int expire)
     {
-        return new TemplateContext(home, expire);
+        SourceFactory sourceFactory = new DefaultSourceFactory(home);
+        TemplateFactory templateFactory = new TemplateFactory();
+        TemplateContext templateContext = new TemplateContext(home, expire);
+        templateContext.setSourceFactory(sourceFactory);
+        templateContext.setTemplateFactory(templateFactory);
+        return templateContext;
     }
 
     /**

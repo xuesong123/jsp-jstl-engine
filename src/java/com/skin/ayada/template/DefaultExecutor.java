@@ -10,7 +10,6 @@
  */
 package com.skin.ayada.template;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class DefaultExecutor
      * @param list
      * @param pageContext
      */
-    public static void execute(Template template, final PageContext pageContext)
+    public static void execute(final Template template, final PageContext pageContext) throws Exception
     {
         Node node = null;
         JspWriter out = null;
@@ -124,20 +123,16 @@ public class DefaultExecutor
                 }
                 index++;
             }
+            
+            jspWriter.flush();
         }
         catch(Throwable t)
         {
-            throw new RuntimeException("\"" + template.getFile() + "\" Exception at line #" + node.getLineNumber() + " " + NodeUtil.toString(node), t);
+            throw new Exception("\"" + template.getPath() + "\" Exception at line #" + node.getLineNumber() + " " + NodeUtil.toString(node), t);
         }
-
-        pageContext.setOut(jspWriter);
-
-        try
+        finally
         {
-            jspWriter.flush();
-        }
-        catch(IOException e)
-        {
+            pageContext.setOut(jspWriter);
         }
     }
 

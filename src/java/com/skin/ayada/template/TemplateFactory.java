@@ -10,6 +10,8 @@
  */
 package com.skin.ayada.template;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +19,7 @@ import com.skin.ayada.compile.TemplateCompiler;
 import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.jstl.TagLibraryFactory;
 import com.skin.ayada.source.SourceFactory;
+import com.skin.ayada.statement.Node;
 
 /**
  * <p>Title: TemplateFactory</p>
@@ -31,19 +34,28 @@ public class TemplateFactory
 
     /**
      * @param home
+     * @param path
+     * @param nodes
+     * @return Template
+     */
+    public static Template getInstance(String home, String path, List<Node> nodes)
+    {
+        return new Template(home, path, nodes);
+    }
+
+    /**
+     * @param home
      * @param file
      * @param charset
      * @return Template
      */
-    public static Template create(SourceFactory sourceFactory, String file, String encoding)
+    public Template create(SourceFactory sourceFactory, String file, String encoding)
     {
         long t1 = System.currentTimeMillis();
         TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();
         TemplateCompiler compiler = new TemplateCompiler(sourceFactory);
         compiler.setTagLibrary(tagLibrary);
         Template template = compiler.compile(file, encoding);
-        template.setFile(file);
-        template.setUpdateTime(System.currentTimeMillis());
         long t2 = System.currentTimeMillis();
 
         if(logger.isDebugEnabled())

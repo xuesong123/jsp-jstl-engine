@@ -44,7 +44,15 @@ public class UserListServlet extends HttpServlet
         Map<String, Object> context = new HashMap<String, Object>();
         List<User> userList = this.getUserList();
         context.put("userList", userList);
-        templateContext.execute("/userList.html", context, response.getWriter());
+        
+        try
+        {
+            templateContext.execute("/userList.html", context, response.getWriter());
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private List<User> getUserList()

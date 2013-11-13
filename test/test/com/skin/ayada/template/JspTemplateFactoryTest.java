@@ -1,11 +1,11 @@
 /*
- * $RCSfile: StaticExecutorTest.java,v $$
+ * $RCSfile: JspTemplateFactoryTest.java,v $$
  * $Revision: 1.1 $
  * $Date: 2013-11-8 $
  *
- * Copyright (C) 2008 WanMei, Inc. All rights reserved.
+ * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
- * This software is the proprietary information of WanMei, Inc.
+ * This software is the proprietary information of Skin, Inc.
  * Use is subject to license terms.
  */
 package test.com.skin.ayada.template;
@@ -31,18 +31,17 @@ import com.skin.ayada.source.DefaultSourceFactory;
 import com.skin.ayada.source.SourceFactory;
 import com.skin.ayada.statement.Node;
 import com.skin.ayada.statement.NodeType;
-import com.skin.ayada.template.DefaultExecutor;
-import com.skin.ayada.template.StaticExecutor;
+import com.skin.ayada.template.JspTemplateFactory;
 import com.skin.ayada.template.Template;
 import com.skin.ayada.util.NodeUtil;
 
 /**
- * <p>Title: StaticExecutorTest</p>
+ * <p>Title: JspTemplateFactoryTest</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class StaticExecutorTest
+public class JspTemplateFactoryTest
 {
     public static void main(String[] args)
     {
@@ -61,21 +60,25 @@ public class StaticExecutorTest
     public static void test1()
     {
         SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
-        TemplateCompiler compiler = new TemplateCompiler(sourceFactory);
-        TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();
-        compiler.setTagLibrary(tagLibrary);
 
         long t1 = System.currentTimeMillis();
-        Template template = compiler.compile("allTagTest.jsp", "UTF-8");
+        JspTemplateFactory jspTemplateFactory = new JspTemplateFactory("work", System.getProperty("java.class.path"));
+        Template template = jspTemplateFactory.create(sourceFactory, "allTagTest.jsp", "UTF-8");
         long t2 = System.currentTimeMillis();
-
         System.out.println("compile time: " + (t2 - t1));
 
         StringWriter writer = new StringWriter();
         PageContext pageContext = getPageContext(writer);
 
         long t3 = System.currentTimeMillis();
-        StaticExecutor.execute(template, pageContext);
+        try
+        {
+            template.execute(pageContext);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
         long t4 = System.currentTimeMillis();
         System.out.println("run time: " + (t4 - t3));
         System.out.println(writer.toString());
@@ -102,13 +105,20 @@ public class StaticExecutorTest
         pageContext.setAttribute("date", "2013-11-8");
 
         pageContext.setAttribute("nodeList", nodes);
-        pageContext.setAttribute("NodeType", StaticExecutorTest.getNodeType());
-        pageContext.setAttribute("CodeUtil", new StaticExecutorTest());
-        pageContext.setAttribute("NodeUtil", new StaticExecutorTest());
+        pageContext.setAttribute("NodeType", JspTemplateFactoryTest.getNodeType());
+        pageContext.setAttribute("CodeUtil", new JspTemplateFactoryTest());
+        pageContext.setAttribute("NodeUtil", new JspTemplateFactoryTest());
         pageContext.setAttribute("tagLibrary", tagLibrary);
 
         long t3 = System.currentTimeMillis();
-        DefaultExecutor.execute(template, pageContext);
+        try
+        {
+            template.execute(pageContext);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
         long t4 = System.currentTimeMillis();
         System.out.println("run time: " + (t4 - t3));
 

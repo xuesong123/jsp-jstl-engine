@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 
 import com.skin.ayada.runtime.JspFactory;
 import com.skin.ayada.runtime.PageContext;
-import com.skin.ayada.source.DefaultSourceFactory;
 import com.skin.ayada.source.SourceFactory;
 import com.skin.ayada.util.StringUtil;
 
@@ -41,6 +40,7 @@ public class TemplateContext
     private int expire;
     private String charset;
     private SourceFactory sourceFactory;
+    private TemplateFactory templateFactory;
     private ConcurrentHashMap<String, FutureTask<Template>> cache;
 
     /**
@@ -58,7 +58,6 @@ public class TemplateContext
     {
         this.home = home;
         this.expire = expire;
-        this.sourceFactory = new DefaultSourceFactory(this.home);
         this.cache = new ConcurrentHashMap<String, FutureTask<Template>>();
     }
 
@@ -67,7 +66,7 @@ public class TemplateContext
      * @param context
      * @param writer
      */
-    public void execute(String path, Map<String, Object> context, Writer writer)
+    public void execute(String path, Map<String, Object> context, Writer writer) throws Exception
     {
         Template template = this.getTemplate(path);
 
@@ -84,7 +83,7 @@ public class TemplateContext
      * @param context
      * @param writer
      */
-    public void execute(Template template, Map<String, Object> context, Writer writer)
+    public void execute(Template template, Map<String, Object> context, Writer writer) throws Exception
     {
         PageContext pageContext = JspFactory.getPageContext(this, writer);
 
@@ -96,41 +95,38 @@ public class TemplateContext
             }
         }
 
-        if(logger.isDebugEnabled())
+        try
         {
-            long t1 = System.currentTimeMillis();
-            DefaultExecutor.execute(template, pageContext);
-            long t2 = System.currentTimeMillis();
-            logger.debug(template.getFile() + " - render time: " + (t2 - t1));
+            template.execute(pageContext);
         }
-        else
+        finally
         {
-            DefaultExecutor.execute(template, pageContext);
+            pageContext.release();
         }
-
-        pageContext.release();
     }
 
     /**
-     * @param path
+     * @param file
      * @return Template
      */
     public Template getTemplate(String path)
     {
         path = StringUtil.replace(path, "\\", "/");
         path = StringUtil.replace(path, "//", "/");
+        final String temp = path;
 
         if(this.expire == 0)
         {
-            return TemplateFactory.create(this.getSourceFactory(), path, this.charset);
+            return this.create(temp);
         }
 
         if(this.cache.size() > 256)
         {
             this.clear();
         }
-
-        final String temp = path;
+        
+        int count = 0;
+        int tryCount = 10;
 
         while(true)
         {
@@ -141,7 +137,7 @@ public class TemplateContext
                 Callable<Template> callable = new Callable<Template>(){
                     public Template call() throws InterruptedException
                     {
-                        return TemplateFactory.create(TemplateContext.this.getSourceFactory(), temp, TemplateContext.this.charset);
+                        return TemplateContext.this.create(temp);
                     }
                 };
 
@@ -169,12 +165,25 @@ public class TemplateContext
 
                     if(timeMillis - template.getUpdateTime() > this.expire * 1000L)
                     {
-                        this.cache.remove(temp, f);
+                        if(template.getLastModified() != sourceFactory.getLastModified(template.getPath()))
+                        {
+                            this.cache.remove(temp, f);
+                        }
+                        else
+                        {
+                            template.setUpdateTime(System.currentTimeMillis());
+                            return template;
+                        }
                     }
                     else
                     {
                         return template;
                     }
+                }
+
+                if(count++ >= tryCount)
+                {
+                    throw new RuntimeException("get template time out...");
                 }
             }
             catch(CancellationException e)
@@ -194,6 +203,15 @@ public class TemplateContext
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    /**
+     * @param path
+     * @return Template
+     */
+    private Template create(String path)
+    {
+        return this.templateFactory.create(this.getSourceFactory(), path, this.charset);
     }
 
     private synchronized void clear()
@@ -256,6 +274,14 @@ public class TemplateContext
     }
 
     /**
+     * @param sourceFactory the sourceFactory to set
+     */
+    public void setSourceFactory(SourceFactory sourceFactory)
+    {
+        this.sourceFactory = sourceFactory;
+    }
+
+    /**
      * @return the sourceFactory
      */
     public SourceFactory getSourceFactory()
@@ -264,16 +290,26 @@ public class TemplateContext
     }
 
     /**
-     * @param sourceFactory the sourceFactory to set
+     * @return the templateFactory
      */
-    public void setSourceFactory(SourceFactory sourceFactory)
+    public TemplateFactory getTemplateFactory()
     {
-        this.sourceFactory = sourceFactory;
+        return this.templateFactory;
+    }
+
+    /**
+     * @param templateFactory the templateFactory to set
+     */
+    public void setTemplateFactory(TemplateFactory templateFactory)
+    {
+        this.templateFactory = templateFactory;
     }
 
     public void destory()
     {
         this.cache.clear();
         this.cache = null;
+        this.sourceFactory = null;
+        this.templateFactory = null;
     }
 }

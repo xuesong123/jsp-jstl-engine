@@ -27,6 +27,12 @@ public abstract class SourceFactory
      * @return Source
      */
     public abstract Source getSource(String path, String encoding);
+    
+    /**
+     * @param path
+     * @return long
+     */
+    public abstract long getLastModified(String path);
 
     /**
      * @param path
@@ -34,16 +40,17 @@ public abstract class SourceFactory
      */
     public int getSourceType(String path)
     {
-        int type = 1;
         String fileType = this.getExtension(path).toLowerCase();
         TemplateConfig config = TemplateConfig.getInstance();
 
         if(config.contains("ayada.compile.source-pattern", fileType))
         {
-            type = 0;
+            return Source.SCRIPT;
         }
-
-        return type;
+        else
+        {
+            return Source.STATIC;
+        }
     }
     
     /**
