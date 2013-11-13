@@ -169,7 +169,8 @@ public class JspCompiler
                         || parentTagName.equals("c:forEach")
                         || parentTagName.equals("c:choose")
                         || parentTagName.equals("c:when")
-                        || parentTagName.equals("c:otherwise"))
+                        || parentTagName.equals("c:otherwise")
+                        || parentTagName.equals("fmt:formatDate"))
                 {
                     hasParent = false;
                 }
@@ -325,6 +326,25 @@ public class JspCompiler
                     writer.println(indent + "if(" + parentTagInstanceName + "){");
                     writer.println(indent + "    " + parentTagInstanceName + " = false;");
                 }
+                else if(tagName.equals("fmt:formatDate"))
+                {
+                    writer.println(indent + tagClassName + " " + tagInstanceName + " = new " + tagClassName + "();");
+
+                    if(hasParent)
+                    {
+                        writer.println(indent + tagInstanceName + ".setParent(" + parentTagInstanceName + ");");
+                    }
+                    else
+                    {
+                        writer.println(indent + tagInstanceName + ".setParent((Tag)null);");
+                    }
+
+                    writer.println(indent + tagInstanceName + ".setPageContext(pageContext);");
+                    this.setAttributes(tagClassName, node.getAttributes(), tagInstanceName, writer);
+                    writer.println(indent + tagInstanceName + ".doStartTag();");
+                    writer.println(indent + tagInstanceName + ".doEndTag();");
+                    writer.println(indent + tagInstanceName + ".release();");
+                }
                 else
                 {
                     writer.println(indent + tagClassName + " " + tagInstanceName + " = new " + tagClassName + "();");
@@ -453,6 +473,10 @@ public class JspCompiler
                 else if(tagName.equals("c:otherwise"))
                 {
                     writer.println(indent + "} /* jsp.jstl.core.OtherwiseTag END */");
+                }
+                else if(tagName.equals("fmt:formatDate"))
+                {
+                    writer.println(indent + "/* jsp.jstl.fmt.FormatDateTag END */");
                 }
                 else
                 {
