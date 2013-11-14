@@ -26,6 +26,7 @@ import com.skin.ayada.source.Source;
 import com.skin.ayada.source.SourceFactory;
 import com.skin.ayada.statement.Expression;
 import com.skin.ayada.statement.JspDeclaration;
+import com.skin.ayada.statement.JspDirective;
 import com.skin.ayada.statement.JspExpression;
 import com.skin.ayada.statement.JspScriptlet;
 import com.skin.ayada.statement.Node;
@@ -48,7 +49,7 @@ public class TemplateCompiler extends PageCompiler
     private int lineNumber = 1;
     private SourceFactory sourceFactory;
     private TagLibrary tagLibrary = null;
-    private static final boolean ignoreJspTag = TemplateConfig.getInstance().getBoolean("ayada.compile.ignore-jsptag");
+    private boolean ignoreJspTag = true;
 
     /**
      * @param source
@@ -56,6 +57,7 @@ public class TemplateCompiler extends PageCompiler
     public TemplateCompiler(SourceFactory sourceFactory)
     {
         this.sourceFactory = sourceFactory;
+        this.ignoreJspTag = TemplateConfig.getInstance().getBoolean("ayada.compile.ignore-jsptag");
     }
 
     /**
@@ -234,7 +236,7 @@ public class TemplateCompiler extends PageCompiler
         }
         else if(n == '%')
         {
-            if(ignoreJspTag)
+            if(this.ignoreJspTag)
             {
                 this.stream.read();
 
@@ -300,8 +302,13 @@ public class TemplateCompiler extends PageCompiler
             {
                 Node node = new Node(nodeName);
                 node.setTagClassName(tagClassName);
-                node.setLineNumber(this.getLineNumber());
                 Map<String, String> attributes = this.getAttributes();
+                
+                node.setOffset(list.size());
+                node.setLineNumber(this.lineNumber);
+                node.setAttributes(attributes);
+                
+                
                 node.setAttributes(attributes);
                 node.setClosed(NodeType.SELF_CLOSED);
                 this.pushNode(stack, list, node);
@@ -323,18 +330,119 @@ public class TemplateCompiler extends PageCompiler
                 String name = attributes.get("name");
                 String className = attributes.get("className");
                 this.setupTagLibrary(name, className);
-                this.popNode(stack, list, "t:import");
+                this.popNode(stack, list, nodeName);
                 return;
             }
 
-            if(tagClassName != null)
+            if(nodeName.equals("jsp:directive.page") || nodeName.equals("jsp:directive.taglib") || nodeName.equals("jsp:directive.include"))
             {
-                Node node = new Node(nodeName);
-                node.setTagClassName(tagClassName);
+                JspDirective node = JspDirective.getInstance(nodeName);
+                node.setTagClassName((String)null);
                 node.setLineNumber(this.getLineNumber());
                 Map<String, String> attributes = this.getAttributes();
                 node.setOffset(list.size());
-                node.setLineNumber(this.lineNumber);
+                node.setLineNumber(this.getLineNumber());
+                node.setAttributes(attributes);
+                this.pushNode(stack, list, node);
+                this.popNode(stack, list, nodeName);
+
+                while((i = this.stream.read()) != -1)
+                {
+                    if(i == '>')
+                    {
+                        break;
+                    }
+                }
+
+                if(this.stream.peek(-2) != '/')
+                {
+                    throw new RuntimeException("The 'jsp:directive.page' direction must be self-closed!");
+                }
+
+                this.skipCRLF();
+            }
+            else if(nodeName.equals("jsp:declaration"))
+            {
+                JspDeclaration node = new JspDeclaration();
+                node.setTagClassName((String)null);
+                node.setLineNumber(this.getLineNumber());
+                Map<String, String> attributes = this.getAttributes();
+                node.setOffset(list.size());
+                node.setLineNumber(this.getLineNumber());
+                node.setAttributes(attributes);
+                node.setClosed(NodeType.PAIR_CLOSED);
+
+                while((i = stream.read()) != -1)
+                {
+                    if(i == '>')
+                    {
+                        break;
+                    }
+                }
+
+                this.skipCRLF();
+                node.append(this.readNodeContent(nodeName));
+                this.pushNode(stack, list, node);
+                this.popNode(stack, list, nodeName);
+                this.skipCRLF();
+            }
+            else if(nodeName.equals("jsp:scriptlet"))
+            {
+                JspScriptlet node = new JspScriptlet();
+                node.setTagClassName((String)null);
+                node.setLineNumber(this.getLineNumber());
+                Map<String, String> attributes = this.getAttributes();
+                node.setOffset(list.size());
+                node.setLineNumber(this.getLineNumber());
+                node.setAttributes(attributes);
+                node.setClosed(NodeType.PAIR_CLOSED);
+
+                while((i = stream.read()) != -1)
+                {
+                    if(i == '>')
+                    {
+                        break;
+                    }
+                }
+
+                this.skipCRLF();
+                node.append(this.readNodeContent(nodeName));
+                this.pushNode(stack, list, node);
+                this.popNode(stack, list, nodeName);
+                this.skipCRLF();
+            }
+            else if(nodeName.equals("jsp:expression"))
+            {
+                JspExpression node = new JspExpression();
+                node.setTagClassName((String)null);
+                node.setLineNumber(this.getLineNumber());
+                Map<String, String> attributes = this.getAttributes();
+                node.setOffset(list.size());
+                node.setLineNumber(this.getLineNumber());
+                node.setAttributes(attributes);
+                node.setClosed(NodeType.PAIR_CLOSED);
+
+                while((i = stream.read()) != -1)
+                {
+                    if(i == '>')
+                    {
+                        break;
+                    }
+                }
+
+                this.skipCRLF();
+                node.append(this.readNodeContent(nodeName));
+                this.pushNode(stack, list, node);
+                this.popNode(stack, list, nodeName);
+                this.skipCRLF();
+            }
+            else if(tagClassName != null)
+            {
+                Node node = new Node(nodeName);
+                node.setTagClassName(tagClassName);
+                Map<String, String> attributes = this.getAttributes();
+                node.setOffset(list.size());
+                node.setLineNumber(this.getLineNumber());
                 node.setAttributes(attributes);
                 node.setClosed(NodeType.PAIR_CLOSED);
                 this.pushNode(stack, list, node);
@@ -395,6 +503,77 @@ public class TemplateCompiler extends PageCompiler
             this.lineNumber++;
             this.stream.read();
         }
+    }
+
+    /**
+     * @param nodeName
+     * @return String
+     */
+    public String readNodeContent(String nodeName)
+    {
+        int i = 0;
+        StringBuilder buffer = new StringBuilder();
+
+        while((i = this.stream.read()) != -1)
+        {
+            if(i == '<' && this.stream.peek() == '/')
+            {
+                this.stream.read();
+
+                if(this.match(nodeName))
+                {
+                    this.stream.skip(nodeName.length());
+
+                    while((i = this.stream.read()) != -1)
+                    {
+                        if(i == '>')
+                        {
+                            break;
+                        }
+                    }
+
+                    break;
+                }
+                else
+                {
+                    buffer.append('/');
+                    buffer.append((char)i);
+                }
+            }
+            else
+            {
+                buffer.append((char)i);
+            }
+        }
+
+        return buffer.toString();
+    }
+
+    /**
+     * @param nodeName
+     * @return boolean
+     */
+    public boolean match(String nodeName)
+    {
+        int i = 0;
+        int length = nodeName.length();
+
+        for(i = 0; i < length; i++)
+        {
+            if(this.stream.peek(i) != nodeName.charAt(i))
+            {
+                return false;
+            }
+        }
+
+        int c = this.stream.peek(i);
+
+        if(c == ' ' || c == '\r' || c == '\n' || c == '\t' || c == '/' || c == '>')
+        {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -798,5 +977,21 @@ public class TemplateCompiler extends PageCompiler
     public void setTagLibrary(TagLibrary tagLibrary)
     {
         this.tagLibrary = tagLibrary;
+    }
+
+    /**
+     * @param ignoreJspTag the ignoreJspTag to set
+     */
+    public void setIgnoreJspTag(boolean ignoreJspTag)
+    {
+        this.ignoreJspTag = ignoreJspTag;
+    }
+
+    /**
+     * @return the ignoreJspTag
+     */
+    public boolean getIgnoreJspTag()
+    {
+        return this.ignoreJspTag;
     }
 }

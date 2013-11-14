@@ -30,6 +30,7 @@ import com.skin.ayada.statement.Node;
  */
 public class TemplateFactory
 {
+    private boolean ignoreJspTag = true;
     private static final Logger logger = LoggerFactory.getLogger(TemplateFactory.class);
 
     /**
@@ -54,6 +55,7 @@ public class TemplateFactory
         long t1 = System.currentTimeMillis();
         TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();
         TemplateCompiler compiler = new TemplateCompiler(sourceFactory);
+        compiler.setIgnoreJspTag(this.getIgnoreJspTag());
         compiler.setTagLibrary(tagLibrary);
         Template template = compiler.compile(file, encoding);
         long t2 = System.currentTimeMillis();
@@ -64,5 +66,21 @@ public class TemplateFactory
         }
 
         return template;
+    }
+
+    /**
+     * @param ignoreJspTag the ignoreJspTag to set
+     */
+    public void setIgnoreJspTag(boolean ignoreJspTag)
+    {
+        this.ignoreJspTag = ignoreJspTag;
+    }
+
+    /**
+     * @return the ignoreJspTag
+     */
+    public boolean getIgnoreJspTag()
+    {
+        return this.ignoreJspTag;
     }
 }

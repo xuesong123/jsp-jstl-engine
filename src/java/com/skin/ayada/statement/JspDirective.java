@@ -39,6 +39,53 @@ public class JspDirective extends DataNode
     {
         super(NodeType.JSP_DIRECTIVE_PAGE_NAME, NodeType.JSP_DIRECTIVE_PAGE);
     }
+
+    /**
+     * @return
+     */
+    public static JspDirective getInstance(String nodeName)
+    {
+        if(nodeName.equals("jsp:directive.page"))
+        {
+            return getPageDirective();
+        }
+        else if(nodeName.equals("jsp:directive.taglib"))
+        {
+            return getPageDirective();
+        }
+        else if(nodeName.equals("jsp:directive.include"))
+        {
+            return getPageDirective();
+        }
+        else
+        {
+            return getPageDirective();
+        }
+    }
+
+    /**
+     * @return JspDirective
+     */
+    public static JspDirective getPageDirective()
+    {
+        return new JspDirective(NodeType.JSP_DIRECTIVE_PAGE_NAME, NodeType.JSP_DIRECTIVE_PAGE);
+    }
+    
+    /**
+     * @return JspDirective
+     */
+    public static JspDirective getTaglibDirective()
+    {
+        return new JspDirective(NodeType.JSP_DIRECTIVE_TAGLIB_NAME, NodeType.JSP_DIRECTIVE_TAGLIB);
+    }
+    
+    /**
+     * @return JspDirective
+     */
+    public static JspDirective getIncludeDirective()
+    {
+        return new JspDirective(NodeType.JSP_DIRECTIVE_INCLUDE_NAME, NodeType.JSP_DIRECTIVE_INCLUDE);
+    }
     
     @Override
     public DataNode clone()

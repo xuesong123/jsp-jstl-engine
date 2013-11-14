@@ -63,7 +63,16 @@ public class PageCompiler
      * read node name, after read nodeName
      * @return String
      */
-    protected Map<String, String> getAttributes()
+    public Map<String, String> getAttributes()
+    {
+        return this.getAttributes(this.stream);
+    }
+
+    /**
+     * read node name, after read nodeName
+     * @return String
+     */
+    public Map<String, String> getAttributes(StringStream stream)
     {
         int i;
         char c;
@@ -72,35 +81,50 @@ public class PageCompiler
         StringBuilder buffer = new StringBuilder();
         Map<String, String> attributes = new HashMap<String, String>();
 
-        while((i = this.stream.peek()) != -1)
+        while((i = stream.peek()) != -1)
         {
-            c = (char)i;
+            if(i == ' ' || i == '\t' || i == '\r' || i == '\n')
+            {
+                stream.read();
+            }
+            else
+            {
+                break;
+            }
+        }
 
-            if(i == '>' || i == '/')
+        while((i = stream.peek()) != -1)
+        {
+            if(i == '/' || i == '>')
             {
                 break;
             }
 
-            if(i == '%' && this.stream.peek(1) == '>')
+            if(i == '%' && stream.peek(1) == '>')
             {
-                this.stream.read();
+                stream.read();
                 break;
             }
 
             // skip space
-            while((i = this.stream.read()) != -1)
+            while((i = stream.read()) != -1)
             {
                 c = (char)i;
 
-                if(Character.isLetter(c) || Character.isDigit(c) || c == ':' || c == '-' || c == '_')
+                if(Character.isLetter(c) || Character.isDigit(c) || c == ':' || c == '-' || c == '_' || c == '/' || c == '>')
                 {
-                    this.stream.back();
+                    stream.back();
                     break;
                 }
             }
 
+            if(i == '/' || i == '>')
+            {
+                break;
+            }
+
             // read name
-            while((i = this.stream.read()) != -1)
+            while((i = stream.read()) != -1)
             {
                 c = (char)i;
 
@@ -110,7 +134,7 @@ public class PageCompiler
                 }
                 else
                 {
-                    this.stream.back();
+                    stream.back();
                     break;
                 }
             }
@@ -124,30 +148,30 @@ public class PageCompiler
             }
 
             // skip space
-            while((i = this.stream.read()) != -1)
+            while((i = stream.read()) != -1)
             {
                 c = (char)i;
 
                 if(c != ' ')
                 {
-                    this.stream.back();
+                    stream.back();
                     break;
                 }
             }
 
             // next character must be '='
-            if(this.stream.peek() != '=')
+            if(stream.peek() != '=')
             {
                 attributes.put(name, "");
                 continue;
             }
             else
             {
-                this.stream.read();
+                stream.read();
             }
 
             // skip space
-            while((i = this.stream.read()) != -1)
+            while((i = stream.read()) != -1)
             {
                 c = (char)i;
 
@@ -159,18 +183,18 @@ public class PageCompiler
 
             char quote = ' ';
 
-            if(c == '"')
+            if(i == '"')
             {
                 quote = '"';
             }
-            else if(c == '\'')
+            else if(i == '\'')
             {
                 quote = '\'';
             }
 
             if(quote == ' ')
             {
-                while((i = this.stream.read()) != -1)
+                while((i = stream.read()) != -1)
                 {
                     c = (char)i;
 
@@ -178,7 +202,7 @@ public class PageCompiler
                     {
                         break;
                     }
-                    else if(c == '/' && this.stream.peek() == '>')
+                    else if(c == '/' && stream.peek() == '>')
                     {
                         break;
                     }
@@ -190,7 +214,7 @@ public class PageCompiler
             }
             else
             {
-                while((i = this.stream.read()) != -1)
+                while((i = stream.read()) != -1)
                 {
                     c = (char)i;
 

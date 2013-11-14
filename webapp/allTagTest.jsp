@@ -7,19 +7,44 @@
 <head>
 <title>test</title>
 </head>
-<body version="1.0">
+<body jsp="<%=1 + 2%>" version="1.0">
+
+<jsp:declaration>
+    public int myInt = 0;
+</jsp:declaration>
+
 <%!
-    public void hello(){
+    public void hello1(){
         System.out.println("Hello, Ayada !");
     }
 %>
 
+<jsp:declaration>
+    public void hello2(){
+        System.out.println("Hello, Ayada !");
+    }
+</jsp:declaration>
+
+<jsp:scriptlet>
+    System.out.println("Hello, Ayada1 !");
+</jsp:scriptlet>
+
+<jsp:scriptlet>
+    System.out.println("Hello, Ayada2 !");
+</jsp:scriptlet>
+
 <%
     int mytest = 0;
-    System.out.println("Hello, Ayada !");
+    System.out.println("Hello, Ayada3 !");
 %>
 
 <%=mytest%>
+
+<jsp:scriptlet>
+System.out.println("Hello, Ayada4 !");
+</jsp:scriptlet >
+
+<jsp:expression>("Hello" + " " + "World !")</jsp:expression>
 
 <c:set var="myVar" value="Hello, Ayada!"/>
 <h1>${myVar}</h1>
@@ -50,12 +75,11 @@
     <c:otherwise>otherwise</c:otherwise>
 </c:choose>
 
-
-<app:scrollpage count="254" pageNum="2" pageSize="10"/>
-
 <app:test myInt="-1.0" myFloat="1.0f" myDouble="1.0d" myLong="1L" myString="Hello"/>
 <app:test myInt="-1.0" myFloat="1.0F" myDouble="1.0D" myLong="1L" myString="Hello"/>
 <app:test myInt="-1.0" myFloat="1.0" myDouble="1e3" myLong="1e3" myString="Hello"/>
 <app:test myInt="-1.0" myFloat="1.0" myDouble="1.2e3" myLong="1.2e3" myString="Hello"/>
+
+<app:scrollpage count="254" pageNum="2" pageSize="10"/>
 </body>
 </html>

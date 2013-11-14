@@ -10,7 +10,7 @@
  */
 package com.skin.ayada.statement;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.skin.ayada.runtime.TagFactory;
@@ -52,7 +52,7 @@ public class Node
         this.nodeName = nodeName;
         this.nodeType = nodeType;
         this.closed   = 1;
-        this.attributes = new HashMap<String, String>();
+        this.attributes = new LinkedHashMap<String, String>();
     }
 
     /**
