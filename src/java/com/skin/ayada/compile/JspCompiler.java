@@ -290,6 +290,11 @@ public class JspCompiler
                         writer.println(indent + tagInstanceName + ".setItems(ExpressionUtil.evaluate(expressionContext, \"" + this.escape(items) + "\"));");
                     }
 
+                    if(variable != null)
+                    {
+                        writer.println(indent + tagInstanceName + ".setVar(\"" + this.escape(variable) + "\");");
+                    }
+
                     if(begin != null && end != null)
                     {
                         writer.println(indent + tagInstanceName + ".setBegin(ExpressionUtil.getInteger(expressionContext, \"" + begin + "\"));");

@@ -30,8 +30,8 @@ public class UserHandler
         for(int i = 0; i < size; i++)
         {
             User user = new User();
-            user.setUserId(Long.valueOf(i));
-            user.setUserName("test" + i);
+            user.setUserId(Long.valueOf(i + 1));
+            user.setUserName("test" + (i + 1));
             user.setAge(i);
             userList.add(user);
         }

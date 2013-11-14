@@ -128,14 +128,9 @@ public class JspTemplateFactoryTest
 
     public static PageContext getPageContext(Writer out)
     {
-        User user = new User();
-        user.setUserId(1L);
-        user.setUserName("xuesong.net");
-        user.setAge(1);
         List<User> userList = UserHandler.getUserList(5);
 
         PageContext pageContext = JspFactory.getPageContext(out);
-        pageContext.setAttribute("user", user);
         pageContext.setAttribute("userList", userList);
         return pageContext;
     }
