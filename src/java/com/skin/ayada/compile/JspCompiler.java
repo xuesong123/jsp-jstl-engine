@@ -17,8 +17,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.skin.ayada.jstl.TagLibrary;
-import com.skin.ayada.jstl.TagLibraryFactory;
 import com.skin.ayada.statement.Node;
 import com.skin.ayada.statement.NodeType;
 import com.skin.ayada.tagext.BodyTag;
@@ -46,21 +44,10 @@ public class JspCompiler
 
         Node node = null;
         List<Node> list = template.getNodes();
-        TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();
 
         for(int index = 0, size = list.size(); index < size; index++)
         {
             node = list.get(index);
-
-            if(node.getNodeType() == NodeType.TEXT)
-            {
-                continue;
-            }
-
-            if(node.getNodeType() == NodeType.EXPRESSION)
-            {
-                continue;
-            }
 
             if(node.getOffset() == index)
             {
@@ -69,13 +56,6 @@ public class JspCompiler
                     writer.println("    /* JSP_DECLARATION: lineNumber: " + node.getLineNumber() + " */");
                     writer.println(node.toString());
                     continue;
-                }
-
-                if(node.getNodeName().equals("t:import"))
-                {
-                    String name = node.getAttribute("name");
-                    String tagClassName = node.getAttribute("className");
-                    tagLibrary.setup(name, tagClassName);
                 }
             }
         }
@@ -115,7 +95,7 @@ public class JspCompiler
                 throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.toString(node) + " not match !");
             }
 
-            this.write(index, indent, tagLibrary.getTagClassName(node.getNodeName()), node, writer);
+            this.write(index, indent, node.getTagClassName(), node, writer);
         }
 
         writer.println("        out.flush();");
@@ -262,7 +242,7 @@ public class JspCompiler
 
         /** Tag Support */
         String tagName = node.getNodeName();
-        String tagInstanceName = this.getVariableName(node, "_tag_instance_");
+        String tagInstanceName = this.getTagInstanceName(node);
 
         if(node.getOffset() == index)
         {
@@ -436,11 +416,11 @@ public class JspCompiler
      */
     private void writeForEachTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
     {
-        String tagInstanceName = this.getVariableName(node, "_tag_instance_");
-        String parentTagInstanceName = this.getVariableName(node.getParent(), "_tag_instance_");
-        String flagName = this.getVariableName(node, "_tag_flag_");
-        String forEachOldVar = this.getVariableName(node, "_for_each_old_var_");
-        String forEachOldVarStatus = this.getVariableName(node, "_for_each_old_var_status_");
+        String tagInstanceName = this.getTagInstanceName(node);
+        String parentTagInstanceName = this.getTagInstanceName(node.getParent());
+        String flagName = this.getVariableName(node, "_jsp_flag_");
+        String forEachOldVar = this.getVariableName(node, "_jsp_old_var_");
+        String forEachOldVarStatus = this.getVariableName(node, "_jsp_old_var_status_");
 
         if(node.getOffset() == index)
         {
@@ -473,14 +453,14 @@ public class JspCompiler
 
             writer.println(indent + tagInstanceName + ".setPageContext(pageContext);");
 
-            if(items != null)
-            {
-                writer.println(indent + tagInstanceName + ".setItems(ExpressionUtil.evaluate(expressionContext, \"" + this.escape(items) + "\"));");
-            }
-
             if(variable != null)
             {
                 writer.println(indent + tagInstanceName + ".setVar(\"" + this.escape(variable) + "\");");
+            }
+
+            if(items != null)
+            {
+                writer.println(indent + tagInstanceName + ".setItems(ExpressionUtil.evaluate(expressionContext, \"" + this.escape(items) + "\"));");
             }
 
             if(begin != null && end != null)
@@ -539,7 +519,7 @@ public class JspCompiler
     {
         if(node.getOffset() == index)
         {
-            String tagInstanceName = this.getVariableName(node, "_tag_instance_");
+            String tagInstanceName = this.getTagInstanceName(node);
             writer.println(indent + "boolean " + tagInstanceName + " = true;");
             writer.println();
         }
@@ -560,7 +540,7 @@ public class JspCompiler
     {
         if(node.getOffset() == index)
         {
-            String parentTagInstanceName = this.getVariableName(node.getParent(), "_tag_instance_");
+            String parentTagInstanceName = this.getTagInstanceName(node.getParent());
             writer.println(indent + "if(" + parentTagInstanceName + " && ExpressionUtil.getBoolean(expressionContext, \"" + this.escape(node.getAttribute("test")) + "\")){");
             writer.println(indent + "    " + parentTagInstanceName + " = false;");
         }
@@ -581,7 +561,7 @@ public class JspCompiler
     {
         if(node.getOffset() == index)
         {
-            String parentTagInstanceName = this.getVariableName(node.getParent(), "_tag_instance_");
+            String parentTagInstanceName = this.getTagInstanceName(node.getParent());
             writer.println(indent + "if(" + parentTagInstanceName + "){");
             writer.println(indent + "    " + parentTagInstanceName + " = false;");
         }
@@ -602,8 +582,8 @@ public class JspCompiler
     {
         if(node.getOffset() == index)
         {
-            String tagInstanceName = this.getVariableName(node, "_tag_instance_");
-            String parentTagInstanceName = this.getVariableName(node.getParent(), "_tag_instance_");
+            String tagInstanceName = this.getTagInstanceName(node);
+            String parentTagInstanceName = this.getTagInstanceName(node.getParent());
             boolean hasParent = this.hasParent(node);
 
             writer.println(indent + tagClassName + " " + tagInstanceName + " = new " + tagClassName + "();");
@@ -638,10 +618,10 @@ public class JspCompiler
      */
     private void writeTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
     {
-        String tagInstanceName = this.getVariableName(node, "_tag_instance_");
-        String parentTagInstanceName = this.getVariableName(node.getParent(), "_tag_instance_");
-        String flagName = this.getVariableName(node, "_tag_flag_");
-        String bodyContentInstanceName = this.getVariableName(node, "_body_content_");
+        String tagInstanceName = this.getTagInstanceName(node);
+        String parentTagInstanceName = this.getTagInstanceName(node.getParent());
+        String flagName = this.getVariableName(node, "_jsp_flag_");
+        String bodyContentInstanceName = this.getVariableName(node, "_jsp_body_content_");
         boolean hasParent = this.hasParent(node);
 
         if(node.getOffset() == index)
@@ -856,6 +836,33 @@ public class JspCompiler
         }
 
         return buffer.toString();
+    }
+
+    /**
+     * @param node
+     * @param prefix
+     * @return String
+     */
+    protected String getTagInstanceName(Node node)
+    {
+        if(node != null)
+        {
+            String tagClassName = node.getTagClassName();
+            int k = tagClassName.lastIndexOf(".");
+
+            if(k > -1)
+            {
+                return this.getVariableName(node, "_jsp_" + tagClassName.substring(k + 1) + "_");
+            }
+            else
+            {
+                return this.getVariableName(node, "_jsp_" + tagClassName + "_");
+            }
+        }
+        else
+        {
+            return "_jsp_undefined";
+        }
     }
 
     /**

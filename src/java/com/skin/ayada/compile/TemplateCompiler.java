@@ -289,9 +289,17 @@ public class TemplateCompiler extends PageCompiler
                 return;
             }
 
+            String tagClassName = null;
+
+            if(tagLibrary != null)
+            {
+                tagClassName = tagLibrary.getTagClassName(nodeName);
+            }
+
             if(nodeName.equals("t:import"))
             {
                 Node node = new Node(nodeName);
+                node.setTagClassName(tagClassName);
                 node.setLineNumber(this.getLineNumber());
                 Map<String, String> attributes = this.getAttributes();
                 node.setAttributes(attributes);
@@ -319,16 +327,10 @@ public class TemplateCompiler extends PageCompiler
                 return;
             }
 
-            String tagClassName = null;
-
-            if(tagLibrary != null)
-            {
-                tagClassName = tagLibrary.getTagClassName(nodeName);
-            }
-
             if(tagClassName != null)
             {
                 Node node = new Node(nodeName);
+                node.setTagClassName(tagClassName);
                 node.setLineNumber(this.getLineNumber());
                 Map<String, String> attributes = this.getAttributes();
                 node.setOffset(list.size());

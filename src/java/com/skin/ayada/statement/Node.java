@@ -25,6 +25,7 @@ import com.skin.ayada.runtime.TagFactory;
 public class Node
 {
     private String nodeName;
+    private String tagClassName;
     private int nodeType;
     private int offset;
     private int length;
@@ -68,6 +69,22 @@ public class Node
     public String getNodeName()
     {
         return this.nodeName;
+    }
+
+    /**
+     * @return the tagClassName
+     */
+    public String getTagClassName()
+    {
+        return this.tagClassName;
+    }
+
+    /**
+     * @param tagClassName the tagClassName to set
+     */
+    public void setTagClassName(String tagClassName)
+    {
+        this.tagClassName = tagClassName;
     }
 
     /**
