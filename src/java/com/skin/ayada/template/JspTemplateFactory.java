@@ -108,9 +108,7 @@ public class JspTemplateFactory extends TemplateFactory
         String source = jspCompiler.compile(template, simpleName, packageName);
         File srcFile = new File(work, classPath + ".java");
         File clsFile = new File(work, classPath + ".class");
-
         write(source, srcFile);
-        // write(source, new File("test", classPath + ".java"));
 
         String lib = this.getClassPath();
 
