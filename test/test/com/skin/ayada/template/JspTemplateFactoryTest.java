@@ -63,7 +63,7 @@ public class JspTemplateFactoryTest
 
         long t1 = System.currentTimeMillis();
         JspTemplateFactory jspTemplateFactory = new JspTemplateFactory("work", System.getProperty("java.class.path"));
-        jspTemplateFactory.setIgnoreJspTag(false);
+        // jspTemplateFactory.setIgnoreJspTag(false);
 
         Template template = jspTemplateFactory.create(sourceFactory, "allTagTest.jsp", "UTF-8");
         long t2 = System.currentTimeMillis();
