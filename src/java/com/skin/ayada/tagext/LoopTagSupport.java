@@ -20,8 +20,8 @@ package com.skin.ayada.tagext;
 public abstract class LoopTagSupport extends TagSupport implements LoopTag, IterationTag
 {
     private int index = 0;
-    private int begin = -1;
     private int count = 0;
+    private int begin = -1;
     private int end = -1;
     private int step = -1;
     private Object current = null;
@@ -29,8 +29,14 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
     private String varStatus = null;
     private LoopTagStatus loopStatus = null;
 
+    protected abstract void prepare();
+
     public int doStartTag()
     {
+        this.index = 0;
+        this.count = 0;
+        this.prepare();
+
         if(this.end != -1 && this.begin > this.end)
         {
             return SKIP_BODY;

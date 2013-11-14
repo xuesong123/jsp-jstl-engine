@@ -34,6 +34,10 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
     private ForEachIterator items;
     private boolean hasItems = false;
 
+    public void prepare()
+    {
+    }
+
     /**
      * @return int
      */

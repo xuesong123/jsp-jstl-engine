@@ -86,7 +86,7 @@ public class JspTemplateFactory extends TemplateFactory
     {
         String home = template.getHome();
         String root = this.getRootPath(home);
-        String path = root + template.getPath();
+        String path = this.join(root, template.getPath().trim());
         String className = this.getClassName(path);
         String simpleName = this.getSimpleName(className);
         String packageName = this.getPackageName(className);
@@ -106,7 +106,6 @@ public class JspTemplateFactory extends TemplateFactory
 
         JspCompiler jspCompiler = new JspCompiler();
         String source = jspCompiler.compile(template, simpleName, packageName);
-        
         File srcFile = new File(work, classPath + ".java");
         File clsFile = new File(work, classPath + ".class");
 
@@ -147,6 +146,29 @@ public class JspTemplateFactory extends TemplateFactory
         {
             throw new Exception("compile error: " + status);
         }
+    }
+
+    /**
+     * @param parent
+     * @param child
+     * @return String
+     */
+    public String join(String parent, String child)
+    {
+        StringBuilder buffer = new StringBuilder();
+        buffer.append(parent.trim());
+
+        if(child.startsWith("/") || child.startsWith("\\"))
+        {
+            buffer.append(child.trim());
+        }
+        else
+        {
+            buffer.append("/");
+            buffer.append(child);
+        }
+
+        return buffer.toString();
     }
 
     /**

@@ -132,7 +132,7 @@ public class JspTemplateFactoryTest
         user.setUserId(1L);
         user.setUserName("xuesong.net");
         user.setAge(1);
-        List<User> userList = UserHandler.getUserList(16);
+        List<User> userList = UserHandler.getUserList(5);
 
         PageContext pageContext = JspFactory.getPageContext(out);
         pageContext.setAttribute("user", user);

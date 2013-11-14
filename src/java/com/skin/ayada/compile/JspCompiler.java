@@ -306,10 +306,9 @@ public class JspCompiler
                         writer.println(indent + "pageContext.setAttribute(\"" + varStatus + "\", " + tagInstanceName + ".getLoopStatus());");
                     }
 
-                    writer.println(indent + tagInstanceName + ".doStartTag();");
-                    writer.println();
-                    writer.println(indent + "while(" + tagInstanceName + ".hasNext()){");
-                    writer.println(indent + "    pageContext.setAttribute(\"" + variable + "\", " + tagInstanceName + ".next());");
+                    writer.println(indent + "int " + flagName + " = " + tagInstanceName + ".doStartTag();");
+                    writer.println(indent + "if(" + flagName + " != Tag.SKIP_BODY){");
+                    writer.println(indent + "    while(true){");
                 }
                 else if(tagName.equals("c:choose"))
                 {
@@ -451,6 +450,13 @@ public class JspCompiler
                     String variable = node.getAttribute("var");
                     String varStatus = node.getAttribute("varStatus");
                     
+                    writer.println(indent + "       if(" + tagInstanceName + ".hasNext()){");
+                    writer.println(indent + "           pageContext.setAttribute(\"" + variable + "\", " + tagInstanceName + ".next());");
+                    writer.println(indent + "       }");
+                    writer.println(indent + "       else{");
+                    writer.println(indent + "           break;");
+                    writer.println(indent + "       }");
+                    writer.println(indent + "   }");
                     writer.println(indent + "}");
                     writer.println(indent + tagInstanceName + ".release();");
                     writer.println(indent + "pageContext.setAttribute(\"" + variable + "\", " + forEachOldVar + ");");
