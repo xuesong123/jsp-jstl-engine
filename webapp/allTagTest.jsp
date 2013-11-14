@@ -50,6 +50,6 @@
 </c:choose>
 
 
-<app:scrollpage count="254" pageNum="2" pageSize="10">haha</app:scrollpage>
+<app:scrollpage count="254" pageNum="2" pageSize="10"/>
 </body>
 </html>
