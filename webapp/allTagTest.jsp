@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <t:import name="app:scrollpage" className="test.com.skin.ayada.taglib.ScrollPage"/>
+<t:import name="app:test" className="test.com.skin.ayada.taglib.TestTag"/>
 <html>
 <head>
 <title>test</title>
@@ -51,5 +52,10 @@
 
 
 <app:scrollpage count="254" pageNum="2" pageSize="10"/>
+
+<app:test myInt="-1.0" myFloat="1.0f" myDouble="1.0d" myLong="1L" myString="Hello"/>
+<app:test myInt="-1.0" myFloat="1.0F" myDouble="1.0D" myLong="1L" myString="Hello"/>
+<app:test myInt="-1.0" myFloat="1.0" myDouble="1e3" myLong="1e3" myString="Hello"/>
+<app:test myInt="-1.0" myFloat="1.0" myDouble="1.2e3" myLong="1.2e3" myString="Hello"/>
 </body>
 </html>

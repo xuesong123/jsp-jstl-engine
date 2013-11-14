@@ -314,10 +314,23 @@ public class ExpressionUtil
             {
                 try
                 {
-                    value = Integer.parseInt(source);
+                    String temp = source.trim();
+
+                    if(temp.length() > 0)
+                    {
+                        if(temp.charAt(0) == '+')
+                        {
+                            value = Integer.parseInt(temp.substring(1));
+                        }
+                        else
+                        {
+                            value = Integer.parseInt(temp);
+                        }
+                    }
                 }
                 catch(NumberFormatException e)
                 {
+                    e.printStackTrace();
                 }
 
                 break;
@@ -348,12 +361,19 @@ public class ExpressionUtil
             {
                 try
                 {
-                    source = source.trim();
-                    if(source.endsWith("l") || source.endsWith("L"))
+                    String temp = source.trim();
+
+                    if(temp.length() > 0)
                     {
-                        source = source.substring(0, source.length() - 1);
+                        if(temp.endsWith("l") || temp.endsWith("L"))
+                        {
+                            value = Long.parseLong(temp.substring(0, temp.length() - 1));
+                        }
+                        else
+                        {
+                            value = Long.parseLong(temp);
+                        }
                     }
-                    value = Long.parseLong(source);
                 }
                 catch(NumberFormatException e)
                 {
@@ -395,6 +415,11 @@ public class ExpressionUtil
         for(int i = 0; i < length; i++)
         {
             c = source.charAt(i);
+
+            if(i == 0 && (c == '+' || c == '-'))
+            {
+                continue;
+            }
 
             if(c == '.')
             {
@@ -451,14 +476,13 @@ public class ExpressionUtil
         long longValue = 2L;
         double doubleValue2 = 1E3;
         */
-
-        String[] source = {"ae2", "1", "1.0", "1.0f", "1.0F", "1.0d", "1.0D", "1.0L", "1L", "1e3", "1.2e3"};
+        String[] source = {"ae2", "+1", "-1", "1", "1.0", "1.0f", "1.0F", "1.0d", "1.0D", "1.0L", "1L", "-1e3", "-1.2e3"};
 
         for(int i = 0; i < source.length; i++)
         {
             int type = getNumberType(source[i]);
             Object value = getValue(source[i]);
-    
+
             switch(type)
             {
                 case 0:
