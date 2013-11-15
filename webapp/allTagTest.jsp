@@ -25,6 +25,12 @@
     }
 </jsp:declaration>
 
+<jsp:declaration>
+    public void hello3(){
+        System.out.println("Hello, Ayada !");
+    }
+</jsp:declaration>
+
 <jsp:scriptlet>
     System.out.println("Hello, Ayada1 !");
 </jsp:scriptlet>
@@ -57,7 +63,9 @@ System.out.println("Hello, Ayada4 !");
 <c:if test="${1 == 1}">c:if test</c:if>
 
 <h1>c:forEach test1</h1>
-<c:forEach items="1,2,3,4,5" var="mynum">${mynum}</c:forEach>
+<c:forEach    
+    items="1,2,3,4,5"
+    var="mynum">${mynum}</c:forEach>
 
 <h1>c:forEach test2</h1>
 <c:forEach items="${userList}" var="user" varStatus="status">

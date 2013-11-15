@@ -27,7 +27,6 @@ public class NodeType
     public static final int CDATA   = 4;
     public static final int EXPRESSION = 2013;
 
-
     public static final int JSP_DIRECTIVE_PAGE    = 2014;   // startsWith "<%@" page
     public static final int JSP_DIRECTIVE_TAGLIB  = 2015;   // startsWith "<%@" taglib
     public static final int JSP_DIRECTIVE_INCLUDE = 2016;   // startsWith "<%@" include
@@ -35,7 +34,6 @@ public class NodeType
     public static final int JSP_EXPRESSION  = 2018;         // startsWith "<%="
     public static final int JSP_SCRIPTLET   = 2019;         // startsWith "<% " [\r|\n]
     public static final int UNKNOWN         = 9999;         // startsWith "<% " [\r|\n]
-    
 
     public static final String EXPR_NAME    = "#expr";
     public static final String DATA_NAME    = "#data";

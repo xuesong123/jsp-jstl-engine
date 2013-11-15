@@ -125,7 +125,7 @@ public abstract class DataNode extends Node
     /**
      * @return String
      */
-    public String getText()
+    public String getString2()
     {
         return this.buffer.toString();
     }
@@ -133,21 +133,13 @@ public abstract class DataNode extends Node
     /**
      * @return String
      */
-    public String getTrimText()
+    public String getTextContent()
     {
-        return this.buffer.toString().trim();
+        return this.buffer.toString();
     }
 
     /**
      * @return DataNode
      */
     public abstract DataNode clone();
-
-    /**
-     * @return String
-     */
-    public String toString()
-    {
-        return this.buffer.toString();
-    }
 }

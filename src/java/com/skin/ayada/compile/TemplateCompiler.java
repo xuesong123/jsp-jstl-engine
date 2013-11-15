@@ -139,13 +139,29 @@ public class TemplateCompiler extends PageCompiler
             }
             else
             {
-                int line = this.lineNumber;
                 buffer.append(c);
 
                 if(c == '\n')
                 {
                     this.lineNumber++;
                 }
+
+                while((i = this.stream.read()) != -1)
+                {
+                    if(i == '\n')
+                    {
+                        this.lineNumber++;
+                        buffer.append((char)i);
+                        continue;
+                    }
+                    else
+                    {
+                        this.stream.back();
+                        break;
+                    }
+                }
+
+                int line = this.lineNumber;
 
                 while((i = this.stream.read()) != -1)
                 {
@@ -460,6 +476,11 @@ public class TemplateCompiler extends PageCompiler
 
                     while((i = this.stream.read()) != -1)
                     {
+                        if(i == '\n')
+                        {
+                            this.lineNumber++;
+                        }
+
                         if(i == '>')
                         {
                             break;
@@ -476,6 +497,11 @@ public class TemplateCompiler extends PageCompiler
             }
             else
             {
+                if(i == '\n')
+                {
+                    this.lineNumber++;
+                }
+
                 buffer.append((char)i);
             }
         }
@@ -559,6 +585,11 @@ public class TemplateCompiler extends PageCompiler
             if(i != '!' && i != '=' && i != '\r' && i != '\n')
             {
                 buffer.append((char)i);
+            }
+
+            if(i == '\n')
+            {
+                this.lineNumber++;
             }
 
             this.skipCRLF();
@@ -664,12 +695,14 @@ public class TemplateCompiler extends PageCompiler
 
             if(logger.isDebugEnabled())
             {
-                // Node parent = node.getParent();
-                // logger.debug("[pop ][node] parent: " + (parent != null ? parent.getNodeName() : "null") + ", html:[/" + node.getNodeName() + "]");
+                Node parent = node.getParent();
+                logger.debug("[pop ][node] parent: " + (parent != null ? parent.getNodeName() : "null") + ", html:[/" + node.getNodeName() + "]");
             }
         }
         else
         {
+            stack.print();
+            System.out.println("nodeName: [" + node.getNodeName() + "] - [" + nodeName + "]");
             throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.toString(node) + " not match !");
         }
     }
@@ -915,5 +948,17 @@ public class TemplateCompiler extends PageCompiler
     public boolean getIgnoreJspTag()
     {
         return this.ignoreJspTag;
+    }
+    
+    public static void main(String[] args)
+    {
+        String[] list = {"jsp:directive.page", "jsp:directive.taglib", "jsp:directive.include"};
+        
+        for(int i = 0; i < list.length; i++)
+        {
+            String nodeName = list[i];
+            JspDirective jspDirective = JspDirective.getInstance(nodeName);
+            System.out.println("nodeName: [" + jspDirective.getNodeName() + "] - [" + nodeName + "]");
+        }
     }
 }

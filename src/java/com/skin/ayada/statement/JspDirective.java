@@ -28,7 +28,7 @@ public class JspDirective extends DataNode
      */
     public JspDirective(String nodeName)
     {
-        super(NodeType.JSP_DIRECTIVE_PAGE_NAME, NodeType.JSP_DIRECTIVE_PAGE);
+        super(nodeName, NodeType.JSP_DIRECTIVE_PAGE);
     }
 
     /**
@@ -37,7 +37,7 @@ public class JspDirective extends DataNode
      */
     protected JspDirective(String nodeName, int nodeType)
     {
-        super(NodeType.JSP_DIRECTIVE_PAGE_NAME, NodeType.JSP_DIRECTIVE_PAGE);
+        super(nodeName, nodeType);
     }
 
     /**
@@ -51,11 +51,11 @@ public class JspDirective extends DataNode
         }
         else if(nodeName.equals("jsp:directive.taglib"))
         {
-            return getPageDirective();
+            return getTaglibDirective();
         }
         else if(nodeName.equals("jsp:directive.include"))
         {
-            return getPageDirective();
+            return getIncludeDirective();
         }
         else
         {
@@ -98,7 +98,7 @@ public class JspDirective extends DataNode
         node.setLineNumber(this.getLineNumber());
         node.setClosed(this.getClosed());
         node.setParent(this.getParent());
-        node.append(this.getText());
+        node.append(this.getTextContent());
         return node;
     }
 }

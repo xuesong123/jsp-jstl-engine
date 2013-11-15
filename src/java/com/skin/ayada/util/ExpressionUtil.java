@@ -208,9 +208,8 @@ public class ExpressionUtil
 
         char c;
         char[] cbuf = source.toCharArray();
-        List<Node> list = new ArrayList<Node>();
-
         TextNode textNode = null;
+        List<Node> list = new ArrayList<Node>();
 
         for(int i = 0, length = cbuf.length; i < length; i++)
         {
@@ -232,7 +231,7 @@ public class ExpressionUtil
                     }
                 }
 
-                if(expression.toString().length() > 0)
+                if(expression.getTextContent().length() > 0)
                 {
                     list.add(expression);
                     textNode = null;
@@ -258,12 +257,12 @@ public class ExpressionUtil
 
                 if(node instanceof Expression)
                 {
-                    return expressionContext.getValue(node.toString());
+                    return expressionContext.getValue(node.getTextContent());
                 }
                 else
                 {
-                    Object value = getValue(node.toString());
-                    return (value != null ? value : node.toString());
+                    Object value = getValue(node.getTextContent());
+                    return (value != null ? value : node.getTextContent());
                 }
             }
             else
@@ -275,7 +274,7 @@ public class ExpressionUtil
                 {
                     if(node instanceof Expression)
                     {
-                        value = expressionContext.getValue(node.toString());
+                        value = expressionContext.getValue(node.getTextContent());
 
                         if(value != null)
                         {
@@ -284,7 +283,7 @@ public class ExpressionUtil
                     }
                     else
                     {
-                        buffer.append(node.toString());
+                        buffer.append(node.getTextContent());
                     }
                 }
 
@@ -466,56 +465,5 @@ public class ExpressionUtil
         }
 
         return (d == 0 ? type : d);
-    }
-
-    public static void main(String[] args)
-    {
-        /*
-        float floatValue = 2.0f;
-        double doubleValue = 2.0d;
-        long longValue = 2L;
-        double doubleValue2 = 1E3;
-        */
-        String[] source = {"ae2", "+1", "-1", "1", "1.0", "1.0f", "1.0F", "1.0d", "1.0D", "1.0L", "1L", "-1e3", "-1.2e3"};
-
-        for(int i = 0; i < source.length; i++)
-        {
-            int type = getNumberType(source[i]);
-            Object value = getValue(source[i]);
-
-            switch(type)
-            {
-                case 0:
-                {
-                    System.out.println("String: " + source[i] + " - " + value.getClass().getName() + " - " + value);
-                    break;
-                }
-                case 1:
-                {
-                    System.out.println("Integer: " + source[i] + " - " + value.getClass().getName() + " - " + value);
-                    break;
-                }
-                case 2:
-                {
-                    System.out.println("Float: " + source[i] + " - " + value.getClass().getName() + " - " + value);
-                    break;
-                }
-                case 3:
-                {
-                    System.out.println("Double: " + source[i] + " - " + value.getClass().getName() + " - " + value);
-                    break;
-                }
-                case 4:
-                {
-                    System.out.println("Long: " + source[i] + " - " + value.getClass().getName() + " - " + value);
-                    break;
-                }
-                default:
-                {
-                    System.out.println("String: " + source[i] + " - " + value.getClass().getName() + " - " + value);
-                    break;
-                }
-            }
-        }
     }
 }

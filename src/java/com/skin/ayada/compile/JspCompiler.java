@@ -56,7 +56,7 @@ public class JspCompiler
                 if(node.getOffset() == index)
                 {
                     writer.println("    /* JSP_DECLARATION: lineNumber: " + node.getLineNumber() + " */");
-                    writer.write(node.toString());
+                    writer.write(node.getTextContent());
                 }
                 else
                 {
@@ -84,14 +84,14 @@ public class JspCompiler
             if(node.getNodeType() == NodeType.TEXT)
             {
                 writer.println(indent + "/* TEXT: lineNumber: " + node.getLineNumber() + " */");
-                writer.println(indent + "out.write(\"" + StringUtil.escape(StringUtil.compact(node.toString())) + "\");");
+                writer.println(indent + "out.write(\"" + StringUtil.escape(StringUtil.compact(node.getTextContent())) + "\");");
                 continue;
             }
 
             if(node.getNodeType() == NodeType.EXPRESSION)
             {
                 writer.println(indent + "/* EXPRESSION: lineNumber: " + node.getLineNumber() + " */");
-                writer.println(indent + "out.write(expressionContext.getString(\"" + StringUtil.escape(node.toString()) + "\"));");
+                writer.println(indent + "out.write(expressionContext.getString(\"" + StringUtil.escape(node.getTextContent()) + "\"));");
                 continue;
             }
 
@@ -193,14 +193,14 @@ public class JspCompiler
             if(node.getNodeType() == NodeType.JSP_SCRIPTLET)
             {
                 writer.println(indent + "/* JSP_SCRIPTLET: lineNumber: " + node.getLineNumber() + " */");
-                writer.println(node.toString());
+                writer.println(node.getTextContent());
                 return;
             }
 
             if(node.getNodeType() == NodeType.JSP_EXPRESSION)
             {
                 writer.println(indent + "/* JSP_EXPRESSION: lineNumber: " + node.getLineNumber() + " */");
-                writer.println(indent + "out.print(" + node.toString() + ");");
+                writer.println(indent + "out.print(" + node.getTextContent() + ");");
                 return;
             }
         }

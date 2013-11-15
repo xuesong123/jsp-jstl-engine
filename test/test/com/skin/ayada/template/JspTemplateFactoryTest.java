@@ -21,6 +21,7 @@ import java.util.Map;
 import com.skin.ayada.compile.TemplateCompiler;
 import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.jstl.TagLibraryFactory;
+import com.skin.ayada.runtime.ExpressionContext;
 import com.skin.ayada.runtime.JspFactory;
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.source.ClassPathSourceFactory;
@@ -30,7 +31,7 @@ import com.skin.ayada.statement.Node;
 import com.skin.ayada.statement.NodeType;
 import com.skin.ayada.template.JspTemplateFactory;
 import com.skin.ayada.template.Template;
-import com.skin.ayada.util.NodeUtil;
+import com.skin.ayada.util.ExpressionUtil;
 
 import example.handler.UserHandler;
 import example.model.User;
@@ -63,7 +64,7 @@ public class JspTemplateFactoryTest
 
         long t1 = System.currentTimeMillis();
         JspTemplateFactory jspTemplateFactory = new JspTemplateFactory("work", System.getProperty("java.class.path"));
-        // jspTemplateFactory.setIgnoreJspTag(false);
+        jspTemplateFactory.setIgnoreJspTag(false);
 
         Template template = jspTemplateFactory.create(sourceFactory, "allTagTest.jsp", "UTF-8");
         long t2 = System.currentTimeMillis();
@@ -134,7 +135,6 @@ public class JspTemplateFactoryTest
     public static PageContext getPageContext(Writer out)
     {
         List<User> userList = UserHandler.getUserList(5);
-
         PageContext pageContext = JspFactory.getPageContext(out);
         pageContext.setAttribute("userList", userList);
         return pageContext;
@@ -148,13 +148,12 @@ public class JspTemplateFactoryTest
         return map;
     }
 
-    /**
-     * @param node
-     * @return String
-     */
-    public String toString(Node node)
+    public static void expressionTest()
     {
-        return NodeUtil.toString(node);
+        StringWriter writer = new StringWriter();
+        PageContext pageContext = getPageContext(writer);
+        ExpressionContext expressionContext = pageContext.getExpressionContext();
+        ExpressionUtil.getBoolean(expressionContext, "${1 == 1}");
     }
 
     /**

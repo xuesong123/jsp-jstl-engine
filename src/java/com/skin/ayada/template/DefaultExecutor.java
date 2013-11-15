@@ -63,14 +63,14 @@ public class DefaultExecutor
 
                 if(node.getNodeType() == NodeType.TEXT)
                 {
-                    out.write(node.toString());
+                    out.write(node.getTextContent());
                     index++;
                     continue;
                 }
 
                 if(node.getNodeType() == NodeType.EXPRESSION)
                 {
-                    Object value = expressionContext.getValue(node.toString());
+                    Object value = expressionContext.getValue(node.getTextContent());
 
                     if(value != null)
                     {
@@ -265,6 +265,9 @@ public class DefaultExecutor
         return statements;
     }
 
+    /**
+     * @param list
+     */
     public static void print(List<Node> list)
     {
         for(int index = 0, size = list.size(); index < size; index++)
@@ -273,13 +276,13 @@ public class DefaultExecutor
 
             if(node.getNodeType() == NodeType.TEXT)
             {
-                System.out.println(index + " $" + node.getLineNumber() + " #text: " + node.toString());
+                System.out.println(index + " $" + node.getLineNumber() + " #text: " + node.getTextContent());
                 continue;
             }
 
             if(node.getNodeType() == NodeType.EXPRESSION)
             {
-                System.out.println(index + " $" + node.getLineNumber() + " #expr: " + node.toString());
+                System.out.println(index + " $" + node.getLineNumber() + " #expr: " + node.getTextContent());
                 continue;
             }
 

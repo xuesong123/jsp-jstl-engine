@@ -218,19 +218,11 @@ public class Node
     }
 
     /**
+     * @return String
      */
-    public Node clone()
+    public String getTextContent()
     {
-        Node node = new Node(this.nodeName);
-        node.setClosed(this.closed);
-        node.setParent(this.parent);
-
-        for(Map.Entry<String, String> entry : this.attributes.entrySet())
-        {
-            node.setAttribute(entry.getKey(), entry.getValue());
-        }
-
-        return node;
+        return null;
     }
 
     /**
@@ -270,6 +262,22 @@ public class Node
     public void setTagFactory(TagFactory tagFactory)
     {
         this.tagFactory = tagFactory;
+    }
+
+    /**
+     */
+    public Node clone()
+    {
+        Node node = new Node(this.nodeName);
+        node.setClosed(this.closed);
+        node.setParent(this.parent);
+
+        for(Map.Entry<String, String> entry : this.attributes.entrySet())
+        {
+            node.setAttribute(entry.getKey(), entry.getValue());
+        }
+
+        return node;
     }
 
     /**

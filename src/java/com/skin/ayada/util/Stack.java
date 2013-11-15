@@ -138,7 +138,7 @@ public class Stack<E>
 
         for(int i = this.index; i > -1; i--)
         {
-            out.println(this.stack[i]);
+            out.println("[stack: " + i + "]: " + this.stack[i]);
         }
 
         out.println();
