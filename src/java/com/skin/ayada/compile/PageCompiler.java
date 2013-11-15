@@ -10,7 +10,7 @@
  */
 package com.skin.ayada.compile;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.skin.ayada.io.StringStream;
@@ -24,6 +24,7 @@ import com.skin.ayada.io.StringStream;
  */
 public class PageCompiler
 {
+    protected int lineNumber = 1;
     protected StringStream stream;
 
     /**
@@ -75,62 +76,72 @@ public class PageCompiler
     public Map<String, String> getAttributes(StringStream stream)
     {
         int i;
-        char c;
         String name = null;
         String value = null;
         StringBuilder buffer = new StringBuilder();
-        Map<String, String> attributes = new HashMap<String, String>();
+        Map<String, String> attributes = new LinkedHashMap<String, String>();
 
         while((i = stream.peek()) != -1)
         {
-            if(i == ' ' || i == '\t' || i == '\r' || i == '\n')
-            {
-                stream.read();
-            }
-            else
-            {
-                break;
-            }
-        }
-
-        while((i = stream.peek()) != -1)
-        {
-            if(i == '/' || i == '>')
-            {
-                break;
-            }
-
-            if(i == '%' && stream.peek(1) == '>')
-            {
-                stream.read();
-                break;
-            }
-
-            // skip space
+            // skip invalid character
             while((i = stream.read()) != -1)
             {
-                c = (char)i;
+                if(i == '\n')
+                {
+                    this.lineNumber++;
+                }
 
-                if(Character.isLetter(c) || Character.isDigit(c) || c == ':' || c == '-' || c == '_' || c == '/' || c == '>')
+                if(Character.isLetter(i) || Character.isDigit(i) || i == ':' || i == '-' || i == '_' || i == '%' || i == '/' || i == '>')
                 {
                     stream.back();
                     break;
                 }
             }
 
-            if(i == '/' || i == '>')
+            // check end
+            if(i == '>')
             {
+                stream.read();
                 break;
+            }
+            else if(i == '%')
+            {
+                if(stream.peek(1) == '>')
+                {
+                    stream.skip(2);
+                    break;
+                }
+                else
+                {
+                    stream.read();
+                    continue;
+                }
+            }
+            else if(i == '/')
+            {
+                if(stream.peek(1) == '>')
+                {
+                    stream.skip(2);
+                    break;
+                }
+                else
+                {
+                    stream.read();
+                    continue;
+                }
             }
 
             // read name
             while((i = stream.read()) != -1)
             {
-                c = (char)i;
-
-                if(Character.isLetter(c) || Character.isDigit(c) || c == ':' || c == '-' || c == '_')
+                if(i == '\n')
                 {
-                    buffer.append(c);
+                    this.lineNumber++;
+                }
+
+                if(Character.isLetter(i) || Character.isDigit(i) || i == ':' || i == '-' || i == '_')
+                {
+                    buffer.append((char)i);
                 }
                 else
                 {
@@ -150,9 +161,12 @@ public class PageCompiler
             // skip space
             while((i = stream.read()) != -1)
             {
-                c = (char)i;
+                if(i == '\n')
+                {
+                    this.lineNumber++;
+                }
 
-                if(c != ' ')
+                if(i != ' ')
                 {
                     stream.back();
                     break;
@@ -173,9 +187,16 @@ public class PageCompiler
             // skip space
             while((i = stream.read()) != -1)
             {
-                c = (char)i;
+                if(i == '\n')
+                {
+                    this.lineNumber++;
+                }
 
-                if(c != ' ')
+                if(i == ' ' || i == '\t' || i == '\r' || i == '\n')
+                {
+                    continue;
+                }
+                else
                 {
                     break;
                 }
@@ -196,19 +217,22 @@ public class PageCompiler
             {
                 while((i = stream.read()) != -1)
                 {
-                    c = (char)i;
+                    if(i == '\n')
+                    {
+                        this.lineNumber++;
+                    }
 
-                    if(c == ' ' || c == '>')
+                    if(i == ' ' || i == '\t' || i == '\r' || i == '\n' || i == '>')
                     {
                         break;
                     }
-                    else if(c == '/' && stream.peek() == '>')
+                    else if(i == '/' && stream.peek() == '>')
                     {
                         break;
                     }
                     else
                     {
-                        buffer.append(c);
+                        buffer.append((char)i);
                     }
                 }
             }
@@ -216,11 +240,9 @@ public class PageCompiler
             {
                 while((i = stream.read()) != -1)
                 {
-                    c = (char)i;
-
-                    if(c != quote)
+                    if(i != quote)
                     {
-                        buffer.append(c);
+                        buffer.append((char)i);
                     }
                     else
                     {
@@ -252,4 +274,20 @@ public class PageCompiler
     {
         this.stream = stream;
     };
+
+    /**
+     * @param lineNumber
+     */
+    public void setLineNumber(int lineNumber)
+    {
+        this.lineNumber = lineNumber;
+    }
+
+    /**
+     * @return int
+     */
+    public int getLineNumber()
+    {
+        return this.lineNumber;
+    }
 }

@@ -292,7 +292,9 @@ public class Node
         {
             buffer.append("<");
             buffer.append(this.getNodeName());
-            buffer.append(" offset=\"");
+            buffer.append(" lineNumber=\"");
+            buffer.append(this.getLineNumber());
+            buffer.append("\" offset=\"");
             buffer.append(this.getOffset());
             buffer.append("\" length=\"");
             buffer.append(this.getLength());

@@ -10,13 +10,12 @@
  */
 package test.com.skin.ayada.template;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.skin.ayada.compile.TemplateCompiler;
 import com.skin.ayada.io.StringStream;
-import com.skin.ayada.statement.JspDeclaration;
-import com.skin.ayada.statement.NodeType;
 import com.skin.ayada.util.NodeUtil;
+import com.skin.ayada.util.StringUtil;
 
 /**
  * <p>Title: StreamTest</p>
@@ -26,54 +25,348 @@ import com.skin.ayada.util.NodeUtil;
  */
 public class StreamTest
 {
+    protected int lineNumber = 1;
+
     /**
      * @param args
      */
     public static void main(String[] args)
     {
-        System.out.println("*****************");
-        
-        // TODO:
-        TemplateCompiler tc = new TemplateCompiler(null);
-        // tc.stream = new StringStream("<jsp:scriptlet>abc</jsp:scriptlet   >abc");
-
-        String source = "   />abc</jsp:scriptlet   >abc";
+        StreamTest st = new StreamTest();
+        String source = " % \\ / a=\"1\" % b=\"2\" \\ / c=\"3\" d=\"4\" %%///\\\\%>abc</jsp:scriptlet   >abc";
         StringStream stream = new StringStream(source);
 
-        System.out.println("         10        20        30        40        50        60");
+        System.out.println("---------10        20        30        40        50        60");
         System.out.println("0123456789012345678901234567890123456789012345678901234567890");
         System.out.println(source);
 
-        JspDeclaration node = new JspDeclaration();
-        node.setTagClassName((String)null);
-        node.setLineNumber(tc.getLineNumber());
-        Map<String, String> attributes = tc.getAttributes();
+        Map<String, String> attributes = st.getAttributes(stream);
+        System.out.println("########################################");
+
+        System.out.println("attributes.size: [" + attributes.size() + "]");
+        System.out.println("attributes.html: [" + NodeUtil.toString(attributes) + "]");
+        System.out.println("pos: " + stream.getPosition() + " - " + (char)(stream.peek()) + " - " + (char)(stream.peek(-1)) + " - " + (char)(stream.peek(-2)));
+
         System.out.println("pos: " + stream.getPosition() + " - " + (char)(stream.peek()));
-
-        node.setAttributes(attributes);
-        node.setClosed(NodeType.SELF_CLOSED);
-
-        System.out.println("size: " + attributes.size());
-        System.out.println(NodeUtil.toString(attributes));
+        st.skipCRLF(stream);
         System.out.println("pos: " + stream.getPosition() + " - " + (char)(stream.peek()));
+        String content = readNodeContent(stream, "jsp:scriptlet");
+        System.out.println("content: [" + content + "]");
+        System.out.println("compact: " + StringUtil.escape(compact("\r\n\r\n\r\n\r\n123\r\nabc\r\n\r\nedf")) + "]");
+    }
+    
+    /**
+     * read node name, after read nodeName
+     * @return String
+     */
+    public Map<String, String> getAttributes(StringStream stream)
+    {
+        int i;
+        String name = null;
+        String value = null;
+        StringBuilder buffer = new StringBuilder();
+        Map<String, String> attributes = new LinkedHashMap<String, String>();
 
-        int i = 0;
-        while((i = stream.read()) != -1)
+        while((i = stream.peek()) != -1)
         {
+            // skip invalid character
+            while((i = stream.read()) != -1)
+            {
+                if(i == '\n')
+                {
+                    this.lineNumber++;
+                }
+
+                if(Character.isLetter(i) || Character.isDigit(i) || i == ':' || i == '-' || i == '_' || i == '%' || i == '/' || i == '>')
+                {
+                    stream.back();
+                    break;
+                }
+            }
+
+            // check end
             if(i == '>')
             {
-                System.out.println("2 c: [" + (char)i + "]");
+                stream.read();
                 break;
+            }
+            else if(i == '%')
+            {
+                if(stream.peek(1) == '>')
+                {
+                    stream.skip(2);
+                    break;
+                }
+                else
+                {
+                    stream.read();
+                    continue;
+                }
+            }
+            else if(i == '/')
+            {
+                if(stream.peek(1) == '>')
+                {
+                    stream.skip(2);
+                    break;
+                }
+                else
+                {
+                    stream.read();
+                    continue;
+                }
+            }
+
+            // read name
+            while((i = stream.read()) != -1)
+            {
+                if(i == '\n')
+                {
+                    this.lineNumber++;
+                }
+
+                if(Character.isLetter(i) || Character.isDigit(i) || i == ':' || i == '-' || i == '_')
+                {
+                    buffer.append((char)i);
+                }
+                else
+                {
+                    stream.back();
+                    break;
+                }
+            }
+
+            name = buffer.toString();
+            buffer.setLength(0);
+
+            if(name.length() < 1)
+            {
+                continue;
+            }
+
+            // skip space
+            while((i = stream.read()) != -1)
+            {
+                if(i == '\n')
+                {
+                    this.lineNumber++;
+                }
+
+                if(i != ' ')
+                {
+                    stream.back();
+                    break;
+                }
+            }
+
+            // next character must be '='
+            if(stream.peek() != '=')
+            {
+                attributes.put(name, "");
+                continue;
             }
             else
             {
-                System.out.println("2 c: [" + (char)i + "]");
+                stream.read();
+            }
+
+            // skip space
+            while((i = stream.read()) != -1)
+            {
+                if(i == '\n')
+                {
+                    this.lineNumber++;
+                }
+
+                if(i == ' ' || i == '\t' || i == '\r' || i == '\n')
+                {
+                    continue;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            char quote = ' ';
+
+            if(i == '"')
+            {
+                quote = '"';
+            }
+            else if(i == '\'')
+            {
+                quote = '\'';
+            }
+
+            if(quote == ' ')
+            {
+                while((i = stream.read()) != -1)
+                {
+                    if(i == '\n')
+                    {
+                        this.lineNumber++;
+                    }
+
+                    if(i == ' ' || i == '\t' || i == '\r' || i == '\n' || i == '>')
+                    {
+                        break;
+                    }
+                    else if(i == '/' && stream.peek() == '>')
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        buffer.append((char)i);
+                    }
+                }
+            }
+            else
+            {
+                while((i = stream.read()) != -1)
+                {
+                    if(i != quote)
+                    {
+                        buffer.append((char)i);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+
+            value = buffer.toString();
+            attributes.put(name, value);
+            buffer.setLength(0);
+        }
+
+        return attributes;
+    }
+
+    /**
+     * skip crlf
+     */
+    public void skipCRLF(StringStream stream)
+    {
+        while(stream.peek() == '\r')
+        {
+            stream.read();
+        }
+
+        while(stream.peek() == '\n')
+        {
+            this.lineNumber++;
+            stream.read();
+        }
+    }
+
+    /**
+     * @param nodeName
+     * @return String
+     */
+    public static String readNodeContent(StringStream stream, String nodeName)
+    {
+        int i = 0;
+        StringBuilder buffer = new StringBuilder();
+
+        while((i = stream.read()) != -1)
+        {
+            if(i == '<' && stream.peek() == '/')
+            {
+                stream.read();
+
+                if(match(stream, nodeName))
+                {
+                    stream.skip(nodeName.length());
+
+                    while((i = stream.read()) != -1)
+                    {
+                        if(i == '>')
+                        {
+                            break;
+                        }
+                    }
+
+                    break;
+                }
+                else
+                {
+                    buffer.append('/');
+                    buffer.append((char)i);
+                }
+            }
+            else
+            {
+                buffer.append((char)i);
             }
         }
-        System.out.println("pos: " + stream.getPosition() + " - " + (char)(stream.peek()));
-        tc.skipCRLF();
-        System.out.println("pos: " + stream.getPosition() + " - " + (char)(stream.peek()));
-        String content = tc.readNodeContent("jsp:scriptlet");
-        System.out.println("content: [" + content + "]");
+
+        return buffer.toString();
+    }
+
+    /**
+     * @param nodeName
+     * @return boolean
+     */
+    public static boolean match(StringStream stream, String nodeName)
+    {
+        int i = 0;
+        int length = nodeName.length();
+
+        for(i = 0; i < length; i++)
+        {
+            if(stream.peek(i) != nodeName.charAt(i))
+            {
+                return false;
+            }
+        }
+
+        int c = stream.peek(i);
+
+        if(c == ' ' || c == '\r' || c == '\n' || c == '\t' || c == '/' || c == '>')
+        {
+            return true;
+        }
+
+        return false;
+    }
+    
+    /**
+     * @param source
+     * @return String
+     */
+    public static String compact(String source)
+    {
+        char c;
+        boolean b = true;
+        int length = source.length();
+        StringBuilder buffer = new StringBuilder();
+        
+        for(int i = 0; i < length; i++)
+        {
+            c = source.charAt(i);
+
+            if(c == '\n')
+            {
+                if(b)
+                {
+                    buffer.append("\r\n");
+                    b = false;
+                }
+            }
+            else if(c == '\r')
+            {
+                continue;
+            }
+            else
+            {
+                buffer.append(c);
+                b = true;
+            }
+        }
+
+        return buffer.toString();
     }
 }

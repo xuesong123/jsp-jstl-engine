@@ -56,8 +56,10 @@ System.out.println("Hello, Ayada4 !");
 
 <c:if test="${1 == 1}">c:if test</c:if>
 
+<h1>c:forEach test1</h1>
 <c:forEach items="1,2,3,4,5" var="mynum">${mynum}</c:forEach>
 
+<h1>c:forEach test2</h1>
 <c:forEach items="${userList}" var="user" varStatus="status">
     <p>user: ${user.userName}</p>
     <c:choose>
@@ -68,18 +70,21 @@ System.out.println("Hello, Ayada4 !");
     </c:choose>
 </c:forEach>
 
+<h1>c:choose test1</h1>
 <c:choose>
-    <c:when test="${1 == 1}">1</c:when>
-    <c:when test="${2 == 2}">2</c:when>
-    <c:when test="${3 == 3}">3</c:when>
-    <c:otherwise>otherwise</c:otherwise>
+    <c:when test="${1 == 1}">c:when test="{1 == 1}"</c:when>
+    <c:when test="${2 == 2}">c:when test="{2 == 2}"</c:when>
+    <c:when test="${3 == 3}">c:when test="{3 == 3}"</c:when>
+    <c:otherwise>c:otherwise</c:otherwise>
 </c:choose>
 
+<h1>app:test test1</h1>
 <app:test myInt="-1.0" myFloat="1.0f" myDouble="1.0d" myLong="1L" myString="Hello"/>
 <app:test myInt="-1.0" myFloat="1.0F" myDouble="1.0D" myLong="1L" myString="Hello"/>
 <app:test myInt="-1.0" myFloat="1.0" myDouble="1e3" myLong="1e3" myString="Hello"/>
 <app:test myInt="-1.0" myFloat="1.0" myDouble="1.2e3" myLong="1.2e3" myString="Hello"/>
 
+<h1>app:scrollpage test1</h1>
 <app:scrollpage count="254" pageNum="2" pageSize="10"/>
 </body>
 </html>

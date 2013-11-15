@@ -70,19 +70,22 @@ public class JspTemplateFactoryTest
         System.out.println("compile time: " + (t2 - t1));
 
         StringWriter writer = new StringWriter();
+        // com.skin.ayada.io.CompactWriter compactWriter = new com.skin.ayada.io.CompactWriter(writer);
         PageContext pageContext = getPageContext(writer);
 
-        long t3 = System.currentTimeMillis();
         try
         {
+            long t3 = System.currentTimeMillis();
             template.execute(pageContext);
+            long t4 = System.currentTimeMillis();
+            System.out.println("run time: " + (t4 - t3));
         }
         catch(Exception e)
         {
             e.printStackTrace();
         }
-        long t4 = System.currentTimeMillis();
-        System.out.println("run time: " + (t4 - t3));
+
+        System.out.println("===================== result =====================");
         System.out.println(writer.toString());
     }
     

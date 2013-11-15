@@ -45,11 +45,10 @@ import com.skin.ayada.util.Stack;
  */
 public class TemplateCompiler extends PageCompiler
 {
-    private static final Logger logger = LoggerFactory.getLogger(TemplateCompiler.class);
-    private int lineNumber = 1;
     private SourceFactory sourceFactory;
     private TagLibrary tagLibrary = null;
     private boolean ignoreJspTag = true;
+    private static final Logger logger = LoggerFactory.getLogger(TemplateCompiler.class);
 
     /**
      * @param source
@@ -179,7 +178,8 @@ public class TemplateCompiler extends PageCompiler
         if(stack.peek() != null)
         {
             Node node = stack.peek();
-            throw new RuntimeException("Exception at line # " + node.getLineNumber() + " " + NodeUtil.toString(node) + " not match !");
+            stack.print();
+            throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.toString(node) + " not match !");
         }
 
         return this.getTemplate(source, list, this.tagLibrary);
@@ -269,14 +269,6 @@ public class TemplateCompiler extends PageCompiler
             {
                 Map<String, String> attributes = this.getAttributes();
 
-                while((i = this.stream.read()) != -1)
-                {
-                    if(i == '>')
-                    {
-                        break;
-                    }
-                }
-
                 if(this.stream.peek(-2) != '/')
                 {
                     throw new RuntimeException("The 't:include' direction must be self-closed!");
@@ -302,24 +294,12 @@ public class TemplateCompiler extends PageCompiler
             {
                 Node node = new Node(nodeName);
                 node.setTagClassName(tagClassName);
+                node.setLineNumber(this.getLineNumber());
                 Map<String, String> attributes = this.getAttributes();
-                
                 node.setOffset(list.size());
-                node.setLineNumber(this.lineNumber);
-                node.setAttributes(attributes);
-                
-                
                 node.setAttributes(attributes);
                 node.setClosed(NodeType.SELF_CLOSED);
                 this.pushNode(stack, list, node);
-
-                while((i = this.stream.read()) != -1)
-                {
-                    if(i == '>')
-                    {
-                        break;
-                    }
-                }
 
                 if(this.stream.peek(-2) != '/')
                 {
@@ -334,113 +314,86 @@ public class TemplateCompiler extends PageCompiler
                 return;
             }
 
-            if(this.ignoreJspTag == false)
+            if(nodeName.equals("jsp:directive.page") || nodeName.equals("jsp:directive.taglib") || nodeName.equals("jsp:directive.include"))
             {
-                if(nodeName.equals("jsp:directive.page") || nodeName.equals("jsp:directive.taglib") || nodeName.equals("jsp:directive.include"))
+                JspDirective node = JspDirective.getInstance(nodeName);
+                node.setTagClassName((String)null);
+                node.setLineNumber(this.getLineNumber());
+                Map<String, String> attributes = this.getAttributes();
+                node.setOffset(list.size());
+                node.setAttributes(attributes);
+
+                if(this.ignoreJspTag == false)
                 {
-                    JspDirective node = JspDirective.getInstance(nodeName);
-                    node.setTagClassName((String)null);
-                    node.setLineNumber(this.getLineNumber());
-                    Map<String, String> attributes = this.getAttributes();
-                    node.setOffset(list.size());
-                    node.setLineNumber(this.getLineNumber());
-                    node.setAttributes(attributes);
                     this.pushNode(stack, list, node);
                     this.popNode(stack, list, nodeName);
-    
-                    while((i = this.stream.read()) != -1)
-                    {
-                        if(i == '>')
-                        {
-                            break;
-                        }
-                    }
-    
-                    if(this.stream.peek(-2) != '/')
-                    {
-                        throw new RuntimeException("The 'jsp:directive.page' direction must be self-closed!");
-                    }
-    
-                    this.skipCRLF();
                 }
-                else if(nodeName.equals("jsp:declaration"))
+
+                if(this.stream.peek(-2) != '/')
                 {
-                    JspDeclaration node = new JspDeclaration();
-                    node.setTagClassName((String)null);
-                    node.setLineNumber(this.getLineNumber());
-                    Map<String, String> attributes = this.getAttributes();
-                    node.setOffset(list.size());
-                    node.setLineNumber(this.getLineNumber());
-                    node.setAttributes(attributes);
-                    node.setClosed(NodeType.PAIR_CLOSED);
-    
-                    while((i = stream.read()) != -1)
-                    {
-                        if(i == '>')
-                        {
-                            break;
-                        }
-                    }
-    
-                    this.skipCRLF();
-                    node.append(this.readNodeContent(nodeName));
-                    this.pushNode(stack, list, node);
-                    this.popNode(stack, list, nodeName);
-                    this.skipCRLF();
+                    throw new RuntimeException("The 'jsp:directive.page' direction must be self-closed!");
                 }
-                else if(nodeName.equals("jsp:scriptlet"))
+
+                this.skipCRLF();
+            }
+            else if(nodeName.equals("jsp:declaration"))
+            {
+                JspDeclaration node = new JspDeclaration();
+                node.setTagClassName((String)null);
+                node.setLineNumber(this.getLineNumber());
+                Map<String, String> attributes = this.getAttributes();
+                node.setOffset(list.size());
+                node.setAttributes(attributes);
+                node.setClosed(NodeType.PAIR_CLOSED);
+                this.skipCRLF();
+                node.append(this.readNodeContent(nodeName));
+                this.skipCRLF();
+
+                if(this.ignoreJspTag == false)
                 {
-                    JspScriptlet node = new JspScriptlet();
-                    node.setTagClassName((String)null);
-                    node.setLineNumber(this.getLineNumber());
-                    Map<String, String> attributes = this.getAttributes();
-                    node.setOffset(list.size());
-                    node.setLineNumber(this.getLineNumber());
-                    node.setAttributes(attributes);
-                    node.setClosed(NodeType.PAIR_CLOSED);
-    
-                    while((i = stream.read()) != -1)
-                    {
-                        if(i == '>')
-                        {
-                            break;
-                        }
-                    }
-    
-                    this.skipCRLF();
-                    node.append(this.readNodeContent(nodeName));
                     this.pushNode(stack, list, node);
                     this.popNode(stack, list, nodeName);
-                    this.skipCRLF();
-                }
-                else if(nodeName.equals("jsp:expression"))
-                {
-                    JspExpression node = new JspExpression();
-                    node.setTagClassName((String)null);
-                    node.setLineNumber(this.getLineNumber());
-                    Map<String, String> attributes = this.getAttributes();
-                    node.setOffset(list.size());
-                    node.setLineNumber(this.getLineNumber());
-                    node.setAttributes(attributes);
-                    node.setClosed(NodeType.PAIR_CLOSED);
-    
-                    while((i = stream.read()) != -1)
-                    {
-                        if(i == '>')
-                        {
-                            break;
-                        }
-                    }
-    
-                    this.skipCRLF();
-                    node.append(this.readNodeContent(nodeName));
-                    this.pushNode(stack, list, node);
-                    this.popNode(stack, list, nodeName);
-                    this.skipCRLF();
                 }
             }
+            else if(nodeName.equals("jsp:scriptlet"))
+            {
+                JspScriptlet node = new JspScriptlet();
+                node.setTagClassName((String)null);
+                node.setLineNumber(this.getLineNumber());
+                Map<String, String> attributes = this.getAttributes();
+                node.setOffset(list.size());
+                node.setAttributes(attributes);
+                node.setClosed(NodeType.PAIR_CLOSED);
+                this.skipCRLF();
+                node.append(this.readNodeContent(nodeName));
+                this.skipCRLF();
 
-            if(tagClassName != null)
+                if(this.ignoreJspTag == false)
+                {
+                    this.pushNode(stack, list, node);
+                    this.popNode(stack, list, nodeName);
+                }
+            }
+            else if(nodeName.equals("jsp:expression"))
+            {
+                JspExpression node = new JspExpression();
+                node.setTagClassName((String)null);
+                node.setLineNumber(this.getLineNumber());
+                Map<String, String> attributes = this.getAttributes();
+                node.setOffset(list.size());
+                node.setAttributes(attributes);
+                node.setClosed(NodeType.PAIR_CLOSED);
+                this.skipCRLF();
+                node.append(this.readNodeContent(nodeName));
+                this.skipCRLF();
+
+                if(this.ignoreJspTag == false)
+                {
+                    this.pushNode(stack, list, node);
+                    this.popNode(stack, list, nodeName);
+                };
+            }
+            else if(tagClassName != null)
             {
                 Node node = new Node(nodeName);
                 node.setTagClassName(tagClassName);
@@ -451,34 +404,11 @@ public class TemplateCompiler extends PageCompiler
                 node.setClosed(NodeType.PAIR_CLOSED);
                 this.pushNode(stack, list, node);
 
-                i = this.stream.peek();
-
-                if(i == '/')
+                if(this.stream.peek(-2) == '/')
                 {
-                    int offset = 0;
-
-                    while((i = this.stream.peek(offset++)) != -1)
-                    {
-                        if(i == '>')
-                        {
-                            break;
-                        }
-                    }
-
-                    this.stream.setPosition(this.stream.getPosition() + offset);
                     node.setLength(2);
                     node.setClosed(NodeType.SELF_CLOSED);
                     this.popNode(stack, list, nodeName);
-                }
-                else
-                {
-                    while((i = stream.read()) != -1)
-                    {
-                        if(i == '>')
-                        {
-                            break;
-                        }
-                    }
                 }
             }
             else
@@ -493,7 +423,7 @@ public class TemplateCompiler extends PageCompiler
     }
 
     /**
-     * 
+     * skip crlf
      */
     public void skipCRLF()
     {
@@ -592,32 +522,34 @@ public class TemplateCompiler extends PageCompiler
         if(i == '@')
         {
             i = this.stream.read();
+            int lineNumber = this.getLineNumber();
+            String nodeName = null;
             Map<String, String> attributes = this.getAttributes();
-
-            while((i = this.stream.read()) != -1)
-            {
-                if(i == '>')
-                {
-                    break;
-                }
-            }
 
             if(attributes.get("page") != null)
             {
-                
+                nodeName = NodeType.JSP_DIRECTIVE_PAGE_NAME;
             }
             else if(attributes.get("taglib") != null)
             {
-                
+                nodeName = NodeType.JSP_DIRECTIVE_TAGLIB_NAME;
             }
             else if(attributes.get("include") != null)
             {
-                
+                nodeName = NodeType.JSP_DIRECTIVE_INCLUDE_NAME;
             }
             else
             {
                 throw new RuntimeException("Unknown jsp directive at line #" + this.lineNumber + " - <%@ " + NodeUtil.toString(attributes));
             }
+
+            JspDirective node = JspDirective.getInstance(nodeName);
+            node.setTagClassName((String)null);
+            node.setOffset(list.size());
+            node.setLineNumber(lineNumber);
+            node.setAttributes(attributes);
+            this.pushNode(stack, list, node);
+            this.popNode(stack, list, nodeName);
         }
         else
         {
@@ -738,7 +670,7 @@ public class TemplateCompiler extends PageCompiler
         }
         else
         {
-            throw new RuntimeException("Exception at line # " + node.getLineNumber() + " " + NodeUtil.toString(node) + " not match !");
+            throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.toString(node) + " not match !");
         }
     }
 
@@ -830,6 +762,8 @@ public class TemplateCompiler extends PageCompiler
 
         TemplateCompiler compiler = new TemplateCompiler(this.sourceFactory);
         compiler.setTagLibrary(this.getTagLibrary());
+        compiler.setIgnoreJspTag(this.getIgnoreJspTag());
+
         Template template = compiler.compile(path, encoding);
         List<Node> nodes = template.getNodes();
 
@@ -917,7 +851,7 @@ public class TemplateCompiler extends PageCompiler
 
             if(node.getLength() == 0)
             {
-                throw new RuntimeException("Exception at line # " + node.getLineNumber() + " " + NodeUtil.toString(node) + " not match !");
+                throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.toString(node) + " not match !");
             }
 
             if(i == node.getOffset())
@@ -933,22 +867,6 @@ public class TemplateCompiler extends PageCompiler
         template.setLastModified(source.getLastModified());
         template.setUpdateTime(System.currentTimeMillis());
         return template;
-    }
-
-    /**
-     * @return int
-     */
-    public int getLineNumber()
-    {
-        return this.lineNumber;
-    }
-
-    /**
-     * @param lineNumber
-     */
-    public void setLineNumber(int lineNumber)
-    {
-        this.lineNumber = lineNumber;
     }
     
     /**

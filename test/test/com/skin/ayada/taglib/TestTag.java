@@ -38,7 +38,6 @@ public class TestTag extends TagSupport
             writer.println("<p>myDouble: " + this.myDouble + "</p>");
             writer.println("<p>myLong: " + this.myLong + "</p>");
             writer.println("<p>myString: " + this.myString + "</p>");
-            writer.println();
             writer.flush();
         }
         catch(java.io.IOException e)

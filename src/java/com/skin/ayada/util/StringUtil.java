@@ -142,4 +142,109 @@ public class StringUtil
 
         return buffer.toString();
     }
+    
+    /**
+     * @param source
+     * @return String
+     */
+    public static String escape(String source)
+    {
+        if(source == null)
+        {
+            return "";
+        }
+
+        char c;
+        StringBuilder buffer = new StringBuilder();
+
+        for(int i = 0, length = source.length(); i < length; i++)
+        {
+            c = source.charAt(i);
+
+            switch (c)
+            {
+                case '\'':
+                {
+                    buffer.append("\\\'");break;
+                }
+                case '"':
+                {
+                    buffer.append("\\\"");break;
+                }
+                case '\r':
+                {
+                    buffer.append("\\r");break;
+                }
+                case '\n':
+                {
+                    buffer.append("\\n");break;
+                }
+                case '\t':
+                {
+                    buffer.append("\\t");break;
+                }
+                case '\b':
+                {
+                    buffer.append("\\b");break;
+                }
+                case '\f':
+                {
+                    buffer.append("\\f");break;
+                }
+                default :
+                {
+                    buffer.append(c);break;
+                }
+            }   
+        }
+
+        return buffer.toString();
+    }
+
+    /**
+     * @param source
+     * @return String
+     */
+    public static String compact(String source)
+    {
+        return compact(source, "\r\n");
+    }
+
+    /**
+     * @param source
+     * @param crlf
+     * @return String
+     */
+    public static String compact(String source, String crlf)
+    {
+        char c;
+        boolean b = true;
+        int length = source.length();
+        StringBuilder buffer = new StringBuilder();
+        
+        for(int i = 0; i < length; i++)
+        {
+            c = source.charAt(i);
+
+            if(c == '\n')
+            {
+                if(b)
+                {
+                    buffer.append(crlf);
+                    b = false;
+                }
+            }
+            else if(c == '\r')
+            {
+                continue;
+            }
+            else
+            {
+                buffer.append(c);
+                b = true;
+            }
+        }
+
+        return buffer.toString();
+    }
 }
