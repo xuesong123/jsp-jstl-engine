@@ -18,9 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import test.com.skin.ayada.handler.UserHandler;
-import test.com.skin.ayada.model.User;
-
 import com.skin.ayada.compile.TemplateCompiler;
 import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.jstl.TagLibraryFactory;
@@ -34,6 +31,9 @@ import com.skin.ayada.statement.NodeType;
 import com.skin.ayada.template.JspTemplateFactory;
 import com.skin.ayada.template.Template;
 import com.skin.ayada.util.NodeUtil;
+
+import example.handler.UserHandler;
+import example.model.User;
 
 /**
  * <p>Title: JspTemplateFactoryTest</p>

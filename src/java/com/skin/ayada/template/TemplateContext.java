@@ -211,7 +211,16 @@ public class TemplateContext
      */
     private Template create(String path)
     {
-        return this.templateFactory.create(this.getSourceFactory(), path, this.charset);
+        try
+        {
+            return this.templateFactory.create(this.getSourceFactory(), path, this.charset);
+        }
+        catch(Throwable t)
+        {
+            t.printStackTrace();
+        }
+
+        return null;
     }
 
     private synchronized void clear()

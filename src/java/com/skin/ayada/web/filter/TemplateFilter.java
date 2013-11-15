@@ -104,12 +104,18 @@ public class TemplateFilter implements Filter
             }
             catch(Exception e)
             {
+                e.printStackTrace();
                 throw new ServletException(e);
             }
         }
         else
         {
             templateFactory = new TemplateFactory();
+        }
+
+        if(templateFactory == null)
+        {
+            throw new ServletException("templateFactory is null!");
         }
 
         this.templateContext = TemplateManager.getTemplateContext(servletContext.getRealPath(this.home), true);
@@ -141,7 +147,7 @@ public class TemplateFilter implements Filter
         }
 
         request.setAttribute("TemplateFilter$servletContext", this.servletContext);
-        TemplateDispatcher.dispatch(templateContext, request, response, requestURI);
+        TemplateDispatcher.dispatch(this.templateContext, request, response, requestURI);
     }
 
     /**

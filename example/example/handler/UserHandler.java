@@ -8,12 +8,12 @@
  * This software is the proprietary information of Skin, Inc.
  * Use is subject to license terms.
  */
-package test.com.skin.ayada.handler;
+package example.handler;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import test.com.skin.ayada.model.User;
+import example.model.User;
 
 /**
  * <p>Title: UserHandler</p>
@@ -24,9 +24,27 @@ import test.com.skin.ayada.model.User;
  */
 public class UserHandler
 {
+    /**
+     * @param userId
+     * @return
+     */
+    public static User getUserById(long userId)
+    {
+        User user = new User();
+        user.setUserId(userId);
+        user.setUserName("test" + userId);
+        user.setAge(22);
+        return user;
+    }
+
+    /**
+     * @param size
+     * @return List<User>
+     */
     public static List<User> getUserList(int size)
     {
         List<User> userList = new ArrayList<User>();
+
         for(int i = 0; i < size; i++)
         {
             User user = new User();
@@ -35,6 +53,7 @@ public class UserHandler
             user.setAge(i);
             userList.add(user);
         }
+
         return userList;
     }
 }

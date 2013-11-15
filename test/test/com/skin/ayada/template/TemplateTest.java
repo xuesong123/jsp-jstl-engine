@@ -21,9 +21,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import test.com.skin.ayada.handler.UserHandler;
-import test.com.skin.ayada.model.User;
-
 import com.skin.ayada.compile.TemplateCompiler;
 import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.jstl.TagLibraryFactory;
@@ -40,6 +37,9 @@ import com.skin.ayada.template.TemplateContext;
 import com.skin.ayada.util.ExpressionUtil;
 import com.skin.ayada.util.MemMonitor;
 import com.skin.ayada.util.TemplateUtil;
+
+import example.handler.UserHandler;
+import example.model.User;
 
 /**
  * <p>Title: TemplateTest</p>
