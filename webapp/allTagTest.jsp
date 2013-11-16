@@ -36,7 +36,8 @@
 </jsp:scriptlet>
 
 <jsp:scriptlet>
-    System.out.println("Hello, Ayada2 !");
+    System.out.println("Hello, Ayada2 ! </test");
+    System.out.println("Hello, Ayada2 ! </jsp:scriptlet>");
 </jsp:scriptlet>
 
 <%

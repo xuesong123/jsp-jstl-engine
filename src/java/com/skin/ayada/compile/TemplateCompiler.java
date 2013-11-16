@@ -491,8 +491,7 @@ public class TemplateCompiler extends PageCompiler
                 }
                 else
                 {
-                    buffer.append('/');
-                    buffer.append((char)i);
+                    buffer.append("</");
                 }
             }
             else
@@ -948,17 +947,5 @@ public class TemplateCompiler extends PageCompiler
     public boolean getIgnoreJspTag()
     {
         return this.ignoreJspTag;
-    }
-    
-    public static void main(String[] args)
-    {
-        String[] list = {"jsp:directive.page", "jsp:directive.taglib", "jsp:directive.include"};
-        
-        for(int i = 0; i < list.length; i++)
-        {
-            String nodeName = list[i];
-            JspDirective jspDirective = JspDirective.getInstance(nodeName);
-            System.out.println("nodeName: [" + jspDirective.getNodeName() + "] - [" + nodeName + "]");
-        }
     }
 }
