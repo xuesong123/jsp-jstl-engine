@@ -37,13 +37,101 @@ public class ExpressionContext extends OgnlContext
         this.pageContext = pageContext;
     }
 
+    @Override
+    public Object put(Object key, Object value)
+    {
+        return this.pageContext.setAttribute(key.toString(), value);
+    }
+
+    @Override
+    public Object get(Object key)
+    {
+        if(key == null)
+        {
+            return EMPTY;
+        }
+
+        Object value = this.pageContext.getAttribute(key.toString());
+
+        if(value == null)
+        {
+            value = this.tools.get(key);
+        }
+
+        return (value != null ? value : EMPTY);
+    }
+
     /**
      * @param expression
      * @return Object
      */
-    public Object evaluate(String expression)
+    public Object getValue(String expression)
     {
         return OgnlUtil.getValue(expression, this, this);
+    }
+
+    /**
+     * @param expression
+     * @return Object
+     */
+    public boolean getBoolean(String expression)
+    {
+        Object value = OgnlUtil.getValue(expression, this, this);
+
+        if(value == null)
+        {
+            return false;
+        }
+
+        if(value instanceof Boolean)
+        {
+            return Boolean.TRUE.equals(value);
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /**
+     * @param expression
+     * @return Object
+     */
+    public boolean getInteger(String expression)
+    {
+        Object value = OgnlUtil.getValue(expression, this, this);
+
+        if(value == null)
+        {
+            return false;
+        }
+
+        if(value instanceof Integer)
+        {
+            return Boolean.TRUE.equals(value);
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /**
+     * @param expression
+     * @return Object
+     */
+    public String getString(String expression)
+    {
+        Object value = OgnlUtil.getValue(expression, this, this);
+        
+        if(value == null || value instanceof Empty<?, ?>)
+        {
+            return "";
+        }
+        else
+        {
+            return value.toString();
+        }
     }
 
     /**
@@ -77,30 +165,6 @@ public class ExpressionContext extends OgnlContext
     public Map<String, Object> getTools()
     {
         return this.tools;
-    }
-
-    @Override
-    public Object put(Object key, Object value)
-    {
-        return this.pageContext.setAttribute(key.toString(), value);
-    }
-
-    @Override
-    public Object get(Object key)
-    {
-        if(key == null)
-        {
-            return EMPTY;
-        }
-
-        Object value = this.pageContext.getAttribute(key.toString());
-
-        if(value == null)
-        {
-            value = this.tools.get(key);
-        }
-
-        return (value != null ? value : EMPTY);
     }
 
     public void release()

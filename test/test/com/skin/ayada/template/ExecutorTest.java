@@ -14,9 +14,6 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
 
-import test.com.skin.ayada.handler.UserHandler;
-import test.com.skin.ayada.model.User;
-
 import com.skin.ayada.compile.TemplateCompiler;
 import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.jstl.TagLibraryFactory;
@@ -24,8 +21,10 @@ import com.skin.ayada.runtime.JspFactory;
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.source.DefaultSourceFactory;
 import com.skin.ayada.source.SourceFactory;
-import com.skin.ayada.template.DefaultExecutor;
 import com.skin.ayada.template.Template;
+
+import example.handler.UserHandler;
+import example.model.User;
 
 /**
  * <p>Title: ExecutorTest</p>
@@ -36,20 +35,6 @@ import com.skin.ayada.template.Template;
  */
 public class ExecutorTest
 {
-    public static PageContext getPageContext(Writer out)
-    {
-        User user = new User();
-        user.setUserId(1L);
-        user.setUserName("xuesong.net");
-        user.setAge(1);
-        List<User> userList = UserHandler.getUserList(16);
-
-        PageContext pageContext = JspFactory.getPageContext(out);
-        pageContext.setAttribute("user", user);
-        pageContext.setAttribute("userList", userList);
-        return pageContext;
-    }
-
     public static void main(String[] args)
     {
         SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
@@ -67,9 +52,30 @@ public class ExecutorTest
         PageContext pageContext = getPageContext(writer);
 
         long t3 = System.currentTimeMillis();
-        DefaultExecutor.execute(template, pageContext);
+        try
+        {
+            template.execute(pageContext);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
         long t4 = System.currentTimeMillis();
         System.out.println("run time: " + (t4 - t3));
         System.out.println(writer.toString());
+    }
+
+    public static PageContext getPageContext(Writer out)
+    {
+        User user = new User();
+        user.setUserId(1L);
+        user.setUserName("xuesong.net");
+        user.setAge(1);
+        List<User> userList = UserHandler.getUserList(16);
+
+        PageContext pageContext = JspFactory.getPageContext(out);
+        pageContext.setAttribute("user", user);
+        pageContext.setAttribute("userList", userList);
+        return pageContext;
     }
 }

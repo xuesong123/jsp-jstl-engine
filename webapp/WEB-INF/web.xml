@@ -7,19 +7,58 @@
 
     <filter>
         <filter-name>TemplateFilter</filter-name>
-        <filter-class>com.skin.ayada.filter.TemplateFilter</filter-class>
+        <filter-class>com.skin.ayada.web.filter.TemplateFilter</filter-class>
+        <!-- template file location -->
         <init-param>
             <param-name>home</param-name>
-            <param-value>/template</param-value>
+            <param-value>/WEB-INF/template</param-value>
+        </init-param>
+
+        <!-- JspTemplateFactory - as .jsp run -->
+        <init-param>
+            <param-name>template-factory</param-name>
+            <param-value>com.skin.ayada.template.JspTemplateFactory</param-value>
+        </init-param>
+
+        <!-- check file lastModified unit: second -->
+        <init-param>
+            <param-name>expire</param-name>
+            <param-value>30</param-value>
         </init-param>
     </filter>
 
     <!-- filter mapping -->
     <filter-mapping>
         <filter-name>TemplateFilter</filter-name>
-        <url-pattern>/template/*</url-pattern>
+        <url-pattern>/WEB-INF/template/*</url-pattern>
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
+
+    <servlet>
+        <servlet-name>UserListServlet</servlet-name>
+        <servlet-class>example.servlet.UserListServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UserListServlet2</servlet-name>
+        <servlet-class>example.servlet.UserListServlet2</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UserServlet</servlet-name>
+        <servlet-class>example.servlet.UserServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>UserListServlet</servlet-name>
+        <url-pattern>/user/UserListServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserListServlet2</servlet-name>
+        <url-pattern>/user/UserListServlet2</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserServlet</servlet-name>
+        <url-pattern>/user/UserServlet</url-pattern>
+    </servlet-mapping>
 
     <!-- welcome file list -->
     <welcome-file-list>

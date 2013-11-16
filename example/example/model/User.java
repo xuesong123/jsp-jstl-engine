@@ -8,7 +8,7 @@
  * This software is the proprietary information of Skin, Inc.
  * Use is subject to license terms.
  */
-package test.com.skin.ayada.model;
+package example.model;
 
 import java.io.Serializable;
 

@@ -12,6 +12,7 @@ package com.skin.ayada.util;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -77,6 +78,47 @@ public class IO
         finally
         {
             close(inputStreamReader);
+        }
+    }
+
+    /**
+     * @param bytes
+     * @param file
+     * @throws IOException
+     */
+    public static void write(byte[] bytes, File file) throws IOException
+    {
+        OutputStream outputStream = null;
+        
+        try
+        {
+            outputStream = new FileOutputStream(file);
+            outputStream.write(bytes);
+            outputStream.flush();
+        }
+        finally
+        {
+            close(outputStream);
+        }
+    }
+
+    /**
+     * @param bytes
+     * @param file
+     * @throws IOException
+     */
+    public static void write(InputStream inputStream, File file) throws IOException
+    {
+        OutputStream outputStream = null;
+
+        try
+        {
+            outputStream = new FileOutputStream(file);
+            copy(inputStream, outputStream);
+        }
+        finally
+        {
+            close(outputStream);
         }
     }
 

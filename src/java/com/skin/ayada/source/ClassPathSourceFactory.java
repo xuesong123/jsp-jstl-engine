@@ -46,7 +46,7 @@ public class ClassPathSourceFactory extends SourceFactory
         {
             this.home = this.home.substring(0, this.home.length() - 1);
         }
-
+        
         URL url = ClassPathSourceFactory.class.getClassLoader().getResource(this.home);
 
         if(url == null)
@@ -110,7 +110,7 @@ public class ClassPathSourceFactory extends SourceFactory
         try
         {
             inputStream = tempUrl.openStream();
-            return new Source(this.home, IO.read(inputStream, encoding, 4096), this.getSourceType(realPath));
+            return new Source(this.home, realPath, IO.read(inputStream, encoding, 4096), this.getSourceType(realPath));
         }
         catch(IOException e)
         {
@@ -120,6 +120,15 @@ public class ClassPathSourceFactory extends SourceFactory
         {
             IO.close(inputStream);
         }
+    }
+
+    /**
+     * @param path
+     * @return long
+     */
+    public long getLastModified(String path)
+    {
+        return 0L;
     }
 
     /**

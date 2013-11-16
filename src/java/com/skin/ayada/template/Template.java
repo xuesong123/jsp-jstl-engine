@@ -12,6 +12,10 @@ package com.skin.ayada.template;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.statement.Node;
 
 /**
@@ -23,33 +27,93 @@ import com.skin.ayada.statement.Node;
  */
 public class Template
 {
-    private String file;
+    private String home;
+    private String path;
     private long updateTime;
+    private long lastModified;
     private List<Node> nodes;
+    private static final Logger logger = LoggerFactory.getLogger(Template.class);
+
+    public Template()
+    {
+    }
 
     /**
-     * @param document
+     * @param file
+     * @param nodes
      */
-    public Template(List<Node> nodes)
+    public Template(String home, String path, List<Node> nodes)
     {
+        this.home = home;
+        this.path = path;
         this.nodes = nodes;
         this.updateTime = System.currentTimeMillis();
     }
 
     /**
-     * @return the nodes
+     * @param pageContext
      */
-    public List<Node> getNodes()
+    public void execute(final PageContext pageContext) throws Exception
     {
-        return nodes;
+        if(logger.isDebugEnabled())
+        {
+            long t1 = System.currentTimeMillis();
+            DefaultExecutor.execute(this, pageContext);
+            long t2 = System.currentTimeMillis();
+            logger.debug(this.getPath() + " - render time: " + (t2 - t1));
+        }
+        else
+        {
+            DefaultExecutor.execute(this, pageContext);
+        }
     }
 
     /**
-     * @param nodes the nodes to set
+     * @param home the home to set
      */
-    public void setNodes(List<Node> nodes)
+    public void setHome(String home)
     {
-        this.nodes = nodes;
+        this.home = home;
+    }
+
+    /**
+     * @return the home
+     */
+    public String getHome()
+    {
+        return this.home;
+    }
+
+    /**
+     * @param path the path to set
+     */
+    public void setPath(String path)
+    {
+        this.path = path;
+    }
+
+    /**
+     * @return the path
+     */
+    public String getPath()
+    {
+        return this.path;
+    }
+
+    /**
+     * @return the lastModified
+     */
+    public long getLastModified()
+    {
+        return this.lastModified;
+    }
+
+    /**
+     * @param lastModified the lastModified to set
+     */
+    public void setLastModified(long lastModified)
+    {
+        this.lastModified = lastModified;
     }
 
     /**
@@ -69,18 +133,18 @@ public class Template
     }
 
     /**
-     * @param file the file to set
+     * @param nodes the nodes to set
      */
-    public void setFile(String file)
+    public void setNodes(List<Node> nodes)
     {
-        this.file = file;
+        this.nodes = nodes;
     }
 
     /**
-     * @return the file
+     * @return the nodes
      */
-    public String getFile()
+    public List<Node> getNodes()
     {
-        return this.file;
-    } 
+        return this.nodes;
+    }
 }

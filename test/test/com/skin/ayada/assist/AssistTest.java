@@ -10,19 +10,27 @@
  */
 package test.com.skin.ayada.assist;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
+import java.lang.reflect.Method;
 
 import javassist.CannotCompileException;
 import javassist.ClassClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
+import javassist.CtMember;
 import javassist.CtMethod;
 import javassist.CtNewMethod;
 import javassist.NotFoundException;
+import javassist.compiler.Javac;
 
 import com.skin.ayada.factory.DefaultTagFactory;
 import com.skin.ayada.factory.FactoryClassLoader;
+import com.skin.ayada.runtime.JspFactory;
+import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.runtime.TagFactory;
+import com.skin.ayada.util.IO;
 
 /**
  * <p>Title: AssistTest</p>
@@ -36,6 +44,41 @@ public class AssistTest
      * @param args
      */
     public static void main(String[] args)
+    {
+        ClassPool classPool = ClassPool.getDefault();
+
+        try
+        {
+            String className = "test.com.skin.ayada.template.Test2";
+            CtClass ctClass = classPool.makeClass(className);
+            Javac javac = new Javac(ctClass);
+            CtMember ctMember = javac.compile(IO.read(new File("test2body.java"), "UTF-8", 4096));
+
+            System.out.println(ctMember.getClass().getName());
+            System.out.println(ctMember.getName());
+
+            ctClass = ctMember.getDeclaringClass();
+            Object object = getInstance(className, ctClass.toBytecode());
+
+            Method[] methods = object.getClass().getMethods();
+
+            for(Method method : methods)
+            {
+                System.out.println(method.toGenericString());
+            }
+
+            StringWriter writer = new StringWriter();
+            PageContext pageContext = JspFactory.getPageContext(writer);
+            invoke(object, "execute", new Class<?>[]{PageContext.class}, new Object[]{pageContext});
+            System.out.println(writer.toString());
+        }
+        catch(Throwable t)
+        {
+            t.printStackTrace();
+        }
+    }
+    
+    public static void test3()
     {
         ClassPool classPool = ClassPool.getDefault();
 
@@ -65,7 +108,7 @@ public class AssistTest
             // ctClass.addMethod(method);
 
             ctClass.setSuperclass(pool.get("com.skin.ayada.factory.DefaultTagFactory"));
-            
+
             System.out.println(ctClass);
             CtMethod method = CtNewMethod.make("public com.skin.ayada.tagext.Tag create(){return new com.skin.ayada.jstl.core.SetTag();}", ctClass);
             ctClass.addMethod(method);
@@ -78,7 +121,7 @@ public class AssistTest
             System.out.println(tagFactory);
             System.out.println(tagFactory.create());
         }
-        catch(Exception e)
+        catch(Throwable e)
         {
             e.printStackTrace();
         }
@@ -132,7 +175,7 @@ public class AssistTest
 
         try
         {
-            return (TagFactory)(clazz.newInstance());
+            return clazz.newInstance();
         }
         catch(InstantiationException e)
         {
@@ -144,5 +187,11 @@ public class AssistTest
         }
         
         return null;
+    }
+    
+    public static void invoke(Object object, String methodName, Class<?>[] types, Object[] parameters) throws Throwable
+    {
+        Method method = object.getClass().getMethod(methodName, types);
+        method.invoke(object, parameters);
     }
 }

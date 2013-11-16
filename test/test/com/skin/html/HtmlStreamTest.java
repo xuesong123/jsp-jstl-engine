@@ -57,6 +57,6 @@ public class HtmlStreamTest
             i--;
         }
 
-        stack.println();
+        stack.print();
     }
 }

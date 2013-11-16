@@ -16,10 +16,11 @@ import java.util.Map;
 
 import ognl.Ognl;
 import ognl.OgnlException;
-import test.com.skin.ayada.handler.UserHandler;
-import test.com.skin.ayada.model.User;
 
 import com.skin.ayada.jstl.util.BeanUtil;
+
+import example.handler.UserHandler;
+import example.model.User;
 
 /**
  * <p>Title: OgnlTest</p>

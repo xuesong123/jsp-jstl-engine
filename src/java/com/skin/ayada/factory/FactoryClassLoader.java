@@ -1,5 +1,5 @@
 /*
- * $RCSfile: TagFactoryClassLoader.java,v $$
+ * $RCSfile: FactoryClassLoader.java,v $$
  * $Revision: 1.1 $
  * $Date: 2013-11-6 $
  *
@@ -14,7 +14,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 
 /**
- * <p>Title: TagFactoryClassLoader</p>
+ * <p>Title: FactoryClassLoader</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
@@ -28,15 +28,33 @@ public class FactoryClassLoader extends ClassLoader
     {
         super(classLoader);
     }
+    
+    /**
+     * @param className
+     * @return Class<?>
+     */
+    public Class<?> getClass(String className)
+    {
+        try
+        {
+            return this.findClass(className);
+        }
+        catch(ClassNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 
     /**
-     * @param name
+     * @param className
      * @param bytes
      * @return Class<?>
      */
-    public Class<?> create(String name, byte[] bytes)
+    public Class<?> create(String className, byte[] bytes)
     {
-        return defineClass(name, bytes, 0, bytes.length);
+        return this.defineClass(className, bytes, 0, bytes.length);
     }
 
     /**

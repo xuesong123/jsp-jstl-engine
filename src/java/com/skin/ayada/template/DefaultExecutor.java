@@ -10,7 +10,6 @@
  */
 package com.skin.ayada.template;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class DefaultExecutor
      * @param list
      * @param pageContext
      */
-    public static void execute(Template template, final PageContext pageContext)
+    public static void execute(final Template template, final PageContext pageContext) throws Exception
     {
         Node node = null;
         JspWriter out = null;
@@ -64,19 +63,25 @@ public class DefaultExecutor
 
                 if(node.getNodeType() == NodeType.TEXT)
                 {
-                    out.write(node.toString());
+                    out.write(node.getTextContent());
                     index++;
                     continue;
                 }
 
                 if(node.getNodeType() == NodeType.EXPRESSION)
                 {
-                    Object value = expressionContext.evaluate(node.toString());
+                    Object value = expressionContext.getValue(node.getTextContent());
 
                     if(value != null)
                     {
                         out.write(value.toString());
                     }
+                    index++;
+                    continue;
+                }
+
+                if(node.getNodeType() != NodeType.NODE)
+                {
                     index++;
                     continue;
                 }
@@ -118,20 +123,16 @@ public class DefaultExecutor
                 }
                 index++;
             }
+            
+            jspWriter.flush();
         }
         catch(Throwable t)
         {
-            throw new RuntimeException("Exception at " + template.getFile() + node.getLineNumber() + " " + NodeUtil.toString(node), t);
+            throw new Exception("\"" + template.getPath() + "\" Exception at line #" + node.getLineNumber() + " " + NodeUtil.toString(node), t);
         }
-
-        pageContext.setOut(jspWriter);
-
-        try
+        finally
         {
-            jspWriter.flush();
-        }
-        catch(IOException e)
-        {
+            pageContext.setOut(jspWriter);
         }
     }
 
@@ -264,6 +265,9 @@ public class DefaultExecutor
         return statements;
     }
 
+    /**
+     * @param list
+     */
     public static void print(List<Node> list)
     {
         for(int index = 0, size = list.size(); index < size; index++)
@@ -272,13 +276,13 @@ public class DefaultExecutor
 
             if(node.getNodeType() == NodeType.TEXT)
             {
-                System.out.println(index + " $" + node.getLineNumber() + " #text: " + node.toString());
+                System.out.println(index + " $" + node.getLineNumber() + " #text: " + node.getTextContent());
                 continue;
             }
 
             if(node.getNodeType() == NodeType.EXPRESSION)
             {
-                System.out.println(index + " $" + node.getLineNumber() + " #expr: " + node.toString());
+                System.out.println(index + " $" + node.getLineNumber() + " #expr: " + node.getTextContent());
                 continue;
             }
 

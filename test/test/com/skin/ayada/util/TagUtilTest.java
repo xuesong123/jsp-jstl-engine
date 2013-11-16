@@ -10,7 +10,7 @@
  */
 package test.com.skin.ayada.util;
 
-import com.skin.ayada.util.TagUtil;
+import com.skin.ayada.util.ExpressionUtil;
 
 /**
  * <p>Title: TagUtilTest</p>
@@ -25,7 +25,7 @@ public class TagUtilTest
      */
     public static void main(String[] args)
     {
-        int type = TagUtil.getNumberType("user");
+        int type = ExpressionUtil.getNumberType("user");
         System.out.println("type: " + type + ((int)('.')));
     }
 }

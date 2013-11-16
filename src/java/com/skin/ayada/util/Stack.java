@@ -10,6 +10,9 @@
  */
 package com.skin.ayada.util;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 /**
  * <p>Title: Stack</p>
  * <p>Description: </p>
@@ -24,14 +27,20 @@ public class Stack<E>
 
     public Stack()
     {
-        this(10);
+        this(32);
     }
 
+    /**
+     * @param capacity
+     */
     public Stack(int capacity)
     {
         this.stack = new Object[capacity];
     }
 
+    /**
+     * @param e
+     */
     public void push(E e)
     {
         this.index++;
@@ -47,6 +56,9 @@ public class Stack<E>
         this.stack[this.index] = e;
     }
 
+    /**
+     * @return E
+     */
     public E pop()
     {
         E e = this.poll();
@@ -59,6 +71,9 @@ public class Stack<E>
         return e;
     }
 
+    /**
+     * @return E
+     */
     @SuppressWarnings("unchecked")
     public E poll()
     {
@@ -101,32 +116,44 @@ public class Stack<E>
         return null;
     }
 
-    public void println()
-    {
-        this.println("stack");
-    }
-
-    public void println(String name)
-    {
-        if(name == null)
-        {
-            System.out.println("=============== stack ===============");
-        }
-        else
-        {
-            System.out.println("=============== " + name + " ===============");
-        }
-
-        for(int i = this.index; i > -1; i--)
-        {
-            System.out.println(this.stack[i]);
-        }
-
-        System.out.println();
-    }
-
+    /**
+     * @return int
+     */
     public int size()
     {
         return this.index + 1;
+    }
+
+    public void print()
+    {
+        this.print(new PrintWriter(System.out));
+    }
+
+    /**
+     * @param out
+     */
+    public void print(PrintWriter out)
+    {
+        out.println("=============== stack ===============");
+
+        for(int i = this.index; i > -1; i--)
+        {
+            out.println("[stack: " + i + "]: " + this.stack[i]);
+        }
+
+        out.println();
+        out.flush();
+    }
+
+    /**
+     * @param head
+     * @return String
+     */
+    @Override
+    public String toString()
+    {
+        StringWriter stringWriter = new StringWriter();
+        this.print(new PrintWriter(stringWriter));
+        return stringWriter.toString();
     }
 }

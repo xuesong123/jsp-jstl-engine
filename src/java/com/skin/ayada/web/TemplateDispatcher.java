@@ -47,6 +47,11 @@ public class TemplateDispatcher
      */
     public static void dispatch(TemplateContext templateContext, HttpServletRequest request, HttpServletResponse response, String page) throws ServletException, IOException
     {
+        if(logger.isDebugEnabled())
+        {
+            logger.debug("dispatch: " + page);
+        }
+
         Template template = templateContext.getTemplate(page);
 
         if(template == null)
@@ -93,7 +98,14 @@ public class TemplateDispatcher
             writer = response.getWriter();
         }
 
-        templateContext.execute(template, context, writer);
+        try
+        {
+            templateContext.execute(template, context, writer);
+        }
+        catch(Exception e)
+        {
+            throw new ServletException(e);
+        }
     }
 
     /**

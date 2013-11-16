@@ -10,7 +10,7 @@
  */
 package com.skin.ayada.statement;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.skin.ayada.runtime.TagFactory;
@@ -25,6 +25,7 @@ import com.skin.ayada.runtime.TagFactory;
 public class Node
 {
     private String nodeName;
+    private String tagClassName;
     private int nodeType;
     private int offset;
     private int length;
@@ -36,8 +37,6 @@ public class Node
 
     /**
      * @param nodeName
-     * @param nodeType
-     * @param nodeHtml
      */
     public Node(String nodeName)
     {
@@ -47,14 +46,13 @@ public class Node
     /**
      * @param nodeName
      * @param nodeType
-     * @param nodeHtml
      */
     public Node(String nodeName, int nodeType)
     {
         this.nodeName = nodeName;
         this.nodeType = nodeType;
         this.closed   = 1;
-        this.attributes = new HashMap<String, String>();
+        this.attributes = new LinkedHashMap<String, String>();
     }
 
     /**
@@ -74,11 +72,27 @@ public class Node
     }
 
     /**
+     * @return the tagClassName
+     */
+    public String getTagClassName()
+    {
+        return this.tagClassName;
+    }
+
+    /**
+     * @param tagClassName the tagClassName to set
+     */
+    public void setTagClassName(String tagClassName)
+    {
+        this.tagClassName = tagClassName;
+    }
+
+    /**
      * @return the nodeType
      */
     public int getNodeType()
     {
-        return nodeType;
+        return this.nodeType;
     }
 
     /**
@@ -168,7 +182,7 @@ public class Node
      */
     public String getAttribute(String name)
     {
-        return this.attributes.get(name.toLowerCase());
+        return this.attributes.get(name);
     }
 
     /**
@@ -204,19 +218,11 @@ public class Node
     }
 
     /**
+     * @return String
      */
-    public Node clone()
+    public String getTextContent()
     {
-        Node node = new Node(this.nodeName);
-        node.setClosed(this.closed);
-        node.setParent(this.parent);
-
-        for(Map.Entry<String, String> entry : this.attributes.entrySet())
-        {
-            node.setAttribute(entry.getKey(), entry.getValue());
-        }
-
-        return node;
+        return null;
     }
 
     /**
@@ -259,6 +265,22 @@ public class Node
     }
 
     /**
+     */
+    public Node clone()
+    {
+        Node node = new Node(this.nodeName);
+        node.setClosed(this.closed);
+        node.setParent(this.parent);
+
+        for(Map.Entry<String, String> entry : this.attributes.entrySet())
+        {
+            node.setAttribute(entry.getKey(), entry.getValue());
+        }
+
+        return node;
+    }
+
+    /**
      * @return String
      */
     public String toString()
@@ -278,7 +300,9 @@ public class Node
         {
             buffer.append("<");
             buffer.append(this.getNodeName());
-            buffer.append(" offset=\"");
+            buffer.append(" lineNumber=\"");
+            buffer.append(this.getLineNumber());
+            buffer.append("\" offset=\"");
             buffer.append(this.getOffset());
             buffer.append("\" length=\"");
             buffer.append(this.getLength());

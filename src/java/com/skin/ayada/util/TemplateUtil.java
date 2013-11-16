@@ -39,14 +39,14 @@ public class TemplateUtil
 
             if(node.getNodeType() == NodeType.TEXT)
             {
-                buffer.append(node.toString());
+                buffer.append(node.getTextContent());
                 continue;
             }
 
             if(node.getNodeType() == NodeType.EXPRESSION)
             {
                 buffer.append("${");
-                buffer.append(node.toString());
+                buffer.append(node.getTextContent());
                 buffer.append("}");
                 continue;
             }

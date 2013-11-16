@@ -72,7 +72,7 @@ public class BeanUtil
      * @param value
      * @return boolean
      */
-    public boolean notNull(Object value)
+    public boolean isNotNull(Object value)
     {
         return (this.isNull(value) == false);
     }
@@ -139,7 +139,7 @@ public class BeanUtil
      */
     public String toString(Character c)
     {
-        return (c.toString());
+        return c.toString();
     }
 
     /**

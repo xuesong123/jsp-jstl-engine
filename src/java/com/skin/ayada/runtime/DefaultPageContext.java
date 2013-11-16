@@ -10,6 +10,7 @@
  */
 package com.skin.ayada.runtime;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -78,7 +79,14 @@ public class DefaultPageContext implements PageContext
      */
     public Object setAttribute(String key, Object value)
     {
-        return this.attributes.put(key, value);
+        if(value != null)
+        {
+            return this.attributes.put(key, value);
+        }
+        else
+        {
+            return this.attributes.remove(key);
+        }
     }
 
     /**
@@ -166,19 +174,92 @@ public class DefaultPageContext implements PageContext
     }
 
     /**
-     * @param page
+     * @param bodyContent
+     * @param escapeXml
+     * @throws IOException 
      */
-    @Override
-    public void include(String page)
+    public void printBodyContent(BodyContent bodyContent, boolean escapeXml) throws IOException
     {
-        this.include(page, null);
+        String content = bodyContent.getString().trim();
+
+        if(escapeXml)
+        {
+            content = this.escape(content);
+        }
+
+        bodyContent.getEnclosingWriter().write(content);
+    }
+
+    /**
+     * @param source
+     * @return String
+     */
+    private String escape(String source)
+    {
+        if(source == null)
+        {
+            return "";
+        }
+
+        char c;
+        StringBuilder buffer = new StringBuilder();
+
+        for(int i = 0, size = source.length(); i < size; i++)
+        {
+            c = source.charAt(i);
+
+            switch (c)
+            {
+                case '&':
+                {
+                    buffer.append("&amp;");
+                    break;
+                }
+                case '"':
+                {
+                    buffer.append("&quot;");
+                    break;
+                }
+                case '<':
+                {
+                    buffer.append("&lt;");
+                    break;
+                }
+                case '>':
+                {
+                    buffer.append("&gt;");
+                    break;
+                }
+                case '\'':
+                {
+                    buffer.append("&#39;");
+                }
+                default :
+                {
+                    buffer.append(c);
+                    break;
+                }
+            }
+        }
+
+        return buffer.toString();
     }
 
     /**
      * @param page
      */
     @Override
-    public void include(String page, Map<String, Object> context)
+    public void include(String page) throws Exception
+    {
+        this.include(page, null);
+    }
+
+    /**
+     * @param page
+     * @throws Exception 
+     */
+    @Override
+    public void include(String page, Map<String, Object> context) throws Exception
     {
         this.templateContext.execute(page, context, this.getOut());
     }

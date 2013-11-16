@@ -15,6 +15,7 @@ import java.io.StringWriter;
 import com.skin.ayada.jstl.core.ForEachTag;
 import com.skin.ayada.runtime.JspFactory;
 import com.skin.ayada.runtime.PageContext;
+import com.skin.ayada.tagext.Tag;
 
 /**
  * <p>Title: ForEachTagTest</p>
@@ -26,6 +27,28 @@ public class ForEachTagTest
 {
     public static void main(String[] args)
     {
+        test2();
+    }
+    
+    public static void test1()
+    {
+        StringWriter out = new StringWriter();
+        PageContext pageContext = JspFactory.getPageContext(out);
+
+        ForEachTag forEachTag = new ForEachTag();
+        forEachTag.setParent((Tag)null);
+        forEachTag.setPageContext(pageContext);
+        forEachTag.setItems(new String[]{"1", "2"});
+        forEachTag.doStartTag();
+
+        while(forEachTag.hasNext())
+        {
+            System.out.println(forEachTag.next());
+        }
+    }
+
+    public static void test2()
+    {
         StringWriter out = new StringWriter();
         PageContext pageContext = JspFactory.getPageContext(out);
 
@@ -35,5 +58,10 @@ public class ForEachTagTest
         int flag = forEachTag.doStartTag();
         System.out.println("index: " + forEachTag.getIndex());
         System.out.println("flag: " + flag);
+
+        while(forEachTag.hasNext())
+        {
+            System.out.println(forEachTag.next());
+        }
     }
 }

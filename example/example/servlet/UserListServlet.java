@@ -11,19 +11,15 @@
 package example.servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import test.com.skin.ayada.model.User;
-
-import com.skin.ayada.template.TemplateContext;
+import example.handler.UserHandler;
+import example.model.User;
 
 
 /**
@@ -36,27 +32,16 @@ import com.skin.ayada.template.TemplateContext;
 public class UserListServlet extends HttpServlet
 {
     private static final long serialVersionUID = 1L;
-    private static final TemplateContext templateContext = new TemplateContext("webapp");
 
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         response.setContentType("text/html; charset=UTF-8");
-        Map<String, Object> context = new HashMap<String, Object>();
-        List<User> userList = this.getUserList();
-        context.put("userList", userList);
-        templateContext.execute("/userList.html", context, response.getWriter());
-    }
+        List<User> userList = UserHandler.getUserList(5);
+        request.setAttribute("userList", userList);
 
-    private List<User> getUserList()
-    {
-        List<User> userList = new ArrayList<User>();
-        for(int i = 0; i < 10; i++)
-        {
-            User user = new User();
-            user.setUserId(Long.valueOf(i));
-            user.setUserName("test" + i);
-            userList.add(user);
-        }
-        return userList;
+        /**
+         * forward to TemplateFilter.doFilter 
+         */
+        request.getRequestDispatcher("/WEB-INF/template/userList.jsp").forward(request, response);
     }
 }

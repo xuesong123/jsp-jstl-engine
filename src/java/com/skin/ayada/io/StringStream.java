@@ -75,7 +75,6 @@ public class StringStream
 
         int len = (length > this.position ? this.position : length);
         this.position -= len;
-
         return len;
     }
 
@@ -115,12 +114,31 @@ public class StringStream
     {
         if(this.position < this.length)
         {
-            return buffer[this.position++];
+            return this.buffer[this.position++];
         }
 
         return -1;
     }
 
+    /**
+     * @param length
+     * @return int
+     */
+    public int skip(int length)
+    {
+        if(this.position + length <= this.length)
+        {
+            this.position = this.position + length;
+            return length;
+        }
+        else
+        {
+            int index = this.position;
+            this.position = this.length;
+            return this.length - index;
+        }
+    }
+    
     /**
      * @param cbuf
      * @return int
@@ -156,6 +174,25 @@ public class StringStream
         }
 
         return size;
+    }
+
+    /**
+     * @param nodeName
+     */
+    public boolean match(String search)
+    {
+        int j = this.position;
+        int length = search.length();
+
+        for(int i = 0; i < length; i++, j++)
+        {
+            if(j >= this.buffer.length || search.charAt(i) != this.buffer[j])
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

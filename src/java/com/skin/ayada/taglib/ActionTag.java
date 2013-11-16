@@ -57,7 +57,14 @@ public class ActionTag extends TagSupport implements com.skin.ayada.tagext.Param
 
         if(this.getPage() != null)
         {
-            pageContext.include(this.getPage(), context);
+            try
+            {
+                pageContext.include(this.getPage(), context);
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
         }
 
         return TagSupport.EVAL_PAGE;

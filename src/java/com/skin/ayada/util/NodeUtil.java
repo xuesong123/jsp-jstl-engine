@@ -33,20 +33,20 @@ public class NodeUtil
 
         if(node.getNodeType() == NodeType.TEXT)
         {
-            buffer.append(node.toString());
+            buffer.append(node.getTextContent());
             return buffer.toString();
         }
 
         if(node.getNodeType() == NodeType.COMMENT)
         {
-            buffer.append(node.toString());
+            buffer.append(node.getTextContent());
             return buffer.toString();
         }
 
         if(node.getNodeType() == NodeType.EXPRESSION)
         {
             buffer.append("${");
-            buffer.append(node.toString());
+            buffer.append(node.getTextContent());
             buffer.append("}");
             return buffer.toString();
         }
@@ -77,6 +77,33 @@ public class NodeUtil
         else
         {
             buffer.append("/>");
+        }
+
+        return buffer.toString();
+    }
+    /**
+     * @param node
+     * @return String
+     */
+    public static String toString(Map<String, String> attributes)
+    {
+        StringBuilder buffer = new StringBuilder();
+
+        if(attributes != null && attributes.size() > 0)
+        {
+            for(Map.Entry<String, String> entrySet : attributes.entrySet())
+            {
+                buffer.append(entrySet.getKey());
+                buffer.append("=\"");
+                buffer.append(entrySet.getValue());
+                buffer.append("\"");
+                buffer.append(" ");
+            }
+        }
+
+        if(buffer.length() > 0)
+        {
+            buffer.deleteCharAt(buffer.length() - 1);
         }
 
         return buffer.toString();

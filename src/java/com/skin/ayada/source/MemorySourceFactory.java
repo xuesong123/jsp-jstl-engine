@@ -30,6 +30,15 @@ public class MemorySourceFactory extends SourceFactory
 
     /**
      * @param path
+     * @return long
+     */
+    public long getLastModified(String path)
+    {
+        return this.source.getLastModified();
+    }
+
+    /**
+     * @param path
      * @param encoding
      * @return Source
      */
