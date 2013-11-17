@@ -66,7 +66,9 @@ public class TemplateCompiler extends PageCompiler
      */
     public Template compile(String path, String encoding)
     {
+        long t1 = System.currentTimeMillis();
         Source source = this.getSourceFactory().getSource(path, encoding);
+        long t2 = System.currentTimeMillis();
 
         if(source.getType() == Source.STATIC)
         {
@@ -83,14 +85,15 @@ public class TemplateCompiler extends PageCompiler
         }
 
         int i;
-        char c;
+        Stack<Node> stack = new Stack<Node>();
+        StringBuilder buffer = new StringBuilder();
+        StringBuilder expression = new StringBuilder();
+        List<Node> list = new ArrayList<Node>();
         this.stream = new StringStream(source.getSource());
 
         while((i = this.stream.read()) != -1)
         {
-            c = (char)i;
-
-            if(Character.isISOControl(c) || c == ' ')
+            if(Character.isISOControl(i) || i == ' ')
             {
                 continue;
             }
@@ -99,29 +102,20 @@ public class TemplateCompiler extends PageCompiler
             break;
         }
 
-        Stack<Node> stack = new Stack<Node>();
-        StringBuilder buffer = new StringBuilder();
-        StringBuilder expression = new StringBuilder();
-        List<Node> list = new ArrayList<Node>();
-
         while((i = this.stream.read()) != -1)
         {
-            c = (char)i;
-
-            if(c == '<')
+            if(i == '<')
             {
                 this.startTag(stack, list);
             }
-            else if(c == '$' && this.stream.peek() == '{')
+            else if(i == '$' && this.stream.peek() == '{')
             {
                 i = this.stream.read();
                 expression.setLength(0);
 
                 while((i = this.stream.read()) != -1)
                 {
-                    c = (char)i;
-
-                    if(c == '}')
+                    if(i == '}')
                     {
                         Expression expr = new Expression();
                         expr.setOffset(list.size());
@@ -133,35 +127,19 @@ public class TemplateCompiler extends PageCompiler
                     }
                     else
                     {
-                        expression.append(c);
+                        expression.append((char)i);
                     }
                 }
             }
             else
             {
-                buffer.append(c);
+                int line = this.lineNumber;
+                buffer.append((char)i);
 
-                if(c == '\n')
+                if(i == '\n')
                 {
                     this.lineNumber++;
                 }
-
-                while((i = this.stream.read()) != -1)
-                {
-                    if(i == '\n')
-                    {
-                        this.lineNumber++;
-                        buffer.append((char)i);
-                        continue;
-                    }
-                    else
-                    {
-                        this.stream.back();
-                        break;
-                    }
-                }
-
-                int line = this.lineNumber;
 
                 while((i = this.stream.read()) != -1)
                 {
@@ -172,14 +150,12 @@ public class TemplateCompiler extends PageCompiler
                     }
                     else
                     {
-                        c = (char)i;
-
-                        if(c == '\n')
+                        if(i == '\n')
                         {
                             this.lineNumber++;
                         }
 
-                        buffer.append(c);
+                        buffer.append((char)i);
                     }
                 }
 
@@ -198,7 +174,18 @@ public class TemplateCompiler extends PageCompiler
             throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.toString(node) + " not match !");
         }
 
-        return this.getTemplate(source, list, this.tagLibrary);
+        long t3 = System.currentTimeMillis();
+        Template template = this.getTemplate(source, list, this.tagLibrary);
+        long t4 = System.currentTimeMillis();
+
+        if(logger.isDebugEnabled())
+        {
+            logger.debug("getSource: " + (t2 - t1));
+            logger.debug("compile time: " + (t3 - t2));
+            logger.debug("create tagFactory: " + (t4 - t3));
+        }
+
+        return template;
     }
 
     /**
@@ -413,9 +400,9 @@ public class TemplateCompiler extends PageCompiler
             {
                 Node node = new Node(nodeName);
                 node.setTagClassName(tagClassName);
+                node.setLineNumber(this.getLineNumber());
                 Map<String, String> attributes = this.getAttributes();
                 node.setOffset(list.size());
-                node.setLineNumber(this.getLineNumber());
                 node.setAttributes(attributes);
                 node.setClosed(NodeType.PAIR_CLOSED);
                 this.pushNode(stack, list, node);
@@ -668,7 +655,7 @@ public class TemplateCompiler extends PageCompiler
 
         if(logger.isDebugEnabled())
         {
-            // logger.debug("[push][node] parent: " + (parent != null ? parent.getNodeName() : "null") + "[" + node.getNodeName() + "]");
+            logger.debug("[push][node] parent: " + (parent != null ? parent.getNodeName() : "null") + ", nodeName: [" + node.getNodeName() + "]");
         }
     }
 
@@ -695,13 +682,12 @@ public class TemplateCompiler extends PageCompiler
             if(logger.isDebugEnabled())
             {
                 Node parent = node.getParent();
-                logger.debug("[pop ][node] parent: " + (parent != null ? parent.getNodeName() : "null") + ", html:[/" + node.getNodeName() + "]");
+                logger.debug("[pop ][node] parent: " + (parent != null ? parent.getNodeName() : "null") + ", nodeName: [/" + node.getNodeName() + "]");
             }
         }
         else
         {
             stack.print();
-            System.out.println("nodeName: [" + node.getNodeName() + "] - [" + nodeName + "]");
             throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.toString(node) + " not match !");
         }
     }

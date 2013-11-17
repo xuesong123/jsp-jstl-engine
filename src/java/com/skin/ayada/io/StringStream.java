@@ -85,7 +85,7 @@ public class StringStream
     {
         if(this.position < this.length)
         {
-            return buffer[this.position];
+            return this.buffer[this.position];
         }
 
         return -1;
