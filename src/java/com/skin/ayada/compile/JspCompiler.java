@@ -376,7 +376,23 @@ public class JspCompiler
         if(node.getOffset() == index)
         {
             String name = node.getAttribute("var");
-            writer.println(indent + "pageContext.setAttribute(\"" + name + "\", ExpressionUtil.evaluate(expressionContext, \"" + StringUtil.escape(node.getAttribute("value")) + "\"));");
+            String value = node.getAttribute("value");
+
+            if(value != null)
+            {
+                if(value.indexOf("${") > -1)
+                {
+                    writer.println(indent + "pageContext.setAttribute(\"" + name + "\", ExpressionUtil.evaluate(expressionContext, \"" + StringUtil.escape(node.getAttribute("value")) + "\"));");
+                }
+                else
+                {
+                    writer.println(indent + "pageContext.setAttribute(\"" + name + "\", \"" + StringUtil.escape(value) + "\");");
+                }
+            }
+            else
+            {
+                writer.println(indent + "pageContext.setAttribute(\"" + name + "\", null));");
+            }
         }
         else
         {
@@ -480,7 +496,18 @@ public class JspCompiler
 
             if(items != null)
             {
-                writer.println(indent + tagInstanceName + ".setItems(ExpressionUtil.evaluate(expressionContext, \"" + StringUtil.escape(items) + "\"));");
+                if(items.indexOf("${") > -1)
+                {
+                    writer.println(indent + tagInstanceName + ".setItems(ExpressionUtil.evaluate(expressionContext, \"" + StringUtil.escape(items) + "\"));");
+                }
+                else
+                {
+                    writer.println(indent + tagInstanceName + ".setItems(\"" + StringUtil.escape(items) + "\");");
+                }
+            }
+            else
+            {
+                writer.println(indent + tagInstanceName + ".setItems(null);");
             }
 
             if(begin != null && end != null)
