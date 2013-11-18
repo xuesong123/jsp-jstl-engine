@@ -350,18 +350,23 @@ public class Node
             buffer.append("\" length=\"");
             buffer.append(this.getLength());
             buffer.append("\"");
-    
+
+            if(this.tagClassName != null)
+            {
+                buffer.append(" tagClass=\"");
+                buffer.append(this.tagClassName);
+                buffer.append("\"");
+            }
+
+            if(this.tagFactory != null)
+            {
+                buffer.append(" tagFactory=\"");
+                buffer.append(this.tagFactory.getClass().getName());
+                buffer.append("\"");
+            }
+
             if(this.attributes != null && this.attributes.size() > 0)
             {
-                if(this.tagFactory != null)
-                {
-                    buffer.append(" tagFactory=\"");
-                    buffer.append(this.tagFactory.getClass().getName());
-                    buffer.append("\" tagClass=\"");
-                    buffer.append(this.tagFactory.getClassName());
-                    buffer.append("\"");
-                }
-
                 for(Map.Entry<String, String> entry : this.attributes.entrySet())
                 {
                     buffer.append(" ");

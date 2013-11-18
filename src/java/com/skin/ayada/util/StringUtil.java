@@ -142,7 +142,7 @@ public class StringUtil
 
         return buffer.toString();
     }
-    
+
     /**
      * @param source
      * @return String
@@ -191,10 +191,86 @@ public class StringUtil
                 {
                     buffer.append("\\f");break;
                 }
+                case '\\':
+                {
+                    buffer.append("\\\\");break;
+                }
                 default :
                 {
                     buffer.append(c);break;
                 }
+            }
+        }
+
+        return buffer.toString();
+    }
+
+    /**
+     * @param source
+     * @return String
+     */
+    public static String unescape(String source)
+    {
+        if(source == null)
+        {
+            return "";
+        }
+
+        char c;
+        StringBuilder buffer = new StringBuilder();
+
+        for(int i = 0, length = source.length(); i < length; i++)
+        {
+            c = source.charAt(i);
+
+            if(c == '\\' && (i + 1 < length))
+            {
+                switch (source.charAt(i + 1))
+                {
+                    case '\'':
+                    {
+                        buffer.append("\'");break;
+                    }
+                    case '"':
+                    {
+                        buffer.append("\"");break;
+                    }
+                    case 'r':
+                    {
+                        buffer.append("\r");break;
+                    }
+                    case 'n':
+                    {
+                        buffer.append("\n");break;
+                    }
+                    case 't':
+                    {
+                        buffer.append("\t");break;
+                    }
+                    case 'b':
+                    {
+                        buffer.append("\b");break;
+                    }
+                    case 'f':
+                    {
+                        buffer.append("\f");break;
+                    }
+                    case '\\':
+                    {
+                        buffer.append("\\");break;
+                    }
+                    default :
+                    {
+                        buffer.append('\\');
+                        buffer.append(source.charAt(i + 1));
+                        break;
+                    }
+                }
+                i++;
+            }
+            else
+            {
+                buffer.append(c);
             }
         }
 

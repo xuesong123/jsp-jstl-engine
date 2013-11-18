@@ -21,6 +21,7 @@ public class JspScriptlet extends DataNode
     public JspScriptlet()
     {
         super(NodeType.JSP_SCRIPTLET_NAME, NodeType.JSP_SCRIPTLET);
+        this.setClosed(NodeType.PAIR_CLOSED);
     }
 
     /**
@@ -29,6 +30,7 @@ public class JspScriptlet extends DataNode
     public JspScriptlet(String nodeName)
     {
         super(NodeType.JSP_SCRIPTLET_NAME, NodeType.JSP_SCRIPTLET);
+        this.setClosed(NodeType.PAIR_CLOSED);
     }
 
     /**
@@ -38,6 +40,7 @@ public class JspScriptlet extends DataNode
     protected JspScriptlet(String nodeName, int nodeType)
     {
         super(NodeType.JSP_SCRIPTLET_NAME, NodeType.JSP_SCRIPTLET);
+        this.setClosed(NodeType.PAIR_CLOSED);
     }
     
     @Override

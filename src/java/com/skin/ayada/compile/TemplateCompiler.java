@@ -611,7 +611,7 @@ public class TemplateCompiler extends PageCompiler
                 node.append(buffer.toString());
                 node.setOffset(list.size());
                 node.setLineNumber(this.lineNumber);
-                node.setClosed(NodeType.SELF_CLOSED);
+                node.setClosed(NodeType.PAIR_CLOSED);
                 this.pushNode(stack, list, node);
                 this.popNode(stack, list, node.getNodeName());
             }
@@ -631,7 +631,7 @@ public class TemplateCompiler extends PageCompiler
                 node.append(buffer.toString());
                 node.setOffset(list.size());
                 node.setLineNumber(this.lineNumber);
-                node.setClosed(NodeType.SELF_CLOSED);
+                node.setClosed(NodeType.PAIR_CLOSED);
                 this.pushNode(stack, list, node);
                 this.popNode(stack, list, node.getNodeName());
             }

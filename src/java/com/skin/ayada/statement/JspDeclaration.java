@@ -21,6 +21,7 @@ public class JspDeclaration extends DataNode
     public JspDeclaration()
     {
         super(NodeType.JSP_DECLARATION_NAME, NodeType.JSP_DECLARATION);
+        this.setClosed(NodeType.PAIR_CLOSED);
     }
 
     /**
@@ -29,6 +30,7 @@ public class JspDeclaration extends DataNode
     public JspDeclaration(String nodeName)
     {
         super(NodeType.JSP_DECLARATION_NAME, NodeType.JSP_DECLARATION);
+        this.setClosed(NodeType.PAIR_CLOSED);
     }
 
     /**
@@ -38,6 +40,7 @@ public class JspDeclaration extends DataNode
     protected JspDeclaration(String nodeName, int nodeType)
     {
         super(NodeType.JSP_DECLARATION_NAME, NodeType.JSP_DECLARATION);
+        this.setClosed(NodeType.PAIR_CLOSED);
     }
     
     @Override

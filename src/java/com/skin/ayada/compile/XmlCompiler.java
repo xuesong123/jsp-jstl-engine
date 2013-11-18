@@ -37,7 +37,17 @@ public class XmlCompiler
         StringWriter stringWriter = new StringWriter();
         PrintWriter writer = new PrintWriter(stringWriter);
         writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-        
+        writer.write("<jsp:servlet");
+        writer.write(" home=\"");
+        writer.write(HtmlUtil.encode(template.getHome()));
+        writer.write("\" path=\"");
+        writer.write(HtmlUtil.encode(template.getPath()));
+        writer.write("\" lastModified=\"");
+        writer.write(String.valueOf(template.getLastModified()));
+        writer.write("\" updateTime=\"");
+        writer.write(String.valueOf(template.getUpdateTime()));
+        writer.write("\"");
+
         Node node = null;
         String indent = "    ";
         List<Node> list = template.getNodes();
@@ -45,7 +55,6 @@ public class XmlCompiler
 
         if(namespaces.size() > 0)
         {
-            writer.write("<jsp:doc");
             for(Map.Entry<String, String> entry : namespaces.entrySet())
             {
                 writer.write(" xmlns:");
@@ -58,7 +67,7 @@ public class XmlCompiler
         }
         else
         {
-            writer.println("<jsp:doc>");
+            writer.println(">");
         }
 
         for(int index = 0, size = list.size(); index < size; index++)
@@ -69,7 +78,7 @@ public class XmlCompiler
             if(node.getNodeType() == NodeType.TEXT)
             {
                 writer.write(indent + "<text lineNumber=\"" + node.getLineNumber() + "\" offset=\"" + node.getOffset() + "\" length=\"" + node.getLength() + "\">");
-                writer.write(HtmlUtil.encode(StringUtil.escape(node.getTextContent())));
+                writer.write(StringUtil.escape(HtmlUtil.encode(node.getTextContent())));
                 writer.println("</text>");
                 continue;
             }
@@ -77,7 +86,7 @@ public class XmlCompiler
             if(node.getNodeType() == NodeType.EXPRESSION)
             {
                 writer.write(indent + "<expression lineNumber=\"" + node.getLineNumber() + "\" offset=\"" + node.getOffset() + "\" length=\"" + node.getLength() + "\">");
-                writer.write(HtmlUtil.encode(StringUtil.escape(node.getTextContent())));
+                writer.write(StringUtil.escape(HtmlUtil.encode(node.getTextContent())));
                 writer.println("</expression>");
                 continue;
             }
@@ -92,7 +101,7 @@ public class XmlCompiler
                 if(node.getNodeType() == NodeType.JSP_DECLARATION || node.getNodeType() == NodeType.JSP_SCRIPTLET || node.getNodeType() == NodeType.JSP_EXPRESSION)
                 {
                     writer.write(indent + node.toString(index));
-                    writer.write(HtmlUtil.encode(StringUtil.escape(node.getTextContent())));
+                    writer.write(StringUtil.escape(HtmlUtil.encode(node.getTextContent())));
                 }
                 else
                 {
@@ -115,7 +124,7 @@ public class XmlCompiler
             }
         }
 
-        writer.println("</jsp:doc>");
+        writer.println("</jsp:servlet>");
         return stringWriter.toString();
     }
 

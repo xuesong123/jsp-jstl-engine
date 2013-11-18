@@ -152,7 +152,7 @@ public class JspTemplateFactoryTest
 
         try
         {
-            IO.write(result.getBytes("UTF-8"), new File("allTagTest.xml"));
+            IO.write(result.getBytes("UTF-8"), new File("webapp\\allTagTest.xml"));
         }
         catch(IOException e)
         {
