@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.skin.ayada.compile.TemplateCompiler;
-import com.skin.ayada.compile.XmlCompiler;
 import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.jstl.TagLibraryFactory;
 import com.skin.ayada.runtime.ExpressionContext;
@@ -36,7 +35,6 @@ import com.skin.ayada.statement.Node;
 import com.skin.ayada.statement.NodeType;
 import com.skin.ayada.template.JspTemplateFactory;
 import com.skin.ayada.template.Template;
-import com.skin.ayada.template.TemplateFactory;
 import com.skin.ayada.util.ExpressionUtil;
 import com.skin.ayada.util.IO;
 import com.skin.ayada.util.StringUtil;
@@ -138,27 +136,6 @@ public class JspTemplateFactoryTest
 
         String result = writer.toString();
         System.out.println(format(result));
-    }
-    
-    public static void test3()
-    {
-        SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
-        TemplateFactory templateFactory = new TemplateFactory();
-        templateFactory.setIgnoreJspTag(false);
-
-        Template template = templateFactory.create(sourceFactory, "allTagTest.jsp", "UTF-8");
-        XmlCompiler xmlCompiler = new XmlCompiler();
-        String result = xmlCompiler.compile(template);
-
-        try
-        {
-            IO.write(result.getBytes("UTF-8"), new File("webapp\\allTagTest.xml"));
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
-        }
-        System.out.println(result);
     }
     
     public static void test4(String[] args)
