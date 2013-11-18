@@ -10,6 +10,7 @@
  */
 package com.skin.ayada.statement;
 
+
 /**
  * <p>Title: Directive</p>
  * <p>Description: </p>
@@ -86,7 +87,7 @@ public class JspDirective extends DataNode
     {
         return new JspDirective(NodeType.JSP_DIRECTIVE_INCLUDE_NAME, NodeType.JSP_DIRECTIVE_INCLUDE);
     }
-    
+
     @Override
     public DataNode clone()
     {

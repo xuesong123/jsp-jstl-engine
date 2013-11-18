@@ -11,14 +11,19 @@
 package test.com.skin.ayada.template;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.skin.ayada.compile.TemplateCompiler;
+import com.skin.ayada.compile.XmlCompiler;
 import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.jstl.TagLibraryFactory;
 import com.skin.ayada.runtime.ExpressionContext;
@@ -31,7 +36,10 @@ import com.skin.ayada.statement.Node;
 import com.skin.ayada.statement.NodeType;
 import com.skin.ayada.template.JspTemplateFactory;
 import com.skin.ayada.template.Template;
+import com.skin.ayada.template.TemplateFactory;
 import com.skin.ayada.util.ExpressionUtil;
+import com.skin.ayada.util.IO;
+import com.skin.ayada.util.StringUtil;
 
 import example.handler.UserHandler;
 import example.model.User;
@@ -46,9 +54,9 @@ public class JspTemplateFactoryTest
 {
     public static void main(String[] args)
     {
-        test1();
+        test3();
     }
-    
+
     public static Template getTemplate()
     {
         SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
@@ -131,6 +139,74 @@ public class JspTemplateFactoryTest
         String result = writer.toString();
         System.out.println(format(result));
     }
+    
+    public static void test3()
+    {
+        SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
+        TemplateFactory templateFactory = new TemplateFactory();
+        templateFactory.setIgnoreJspTag(false);
+
+        Template template = templateFactory.create(sourceFactory, "allTagTest.jsp", "UTF-8");
+        XmlCompiler xmlCompiler = new XmlCompiler();
+        String result = xmlCompiler.compile(template);
+
+        try
+        {
+            IO.write(result.getBytes("UTF-8"), new File("allTagTest.xml"));
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+        System.out.println(result);
+    }
+    
+    public static void test4(String[] args)
+    {
+        try
+        {
+            String source = IO.read(new File("webapp/allTagTest.jsp"), "UTF-8", 4096);
+            System.out.println(crlf(source));
+            System.out.println(StringUtil.escape(source));
+            // IO.write(crlf(source).getBytes("UTF-8"), new File("webapp/allTagTest.jsp"));
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+    
+    public static void arrayListTest()
+    {
+        ArrayList<String> list = new ArrayList<String>(4);
+
+        for(int i = 0; i < 5; i++)
+        {
+            list.add(String.valueOf(i));
+        }
+
+        try
+        {
+            Field[] fields = list.getClass().getDeclaredFields();
+
+            for(int i = 0; i < fields.length; i++)
+            {
+                Field field = fields[i];
+                System.out.println("field: " + field.getName());
+
+                if(field.getName().equals("elementData"))
+                {
+                    field.setAccessible(true);
+                    Object[] elements = (Object[])(field.get(list));
+                    System.out.println(elements.length);
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 
     public static PageContext getPageContext(Writer out)
     {
@@ -195,12 +271,12 @@ public class JspTemplateFactoryTest
 
         return stringWriter.toString();
     }
-    
+
     /**
      * @param source
      * @return String
      */
-    public String escape(String source)
+    public static String crlf(String source)
     {
         if(source == null)
         {
@@ -216,33 +292,13 @@ public class JspTemplateFactoryTest
 
             switch (c)
             {
-                case '\'':
-                {
-                    buffer.append("\\\'");break;
-                }
-                case '"':
-                {
-                    buffer.append("\\\"");break;
-                }
                 case '\r':
                 {
-                    buffer.append("\\r");break;
+                    break;
                 }
                 case '\n':
                 {
-                    buffer.append("\\n");break;
-                }
-                case '\t':
-                {
-                    buffer.append("\\t");break;
-                }
-                case '\b':
-                {
-                    buffer.append("\\b");break;
-                }
-                case '\f':
-                {
-                    buffer.append("\\f");break;
+                    buffer.append("\r\n");break;
                 }
                 default :
                 {
@@ -253,4 +309,5 @@ public class JspTemplateFactoryTest
 
         return buffer.toString();
     }
+    
 }

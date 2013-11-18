@@ -42,10 +42,10 @@ public class JspCompiler
     {
         StringWriter stringWriter = new StringWriter();
         PrintWriter writer = new PrintWriter(stringWriter);
-        this.writeHeader(className, packageName, writer);
 
         Node node = null;
         List<Node> list = template.getNodes();
+        this.writeHeader(className, packageName, list, writer);
 
         for(int index = 0, size = list.size(); index < size; index++)
         {
@@ -116,7 +116,7 @@ public class JspCompiler
      * @param packageName
      * @param writer
      */
-    public void writeHeader(String className, String packageName, PrintWriter writer)
+    public void writeHeader(String className, String packageName, List<Node> nodes, PrintWriter writer)
     {
         Date date = new Date();
         writer.println("/*");
@@ -143,6 +143,24 @@ public class JspCompiler
         writer.println("import com.skin.ayada.tagext.Tag;");
         writer.println("import com.skin.ayada.template.JspTemplate;");
         writer.println("import com.skin.ayada.util.ExpressionUtil;");
+        Node node = null;
+
+        for(int index = 0, size = nodes.size(); index < size; index++)
+        {
+            node = nodes.get(index);
+
+            if(node.getNodeType() == NodeType.JSP_DIRECTIVE_PAGE)
+            {
+                if(node.getAttribute("import") != null)
+                {
+                    if(node.getOffset() == index)
+                    {
+                        writer.println("import " + node.getAttribute("import") + "; /* JSP_DIRECTIVE_PAGE.import: lineNumber: " + node.getLineNumber() + " */");
+                    }
+                }
+            }
+        }
+        
         writer.println();
         writer.println("/**");
         writer.println(" * <p>Title: " + className + "</p>");

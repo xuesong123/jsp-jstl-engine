@@ -195,7 +195,7 @@ public class StringUtil
                 {
                     buffer.append(c);break;
                 }
-            }   
+            }
         }
 
         return buffer.toString();

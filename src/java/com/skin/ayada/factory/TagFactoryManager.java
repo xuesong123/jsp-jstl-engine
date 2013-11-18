@@ -45,10 +45,18 @@ public class TagFactoryManager
 
     public static void main(String[] args)
     {
+        System.out.println("tag: " + getTag("c:set", "com.skin.ayada.jstl.core.SetTag"));
+        System.out.println("tag: " + getTag("app:test", "test.com.skin.ayada.taglib.TestTag"));
+    }
+
+    public static Tag getTag(String tagName, String tagClassName)
+    {
         TagFactoryManager tagFactoryManager = TagFactoryManager.getInstance();
-        TagFactory tagFactory = tagFactoryManager.getTagFactory("c:set", "com.skin.ayada.jstl.core.SetTag");
-        Tag tag = tagFactory.create();
-        System.out.println("tag: " + tag);
+        long t1 = System.currentTimeMillis();
+        TagFactory tagFactory = tagFactoryManager.getTagFactory(tagName, tagClassName);
+        long t2 = System.currentTimeMillis();
+        System.out.println("tagFactory.create: " + (t2 - t1));
+        return tagFactory.create();
     }
 
     private TagFactoryManager()
@@ -79,14 +87,14 @@ public class TagFactoryManager
 
             if(tagFactory == null)
             {
-                if(logger.isDebugEnabled())
-                {
-                    logger.debug("DefaultTagFactory - tagName: " + tagName + ", className: " + className);
-                }
-
                 tagFactory = new DefaultTagFactory();
                 tagFactory.setTagName(tagName);
                 tagFactory.setClassName(className);
+            }
+
+            if(logger.isDebugEnabled())
+            {
+                logger.debug("tagName: " + tagName + ", className: " + className + ", tagFactory: " + tagFactory.getClass().getName());
             }
 
             this.context.put(className, tagFactory);
@@ -135,7 +143,7 @@ public class TagFactoryManager
         String packageName = "";
         String simpleClassName = className;
         int k = simpleClassName.lastIndexOf(".");
-        
+
         if(k > -1)
         {
             packageName = simpleClassName.substring(0, k);
@@ -148,7 +156,7 @@ public class TagFactoryManager
         }
         else
         {
-            return "ayada." + packageName + ".proxy." + simpleClassName + "Factory";
+            return packageName + ".proxy." + simpleClassName + "Factory";
         }
     }
 

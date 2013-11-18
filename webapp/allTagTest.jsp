@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ page import="java.io.File"%>
 <t:import name="app:scrollpage" className="test.com.skin.ayada.taglib.ScrollPage"/>
 <t:import name="app:test" className="test.com.skin.ayada.taglib.TestTag"/>
 <html>
@@ -31,12 +32,19 @@
     }
 </jsp:declaration>
 
+<jsp:declaration>
+    public void hello4(){
+        System.out.println(new File("."));
+    }
+</jsp:declaration>
+
 <jsp:scriptlet>
     System.out.println("Hello, Ayada1 !");
 </jsp:scriptlet>
 
 <jsp:scriptlet>
-    System.out.println("Hello, Ayada2 !");
+    System.out.println("Hello, Ayada2 ! </test");
+    System.out.println("Hello, Ayada2 ! </jsp:scriptlet2>");
 </jsp:scriptlet>
 
 <%
@@ -54,6 +62,7 @@ System.out.println("Hello, Ayada4 !");
 
 <c:set var="myVar" value="Hello, Ayada!"/>
 <h1>${myVar}</h1>
+
 
 <c:out value="c:out: Hello, Ayada!"/>
 <div style="background-color: #c0c0c0;"></div>

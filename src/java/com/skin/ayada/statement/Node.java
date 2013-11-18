@@ -281,6 +281,49 @@ public class Node
     }
 
     /**
+     * @param source
+     * @return String
+     */
+    private String encode(String source)
+    {
+        if(source == null)
+        {
+            return "";
+        }
+
+        StringBuilder buffer = new StringBuilder();
+
+        for(int i = 0, length = source.length(); i < length; i++)
+        {
+            char c = source.charAt(i);
+
+            switch(c)
+            {
+                case '"':
+                    buffer.append("&quot;");
+                    break;
+                case '<':
+                    buffer.append("&lt;");
+                    break;
+                case '>':
+                    buffer.append("&gt;");
+                    break;
+                case '&':
+                    buffer.append("&amp;");
+                    break;
+                case '\'':
+                    buffer.append("&#39;");
+                    break;
+                default:
+                    buffer.append(c);
+                    break;
+            }
+        }
+
+        return buffer.toString();
+    }
+
+    /**
      * @return String
      */
     public String toString()
@@ -318,29 +361,34 @@ public class Node
                     buffer.append(this.tagFactory.getClassName());
                     buffer.append("\"");
                 }
-                else
-                {
-                    buffer.append(" tagFactory=\"null\"");
-                    buffer.append(" tagClass=\"null\"");
-                }
 
                 for(Map.Entry<String, String> entry : this.attributes.entrySet())
                 {
                     buffer.append(" ");
                     buffer.append(entry.getKey());
                     buffer.append("=\"");
-                    buffer.append(entry.getValue());
+                    buffer.append(this.encode(entry.getValue()));
                     buffer.append("\"");
                 }
             }
 
-            buffer.append("/>");
+            if(this.closed == NodeType.SELF_CLOSED)
+            {
+                buffer.append("/>");
+            }
+            else
+            {
+                buffer.append(">");
+            }
         }
         else
         {
-            buffer.append("</");
-            buffer.append(this.getNodeName());
-            buffer.append(">");
+            if(this.closed == NodeType.PAIR_CLOSED)
+            {
+                buffer.append("</");
+                buffer.append(this.getNodeName());
+                buffer.append(">");
+            }
         }
 
         return buffer.toString();
