@@ -54,7 +54,7 @@ public class JspTemplateFactoryTest
 {
     public static void main(String[] args)
     {
-        test3();
+        test1();
     }
 
     public static Template getTemplate()
