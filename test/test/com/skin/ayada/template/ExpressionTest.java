@@ -28,11 +28,11 @@ public class ExpressionTest
         long longValue = 2L;
         double doubleValue2 = 1E3;
         */
-        String[] source = {"ae2", "+1", "-1", "1", "1.0", "1.0f", "1.0F", "1.0d", "1.0D", "1.0L", "1L", "-1e3", "-1.2e3"};
+        String[] source = {"true", "false", "ae2", "+1", "-1", "1", "1.0", "1.0f", "1.0F", "1.0d", "1.0D", "1.0L", "1L", "-1e3", "-1.2e3"};
 
         for(int i = 0; i < source.length; i++)
         {
-            int type = ExpressionUtil.getNumberType(source[i]);
+            int type = ExpressionUtil.getDataType(source[i]);
             Object value = ExpressionUtil.getValue(source[i]);
 
             switch(type)
@@ -44,20 +44,25 @@ public class ExpressionTest
                 }
                 case 1:
                 {
-                    System.out.println("Integer: " + source[i] + " - " + value.getClass().getName() + " - " + value);
+                    System.out.println("Boolean: " + source[i] + " - " + value.getClass().getName() + " - " + value);
                     break;
                 }
                 case 2:
                 {
-                    System.out.println("Float: " + source[i] + " - " + value.getClass().getName() + " - " + value);
+                    System.out.println("Integer: " + source[i] + " - " + value.getClass().getName() + " - " + value);
                     break;
                 }
                 case 3:
                 {
-                    System.out.println("Double: " + source[i] + " - " + value.getClass().getName() + " - " + value);
+                    System.out.println("Float: " + source[i] + " - " + value.getClass().getName() + " - " + value);
                     break;
                 }
                 case 4:
+                {
+                    System.out.println("Double: " + source[i] + " - " + value.getClass().getName() + " - " + value);
+                    break;
+                }
+                case 5:
                 {
                     System.out.println("Long: " + source[i] + " - " + value.getClass().getName() + " - " + value);
                     break;

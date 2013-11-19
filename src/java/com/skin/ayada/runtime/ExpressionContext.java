@@ -123,7 +123,7 @@ public class ExpressionContext extends OgnlContext
     public String getString(String expression)
     {
         Object value = OgnlUtil.getValue(expression, this, this);
-        
+
         if(value == null || value instanceof Empty<?, ?>)
         {
             return "";

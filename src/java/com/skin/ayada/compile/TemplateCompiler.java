@@ -116,18 +116,24 @@ public class TemplateCompiler extends PageCompiler
                 {
                     if(i == '}')
                     {
-                        Expression expr = new Expression();
-                        expr.setOffset(list.size());
-                        expr.setLength(1);
-                        expr.setLineNumber(this.lineNumber);
-                        expr.append(expression.toString());
+                        String temp = expression.toString().trim();
 
-                        if(stack.peek() != null)
+                        if(temp.length() > 0)
                         {
-                            expr.setParent(stack.peek());
+                            Expression expr = new Expression();
+                            expr.setOffset(list.size());
+                            expr.setLength(1);
+                            expr.setLineNumber(this.lineNumber);
+                            expr.append(temp);
+
+                            if(stack.peek() != null)
+                            {
+                                expr.setParent(stack.peek());
+                            }
+    
+                            list.add(expr);
                         }
 
-                        list.add(expr);
                         break;
                     }
                     else

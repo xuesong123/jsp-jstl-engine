@@ -25,7 +25,7 @@ public class TagUtilTest
      */
     public static void main(String[] args)
     {
-        int type = ExpressionUtil.getNumberType("user");
+        int type = ExpressionUtil.getDataType("user");
         System.out.println("type: " + type + ((int)('.')));
     }
 }

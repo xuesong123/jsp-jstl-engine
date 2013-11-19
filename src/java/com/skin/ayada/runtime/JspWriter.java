@@ -128,6 +128,24 @@ public class JspWriter extends Writer
     }
 
     /**
+     * @param value
+     */
+    public void print(java.lang.Object value, boolean nullable) throws IOException
+    {
+        if(value != null)
+        {
+            this.write(value.toString());
+        }
+        else
+        {
+            if(nullable)
+            {
+                this.write(NULL, 0, 4);
+            }
+        }
+    }
+
+    /**
      *
      */
     public void println() throws IOException
@@ -210,6 +228,26 @@ public class JspWriter extends Writer
         else
         {
             this.write(NULL, 0, 4);
+        }
+
+        this.write(CRLF, 0, 2);
+    }
+
+    /**
+     * @param value
+     */
+    public void println(java.lang.Object value, boolean nullable) throws IOException
+    {
+        if(value != null)
+        {
+            this.write(value.toString());
+        }
+        else
+        {
+            if(nullable)
+            {
+                this.write(NULL, 0, 4);
+            }
         }
 
         this.write(CRLF, 0, 2);

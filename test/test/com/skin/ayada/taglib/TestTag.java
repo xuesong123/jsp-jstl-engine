@@ -21,6 +21,9 @@ import com.skin.ayada.tagext.TagSupport;
  */
 public class TestTag extends TagSupport
 {
+    private boolean myBoolean;
+    private char myChar;
+    private byte myByte;
     private int myInt;
     private float myFloat;
     private double myDouble;
@@ -33,6 +36,9 @@ public class TestTag extends TagSupport
         try
         {
             JspWriter writer = pageContext.getOut();
+            writer.println("<p>myBoolean: " + this.myBoolean + "</p>");
+            writer.println("<p>myChar: " + this.myChar + "</p>");
+            writer.println("<p>myByte: " + this.myByte + "</p>");
             writer.println("<p>myInt: " + this.myInt + "</p>");
             writer.println("<p>myFloat: " + this.myFloat + "</p>");
             writer.println("<p>myDouble: " + this.myDouble + "</p>");
@@ -48,6 +54,54 @@ public class TestTag extends TagSupport
         return SKIP_BODY;
     }
     
+    /**
+     * @return the myBoolean
+     */
+    public boolean isMyBoolean()
+    {
+        return this.myBoolean;
+    }
+
+    /**
+     * @param myBoolean the myBoolean to set
+     */
+    public void setMyBoolean(boolean myBoolean)
+    {
+        this.myBoolean = myBoolean;
+    }
+
+    /**
+     * @return the myChar
+     */
+    public char getMyChar()
+    {
+        return this.myChar;
+    }
+
+    /**
+     * @param myChar the myChar to set
+     */
+    public void setMyChar(char myChar)
+    {
+        this.myChar = myChar;
+    }
+
+    /**
+     * @return the myByte
+     */
+    public byte getMyByte()
+    {
+        return this.myByte;
+    }
+
+    /**
+     * @param myByte the myByte to set
+     */
+    public void setMyByte(byte myByte)
+    {
+        this.myByte = myByte;
+    }
+
     /**
      * @return the myInt
      */

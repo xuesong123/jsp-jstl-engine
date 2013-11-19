@@ -24,6 +24,8 @@ import com.skin.ayada.tagext.IterationTag;
 import com.skin.ayada.template.Template;
 import com.skin.ayada.util.ClassUtil;
 import com.skin.ayada.util.DateUtil;
+import com.skin.ayada.util.ExpressionUtil;
+import com.skin.ayada.util.HtmlUtil;
 import com.skin.ayada.util.NodeUtil;
 import com.skin.ayada.util.StringUtil;
 import com.skin.ayada.util.TagUtil;
@@ -90,8 +92,17 @@ public class JspCompiler
 
             if(node.getNodeType() == NodeType.EXPRESSION)
             {
+                String textContent = node.getTextContent();
                 writer.println(indent + "/* EXPRESSION: lineNumber: " + node.getLineNumber() + " */");
-                writer.println(indent + "out.write(expressionContext.getString(\"" + StringUtil.escape(node.getTextContent()) + "\"));");
+
+                if(this.isJavaIdentifier(textContent))
+                {
+                    writer.println(indent + "out.print(pageContext.getAttribute(\"" + textContent + "\"), false);");
+                }
+                else
+                {
+                    writer.println(indent + "out.write(expressionContext.getString(\"" + StringUtil.escape(textContent) + "\"));");
+                }
                 continue;
             }
 
@@ -386,7 +397,23 @@ public class JspCompiler
                 }
                 else
                 {
-                    writer.println(indent + "pageContext.setAttribute(\"" + name + "\", \"" + StringUtil.escape(value) + "\");");
+                    Object constant = ExpressionUtil.getValue(value);
+
+                    if(constant != null)
+                    {
+                        if(constant instanceof String)
+                        {
+                            writer.println(indent + "pageContext.setAttribute(\"" + name + "\", \"" + StringUtil.escape(value) + "\");");
+                        }
+                        else
+                        {
+                            writer.println(indent + "pageContext.setAttribute(\"" + name + "\", " + constant.toString() + ");");
+                        }
+                    }
+                    else
+                    {
+                        writer.println(indent + "pageContext.setAttribute(\"" + name + "\", null);");
+                    }
                 }
             }
             else
@@ -409,24 +436,49 @@ public class JspCompiler
      */
     private void writeOutTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
     {
+        boolean escapeXml = "true".equals(node.getAttribute("escapeXml"));
+
         if(node.getOffset() == index)
         {
-            boolean escapeXml = "true".equals(node.getAttribute("escapeXml"));
+            String value = node.getAttribute("value");
 
             if(node.getLength() > 2)
             {
                 writer.println(indent + "out = pageContext.pushBody();");
             }
 
-            if(node.getAttribute("value") != null)
+            if(value != null)
             {
-                if(escapeXml)
+                if(value.indexOf("${") < 0)
                 {
-                    writer.println(indent + "out.write(ExpressionUtil.getHtml(expressionContext, \"" + StringUtil.escape(node.getAttribute("value")) + "\"));");
+                    Object constant = ExpressionUtil.getValue(value);
+
+                    if(constant instanceof String)
+                    {
+                        if(escapeXml)
+                        {
+                            writer.println(indent + "out.write(\"" + HtmlUtil.encode(StringUtil.escape(value)) + "\");");
+                        }
+                        else
+                        {
+                            writer.println(indent + "out.write(\"" + StringUtil.escape(value) + "\");");
+                        }
+                    }
+                    else
+                    {
+                        writer.println(indent + "out.print(" + value + ");");
+                    }
                 }
                 else
                 {
-                    writer.println(indent + "out.write(ExpressionUtil.getString(expressionContext, \"" + StringUtil.escape(node.getAttribute("value")) + "\"));");
+                    if(escapeXml)
+                    {
+                        writer.println(indent + "out.write(ExpressionUtil.getHtml(expressionContext, \"" + StringUtil.escape(value) + "\"));");
+                    }
+                    else
+                    {
+                        writer.println(indent + "out.write(ExpressionUtil.getString(expressionContext, \"" + StringUtil.escape(value) + "\"));");
+                    }
                 }
             }
         }
@@ -434,7 +486,6 @@ public class JspCompiler
         {
             if(node.getLength() > 2)
             {
-                boolean escapeXml = "true".equals(node.getAttribute("escapeXml"));
                 writer.println(indent + "pageContext.printBodyContent((BodyContent)out, " + escapeXml + ");");
                 writer.println(indent + "out = pageContext.popBody();");
             }
@@ -512,13 +563,49 @@ public class JspCompiler
 
             if(begin != null && end != null)
             {
-                writer.println(indent + tagInstanceName + ".setBegin(ExpressionUtil.getInteger(expressionContext, \"" + begin + "\"));");
-                writer.println(indent + tagInstanceName + ".setEnd(ExpressionUtil.getInteger(expressionContext, \"" + end + "\"));");
+                if(begin.indexOf("${") < 0)
+                {
+                    Object beginValue = ExpressionUtil.getValue(begin);
+
+                    if((beginValue instanceof String) == false)
+                    {
+                        writer.println(indent + tagInstanceName + ".setBegin(" + begin + ");");
+                    }
+                }
+                else
+                {
+                    writer.println(indent + tagInstanceName + ".setBegin(ExpressionUtil.getInteger(expressionContext, \"" + begin + "\"));");
+                }
+
+                if(end.indexOf("${") < 0)
+                {
+                    Object endValue = ExpressionUtil.getValue(end);
+                    if((endValue instanceof String) == false)
+                    {
+                        writer.println(indent + tagInstanceName + ".setEnd(" + end + ");");
+                    }
+                }
+                else
+                {
+                    writer.println(indent + tagInstanceName + ".setEnd(ExpressionUtil.getInteger(expressionContext, \"" + end + "\"));");
+                }
             }
 
             if(step != null)
             {
-                writer.println(indent + tagInstanceName + ".setStep(ExpressionUtil.getInteger(expressionContext, \"" + step + "\"));");
+                if(step.indexOf("${") < 0)
+                {
+                    Object stepValue = ExpressionUtil.getValue(begin);
+
+                    if((stepValue instanceof String) == false)
+                    {
+                        writer.println(indent + tagInstanceName + ".setStep(" + step + ");");
+                    }
+                }
+                else
+                {
+                    writer.println(indent + tagInstanceName + ".setStep(ExpressionUtil.getInteger(expressionContext, \"" + step + "\"));");
+                }
             }
 
             if(varStatus != null)
@@ -535,13 +622,13 @@ public class JspCompiler
             String variable = node.getAttribute("var");
             String varStatus = node.getAttribute("varStatus");
             
-            writer.println(indent + "       if(" + tagInstanceName + ".hasNext()){");
-            writer.println(indent + "           pageContext.setAttribute(\"" + variable + "\", " + tagInstanceName + ".next());");
-            writer.println(indent + "       }");
-            writer.println(indent + "       else{");
-            writer.println(indent + "           break;");
-            writer.println(indent + "       }");
-            writer.println(indent + "   }");
+            writer.println(indent + "        if(" + tagInstanceName + ".hasNext()){");
+            writer.println(indent + "            pageContext.setAttribute(\"" + variable + "\", " + tagInstanceName + ".next());");
+            writer.println(indent + "        }");
+            writer.println(indent + "        else{");
+            writer.println(indent + "            break;");
+            writer.println(indent + "        }");
+            writer.println(indent + "    }");
             writer.println(indent + "}");
             writer.println(indent + tagInstanceName + ".release();");
             writer.println(indent + "pageContext.setAttribute(\"" + variable + "\", " + forEachOldVar + ");");
@@ -728,6 +815,28 @@ public class JspCompiler
     }
 
     /**
+     * @param source
+     * @return boolean
+     */
+    protected boolean isJavaIdentifier(String source)
+    {
+        if(Character.isJavaIdentifierStart(source.charAt(0)) == false)
+        {
+            return false;
+        }
+
+        for(int i = 0; i < source.length(); i++)
+        {
+            if(Character.isJavaIdentifierPart(source.charAt(i)) == false)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * @param node
      * @return boolean
      */
@@ -796,50 +905,99 @@ public class JspCompiler
                 {
                     Class<?>[] parameterTypes = method.getParameterTypes();
                     Class<?> parameterType = parameterTypes[0];
+                    Object parameterValue = null;
 
-                    if(parameterType == char.class || parameterType == Character.class)
+                    if(value.indexOf("${") < 0)
                     {
-                        writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getInteger(expressionContext, \"" + StringUtil.escape(value) + "\"));");
+                        parameterValue = ExpressionUtil.getValue(value);
+
+                        if(parameterType == char.class || parameterType == Character.class)
+                        {
+                            writer.println(indent + tagInstanceName + "." + methodName + "('" + StringUtil.escape(value).charAt(0) + "');");
+                        }
+                        else if(parameterType == boolean.class || parameterType == Boolean.class)
+                        {
+                            writer.println(indent + tagInstanceName + "." + methodName + "(" + parameterValue.toString() + ");");
+                        }
+                        else if(parameterType == byte.class || parameterType == Byte.class)
+                        {
+                            writer.println(indent + tagInstanceName + "." + methodName + "((byte)" + ((Number)parameterValue).intValue() + ");");
+                        }
+                        else if(parameterType == short.class || parameterType == Short.class)
+                        {
+                            writer.println(indent + tagInstanceName + "." + methodName + "((short)" + ((Number)parameterValue).intValue() + ");");
+                        }
+                        else if(parameterType == int.class || parameterType == Integer.class)
+                        {
+                            writer.println(indent + tagInstanceName + "." + methodName + "(" + ((Number)parameterValue).intValue() + ");");
+                        }
+                        else if(parameterType == float.class || parameterType == Float.class)
+                        {
+                            writer.println(indent + tagInstanceName + "." + methodName + "(" + ((Number)parameterValue).floatValue() + "f);");
+                        }
+                        else if(parameterType == double.class || parameterType == Double.class)
+                        {
+                            writer.println(indent + tagInstanceName + "." + methodName + "(" + ((Number)parameterValue).doubleValue() + "d);");
+                        }
+                        else if(parameterType == long.class || parameterType == Long.class)
+                        {
+                            writer.println(indent + tagInstanceName + "." + methodName + "(" + ((Number)parameterValue).longValue() + "L);");
+                        }
+                        else if(parameterType == String.class)
+                        {
+                            writer.println(indent + tagInstanceName + "." + methodName + "(\"" + StringUtil.escape(value) + "\");");
+                        }
+                        else
+                        {
+                            writer.println(indent + tagInstanceName + "." + methodName + "(\"" + StringUtil.escape(value) + "\");");
+                        }
                     }
-                    else if(parameterType == boolean.class || parameterType == Boolean.class)
+                    else
                     {
-                        writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getBoolean(expressionContext, \"" + StringUtil.escape(value) + "\"));");
-                    }
-                    else if(parameterType == byte.class || parameterType == Byte.class)
-                    {
-                        writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getByte(expressionContext, \"" + StringUtil.escape(value) + "\"));");
-                    }
-                    else if(parameterType == short.class || parameterType == Short.class)
-                    {
-                        writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getShort(expressionContext, \"" + StringUtil.escape(value) + "\"));");
-                    }
-                    else if(parameterType == int.class || parameterType == Integer.class)
-                    {
-                        writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getInteger(expressionContext, \"" + StringUtil.escape(value) + "\"));");
-                    }
-                    else if(parameterType == float.class || parameterType == Float.class)
-                    {
-                        writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getFloat(expressionContext, \"" + StringUtil.escape(value) + "\"));");
-                    }
-                    else if(parameterType == double.class || parameterType == Double.class)
-                    {
-                        writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getDouble(expressionContext, \"" + StringUtil.escape(value) + "\"));");
-                    }
-                    else if(parameterType == long.class || parameterType == Long.class)
-                    {
-                        writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getLong(expressionContext, \"" + StringUtil.escape(value) + "\"));");
-                    }
-                    else if(parameterType == String.class)
-                    {
-                        writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getString(expressionContext, \"" + StringUtil.escape(value) + "\"));");
-                    }
-                    else if(parameterType == java.util.Date.class)
-                    {
-                        writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getDate(expressionContext, \"" + StringUtil.escape(value) + "\"));");
-                    }
-                    else if(parameterType == Object.class)
-                    {
-                        writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.evaluate(expressionContext, \"" + StringUtil.escape(value) + "\"));");
+                        if(parameterType == char.class || parameterType == Character.class)
+                        {
+                            writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getString(expressionContext, \"" + StringUtil.escape(value) + "\").charAt(0));");
+                        }
+                        else if(parameterType == boolean.class || parameterType == Boolean.class)
+                        {
+                            writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getBoolean(expressionContext, \"" + StringUtil.escape(value) + "\"));");
+                        }
+                        else if(parameterType == byte.class || parameterType == Byte.class)
+                        {
+                            writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getByte(expressionContext, \"" + StringUtil.escape(value) + "\"));");
+                        }
+                        else if(parameterType == short.class || parameterType == Short.class)
+                        {
+                            writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getShort(expressionContext, \"" + StringUtil.escape(value) + "\"));");
+                        }
+                        else if(parameterType == int.class || parameterType == Integer.class)
+                        {
+                            writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getInteger(expressionContext, \"" + StringUtil.escape(value) + "\"));");
+                        }
+                        else if(parameterType == float.class || parameterType == Float.class)
+                        {
+                            writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getFloat(expressionContext, \"" + StringUtil.escape(value) + "\"));");
+                        }
+                        else if(parameterType == double.class || parameterType == Double.class)
+                        {
+                            writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getDouble(expressionContext, \"" + StringUtil.escape(value) + "\"));");
+                        }
+                        else if(parameterType == long.class || parameterType == Long.class)
+                        {
+                            writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getLong(expressionContext, \"" + StringUtil.escape(value) + "\"));");
+                        }
+                        else if(parameterType == String.class)
+                        {
+                            writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getString(expressionContext, \"" + StringUtil.escape(value) + "\"));");
+                        }
+                        else if(parameterType == java.util.Date.class)
+                        {
+                            writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getDate(expressionContext, \"" + StringUtil.escape(value) + "\"));");
+                        }
+                        else if(parameterType == Object.class)
+                        {
+                            writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.evaluate(expressionContext, \"" + StringUtil.escape(value) + "\"));");
+                        }
                     }
                 }
             }

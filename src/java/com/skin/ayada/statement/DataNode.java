@@ -125,14 +125,6 @@ public abstract class DataNode extends Node
     /**
      * @return String
      */
-    public String getString2()
-    {
-        return this.buffer.toString();
-    }
-
-    /**
-     * @return String
-     */
     public String getTextContent()
     {
         return this.buffer.toString();

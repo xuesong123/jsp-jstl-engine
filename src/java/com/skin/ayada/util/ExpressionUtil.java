@@ -300,8 +300,15 @@ public class ExpressionUtil
      */
     public static Object getValue(String source)
     {
+        String temp = source.trim();
         Object value = source;
-        int type = getNumberType(source);
+
+        if(temp.length() < 1)
+        {
+            return value;
+        }
+
+        int type = getDataType(source);
 
         switch(type)
         {
@@ -313,19 +320,7 @@ public class ExpressionUtil
             {
                 try
                 {
-                    String temp = source.trim();
-
-                    if(temp.length() > 0)
-                    {
-                        if(temp.charAt(0) == '+')
-                        {
-                            value = Integer.parseInt(temp.substring(1));
-                        }
-                        else
-                        {
-                            value = Integer.parseInt(temp);
-                        }
-                    }
+                    value = Boolean.parseBoolean(temp);
                 }
                 catch(NumberFormatException e)
                 {
@@ -338,18 +333,27 @@ public class ExpressionUtil
             {
                 try
                 {
-                    value = Float.parseFloat(source);
+                    if(temp.charAt(0) == '+')
+                    {
+                        value = Integer.parseInt(temp.substring(1));
+                    }
+                    else
+                    {
+                        value = Integer.parseInt(temp);
+                    }
                 }
                 catch(NumberFormatException e)
                 {
+                    e.printStackTrace();
                 }
+
                 break;
             }
             case 3:
             {
                 try
                 {
-                    value = Double.parseDouble(source);
+                    value = Float.parseFloat(temp);
                 }
                 catch(NumberFormatException e)
                 {
@@ -360,18 +364,24 @@ public class ExpressionUtil
             {
                 try
                 {
-                    String temp = source.trim();
-
-                    if(temp.length() > 0)
+                    value = Double.parseDouble(temp);
+                }
+                catch(NumberFormatException e)
+                {
+                }
+                break;
+            }
+            case 5:
+            {
+                try
+                {
+                    if(temp.endsWith("l") || temp.endsWith("L"))
                     {
-                        if(temp.endsWith("l") || temp.endsWith("L"))
-                        {
-                            value = Long.parseLong(temp.substring(0, temp.length() - 1));
-                        }
-                        else
-                        {
-                            value = Long.parseLong(temp);
-                        }
+                        value = Long.parseLong(temp.substring(0, temp.length() - 1));
+                    }
+                    else
+                    {
+                        value = Long.parseLong(temp);
                     }
                 }
                 catch(NumberFormatException e)
@@ -390,14 +400,15 @@ public class ExpressionUtil
 
     /**
      * 0 - String
-     * 1 - Integer
-     * 2 - Float
-     * 3 - Double
-     * 4 - Long
+     * 1 - Boolean
+     * 2 - Integer
+     * 3 - Float
+     * 4 - Double
+     * 5 - Long
      * @param source
      * @return int
      */
-    public static int getNumberType(String content)
+    public static int getDataType(String content)
     {
         String source = content.trim();
 
@@ -405,10 +416,15 @@ public class ExpressionUtil
         {
             return 0;
         }
+        
+        if(source.equals("true") || source.equals("false"))
+        {
+            return 1;
+        }
 
         char c;
         int d = 0;
-        int type = 1;
+        int type = 2;
         int length = source.length();
 
         for(int i = 0; i < length; i++)
@@ -424,7 +440,7 @@ public class ExpressionUtil
             {
                 if(d == 0)
                 {
-                    d = 3;
+                    d = 4;
                     continue;
                 }
                 else
@@ -439,15 +455,15 @@ public class ExpressionUtil
                 {
                     if(c == 'f' || c == 'F')
                     {
-                        return 2;
+                        return 3;
                     }
                     else if(c == 'd' || c == 'D')
                     {
-                        return 3;
+                        return 4;
                     }
                     else if(c == 'l' || c == 'L')
                     {
-                        return (d == 0 ? 4 : 0);
+                        return (d == 0 ? 5 : 0);
                     }
                     else
                     {
@@ -457,7 +473,7 @@ public class ExpressionUtil
 
                 if(i == length - 2 && (c == 'e' || c == 'E') && Character.isDigit(source.charAt(length - 1)))
                 {
-                    return 3;
+                    return 4;
                 }
 
                 return 0;
