@@ -198,29 +198,39 @@ public class JspCompiler
         {
             if(node.getNodeType() == NodeType.JSP_DECLARATION)
             {
+                writer.println();
+                writer.println(indent + "/* JSP_DECLARATION: lineNumber: " + node.getLineNumber() + " */");
+                writer.println(indent + "/* " + NodeUtil.toString(node) + " */");
                 return;
             }
 
             if(node.getNodeType() == NodeType.JSP_DIRECTIVE_PAGE)
             {
+                writer.println();
                 writer.println(indent + "/* JSP_DIRECTIVE: lineNumber: " + node.getLineNumber() + " */");
+                writer.println(indent + "/* " + NodeUtil.toString(node) + " */");
                 return;
             }
 
             if(node.getNodeType() == NodeType.JSP_DIRECTIVE_TAGLIB)
             {
+                writer.println();
                 writer.println(indent + "/* JSP_DIRECTIVE: lineNumber: " + node.getLineNumber() + " */");
+                writer.println(indent + "/* " + NodeUtil.toString(node) + " */");
                 return;
             }
 
             if(node.getNodeType() == NodeType.JSP_DIRECTIVE_INCLUDE)
             {
+                writer.println();
                 writer.println(indent + "/* JSP_DIRECTIVE: lineNumber: " + node.getLineNumber() + " */");
+                writer.println(indent + "/* " + NodeUtil.toString(node) + " */");
                 return;
             }
 
             if(node.getNodeType() == NodeType.JSP_SCRIPTLET)
             {
+                writer.println();
                 writer.println(indent + "/* JSP_SCRIPTLET: lineNumber: " + node.getLineNumber() + " */");
                 writer.println(node.getTextContent());
                 return;
@@ -228,6 +238,7 @@ public class JspCompiler
 
             if(node.getNodeType() == NodeType.JSP_EXPRESSION)
             {
+                writer.println();
                 writer.println(indent + "/* JSP_EXPRESSION: lineNumber: " + node.getLineNumber() + " */");
                 writer.println(indent + "out.print(" + node.getTextContent() + ");");
                 return;
@@ -237,6 +248,7 @@ public class JspCompiler
         {
             if(node.getNodeType() == NodeType.JSP_DECLARATION)
             {
+                writer.println(indent + "/* jsp:declaration END */");
                 return;
             }
 

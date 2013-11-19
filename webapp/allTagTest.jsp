@@ -55,14 +55,13 @@
 <%=mytest%>
 
 <jsp:scriptlet>
-System.out.println("Hello, Ayada4 !");
+    System.out.println("Hello, Ayada4 !");
 </jsp:scriptlet >
 
 <jsp:expression>("Hello" + " " + "World !")</jsp:expression>
 
 <c:set var="myVar" value="Hello, Ayada!"/>
 <h1>${myVar}</h1>
-
 
 <c:out value="c:out: Hello, Ayada!"/>
 <div style="background-color: #c0c0c0;"></div>
