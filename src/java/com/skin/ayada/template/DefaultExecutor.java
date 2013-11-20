@@ -88,7 +88,7 @@ public class DefaultExecutor
 
                 if(node.getLength() == 0)
                 {
-                    throw new RuntimeException("Exception at line # " + node.getLineNumber() + " " + NodeUtil.toString(node) + " not match !");
+                    throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.toString(node) + " not match !");
                 }
 
                 if(node.getOffset() == index)
@@ -171,7 +171,7 @@ public class DefaultExecutor
 
         if(flag != Tag.SKIP_BODY)
         {
-            if(flag != Tag.EVAL_BODY_INCLUDE)
+            if(flag == BodyTag.EVAL_BODY_BUFFERED)
             {
                 if(tag instanceof BodyTag)
                 {
@@ -194,15 +194,10 @@ public class DefaultExecutor
     private static int doEndTag(final Statement statement, final PageContext pageContext)
     {
         Tag tag = statement.getTag();
-        IterationTag iterationTag = null;
 
         if(tag instanceof IterationTag)
         {
-            iterationTag = (IterationTag)tag;
-        }
-
-        if(iterationTag != null)
-        {
+            IterationTag iterationTag = (IterationTag)tag;
             int flag = iterationTag.doAfterBody();
 
             if(flag == BodyTag.EVAL_BODY_AGAIN)
@@ -215,7 +210,7 @@ public class DefaultExecutor
 
                 if(startTagFlag != Tag.SKIP_BODY)
                 {
-                    if(startTagFlag != Tag.EVAL_BODY_INCLUDE)
+                    if(startTagFlag == BodyTag.EVAL_BODY_BUFFERED)
                     {
                         if(tag instanceof BodyTag)
                         {

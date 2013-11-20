@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jsp:servlet home="E:\WorkSpace\ayada\webapp" path="allTagTest.jsp" lastModified="1384747914250" updateTime="1384760890562" xmlns:app="http://www.ayada.org/app" xmlns:t="http://www.ayada.org/t" xmlns:jsp="http://www.ayada.org/jsp" xmlns:c="http://www.ayada.org/c">
+<jsp:servlet home="E:\WorkSpace\ayada\webapp" path="allTagTest.jsp" lastModified="1384835014687" updateTime="1384835022375" xmlns:app="http://www.ayada.org/app" xmlns:t="http://www.ayada.org/t" xmlns:jsp="http://www.ayada.org/jsp" xmlns:c="http://www.ayada.org/c">
     <jsp:directive.page lineNumber="1" offset="0" length="2" contentType="text/html;charset=UTF-8" page=""/>
     <jsp:directive.taglib lineNumber="2" offset="2" length="2" prefix="c" taglib="" uri="http://java.sun.com/jsp/jstl/core"/>
     <jsp:directive.taglib lineNumber="3" offset="4" length="2" prefix="fmt" taglib="" uri="http://java.sun.com/jsp/jstl/fmt"/>
@@ -11,90 +11,94 @@
     <text lineNumber="11" offset="15" length="1">&quot; version=&quot;1.0&quot;&gt;\r\n\r\n</text>
     <jsp:declaration lineNumber="13" offset="16" length="2">    public int myInt = 0;\r\n</jsp:declaration>
     <text lineNumber="16" offset="18" length="1">\r\n</text>
-    <jsp:declaration lineNumber="21" offset="19" length="2">    public void hello1(){\r\n        System.out.println(&quot;Hello, Ayada !&quot;);\r\n    }\r\n</jsp:declaration>
+    <jsp:declaration lineNumber="21" offset="19" length="2">    public void hello1(){\r\n        System.out.println(&quot;Hello, World !&quot;);\r\n    }\r\n</jsp:declaration>
     <text lineNumber="22" offset="21" length="1">\r\n</text>
-    <jsp:declaration lineNumber="23" offset="22" length="2">    public void hello2(){\r\n        System.out.println(&quot;Hello, Ayada !&quot;);\r\n    }\r\n</jsp:declaration>
+    <jsp:declaration lineNumber="23" offset="22" length="2">    public void hello2(){\r\n        System.out.println(&quot;Hello, World !&quot;);\r\n    }\r\n</jsp:declaration>
     <text lineNumber="28" offset="24" length="1">\r\n</text>
-    <jsp:declaration lineNumber="29" offset="25" length="2">    public void hello3(){\r\n        System.out.println(&quot;Hello, Ayada !&quot;);\r\n    }\r\n</jsp:declaration>
+    <jsp:declaration lineNumber="29" offset="25" length="2">    public void hello3(){\r\n        System.out.println(&quot;Hello, World !&quot;);\r\n    }\r\n</jsp:declaration>
     <text lineNumber="34" offset="27" length="1">\r\n</text>
     <jsp:declaration lineNumber="35" offset="28" length="2">    public void hello4(){\r\n        System.out.println(new File(&quot;.&quot;));\r\n    }\r\n</jsp:declaration>
     <text lineNumber="40" offset="30" length="1">\r\n</text>
-    <jsp:scriptlet lineNumber="41" offset="31" length="2">    System.out.println(&quot;Hello, Ayada1 !&quot;);\r\n</jsp:scriptlet>
+    <jsp:scriptlet lineNumber="41" offset="31" length="2">    System.out.println(&quot;Hello, World1 !&quot;);\r\n</jsp:scriptlet>
     <text lineNumber="44" offset="33" length="1">\r\n</text>
-    <jsp:scriptlet lineNumber="45" offset="34" length="2">    System.out.println(&quot;Hello, Ayada2 ! &lt;/test&quot;);\r\n    System.out.println(&quot;Hello, Ayada2 ! &lt;/jsp:scriptlet2&gt;&quot;);\r\n</jsp:scriptlet>
+    <jsp:scriptlet lineNumber="45" offset="34" length="2">    System.out.println(&quot;Hello, World2 ! &lt;/test&quot;);\r\n    System.out.println(&quot;Hello, World2 ! &lt;/jsp:scriptlet2&gt;&quot;);\r\n</jsp:scriptlet>
     <text lineNumber="49" offset="36" length="1">\r\n</text>
-    <jsp:scriptlet lineNumber="53" offset="37" length="2">    int mytest = 0;\r\n    System.out.println(&quot;Hello, Ayada3 !&quot;);\r\n</jsp:scriptlet>
+    <jsp:scriptlet lineNumber="53" offset="37" length="2">    int mytest = 0;\r\n    System.out.println(&quot;Hello, World3 !&quot;);\r\n</jsp:scriptlet>
     <text lineNumber="54" offset="39" length="1">\r\n</text>
     <jsp:expression lineNumber="55" offset="40" length="2">mytest</jsp:expression>
     <text lineNumber="56" offset="42" length="1">\r\n</text>
-    <jsp:scriptlet lineNumber="57" offset="43" length="2">System.out.println(&quot;Hello, Ayada4 !&quot;);\r\n</jsp:scriptlet>
+    <jsp:scriptlet lineNumber="57" offset="43" length="2">    System.out.println(&quot;Hello, World4 !&quot;);\r\n</jsp:scriptlet>
     <text lineNumber="60" offset="45" length="1">\r\n</text>
     <jsp:expression lineNumber="61" offset="46" length="2">(&quot;Hello&quot; + &quot; &quot; + &quot;World !&quot;)</jsp:expression>
     <text lineNumber="62" offset="48" length="1">\r\n</text>
-    <c:set lineNumber="63" offset="49" length="2" tagClass="com.skin.ayada.jstl.core.SetTag" tagFactory="com.skin.ayada.jstl.factory.SetTagFactory" value="Hello, Ayada!" var="myVar"/>
+    <c:set lineNumber="63" offset="49" length="2" tagClass="com.skin.ayada.jstl.core.SetTag" tagFactory="com.skin.ayada.jstl.factory.SetTagFactory" value="Hello, World!" var="myVar"/>
     <text lineNumber="63" offset="51" length="1">\r\n&lt;h1&gt;</text>
     <expression lineNumber="64" offset="52" length="1">myVar</expression>
-    <text lineNumber="64" offset="53" length="1">&lt;/h1&gt;\r\n\r\n\r\n</text>
-    <c:out lineNumber="67" offset="54" length="2" tagClass="com.skin.ayada.jstl.core.OutTag" tagFactory="com.skin.ayada.jstl.factory.OutTagFactory" value="c:out: Hello, Ayada!"/>
-    <text lineNumber="67" offset="56" length="1">\r\n&lt;div style=&quot;background-color: #c0c0c0;&quot;&gt;&lt;/div&gt;\r\n</text>
-    <c:out lineNumber="69" offset="57" length="2" tagClass="com.skin.ayada.jstl.core.OutTag" tagFactory="com.skin.ayada.jstl.factory.OutTagFactory" escapeXml="true" value="&lt;div&gt;Hello Ayada!&lt;/div&gt;"/>
-    <text lineNumber="69" offset="59" length="1">\r\n</text>
-    <c:out lineNumber="70" offset="60" length="3" tagClass="com.skin.ayada.jstl.core.OutTag" tagFactory="com.skin.ayada.jstl.factory.OutTagFactory" escapeXml="true">
-        <text lineNumber="70" offset="61" length="1">&lt;h1&gt;Hello Ayada!&lt;/h1&gt;</text>
+    <text lineNumber="64" offset="53" length="1">&lt;/h1&gt;\r\n\r\n</text>
+    <c:out lineNumber="66" offset="54" length="2" tagClass="com.skin.ayada.jstl.core.OutTag" tagFactory="com.skin.ayada.jstl.factory.OutTagFactory" value="c:out: Hello, World!"/>
+    <text lineNumber="66" offset="56" length="1">\r\n&lt;div style=&quot;background-color: #c0c0c0;&quot;&gt;&lt;/div&gt;\r\n</text>
+    <c:out lineNumber="68" offset="57" length="2" tagClass="com.skin.ayada.jstl.core.OutTag" tagFactory="com.skin.ayada.jstl.factory.OutTagFactory" escapeXml="true" value="&lt;div&gt;Hello World!&lt;/div&gt;"/>
+    <text lineNumber="68" offset="59" length="1">\r\n</text>
+    <c:out lineNumber="69" offset="60" length="3" tagClass="com.skin.ayada.jstl.core.OutTag" tagFactory="com.skin.ayada.jstl.factory.OutTagFactory" escapeXml="true">
+        <text lineNumber="69" offset="61" length="1">&lt;h1&gt;Hello World!&lt;/h1&gt;</text>
     </c:out>
-    <text lineNumber="70" offset="63" length="1">\r\n\r\n</text>
-    <c:if lineNumber="72" offset="64" length="3" tagClass="com.skin.ayada.jstl.core.IfTag" tagFactory="com.skin.ayada.jstl.factory.IfTagFactory" test="${1 == 1}">
-        <text lineNumber="72" offset="65" length="1">c:if test</text>
+    <text lineNumber="69" offset="63" length="1">\r\n</text>
+    <c:out lineNumber="70" offset="64" length="3" tagClass="com.skin.ayada.jstl.core.OutTag" tagFactory="com.skin.ayada.jstl.factory.OutTagFactory" escapeXml="true" value="&lt;div&gt;Hello World!&lt;/div&gt;">
+        <text lineNumber="70" offset="65" length="1">&lt;h1&gt;Hello World!&lt;/h1&gt;</text>
+    </c:out>
+    <text lineNumber="70" offset="67" length="1">\r\n\r\n</text>
+    <c:if lineNumber="72" offset="68" length="3" tagClass="com.skin.ayada.jstl.core.IfTag" tagFactory="com.skin.ayada.jstl.factory.IfTagFactory" test="${1 == 1}">
+        <text lineNumber="72" offset="69" length="1">c:if test</text>
     </c:if>
-    <text lineNumber="72" offset="67" length="1">\r\n\r\n&lt;h1&gt;c:forEach test1&lt;/h1&gt;\r\n</text>
-    <c:forEach lineNumber="75" offset="68" length="3" tagClass="com.skin.ayada.jstl.core.ForEachTag" tagFactory="com.skin.ayada.jstl.factory.ForEachTagFactory" items="1,2,3,4,5" var="mynum">
-        <expression lineNumber="77" offset="69" length="1">mynum</expression>
+    <text lineNumber="72" offset="71" length="1">\r\n\r\n&lt;h1&gt;c:forEach test1&lt;/h1&gt;\r\n</text>
+    <c:forEach lineNumber="75" offset="72" length="3" tagClass="com.skin.ayada.jstl.core.ForEachTag" tagFactory="com.skin.ayada.jstl.factory.ForEachTagFactory" items="1,2,3,4,5" var="mynum">
+        <expression lineNumber="77" offset="73" length="1">mynum</expression>
     </c:forEach>
-    <text lineNumber="77" offset="71" length="1">\r\n\r\n&lt;h1&gt;c:forEach test2&lt;/h1&gt;\r\n</text>
-    <c:forEach lineNumber="80" offset="72" length="20" tagClass="com.skin.ayada.jstl.core.ForEachTag" tagFactory="com.skin.ayada.jstl.factory.ForEachTagFactory" items="${userList}" var="user" varStatus="status">
-        <text lineNumber="80" offset="73" length="1">\r\n    &lt;p&gt;user: </text>
-        <expression lineNumber="81" offset="74" length="1">user.userName</expression>
-        <text lineNumber="81" offset="75" length="1">&lt;/p&gt;\r\n    </text>
-        <c:choose lineNumber="82" offset="76" length="14" tagClass="com.skin.ayada.jstl.core.ChooseTag" tagFactory="com.skin.ayada.jstl.factory.ChooseTagFactory">
-            <c:when lineNumber="83" offset="77" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${user.userName == &#39;test1&#39;}">
-                <text lineNumber="83" offset="78" length="1">&lt;p&gt;test1, good man !&lt;/p&gt;</text>
+    <text lineNumber="77" offset="75" length="1">\r\n\r\n&lt;h1&gt;c:forEach test2&lt;/h1&gt;\r\n</text>
+    <c:forEach lineNumber="80" offset="76" length="20" tagClass="com.skin.ayada.jstl.core.ForEachTag" tagFactory="com.skin.ayada.jstl.factory.ForEachTagFactory" items="${userList}" var="user" varStatus="status">
+        <text lineNumber="80" offset="77" length="1">\r\n    &lt;p&gt;user: </text>
+        <expression lineNumber="81" offset="78" length="1">user.userName</expression>
+        <text lineNumber="81" offset="79" length="1">&lt;/p&gt;\r\n    </text>
+        <c:choose lineNumber="82" offset="80" length="14" tagClass="com.skin.ayada.jstl.core.ChooseTag" tagFactory="com.skin.ayada.jstl.factory.ChooseTagFactory">
+            <c:when lineNumber="83" offset="81" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${user.userName == &#39;test1&#39;}">
+                <text lineNumber="83" offset="82" length="1">&lt;p&gt;test1, good man !&lt;/p&gt;</text>
             </c:when>
-            <c:when lineNumber="84" offset="80" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${user.userName == &#39;test2&#39;}">
-                <text lineNumber="84" offset="81" length="1">&lt;p&gt;test2, good man !&lt;/p&gt;</text>
+            <c:when lineNumber="84" offset="84" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${user.userName == &#39;test2&#39;}">
+                <text lineNumber="84" offset="85" length="1">&lt;p&gt;test2, good man !&lt;/p&gt;</text>
             </c:when>
-            <c:when lineNumber="85" offset="83" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${user.userName == &#39;test3&#39;}">
-                <text lineNumber="85" offset="84" length="1">&lt;p&gt;test3, good man !&lt;/p&gt;</text>
+            <c:when lineNumber="85" offset="87" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${user.userName == &#39;test3&#39;}">
+                <text lineNumber="85" offset="88" length="1">&lt;p&gt;test3, good man !&lt;/p&gt;</text>
             </c:when>
-            <c:otherwise lineNumber="86" offset="86" length="3" tagClass="com.skin.ayada.jstl.core.OtherwiseTag" tagFactory="com.skin.ayada.jstl.factory.OtherwiseTagFactory">
-                <text lineNumber="86" offset="87" length="1">&lt;p&gt;unknown user! Do you known &#39;bad egg&#39;? You! Are!&lt;/p&gt;</text>
+            <c:otherwise lineNumber="86" offset="90" length="3" tagClass="com.skin.ayada.jstl.core.OtherwiseTag" tagFactory="com.skin.ayada.jstl.factory.OtherwiseTagFactory">
+                <text lineNumber="86" offset="91" length="1">&lt;p&gt;unknown user! Do you known &#39;bad egg&#39;? You! Are!&lt;/p&gt;</text>
             </c:otherwise>
         </c:choose>
-        <text lineNumber="87" offset="90" length="1">\r\n</text>
+        <text lineNumber="87" offset="94" length="1">\r\n</text>
     </c:forEach>
-    <text lineNumber="88" offset="92" length="1">\r\n\r\n&lt;h1&gt;c:choose test1&lt;/h1&gt;\r\n</text>
-    <c:choose lineNumber="91" offset="93" length="14" tagClass="com.skin.ayada.jstl.core.ChooseTag" tagFactory="com.skin.ayada.jstl.factory.ChooseTagFactory">
-        <c:when lineNumber="92" offset="94" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${1 == 1}">
-            <text lineNumber="92" offset="95" length="1">c:when test=&quot;{1 == 1}&quot;</text>
+    <text lineNumber="88" offset="96" length="1">\r\n\r\n&lt;h1&gt;c:choose test1&lt;/h1&gt;\r\n</text>
+    <c:choose lineNumber="91" offset="97" length="14" tagClass="com.skin.ayada.jstl.core.ChooseTag" tagFactory="com.skin.ayada.jstl.factory.ChooseTagFactory">
+        <c:when lineNumber="92" offset="98" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${1 == 1}">
+            <text lineNumber="92" offset="99" length="1">c:when test=&quot;{1 == 1}&quot;</text>
         </c:when>
-        <c:when lineNumber="93" offset="97" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${2 == 2}">
-            <text lineNumber="93" offset="98" length="1">c:when test=&quot;{2 == 2}&quot;</text>
+        <c:when lineNumber="93" offset="101" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${2 == 2}">
+            <text lineNumber="93" offset="102" length="1">c:when test=&quot;{2 == 2}&quot;</text>
         </c:when>
-        <c:when lineNumber="94" offset="100" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${3 == 3}">
-            <text lineNumber="94" offset="101" length="1">c:when test=&quot;{3 == 3}&quot;</text>
+        <c:when lineNumber="94" offset="104" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${3 == 3}">
+            <text lineNumber="94" offset="105" length="1">c:when test=&quot;{3 == 3}&quot;</text>
         </c:when>
-        <c:otherwise lineNumber="95" offset="103" length="3" tagClass="com.skin.ayada.jstl.core.OtherwiseTag" tagFactory="com.skin.ayada.jstl.factory.OtherwiseTagFactory">
-            <text lineNumber="95" offset="104" length="1">c:otherwise</text>
+        <c:otherwise lineNumber="95" offset="107" length="3" tagClass="com.skin.ayada.jstl.core.OtherwiseTag" tagFactory="com.skin.ayada.jstl.factory.OtherwiseTagFactory">
+            <text lineNumber="95" offset="108" length="1">c:otherwise</text>
         </c:otherwise>
     </c:choose>
-    <text lineNumber="96" offset="107" length="1">\r\n\r\n&lt;h1&gt;app:test test1&lt;/h1&gt;\r\n</text>
-    <app:test lineNumber="99" offset="108" length="2" tagClass="test.com.skin.ayada.taglib.TestTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestTagFactory" myDouble="1.0d" myFloat="1.0f" myInt="-1.0" myLong="1L" myString="Hello"/>
-    <text lineNumber="99" offset="110" length="1">\r\n</text>
-    <app:test lineNumber="100" offset="111" length="2" tagClass="test.com.skin.ayada.taglib.TestTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestTagFactory" myDouble="1.0D" myFloat="1.0F" myInt="-1.0" myLong="1L" myString="Hello"/>
-    <text lineNumber="100" offset="113" length="1">\r\n</text>
-    <app:test lineNumber="101" offset="114" length="2" tagClass="test.com.skin.ayada.taglib.TestTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestTagFactory" myDouble="1e3" myFloat="1.0" myInt="-1.0" myLong="1e3" myString="Hello"/>
-    <text lineNumber="101" offset="116" length="1">\r\n</text>
-    <app:test lineNumber="102" offset="117" length="2" tagClass="test.com.skin.ayada.taglib.TestTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestTagFactory" myDouble="1.2e3" myFloat="1.0" myInt="-1.0" myLong="1.2e3" myString="Hello"/>
-    <text lineNumber="102" offset="119" length="1">\r\n\r\n&lt;h1&gt;app:scrollpage test1&lt;/h1&gt;\r\n</text>
-    <app:scrollpage lineNumber="105" offset="120" length="2" tagClass="test.com.skin.ayada.taglib.ScrollPage" tagFactory="test.com.skin.ayada.taglib.proxy.ScrollPageFactory" count="254" pageNum="2" pageSize="10"/>
-    <text lineNumber="105" offset="122" length="1">\r\n&lt;/body&gt;\r\n&lt;/html&gt;</text>
+    <text lineNumber="96" offset="111" length="1">\r\n\r\n&lt;h1&gt;app:test test1&lt;/h1&gt;\r\n</text>
+    <app:test lineNumber="99" offset="112" length="2" tagClass="test.com.skin.ayada.taglib.TestTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestTagFactory" myBoolean="true" myByte="1" myChar="c" myDouble="1.0d" myFloat="1.0f" myInt="-1.0" myLong="1L" myString="Hello"/>
+    <text lineNumber="99" offset="114" length="1">\r\n</text>
+    <app:test lineNumber="100" offset="115" length="2" tagClass="test.com.skin.ayada.taglib.TestTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestTagFactory" myBoolean="false" myByte="243" myChar="c" myDouble="1.0D" myFloat="1.0F" myInt="-1.0" myLong="1L" myString="Hello"/>
+    <text lineNumber="100" offset="117" length="1">\r\n</text>
+    <app:test lineNumber="101" offset="118" length="2" tagClass="test.com.skin.ayada.taglib.TestTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestTagFactory" myDouble="1e3" myFloat="1.0" myInt="-1.0" myLong="1e3" myString="Hello"/>
+    <text lineNumber="101" offset="120" length="1">\r\n</text>
+    <app:test lineNumber="102" offset="121" length="2" tagClass="test.com.skin.ayada.taglib.TestTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestTagFactory" myDouble="1.2e3" myFloat="1.0" myInt="-1.0" myLong="1.2e3" myString="Hello"/>
+    <text lineNumber="102" offset="123" length="1">\r\n\r\n&lt;h1&gt;app:scrollpage test1&lt;/h1&gt;\r\n</text>
+    <app:scrollpage lineNumber="105" offset="124" length="2" tagClass="test.com.skin.ayada.taglib.ScrollPage" tagFactory="test.com.skin.ayada.taglib.proxy.ScrollPageFactory" count="254" pageNum="2" pageSize="10"/>
+    <text lineNumber="105" offset="126" length="1">\r\n&lt;/body&gt;\r\n&lt;/html&gt;</text>
 </jsp:servlet>

@@ -14,6 +14,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +25,7 @@ import com.skin.ayada.factory.FactoryClassLoader;
 import com.skin.ayada.source.SourceFactory;
 import com.skin.ayada.util.IO;
 import com.skin.ayada.util.StringUtil;
+import com.skin.ayada.util.TemplateUtil;
 
 /**
  * <p>Title: JspTemplateFactory</p>
@@ -108,7 +111,10 @@ public class JspTemplateFactory extends TemplateFactory
         String source = jspCompiler.compile(template, simpleName, packageName);
         File srcFile = new File(work, classPath + ".java");
         File clsFile = new File(work, classPath + ".class");
+        File tplFile = new File(work, classPath + ".tpl");
+
         write(source, srcFile);
+        write(this.getTemplateDescription(template), tplFile);
 
         String lib = this.getClassPath();
 
@@ -306,6 +312,16 @@ public class JspTemplateFactory extends TemplateFactory
         }
 
         return null;
+    }
+
+    /**
+     * @return String
+     */
+    public String getTemplateDescription(Template template)
+    {
+        StringWriter stringWriter = new StringWriter();
+        TemplateUtil.print(template, new PrintWriter(stringWriter));
+        return stringWriter.toString();
     }
 
     /**

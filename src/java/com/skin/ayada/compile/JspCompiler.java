@@ -48,6 +48,15 @@ public class JspCompiler
         Node node = null;
         List<Node> list = template.getNodes();
         this.writeHeader(className, packageName, list, writer);
+        writer.println("/**");
+        writer.println(" * <p>Title: " + className + "</p>");
+        writer.println(" * <p>Description: </p>");
+        writer.println(" * <p>Copyright: Copyright (c) 2006</p>");
+        writer.println(" * @author JspCompiler");
+        writer.println(" * @version 1.0");
+        writer.println(" */");
+        writer.println("public class " + className + " extends JspTemplate");
+        writer.println("{");
 
         for(int index = 0, size = list.size(); index < size; index++)
         {
@@ -173,15 +182,6 @@ public class JspCompiler
         }
         
         writer.println();
-        writer.println("/**");
-        writer.println(" * <p>Title: " + className + "</p>");
-        writer.println(" * <p>Description: </p>");
-        writer.println(" * <p>Copyright: Copyright (c) 2006</p>");
-        writer.println(" * @author JspCompiler");
-        writer.println(" * @version 1.0");
-        writer.println(" */");
-        writer.println("public class " + className + " extends JspTemplate");
-        writer.println("{");
     }
 
     /**
@@ -348,7 +348,7 @@ public class JspCompiler
             writer.println();
         }
     }
-    
+
     /**
      * @param index
      * @param indent
@@ -360,7 +360,7 @@ public class JspCompiler
     {
         if(node.getOffset() == index)
         {
-            writer.println(indent + "pageContext.getTagLibrary().setup(\"" + node.getAttribute("name") + "\", \"" + node.getAttribute("className") + "\");");
+            writer.println(indent + "/* pageContext.getTagLibrary().setup(\"" + node.getAttribute("name") + "\", \"" + node.getAttribute("className") + "\"); */");
         }
         else
         {
@@ -787,7 +787,6 @@ public class JspCompiler
             this.setAttributes(indent, tagClassName, tagInstanceName, node.getAttributes(), writer);
             writer.println(indent + "int " + flagName + " = " + tagInstanceName + ".doStartTag();");
             writer.println();
-
             writer.println(indent + "if(" + flagName + " == Tag.SKIP_PAGE){");
             writer.println(indent + "    return;");
             writer.println(indent + "}");

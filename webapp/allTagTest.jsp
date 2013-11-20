@@ -16,19 +16,19 @@
 
 <%!
     public void hello1(){
-        System.out.println("Hello, Ayada !");
+        System.out.println("Hello, World !");
     }
 %>
 
 <jsp:declaration>
     public void hello2(){
-        System.out.println("Hello, Ayada !");
+        System.out.println("Hello, World !");
     }
 </jsp:declaration>
 
 <jsp:declaration>
     public void hello3(){
-        System.out.println("Hello, Ayada !");
+        System.out.println("Hello, World !");
     }
 </jsp:declaration>
 
@@ -39,34 +39,35 @@
 </jsp:declaration>
 
 <jsp:scriptlet>
-    System.out.println("Hello, Ayada1 !");
+    System.out.println("Hello, World1 !");
 </jsp:scriptlet>
 
 <jsp:scriptlet>
-    System.out.println("Hello, Ayada2 ! </test");
-    System.out.println("Hello, Ayada2 ! </jsp:scriptlet2>");
+    System.out.println("Hello, World2 ! </test");
+    System.out.println("Hello, World2 ! </jsp:scriptlet2>");
 </jsp:scriptlet>
 
 <%
     int mytest = 0;
-    System.out.println("Hello, Ayada3 !");
+    System.out.println("Hello, World3 !");
 %>
 
 <%=mytest%>
 
 <jsp:scriptlet>
-    System.out.println("Hello, Ayada4 !");
+    System.out.println("Hello, World4 !");
 </jsp:scriptlet >
 
 <jsp:expression>("Hello" + " " + "World !")</jsp:expression>
 
-<c:set var="myVar" value="Hello, Ayada!"/>
+<c:set var="myVar" value="Hello, World!"/>
 <h1>${myVar}</h1>
 
-<c:out value="c:out: Hello, Ayada!"/>
+<c:out value="c:out: Hello, World!"/>
 <div style="background-color: #c0c0c0;"></div>
-<c:out value="<div>Hello Ayada!</div>" escapeXml="true"/>
-<c:out escapeXml="true"><h1>Hello Ayada!</h1></c:out>
+<c:out value="<div>Hello World!</div>" escapeXml="true"/>
+<c:out escapeXml="true"><h1>Hello World!</h1></c:out>
+<c:out value="<div>Hello World!</div>" escapeXml="true"><h1>Hello World!</h1></c:out>
 
 <c:if test="${1 == 1}">c:if test</c:if>
 

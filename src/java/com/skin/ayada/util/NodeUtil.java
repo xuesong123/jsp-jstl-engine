@@ -81,8 +81,9 @@ public class NodeUtil
 
         return buffer.toString();
     }
+
     /**
-     * @param node
+     * @param attributes
      * @return String
      */
     public static String toString(Map<String, String> attributes)
@@ -99,11 +100,11 @@ public class NodeUtil
                 buffer.append("\"");
                 buffer.append(" ");
             }
-        }
 
-        if(buffer.length() > 0)
-        {
-            buffer.deleteCharAt(buffer.length() - 1);
+            if(buffer.length() > 0)
+            {
+                buffer.deleteCharAt(buffer.length() - 1);
+            }
         }
 
         return buffer.toString();

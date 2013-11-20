@@ -232,17 +232,20 @@ public class Node
     {
         StringBuilder buffer = new StringBuilder();
 
-        for(Map.Entry<String, String> entry : this.attributes.entrySet())
+        if(this.attributes != null && this.attributes.size() > 0)
         {
-            buffer.append(entry.getKey());
-            buffer.append("=\"");
-            buffer.append(entry.getValue());
-            buffer.append("\" ");
-        }
-
-        if(buffer.length() > 0)
-        {
-            buffer.setLength(buffer.length() - 1);
+            for(Map.Entry<String, String> entry : this.attributes.entrySet())
+            {
+                buffer.append(entry.getKey());
+                buffer.append("=\"");
+                buffer.append(entry.getValue());
+                buffer.append("\" ");
+            }
+    
+            if(buffer.length() > 0)
+            {
+                buffer.setLength(buffer.length() - 1);
+            }
         }
 
         return buffer.toString();
@@ -264,17 +267,19 @@ public class Node
         this.tagFactory = tagFactory;
     }
 
-    /**
-     */
+    @Override
     public Node clone()
     {
         Node node = new Node(this.nodeName);
         node.setClosed(this.closed);
         node.setParent(this.parent);
 
-        for(Map.Entry<String, String> entry : this.attributes.entrySet())
+        if(this.attributes != null && this.attributes.size() > 0)
         {
-            node.setAttribute(entry.getKey(), entry.getValue());
+            for(Map.Entry<String, String> entry : this.attributes.entrySet())
+            {
+                node.setAttribute(entry.getKey(), entry.getValue());
+            }
         }
 
         return node;

@@ -425,6 +425,11 @@ public class TemplateCompiler extends PageCompiler
                     node.setClosed(NodeType.SELF_CLOSED);
                     this.popNode(stack, list, nodeName);
                 }
+
+                if(nodeName.equals("c:set"))
+                {
+                    this.skipCRLF();
+                }
             }
             else
             {
