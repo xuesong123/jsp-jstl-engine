@@ -40,13 +40,13 @@ public class TemplateUtil
 
             if(node.getNodeType() == NodeType.TEXT)
             {
-                writer.println("[TEXT-@" + node.hashCode() + "]: " + StringUtil.escape(node.getTextContent()));
+                writer.println("[TEXT]: " + StringUtil.escape(node.getTextContent()));
                 continue;
             }
 
             if(node.getNodeType() == NodeType.EXPRESSION)
             {
-                writer.println("[EXPR-@" + node.hashCode() + "]: ${" + StringUtil.escape(node.getTextContent()) + "}");
+                writer.println("[EXPR]: ${" + StringUtil.escape(node.getTextContent()) + "}");
                 continue;
             }
 
@@ -55,7 +55,7 @@ public class TemplateUtil
                 break;
             }
 
-            writer.println("[NODE-@" + node.hashCode() + "]: " + TemplateUtil.toString(node, i, false));
+            writer.println("[NODE]: " + TemplateUtil.toString(node, i, false));
         }
 
         writer.flush();

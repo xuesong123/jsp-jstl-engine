@@ -3,9 +3,9 @@
  * $Revision: 1.1 $
  * $Date: 2013-11-19 $
  *
- * Copyright (C) 2008 WanMei, Inc. All rights reserved.
+ * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
- * This software is the proprietary information of WanMei, Inc.
+ * This software is the proprietary information of Skin, Inc.
  * Use is subject to license terms.
  */
 package com.skin.ayada.template;
@@ -17,8 +17,6 @@ import java.io.StringWriter;
 
 import com.skin.ayada.runtime.JspFactory;
 import com.skin.ayada.runtime.PageContext;
-import com.skin.ayada.source.DefaultSourceFactory;
-import com.skin.ayada.source.SourceFactory;
 import com.skin.ayada.util.TemplateUtil;
 
 /**
@@ -71,17 +69,13 @@ public class Main
         {
             throw new IOException(path + " not exists!");
         }
-        
+
         File parent = file.getParentFile();
-        long t1 = System.currentTimeMillis();
-        SourceFactory sourceFactory = new DefaultSourceFactory(parent.getAbsolutePath());
-        TemplateFactory templateFactory = new TemplateFactory();
-        Template template = templateFactory.create(sourceFactory, file.getName(), encoding);
-        long t2 = System.currentTimeMillis();
-        System.out.println("compile time: " + (t2 - t1));
+        TemplateContext templateContext = TemplateManager.getTemplateContext(parent.getAbsolutePath(), true);
 
         StringWriter writer = new StringWriter();
-        PageContext pageContext = JspFactory.getPageContext(writer);
+        PageContext pageContext = JspFactory.getPageContext(templateContext, writer);
+        Template template = templateContext.getTemplate(file.getName());
 
         try
         {

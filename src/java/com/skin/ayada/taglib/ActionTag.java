@@ -10,6 +10,7 @@
  */
 package com.skin.ayada.taglib;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import com.skin.ayada.component.Parameters;
@@ -46,19 +47,42 @@ public class ActionTag extends TagSupport implements com.skin.ayada.tagext.Param
         if(this.className != null)
         {
             context = ActionDispatcher.dispatch(pageContext, this.parameters, this.className, this.method);
+        }
 
-            if(context != null)
-            {
-                context.put("request", pageContext.getAttribute("request"));
-                context.put("response", pageContext.getAttribute("response"));
-                context.put("session", pageContext.getAttribute("session"));
-            }
+        if(context == null)
+        {
+            context = new HashMap<String, Object>();
+        }
+
+        if(pageContext.getAttribute("request") != null)
+        {
+            context.put("request", pageContext.getAttribute("request"));
+        }
+
+        if(pageContext.getAttribute("response") != null)
+        {
+            context.put("response", pageContext.getAttribute("response"));
+        }
+
+        if(pageContext.getAttribute("session") != null)
+        {
+            context.put("session", pageContext.getAttribute("session"));
         }
 
         if(this.getPage() != null)
         {
             try
             {
+                Map<String, Object> map = parameters.getParameters();
+
+                for(Map.Entry<String, Object> entry : map.entrySet())
+                {
+                    if(context.get(entry.getKey()) == null && entry.getValue() != null)
+                    {
+                        context.put(entry.getKey(), entry.getValue());
+                    }
+                }
+
                 pageContext.include(this.getPage(), context);
             }
             catch(Exception e)

@@ -91,7 +91,10 @@ public class TemplateContext
         {
             for(Map.Entry<String, Object> entry : context.entrySet())
             {
-                pageContext.setAttribute(entry.getKey(), entry.getValue());
+                if(entry.getValue() != null)
+                {
+                    pageContext.setAttribute(entry.getKey(), entry.getValue());
+                }
             }
         }
 

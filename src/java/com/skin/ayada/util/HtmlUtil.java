@@ -99,11 +99,44 @@ public class HtmlUtil
                     buffer.append('&');
                     i += 4;
                 }
-                else if ( ((i + 5) < length) && (c[i + 1] == 'q') && (c[i + 2] == 'u') && (c[i + 3] == 'o') && (c[i + 4] == 't') && (c[i + 5] == ';') )
+                else if(((i + 5) < length) && (c[i + 1] == 'q') && (c[i + 2] == 'u') && (c[i + 3] == 'o') && (c[i + 4] == 't') && (c[i + 5] == ';') )
                 {
                     // &quot;
                     buffer.append('"');
                     i += 5;
+                }
+                else if(((i + 3) < length && (c[i + 1] == '#') && Character.isDigit(c[i + 2])))
+                {
+                    // &#10;
+                    for(int j = i + 2; j < length; j++)
+                    {
+                        if(Character.isDigit(c[j]))
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            if(c[j] != ';')
+                            {
+                                buffer.append('&');
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    int charCode = Integer.parseInt(new String(c, i + 2, j - i - 2));
+                                    buffer.append((char)charCode);
+                                }
+                                catch(NumberFormatException e)
+                                {
+                                }
+
+                                i = j;
+                            }
+
+                            break;
+                        }
+                    }
                 }
                 else
                 {

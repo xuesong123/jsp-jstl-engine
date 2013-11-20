@@ -251,12 +251,102 @@ public class PageCompiler
                 }
             }
 
-            value = buffer.toString();
+            value = this.decode(buffer.toString());
             attributes.put(name, value);
             buffer.setLength(0);
         }
 
         return attributes;
+    }
+
+    /**
+     * @param source
+     * @return String
+     */
+    private String decode(String source)
+    {
+        if(source == null)
+        {
+            return "";
+        }
+
+        int length = source.length();
+        char[] c = source.toCharArray();
+        StringBuilder buffer = new StringBuilder(length);
+
+        for(int i = 0; i < length; i++)
+        {
+            if(c[i] == '&')
+            {
+                if(((i + 3) < length) && (c[i + 1] == 'l') && (c[i + 2] == 't') && (c[i + 3] == ';'))
+                {
+                    // &lt;
+                    buffer.append('<');
+                    i += 3;
+                }
+                else if(((i + 3) < length) && (c[i + 1] == 'g') && (c[i + 2] == 't') && (c[i + 3] == ';'))
+                {
+                    // &gt;
+                    buffer.append('>');
+                    i += 3;
+                }
+                else if (((i + 4) < length) && (c[i + 1] == 'a') && (c[i + 2] == 'm') && (c[i + 3] == 'p') && (c[i + 4] == ';'))
+                {
+                    // &amp;
+                    buffer.append('&');
+                    i += 4;
+                }
+                else if(((i + 5) < length) && (c[i + 1] == 'q') && (c[i + 2] == 'u') && (c[i + 3] == 'o') && (c[i + 4] == 't') && (c[i + 5] == ';') )
+                {
+                    // &quot;
+                    buffer.append('"');
+                    i += 5;
+                }
+                else if(((i + 3) < length && (c[i + 1] == '#') && Character.isDigit(c[i + 2])))
+                {
+                    // &#10;
+                    for(int j = i + 2; j < length; j++)
+                    {
+                        if(Character.isDigit(c[j]))
+                        {
+                            continue;
+                        }
+                        else
+                        {
+                            if(c[j] != ';')
+                            {
+                                buffer.append('&');
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    int charCode = Integer.parseInt(new String(c, i + 2, j - i - 2));
+                                    buffer.append((char)charCode);
+                                }
+                                catch(NumberFormatException e)
+                                {
+                                }
+
+                                i = j;
+                            }
+
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    buffer.append('&');
+                }
+            }
+            else
+            {
+                buffer.append(c[i]);
+            }
+        }
+
+        return buffer.toString();
     }
 
     /**

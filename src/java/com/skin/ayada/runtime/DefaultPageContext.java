@@ -261,6 +261,11 @@ public class DefaultPageContext implements PageContext
     @Override
     public void include(String page, Map<String, Object> context) throws Exception
     {
+        if(this.templateContext == null)
+        {
+            throw new NullPointerException("NullPointerException: templateContext");
+        }
+
         this.templateContext.execute(page, context, this.getOut());
     }
 

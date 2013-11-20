@@ -22,6 +22,7 @@ import com.skin.ayada.statement.Statement;
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTag;
 import com.skin.ayada.tagext.IterationTag;
+import com.skin.ayada.tagext.SimpleTag;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.util.NodeUtil;
 import com.skin.ayada.util.TagUtil;
@@ -36,11 +37,29 @@ import com.skin.ayada.util.TagUtil;
 public class DefaultExecutor
 {
     /**
-     * @param list
+     * @param template
      * @param pageContext
+     * @throws Exception
      */
     public static void execute(final Template template, final PageContext pageContext) throws Exception
     {
+        execute(template, pageContext, 0, template.getNodes().size());
+    }
+
+    /**
+     * @param template
+     * @param pageContext
+     * @param offset
+     * @param end
+     * @throws Exception
+     */
+    public static void execute(final Template template, final PageContext pageContext, final int offset, final int length) throws Exception
+    {
+        if(length < 1)
+        {
+            return;
+        }
+
         Node node = null;
         JspWriter out = null;
         Statement statement = null;
@@ -52,10 +71,10 @@ public class DefaultExecutor
         try
         {
             int flag = 0;
-            int index = 0;
-            int size = statements.size();
+            int index = offset;
+            int end = offset + length;
 
-            while(index < size)
+            while(index < end)
             {
                 out = pageContext.getOut();
                 statement = statements.get(index);
@@ -93,6 +112,36 @@ public class DefaultExecutor
 
                 if(node.getOffset() == index)
                 {
+                    Tag tag = statement.getTag();
+
+                    if(tag == null)
+                    {
+                        tag = node.getTagFactory().create();
+                        tag.setPageContext(pageContext);
+                        statement.setTag(tag);
+                        Statement parent = statement.getParent();
+
+                        if(parent != null)
+                        {
+                            tag.setParent(parent.getTag());
+                        }
+                    }
+
+                    // create - doStartTag
+                    TagUtil.setAttributes(tag, node.getAttributes(), pageContext.getExpressionContext());
+
+                    if(tag instanceof SimpleTag)
+                    {
+                        DefaultJspFragment jspFragment = new DefaultJspFragment(template, pageContext);
+                        jspFragment.setOffset(node.getOffset() + 1);
+                        jspFragment.setLength(node.getLength() - 2);
+                        SimpleTag simpleTag = (SimpleTag)tag;
+                        simpleTag.setPageBody(jspFragment);
+                        simpleTag.doTag();
+                        index = node.getOffset() + node.getLength();
+                        continue;
+                    }
+
                     flag = doStartTag(statement, pageContext);
 
                     if(flag == Tag.SKIP_BODY)
@@ -143,24 +192,6 @@ public class DefaultExecutor
     public static int doStartTag(final Statement statement, final PageContext pageContext)
     {
         Tag tag = statement.getTag();
-        Node node = statement.getNode();
-
-        if(tag == null)
-        {
-            tag = node.getTagFactory().create();
-            tag.setPageContext(pageContext);
-            statement.setTag(tag);
-
-            Statement parent = statement.getParent();
-
-            if(parent != null)
-            {
-                tag.setParent(parent.getTag());
-            }
-        }
-
-        // create - doStartTag
-        TagUtil.setAttributes(tag, node.getAttributes(), pageContext.getExpressionContext());
         int flag = tag.doStartTag();
         statement.setStartTagFlag(flag);
 

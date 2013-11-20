@@ -3,9 +3,9 @@
  * $Revision: 1.1 $
  * $Date: 2013-11-14 $
  *
- * Copyright (C) 2008 WanMei, Inc. All rights reserved.
+ * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
- * This software is the proprietary information of WanMei, Inc.
+ * This software is the proprietary information of Skin, Inc.
  * Use is subject to license terms.
  */
 package test.com.skin.ayada.template;

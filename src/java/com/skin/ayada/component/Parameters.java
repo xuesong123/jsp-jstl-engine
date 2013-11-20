@@ -770,6 +770,14 @@ public class Parameters
         return (T)value;
     }
 
+    /**
+     * @return Map<String, Object>
+     */
+    public Map<String, Object> getParameters()
+    {
+        return this.parameters;
+    }
+
     public void clear()
     {
         this.parameters.clear();
