@@ -1,0 +1,48 @@
+1. 自定义Action
+
+className 可选
+method    可选
+page      可选
+<c:action className="test.MyAction" method="execute" page="/include/common/fragment.jsp">
+    <c:param name="title" value="test"/>
+</c:action>
+
+public class MyAction{
+    public Map<String, Object> execute(PageContext pageContext, Parameters parameters)
+    {
+        String title = parameters.getString("title");
+        // do something
+        return Map<String, Object>;
+    }
+}
+
+2. layout
+index.jsp ================================
+<t:import name="c:action" className="com.skin.ayada.taglib.ActionTag"/>
+<t:import name="c:layout" className="com.skin.ayada.taglib.ActionTag"/>
+<c:layout page="/include/common/layout.jsp">
+    <c:param name="header">
+        <div>menu</div>
+    </c:param>
+    <c:param name="body">
+        <c:set var="myString" value="${StringUtil.replace('abc', 'b', '\n')}"/>
+        <p>myString: [<c:out value="${myString}"/>]</p>
+        <ul>
+            <c:forEach items="1,2,3" var="myInt">
+                <li>${myInt}</li>
+            </c:forEach>
+        </ul>
+    </c:param>
+    <c:param name="footer">
+        <div>footer</div>
+    </c:param>
+</c:layout>
+
+layout.jsp ================================
+<html>
+<head><title>test</title></head>
+<body>
+    <div>${header}</div>
+    <div>${body}</div>
+    <div>${footer}</div>
+</body>

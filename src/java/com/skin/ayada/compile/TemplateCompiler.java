@@ -48,6 +48,7 @@ public class TemplateCompiler extends PageCompiler
     private SourceFactory sourceFactory;
     private TagLibrary tagLibrary = null;
     private boolean ignoreJspTag = true;
+    private boolean ignoreText = false;
     private static final Logger logger = LoggerFactory.getLogger(TemplateCompiler.class);
 
     /**
@@ -172,7 +173,11 @@ public class TemplateCompiler extends PageCompiler
 
                 if(buffer.length() > 0)
                 {
-                    this.pushTextNode(stack, list, buffer.toString(), line);
+                    // this.ignoreText = false;
+                    if(this.ignoreText == false)
+                    {
+                        this.pushTextNode(stack, list, buffer.toString(), line);
+                    }
                     buffer.setLength(0);
                 }
             }
@@ -215,14 +220,14 @@ public class TemplateCompiler extends PageCompiler
 
             if(nodeName.length() > 0)
             {
-                String calssName = null;
+                String tagClassName = null;
 
                 if(tagLibrary != null)
                 {
-                    calssName = tagLibrary.getTagClassName(nodeName);
+                    tagClassName = tagLibrary.getTagClassName(nodeName);
                 }
 
-                if(calssName != null)
+                if(tagClassName != null)
                 {
                     while((i = this.stream.read()) != -1)
                     {
@@ -237,6 +242,30 @@ public class TemplateCompiler extends PageCompiler
                     }
 
                     this.popNode(stack, list, nodeName);
+
+                    if(tagClassName.equals("com.skin.ayada.jstl.core.SetTag"))
+                    {
+                        this.skipCRLF();
+                    }
+                    else if(tagClassName.equals("com.skin.ayada.jstl.core.ParameterTag"))
+                    {
+                        this.ignoreText = true;
+                        this.skipCRLF();
+                    }
+                    else if(tagClassName.equals("com.skin.ayada.taglib.ActionTag"))
+                    {
+                        this.ignoreText = true;
+                        this.skipCRLF();
+                    }
+                    else if(tagClassName.equals("com.skin.ayada.jstl.core.ChooseTag"))
+                    {
+                        this.ignoreText = true;
+                        this.skipCRLF();
+                    }
+                    else
+                    {
+                        this.ignoreText = false;
+                    }
                 }
                 else
                 {
@@ -289,7 +318,6 @@ public class TemplateCompiler extends PageCompiler
                 }
 
                 this.skipCRLF();
-
                 String type = attributes.get("type");
                 String file = attributes.get("file");
                 String encoding = attributes.get("encoding");
@@ -419,16 +447,56 @@ public class TemplateCompiler extends PageCompiler
                 node.setClosed(NodeType.PAIR_CLOSED);
                 this.pushNode(stack, list, node);
 
-                if(this.stream.peek(-2) == '/')
+                boolean isEndTag = (this.stream.peek(-2) == '/');
+
+                if(isEndTag)
                 {
                     node.setLength(2);
                     node.setClosed(NodeType.SELF_CLOSED);
                     this.popNode(stack, list, nodeName);
                 }
 
-                if(nodeName.equals("c:set"))
+                if(tagClassName.equals("com.skin.ayada.jstl.core.SetTag"))
                 {
                     this.skipCRLF();
+                }
+                else if(tagClassName.equals("com.skin.ayada.jstl.core.WhenTag"))
+                {
+                    if(isEndTag)
+                    {
+                        this.ignoreText = true;
+                    }
+                    else
+                    {
+                        this.ignoreText = false;
+                    }
+                    this.skipCRLF();
+                }
+                else if(tagClassName.equals("com.skin.ayada.jstl.core.ParameterTag"))
+                {
+                    if(isEndTag)
+                    {
+                        this.ignoreText = true;
+                    }
+                    else
+                    {
+                        this.ignoreText = false;
+                    }
+                    this.skipCRLF();
+                }
+                else if(tagClassName.equals("com.skin.ayada.taglib.ActionTag"))
+                {
+                    this.ignoreText = true;
+                    this.skipCRLF();
+                }
+                else if(tagClassName.equals("com.skin.ayada.jstl.core.ChooseTag"))
+                {
+                    this.ignoreText = true;
+                    this.skipCRLF();
+                }
+                else
+                {
+                    this.ignoreText = false;
                 }
             }
             else
