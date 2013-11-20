@@ -60,6 +60,12 @@
 
 <jsp:expression>("Hello" + " " + "World !")</jsp:expression>
 
+<c:set var="myString" value="${StringUtil.replace('abc', 'b', '\n')}"/>
+<p>myString: [<c:out value="${myString}"/>]</p>
+
+<c:set var="myString" value="&quot;a + 1&quot;"/>
+<p>myString: [<c:out value="${myString}"/>]</p>
+
 <c:set var="myVar" value="Hello, World!"/>
 <h1>${myVar}</h1>
 
