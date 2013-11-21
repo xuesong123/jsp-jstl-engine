@@ -118,7 +118,7 @@ public class DefaultExecutor
 
                 if(node.getLength() == 0)
                 {
-                    throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.toString(node) + " not match !");
+                    throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node) + " not match !");
                 }
 
                 if(node.getOffset() == index)
@@ -188,7 +188,7 @@ public class DefaultExecutor
         }
         catch(Throwable t)
         {
-            throw new Exception("\"" + template.getPath() + "\" Exception at line #" + node.getLineNumber() + " " + NodeUtil.toString(node), t);
+            throw new Exception("\"" + template.getPath() + "\" Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node), t);
         }
         finally
         {
@@ -294,16 +294,8 @@ public class DefaultExecutor
             }
             else
             {
-                try
-                {
-                    Statement statement = statements.get(node.getOffset());
-                    statements.add(statement);
-                }
-                catch(RuntimeException e)
-                {
-                    System.out.println(node.getClass().getName() + " - exception: [ " + NodeUtil.toString(node) + "]");
-                    throw e;
-                }
+                Statement statement = statements.get(node.getOffset());
+                statements.add(statement);
             }
         }
 

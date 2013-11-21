@@ -27,7 +27,7 @@ public class NodeUtil
      * @param node
      * @return String
      */
-    public static String toString(Node node)
+    public static String getDescription(Node node)
     {
         StringBuilder buffer = new StringBuilder();
 

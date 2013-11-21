@@ -257,32 +257,12 @@ public class XmlTemplateParser
         {
             com.skin.ayada.statement.Node node = list.get(i);
 
-            if(node.getNodeType() == NodeType.TEXT)
-            {
-                continue;
-            }
-
-            if(node.getNodeType() == NodeType.EXPRESSION)
-            {
-                continue;
-            }
-
-            if(node.getNodeType() == NodeType.JSP_DECLARATION 
-                    || node.getNodeType() == NodeType.JSP_SCRIPTLET
-                    || node.getNodeType() == NodeType.JSP_EXPRESSION
-                    || node.getNodeType() == NodeType.JSP_DIRECTIVE_PAGE
-                    || node.getNodeType() == NodeType.JSP_DIRECTIVE_TAGLIB
-                    || node.getNodeType() == NodeType.JSP_DIRECTIVE_INCLUDE)
-            {
-                continue;
-            }
-
             if(node.getLength() == 0)
             {
-                throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.toString(node) + " not match !");
+                throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node) + " not match !");
             }
 
-            if(i == node.getOffset())
+            if(node.getNodeType() == NodeType.NODE && i == node.getOffset())
             {
                 String tagName = node.getNodeName();
                 String className = node.getTagClassName();

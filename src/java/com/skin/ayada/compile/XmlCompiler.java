@@ -93,7 +93,7 @@ public class XmlCompiler
 
             if(node.getLength() == 0)
             {
-                throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.toString(node) + " not match !");
+                throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node) + " not match !");
             }
 
             if(node.getOffset() == index)

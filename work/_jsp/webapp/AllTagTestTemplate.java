@@ -60,7 +60,7 @@ public class AllTagTestTemplate extends JspTemplate
      * @throws Exception
      */
     @Override
-    public void execute(final PageContext pageContext) throws Exception
+    public void _execute(final PageContext pageContext) throws Exception
     {
         JspWriter out = pageContext.getOut();
         JspWriter jspWriter = pageContext.getOut();

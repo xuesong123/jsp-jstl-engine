@@ -12,6 +12,10 @@ package com.skin.ayada.template;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.statement.Node;
 
 /**
@@ -21,8 +25,10 @@ import com.skin.ayada.statement.Node;
  * @author xuesong.net
  * @version 1.0
  */
-public class JspTemplate extends Template
+public abstract class JspTemplate extends Template
 {
+    private static final Logger logger = LoggerFactory.getLogger(JspTemplate.class);
+
     public JspTemplate()
     {
     }
@@ -35,4 +41,28 @@ public class JspTemplate extends Template
     {
         super(home, file, nodes);
     }
+
+    /**
+     * @param pageContext
+     */
+    @Override
+    public void execute(final PageContext pageContext) throws Exception
+    {
+        if(logger.isDebugEnabled())
+        {
+            long t1 = System.currentTimeMillis();
+            this._execute(pageContext);
+            long t2 = System.currentTimeMillis();
+            logger.debug(this.getPath() + " - render time: " + (t2 - t1));
+        }
+        else
+        {
+            this._execute(pageContext);
+        }
+    }
+
+    /**
+     * @param pageContext
+     */
+    public abstract void _execute(final PageContext pageContext) throws Exception;
 }

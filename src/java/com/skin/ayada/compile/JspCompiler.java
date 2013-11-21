@@ -81,7 +81,7 @@ public class JspCompiler
         writer.println("     * @throws Exception");
         writer.println("     */");
         writer.println("    @Override");
-        writer.println("    public void execute(final PageContext pageContext) throws Exception");
+        writer.println("    public void _execute(final PageContext pageContext) throws Exception");
         writer.println("    {");
         writer.println("        JspWriter out = pageContext.getOut();");
         writer.println("        JspWriter jspWriter = pageContext.getOut();");
@@ -117,7 +117,7 @@ public class JspCompiler
 
             if(node.getLength() == 0)
             {
-                throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.toString(node) + " not match !");
+                throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node) + " not match !");
             }
 
             this.write(index, indent, node.getTagClassName(), node, writer);
@@ -200,7 +200,7 @@ public class JspCompiler
             {
                 writer.println();
                 writer.println(indent + "/* JSP_DECLARATION: lineNumber: " + node.getLineNumber() + " */");
-                writer.println(indent + "/* " + NodeUtil.toString(node) + " */");
+                writer.println(indent + "/* " + NodeUtil.getDescription(node) + " */");
                 return;
             }
 
@@ -208,7 +208,7 @@ public class JspCompiler
             {
                 writer.println();
                 writer.println(indent + "/* JSP_DIRECTIVE: lineNumber: " + node.getLineNumber() + " */");
-                writer.println(indent + "/* " + NodeUtil.toString(node) + " */");
+                writer.println(indent + "/* " + NodeUtil.getDescription(node) + " */");
                 return;
             }
 
@@ -216,7 +216,7 @@ public class JspCompiler
             {
                 writer.println();
                 writer.println(indent + "/* JSP_DIRECTIVE: lineNumber: " + node.getLineNumber() + " */");
-                writer.println(indent + "/* " + NodeUtil.toString(node) + " */");
+                writer.println(indent + "/* " + NodeUtil.getDescription(node) + " */");
                 return;
             }
 
@@ -224,7 +224,7 @@ public class JspCompiler
             {
                 writer.println();
                 writer.println(indent + "/* JSP_DIRECTIVE: lineNumber: " + node.getLineNumber() + " */");
-                writer.println(indent + "/* " + NodeUtil.toString(node) + " */");
+                writer.println(indent + "/* " + NodeUtil.getDescription(node) + " */");
                 return;
             }
 
@@ -291,7 +291,7 @@ public class JspCompiler
         {
             writer.println();
             writer.println(indent + "/* NODE START: lineNumber: " + node.getLineNumber() + ", offset: " + node.getOffset() + ", length: " + node.getLength() + ", tagClassName: " + tagClassName + ", tagInstanceName: " + tagInstanceName + " */");
-            writer.println(indent + "/* " + NodeUtil.toString(node) + " */");
+            writer.println(indent + "/* " + NodeUtil.getDescription(node) + " */");
         }
 
         if(this.fast)
