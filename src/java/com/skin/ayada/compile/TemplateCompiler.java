@@ -10,6 +10,7 @@
  */
 package com.skin.ayada.compile;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -200,7 +201,7 @@ public class TemplateCompiler extends PageCompiler
         if(stack.peek() != null)
         {
             Node node = stack.peek();
-            stack.print();
+            stack.print(new PrintWriter(System.err));
             throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node) + " not match !");
         }
 

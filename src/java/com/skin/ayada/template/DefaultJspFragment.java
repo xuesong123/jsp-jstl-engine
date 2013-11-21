@@ -11,7 +11,6 @@
 package com.skin.ayada.template;
 
 import java.io.Writer;
-import java.util.List;
 
 import com.skin.ayada.runtime.JspWriter;
 import com.skin.ayada.runtime.PageContext;
@@ -27,7 +26,7 @@ import com.skin.ayada.tagext.JspFragment;
 public class DefaultJspFragment extends JspFragment
 {
     private Template template;
-    private List<Statement> statements;
+    private Statement[] statements;
     private PageContext pageContext;
     private int offset;
     private int length;
@@ -40,7 +39,7 @@ public class DefaultJspFragment extends JspFragment
      * @param template
      * @param pageContext
      */
-    public DefaultJspFragment(Template template, List<Statement> statements, PageContext pageContext)
+    public DefaultJspFragment(Template template, Statement[] statements, PageContext pageContext)
     {
         this.template = template;
         this.statements = statements;
@@ -103,7 +102,7 @@ public class DefaultJspFragment extends JspFragment
     /**
      * @param statements the statements to set
      */
-    public void setStatements(List<Statement> statements)
+    public void setStatements(Statement[] statements)
     {
         this.statements = statements;
     }
@@ -111,7 +110,7 @@ public class DefaultJspFragment extends JspFragment
     /**
      * @return the statements
      */
-    public List<Statement> getStatements()
+    public Statement[] getStatements()
     {
         return this.statements;
     }

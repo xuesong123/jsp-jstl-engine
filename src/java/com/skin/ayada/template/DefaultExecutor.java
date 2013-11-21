@@ -10,7 +10,6 @@
  */
 package com.skin.ayada.template;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.skin.ayada.runtime.ExpressionContext;
@@ -55,7 +54,7 @@ public class DefaultExecutor
      */
     public static void execute(final Template template, final PageContext pageContext, final int offset, final int length) throws Exception
     {
-        List<Statement> statements = getStatements(template.getNodes());
+        Statement[] statements = getStatements(template.getNodes());
         execute(template, statements, pageContext, offset, length);
     }
 
@@ -66,7 +65,7 @@ public class DefaultExecutor
      * @param end
      * @throws Exception
      */
-    public static void execute(final Template template, final List<Statement> statements, final PageContext pageContext, final int offset, final int length) throws Exception
+    public static void execute(final Template template, final Statement[] statements, final PageContext pageContext, final int offset, final int length) throws Exception
     {
         if(length < 1)
         {
@@ -89,7 +88,7 @@ public class DefaultExecutor
             while(index < end)
             {
                 out = pageContext.getOut();
-                statement = statements.get(index);
+                statement = statements[index];
                 node = statement.getNode();
                 nodeType = node.getNodeType();
 
@@ -192,7 +191,7 @@ public class DefaultExecutor
                 }
                 index++;
             }
-            
+
             jspWriter.flush();
         }
         catch(Throwable t)
@@ -281,9 +280,9 @@ public class DefaultExecutor
      * @param list
      * @return List<Statement>
      */
-    public static List<Statement> getStatements(List<Node> list)
+    public static Statement[] getStatements(List<Node> list)
     {
-        List<Statement> statements = new ArrayList<Statement>(list.size());
+        Statement[] statements = new Statement[list.size()];
 
         for(int i = 0, size = list.size(); i < size; i++)
         {
@@ -301,15 +300,15 @@ public class DefaultExecutor
 
                 if(parent != null)
                 {
-                    statement.setParent(statements.get(parent.getOffset()));
+                    statement.setParent(statements[parent.getOffset()]);
                 }
 
-                statements.add(statement);
+                statements[i] = statement;
             }
             else
             {
-                Statement statement = statements.get(node.getOffset());
-                statements.add(statement);
+                Statement statement = statements[node.getOffset()];
+                statements[i] = statement;
             }
         }
 
