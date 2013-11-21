@@ -50,10 +50,23 @@ public class DefaultExecutor
      * @param template
      * @param pageContext
      * @param offset
-     * @param end
+     * @param length
      * @throws Exception
      */
     public static void execute(final Template template, final PageContext pageContext, final int offset, final int length) throws Exception
+    {
+        List<Statement> statements = getStatements(template.getNodes());
+        execute(template, statements, pageContext, offset, length);
+    }
+
+    /**
+     * @param template
+     * @param pageContext
+     * @param offset
+     * @param end
+     * @throws Exception
+     */
+    public static void execute(final Template template, final List<Statement> statements, final PageContext pageContext, final int offset, final int length) throws Exception
     {
         if(length < 1)
         {
@@ -63,9 +76,7 @@ public class DefaultExecutor
         Node node = null;
         JspWriter out = null;
         Statement statement = null;
-        List<Node> list = template.getNodes();
         JspWriter jspWriter = pageContext.getOut();
-        List<Statement> statements = getStatements(list);
         ExpressionContext expressionContext = pageContext.getExpressionContext();
 
         try
@@ -132,7 +143,7 @@ public class DefaultExecutor
 
                     if(tag instanceof SimpleTag)
                     {
-                        DefaultJspFragment jspFragment = new DefaultJspFragment(template, pageContext);
+                        DefaultJspFragment jspFragment = new DefaultJspFragment(template, statements, pageContext);
                         jspFragment.setOffset(node.getOffset() + 1);
                         jspFragment.setLength(node.getLength() - 2);
                         SimpleTag simpleTag = (SimpleTag)tag;

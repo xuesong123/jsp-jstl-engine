@@ -48,7 +48,6 @@ public class TemplateCompiler extends PageCompiler
     private SourceFactory sourceFactory;
     private TagLibrary tagLibrary = null;
     private boolean ignoreJspTag = true;
-    private boolean ignoreText = false;
     private static final Logger logger = LoggerFactory.getLogger(TemplateCompiler.class);
 
     /**
@@ -173,11 +172,7 @@ public class TemplateCompiler extends PageCompiler
 
                 if(buffer.length() > 0)
                 {
-                    // this.ignoreText = false;
-                    if(this.ignoreText == false)
-                    {
-                        this.pushTextNode(stack, list, buffer.toString(), line);
-                    }
+                    this.pushTextNode(stack, list, buffer.toString(), line);
                     buffer.setLength(0);
                 }
             }
@@ -249,22 +244,15 @@ public class TemplateCompiler extends PageCompiler
                     }
                     else if(tagClassName.equals("com.skin.ayada.jstl.core.ParameterTag"))
                     {
-                        this.ignoreText = true;
                         this.skipCRLF();
                     }
                     else if(tagClassName.equals("com.skin.ayada.taglib.ActionTag"))
                     {
-                        this.ignoreText = true;
                         this.skipCRLF();
                     }
                     else if(tagClassName.equals("com.skin.ayada.jstl.core.ChooseTag"))
                     {
-                        this.ignoreText = true;
                         this.skipCRLF();
-                    }
-                    else
-                    {
-                        this.ignoreText = false;
                     }
                 }
                 else
@@ -447,9 +435,7 @@ public class TemplateCompiler extends PageCompiler
                 node.setClosed(NodeType.PAIR_CLOSED);
                 this.pushNode(stack, list, node);
 
-                boolean isEndTag = (this.stream.peek(-2) == '/');
-
-                if(isEndTag)
+                if(this.stream.peek(-2) == '/')
                 {
                     node.setLength(2);
                     node.setClosed(NodeType.SELF_CLOSED);
@@ -462,41 +448,19 @@ public class TemplateCompiler extends PageCompiler
                 }
                 else if(tagClassName.equals("com.skin.ayada.jstl.core.WhenTag"))
                 {
-                    if(isEndTag)
-                    {
-                        this.ignoreText = true;
-                    }
-                    else
-                    {
-                        this.ignoreText = false;
-                    }
                     this.skipCRLF();
                 }
                 else if(tagClassName.equals("com.skin.ayada.jstl.core.ParameterTag"))
                 {
-                    if(isEndTag)
-                    {
-                        this.ignoreText = true;
-                    }
-                    else
-                    {
-                        this.ignoreText = false;
-                    }
                     this.skipCRLF();
                 }
                 else if(tagClassName.equals("com.skin.ayada.taglib.ActionTag"))
                 {
-                    this.ignoreText = true;
                     this.skipCRLF();
                 }
                 else if(tagClassName.equals("com.skin.ayada.jstl.core.ChooseTag"))
                 {
-                    this.ignoreText = true;
                     this.skipCRLF();
-                }
-                else
-                {
-                    this.ignoreText = false;
                 }
             }
             else

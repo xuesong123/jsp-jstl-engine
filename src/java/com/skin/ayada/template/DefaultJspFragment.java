@@ -11,9 +11,11 @@
 package com.skin.ayada.template;
 
 import java.io.Writer;
+import java.util.List;
 
 import com.skin.ayada.runtime.JspWriter;
 import com.skin.ayada.runtime.PageContext;
+import com.skin.ayada.statement.Statement;
 import com.skin.ayada.tagext.JspFragment;
 
 /**
@@ -25,6 +27,7 @@ import com.skin.ayada.tagext.JspFragment;
 public class DefaultJspFragment extends JspFragment
 {
     private Template template;
+    private List<Statement> statements;
     private PageContext pageContext;
     private int offset;
     private int length;
@@ -37,27 +40,11 @@ public class DefaultJspFragment extends JspFragment
      * @param template
      * @param pageContext
      */
-    public DefaultJspFragment(Template template, PageContext pageContext)
+    public DefaultJspFragment(Template template, List<Statement> statements, PageContext pageContext)
     {
         this.template = template;
+        this.statements = statements;
         this.pageContext = pageContext;
-    }
-
-    /**
-     * @return PageContext
-     */
-    public void setPageContext(PageContext pageContext)
-    {
-        this.pageContext = pageContext;
-    }
-
-    /**
-     * @return PageContext
-     */
-    @Override
-    public PageContext getPageContext()
-    {
-        return this.pageContext;
     }
 
     /**
@@ -73,7 +60,7 @@ public class DefaultJspFragment extends JspFragment
 
             try
             {
-                DefaultExecutor.execute(template, pageContext, this.offset, this.length);
+                DefaultExecutor.execute(this.template, this.statements, this.pageContext, this.offset, this.length);
             }
             catch(Throwable t)
             {
@@ -111,6 +98,39 @@ public class DefaultJspFragment extends JspFragment
     public void setTemplate(Template template)
     {
         this.template = template;
+    }
+
+    /**
+     * @param statements the statements to set
+     */
+    public void setStatements(List<Statement> statements)
+    {
+        this.statements = statements;
+    }
+    
+    /**
+     * @return the statements
+     */
+    public List<Statement> getStatements()
+    {
+        return this.statements;
+    }
+
+    /**
+     * @return PageContext
+     */
+    public void setPageContext(PageContext pageContext)
+    {
+        this.pageContext = pageContext;
+    }
+
+    /**
+     * @return PageContext
+     */
+    @Override
+    public PageContext getPageContext()
+    {
+        return this.pageContext;
     }
 
     /**
