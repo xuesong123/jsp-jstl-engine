@@ -123,6 +123,14 @@ public abstract class DataNode extends Node
     }
 
     /**
+     * 
+     */
+    public void clear()
+    {
+        this.buffer.setLength(0);
+    }
+
+    /**
      * @return String
      */
     public String getTextContent()

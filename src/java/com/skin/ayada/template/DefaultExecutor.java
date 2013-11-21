@@ -294,8 +294,16 @@ public class DefaultExecutor
             }
             else
             {
-                Statement statement = statements.get(node.getOffset());
-                statements.add(statement);
+                try
+                {
+                    Statement statement = statements.get(node.getOffset());
+                    statements.add(statement);
+                }
+                catch(RuntimeException e)
+                {
+                    System.out.println(node.getClass().getName() + " - exception: [ " + NodeUtil.toString(node) + "]");
+                    throw e;
+                }
             }
         }
 

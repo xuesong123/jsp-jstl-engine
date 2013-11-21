@@ -434,8 +434,9 @@ public class TemplateCompiler extends PageCompiler
                 node.setAttributes(attributes);
                 node.setClosed(NodeType.PAIR_CLOSED);
                 this.pushNode(stack, list, node);
+                boolean isEnd = (this.stream.peek(-2) == '/');
 
-                if(this.stream.peek(-2) == '/')
+                if(isEnd)
                 {
                     node.setLength(2);
                     node.setClosed(NodeType.SELF_CLOSED);
@@ -449,18 +450,20 @@ public class TemplateCompiler extends PageCompiler
                 else if(tagClassName.equals("com.skin.ayada.jstl.core.WhenTag"))
                 {
                     this.skipCRLF();
+                    this.skipTextNode(list, (isEnd ? list.size() - 3 : list.size() - 2));
                 }
                 else if(tagClassName.equals("com.skin.ayada.jstl.core.ParameterTag"))
                 {
                     this.skipCRLF();
+                    this.skipTextNode(list, (isEnd ? list.size() - 3 : list.size() - 2));
                 }
                 else if(tagClassName.equals("com.skin.ayada.taglib.ActionTag"))
                 {
-                    this.skipCRLF();
+                    this.skipWhitespace();
                 }
                 else if(tagClassName.equals("com.skin.ayada.jstl.core.ChooseTag"))
                 {
-                    this.skipCRLF();
+                    this.skipWhitespace();
                 }
             }
             else
@@ -488,6 +491,57 @@ public class TemplateCompiler extends PageCompiler
         {
             this.lineNumber++;
             this.stream.read();
+        }
+    }
+
+    /**
+     * skip whitespace
+     */
+    public void skipWhitespace()
+    {
+        int i;
+        while((i = this.stream.peek()) != -1)
+        {
+            if(i == '\n')
+            {
+                this.lineNumber++;
+                this.stream.read();
+                continue;
+            }
+            else if(i == ' ' || i == '\r' || i == '\t')
+            {
+                this.stream.read();
+                continue;
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+
+    /**
+     * @param list
+     * @param offset
+     */
+    public void skipTextNode(List<Node> list, int offset)
+    {
+        for(int i = offset; i > -1; i--)
+        {
+            Node node = list.get(i);
+
+            if(node.getNodeType() == NodeType.TEXT)
+            {
+                ((TextNode)node).clear();
+            }
+            else if(node.getNodeType() == NodeType.EXPRESSION)
+            {
+                list.set(i, new TextNode());
+            }
+            else
+            {
+                break;
+            }
         }
     }
 
@@ -929,7 +983,37 @@ public class TemplateCompiler extends PageCompiler
             }
         }
 
-        Template template = new Template(source.getHome(), source.getPath(), list);
+        List<Node> nodes = new ArrayList<Node>();
+
+        for(int i = 0, size = list.size(); i < size; i++)
+        {
+            Node node = list.get(i);
+
+            if(node.getNodeType() == NodeType.TEXT || node.getNodeType() == NodeType.EXPRESSION)
+            {
+                if(node.getTextContent().length() > 0)
+                {
+                    node.setOffset(nodes.size());
+                    node.setLength(1);
+                    nodes.add(node);
+                }
+            }
+            else
+            {
+                if(i == node.getOffset())
+                {
+                    node.setOffset(nodes.size());
+                }
+                else
+                {
+                    node.setLength(nodes.size() - node.getOffset() + 1);
+                }
+
+                nodes.add(node);
+            }
+        }
+
+        Template template = new Template(source.getHome(), source.getPath(), nodes);
         template.setLastModified(source.getLastModified());
         template.setUpdateTime(System.currentTimeMillis());
         return template;
