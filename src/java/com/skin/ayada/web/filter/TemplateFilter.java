@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.skin.ayada.config.TemplateConfig;
 import com.skin.ayada.runtime.ExpressionFactory;
 import com.skin.ayada.template.JspTemplateFactory;
 import com.skin.ayada.template.TemplateContext;
@@ -96,10 +97,19 @@ public class TemplateFilter implements Filter
 
                 if(templateFactory instanceof JspTemplateFactory)
                 {
+                    String jspWork = filterConfig.getInitParameter("jsp-work");
+                    boolean ignoreJspTag = TemplateConfig.getInstance().getBoolean("ayada.compile.ignore-jsptag");
+
+                    if(jspWork == null)
+                    {
+                        jspWork = "/WEB-INF/work/ayada";
+                    }
+
                     JspTemplateFactory jspTemplateFactory = (JspTemplateFactory)templateFactory;
-                    File work = new File(servletContext.getRealPath("/WEB-INF/work/ayada"));
+                    File work = new File(servletContext.getRealPath(jspWork));
                     jspTemplateFactory.setWork(work.getAbsolutePath());
                     jspTemplateFactory.setClassPath(this.getClassPath(servletContext));
+                    jspTemplateFactory.setIgnoreJspTag(ignoreJspTag);
                 }
             }
             catch(Exception e)

@@ -99,19 +99,19 @@ public class JspCompiler
                 continue;
             }
 
+            if(node.getNodeType() == NodeType.VARIABLE)
+            {
+                String textContent = node.getTextContent();
+                writer.println(indent + "/* VARIABLE: lineNumber: " + node.getLineNumber() + " */");
+                writer.println(indent + "out.print(pageContext.getAttribute(\"" + textContent + "\"), false);");
+                continue;
+            }
+
             if(node.getNodeType() == NodeType.EXPRESSION)
             {
                 String textContent = node.getTextContent();
                 writer.println(indent + "/* EXPRESSION: lineNumber: " + node.getLineNumber() + " */");
-
-                if(this.isJavaIdentifier(textContent))
-                {
-                    writer.println(indent + "out.print(pageContext.getAttribute(\"" + textContent + "\"), false);");
-                }
-                else
-                {
-                    writer.println(indent + "out.write(expressionContext.getString(\"" + StringUtil.escape(textContent) + "\"));");
-                }
+                writer.println(indent + "out.write(expressionContext.getString(\"" + StringUtil.escape(textContent) + "\"));");
                 continue;
             }
 

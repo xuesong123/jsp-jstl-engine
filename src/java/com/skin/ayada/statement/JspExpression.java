@@ -44,7 +44,7 @@ public class JspExpression extends DataNode
     }
     
     @Override
-    public DataNode clone()
+    public JspExpression clone()
     {
         JspExpression node = new JspExpression();
         node.setNodeName(this.getNodeName());

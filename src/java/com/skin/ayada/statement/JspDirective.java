@@ -89,7 +89,7 @@ public class JspDirective extends DataNode
     }
 
     @Override
-    public DataNode clone()
+    public JspDirective clone()
     {
         JspDirective node = new JspDirective();
         node.setNodeName(this.getNodeName());

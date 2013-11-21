@@ -84,21 +84,23 @@ public class DefaultExecutor
             int flag = 0;
             int index = offset;
             int end = offset + length;
+            int nodeType = NodeType.UNKNOWN;
 
             while(index < end)
             {
                 out = pageContext.getOut();
                 statement = statements.get(index);
                 node = statement.getNode();
+                nodeType = node.getNodeType();
 
-                if(node.getNodeType() == NodeType.TEXT)
+                if(nodeType == NodeType.TEXT)
                 {
                     out.write(node.getTextContent());
                     index++;
                     continue;
                 }
 
-                if(node.getNodeType() == NodeType.EXPRESSION)
+                if(nodeType == NodeType.EXPRESSION)
                 {
                     Object value = expressionContext.getValue(node.getTextContent());
 
@@ -110,15 +112,22 @@ public class DefaultExecutor
                     continue;
                 }
 
-                if(node.getNodeType() != NodeType.NODE)
+                if(nodeType == NodeType.VARIABLE)
                 {
+                    Object value = pageContext.getAttribute(node.getTextContent());
+
+                    if(value != null)
+                    {
+                        out.write(value.toString());
+                    }
                     index++;
                     continue;
                 }
 
-                if(node.getLength() == 0)
+                if(nodeType != NodeType.NODE)
                 {
-                    throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node) + " not match !");
+                    index++;
+                    continue;
                 }
 
                 if(node.getOffset() == index)
@@ -280,6 +289,11 @@ public class DefaultExecutor
         {
             Node node = list.get(i);
 
+            if(node.getLength() < 1)
+            {
+                throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node) + " not match !");
+            }
+
             if(node.getOffset() == i)
             {
                 Node parent = node.getParent();
@@ -317,7 +331,7 @@ public class DefaultExecutor
                 continue;
             }
 
-            if(node.getNodeType() == NodeType.EXPRESSION)
+            if(node.getNodeType() == NodeType.VARIABLE || node.getNodeType() == NodeType.EXPRESSION)
             {
                 System.out.println(index + " $" + node.getLineNumber() + " #expr: " + node.getTextContent());
                 continue;

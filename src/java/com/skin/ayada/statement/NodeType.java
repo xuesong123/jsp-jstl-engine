@@ -20,11 +20,11 @@ package com.skin.ayada.statement;
 public class NodeType
 {
     public static final String DOCTYPE = "html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"";
-
     public static final int NODE    = 1;
     public static final int TEXT    = 2;
     public static final int COMMENT = 3;
     public static final int CDATA   = 4;
+    public static final int VARIABLE   = 2012;
     public static final int EXPRESSION = 2013;
 
     public static final int JSP_DIRECTIVE_PAGE    = 2014;   // startsWith "<%@" page
@@ -35,9 +35,10 @@ public class NodeType
     public static final int JSP_SCRIPTLET   = 2019;         // startsWith "<% " [\r|\n]
     public static final int UNKNOWN         = 9999;         // startsWith "<% " [\r|\n]
 
-    public static final String EXPR_NAME    = "#expr";
     public static final String DATA_NAME    = "#data";
     public static final String TEXT_NAME    = "#text";
+    public static final String EXPR_NAME    = "#expr";
+    public static final String VARI_NAME    = "#vari";
     public static final String CDATA_NAME   = "<![CDATA[";
     public static final String COMMENT_NAME = "#comment";
 

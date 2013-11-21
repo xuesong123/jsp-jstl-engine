@@ -33,6 +33,7 @@ import com.skin.ayada.statement.JspExpression;
 import com.skin.ayada.statement.JspScriptlet;
 import com.skin.ayada.statement.NodeType;
 import com.skin.ayada.statement.TextNode;
+import com.skin.ayada.statement.Variable;
 import com.skin.ayada.template.Template;
 import com.skin.ayada.util.NodeUtil;
 import com.skin.ayada.util.StringUtil;
@@ -141,6 +142,13 @@ public class XmlTemplateParser
             expression.setClosed(NodeType.PAIR_CLOSED);
             jspNode = expression;
         }
+        else if(nodeName.equals("variable"))
+        {
+            Variable variable = new Variable();
+            variable.append(StringUtil.unescape(node.getTextContent()));
+            variable.setClosed(NodeType.PAIR_CLOSED);
+            jspNode = variable;
+        }
         else
         {
             jspNode = new com.skin.ayada.statement.Node(nodeName);
@@ -215,7 +223,7 @@ public class XmlTemplateParser
             }
         }
 
-        if(jspNode.getNodeType() != NodeType.TEXT && jspNode.getNodeType() != NodeType.EXPRESSION)
+        if(jspNode.getNodeType() != NodeType.TEXT && node.getNodeType() != NodeType.VARIABLE && jspNode.getNodeType() != NodeType.EXPRESSION)
         {
             list.add(jspNode);
         }

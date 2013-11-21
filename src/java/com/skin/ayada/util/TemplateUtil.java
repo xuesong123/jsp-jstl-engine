@@ -44,6 +44,12 @@ public class TemplateUtil
                 continue;
             }
 
+            if(node.getNodeType() == NodeType.VARIABLE)
+            {
+                writer.println("[VARI]: ${" + StringUtil.escape(node.getTextContent()) + "}");
+                continue;
+            }
+
             if(node.getNodeType() == NodeType.EXPRESSION)
             {
                 writer.println("[EXPR]: ${" + StringUtil.escape(node.getTextContent()) + "}");
@@ -82,7 +88,7 @@ public class TemplateUtil
                 continue;
             }
 
-            if(node.getNodeType() == NodeType.EXPRESSION)
+            if(node.getNodeType() == NodeType.VARIABLE || node.getNodeType() == NodeType.EXPRESSION)
             {
                 buffer.append("<div style=\"font-size: 12px; white-space:nowrap; line-height: 20px;\" onmouseover=\"this.style.backgroundColor='#efefef';\" onmouseout=\"this.style.backgroundColor='#ffffff';\">${");
                 buffer.append(StringUtil.escape(HtmlUtil.encode(node.getTextContent())));
@@ -131,7 +137,7 @@ public class TemplateUtil
                 continue;
             }
 
-            if(node.getNodeType() == NodeType.EXPRESSION)
+            if(node.getNodeType() == NodeType.VARIABLE || node.getNodeType() == NodeType.EXPRESSION)
             {
                 buffer.append("${");
                 buffer.append(StringUtil.escape(node.getTextContent()));
@@ -171,7 +177,7 @@ public class TemplateUtil
             return buffer.toString();
         }
 
-        if(node.getNodeType() == NodeType.EXPRESSION)
+        if(node.getNodeType() == NodeType.VARIABLE || node.getNodeType() == NodeType.EXPRESSION)
         {
             buffer.append("${");
             buffer.append(node.getTextContent());

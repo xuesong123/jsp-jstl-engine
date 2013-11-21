@@ -32,6 +32,7 @@ import com.skin.ayada.statement.JspScriptlet;
 import com.skin.ayada.statement.Node;
 import com.skin.ayada.statement.NodeType;
 import com.skin.ayada.statement.TextNode;
+import com.skin.ayada.statement.Variable;
 import com.skin.ayada.template.Template;
 import com.skin.ayada.util.NodeUtil;
 import com.skin.ayada.util.Stack;
@@ -120,18 +121,36 @@ public class TemplateCompiler extends PageCompiler
 
                         if(temp.length() > 0)
                         {
-                            Expression expr = new Expression();
-                            expr.setOffset(list.size());
-                            expr.setLength(1);
-                            expr.setLineNumber(this.lineNumber);
-                            expr.append(temp);
-
-                            if(stack.peek() != null)
+                            if(this.isJavaIdentifier(temp))
                             {
-                                expr.setParent(stack.peek());
+                                Variable variable = new Variable();
+                                variable.setOffset(list.size());
+                                variable.setLength(1);
+                                variable.setLineNumber(this.lineNumber);
+                                variable.append(temp);
+
+                                if(stack.peek() != null)
+                                {
+                                    variable.setParent(stack.peek());
+                                }
+
+                                list.add(variable);
                             }
+                            else
+                            {
+                                Expression expr = new Expression();
+                                expr.setOffset(list.size());
+                                expr.setLength(1);
+                                expr.setLineNumber(this.lineNumber);
+                                expr.append(temp);
     
-                            list.add(expr);
+                                if(stack.peek() != null)
+                                {
+                                    expr.setParent(stack.peek());
+                                }
+
+                                list.add(expr);
+                            }
                         }
 
                         break;
@@ -533,6 +552,10 @@ public class TemplateCompiler extends PageCompiler
             if(node.getNodeType() == NodeType.TEXT)
             {
                 ((TextNode)node).clear();
+            }
+            else if(node.getNodeType() == NodeType.VARIABLE)
+            {
+                list.set(i, new TextNode());
             }
             else if(node.getNodeType() == NodeType.EXPRESSION)
             {
@@ -969,7 +992,7 @@ public class TemplateCompiler extends PageCompiler
         {
             Node node = list.get(i);
 
-            if(node.getNodeType() == NodeType.TEXT || node.getNodeType() == NodeType.EXPRESSION)
+            if(node.getNodeType() == NodeType.TEXT || node.getNodeType() == NodeType.VARIABLE || node.getNodeType() == NodeType.EXPRESSION)
             {
                 if(node.getTextContent().length() > 0)
                 {

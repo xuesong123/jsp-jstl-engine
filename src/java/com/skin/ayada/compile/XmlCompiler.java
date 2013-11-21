@@ -83,6 +83,14 @@ public class XmlCompiler
                 continue;
             }
 
+            if(node.getNodeType() == NodeType.VARIABLE)
+            {
+                writer.write(indent + "<variable lineNumber=\"" + node.getLineNumber() + "\" offset=\"" + node.getOffset() + "\" length=\"" + node.getLength() + "\">");
+                writer.write(StringUtil.escape(HtmlUtil.encode(node.getTextContent())));
+                writer.println("</variable>");
+                continue;
+            }
+
             if(node.getNodeType() == NodeType.EXPRESSION)
             {
                 writer.write(indent + "<expression lineNumber=\"" + node.getLineNumber() + "\" offset=\"" + node.getOffset() + "\" length=\"" + node.getLength() + "\">");
@@ -141,7 +149,7 @@ public class XmlCompiler
         {
             node = list.get(index);
 
-            if(node.getNodeType() == NodeType.TEXT || node.getNodeType() == NodeType.EXPRESSION)
+            if(node.getNodeType() == NodeType.TEXT || node.getNodeType() == NodeType.VARIABLE || node.getNodeType() == NodeType.EXPRESSION)
             {
                 continue;
             }

@@ -43,7 +43,7 @@ public class NodeUtil
             return buffer.toString();
         }
 
-        if(node.getNodeType() == NodeType.EXPRESSION)
+        if(node.getNodeType() == NodeType.VARIABLE || node.getNodeType() == NodeType.EXPRESSION)
         {
             buffer.append("${");
             buffer.append(node.getTextContent());

@@ -350,6 +350,28 @@ public class PageCompiler
     }
 
     /**
+     * @param source
+     * @return boolean
+     */
+    protected boolean isJavaIdentifier(String source)
+    {
+        if(Character.isJavaIdentifierStart(source.charAt(0)) == false)
+        {
+            return false;
+        }
+
+        for(int i = 0; i < source.length(); i++)
+        {
+            if(Character.isJavaIdentifierPart(source.charAt(i)) == false)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * @return the stream
      */
     public StringStream getStream()

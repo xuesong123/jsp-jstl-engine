@@ -44,7 +44,7 @@ public class JspScriptlet extends DataNode
     }
     
     @Override
-    public DataNode clone()
+    public JspScriptlet clone()
     {
         JspScriptlet node = new JspScriptlet();
         node.setNodeName(this.getNodeName());

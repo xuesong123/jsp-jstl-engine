@@ -1,52 +1,51 @@
 /*
- * $RCSfile: Expression.java,v $$
- * $Revision: 1.1  $
- * $Date: 2013-2-19  $
+ * $RCSfile: Variable.java,v $$
+ * $Revision: 1.1 $
+ * $Date: 2013-11-21 $
  *
- * Copyright (C) 2008 Skin, Inc. All rights reserved.
+ * Copyright (C) 2008 WanMei, Inc. All rights reserved.
  *
- * This software is the proprietary information of Skin, Inc.
+ * This software is the proprietary information of WanMei, Inc.
  * Use is subject to license terms.
  */
 package com.skin.ayada.statement;
 
 /**
- * <p>Title: Expression</p>
+ * <p>Title: Variable</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2006</p>
- * @author xuesong.net
  * @version 1.0
  */
-public class Expression extends DataNode
+public class Variable extends DataNode
 {
-    public Expression()
+    public Variable()
     {
-        super(NodeType.EXPR_NAME, NodeType.EXPRESSION);
+        super(NodeType.VARI_NAME, NodeType.VARIABLE);
     }
 
     /**
      * @param nodeName
      */
-    public Expression(String nodeName)
+    public Variable(String nodeName)
     {
-        super(NodeType.EXPR_NAME, NodeType.EXPRESSION);
+        super(NodeType.VARI_NAME, NodeType.VARIABLE);
     }
 
     /**
      * @param nodeName
      * @param nodeType
      */
-    protected Expression(String nodeName, int nodeType)
+    protected Variable(String nodeName, int nodeType)
     {
-        super(NodeType.EXPR_NAME, NodeType.EXPRESSION);
+        super(NodeType.VARI_NAME, NodeType.VARIABLE);
     }
 
     /**
      * @return TextNode
      */
-    public Expression clone()
+    public Variable clone()
     {
-        Expression node = new Expression();
+        Variable node = new Variable();
         node.setNodeName(this.getNodeName());
         node.setNodeType(this.getNodeType());
         node.setOffset(this.getOffset());

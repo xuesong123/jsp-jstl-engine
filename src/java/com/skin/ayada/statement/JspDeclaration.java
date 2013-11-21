@@ -44,7 +44,7 @@ public class JspDeclaration extends DataNode
     }
     
     @Override
-    public DataNode clone()
+    public JspDeclaration clone()
     {
         JspDeclaration node = new JspDeclaration();
         node.setNodeName(this.getNodeName());
