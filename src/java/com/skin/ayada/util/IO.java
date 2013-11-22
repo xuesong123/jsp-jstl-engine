@@ -89,7 +89,7 @@ public class IO
     public static void write(byte[] bytes, File file) throws IOException
     {
         OutputStream outputStream = null;
-        
+
         try
         {
             outputStream = new FileOutputStream(file);

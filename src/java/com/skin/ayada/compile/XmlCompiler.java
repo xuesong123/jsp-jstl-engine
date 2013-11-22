@@ -38,13 +38,13 @@ public class XmlCompiler
         PrintWriter writer = new PrintWriter(stringWriter);
         writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         writer.write("<jsp:servlet");
-        writer.write(" home=\"");
+        writer.write("\r\n    home=\"");
         writer.write(HtmlUtil.encode(template.getHome()));
-        writer.write("\" path=\"");
+        writer.write("\"\r\n    path=\"");
         writer.write(HtmlUtil.encode(template.getPath()));
-        writer.write("\" lastModified=\"");
+        writer.write("\"\r\n    astModified=\"");
         writer.write(String.valueOf(template.getLastModified()));
-        writer.write("\" updateTime=\"");
+        writer.write("\"\r\n    updateTime=\"");
         writer.write(String.valueOf(template.getUpdateTime()));
         writer.write("\"");
 

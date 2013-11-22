@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import com.skin.ayada.io.CompactWriter;
 import com.skin.ayada.runtime.JspFactory;
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.util.TemplateUtil;
@@ -49,14 +50,14 @@ public class Main
             {
                 execute(path, encoding);
             }
-            catch(IOException e)
+            catch(Exception e)
             {
                 e.printStackTrace();
             }
         }
     }
 
-    public static void execute(String path, String encoding) throws IOException
+    public static void execute(String path, String encoding) throws Exception
     {
         File file = new File(path);
         
@@ -73,27 +74,21 @@ public class Main
         File parent = file.getParentFile();
         TemplateContext templateContext = TemplateManager.getTemplateContext(parent.getAbsolutePath(), true);
 
-        StringWriter writer = new StringWriter();
-        PageContext pageContext = JspFactory.getPageContext(templateContext, writer);
+        StringWriter stringWriter = new StringWriter();
+        CompactWriter compactWriter = new CompactWriter(stringWriter);
+        PageContext pageContext = JspFactory.getPageContext(templateContext, compactWriter);
         Template template = templateContext.getTemplate(file.getName());
 
-        try
-        {
-            long t3 = System.currentTimeMillis();
-            template.execute(pageContext);
-            long t4 = System.currentTimeMillis();
-            System.out.println("run time: " + (t4 - t3));
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
+        long t3 = System.currentTimeMillis();
+        template.execute(pageContext);
+        long t4 = System.currentTimeMillis();
+        System.out.println("run time: " + (t4 - t3));
 
         System.out.println("===================== template =====================");
         TemplateUtil.print(template, new PrintWriter(System.out));
 
         System.out.println("===================== result =====================");
-        System.out.println(writer.toString());
+        System.out.println(stringWriter.toString());
     }
 
     public static void usage()

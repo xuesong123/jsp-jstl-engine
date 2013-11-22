@@ -74,7 +74,7 @@ public class TagUtil
      * @param attributes
      * @param expressionContext
      */
-    public static void setAttributes(Tag tag, Map<String, String> attributes, ExpressionContext expressionContext)
+    public static void setAttributes(Tag tag, Map<String, String> attributes, ExpressionContext expressionContext) throws Exception
     {
         if(attributes == null || attributes.size() < 1)
         {
@@ -87,40 +87,25 @@ public class TagUtil
             String value = entry.getValue();
             Class<?> type = tag.getClass();
 
-            try
+            name = "set" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
+            Method method = getSetMethod(type, name);
+
+            if(method != null)
             {
-                name = "set" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
-                Method method = getSetMethod(type, name);
+                Class<?>[] parameterTypes = method.getParameterTypes();
+                Class<?> parameterType = parameterTypes[0];
+                Object arg = ExpressionUtil.evaluate(expressionContext, value, parameterType);
 
-                if(method != null)
+                if(arg == null && parameterType.isPrimitive())
                 {
-                    Object arg = ExpressionUtil.evaluate(expressionContext, value);
-                    Class<?>[] parameterTypes = method.getParameterTypes();
-                    Class<?> parameterType = parameterTypes[0];
-
-                    if(arg != null)
-                    {
-                        arg = ClassUtil.cast(arg, parameterType);
-                    }
-
-                    try
-                    {
-                        method.invoke(tag, new Object[]{arg});
-                    }
-                    catch(Exception e)
-                    {
-                        String className = (arg != null ? arg.getClass().getName() : "null");
-                        throw new RuntimeException("method: " + method + " - " + parameterType.getName() + " - " + className, e);
-                    }
+                    continue;
                 }
-                else
-                {
-                    throw new RuntimeException("NoSuchMethodException: " + tag.getClass().getName() + "." + name);
-                }
+
+                method.invoke(tag, new Object[]{arg});
             }
-            catch(SecurityException e)
+            else
             {
-                throw new RuntimeException(e);
+                throw new Exception("NoSuchMethodException: " + tag.getClass().getName() + "." + name);
             }
         }
     }

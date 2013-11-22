@@ -10,6 +10,7 @@
  */
 package com.skin.ayada.util;
 
+import java.util.List;
 import java.util.Map;
 
 import com.skin.ayada.statement.Node;
@@ -23,6 +24,23 @@ import com.skin.ayada.statement.NodeType;
  */
 public class NodeUtil
 {
+    /**
+     * @param nodes
+     * @return String
+     */
+    public static String getDescription(List<Node> nodes)
+    {
+        StringBuilder buffer = new StringBuilder();
+        
+        for(Node node : nodes)
+        {
+            buffer.append(getDescription(node));
+            buffer.append("\r\n");
+        }
+
+        return buffer.toString();
+    }
+    
     /**
      * @param node
      * @return String

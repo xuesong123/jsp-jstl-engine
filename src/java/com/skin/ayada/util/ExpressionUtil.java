@@ -196,58 +196,30 @@ public class ExpressionUtil
     }
 
     /**
-     * @param source
-     * @return String
+     * @param expressionContext
+     * @param expresion
+     * @param resultType
+     * @return Object
      */
-    public static Object evaluate(ExpressionContext expressionContext, String source)
+    public static Object evaluate(ExpressionContext expressionContext, String expresion, Class<?> resultType)
     {
-        if(source == null)
+        Object value = evaluate(expressionContext, expresion);
+        return ClassUtil.cast(value, resultType);
+    }
+
+    /**
+     * @param expressionContext
+     * @param expresion
+     * @return Object
+     */
+    public static Object evaluate(ExpressionContext expressionContext, String expresion)
+    {
+        if(expresion == null)
         {
             return null;
         }
 
-        char c;
-        char[] cbuf = source.toCharArray();
-        TextNode textNode = null;
-        List<Node> list = new ArrayList<Node>();
-
-        for(int i = 0, length = cbuf.length; i < length; i++)
-        {
-            c = cbuf[i];
-
-            if(c == '$' && (i + 1) < length && cbuf[i + 1] == '{')
-            {
-                Expression expression = new Expression();
-
-                for(i = i + 2; i < length; i++)
-                {
-                    if(cbuf[i] == '}')
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        expression.append(cbuf[i]);
-                    }
-                }
-
-                if(expression.getTextContent().length() > 0)
-                {
-                    list.add(expression);
-                    textNode = null;
-                }
-            }
-            else
-            {
-                if(textNode == null)
-                {
-                    textNode = new TextNode();
-                    list.add(textNode);
-                }
-
-                textNode.append(c);
-            }
-        }
+        List<Node> list = parse(expresion);
 
         if(list.size() > 0)
         {
@@ -292,6 +264,58 @@ public class ExpressionUtil
         }
 
         return null;
+    }
+
+    /**
+     * @param expression
+     * @return List<Node>
+     */
+    public static List<Node> parse(String source)
+    {
+        char c;
+        char[] cbuf = source.toCharArray();
+        TextNode textNode = null;
+        List<Node> list = new ArrayList<Node>();
+
+        for(int i = 0, length = cbuf.length; i < length; i++)
+        {
+            c = cbuf[i];
+
+            if(c == '$' && (i + 1) < length && cbuf[i + 1] == '{')
+            {
+                Expression expression = new Expression();
+
+                for(i = i + 2; i < length; i++)
+                {
+                    if(cbuf[i] == '}')
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        expression.append(cbuf[i]);
+                    }
+                }
+
+                if(expression.getTextContent().length() > 0)
+                {
+                    list.add(expression);
+                    textNode = null;
+                }
+            }
+            else
+            {
+                if(textNode == null)
+                {
+                    textNode = new TextNode();
+                    list.add(textNode);
+                }
+
+                textNode.append(c);
+            }
+        }
+
+        return list;
     }
 
     /**

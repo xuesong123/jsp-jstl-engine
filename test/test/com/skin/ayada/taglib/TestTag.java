@@ -37,7 +37,16 @@ public class TestTag extends TagSupport
         {
             JspWriter writer = pageContext.getOut();
             writer.println("<p>myBoolean: " + this.myBoolean + "</p>");
-            writer.println("<p>myChar: " + this.myChar + "</p>");
+
+            if(this.myChar == '\0')
+            {
+                writer.println("<p>myChar: \\0</p>");
+            }
+            else
+            {
+                writer.println("<p>myChar: " + this.myChar + "</p>");
+            }
+
             writer.println("<p>myByte: " + this.myByte + "</p>");
             writer.println("<p>myInt: " + this.myInt + "</p>");
             writer.println("<p>myFloat: " + this.myFloat + "</p>");
@@ -46,14 +55,14 @@ public class TestTag extends TagSupport
             writer.println("<p>myString: " + this.myString + "</p>");
             writer.flush();
         }
-        catch(java.io.IOException e)
+        catch(Exception e)
         {
             e.printStackTrace();
         }
 
         return SKIP_BODY;
     }
-    
+
     /**
      * @return the myBoolean
      */

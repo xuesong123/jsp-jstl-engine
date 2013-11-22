@@ -10,7 +10,17 @@
  */
 package test.com.skin.ayada.template;
 
+import java.io.StringWriter;
+import java.util.List;
+
+import com.skin.ayada.runtime.ExpressionContext;
+import com.skin.ayada.runtime.ExpressionFactory;
+import com.skin.ayada.runtime.JspFactory;
+import com.skin.ayada.runtime.PageContext;
+import com.skin.ayada.statement.Node;
+import com.skin.ayada.util.ClassUtil;
 import com.skin.ayada.util.ExpressionUtil;
+import com.skin.ayada.util.NodeUtil;
 
 /**
  * <p>Title: ExpressionTest</p>
@@ -21,6 +31,32 @@ import com.skin.ayada.util.ExpressionUtil;
 public class ExpressionTest
 {
     public static void main(String[] args)
+    {
+        List<Node> list = ExpressionUtil.parse("123${abc}xyz");
+        System.out.println(NodeUtil.getDescription(list));
+    }
+
+    public static void test1()
+    {
+        StringWriter stringWriter = new StringWriter();
+        PageContext pageContext = JspFactory.getPageContext(stringWriter);
+        ExpressionContext expressionContext = ExpressionFactory.getExpressionContext(pageContext);
+        Object arg = ExpressionUtil.evaluate(expressionContext, "-1.0");
+        Object value = ClassUtil.cast(arg, int.class);
+
+        if(value != null)
+        {
+            System.out.println("class: " + value.getClass().getName());
+        }
+        else
+        {
+            System.out.println("class: null");
+        }
+
+        System.out.println(value);
+    }
+    
+    public static void test2()
     {
         /*
         float floatValue = 2.0f;

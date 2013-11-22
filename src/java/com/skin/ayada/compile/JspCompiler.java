@@ -86,16 +86,23 @@ public class JspCompiler
         writer.println("        JspWriter out = pageContext.getOut();");
         writer.println("        JspWriter jspWriter = pageContext.getOut();");
         writer.println("        ExpressionContext expressionContext = pageContext.getExpressionContext();");
+        writer.println();
         String indent = this.getIndent(2);
 
         for(int index = 0, size = list.size(); index < size; index++)
         {
             node = list.get(index);
+            indent = getIndent(node);
 
             if(node.getNodeType() == NodeType.TEXT)
             {
                 writer.println(indent + "/* TEXT: lineNumber: " + node.getLineNumber() + " */");
                 writer.println(indent + "out.write(\"" + StringUtil.escape(StringUtil.compact(node.getTextContent())) + "\");");
+
+                if(this.isTagNode(list, index + 1))
+                {
+                    writer.println();
+                }
                 continue;
             }
 
@@ -104,6 +111,11 @@ public class JspCompiler
                 String textContent = node.getTextContent();
                 writer.println(indent + "/* VARIABLE: lineNumber: " + node.getLineNumber() + " */");
                 writer.println(indent + "out.print(pageContext.getAttribute(\"" + textContent + "\"), false);");
+
+                if(this.isTagNode(list, index + 1))
+                {
+                    writer.println();
+                }
                 continue;
             }
 
@@ -112,6 +124,11 @@ public class JspCompiler
                 String textContent = node.getTextContent();
                 writer.println(indent + "/* EXPRESSION: lineNumber: " + node.getLineNumber() + " */");
                 writer.println(indent + "out.write(expressionContext.getString(\"" + StringUtil.escape(textContent) + "\"));");
+
+                if(this.isTagNode(list, index + 1))
+                {
+                    writer.println();
+                }
                 continue;
             }
 
@@ -121,6 +138,11 @@ public class JspCompiler
             }
 
             this.write(index, indent, node.getTagClassName(), node, writer);
+
+            if(node.getOffset() != index)
+            {
+                writer.println();
+            }
         }
 
         writer.println("        out.flush();");
@@ -199,7 +221,6 @@ public class JspCompiler
         {
             if(node.getNodeType() == NodeType.JSP_DECLARATION)
             {
-                writer.println();
                 writer.println(indent + "/* JSP_DECLARATION: lineNumber: " + node.getLineNumber() + " */");
                 writer.println(indent + "/* " + NodeUtil.getDescription(node) + " */");
                 return;
@@ -207,7 +228,6 @@ public class JspCompiler
 
             if(node.getNodeType() == NodeType.JSP_DIRECTIVE_PAGE)
             {
-                writer.println();
                 writer.println(indent + "/* JSP_DIRECTIVE: lineNumber: " + node.getLineNumber() + " */");
                 writer.println(indent + "/* " + NodeUtil.getDescription(node) + " */");
                 return;
@@ -215,7 +235,6 @@ public class JspCompiler
 
             if(node.getNodeType() == NodeType.JSP_DIRECTIVE_TAGLIB)
             {
-                writer.println();
                 writer.println(indent + "/* JSP_DIRECTIVE: lineNumber: " + node.getLineNumber() + " */");
                 writer.println(indent + "/* " + NodeUtil.getDescription(node) + " */");
                 return;
@@ -223,7 +242,6 @@ public class JspCompiler
 
             if(node.getNodeType() == NodeType.JSP_DIRECTIVE_INCLUDE)
             {
-                writer.println();
                 writer.println(indent + "/* JSP_DIRECTIVE: lineNumber: " + node.getLineNumber() + " */");
                 writer.println(indent + "/* " + NodeUtil.getDescription(node) + " */");
                 return;
@@ -231,7 +249,6 @@ public class JspCompiler
 
             if(node.getNodeType() == NodeType.JSP_SCRIPTLET)
             {
-                writer.println();
                 writer.println(indent + "/* JSP_SCRIPTLET: lineNumber: " + node.getLineNumber() + " */");
                 writer.println(node.getTextContent());
                 return;
@@ -239,7 +256,6 @@ public class JspCompiler
 
             if(node.getNodeType() == NodeType.JSP_EXPRESSION)
             {
-                writer.println();
                 writer.println(indent + "/* JSP_EXPRESSION: lineNumber: " + node.getLineNumber() + " */");
                 writer.println(indent + "out.print(" + node.getTextContent() + ");");
                 return;
@@ -289,7 +305,6 @@ public class JspCompiler
 
         if(node.getOffset() == index)
         {
-            writer.println();
             writer.println(indent + "/* NODE START: lineNumber: " + node.getLineNumber() + ", offset: " + node.getOffset() + ", length: " + node.getLength() + ", tagClassName: " + tagClassName + ", tagInstanceName: " + tagInstanceName + " */");
             writer.println(indent + "/* " + NodeUtil.getDescription(node) + " */");
         }
@@ -353,7 +368,6 @@ public class JspCompiler
         if(node.getOffset() != index)
         {
             writer.println(indent + "/* NODE END: lineNumber: " + node.getLineNumber() + ", tagClassName: " + tagClassName + ", tagInstanceName: " + tagInstanceName + " */");
-            writer.println();
         }
     }
 
@@ -644,9 +658,8 @@ public class JspCompiler
         {
             String variable = node.getAttribute("var");
             String varStatus = node.getAttribute("varStatus");
-            
             writer.println(indent + "        if(" + tagInstanceName + ".hasNext()){");
-            
+
             if(variable != null && variable.trim().length() > 0)
             {
                 writer.println(indent + "            pageContext.setAttribute(\"" + variable + "\", " + tagInstanceName + ".next());");
@@ -740,7 +753,7 @@ public class JspCompiler
             writer.println(indent + "} /* jsp.jstl.core.OtherwiseTag END */");
         }
     }
-    
+
     /**
      * @param index
      * @param indent
@@ -935,6 +948,30 @@ public class JspCompiler
         }
 
         return true;
+    }
+
+    /**
+     * @param list
+     * @param index
+     * @return boolean
+     */
+    protected boolean isTagNode(List<Node> list, int index)
+    {
+        if(index < list.size())
+        {
+            Node node = list.get(index);
+            int nodeType = node.getNodeType();
+
+            if(nodeType != NodeType.TEXT && nodeType != NodeType.VARIABLE && nodeType != NodeType.EXPRESSION)
+            {
+                if(node.getOffset() == index)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -1140,6 +1177,66 @@ public class JspCompiler
         for(int i = 0; i < indent; i++)
         {
             buffer.append("    ");
+        }
+
+        return buffer.toString();
+    }
+
+    /**
+     * @param indent
+     * @return String
+     */
+    protected String getIndent(Node node)
+    {
+        Node parent = node;
+        StringBuilder buffer = new StringBuilder("        ");
+
+        while(parent != null && (parent = parent.getParent()) != null)
+        {
+            String tagClassName = parent.getTagClassName();
+
+            if(tagClassName.equals("com.skin.ayada.jstl.core.ImportTag"))
+            {
+            }
+            else if(tagClassName.equals("com.skin.ayada.jstl.core.IfTag"))
+            {
+                buffer.append("    ");
+            }
+            else if(tagClassName.equals("com.skin.ayada.jstl.core.SetTag"))
+            {
+            }
+            else if(tagClassName.equals("com.skin.ayada.jstl.core.OutTag"))
+            {
+            }
+            else if(tagClassName.equals("com.skin.ayada.jstl.core.ForEachTag"))
+            {
+                buffer.append("        ");
+            }
+            else if(tagClassName.equals("com.skin.ayada.jstl.core.ChooseTag"))
+            {
+            }
+            else if(tagClassName.equals("com.skin.ayada.jstl.core.WhenTag"))
+            {
+                buffer.append("    ");
+            }
+            else if(tagClassName.equals("com.skin.ayada.jstl.core.OtherwiseTag"))
+            {
+                buffer.append("    ");
+            }
+            else if(tagClassName.equals("com.skin.ayada.jstl.core.CommentTag"))
+            {
+                buffer.append("    ");
+            }
+            else if(tagClassName.equals("com.skin.ayada.taglib.PrintTag"))
+            {
+            }
+            else if(tagClassName.equals("com.skin.ayada.jstl.fmt.DateFormatTag"))
+            {
+            }
+            else
+            {
+                buffer.append("    ");
+            }
         }
 
         return buffer.toString();

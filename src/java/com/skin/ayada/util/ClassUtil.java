@@ -10,12 +10,8 @@
  */
 package com.skin.ayada.util;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * <p>Title: ClassUtil</p>
@@ -26,8 +22,6 @@ import org.slf4j.LoggerFactory;
  */
 public class ClassUtil
 {
-    private static Logger logger = LoggerFactory.getLogger(ClassUtil.class);
-
     /**
      * @param className
      * @param parent
@@ -100,174 +94,74 @@ public class ClassUtil
             return value;
         }
 
-        return ClassUtil.cast(value.toString(), type);
-    }
-
-    /**
-     * @param type
-     * @param value
-     * @return Object
-     */
-    public static Object cast(String value, Class<?> type)
-    {
-        if(value == null || type == null)
-        {
-            return null;
-        }
-
         Object result = null;
 
         if(type == char.class || type == Character.class)
         {
-            result = (value.length() > 0 ? value.charAt(0) : null);
+            return ClassUtil.getCharacter(value);
         }
         else if(type == boolean.class || type == Boolean.class)
         {
-            boolean b = ("1".equalsIgnoreCase(value) || "y".equalsIgnoreCase(value) || "on".equalsIgnoreCase(value) || "yes".equalsIgnoreCase(value) || "true".equalsIgnoreCase(value));
-            result = Boolean.valueOf(b);
+            return ClassUtil.getBoolean(value);
         }
         else if(type == byte.class || type == Byte.class)
         {
-            try
-            {
-                result = Byte.parseByte(value);
-            }
-            catch(NumberFormatException e)
-            {
-            }
+            return ClassUtil.getByte(value);
         }
         else if(type == short.class || type == Short.class)
         {
-            try
-            {
-                result = Short.parseShort(value);
-            }
-            catch(NumberFormatException e)
-            {
-            }
+            return ClassUtil.getShort(value);
         }
         else if(type == int.class || type == Integer.class)
         {
-            try
-            {
-                result = Integer.parseInt(value);
-            }
-            catch(NumberFormatException e)
-            {
-            }
+            return ClassUtil.getInteger(value);
         }
         else if(type == float.class || type == Float.class)
         {
-            try
-            {
-                result = Float.parseFloat(value);
-            }
-            catch(NumberFormatException e)
-            {
-            }
+            return ClassUtil.getFloat(value);
         }
         else if(type == double.class || type == Double.class)
         {
-            try
-            {
-                result = Double.parseDouble(value);
-            }
-            catch(NumberFormatException e)
-            {
-            }
+            return ClassUtil.getDouble(value);
         }
         else if(type == long.class || type == Long.class)
         {
-            try
-            {
-                result = Long.parseLong(value);
-            }
-            catch(NumberFormatException e)
-            {
-            }
+            return ClassUtil.getLong(value);
         }
         else if(type == String.class)
         {
-            result = value;
-        }
-        else if(type == StringBuilder.class)
-        {
-            result = new StringBuilder(value);
-        }
-        else if(type == StringBuffer.class)
-        {
-            result = new StringBuffer(value);
-        }
-        else if(type == java.io.Reader.class)
-        {
-            result = new java.io.StringReader(value);
+            result = ClassUtil.getString(value);
         }
         else if(type == java.sql.Date.class)
         {
-            if(value.length() > 0)
+            Date date = ClassUtil.getDate(value);
+
+            if(date != null)
             {
-                try
-                {
-                    String format = getFormat(value);
-                    DateFormat dateFormat = new SimpleDateFormat(format);
-                    Date date = dateFormat.parse(value);
-                    result = new java.sql.Date(date.getTime());
-                }
-                catch(java.text.ParseException e)
-                {
-                }
+                result = new java.sql.Date(date.getTime());
             }
         }
         else if(type == java.sql.Time.class)
         {
-            if(value.length() > 0)
+            Date date = ClassUtil.getDate(value);
+
+            if(date != null)
             {
-                try
-                {
-                    String format = getFormat(value);
-                    SimpleDateFormat dateFormat = new SimpleDateFormat(format);
-                    java.util.Date date = dateFormat.parse(value);
-                    result = new java.sql.Time(date.getTime());
-                }
-                catch(java.text.ParseException e)
-                {
-                }
+                result = new java.sql.Time(date.getTime());
             }
         }
         else if(type == java.sql.Timestamp.class)
         {
-            if(value.length() > 0)
+            Date date = ClassUtil.getDate(value);
+
+            if(date != null)
             {
-                try
-                {
-                    String format = getFormat(value);
-                    SimpleDateFormat dateFormat = new SimpleDateFormat(format);
-                    java.util.Date date = dateFormat.parse(value);
-                    result = new java.sql.Timestamp(date.getTime());
-                }
-                catch(java.text.ParseException e)
-                {
-                }
+                result = new java.sql.Timestamp(date.getTime());
             }
         }
         else if(type == java.util.Date.class)
         {
-            if(value.length() > 0)
-            {
-                try
-                {
-                    String format = getFormat(value);
-                    SimpleDateFormat dateFormat = new SimpleDateFormat(format);
-                    result = dateFormat.parse(value);
-                }
-                catch(java.text.ParseException e)
-                {
-                    if(logger.isDebugEnabled())
-                    {
-                        logger.debug("Exception: " + e.getMessage());
-                    }
-                }
-            }
+            result = ClassUtil.getDate(value);
         }
         else if(type == Object.class)
         {
@@ -275,6 +169,225 @@ public class ClassUtil
         }
 
         return result;
+    }
+
+    /**
+     * @param value
+     * @return Boolean
+     */
+    public static Boolean getBoolean(Object value)
+    {
+        if(value instanceof Boolean)
+        {
+            return (Boolean)value;
+        }
+
+        if(value != null)
+        {
+            return value.toString().equals("true");
+        }
+
+        return Boolean.FALSE;
+    }
+
+    /**
+     * @param value
+     * @return Byte
+     */
+    public static Byte getByte(Object value)
+    {
+        Integer i = getInteger(value);
+        
+        if(i != null)
+        {
+            return i.byteValue();
+        }
+
+        return null;
+    }
+
+    /**
+     * @param value
+     * @return Boolean
+     */
+    public static Short getShort(Object value)
+    {
+        Integer i = getInteger(value);
+
+        if(i != null)
+        {
+            return i.shortValue();
+        }
+
+        return null;
+    }
+
+    /**
+     * @param value
+     * @return Character
+     */
+    public static Character getCharacter(Object value)
+    {
+        if(value instanceof Character)
+        {
+            return (Character)value;
+        }
+
+        if(value != null)
+        {
+            String content = value.toString();
+            
+            if(content.length() > 0)
+            {
+                return content.charAt(0);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param value
+     * @return Integer
+     */
+    public static Integer getInteger(Object value)
+    {
+        if(value instanceof Number)
+        {
+            return ((Number)value).intValue();
+        }
+
+        if(value != null)
+        {
+            Double d = getDouble(value);
+
+            if(d != null)
+            {
+                return d.intValue();
+            }
+        }
+
+        return null;
+    }
+    
+    /**
+     * @param value
+     * @return Float
+     */
+    public static Float getFloat(Object value)
+    {
+        if(value instanceof Number)
+        {
+            return ((Number)value).floatValue();
+        }
+
+        if(value != null)
+        {
+            Double d = getDouble(value);
+
+            if(d != null)
+            {
+                return d.floatValue();
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param value
+     * @return Double
+     */
+    public static Double getDouble(Object value)
+    {
+        if(value instanceof Number)
+        {
+            return ((Number)value).doubleValue();
+        }
+
+        if(value != null)
+        {
+            try
+            {
+                return Double.parseDouble(value.toString());
+            }
+            catch(NumberFormatException e)
+            {
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param value
+     * @return Long
+     */
+    public static Long getLong(Object value)
+    {
+        if(value instanceof Number)
+        {
+            return ((Number)value).longValue();
+        }
+
+        if(value != null)
+        {
+            Double d = getDouble(value);
+
+            if(d != null)
+            {
+                return d.longValue();
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param value
+     * @return
+     */
+    public static String getString(Object value)
+    {
+        if(value instanceof String)
+        {
+            return ((String)value);
+        }
+
+        if(value != null)
+        {
+            return value.toString();
+        }
+
+        return null;
+    }
+
+    /**
+     * @param value
+     * @return Date
+     */
+    public static Date getDate(Object value)
+    {
+        if(value instanceof Date)
+        {
+            return (Date)value;
+        }
+
+        if(value != null)
+        {
+            try
+            {
+                String content = value.toString();
+                String pattern = getFormat(content);
+                SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+                return dateFormat.parse(content);
+            }
+            catch(java.text.ParseException e)
+            {
+            }
+        }
+
+        return null;
     }
 
     /**
