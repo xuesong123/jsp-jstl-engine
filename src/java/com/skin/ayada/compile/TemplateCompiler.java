@@ -37,7 +37,6 @@ import com.skin.ayada.statement.Variable;
 import com.skin.ayada.template.Template;
 import com.skin.ayada.util.NodeUtil;
 import com.skin.ayada.util.Stack;
-import com.skin.ayada.util.TemplateUtil;
 
 /**
  * <p>Title: TemplateCompiler</p>

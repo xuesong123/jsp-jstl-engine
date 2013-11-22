@@ -37,17 +37,28 @@ public class PrintTag extends TagSupport
     @Override
     public int doEndTag()
     {
+        print(this.pageContext, this.out, this.value);
+        return TagSupport.EVAL_PAGE;
+    }
+
+    /**
+     * @param pageContext
+     * @param out
+     * @param value
+     */
+    public static void print(PageContext pageContext, Object out, Object value)
+    {
         Writer writer = null;
 
-        if(this.out == null)
+        if(out == null)
         {
-            writer = this.pageContext.getOut();
+            writer = pageContext.getOut();
         }
-        else if(this.out instanceof Writer)
+        else if(out instanceof Writer)
         {
             writer = ((Writer)out);
         }
-        else if(this.out instanceof OutputStream)
+        else if(out instanceof OutputStream)
         {
             writer = new PrintWriter((OutputStream)out);
         }
@@ -60,15 +71,15 @@ public class PrintTag extends TagSupport
                 {
                     String name = null;
                     Object bean = null;
-                    PageContext pageContext = ((PageContext)value);
-                    Iterator<String> iterator = pageContext.getAttributeNames();
+                    PageContext pc = ((PageContext)value);
+                    Iterator<String> iterator = pc.getAttributeNames();
 
                     while(iterator.hasNext())
                     {
                         name = iterator.next();
-                        bean = pageContext.getAttribute(name);
+                        bean = pc.getAttribute(name);
 
-                        writer.write(name);
+                        writer.write((name != null ? name : "null"));
                         writer.write(": ");
                         writer.write((bean != null ? bean.toString() : "null"));
                         writer.write("\r\n");
@@ -76,7 +87,7 @@ public class PrintTag extends TagSupport
                 }
                 else
                 {
-                    writer.write(beanUtil.toString(this.value));
+                    writer.write(beanUtil.toString(value));
                     writer.write("\r\n");
                 }
 
@@ -87,8 +98,6 @@ public class PrintTag extends TagSupport
                 e.printStackTrace();
             }
         }
-
-        return TagSupport.EVAL_PAGE;
     }
 
     /**

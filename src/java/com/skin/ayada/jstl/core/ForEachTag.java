@@ -80,8 +80,11 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
      */
     public void setItems(Object object)
     {
-        this.items = getIterator(object);
-        this.hasItems = true;
+        if(object != null)
+        {
+            this.items = getIterator(object);
+            this.hasItems = true;
+        }
     }
 
     /**

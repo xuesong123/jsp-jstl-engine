@@ -210,7 +210,11 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
     public void setCurrent(Object current)
     {
         this.current = current;
-        this.pageContext.setAttribute(this.var, this.current);
+
+        if(this.var != null)
+        {
+            this.pageContext.setAttribute(this.var, this.current);
+        }
     }
 
     /**

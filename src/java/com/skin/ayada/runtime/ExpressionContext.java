@@ -10,9 +10,8 @@
  */
 package com.skin.ayada.runtime;
 
-import java.util.HashMap;
-import java.util.Map;
 import ognl.OgnlContext;
+
 import com.skin.ayada.ognl.util.Empty;
 import com.skin.ayada.ognl.util.OgnlUtil;
 
@@ -26,7 +25,6 @@ import com.skin.ayada.ognl.util.OgnlUtil;
 public class ExpressionContext extends OgnlContext
 {
     private PageContext pageContext;
-    private Map<String, Object> tools = new HashMap<String, Object>();
     private static final Object EMPTY = new Empty<String, Object>();
 
     /**
@@ -52,12 +50,6 @@ public class ExpressionContext extends OgnlContext
         }
 
         Object value = this.pageContext.getAttribute(key.toString());
-
-        if(value == null)
-        {
-            value = this.tools.get(key);
-        }
-
         return (value != null ? value : EMPTY);
     }
 
@@ -150,26 +142,8 @@ public class ExpressionContext extends OgnlContext
         this.pageContext = pageContext;
     }
 
-    /**
-     * @param name
-     * @param tools
-     */
-    public void addTools(String name, Object tools)
-    {
-        this.tools.put(name, tools);
-    }
-
-    /**
-     * @return the tools
-     */
-    public Map<String, Object> getTools()
-    {
-        return this.tools;
-    }
-
     public void release()
     {
         this.pageContext = null;
-        this.tools.clear();
     }
 }

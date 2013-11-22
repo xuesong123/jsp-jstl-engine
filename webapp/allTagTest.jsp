@@ -71,7 +71,7 @@
 
 <c:out value="c:out: Hello, World!"/>
 <div style="background-color: #c0c0c0;"></div>
-<c:out value="<div>Hello World!</div>" escapeXml="true"/>
+<c:out value="&quot;<div>Hello World!</div>&quot;" escapeXml="true"/>
 <c:out escapeXml="true"><h1>Hello World!</h1></c:out>
 <c:out value="<div>Hello World!</div>" escapeXml="true"><h1>Hello World!</h1></c:out>
 

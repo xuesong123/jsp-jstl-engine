@@ -37,11 +37,11 @@ public class ExpressionFactory
     {
         ExpressionContext expressionContext = new ExpressionContext(pageContext);
 
-        if(attributes != null)
+        if(attributes != null && attributes.size() > 0)
         {
             for(Map.Entry<String, Object> entry : attributes.entrySet())
             {
-                expressionContext.addTools(entry.getKey(), entry.getValue());
+                pageContext.setAttribute(entry.getKey(), entry.getValue());
             }
         }
 
