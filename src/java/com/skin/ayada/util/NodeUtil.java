@@ -33,7 +33,9 @@ public class NodeUtil
 
         if(node.getNodeType() == NodeType.TEXT)
         {
+            buffer.append("<text>");
             buffer.append(node.getTextContent());
+            buffer.append("</text>");
             return buffer.toString();
         }
 

@@ -37,6 +37,7 @@ import com.skin.ayada.statement.Variable;
 import com.skin.ayada.template.Template;
 import com.skin.ayada.util.NodeUtil;
 import com.skin.ayada.util.Stack;
+import com.skin.ayada.util.TemplateUtil;
 
 /**
  * <p>Title: TemplateCompiler</p>
@@ -973,13 +974,13 @@ public class TemplateCompiler extends PageCompiler
         {
             Node node = list.get(i);
 
-            if(node.getLength() == 0)
-            {
-                throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node) + " not match !");
-            }
-
             if(node.getNodeType() == NodeType.NODE && i == node.getOffset())
             {
+                if(node.getLength() == 0)
+                {
+                    throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node) + " not match !");
+                }
+
                 String tagName = node.getNodeName();
                 String className = tagLibrary.getTagClassName(tagName);
                 TagFactory tagFactory = tagFactoryManager.getTagFactory(tagName, className);

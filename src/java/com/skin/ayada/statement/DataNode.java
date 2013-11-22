@@ -41,6 +41,7 @@ public abstract class DataNode extends Node
     protected DataNode(String nodeName, int nodeType)
     {
         super(nodeName, nodeType);
+        this.setLength(1);
     }
 
     /**
