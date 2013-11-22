@@ -21,15 +21,15 @@ import com.skin.ayada.runtime.PageContext;
  * @author xuesong.net
  * @version 1.0
  */
-public abstract class JspFragment
+public interface JspFragment
 {
     /**
      * @return PageContext
      */
-    public abstract PageContext getPageContext();
+    public PageContext getPageContext();
 
     /**
      * @param out
      */
-    public abstract void invoke(Writer out);
+    public void invoke(Writer out);
 }

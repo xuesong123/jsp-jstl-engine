@@ -1,5 +1,5 @@
 /*
- * $RCSfile: PageContext.java,v $$
+ * $RCSfile: DefaultPageContext.java,v $$
  * $Revision: 1.1  $
  * $Date: 2013-2-19  $
  *
@@ -20,7 +20,7 @@ import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.template.TemplateContext;
 
 /**
- * <p>Title: PageContext</p>
+ * <p>Title: DefaultPageContext</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2006</p>
  * @author xuesong.net

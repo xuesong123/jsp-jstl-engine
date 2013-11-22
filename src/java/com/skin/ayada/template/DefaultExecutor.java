@@ -147,7 +147,7 @@ public class DefaultExecutor
                     }
 
                     // create - doStartTag
-                    TagUtil.setAttributes(tag, node.getAttributes(), pageContext.getExpressionContext());
+                    TagUtil.setAttributes(tag, node.getAttributes(), expressionContext);
 
                     if(tag instanceof SimpleTag)
                     {
@@ -313,37 +313,5 @@ public class DefaultExecutor
         }
 
         return statements;
-    }
-
-    /**
-     * @param list
-     */
-    public static void print(List<Node> list)
-    {
-        for(int index = 0, size = list.size(); index < size; index++)
-        {
-            Node node = list.get(index);
-
-            if(node.getNodeType() == NodeType.TEXT)
-            {
-                System.out.println(index + " $" + node.getLineNumber() + " #text: " + node.getTextContent());
-                continue;
-            }
-
-            if(node.getNodeType() == NodeType.VARIABLE || node.getNodeType() == NodeType.EXPRESSION)
-            {
-                System.out.println(index + " $" + node.getLineNumber() + " #expr: " + node.getTextContent());
-                continue;
-            }
-
-            if(node.getOffset() == index)
-            {
-                System.out.println(index + " $" + node.getLineNumber() + " #node: " + node.toString());
-            }
-            else
-            {
-                System.out.println(index + " $" + node.getLineNumber() + " #node: </" + node.getNodeName() + ">");
-            }
-        }
     }
 }

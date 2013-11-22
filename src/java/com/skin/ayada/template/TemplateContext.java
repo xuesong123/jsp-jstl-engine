@@ -35,13 +35,13 @@ import com.skin.ayada.util.StringUtil;
  */
 public class TemplateContext
 {
-    private static final Logger logger = LoggerFactory.getLogger(TemplateContext.class);
     private String home;
     private int expire;
     private String charset;
     private SourceFactory sourceFactory;
     private TemplateFactory templateFactory;
     private ConcurrentHashMap<String, FutureTask<Template>> cache;
+    private static final Logger logger = LoggerFactory.getLogger(TemplateContext.class);
 
     /**
      * @param home

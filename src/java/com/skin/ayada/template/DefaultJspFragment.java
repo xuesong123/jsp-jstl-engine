@@ -23,7 +23,7 @@ import com.skin.ayada.tagext.JspFragment;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class DefaultJspFragment extends JspFragment
+public class DefaultJspFragment implements JspFragment
 {
     private Template template;
     private Statement[] statements;
