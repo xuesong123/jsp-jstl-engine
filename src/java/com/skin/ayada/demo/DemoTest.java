@@ -18,6 +18,8 @@ import com.skin.ayada.source.ClassPathSourceFactory;
 import com.skin.ayada.source.SourceFactory;
 import com.skin.ayada.template.Template;
 import com.skin.ayada.template.TemplateContext;
+import com.skin.ayada.template.TemplateFactory;
+import com.skin.ayada.template.TemplateManager;
 import com.skin.ayada.util.TemplateUtil;
 
 /**
@@ -40,8 +42,12 @@ public class DemoTest
     {
         String home = "com/skin/ayada/demo";
         SourceFactory sourceFactory = new ClassPathSourceFactory(home);
+        TemplateFactory templateFactory = new TemplateFactory();
+
         TemplateContext templateContext = new TemplateContext(home);
         templateContext.setSourceFactory(sourceFactory);
+        templateContext.setTemplateFactory(templateFactory);
+        TemplateManager.add(templateContext);
 
         Template template = templateContext.getTemplate("/hello.jsp");
         StringWriter writer = new StringWriter();
@@ -49,7 +55,6 @@ public class DemoTest
 
         System.out.println("-------------- source result --------------");
         System.out.println(TemplateUtil.toString(template));
-
         System.out.println("-------------- System.out.print --------------");
 
         try

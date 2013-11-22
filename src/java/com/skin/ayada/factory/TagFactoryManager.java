@@ -52,10 +52,7 @@ public class TagFactoryManager
     public static Tag getTag(String tagName, String tagClassName)
     {
         TagFactoryManager tagFactoryManager = TagFactoryManager.getInstance();
-        long t1 = System.currentTimeMillis();
         TagFactory tagFactory = tagFactoryManager.getTagFactory(tagName, tagClassName);
-        long t2 = System.currentTimeMillis();
-        System.out.println("tagFactory.create: " + (t2 - t1));
         return tagFactory.create();
     }
 

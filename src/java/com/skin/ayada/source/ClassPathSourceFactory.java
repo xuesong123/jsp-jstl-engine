@@ -65,7 +65,7 @@ public class ClassPathSourceFactory extends SourceFactory
     {
         if(path == null)
         {
-            throw new RuntimeException("t:include error: attribute 'file' not exists !");
+            throw new RuntimeException("path must be not null !");
         }
 
         if(encoding == null)

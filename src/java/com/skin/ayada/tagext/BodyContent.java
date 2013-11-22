@@ -12,6 +12,7 @@ package com.skin.ayada.tagext;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.io.Writer;
 
 import com.skin.ayada.runtime.JspWriter;
 
@@ -39,6 +40,15 @@ public class BodyContent extends JspWriter
     public void write(char[] cbuf, int off, int len) throws IOException
     {
         this.buffer.write(cbuf, off, len);
+    }
+
+    /**
+     * @param out
+     * @throws IOException
+     */
+    public void writeOut(Writer out)  throws IOException
+    {
+        out.write(this.buffer.toString());
     }
 
     @Override

@@ -280,7 +280,7 @@ public class DefaultExecutor
      * @param list
      * @return List<Statement>
      */
-    public static Statement[] getStatements(List<Node> list)
+    public static Statement[] getStatements(final List<Node> list)
     {
         Statement[] statements = new Statement[list.size()];
 

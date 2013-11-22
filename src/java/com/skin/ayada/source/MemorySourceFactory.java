@@ -1,5 +1,5 @@
 /*
- * $RCSfile: DefaultSourceFactory.java,v $$
+ * $RCSfile: MemorySourceFactory.java,v $$
  * $Revision: 1.1 $
  * $Date: 2013-11-4 $
  *
@@ -11,7 +11,7 @@
 package com.skin.ayada.source;
 
 /**
- * <p>Title: DefaultSourceFactory</p>
+ * <p>Title: MemorySourceFactory</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0

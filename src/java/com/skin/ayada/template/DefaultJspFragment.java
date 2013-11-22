@@ -12,9 +12,9 @@ package com.skin.ayada.template;
 
 import java.io.Writer;
 
-import com.skin.ayada.runtime.JspWriter;
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.statement.Statement;
+import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.JspFragment;
 
 /**
@@ -54,12 +54,12 @@ public class DefaultJspFragment implements JspFragment
     {
         if(out != null)
         {
-            JspWriter jspWriter = pageContext.getOut();
-            pageContext.setOut(new JspWriter(out));
+            BodyContent bodyContent = (BodyContent)(pageContext.pushBody());
 
             try
             {
                 DefaultExecutor.execute(this.template, this.statements, this.pageContext, this.offset, this.length);
+                bodyContent.writeOut(out);
             }
             catch(Throwable t)
             {
@@ -67,7 +67,7 @@ public class DefaultJspFragment implements JspFragment
             }
             finally
             {
-                pageContext.setOut(jspWriter);
+                pageContext.popBody();
             }
         }
         else
