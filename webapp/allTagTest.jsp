@@ -4,6 +4,7 @@
 <%@ page import="java.io.File"%>
 <t:import name="app:scrollpage" className="test.com.skin.ayada.taglib.ScrollPage"/>
 <t:import name="app:test" className="test.com.skin.ayada.taglib.TestTag"/>
+<t:import name="app:bodytest" className="test.com.skin.ayada.taglib.TestBodyTag"/>
 <html>
 <head>
 <title>test</title>
@@ -71,7 +72,7 @@
 
 <c:out value="c:out: Hello, World!"/>
 <div style="background-color: #c0c0c0;"></div>
-<c:out value="&quot;<div>Hello World!</div>&quot;" escapeXml="true"/>
+<c:out value="&quot;<div>Hello World!</div>&quot;" escapeXml="false"/>
 <c:out escapeXml="true"><h1>Hello World!</h1></c:out>
 <c:out value="<div>Hello World!</div>" escapeXml="true"><h1>Hello World!</h1></c:out>
 
@@ -109,5 +110,8 @@
 
 <h1>app:scrollpage test1</h1>
 <app:scrollpage count="254" pageNum="2" pageSize="10"/>
+
+<app:bodytest/>
+<app:bodytest>Hello World !</app:bodytest>
 </body>
 </html>

@@ -21,6 +21,7 @@ import com.skin.ayada.statement.Node;
 import com.skin.ayada.statement.NodeType;
 import com.skin.ayada.tagext.BodyTag;
 import com.skin.ayada.tagext.IterationTag;
+import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.template.Template;
 import com.skin.ayada.util.ClassUtil;
 import com.skin.ayada.util.DateUtil;
@@ -137,7 +138,12 @@ public class JspCompiler
                 throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node) + " not match !");
             }
 
-            this.write(index, indent, node.getTagClassName(), node, writer);
+            int flag = this.write(index, indent, node.getTagClassName(), node, writer);
+
+            if(flag == Tag.SKIP_BODY)
+            {
+                index = node.getOffset() + node.getLength() - 2;
+            }
 
             if(node.getOffset() != index)
             {
@@ -182,6 +188,7 @@ public class JspCompiler
         writer.println("import com.skin.ayada.runtime.JspWriter;");
         writer.println("import com.skin.ayada.runtime.PageContext;");
         writer.println("import com.skin.ayada.tagext.BodyContent;");
+        writer.println("import com.skin.ayada.tagext.BodyTag;");
         writer.println("import com.skin.ayada.tagext.IterationTag;");
         writer.println("import com.skin.ayada.tagext.Tag;");
         writer.println("import com.skin.ayada.template.JspTemplate;");
@@ -213,8 +220,9 @@ public class JspCompiler
      * @param tagClassName
      * @param node
      * @param writer
+     * @return int
      */
-    public void write(int index, String indent, String tagClassName, Node node, PrintWriter writer)
+    public int write(int index, String indent, String tagClassName, Node node, PrintWriter writer)
     {
         /** Jsp Support */
         if(node.getOffset() == index)
@@ -223,42 +231,42 @@ public class JspCompiler
             {
                 writer.println(indent + "/* JSP_DECLARATION: lineNumber: " + node.getLineNumber() + " */");
                 writer.println(indent + "/* " + NodeUtil.getDescription(node) + " */");
-                return;
+                return Tag.EVAL_PAGE;
             }
 
             if(node.getNodeType() == NodeType.JSP_DIRECTIVE_PAGE)
             {
                 writer.println(indent + "/* JSP_DIRECTIVE: lineNumber: " + node.getLineNumber() + " */");
                 writer.println(indent + "/* " + NodeUtil.getDescription(node) + " */");
-                return;
+                return Tag.EVAL_PAGE;
             }
 
             if(node.getNodeType() == NodeType.JSP_DIRECTIVE_TAGLIB)
             {
                 writer.println(indent + "/* JSP_DIRECTIVE: lineNumber: " + node.getLineNumber() + " */");
                 writer.println(indent + "/* " + NodeUtil.getDescription(node) + " */");
-                return;
+                return Tag.EVAL_PAGE;
             }
 
             if(node.getNodeType() == NodeType.JSP_DIRECTIVE_INCLUDE)
             {
                 writer.println(indent + "/* JSP_DIRECTIVE: lineNumber: " + node.getLineNumber() + " */");
                 writer.println(indent + "/* " + NodeUtil.getDescription(node) + " */");
-                return;
+                return Tag.EVAL_PAGE;
             }
 
             if(node.getNodeType() == NodeType.JSP_SCRIPTLET)
             {
                 writer.println(indent + "/* JSP_SCRIPTLET: lineNumber: " + node.getLineNumber() + " */");
                 writer.println(node.getTextContent());
-                return;
+                return Tag.EVAL_PAGE;
             }
 
             if(node.getNodeType() == NodeType.JSP_EXPRESSION)
             {
                 writer.println(indent + "/* JSP_EXPRESSION: lineNumber: " + node.getLineNumber() + " */");
                 writer.println(indent + "out.print(" + node.getTextContent() + ");");
-                return;
+                return Tag.EVAL_PAGE;
             }
         }
         else
@@ -266,37 +274,37 @@ public class JspCompiler
             if(node.getNodeType() == NodeType.JSP_DECLARATION)
             {
                 writer.println(indent + "/* jsp:declaration END */");
-                return;
+                return Tag.EVAL_PAGE;
             }
 
             if(node.getNodeType() == NodeType.JSP_DIRECTIVE_PAGE)
             {
                 writer.println(indent + "/* jsp:directive.page END */");
-                return;
+                return Tag.EVAL_PAGE;
             }
 
             if(node.getNodeType() == NodeType.JSP_DIRECTIVE_TAGLIB)
             {
                 writer.println(indent + "/* jsp:directive.taglib END */");
-                return;
+                return Tag.EVAL_PAGE;
             }
 
             if(node.getNodeType() == NodeType.JSP_DIRECTIVE_INCLUDE)
             {
                 writer.println(indent + "/* jsp:directive.include END */");
-                return;
+                return Tag.EVAL_PAGE;
             }
 
             if(node.getNodeType() == NodeType.JSP_SCRIPTLET)
             {
                 writer.println(indent + "/* jsp:scriptlet END */");
-                return;
+                return Tag.EVAL_PAGE;
             }
 
             if(node.getNodeType() == NodeType.JSP_EXPRESSION)
             {
                 writer.println(indent + "/* jsp:expression END */");
-                return;
+                return Tag.EVAL_PAGE;
             }
         }
 
@@ -309,66 +317,70 @@ public class JspCompiler
             writer.println(indent + "/* " + NodeUtil.getDescription(node) + " */");
         }
 
+        int flag = Tag.EVAL_PAGE;
+        
         if(this.fast)
         {
             if(tagClassName.equals("com.skin.ayada.jstl.core.ImportTag"))
             {
-                this.writeImportTag(index, indent, tagClassName, node, writer);
+                flag = this.writeImportTag(index, indent, tagClassName, node, writer);
             }
             else if(tagClassName.equals("com.skin.ayada.jstl.core.IfTag"))
             {
-                this.writeIfTag(index, indent, tagClassName, node, writer);
+                flag = this.writeIfTag(index, indent, tagClassName, node, writer);
             }
             else if(tagClassName.equals("com.skin.ayada.jstl.core.SetTag"))
             {
-                this.writeSetTag(index, indent, tagClassName, node, writer);
+                flag = this.writeSetTag(index, indent, tagClassName, node, writer);
             }
             else if(tagClassName.equals("com.skin.ayada.jstl.core.OutTag"))
             {
-                this.writeOutTag(index, indent, tagClassName, node, writer);
+                flag = this.writeOutTag(index, indent, tagClassName, node, writer);
             }
             else if(tagClassName.equals("com.skin.ayada.jstl.core.ForEachTag"))
             {
-                this.writeForEachTag(index, indent, tagClassName, node, writer);
+                flag = this.writeForEachTag(index, indent, tagClassName, node, writer);
             }
             else if(tagClassName.equals("com.skin.ayada.jstl.core.ChooseTag"))
             {
-                this.writeChooseTag(index, indent, tagClassName, node, writer);
+                flag = this.writeChooseTag(index, indent, tagClassName, node, writer);
             }
             else if(tagClassName.equals("com.skin.ayada.jstl.core.WhenTag"))
             {
-                this.writeWhenTag(index, indent, tagClassName, node, writer);
+                flag = this.writeWhenTag(index, indent, tagClassName, node, writer);
             }
             else if(tagClassName.equals("com.skin.ayada.jstl.core.OtherwiseTag"))
             {
-                this.writeOtherwiseTag(index, indent, tagClassName, node, writer);
+                flag = this.writeOtherwiseTag(index, indent, tagClassName, node, writer);
             }
             else if(tagClassName.equals("com.skin.ayada.jstl.core.CommentTag"))
             {
-                this.writeCommentTag(index, indent, tagClassName, node, writer);
+                flag = this.writeCommentTag(index, indent, tagClassName, node, writer);
             }
             else if(tagClassName.equals("com.skin.ayada.taglib.PrintTag"))
             {
-                this.writePrintTagTag(index, indent, tagClassName, node, writer);
+                flag = this.writePrintTagTag(index, indent, tagClassName, node, writer);
             }
             else if(tagClassName.equals("com.skin.ayada.jstl.fmt.DateFormatTag"))
             {
-                this.writeFormatDateTag(index, indent, tagClassName, node, writer);
+                flag = this.writeFormatDateTag(index, indent, tagClassName, node, writer);
             }
             else
             {
-                this.writeTag(index, indent, tagClassName, node, writer);
+                flag = this.writeTag(index, indent, tagClassName, node, writer);
             }
         }
         else
         {
-            this.writeTag(index, indent, tagClassName, node, writer);
+            flag = this.writeTag(index, indent, tagClassName, node, writer);
         }
 
         if(node.getOffset() != index)
         {
             writer.println(indent + "/* NODE END: lineNumber: " + node.getLineNumber() + ", tagClassName: " + tagClassName + ", tagInstanceName: " + tagInstanceName + " */");
         }
+
+        return flag;
     }
 
     /**
@@ -377,8 +389,9 @@ public class JspCompiler
      * @param tagClassName
      * @param node
      * @param writer
+     * @return int
      */
-    private void writeImportTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
+    private int writeImportTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
     {
         if(node.getOffset() == index)
         {
@@ -388,6 +401,8 @@ public class JspCompiler
         {
             writer.println(indent + "/* jsp.jstl.core.ImportTag END */");
         }
+
+        return Tag.EVAL_PAGE;
     }
 
     /**
@@ -396,8 +411,9 @@ public class JspCompiler
      * @param tagClassName
      * @param node
      * @param writer
+     * @return int
      */
-    private void writeIfTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
+    private int writeIfTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
     {
         if(node.getOffset() == index)
         {
@@ -407,6 +423,8 @@ public class JspCompiler
         {
             writer.println(indent + "} /* jsp.jstl.core.IfTag END */");
         }
+
+        return Tag.EVAL_PAGE;
     }
     
     /**
@@ -415,8 +433,9 @@ public class JspCompiler
      * @param tagClassName
      * @param node
      * @param writer
+     * @return int
      */
-    private void writeSetTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
+    private int writeSetTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
     {
         if(node.getOffset() == index)
         {
@@ -459,6 +478,8 @@ public class JspCompiler
         {
             writer.println(indent + "/* jsp.jstl.core.SetTag END */");
         }
+
+        return Tag.EVAL_PAGE;
     }
     
     /**
@@ -467,15 +488,15 @@ public class JspCompiler
      * @param tagClassName
      * @param node
      * @param writer
+     * @return int
      */
-    private void writeOutTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
+    private int writeOutTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
     {
+        String value = node.getAttribute("value");
         boolean escapeXml = "true".equals(node.getAttribute("escapeXml"));
 
         if(node.getOffset() == index)
         {
-            String value = node.getAttribute("value");
-
             if(value != null)
             {
                 if(value.indexOf("${") < 0)
@@ -510,22 +531,24 @@ public class JspCompiler
                         writer.println(indent + "out.write(ExpressionUtil.getString(expressionContext, \"" + StringUtil.escape(value) + "\"));");
                     }
                 }
+                return Tag.SKIP_BODY;
             }
-
-            if(node.getLength() > 2)
+            else if(node.getLength() > 2)
             {
                 writer.println(indent + "out = pageContext.pushBody();");
             }
+            return Tag.EVAL_PAGE;
         }
         else
         {
-            if(node.getLength() > 2)
+            if(value == null && node.getLength() > 2)
             {
                 writer.println(indent + "pageContext.printBodyContent((BodyContent)out, " + escapeXml + ");");
                 writer.println(indent + "out = pageContext.popBody();");
             }
 
             writer.println(indent + "/* jsp.jstl.core.OutTag END */");
+            return Tag.EVAL_PAGE;
         }
     }
     
@@ -535,8 +558,9 @@ public class JspCompiler
      * @param tagClassName
      * @param node
      * @param writer
+     * @return int
      */
-    private void writeForEachTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
+    private int writeForEachTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
     {
         String tagInstanceName = this.getTagInstanceName(node);
         String parentTagInstanceName = this.getTagInstanceName(node.getParent());
@@ -689,6 +713,8 @@ public class JspCompiler
 
             writer.println(indent + "/* jsp.jstl.core.ForEachTag END */");
         }
+
+        return Tag.EVAL_PAGE;
     }
 
     /**
@@ -697,8 +723,9 @@ public class JspCompiler
      * @param tagClassName
      * @param node
      * @param writer
+     * @return int
      */
-    private void writeChooseTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
+    private int writeChooseTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
     {
         if(node.getOffset() == index)
         {
@@ -710,16 +737,19 @@ public class JspCompiler
         {
             writer.println(indent + "/* jsp.jstl.core.ChooseTag END */");
         }
+
+        return Tag.EVAL_PAGE;
     }
-    
+
     /**
      * @param index
      * @param indent
      * @param tagClassName
      * @param node
      * @param writer
+     * @return int
      */
-    private void writeWhenTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
+    private int writeWhenTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
     {
         if(node.getOffset() == index)
         {
@@ -731,6 +761,8 @@ public class JspCompiler
         {
             writer.println(indent + "} /* jsp.jstl.core.WhenTag END */");
         }
+
+        return Tag.EVAL_PAGE;
     }
     
     /**
@@ -739,8 +771,9 @@ public class JspCompiler
      * @param tagClassName
      * @param node
      * @param writer
+     * @return int
      */
-    private void writeOtherwiseTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
+    private int writeOtherwiseTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
     {
         if(node.getOffset() == index)
         {
@@ -752,6 +785,8 @@ public class JspCompiler
         {
             writer.println(indent + "} /* jsp.jstl.core.OtherwiseTag END */");
         }
+
+        return Tag.EVAL_PAGE;
     }
 
     /**
@@ -760,8 +795,9 @@ public class JspCompiler
      * @param tagClassName
      * @param node
      * @param writer
+     * @return int
      */
-    private void writeFormatDateTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
+    private int writeFormatDateTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
     {
         if(node.getOffset() == index)
         {
@@ -790,6 +826,8 @@ public class JspCompiler
         {
             writer.println(indent + "/* jsp.jstl.fmt.FormatDateTag END */");
         }
+
+        return Tag.EVAL_PAGE;
     }
 
     /**
@@ -798,8 +836,9 @@ public class JspCompiler
      * @param tagClassName
      * @param node
      * @param writer
+     * @return int
      */
-    private void writeCommentTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
+    private int writeCommentTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
     {
         if(node.getOffset() == index)
         {
@@ -809,6 +848,8 @@ public class JspCompiler
         {
             writer.println(indent + "} /* jsp.jstl.core.CommentTag END */");
         }
+
+        return Tag.EVAL_PAGE;
     }
 
     /**
@@ -817,8 +858,9 @@ public class JspCompiler
      * @param tagClassName
      * @param node
      * @param writer
+     * @return int
      */
-    private void writePrintTagTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
+    private int writePrintTagTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
     {
         if(node.getOffset() == index)
         {
@@ -856,6 +898,8 @@ public class JspCompiler
         {
             writer.println(indent + "/* jsp.jstl.core.PrintTag END */");
         }
+
+        return Tag.EVAL_PAGE;
     }
     
     /**
@@ -864,8 +908,9 @@ public class JspCompiler
      * @param tagClassName
      * @param node
      * @param writer
+     * @return int
      */
-    private void writeTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
+    private int writeTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
     {
         String tagInstanceName = this.getTagInstanceName(node);
         String parentTagInstanceName = this.getTagInstanceName(node.getParent());
@@ -894,14 +939,17 @@ public class JspCompiler
             writer.println(indent + "    return;");
             writer.println(indent + "}");
 
-            if(this.isAssignableFrom(tagClassName, BodyTag.class))
+            if(node.getLength() > 2)
             {
-                writer.println(indent + "if(" + flagName + " != Tag.SKIP_BODY && " + flagName + " != Tag.EVAL_BODY_INCLUDE){");
-                writer.println(indent + "    BodyContent " + bodyContentInstanceName + " = (BodyContent)(pageContext.pushBody());");
-                writer.println(indent + "    " + tagInstanceName + ".setBodyContent(" + bodyContentInstanceName + ");");
-                writer.println(indent + "    " + tagInstanceName + ".doInitBody();");
-                writer.println(indent + "    out = " + bodyContentInstanceName + ";");
-                writer.println(indent + "}");
+                if(this.isAssignableFrom(tagClassName, BodyTag.class))
+                {
+                    writer.println(indent + "if(" + flagName + " != Tag.SKIP_BODY && " + flagName + " == BodyTag.EVAL_BODY_BUFFERED){");
+                    writer.println(indent + "    BodyContent " + bodyContentInstanceName + " = (BodyContent)(pageContext.pushBody());");
+                    writer.println(indent + "    " + tagInstanceName + ".setBodyContent(" + bodyContentInstanceName + ");");
+                    writer.println(indent + "    " + tagInstanceName + ".doInitBody();");
+                    writer.println(indent + "    out = " + bodyContentInstanceName + ";");
+                    writer.println(indent + "}");
+                }
             }
 
             writer.println();
@@ -919,13 +967,18 @@ public class JspCompiler
             writer.println(indent + tagInstanceName+ ".doEndTag();");
             writer.println(indent + tagInstanceName + ".release();");
 
-            if(this.isAssignableFrom(tagClassName, BodyTag.class))
+            if(node.getLength() > 2)
             {
-                writer.println(indent + "if(" + flagName + " != Tag.SKIP_BODY && " + flagName + " != Tag.EVAL_BODY_INCLUDE){");
-                writer.println(indent + "    out = pageContext.popBody();");
-                writer.println(indent + "}");
+                if(this.isAssignableFrom(tagClassName, BodyTag.class))
+                {
+                    writer.println(indent + "if(" + flagName + " != Tag.SKIP_BODY && " + flagName + " == BodyTag.EVAL_BODY_BUFFERED){");
+                    writer.println(indent + "    out = pageContext.popBody();");
+                    writer.println(indent + "}");
+                }
             }
         }
+
+        return Tag.EVAL_PAGE;
     }
 
     /**

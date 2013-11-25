@@ -223,12 +223,17 @@ public class DefaultExecutor
         {
             if(flag == BodyTag.EVAL_BODY_BUFFERED)
             {
-                if(tag instanceof BodyTag)
+                Node node = statement.getNode();
+
+                if(node.getLength() > 2)
                 {
-                    BodyTag bodyTag = (BodyTag)tag;
-                    BodyContent bodyContent = (BodyContent)(pageContext.pushBody());
-                    bodyTag.setBodyContent(bodyContent);
-                    bodyTag.doInitBody();
+                    if(tag instanceof BodyTag)
+                    {
+                        BodyTag bodyTag = (BodyTag)tag;
+                        BodyContent bodyContent = (BodyContent)(pageContext.pushBody());
+                        bodyTag.setBodyContent(bodyContent);
+                        bodyTag.doInitBody();
+                    }
                 }
             }
         }
@@ -262,9 +267,14 @@ public class DefaultExecutor
                 {
                     if(startTagFlag == BodyTag.EVAL_BODY_BUFFERED)
                     {
-                        if(tag instanceof BodyTag)
+                        Node node = statement.getNode();
+
+                        if(node.getLength() > 2)
                         {
-                            pageContext.popBody();
+                            if(tag instanceof BodyTag)
+                            {
+                                pageContext.popBody();
+                            }
                         }
                     }
                 }
