@@ -73,6 +73,7 @@ public class JspCompiler
                 else
                 {
                     writer.println("    /* jsp:declaration END */");
+                    writer.println();
                 }
             }
         }
@@ -98,7 +99,7 @@ public class JspCompiler
             if(node.getNodeType() == NodeType.TEXT)
             {
                 writer.println(indent + "/* TEXT: lineNumber: " + node.getLineNumber() + " */");
-                writer.println(indent + "out.write(\"" + StringUtil.escape(StringUtil.compact(node.getTextContent())) + "\");");
+                writer.println(indent + "out.write(\"" + StringUtil.escape(node.getTextContent()) + "\");");
 
                 if(this.isTagNode(list, index + 1))
                 {
@@ -144,10 +145,12 @@ public class JspCompiler
             {
                 index = node.getOffset() + node.getLength() - 2;
             }
-
-            if(node.getOffset() != index)
+            else
             {
-                writer.println();
+                if(node.getOffset() != index)
+                {
+                    writer.println();
+                }
             }
         }
 
@@ -205,7 +208,7 @@ public class JspCompiler
                 {
                     if(node.getOffset() == index)
                     {
-                        writer.println("import " + node.getAttribute("import") + "; /* JSP_DIRECTIVE_PAGE.import: lineNumber: " + node.getLineNumber() + " */");
+                        writer.println("import " + node.getAttribute("import") + "; /* jsp:directive.import: lineNumber: " + node.getLineNumber() + " */");
                     }
                 }
             }
@@ -229,44 +232,44 @@ public class JspCompiler
         {
             if(node.getNodeType() == NodeType.JSP_DECLARATION)
             {
-                writer.println(indent + "/* JSP_DECLARATION: lineNumber: " + node.getLineNumber() + " */");
+                writer.println(indent + "/* jsp:declaration: lineNumber: " + node.getLineNumber() + " */");
                 writer.println(indent + "/* " + NodeUtil.getDescription(node) + " */");
                 return Tag.EVAL_PAGE;
             }
 
             if(node.getNodeType() == NodeType.JSP_DIRECTIVE_PAGE)
             {
-                writer.println(indent + "/* JSP_DIRECTIVE: lineNumber: " + node.getLineNumber() + " */");
+                writer.println(indent + "/* jsp:directive.page: lineNumber: " + node.getLineNumber() + " */");
                 writer.println(indent + "/* " + NodeUtil.getDescription(node) + " */");
                 return Tag.EVAL_PAGE;
             }
 
             if(node.getNodeType() == NodeType.JSP_DIRECTIVE_TAGLIB)
             {
-                writer.println(indent + "/* JSP_DIRECTIVE: lineNumber: " + node.getLineNumber() + " */");
+                writer.println(indent + "/* jsp:directive.taglib: lineNumber: " + node.getLineNumber() + " */");
                 writer.println(indent + "/* " + NodeUtil.getDescription(node) + " */");
                 return Tag.EVAL_PAGE;
             }
 
             if(node.getNodeType() == NodeType.JSP_DIRECTIVE_INCLUDE)
             {
-                writer.println(indent + "/* JSP_DIRECTIVE: lineNumber: " + node.getLineNumber() + " */");
+                writer.println(indent + "/* jsp:directive.include: lineNumber: " + node.getLineNumber() + " */");
                 writer.println(indent + "/* " + NodeUtil.getDescription(node) + " */");
                 return Tag.EVAL_PAGE;
             }
 
             if(node.getNodeType() == NodeType.JSP_SCRIPTLET)
             {
-                writer.println(indent + "/* JSP_SCRIPTLET: lineNumber: " + node.getLineNumber() + " */");
+                writer.println(indent + "/* jsp:scriptlet: lineNumber: " + node.getLineNumber() + " */");
                 writer.println(node.getTextContent());
-                return Tag.EVAL_PAGE;
+                return Tag.SKIP_BODY;
             }
 
             if(node.getNodeType() == NodeType.JSP_EXPRESSION)
             {
-                writer.println(indent + "/* JSP_EXPRESSION: lineNumber: " + node.getLineNumber() + " */");
+                writer.println(indent + "/* jsp:expression: lineNumber: " + node.getLineNumber() + " */");
                 writer.println(indent + "out.print(" + node.getTextContent() + ");");
-                return Tag.EVAL_PAGE;
+                return Tag.SKIP_BODY;
             }
         }
         else

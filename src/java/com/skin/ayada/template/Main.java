@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import com.skin.ayada.io.CompactWriter;
 import com.skin.ayada.runtime.JspFactory;
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.util.TemplateUtil;
@@ -75,8 +74,8 @@ public class Main
         TemplateContext templateContext = TemplateManager.getTemplateContext(parent.getAbsolutePath(), true);
 
         StringWriter stringWriter = new StringWriter();
-        CompactWriter compactWriter = new CompactWriter(stringWriter);
-        PageContext pageContext = JspFactory.getPageContext(templateContext, compactWriter);
+        /* CompactWriter compactWriter = new CompactWriter(stringWriter); */
+        PageContext pageContext = JspFactory.getPageContext(templateContext, stringWriter);
         Template template = templateContext.getTemplate(file.getName());
 
         long t3 = System.currentTimeMillis();

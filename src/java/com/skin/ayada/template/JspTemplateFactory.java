@@ -126,6 +126,7 @@ public class JspTemplateFactory extends TemplateFactory
         String[] args = new String[]{
             "-d", work,
             "-nowarn",
+            "-g",
             "-encoding", "UTF-8",
             "-classpath", this.getClassPath(),
             "-Xlint:unchecked",

@@ -77,7 +77,6 @@ public class JspTemplateFactoryTest
         System.out.println("compile time: " + (t2 - t1));
 
         StringWriter writer = new StringWriter();
-        // com.skin.ayada.io.CompactWriter compactWriter = new com.skin.ayada.io.CompactWriter(writer);
         PageContext pageContext = getPageContext(writer);
 
         try

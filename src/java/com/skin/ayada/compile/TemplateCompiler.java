@@ -436,7 +436,6 @@ public class TemplateCompiler extends PageCompiler
                 node.setClosed(NodeType.PAIR_CLOSED);
                 this.skipCRLF();
                 node.append(this.readNodeContent(nodeName));
-                this.skipCRLF();
 
                 if(this.ignoreJspTag == false)
                 {
@@ -502,15 +501,24 @@ public class TemplateCompiler extends PageCompiler
      */
     public void skipCRLF()
     {
-        while(this.stream.peek() == '\r')
-        {
-            this.stream.read();
-        }
+        int i = -1;
 
-        while(this.stream.peek() == '\n')
+        while((i = this.stream.peek()) != -1)
         {
-            this.lineNumber++;
-            this.stream.read();
+            if(i == '\r')
+            {
+                this.stream.read();
+                continue;
+            }
+
+            if(i == '\n')
+            {
+                this.lineNumber++;
+                this.stream.read();
+                continue;
+            }
+
+            break;
         }
     }
 
@@ -522,14 +530,13 @@ public class TemplateCompiler extends PageCompiler
         int i;
         while((i = this.stream.peek()) != -1)
         {
-            if(i == '\n')
+            if(i <= ' ')
             {
-                this.lineNumber++;
-                this.stream.read();
-                continue;
-            }
-            else if(i == ' ' || i == '\r' || i == '\t')
-            {
+                if(i == '\n')
+                {
+                    this.lineNumber++;
+                }
+
                 this.stream.read();
                 continue;
             }
@@ -668,6 +675,7 @@ public class TemplateCompiler extends PageCompiler
             if(attributes.get("page") != null)
             {
                 nodeName = NodeType.JSP_DIRECTIVE_PAGE_NAME;
+                attributes.remove("page");
             }
             else if(attributes.get("taglib") != null)
             {
@@ -690,6 +698,7 @@ public class TemplateCompiler extends PageCompiler
             node.setClosed(NodeType.SELF_CLOSED);
             this.pushNode(stack, list, node);
             this.popNode(stack, list, nodeName);
+            this.skipCRLF();
         }
         else
         {
@@ -707,6 +716,7 @@ public class TemplateCompiler extends PageCompiler
             }
 
             this.skipCRLF();
+            int ln = this.lineNumber;
 
             while((i = this.stream.read()) != -1)
             {
@@ -731,17 +741,18 @@ public class TemplateCompiler extends PageCompiler
                 JspDeclaration node = new JspDeclaration();
                 node.append(buffer.toString());
                 node.setOffset(list.size());
-                node.setLineNumber(this.lineNumber);
+                node.setLineNumber(ln);
                 node.setClosed(NodeType.PAIR_CLOSED);
                 this.pushNode(stack, list, node);
                 this.popNode(stack, list, node.getNodeName());
+                this.skipCRLF();
             }
             else if(t == '=')
             {
                 JspExpression node = new JspExpression();
                 node.append(buffer.toString());
                 node.setOffset(list.size());
-                node.setLineNumber(this.lineNumber);
+                node.setLineNumber(ln);
                 node.setClosed(NodeType.PAIR_CLOSED);
                 this.pushNode(stack, list, node);
                 this.popNode(stack, list, node.getNodeName());
@@ -751,14 +762,13 @@ public class TemplateCompiler extends PageCompiler
                 JspScriptlet node = new JspScriptlet();
                 node.append(buffer.toString());
                 node.setOffset(list.size());
-                node.setLineNumber(this.lineNumber);
+                node.setLineNumber(ln);
                 node.setClosed(NodeType.PAIR_CLOSED);
                 this.pushNode(stack, list, node);
                 this.popNode(stack, list, node.getNodeName());
+                this.skipCRLF();
             }
         }
-
-        this.skipCRLF();
     }
 
     /**
