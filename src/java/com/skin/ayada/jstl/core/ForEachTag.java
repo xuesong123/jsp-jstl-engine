@@ -38,13 +38,8 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
     {
     }
 
-    /**
-     * @return int
-     */
-    public int doStartTag()
+    public void init()
     {
-        super.doStartTag();
-
         if(this.hasItems == false)
         {
             List<Integer> list = new ArrayList<Integer>();
@@ -62,6 +57,15 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
             this.setLoopStatus(this);
             this.pageContext.setAttribute(this.getVarStatus(), this);
         }
+    }
+
+    /**
+     * @return int
+     */
+    public int doStartTag()
+    {
+        super.doStartTag();
+        this.init();
 
         if(this.hasNext())
         {

@@ -95,9 +95,9 @@
 <c:if test="${1 == 1}">c:if test</c:if>
 
 <h1>c:forEach test1</h1>
-<c:forEach    
+<c:each    
     items="1,2,3,4,5"
-    var="mynum">${mynum}</c:forEach>
+    var="mynum">${mynum}</c:each>
 
 <h1>c:forEach test2</h1>
 <c:forEach items="${userList}" var="user" varStatus="status">
@@ -108,6 +108,7 @@
         <c:when test="${user.userName == 'test3'}"><p>test3, good man !</p></c:when>
         <c:otherwise><p>unknown user! Do you known 'bad egg'? You! Are!</p></c:otherwise>
     </c:choose>
+    <c:continue/>
 </c:forEach>
 
 <h1>c:choose test1</h1>

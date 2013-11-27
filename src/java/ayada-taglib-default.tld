@@ -12,6 +12,8 @@ c:forEach         com.skin.ayada.jstl.core.ForEachTag
 c:choose          com.skin.ayada.jstl.core.ChooseTag
 c:when            com.skin.ayada.jstl.core.WhenTag
 c:otherwise       com.skin.ayada.jstl.core.OtherwiseTag
+c:continue        com.skin.ayada.jstl.core.ContinueTag
+c:break           com.skin.ayada.jstl.core.BreakTag
 c:comment         com.skin.ayada.jstl.core.CommentTag
 c:param           com.skin.ayada.jstl.core.ParameterTag
 c:print           com.skin.ayada.jstl.core.PrintTag
@@ -25,7 +27,9 @@ c:list            com.skin.ayada.jstl.core.ListTag
 c:entry           com.skin.ayada.jstl.core.AttributeTag
 c:element         com.skin.ayada.jstl.core.AttributeTag
 c:attribute       com.skin.ayada.jstl.core.AttributeTag
+c:invoke          com.skin.ayada.jstl.core.InvokeTag
 c:export          com.skin.ayada.jstl.core.ExportTag
+c:execute         com.skin.ayada.jstl.core.ExecuteTag
 
 ## ext taglib
 c:action          com.skin.ayada.taglib.ActionTag

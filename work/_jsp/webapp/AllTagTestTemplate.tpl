@@ -27,129 +27,133 @@
 [NODE]: <jsp:scriptlet lineNumber="38" offset="26" length="2">
 [NODE]: </jsp:scriptlet>
 [TEXT]: ============================================\r\n
-[NODE]: <jsp:scriptlet lineNumber="47" offset="29" length="2">
+[NODE]: <jsp:scriptlet lineNumber="42" offset="29" length="2">
 [NODE]: </jsp:scriptlet>
-[NODE]: <jsp:declaration lineNumber="51" offset="31" length="2">
+[NODE]: <jsp:declaration lineNumber="46" offset="31" length="2">
 [NODE]: </jsp:declaration>
-[NODE]: <jsp:scriptlet lineNumber="55" offset="33" length="2">
+[NODE]: <jsp:scriptlet lineNumber="50" offset="33" length="2">
 [NODE]: </jsp:scriptlet>
-[NODE]: <jsp:scriptlet lineNumber="59" offset="35" length="2">
+[NODE]: <jsp:scriptlet lineNumber="54" offset="35" length="2">
 [NODE]: </jsp:scriptlet>
-[NODE]: <jsp:scriptlet lineNumber="65" offset="37" length="2">
+[NODE]: <jsp:scriptlet lineNumber="60" offset="37" length="2">
 [NODE]: </jsp:scriptlet>
 [TEXT]: <p>\r\n    myInt: 
-[NODE]: <jsp:expression lineNumber="69" offset="40" length="2">
+[NODE]: <jsp:expression lineNumber="64" offset="40" length="2">
 [NODE]: </jsp:expression>
 [TEXT]: \r\n</p>\r\n\r\n<p>\r\n    mytest: 
-[NODE]: <jsp:expression lineNumber="73" offset="43" length="2">
+[NODE]: <jsp:expression lineNumber="68" offset="43" length="2">
 [NODE]: </jsp:expression>
 [TEXT]: \r\n</p>\r\n
-[NODE]: <jsp:scriptlet lineNumber="75" offset="46" length="2">
+[NODE]: <jsp:scriptlet lineNumber="70" offset="46" length="2">
 [NODE]: </jsp:scriptlet>
-[NODE]: <jsp:expression lineNumber="79" offset="48" length="2">
+[NODE]: <jsp:expression lineNumber="74" offset="48" length="2">
 [NODE]: </jsp:expression>
 [TEXT]: \r\n============================================\r\n
-[NODE]: <c:set lineNumber="81" offset="51" length="2" tagClass="com.skin.ayada.jstl.core.SetTag" tagFactory="com.skin.ayada.jstl.factory.SetTagFactory" var="myString" value="${StringUtil.replace('abc', 'b', '\n')}">
+[NODE]: <c:set lineNumber="76" offset="51" length="2" tagClass="com.skin.ayada.jstl.core.SetTag" tagFactory="com.skin.ayada.jstl.factory.SetTagFactory" var="myString" value="${StringUtil.replace('abc', 'b', '\n')}">
 [NODE]: </c:set>
 [TEXT]: <p>myString: [
-[NODE]: <c:out lineNumber="82" offset="54" length="2" tagClass="com.skin.ayada.jstl.core.OutTag" tagFactory="com.skin.ayada.jstl.factory.OutTagFactory" value="${myString}">
+[NODE]: <c:out lineNumber="77" offset="54" length="2" tagClass="com.skin.ayada.jstl.core.OutTag" tagFactory="com.skin.ayada.jstl.factory.OutTagFactory" value="${myString}">
 [NODE]: </c:out>
 [TEXT]: ]</p>\r\n\r\n
-[NODE]: <c:set lineNumber="84" offset="57" length="2" tagClass="com.skin.ayada.jstl.core.SetTag" tagFactory="com.skin.ayada.jstl.factory.SetTagFactory" var="myString" value=""a + 1"">
+[NODE]: <c:set lineNumber="79" offset="57" length="2" tagClass="com.skin.ayada.jstl.core.SetTag" tagFactory="com.skin.ayada.jstl.factory.SetTagFactory" var="myString" value=""a + 1"">
 [NODE]: </c:set>
 [TEXT]: <p>myString: [
-[NODE]: <c:out lineNumber="85" offset="60" length="2" tagClass="com.skin.ayada.jstl.core.OutTag" tagFactory="com.skin.ayada.jstl.factory.OutTagFactory" value="${myString}">
+[NODE]: <c:out lineNumber="80" offset="60" length="2" tagClass="com.skin.ayada.jstl.core.OutTag" tagFactory="com.skin.ayada.jstl.factory.OutTagFactory" value="${myString}">
 [NODE]: </c:out>
 [TEXT]: ]</p>\r\n\r\n
-[NODE]: <c:set lineNumber="87" offset="63" length="2" tagClass="com.skin.ayada.jstl.core.SetTag" tagFactory="com.skin.ayada.jstl.factory.SetTagFactory" var="myVar" value="Hello, World!">
+[NODE]: <c:set lineNumber="82" offset="63" length="2" tagClass="com.skin.ayada.jstl.core.SetTag" tagFactory="com.skin.ayada.jstl.factory.SetTagFactory" var="myVar" value="Hello, World!">
 [NODE]: </c:set>
 [TEXT]: <h1>############## 
 [VARI]: ${myVar}
 [TEXT]:  ##############</h1>\r\n\r\n
-[NODE]: <c:out lineNumber="90" offset="68" length="2" tagClass="com.skin.ayada.jstl.core.OutTag" tagFactory="com.skin.ayada.jstl.factory.OutTagFactory" value="c:out: Hello, World!">
+[NODE]: <c:out lineNumber="85" offset="68" length="2" tagClass="com.skin.ayada.jstl.core.OutTag" tagFactory="com.skin.ayada.jstl.factory.OutTagFactory" value="c:out: Hello, World!">
 [NODE]: </c:out>
 [TEXT]: \r\n<div style=\"background-color: #c0c0c0;\"></div>\r\n
-[NODE]: <c:out lineNumber="92" offset="71" length="2" tagClass="com.skin.ayada.jstl.core.OutTag" tagFactory="com.skin.ayada.jstl.factory.OutTagFactory" value=""<div>Hello World!</div>"" escapeXml="false">
+[NODE]: <c:out lineNumber="87" offset="71" length="2" tagClass="com.skin.ayada.jstl.core.OutTag" tagFactory="com.skin.ayada.jstl.factory.OutTagFactory" value=""<div>Hello World!</div>"" escapeXml="false">
 [NODE]: </c:out>
 [TEXT]: \r\n
-[NODE]: <c:out lineNumber="93" offset="74" length="3" tagClass="com.skin.ayada.jstl.core.OutTag" tagFactory="com.skin.ayada.jstl.factory.OutTagFactory" escapeXml="true">
+[NODE]: <c:out lineNumber="88" offset="74" length="3" tagClass="com.skin.ayada.jstl.core.OutTag" tagFactory="com.skin.ayada.jstl.factory.OutTagFactory" escapeXml="true">
 [TEXT]: <h1>Hello World!</h1>
 [NODE]: </c:out>
 [TEXT]: \r\n
-[NODE]: <c:out lineNumber="94" offset="78" length="3" tagClass="com.skin.ayada.jstl.core.OutTag" tagFactory="com.skin.ayada.jstl.factory.OutTagFactory" value="<div>Hello World!</div>" escapeXml="true">
+[NODE]: <c:out lineNumber="89" offset="78" length="3" tagClass="com.skin.ayada.jstl.core.OutTag" tagFactory="com.skin.ayada.jstl.factory.OutTagFactory" value="<div>Hello World!</div>" escapeXml="true">
 [TEXT]: <h1>Hello World!</h1>
 [NODE]: </c:out>
 [TEXT]: \r\n\r\n
-[NODE]: <c:set lineNumber="96" offset="82" length="2" tagClass="com.skin.ayada.jstl.core.SetTag" tagFactory="com.skin.ayada.jstl.factory.SetTagFactory" var="myName" value="xuesong.net">
+[NODE]: <c:set lineNumber="91" offset="82" length="2" tagClass="com.skin.ayada.jstl.core.SetTag" tagFactory="com.skin.ayada.jstl.factory.SetTagFactory" var="myName" value="xuesong.net">
 [NODE]: </c:set>
-[NODE]: <c:out lineNumber="97" offset="84" length="2" tagClass="com.skin.ayada.jstl.core.OutTag" tagFactory="com.skin.ayada.jstl.factory.OutTagFactory" value="Hello, ${myName}!" escapeXml="true">
+[NODE]: <c:out lineNumber="92" offset="84" length="2" tagClass="com.skin.ayada.jstl.core.OutTag" tagFactory="com.skin.ayada.jstl.factory.OutTagFactory" value="Hello, ${myName}!" escapeXml="true">
 [NODE]: </c:out>
 [TEXT]: \r\n
-[NODE]: <c:out lineNumber="98" offset="87" length="2" tagClass="com.skin.ayada.jstl.core.OutTag" tagFactory="com.skin.ayada.jstl.factory.OutTagFactory" value="Hello, ${myName}!" escapeXml="false">
+[NODE]: <c:out lineNumber="93" offset="87" length="2" tagClass="com.skin.ayada.jstl.core.OutTag" tagFactory="com.skin.ayada.jstl.factory.OutTagFactory" value="Hello, ${myName}!" escapeXml="false">
 [NODE]: </c:out>
 [TEXT]: \r\n\r\n
-[NODE]: <c:if lineNumber="100" offset="90" length="3" tagClass="com.skin.ayada.jstl.core.IfTag" tagFactory="com.skin.ayada.jstl.factory.IfTagFactory" test="${1 == 1}">
+[NODE]: <c:if lineNumber="95" offset="90" length="3" tagClass="com.skin.ayada.jstl.core.IfTag" tagFactory="com.skin.ayada.jstl.factory.IfTagFactory" test="${1 == 1}">
 [TEXT]: c:if test
 [NODE]: </c:if>
 [TEXT]: \r\n\r\n<h1>c:forEach test1</h1>\r\n
-[NODE]: <c:forEach lineNumber="103" offset="94" length="3" tagClass="com.skin.ayada.jstl.core.ForEachTag" tagFactory="com.skin.ayada.jstl.factory.ForEachTagFactory" items="1,2,3,4,5" var="mynum">
+[NODE]: <c:each lineNumber="98" offset="94" length="3" tagClass="com.skin.ayada.jstl.core.ForEachTag" tagFactory="com.skin.ayada.jstl.factory.ForEachTagFactory" items="1,2,3,4,5" var="mynum">
 [VARI]: ${mynum}
-[NODE]: </c:forEach>
+[NODE]: </c:each>
 [TEXT]: \r\n\r\n<h1>c:forEach test2</h1>\r\n
-[NODE]: <c:forEach lineNumber="108" offset="98" length="19" tagClass="com.skin.ayada.jstl.core.ForEachTag" tagFactory="com.skin.ayada.jstl.factory.ForEachTagFactory" items="${userList}" var="user" varStatus="status">
+[NODE]: <c:forEach lineNumber="103" offset="98" length="23" tagClass="com.skin.ayada.jstl.core.ForEachTag" tagFactory="com.skin.ayada.jstl.factory.ForEachTagFactory" items="${userList}" var="user" varStatus="status">
 [TEXT]: \r\n    <p>user: 
 [EXPR]: ${user.userName}
 [TEXT]: </p>\r\n    
-[NODE]: <c:choose lineNumber="110" offset="102" length="14" tagClass="com.skin.ayada.jstl.core.ChooseTag" tagFactory="com.skin.ayada.jstl.factory.ChooseTagFactory">
-[NODE]: <c:when lineNumber="111" offset="103" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${user.userName == 'test1'}">
+[NODE]: <c:choose lineNumber="105" offset="102" length="14" tagClass="com.skin.ayada.jstl.core.ChooseTag" tagFactory="com.skin.ayada.jstl.factory.ChooseTagFactory">
+[NODE]: <c:when lineNumber="106" offset="103" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${user.userName == 'test1'}">
 [TEXT]: <p>test1, good man !</p>
 [NODE]: </c:when>
-[NODE]: <c:when lineNumber="112" offset="106" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${user.userName == 'test2'}">
+[NODE]: <c:when lineNumber="107" offset="106" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${user.userName == 'test2'}">
 [TEXT]: <p>test2, good man !</p>
 [NODE]: </c:when>
-[NODE]: <c:when lineNumber="113" offset="109" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${user.userName == 'test3'}">
+[NODE]: <c:when lineNumber="108" offset="109" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${user.userName == 'test3'}">
 [TEXT]: <p>test3, good man !</p>
 [NODE]: </c:when>
-[NODE]: <c:otherwise lineNumber="114" offset="112" length="3" tagClass="com.skin.ayada.jstl.core.OtherwiseTag" tagFactory="com.skin.ayada.jstl.factory.OtherwiseTagFactory">
+[NODE]: <c:otherwise lineNumber="109" offset="112" length="3" tagClass="com.skin.ayada.jstl.core.OtherwiseTag" tagFactory="com.skin.ayada.jstl.factory.OtherwiseTagFactory">
 [TEXT]: <p>unknown user! Do you known \'bad egg\'? You! Are!</p>
 [NODE]: </c:otherwise>
 [NODE]: </c:choose>
+[TEXT]:     
+[NODE]: <c:continue lineNumber="111" offset="117" length="2" tagClass="com.skin.ayada.jstl.core.ContinueTag" tagFactory="com.skin.ayada.jstl.factory.ContinueTagFactory">
+[NODE]: </c:continue>
+[TEXT]: \r\n
 [NODE]: </c:forEach>
 [TEXT]: \r\n\r\n<h1>c:choose test1</h1>\r\n
-[NODE]: <c:choose lineNumber="119" offset="118" length="14" tagClass="com.skin.ayada.jstl.core.ChooseTag" tagFactory="com.skin.ayada.jstl.factory.ChooseTagFactory">
-[NODE]: <c:when lineNumber="120" offset="119" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${1 == 1}">
+[NODE]: <c:choose lineNumber="115" offset="122" length="14" tagClass="com.skin.ayada.jstl.core.ChooseTag" tagFactory="com.skin.ayada.jstl.factory.ChooseTagFactory">
+[NODE]: <c:when lineNumber="116" offset="123" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${1 == 1}">
 [TEXT]: c:when test=\"{1 == 1}\"
 [NODE]: </c:when>
-[NODE]: <c:when lineNumber="121" offset="122" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${2 == 2}">
+[NODE]: <c:when lineNumber="117" offset="126" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${2 == 2}">
 [TEXT]: c:when test=\"{2 == 2}\"
 [NODE]: </c:when>
-[NODE]: <c:when lineNumber="122" offset="125" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${3 == 3}">
+[NODE]: <c:when lineNumber="118" offset="129" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${3 == 3}">
 [TEXT]: c:when test=\"{3 == 3}\"
 [NODE]: </c:when>
-[NODE]: <c:otherwise lineNumber="123" offset="128" length="3" tagClass="com.skin.ayada.jstl.core.OtherwiseTag" tagFactory="com.skin.ayada.jstl.factory.OtherwiseTagFactory">
+[NODE]: <c:otherwise lineNumber="119" offset="132" length="3" tagClass="com.skin.ayada.jstl.core.OtherwiseTag" tagFactory="com.skin.ayada.jstl.factory.OtherwiseTagFactory">
 [TEXT]: c:otherwise
 [NODE]: </c:otherwise>
 [NODE]: </c:choose>
 [TEXT]: <h1>app:test test1</h1>\r\n
-[NODE]: <app:test lineNumber="127" offset="133" length="2" tagClass="test.com.skin.ayada.taglib.TestTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestTagFactory" myBoolean="true" myChar="c" myByte="1" myInt="-1.0" myFloat="1.0f" myDouble="1.0d" myLong="1L" myString="Hello">
+[NODE]: <app:test lineNumber="123" offset="137" length="2" tagClass="test.com.skin.ayada.taglib.TestTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestTagFactory" myBoolean="true" myChar="c" myByte="1" myInt="-1.0" myFloat="1.0f" myDouble="1.0d" myLong="1L" myString="Hello">
 [NODE]: </app:test>
 [TEXT]: \r\n
-[NODE]: <app:test lineNumber="128" offset="136" length="2" tagClass="test.com.skin.ayada.taglib.TestTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestTagFactory" myBoolean="false" myChar="c" myByte="243" myInt="-1.0" myFloat="1.0F" myDouble="1.0D" myLong="1L" myString="Hello">
+[NODE]: <app:test lineNumber="124" offset="140" length="2" tagClass="test.com.skin.ayada.taglib.TestTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestTagFactory" myBoolean="false" myChar="c" myByte="243" myInt="-1.0" myFloat="1.0F" myDouble="1.0D" myLong="1L" myString="Hello">
 [NODE]: </app:test>
 [TEXT]: \r\n
-[NODE]: <app:test lineNumber="129" offset="139" length="2" tagClass="test.com.skin.ayada.taglib.TestTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestTagFactory" myInt="-1.0" myFloat="1.0" myDouble="1e3" myLong="1e3" myString="Hello">
+[NODE]: <app:test lineNumber="125" offset="143" length="2" tagClass="test.com.skin.ayada.taglib.TestTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestTagFactory" myInt="-1.0" myFloat="1.0" myDouble="1e3" myLong="1e3" myString="Hello">
 [NODE]: </app:test>
 [TEXT]: \r\n
-[NODE]: <app:test lineNumber="130" offset="142" length="2" tagClass="test.com.skin.ayada.taglib.TestTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestTagFactory" myInt="-1.0" myFloat="1.0" myDouble="1.2e3" myLong="1.2e3" myString="Hello">
+[NODE]: <app:test lineNumber="126" offset="146" length="2" tagClass="test.com.skin.ayada.taglib.TestTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestTagFactory" myInt="-1.0" myFloat="1.0" myDouble="1.2e3" myLong="1.2e3" myString="Hello">
 [NODE]: </app:test>
 [TEXT]: \r\n\r\n<h1>app:scrollpage test1</h1>\r\n
-[NODE]: <app:scrollpage lineNumber="133" offset="145" length="2" tagClass="test.com.skin.ayada.taglib.ScrollPage" tagFactory="test.com.skin.ayada.taglib.proxy.ScrollPageFactory" count="254" pageNum="2" pageSize="10">
+[NODE]: <app:scrollpage lineNumber="129" offset="149" length="2" tagClass="test.com.skin.ayada.taglib.ScrollPage" tagFactory="test.com.skin.ayada.taglib.proxy.ScrollPageFactory" count="254" pageNum="2" pageSize="10">
 [NODE]: </app:scrollpage>
 [TEXT]: \r\n\r\n
-[NODE]: <app:bodytest lineNumber="135" offset="148" length="2" tagClass="test.com.skin.ayada.taglib.TestBodyTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestBodyTagFactory">
+[NODE]: <app:bodytest lineNumber="131" offset="152" length="2" tagClass="test.com.skin.ayada.taglib.TestBodyTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestBodyTagFactory">
 [NODE]: </app:bodytest>
 [TEXT]: \r\n
-[NODE]: <app:bodytest lineNumber="136" offset="151" length="3" tagClass="test.com.skin.ayada.taglib.TestBodyTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestBodyTagFactory">
+[NODE]: <app:bodytest lineNumber="132" offset="155" length="3" tagClass="test.com.skin.ayada.taglib.TestBodyTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestBodyTagFactory">
 [TEXT]: Hello World !
 [NODE]: </app:bodytest>
 [TEXT]: \r\n</body>\r\n</html>

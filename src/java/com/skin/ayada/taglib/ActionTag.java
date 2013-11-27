@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.skin.ayada.component.Parameters;
+import com.skin.ayada.tagext.ParameterSupportTag;
 import com.skin.ayada.tagext.TagSupport;
 
 /**
@@ -23,7 +24,7 @@ import com.skin.ayada.tagext.TagSupport;
  * @author xuesong.net
  * @version 1.0
  */
-public class ActionTag extends TagSupport implements com.skin.ayada.tagext.ParameterTag
+public class ActionTag extends TagSupport implements ParameterSupportTag
 {
     private static final long serialVersionUID = 1L;
     private String className;
@@ -73,16 +74,6 @@ public class ActionTag extends TagSupport implements com.skin.ayada.tagext.Param
         {
             try
             {
-                Map<String, Object> map = parameters.getParameters();
-
-                for(Map.Entry<String, Object> entry : map.entrySet())
-                {
-                    if(context.get(entry.getKey()) == null && entry.getValue() != null)
-                    {
-                        context.put(entry.getKey(), entry.getValue());
-                    }
-                }
-
                 pageContext.include(this.getPage(), context);
             }
             catch(Exception e)

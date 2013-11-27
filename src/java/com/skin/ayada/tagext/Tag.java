@@ -24,7 +24,9 @@ public interface Tag
     public static final int SKIP_BODY = 0;
     public static final int EVAL_BODY_INCLUDE = 1;
     public static final int SKIP_PAGE = 5;
-    public static final int EVAL_PAGE = 6; 
+    public static final int EVAL_PAGE = 6;
+    public static final int CONTINUE = "continue".hashCode();
+    public static final int BREAK    = "break".hashCode();
 
     /**
      * @return int

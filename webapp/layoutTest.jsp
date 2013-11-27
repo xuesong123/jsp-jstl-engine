@@ -1,8 +1,7 @@
-<t:import name="c:layout" className="com.skin.ayada.taglib.ActionTag"/>
-<t:import name="c:attribute" className="com.skin.ayada.jstl.core.ParameterTag"/>
+<t:import name="c:layout" className="com.skin.ayada.jstl.core.InvokeTag"/>
 <c:layout page="/tags/layout.jsp">
-  ${1 + 2}  <c:attribute name="title" value="base layout test"/>
-  ${1 + 2}  <c:attribute name="header">
+    <c:attribute name="title" value="base layout test"/>
+    <c:attribute name="header">
         <ul>
             <c:forEach items="1,2,3" var="myInt">
                 <li>${myInt}</li>

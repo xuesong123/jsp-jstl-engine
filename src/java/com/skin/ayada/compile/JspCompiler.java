@@ -356,6 +356,14 @@ public class JspCompiler
             {
                 flag = this.writeOtherwiseTag(index, indent, tagClassName, node, writer);
             }
+            else if(tagClassName.equals("com.skin.ayada.jstl.core.ContinueTag"))
+            {
+                flag = this.writeContinueTag(index, indent, tagClassName, node, writer);
+            }
+            else if(tagClassName.equals("com.skin.ayada.jstl.core.BreakTag"))
+            {
+                flag = this.writeBreakTag(index, indent, tagClassName, node, writer);
+            }
             else if(tagClassName.equals("com.skin.ayada.jstl.core.CommentTag"))
             {
                 flag = this.writeCommentTag(index, indent, tagClassName, node, writer);
@@ -567,7 +575,6 @@ public class JspCompiler
     {
         String tagInstanceName = this.getTagInstanceName(node);
         String parentTagInstanceName = this.getTagInstanceName(node.getParent());
-        String flagName = this.getVariableName(node, "_jsp_flag_");
         String forEachOldVar = this.getVariableName(node, "_jsp_old_var_");
         String forEachOldVarStatus = this.getVariableName(node, "_jsp_old_var_status_");
 
@@ -672,35 +679,22 @@ public class JspCompiler
                 }
             }
 
-            if(varStatus != null)
-            {
-                writer.println(indent + "pageContext.setAttribute(\"" + varStatus + "\", " + tagInstanceName + ".getLoopStatus());");
-            }
+            writer.println(indent + tagInstanceName + ".init();");
+            writer.println(indent + "while(" + tagInstanceName + ".hasNext()){");
 
-            writer.println(indent + "int " + flagName + " = " + tagInstanceName + ".doStartTag();");
-            writer.println(indent + "if(" + flagName + " != Tag.SKIP_BODY){");
-            writer.println(indent + "    while(true){");
+            if(variable != null && variable.trim().length() > 0)
+            {
+                writer.println(indent + "    pageContext.setAttribute(\"" + variable.trim() + "\", " + tagInstanceName + ".next());");
+            }
+            else
+            {
+                writer.println(indent + "    " + tagInstanceName + ".next();");
+            }
         }
         else
         {
             String variable = node.getAttribute("var");
             String varStatus = node.getAttribute("varStatus");
-            writer.println(indent + "        if(" + tagInstanceName + ".hasNext()){");
-
-            if(variable != null && variable.trim().length() > 0)
-            {
-                writer.println(indent + "            pageContext.setAttribute(\"" + variable + "\", " + tagInstanceName + ".next());");
-            }
-            else
-            {
-                writer.println(indent + "            " + tagInstanceName + ".next();");
-            }
-
-            writer.println(indent + "        }");
-            writer.println(indent + "        else{");
-            writer.println(indent + "            break;");
-            writer.println(indent + "        }");
-            writer.println(indent + "    }");
             writer.println(indent + "}");
             writer.println(indent + tagInstanceName + ".release();");
 
@@ -787,6 +781,44 @@ public class JspCompiler
         else
         {
             writer.println(indent + "} /* jsp.jstl.core.OtherwiseTag END */");
+        }
+
+        return Tag.EVAL_PAGE;
+    }
+
+    /**
+     * @param index
+     * @param indent
+     * @param tagClassName
+     * @param node
+     * @param writer
+     * @return int
+     */
+    private int writeContinueTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
+    {
+        if(node.getOffset() == index)
+        {
+            writer.println(indent + "if(1 == 1){ continue; }");
+            writer.println(indent + "/* jsp.jstl.core.ContinueTag END */");
+        }
+
+        return Tag.EVAL_PAGE;
+    }
+
+    /**
+     * @param index
+     * @param indent
+     * @param tagClassName
+     * @param node
+     * @param writer
+     * @return int
+     */
+    private int writeBreakTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
+    {
+        if(node.getOffset() == index)
+        {
+            writer.println(indent + "if(1 == 1){ break; }");
+            writer.println(indent + "/* jsp.jstl.core.BreakTag END */");
         }
 
         return Tag.EVAL_PAGE;
@@ -1266,7 +1298,7 @@ public class JspCompiler
             }
             else if(tagClassName.equals("com.skin.ayada.jstl.core.ForEachTag"))
             {
-                buffer.append("        ");
+                buffer.append("    ");
             }
             else if(tagClassName.equals("com.skin.ayada.jstl.core.ChooseTag"))
             {
