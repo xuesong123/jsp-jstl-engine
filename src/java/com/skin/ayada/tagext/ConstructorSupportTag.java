@@ -24,5 +24,5 @@ public interface ConstructorSupportTag
      * @param type
      * @param value
      */
-    public void setArgument(int index, Class<?> type, Object value);
+    public void setArgument(Class<?> type, Object value);
 }

@@ -1,13 +1,13 @@
 <c:output out="true" file="webapp\extTest.log">
     <c:bean name="testTag1" className="test.com.skin.ayada.taglib.TestTag">
-        <c:constructor index="0" type="char" value="c"/>
-        <c:constructor index="1" type="byte" value="2"/>
+        <c:constructor type="char" value="c"/>
+        <c:constructor type="byte" value="2"/>
         <c:property name="pageContext" value="${pageContext}"/>
     </c:bean>
 
     <c:bean name="testTag2" className="test.com.skin.ayada.taglib.TestTag">
-        <c:constructor index="0" type="long" value="1.2e3"/>
-        <c:constructor index="1" type="java.lang.String" value="Hello"/>
+        <c:constructor type="long" value="1.2e3"/>
+        <c:constructor type="java.lang.String" value="Hello"/>
         <c:property name="pageContext" value="${pageContext}"/>
     </c:bean>
 

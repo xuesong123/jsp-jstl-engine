@@ -106,7 +106,7 @@ public class BeanTag extends TagSupport implements ConstructorSupportTag, Proper
      * @param value
      */
     @Override
-    public void setArgument(int index, Class<?> type, Object value)
+    public void setArgument(Class<?> type, Object value)
     {
         if(type != null)
         {

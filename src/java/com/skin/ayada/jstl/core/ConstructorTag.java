@@ -23,14 +23,13 @@ import com.skin.ayada.util.ClassUtil;
  */
 public class ConstructorTag extends TagSupport
 {
-    private int index;
     private String type;
     private Object value;
 
     @Override
     public int doStartTag() throws Exception
     {
-        this.setArgument(this.index, this.type, this.value);
+        this.setArgument(this.type, this.value);
         return Tag.SKIP_BODY;
     }
 
@@ -39,7 +38,7 @@ public class ConstructorTag extends TagSupport
      * @param value
      * @throws Exception
      */
-    protected void setArgument(int index, String type, Object value) throws Exception
+    protected void setArgument(String type, Object value) throws Exception
     {
         Tag parent = this.getParent();
 
@@ -51,33 +50,17 @@ public class ConstructorTag extends TagSupport
             {
                 Class<?> parameterType = ClassUtil.getClass(type);
                 Object argument = ClassUtil.cast(value, parameterType);
-                tag.setArgument(index, parameterType, argument);
+                tag.setArgument(parameterType, argument);
             }
             else
             {
-                tag.setArgument(index, value.getClass(), value);
+                tag.setArgument(value.getClass(), value);
             }
         }
         else
         {
             throw new RuntimeException("Illegal use of parameter-style tag without servlet as its direct parent: parent tag is not a ConstructorSupportTag !");
         }
-    }
-
-    /**
-     * @return the index
-     */
-    public int getIndex()
-    {
-        return this.index;
-    }
-
-    /**
-     * @param index the index to set
-     */
-    public void setIndex(int index)
-    {
-        this.index = index;
     }
 
     /**
