@@ -29,7 +29,7 @@ public class TagSupport implements IterationTag
      * @return int
      */
     @Override
-    public int doStartTag()
+    public int doStartTag() throws Exception
     {
         return EVAL_BODY_INCLUDE;
     }
@@ -38,7 +38,7 @@ public class TagSupport implements IterationTag
      * @return int
      */
     @Override
-    public int doAfterBody()
+    public int doAfterBody() throws Exception
     {
         return SKIP_BODY;
     }
@@ -47,7 +47,7 @@ public class TagSupport implements IterationTag
      * @return int
      */
     @Override
-    public int doEndTag()
+    public int doEndTag() throws Exception
     {
         return EVAL_PAGE;
     }

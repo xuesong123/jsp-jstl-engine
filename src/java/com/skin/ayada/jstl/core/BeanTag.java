@@ -10,9 +10,12 @@
  */
 package com.skin.ayada.jstl.core;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.skin.ayada.tagext.ConstructorSupportTag;
 import com.skin.ayada.tagext.PropertySupportTag;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.tagext.TagSupport;
@@ -24,39 +27,67 @@ import com.skin.ayada.util.ClassUtil;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class BeanTag extends TagSupport implements PropertySupportTag
+public class BeanTag extends TagSupport implements ConstructorSupportTag, PropertySupportTag
 {
     private String name;
     private String className;
+    private List<Class<?>> parameterTypes;
+    private List<Object> parameters;
     private Map<String, Object> properties;
 
     @Override
-    public int doStartTag()
+    public int doStartTag() throws Exception
     {
-        if(this.name == null)
+        if(this.name == null || this.className == null)
         {
             return Tag.SKIP_BODY;
         }
 
+        this.parameterTypes = new ArrayList<Class<?>>();
+        this.parameters = new ArrayList<Object>();
         this.properties = new HashMap<String, Object>();
         return TagSupport.EVAL_BODY_INCLUDE;
     }
 
     @Override
-    public int doEndTag()
+    public int doEndTag() throws Exception
     {
-        try
+        Object bean = null;
+
+        if(this.parameters.size() > 0)
         {
-            Object bean = ClassUtil.getInstance(this.className, null);
-            ClassUtil.setProperties(bean, this.properties);
-            this.pageContext.setAttribute(this.name, bean);
+            Object[] parameters = this.getParameters();
+            Class<?>[] parameterTypes = this.getParameterTypes();
+            bean = ClassUtil.getInstance(this.className, parameterTypes, parameters);
         }
-        catch(Exception e)
+        else
         {
-            e.printStackTrace();
+            bean = ClassUtil.getInstance(this.className);
         }
 
+        ClassUtil.setProperties(bean, this.properties);
+        this.pageContext.setAttribute(this.name, bean);
         return Tag.EVAL_PAGE;
+    }
+
+    /**
+     * @return Class<?>[]
+     */
+    public Class<?>[] getParameterTypes()
+    {
+        Class<?>[] values = new Class<?>[this.parameterTypes.size()];
+        this.parameterTypes.toArray(values);
+        return values;
+    }
+
+    /**
+     * @return Object[]
+     */
+    public Object[] getParameters()
+    {
+        Object[] values = new Object[this.parameters.size()];
+        this.parameters.toArray(values);
+        return values;
     }
 
     /**
@@ -67,6 +98,26 @@ public class BeanTag extends TagSupport implements PropertySupportTag
     public void setProperty(String name, Object value)
     {
         this.properties.put(name, value);
+    }
+
+    /**
+     * @param index
+     * @param type
+     * @param value
+     */
+    @Override
+    public void setArgument(int index, Class<?> type, Object value)
+    {
+        if(type != null)
+        {
+            this.parameterTypes.add(type);
+        }
+        else
+        {
+            this.parameterTypes.add(value.getClass());
+        }
+
+        this.parameters.add(value);
     }
 
     /**

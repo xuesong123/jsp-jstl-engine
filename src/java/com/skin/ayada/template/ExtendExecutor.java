@@ -240,7 +240,7 @@ public class ExtendExecutor
      * @param statement
      * @return int
      */
-    public static int doStartTag(final Statement statement, final PageContext pageContext)
+    public static int doStartTag(final Statement statement, final PageContext pageContext) throws Exception
     {
         Tag tag = statement.getTag();
         int flag = tag.doStartTag();
@@ -278,7 +278,7 @@ public class ExtendExecutor
      * @param pageContext
      * @return int
      */
-    private static int doEndTag(final Statement statement, final PageContext pageContext)
+    private static int doEndTag(final Statement statement, final PageContext pageContext) throws Exception
     {
         Tag tag = statement.getTag();
 

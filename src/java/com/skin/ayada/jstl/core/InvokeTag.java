@@ -29,7 +29,7 @@ public class InvokeTag extends TagSupport implements AttributeSupportTag
     private Map<String, Object> attributes;
 
     @Override
-    public int doStartTag()
+    public int doStartTag() throws Exception
     {
         super.doStartTag();
 
@@ -43,18 +43,11 @@ public class InvokeTag extends TagSupport implements AttributeSupportTag
     }
 
     @Override
-    public int doEndTag()
+    public int doEndTag() throws Exception
     {
         if(this.getPage() != null)
         {
-            try
-            {
-                pageContext.include(this.getPage(), this.attributes);
-            }
-            catch(Exception e)
-            {
-                e.printStackTrace();
-            }
+            pageContext.include(this.getPage(), this.attributes);
         }
 
         return TagSupport.EVAL_PAGE;

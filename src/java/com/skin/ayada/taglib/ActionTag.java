@@ -33,7 +33,7 @@ public class ActionTag extends TagSupport implements ParameterSupportTag
     private Parameters parameters = new Parameters();
 
     @Override
-    public int doStartTag()
+    public int doStartTag() throws Exception
     {
         super.doStartTag();
         this.parameters.clear();
@@ -41,7 +41,7 @@ public class ActionTag extends TagSupport implements ParameterSupportTag
     }
 
     @Override
-    public int doEndTag()
+    public int doEndTag() throws Exception
     {
         Map<String, Object> context = null;
 

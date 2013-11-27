@@ -96,7 +96,7 @@
 [VARI]: ${mynum}
 [NODE]: </c:each>
 [TEXT]: \r\n\r\n<h1>c:forEach test2</h1>\r\n
-[NODE]: <c:forEach lineNumber="103" offset="98" length="23" tagClass="com.skin.ayada.jstl.core.ForEachTag" tagFactory="com.skin.ayada.jstl.factory.ForEachTagFactory" items="${userList}" var="user" varStatus="status">
+[NODE]: <c:forEach lineNumber="103" offset="98" length="19" tagClass="com.skin.ayada.jstl.core.ForEachTag" tagFactory="com.skin.ayada.jstl.factory.ForEachTagFactory" items="${userList}" var="user" varStatus="status">
 [TEXT]: \r\n    <p>user: 
 [EXPR]: ${user.userName}
 [TEXT]: </p>\r\n    
@@ -114,46 +114,42 @@
 [TEXT]: <p>unknown user! Do you known \'bad egg\'? You! Are!</p>
 [NODE]: </c:otherwise>
 [NODE]: </c:choose>
-[TEXT]:     
-[NODE]: <c:continue lineNumber="111" offset="117" length="2" tagClass="com.skin.ayada.jstl.core.ContinueTag" tagFactory="com.skin.ayada.jstl.factory.ContinueTagFactory">
-[NODE]: </c:continue>
-[TEXT]: \r\n
 [NODE]: </c:forEach>
 [TEXT]: \r\n\r\n<h1>c:choose test1</h1>\r\n
-[NODE]: <c:choose lineNumber="115" offset="122" length="14" tagClass="com.skin.ayada.jstl.core.ChooseTag" tagFactory="com.skin.ayada.jstl.factory.ChooseTagFactory">
-[NODE]: <c:when lineNumber="116" offset="123" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${1 == 1}">
+[NODE]: <c:choose lineNumber="114" offset="118" length="14" tagClass="com.skin.ayada.jstl.core.ChooseTag" tagFactory="com.skin.ayada.jstl.factory.ChooseTagFactory">
+[NODE]: <c:when lineNumber="115" offset="119" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${1 == 1}">
 [TEXT]: c:when test=\"{1 == 1}\"
 [NODE]: </c:when>
-[NODE]: <c:when lineNumber="117" offset="126" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${2 == 2}">
+[NODE]: <c:when lineNumber="116" offset="122" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${2 == 2}">
 [TEXT]: c:when test=\"{2 == 2}\"
 [NODE]: </c:when>
-[NODE]: <c:when lineNumber="118" offset="129" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${3 == 3}">
+[NODE]: <c:when lineNumber="117" offset="125" length="3" tagClass="com.skin.ayada.jstl.core.WhenTag" tagFactory="com.skin.ayada.jstl.factory.WhenTagFactory" test="${3 == 3}">
 [TEXT]: c:when test=\"{3 == 3}\"
 [NODE]: </c:when>
-[NODE]: <c:otherwise lineNumber="119" offset="132" length="3" tagClass="com.skin.ayada.jstl.core.OtherwiseTag" tagFactory="com.skin.ayada.jstl.factory.OtherwiseTagFactory">
+[NODE]: <c:otherwise lineNumber="118" offset="128" length="3" tagClass="com.skin.ayada.jstl.core.OtherwiseTag" tagFactory="com.skin.ayada.jstl.factory.OtherwiseTagFactory">
 [TEXT]: c:otherwise
 [NODE]: </c:otherwise>
 [NODE]: </c:choose>
 [TEXT]: <h1>app:test test1</h1>\r\n
-[NODE]: <app:test lineNumber="123" offset="137" length="2" tagClass="test.com.skin.ayada.taglib.TestTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestTagFactory" myBoolean="true" myChar="c" myByte="1" myInt="-1.0" myFloat="1.0f" myDouble="1.0d" myLong="1L" myString="Hello">
+[NODE]: <app:test lineNumber="122" offset="133" length="2" tagClass="test.com.skin.ayada.taglib.TestTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestTagFactory" myBoolean="true" myChar="c" myByte="1" myInt="-1.0" myFloat="1.0f" myDouble="1.0d" myLong="1L" myString="Hello">
 [NODE]: </app:test>
 [TEXT]: \r\n
-[NODE]: <app:test lineNumber="124" offset="140" length="2" tagClass="test.com.skin.ayada.taglib.TestTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestTagFactory" myBoolean="false" myChar="c" myByte="243" myInt="-1.0" myFloat="1.0F" myDouble="1.0D" myLong="1L" myString="Hello">
+[NODE]: <app:test lineNumber="123" offset="136" length="2" tagClass="test.com.skin.ayada.taglib.TestTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestTagFactory" myBoolean="false" myChar="c" myByte="243" myInt="-1.0" myFloat="1.0F" myDouble="1.0D" myLong="1L" myString="Hello">
 [NODE]: </app:test>
 [TEXT]: \r\n
-[NODE]: <app:test lineNumber="125" offset="143" length="2" tagClass="test.com.skin.ayada.taglib.TestTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestTagFactory" myInt="-1.0" myFloat="1.0" myDouble="1e3" myLong="1e3" myString="Hello">
+[NODE]: <app:test lineNumber="124" offset="139" length="2" tagClass="test.com.skin.ayada.taglib.TestTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestTagFactory" myInt="-1.0" myFloat="1.0" myDouble="1e3" myLong="1e3" myString="Hello">
 [NODE]: </app:test>
 [TEXT]: \r\n
-[NODE]: <app:test lineNumber="126" offset="146" length="2" tagClass="test.com.skin.ayada.taglib.TestTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestTagFactory" myInt="-1.0" myFloat="1.0" myDouble="1.2e3" myLong="1.2e3" myString="Hello">
+[NODE]: <app:test lineNumber="125" offset="142" length="2" tagClass="test.com.skin.ayada.taglib.TestTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestTagFactory" myInt="-1.0" myFloat="1.0" myDouble="1.2e3" myLong="1.2e3" myString="Hello">
 [NODE]: </app:test>
 [TEXT]: \r\n\r\n<h1>app:scrollpage test1</h1>\r\n
-[NODE]: <app:scrollpage lineNumber="129" offset="149" length="2" tagClass="test.com.skin.ayada.taglib.ScrollPage" tagFactory="test.com.skin.ayada.taglib.proxy.ScrollPageFactory" count="254" pageNum="2" pageSize="10">
+[NODE]: <app:scrollpage lineNumber="128" offset="145" length="2" tagClass="test.com.skin.ayada.taglib.ScrollPage" tagFactory="test.com.skin.ayada.taglib.proxy.ScrollPageFactory" count="254" pageNum="2" pageSize="10">
 [NODE]: </app:scrollpage>
 [TEXT]: \r\n\r\n
-[NODE]: <app:bodytest lineNumber="131" offset="152" length="2" tagClass="test.com.skin.ayada.taglib.TestBodyTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestBodyTagFactory">
+[NODE]: <app:bodytest lineNumber="130" offset="148" length="2" tagClass="test.com.skin.ayada.taglib.TestBodyTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestBodyTagFactory">
 [NODE]: </app:bodytest>
 [TEXT]: \r\n
-[NODE]: <app:bodytest lineNumber="132" offset="155" length="3" tagClass="test.com.skin.ayada.taglib.TestBodyTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestBodyTagFactory">
+[NODE]: <app:bodytest lineNumber="131" offset="151" length="3" tagClass="test.com.skin.ayada.taglib.TestBodyTag" tagFactory="test.com.skin.ayada.taglib.proxy.TestBodyTagFactory">
 [TEXT]: Hello World !
 [NODE]: </app:bodytest>
 [TEXT]: \r\n</body>\r\n</html>

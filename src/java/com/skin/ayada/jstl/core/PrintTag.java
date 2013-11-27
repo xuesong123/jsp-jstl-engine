@@ -35,7 +35,7 @@ public class PrintTag extends TagSupport
     private Object value;
 
     @Override
-    public int doEndTag()
+    public int doEndTag() throws Exception
     {
         print(this.pageContext, this.out, this.value);
         return TagSupport.EVAL_PAGE;
@@ -46,7 +46,7 @@ public class PrintTag extends TagSupport
      * @param out
      * @param value
      */
-    public static void print(PageContext pageContext, Object out, Object value)
+    public static void print(PageContext pageContext, Object out, Object value) throws IOException
     {
         Writer writer = null;
 
@@ -65,38 +65,31 @@ public class PrintTag extends TagSupport
 
         if(writer != null)
         {
-            try
+            if(value instanceof PageContext)
             {
-                if(value instanceof PageContext)
-                {
-                    String name = null;
-                    Object bean = null;
-                    PageContext pc = ((PageContext)value);
-                    Iterator<String> iterator = pc.getAttributeNames();
+                String name = null;
+                Object bean = null;
+                PageContext pc = ((PageContext)value);
+                Iterator<String> iterator = pc.getAttributeNames();
 
-                    while(iterator.hasNext())
-                    {
-                        name = iterator.next();
-                        bean = pc.getAttribute(name);
-
-                        writer.write((name != null ? name : "null"));
-                        writer.write(": ");
-                        writer.write((bean != null ? bean.toString() : "null"));
-                        writer.write("\r\n");
-                    }
-                }
-                else
+                while(iterator.hasNext())
                 {
-                    writer.write(beanUtil.toString(value));
+                    name = iterator.next();
+                    bean = pc.getAttribute(name);
+
+                    writer.write((name != null ? name : "null"));
+                    writer.write(": ");
+                    writer.write((bean != null ? bean.toString() : "null"));
                     writer.write("\r\n");
                 }
-
-                writer.flush();
             }
-            catch(IOException e)
+            else
             {
-                e.printStackTrace();
+                writer.write(beanUtil.toString(value));
+                writer.write("\r\n");
             }
+
+            writer.flush();
         }
     }
 

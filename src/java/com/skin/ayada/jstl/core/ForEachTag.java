@@ -62,7 +62,7 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
     /**
      * @return int
      */
-    public int doStartTag()
+    public int doStartTag() throws Exception
     {
         super.doStartTag();
         this.init();

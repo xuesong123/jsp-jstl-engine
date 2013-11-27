@@ -33,7 +33,7 @@ public interface BodyTag extends IterationTag
      * The JSP container will resynchronize the values of any AT_BEGIN and NESTED variables (defined by the associated TagExtraInfo or TLD) after the invocation of doInitBody().
      * @return int
      */
-    public void doInitBody();
+    public void doInitBody() throws Exception;
 
     /**
      * Set the bodyContent property. This method is invoked by the JSP page implementation object at most once per action invocation.

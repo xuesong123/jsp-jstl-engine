@@ -32,42 +32,35 @@ public class OutTag extends BodyTagSupport
     private boolean escapeXml = false;
 
     @Override
-    public int doStartTag()
+    public int doStartTag() throws Exception
     {
         JspWriter out = pageContext.getOut();
 
-        try
+        if(this.value != null)
         {
-            if(this.value != null)
+            if(this.escapeXml)
             {
-                if(this.escapeXml)
-                {
-                    out.print(this.escape(this.value.toString()));
-                }
-                else
-                {
-                    out.print(this.value);
-                }
-            }
-            else if(this.defaultValue != null)
-            {
-                if(this.escapeXml)
-                {
-                    out.print(this.escape(this.defaultValue));
-                }
-                else
-                {
-                    out.print(this.defaultValue);
-                }
+                out.print(this.escape(this.value.toString()));
             }
             else
             {
-                return BodyTag.EVAL_BODY_BUFFERED;
+                out.print(this.value);
             }
         }
-        catch(IOException e)
+        else if(this.defaultValue != null)
         {
-            e.printStackTrace();
+            if(this.escapeXml)
+            {
+                out.print(this.escape(this.defaultValue));
+            }
+            else
+            {
+                out.print(this.defaultValue);
+            }
+        }
+        else
+        {
+            return BodyTag.EVAL_BODY_BUFFERED;
         }
 
         return Tag.SKIP_BODY;
@@ -77,7 +70,7 @@ public class OutTag extends BodyTagSupport
      * @return int
      */
     @Override
-    public int doEndTag()
+    public int doEndTag() throws Exception
     {
         String content = null;
         BodyContent bodyContent = (BodyContent)(this.getBodyContent());

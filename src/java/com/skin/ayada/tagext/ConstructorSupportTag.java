@@ -1,7 +1,7 @@
 /*
- * $RCSfile: JspFragment.java,v $$
+ * $RCSfile: ConstructorSupportTag.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-11-20 $
+ * $Date: 2013-2-28 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -10,26 +10,19 @@
  */
 package com.skin.ayada.tagext;
 
-import java.io.Writer;
-
-import com.skin.ayada.runtime.PageContext;
-
 /**
- * <p>Title: JspFragment</p>
+ * <p>Title: ConstructorSupportTag</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2006</p>
  * @author xuesong.net
  * @version 1.0
  */
-public interface JspFragment
+public interface ConstructorSupportTag
 {
     /**
-     * @return PageContext
+     * @param index
+     * @param type
+     * @param value
      */
-    public PageContext getPageContext();
-
-    /**
-     * @param out
-     */
-    public void invoke(Writer out) throws Exception;
+    public void setArgument(int index, Class<?> type, Object value);
 }

@@ -29,7 +29,7 @@ public class MapTag extends TagSupport implements AttributeSupportTag
     private Map<String, Object> map;
 
     @Override
-    public int doStartTag()
+    public int doStartTag() throws Exception
     {
         super.doStartTag();
         

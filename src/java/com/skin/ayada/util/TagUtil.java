@@ -41,7 +41,7 @@ public class TagUtil
     {
         try
         {
-            return (Tag)(ClassUtil.getInstance(className, Tag.class));
+            return (Tag)(ClassUtil.getInstance(className));
         }
         catch(Exception e)
         {
@@ -61,7 +61,7 @@ public class TagUtil
 
         try
         {
-            return (Tag)(ClassUtil.getInstance(className, Tag.class));
+            return (Tag)(ClassUtil.getInstance(className));
         }
         catch(Exception e)
         {

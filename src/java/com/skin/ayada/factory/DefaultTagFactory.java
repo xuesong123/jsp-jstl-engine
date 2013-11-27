@@ -33,7 +33,7 @@ public class DefaultTagFactory implements TagFactory
     {
         try
         {
-            return (Tag)(ClassUtil.getInstance(this.className, Tag.class));
+            return (Tag)(ClassUtil.getInstance(this.className));
         }
         catch(Exception e)
         {

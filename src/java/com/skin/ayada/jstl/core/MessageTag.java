@@ -10,7 +10,6 @@
  */
 package com.skin.ayada.jstl.core;
 
-import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +57,7 @@ public class MessageTag extends BodyTagSupport
         this.parameters.add(value);
     }
 
-    public int doEndTag()
+    public int doEndTag() throws Exception
     {
         Object[] args = null;
 
@@ -95,14 +94,9 @@ public class MessageTag extends BodyTagSupport
         }
         else
         {
-            try
-            {
-                this.pageContext.getOut().print(message);
-            }
-            catch(IOException e)
-            {
-            }
+            this.pageContext.getOut().print(message);
         }
+
         return Tag.EVAL_PAGE;
     }
 

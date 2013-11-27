@@ -27,10 +27,17 @@ public class ForEachTagTest
 {
     public static void main(String[] args)
     {
-        test2();
+        try
+        {
+            test2();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
     
-    public static void test1()
+    public static void test1() throws Exception
     {
         StringWriter out = new StringWriter();
         PageContext pageContext = JspFactory.getPageContext(out);
@@ -47,7 +54,7 @@ public class ForEachTagTest
         }
     }
 
-    public static void test2()
+    public static void test2() throws Exception
     {
         StringWriter out = new StringWriter();
         PageContext pageContext = JspFactory.getPageContext(out);

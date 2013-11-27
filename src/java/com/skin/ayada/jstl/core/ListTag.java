@@ -29,7 +29,7 @@ public class ListTag extends TagSupport implements AttributeSupportTag
     private List<Object> list;
 
     @Override
-    public int doStartTag()
+    public int doStartTag() throws Exception
     {
         super.doStartTag();
         

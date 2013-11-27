@@ -68,7 +68,7 @@ public class ExpressionFactory
 
                 try
                 {
-                    Object instance = ClassUtil.getInstance(className, Object.class);
+                    Object instance = ClassUtil.getInstance(className);
                     attributes.put(name, instance);
                 }
                 catch(Exception e)

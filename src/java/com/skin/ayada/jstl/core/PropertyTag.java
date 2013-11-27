@@ -63,7 +63,7 @@ public class PropertyTag extends BodyTagSupport
         }
         else
         {
-            throw new RuntimeException("Illegal use of parameter-style tag without servlet as its direct parent: parent tag is not a PropertySupportTag tag !");
+            throw new RuntimeException("Illegal use of parameter-style tag without servlet as its direct parent: parent tag is not a PropertySupportTag !");
         }
     }
 

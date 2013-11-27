@@ -31,7 +31,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
 
     protected abstract void prepare();
 
-    public int doStartTag()
+    public int doStartTag() throws Exception
     {
         this.index = 0;
         this.count = 0;
@@ -61,7 +61,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
         return EVAL_BODY_INCLUDE;
     }
 
-    public int doAfterBody()
+    public int doAfterBody() throws Exception
     {
         if(this.hasNext())
         {
@@ -75,7 +75,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
     }
 
     @Override
-    public int doEndTag()
+    public int doEndTag() throws Exception
     {
         if(this.var != null)
         {

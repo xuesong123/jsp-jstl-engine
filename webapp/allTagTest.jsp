@@ -108,7 +108,6 @@
         <c:when test="${user.userName == 'test3'}"><p>test3, good man !</p></c:when>
         <c:otherwise><p>unknown user! Do you known 'bad egg'? You! Are!</p></c:otherwise>
     </c:choose>
-    <c:continue/>
 </c:forEach>
 
 <h1>c:choose test1</h1>

@@ -32,6 +32,30 @@ public class TestTag extends TagSupport
     private long myLong;
     private String myString;
 
+    public TestTag()
+    {
+    }
+
+    /**
+     * @param myChar
+     * @param myByte
+     */
+    public TestTag(char myChar, byte myByte)
+    {
+        this.myChar = myChar;
+        this.myByte = myByte;
+    }
+
+    /**
+     * @param myLong
+     * @param myString
+     */
+    public TestTag(long myLong, String myString)
+    {
+        this.myLong = myLong;
+        this.myString = myString;
+    }
+
     @Override
     public int doStartTag()
     {

@@ -10,8 +10,6 @@
  */
 package com.skin.ayada.jstl.core;
 
-import java.io.IOException;
-
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.tagext.TagSupport;
 
@@ -26,18 +24,11 @@ public class ExecuteTag extends TagSupport
     public Object result;
 
     @Override
-    public int doStartTag()
+    public int doStartTag() throws Exception
     {
-        try
+        if(this.result != null)
         {
-            if(this.result != null)
-            {
-                this.pageContext.getOut().write(this.result.toString());
-            }
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
+            this.pageContext.getOut().write(this.result.toString());
         }
 
         return Tag.SKIP_BODY;

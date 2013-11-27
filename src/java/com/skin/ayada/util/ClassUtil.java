@@ -10,6 +10,7 @@
  */
 package com.skin.ayada.util;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.text.SimpleDateFormat;
@@ -31,21 +32,23 @@ public class ClassUtil
      * @return Object
      * @throws Exception
      */
-    public static Object getInstance(String className, Class<?> parent) throws Exception
+    public static Object getInstance(String className) throws Exception
+    {
+        return getClass(className).newInstance();
+    }
+
+    /**
+     * @param className
+     * @param parameterTypes
+     * @param parameters
+     * @return Object
+     * @throws Exception
+     */
+    public static Object getInstance(String className, Class<?>[] parameterTypes, Object[] parameters) throws Exception
     {
         Class<?> clazz = getClass(className);
-
-        if(parent == null)
-        {
-            parent = Object.class;
-        }
-
-        if(!parent.isAssignableFrom(clazz))
-        {
-            throw new ClassCastException(className + " class must be implement the " + parent.getName() + " interface.");
-        }
-
-        return clazz.newInstance();
+        Constructor<?> constructor = clazz.getConstructor(parameterTypes);
+        return constructor.newInstance(parameters);
     }
 
     /**
@@ -55,6 +58,39 @@ public class ClassUtil
      */
     public static Class<?> getClass(String className) throws ClassNotFoundException
     {
+        if(className.equals("boolean"))
+        {
+            return boolean.class;
+        }
+        else if(className.equals("byte"))
+        {
+            return byte.class;
+        }
+        else if(className.equals("short"))
+        {
+            return byte.class;
+        }
+        else if(className.equals("char"))
+        {
+            return char.class;
+        }
+        else if(className.equals("int"))
+        {
+            return int.class;
+        }
+        else if(className.equals("float"))
+        {
+            return float.class;
+        }
+        else if(className.equals("double"))
+        {
+            return double.class;
+        }
+        else if(className.equals("long"))
+        {
+            return long.class;
+        }
+
         Class<?> clazz = null;
 
         try
@@ -76,6 +112,22 @@ public class ClassUtil
         }
 
         return clazz;
+    }
+
+    /**
+     * @param values
+     * @return Class<?>[]
+     */
+    public static Class<?>[] getTypes(Object[] values)
+    {
+        Class<?>[] types = new Class<?>[values.length];
+
+        for(int i = 0; i < values.length; i++)
+        {
+            types[i] = values[i].getClass();
+        }
+
+        return types;
     }
 
     /**

@@ -20,6 +20,7 @@ c:print           com.skin.ayada.jstl.core.PrintTag
 c:exit            com.skin.ayada.jstl.core.ExitTag
 
 c:bean            com.skin.ayada.jstl.core.BeanTag
+c:constructor     com.skin.ayada.jstl.core.ConstructorTag
 c:property        com.skin.ayada.jstl.core.PropertyTag
 
 c:map             com.skin.ayada.jstl.core.MapTag
@@ -28,8 +29,8 @@ c:entry           com.skin.ayada.jstl.core.AttributeTag
 c:element         com.skin.ayada.jstl.core.AttributeTag
 c:attribute       com.skin.ayada.jstl.core.AttributeTag
 c:invoke          com.skin.ayada.jstl.core.InvokeTag
-c:export          com.skin.ayada.jstl.core.ExportTag
 c:execute         com.skin.ayada.jstl.core.ExecuteTag
+c:output          com.skin.ayada.jstl.core.OutputTag
 
 ## ext taglib
 c:action          com.skin.ayada.taglib.ActionTag

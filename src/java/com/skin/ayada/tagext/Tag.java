@@ -31,12 +31,12 @@ public interface Tag
     /**
      * @return int
      */
-    public int doStartTag();
+    public int doStartTag() throws Exception;
 
     /**
      * @return int
      */
-    public int doEndTag();
+    public int doEndTag() throws Exception;
 
     /**
      * @param tag

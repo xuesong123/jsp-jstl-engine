@@ -1,5 +1,5 @@
 /*
- * $RCSfile: ExportTag.java,v $$
+ * $RCSfile: OutputTag.java,v $$
  * $Revision: 1.1 $
  * $Date: 2013-11-26 $
  *
@@ -11,7 +11,6 @@
 package com.skin.ayada.jstl.core;
 
 import java.io.File;
-import java.io.IOException;
 
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTag;
@@ -19,12 +18,12 @@ import com.skin.ayada.tagext.BodyTagSupport;
 import com.skin.ayada.util.IO;
 
 /**
- * <p>Title: ExportTag</p>
+ * <p>Title: OutputTag</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class ExportTag extends BodyTagSupport
+public class OutputTag extends BodyTagSupport
 {
     private String file;
     private String encoding;
@@ -32,13 +31,13 @@ public class ExportTag extends BodyTagSupport
     private boolean out = false;
 
     @Override
-    public int doStartTag()
+    public int doStartTag() throws Exception
     {
         return BodyTag.EVAL_BODY_BUFFERED;
     }
 
     @Override
-    public int doEndTag()
+    public int doEndTag() throws Exception
     {
         String content = null;
         BodyContent bodyContent = (BodyContent)(this.getBodyContent());
@@ -57,25 +56,11 @@ public class ExportTag extends BodyTagSupport
                 this.encoding = "UTF-8";
             }
 
-            try
-            {
-                IO.write(content.getBytes(this.encoding), new File(this.file));
-            }
-            catch(Exception e)
-            {
-                throw new RuntimeException(e);
-            }
+            IO.write(content.getBytes(this.encoding), new File(this.file));
 
             if(this.out)
             {
-                try
-                {
-                    this.pageContext.getOut().write(content);
-                }
-                catch(IOException e)
-                {
-                    throw new RuntimeException(e);
-                }
+                this.pageContext.getOut().write(content);
             }
         }
 

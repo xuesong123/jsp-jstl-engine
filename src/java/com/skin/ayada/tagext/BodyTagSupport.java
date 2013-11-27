@@ -23,12 +23,12 @@ public class BodyTagSupport extends TagSupport implements BodyTag
 {
     private BodyContent bodyContent;
 
-    public int doStartTag()
+    public int doStartTag() throws Exception
     {
         return EVAL_BODY_BUFFERED;
     }
 
-    public int doEndTag()
+    public int doEndTag() throws Exception
     {
         return super.doEndTag();
     }
@@ -38,11 +38,11 @@ public class BodyTagSupport extends TagSupport implements BodyTag
       this.bodyContent = bodyContent;
     }
 
-    public void doInitBody()
+    public void doInitBody() throws Exception
     {
     }
 
-    public int doAfterBody()
+    public int doAfterBody() throws Exception
     {
         return SKIP_BODY;
     }
