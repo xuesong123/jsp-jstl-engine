@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import com.skin.ayada.config.TemplateConfig;
 import com.skin.ayada.runtime.JspFactory;
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.util.TemplateUtil;
@@ -59,17 +60,20 @@ public class Main
     public static void execute(String path, String encoding) throws Exception
     {
         File file = new File(path);
-        
+
         if(file.exists() == false)
         {
             throw new IOException(path + " not exists!");
         }
-        
+
         if(file.isFile() == false)
         {
             throw new IOException(path + " not exists!");
         }
 
+        TemplateConfig config = TemplateConfig.getInstance();
+        config.setValue("ayada.compile.source-pattern", "*");
+        
         File parent = file.getParentFile();
         TemplateContext templateContext = TemplateManager.getTemplateContext(parent.getAbsolutePath(), true);
 

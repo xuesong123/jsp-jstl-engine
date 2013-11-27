@@ -76,6 +76,14 @@ public class TagSupport implements IterationTag
     }
 
     /**
+     * @param pageContext
+     */
+    public PageContext getPageContext()
+    {
+        return this.pageContext;
+    }
+
+    /**
      * @param tag
      */
     @Override

@@ -679,6 +679,11 @@ public abstract class Config
 
         if(content != null)
         {
+            if(content.trim().equals("*"))
+            {
+                return true;
+            }
+
             String[] array = content.split(",");
     
             for(int i = 0; i < array.length; i++)

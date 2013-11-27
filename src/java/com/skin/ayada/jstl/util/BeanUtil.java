@@ -235,7 +235,6 @@ public class BeanUtil
         String line = "\r\n";
         StringBuilder buffer = new StringBuilder();
         buffer.append("--------------- " + className + " info ---------------").append(line);
-
         Method[] methods = clazz.getMethods();
 
         for(int i = 0; i < methods.length; i++)
@@ -248,7 +247,7 @@ public class BeanUtil
                 try
                 {
                     Object value = methods[i].invoke(object, new Object[0]);
-                    buffer.append(name.substring(3) + ": " + toString(value)).append(line);
+                    buffer.append(name.substring(3) + ": " + value.toString()).append(line);
                 }
                 catch(Exception e)
                 {

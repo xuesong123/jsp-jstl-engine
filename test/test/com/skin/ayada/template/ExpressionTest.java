@@ -32,8 +32,7 @@ public class ExpressionTest
 {
     public static void main(String[] args)
     {
-        List<Node> list = ExpressionUtil.parse("123${abc}xyz");
-        System.out.println(NodeUtil.getDescription(list));
+        test2();
     }
 
     public static void test1()
@@ -55,7 +54,7 @@ public class ExpressionTest
 
         System.out.println(value);
     }
-    
+
     public static void test2()
     {
         /*
@@ -110,5 +109,11 @@ public class ExpressionTest
                 }
             }
         }
+    }
+    
+    public static void test3()
+    {
+        List<Node> list = ExpressionUtil.parse("123${abc}xyz");
+        System.out.println(NodeUtil.getDescription(list));
     }
 }

@@ -10,8 +10,11 @@
  */
 package com.skin.ayada.util;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * <p>Title: ClassUtil</p>
@@ -73,6 +76,74 @@ public class ClassUtil
         }
 
         return clazz;
+    }
+
+    /**
+     * @param bean
+     * @param properties
+     */
+    public static void setProperties(Object bean, Map<String, Object> properties) throws Exception
+    {
+        if(properties == null || properties.size() < 1)
+        {
+            return;
+        }
+
+        Class<?> type = bean.getClass();
+
+        for(Map.Entry<String, Object> entry : properties.entrySet())
+        {
+            String name = entry.getKey();
+            Object value = entry.getValue();
+            name = "set" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
+            Method method = getSetMethod(type, name);
+
+            if(method != null)
+            {
+                Class<?>[] parameterTypes = method.getParameterTypes();
+                Class<?> parameterType = parameterTypes[0];
+                Object arg = ClassUtil.cast(value, parameterType);
+
+                if(arg == null && parameterType.isPrimitive())
+                {
+                    continue;
+                }
+
+                method.invoke(bean, new Object[]{arg});
+            }
+            else
+            {
+                throw new Exception("NoSuchMethodException: " + type.getName() + "." + name);
+            }
+        }
+    }
+
+    /**
+     * @param type
+     * @param methodName
+     * @return Method
+     */
+    public static Method getSetMethod(Class<?> type, String methodName)
+    {
+        Method[] methods = type.getMethods();
+
+        for(Method method : methods)
+        {
+            if(method.getModifiers() != Modifier.PUBLIC)
+            {
+                continue;
+            }
+
+            if(method.getName().equals(methodName))
+            {
+                if(method.getParameterTypes().length == 1)
+                {
+                    return method;
+                }
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -332,12 +403,25 @@ public class ClassUtil
 
         if(value != null)
         {
-            Double d = getDouble(value);
+            Long l = null;
+            String s = value.toString().trim();
 
-            if(d != null)
+            try
             {
-                return d.longValue();
+                if(s.endsWith("l") || s.endsWith("L"))
+                {
+                    l = Long.parseLong(s.substring(0, s.length() - 1));
+                }
+                else
+                {
+                    l = Long.parseLong(s);
+                }
             }
+            catch(NumberFormatException e)
+            {
+            }
+
+            return l;
         }
 
         return null;

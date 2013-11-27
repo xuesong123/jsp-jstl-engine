@@ -14,10 +14,22 @@ c:when            com.skin.ayada.jstl.core.WhenTag
 c:otherwise       com.skin.ayada.jstl.core.OtherwiseTag
 c:comment         com.skin.ayada.jstl.core.CommentTag
 c:param           com.skin.ayada.jstl.core.ParameterTag
-c:print           com.skin.ayada.taglib.PrintTag
+c:print           com.skin.ayada.jstl.core.PrintTag
+c:exit            com.skin.ayada.jstl.core.ExitTag
+
+c:bean            com.skin.ayada.jstl.core.BeanTag
+c:property        com.skin.ayada.jstl.core.PropertyTag
+
+c:map             com.skin.ayada.jstl.core.MapTag
+c:list            com.skin.ayada.jstl.core.ListTag
+c:entry           com.skin.ayada.jstl.core.AttributeTag
+c:element         com.skin.ayada.jstl.core.AttributeTag
+c:attribute       com.skin.ayada.jstl.core.AttributeTag
+c:export          com.skin.ayada.jstl.core.ExportTag
+
+## ext taglib
 c:action          com.skin.ayada.taglib.ActionTag
 
 f:substring       com.skin.ayada.jstl.fmt.SubstringTag
-
 fmt:formatDate    com.skin.ayada.jstl.fmt.DateFormatTag
 fmt:formatNumber  com.skin.ayada.jstl.fmt.NumberFormatTag

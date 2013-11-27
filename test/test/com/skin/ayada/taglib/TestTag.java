@@ -10,7 +10,9 @@
  */
 package test.com.skin.ayada.taglib;
 
-import com.skin.ayada.runtime.JspWriter;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+
 import com.skin.ayada.tagext.TagSupport;
 
 /**
@@ -33,34 +35,49 @@ public class TestTag extends TagSupport
     @Override
     public int doStartTag()
     {
-        try
-        {
-            JspWriter writer = pageContext.getOut();
-            writer.println("<p>myBoolean: " + this.myBoolean + "</p>");
-
-            if(this.myChar == '\0')
-            {
-                writer.println("<p>myChar: \\0</p>");
-            }
-            else
-            {
-                writer.println("<p>myChar: " + this.myChar + "</p>");
-            }
-
-            writer.println("<p>myByte: " + this.myByte + "</p>");
-            writer.println("<p>myInt: " + this.myInt + "</p>");
-            writer.println("<p>myFloat: " + this.myFloat + "</p>");
-            writer.println("<p>myDouble: " + this.myDouble + "</p>");
-            writer.println("<p>myLong: " + this.myLong + "</p>");
-            writer.println("<p>myString: " + this.myString + "</p>");
-            writer.flush();
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-
+        this.print();
         return SKIP_BODY;
+    }
+
+    /**
+     * @param writer
+     */
+    public void print()
+    {
+        this.print(new PrintWriter(this.pageContext.getOut()));
+    }
+
+    /**
+     * @param writer
+     */
+    public void print(PrintStream out)
+    {
+        this.print(new PrintWriter(out));
+    }
+
+    /**
+     * @param writer
+     */
+    public void print(PrintWriter writer)
+    {
+        writer.println("<p>myBoolean: " + this.myBoolean + "</p>");
+
+        if(this.myChar == '\0')
+        {
+            writer.println("<p>myChar: \\0</p>");
+        }
+        else
+        {
+            writer.println("<p>myChar: " + this.myChar + "</p>");
+        }
+
+        writer.println("<p>myByte: " + this.myByte + "</p>");
+        writer.println("<p>myInt: " + this.myInt + "</p>");
+        writer.println("<p>myFloat: " + this.myFloat + "</p>");
+        writer.println("<p>myDouble: " + this.myDouble + "</p>");
+        writer.println("<p>myLong: " + this.myLong + "</p>");
+        writer.println("<p>myString: " + this.myString + "</p>");
+        writer.flush();
     }
 
     /**

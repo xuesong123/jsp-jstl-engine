@@ -8,7 +8,7 @@
  * This software is the proprietary information of Skin, Inc.
  * Use is subject to license terms.
  */
-package com.skin.ayada.taglib;
+package com.skin.ayada.jstl.core;
 
 import java.io.IOException;
 import java.io.OutputStream;

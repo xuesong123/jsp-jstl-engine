@@ -81,11 +81,12 @@ public class TagUtil
             return;
         }
 
+        Class<?> type = tag.getClass();
+
         for(Map.Entry<String, String> entry : attributes.entrySet())
         {
             String name = entry.getKey();
             String value = entry.getValue();
-            Class<?> type = tag.getClass();
 
             name = "set" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
             Method method = getSetMethod(type, name);
