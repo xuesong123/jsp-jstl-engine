@@ -9,7 +9,7 @@
         </ul>
     </c:attribute>
     <c:attribute name="body">
-        <c:set var="myString" value="${StringUtil.replace('abc', 'b', '\n')}"/>
+        <c:set var="myString" value="${StringUtil.replace('abc', 'b', '\t')}"/>
         <p>myString: [<c:out value="${myString}"/>]</p>
     </c:attribute>
     <c:attribute name="footer">

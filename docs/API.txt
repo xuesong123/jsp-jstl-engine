@@ -18,24 +18,23 @@ public class MyAction{
 
 2. layout
 index.jsp ================================
-<t:import name="c:action" className="com.skin.ayada.taglib.ActionTag"/>
-<t:import name="c:layout" className="com.skin.ayada.taglib.ActionTag"/>
-<c:layout page="/include/common/layout.jsp">
-    <c:param name="header">
-        <div>menu</div>
-    </c:param>
-    <c:param name="body">
-        <c:set var="myString" value="${StringUtil.replace('abc', 'b', '\n')}"/>
-        <p>myString: [<c:out value="${myString}"/>]</p>
+<t:import name="c:layout" className="com.skin.ayada.jstl.core.InvokeTag"/>
+<c:layout page="/tags/layout.jsp">
+    <c:attribute name="title" value="base layout test"/>
+    <c:attribute name="header">
         <ul>
             <c:forEach items="1,2,3" var="myInt">
                 <li>${myInt}</li>
             </c:forEach>
         </ul>
-    </c:param>
-    <c:param name="footer">
-        <div>footer</div>
-    </c:param>
+    </c:attribute>
+    <c:attribute name="body">
+        <c:set var="myString" value="${StringUtil.replace('abc', 'b', '\t')}"/>
+        <p>myString: [<c:out value="${myString}"/>]</p>
+    </c:attribute>
+    <c:attribute name="footer">
+        <div>copy right</div>
+    </c:attribute>
 </c:layout>
 
 layout.jsp ================================
