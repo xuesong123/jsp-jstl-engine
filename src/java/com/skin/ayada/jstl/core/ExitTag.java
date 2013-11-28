@@ -10,8 +10,7 @@
  */
 package com.skin.ayada.jstl.core;
 
-import com.skin.ayada.tagext.Tag;
-import com.skin.ayada.tagext.TagSupport;
+import com.skin.ayada.tagext.ConditionalTagSupport;
 
 /**
  * <p>Title: ExitTag</p>
@@ -19,11 +18,31 @@ import com.skin.ayada.tagext.TagSupport;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class ExitTag extends TagSupport
+public class ExitTag extends ConditionalTagSupport
 {
+    public ExitTag()
+    {
+        super(true);
+    }
+
+    /**
+     * @return int
+     */
     @Override
     public int doStartTag()
     {
-        return Tag.SKIP_PAGE;
+        if(this.condition() == true)
+        {
+            return SKIP_PAGE;
+        }
+        else
+        {
+            return EVAL_PAGE;
+        }
+    }
+
+    public void setTest(boolean b)
+    {
+        this.setCondition(b);
     }
 }

@@ -259,10 +259,14 @@ public class TemplateCompiler extends PageCompiler
                     }
 
                     this.popNode(stack, list, nodeName);
+                    TagInfo tagInfo = this.tagLibrary.getTagInfo(nodeName);
 
-                    if(tagClassName.equals("com.skin.ayada.jstl.core.SetTag"))
+                    if(tagInfo != null)
                     {
-                        this.skipCRLF();
+                        if(tagInfo.getBodyContent() == TagInfo.EMPTY)
+                        {
+                            this.skipCRLF();
+                        }
                     }
                 }
                 else

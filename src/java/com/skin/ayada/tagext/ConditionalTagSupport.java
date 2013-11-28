@@ -21,6 +21,19 @@ public abstract class ConditionalTagSupport extends TagSupport
 {
     private boolean condition = false;
 
+    public ConditionalTagSupport()
+    {
+        this.condition = false;
+    }
+
+    /**
+     * @param condition
+     */
+    public ConditionalTagSupport(boolean condition)
+    {
+        this.condition = condition;
+    }
+
     /**
      * @return boolean
      */

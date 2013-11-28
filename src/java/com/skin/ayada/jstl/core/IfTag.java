@@ -24,14 +24,17 @@ public class IfTag extends ConditionalTagSupport
     /**
      * @return int
      */
+    @Override
     public int doStartTag()
     {
         if(this.condition() == true)
         {
             return EVAL_BODY_INCLUDE;
         }
-
-        return SKIP_BODY;
+        else
+        {
+            return SKIP_BODY;
+        }
     };
 
     public void setTest(boolean b)
