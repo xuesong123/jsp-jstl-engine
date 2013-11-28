@@ -66,7 +66,6 @@ public class XmlTemplateParser
             for(int i = 0, length = childNodes.getLength(); i < length; i++)
             {
                 Node node = childNodes.item(i);
-
                 int nodeType = node.getNodeType();
 
                 if(nodeType == Node.ELEMENT_NODE)

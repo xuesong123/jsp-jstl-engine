@@ -21,10 +21,12 @@ import org.slf4j.LoggerFactory;
 import com.skin.ayada.config.TemplateConfig;
 import com.skin.ayada.factory.TagFactoryManager;
 import com.skin.ayada.io.StringStream;
+import com.skin.ayada.jstl.TagInfo;
 import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.runtime.TagFactory;
 import com.skin.ayada.source.Source;
 import com.skin.ayada.source.SourceFactory;
+import com.skin.ayada.statement.DataNode;
 import com.skin.ayada.statement.Expression;
 import com.skin.ayada.statement.JspDeclaration;
 import com.skin.ayada.statement.JspDirective;
@@ -66,7 +68,7 @@ public class TemplateCompiler extends PageCompiler
      * @param encoding
      * @return Template
      */
-    public Template compile(String path, String encoding)
+    public Template compile(String path, String encoding) throws Exception
     {
         long t1 = System.currentTimeMillis();
         Source source = this.getSourceFactory().getSource(path, encoding);
@@ -202,7 +204,7 @@ public class TemplateCompiler extends PageCompiler
         {
             Node node = stack.peek();
             stack.print(new PrintWriter(System.err));
-            throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node) + " not match !");
+            throw new Exception("Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node) + " not match !");
         }
 
         long t3 = System.currentTimeMillis();
@@ -223,7 +225,7 @@ public class TemplateCompiler extends PageCompiler
      * @param stack
      * @param list
      */
-    public void startTag(Stack<Node> stack, List<Node> list)
+    public void startTag(Stack<Node> stack, List<Node> list) throws Exception
     {
         int i;
         int n = this.stream.peek();
@@ -259,18 +261,6 @@ public class TemplateCompiler extends PageCompiler
                     this.popNode(stack, list, nodeName);
 
                     if(tagClassName.equals("com.skin.ayada.jstl.core.SetTag"))
-                    {
-                        this.skipCRLF();
-                    }
-                    else if(tagClassName.equals("com.skin.ayada.jstl.core.ParameterTag"))
-                    {
-                        this.skipCRLF();
-                    }
-                    else if(tagClassName.equals("com.skin.ayada.taglib.ActionTag"))
-                    {
-                        this.skipCRLF();
-                    }
-                    else if(tagClassName.equals("com.skin.ayada.jstl.core.ChooseTag"))
                     {
                         this.skipCRLF();
                     }
@@ -322,7 +312,7 @@ public class TemplateCompiler extends PageCompiler
 
                 if(this.stream.peek(-2) != '/')
                 {
-                    throw new RuntimeException("The 't:include' direction must be self-closed!");
+                    throw new Exception("The 't:include' direction must be self-closed!");
                 }
 
                 this.skipCRLF();
@@ -353,7 +343,7 @@ public class TemplateCompiler extends PageCompiler
 
                 if(this.stream.peek(-2) != '/')
                 {
-                    throw new RuntimeException("The 't:import' direction must be self-closed!");
+                    throw new Exception("The 't:import' direction must be self-closed!");
                 }
 
                 this.skipCRLF();
@@ -382,7 +372,7 @@ public class TemplateCompiler extends PageCompiler
 
                 if(this.stream.peek(-2) != '/')
                 {
-                    throw new RuntimeException("The 'jsp:directive.page' direction must be self-closed!");
+                    throw new Exception("The 'jsp:directive.page' direction must be self-closed!");
                 }
 
                 this.skipCRLF();
@@ -461,29 +451,6 @@ public class TemplateCompiler extends PageCompiler
                     node.setClosed(NodeType.SELF_CLOSED);
                     this.popNode(stack, list, nodeName);
                 }
-
-                if(tagClassName.equals("com.skin.ayada.jstl.core.SetTag"))
-                {
-                    this.skipCRLF();
-                }
-                else if(tagClassName.equals("com.skin.ayada.jstl.core.WhenTag"))
-                {
-                    this.skipCRLF();
-                    this.skipTextNode(list, (isEnd ? list.size() - 3 : list.size() - 2));
-                }
-                else if(tagClassName.equals("com.skin.ayada.jstl.core.ParameterTag"))
-                {
-                    this.skipCRLF();
-                    this.skipTextNode(list, (isEnd ? list.size() - 3 : list.size() - 2));
-                }
-                else if(tagClassName.equals("com.skin.ayada.taglib.ActionTag"))
-                {
-                    this.skipWhitespace();
-                }
-                else if(tagClassName.equals("com.skin.ayada.jstl.core.ChooseTag"))
-                {
-                    this.skipWhitespace();
-                }
             }
             else
             {
@@ -539,35 +506,6 @@ public class TemplateCompiler extends PageCompiler
 
                 this.stream.read();
                 continue;
-            }
-            else
-            {
-                break;
-            }
-        }
-    }
-
-    /**
-     * @param list
-     * @param offset
-     */
-    public void skipTextNode(List<Node> list, int offset)
-    {
-        for(int i = offset; i > -1; i--)
-        {
-            Node node = list.get(i);
-
-            if(node.getNodeType() == NodeType.TEXT)
-            {
-                ((TextNode)node).clear();
-            }
-            else if(node.getNodeType() == NodeType.VARIABLE)
-            {
-                list.set(i, new TextNode());
-            }
-            else if(node.getNodeType() == NodeType.EXPRESSION)
-            {
-                list.set(i, new TextNode());
             }
             else
             {
@@ -660,7 +598,7 @@ public class TemplateCompiler extends PageCompiler
      * @param stack
      * @param list
      */
-    private void jspCompile(Stack<Node> stack, List<Node> list)
+    private void jspCompile(Stack<Node> stack, List<Node> list) throws Exception
     {
         int i = this.stream.read();
         i = this.stream.read();
@@ -687,7 +625,7 @@ public class TemplateCompiler extends PageCompiler
             }
             else
             {
-                throw new RuntimeException("Unknown jsp directive at line #" + this.lineNumber + " - <%@ " + NodeUtil.toString(attributes));
+                throw new Exception("Unknown jsp directive at line #" + this.lineNumber + " - <%@ " + NodeUtil.toString(attributes));
             }
 
             JspDirective node = JspDirective.getInstance(nodeName);
@@ -799,13 +737,13 @@ public class TemplateCompiler extends PageCompiler
      * @param list
      * @param nodeName
      */
-    private void popNode(Stack<Node> stack, List<Node> list, String nodeName)
+    private void popNode(Stack<Node> stack, List<Node> list, String nodeName) throws Exception
     {
         Node node = stack.peek();
 
         if(node == null)
         {
-            throw new RuntimeException("Exception at line #" + this.lineNumber + ": </" + nodeName + "> not match !");
+            throw new Exception("Exception at line #" + this.lineNumber + ": </" + nodeName + "> not match !");
         }
 
         if(node.getNodeName().equalsIgnoreCase(nodeName))
@@ -823,7 +761,7 @@ public class TemplateCompiler extends PageCompiler
         else
         {
             stack.print();
-            throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node) + " not match !");
+            throw new Exception("Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node) + " not match !");
         }
     }
 
@@ -881,16 +819,16 @@ public class TemplateCompiler extends PageCompiler
      * @param path
      * @param encoding
      */
-    public void include(Stack<Node> stack, List<Node> list, String type, String path, String encoding)
+    public void include(Stack<Node> stack, List<Node> list, String type, String path, String encoding) throws Exception
     {
         if(path == null)
         {
-            throw new RuntimeException("t:include error: attribute 'file' not exists !");
+            throw new Exception("t:include error: attribute 'file' not exists !");
         }
 
         if(path.charAt(0) != '/')
         {
-            throw new RuntimeException("t:include error: file must be starts with '/'");
+            throw new Exception("t:include error: file must be starts with '/'");
         }
 
         if(encoding == null)
@@ -975,19 +913,20 @@ public class TemplateCompiler extends PageCompiler
      * @param tagLibrary
      * @return Template
      */
-    public Template getTemplate(Source source, List<Node> list, TagLibrary tagLibrary)
+    public Template getTemplate(Source source, List<Node> list, TagLibrary tagLibrary) throws Exception
     {
+        List<Node> nodes = this.compact(list, tagLibrary);
         TagFactoryManager tagFactoryManager = TagFactoryManager.getInstance();
 
-        for(int i = 0, size = list.size(); i < size; i++)
+        for(int i = 0, size = nodes.size(); i < size; i++)
         {
-            Node node = list.get(i);
+            Node node = nodes.get(i);
 
             if(node.getNodeType() == NodeType.NODE && i == node.getOffset())
             {
                 if(node.getLength() == 0)
                 {
-                    throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node) + " not match !");
+                    throw new Exception("Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node) + " not match !");
                 }
 
                 String tagName = node.getNodeName();
@@ -997,13 +936,27 @@ public class TemplateCompiler extends PageCompiler
             }
         }
 
+        Template template = new Template(source.getHome(), source.getPath(), nodes);
+        template.setLastModified(source.getLastModified());
+        template.setUpdateTime(System.currentTimeMillis());
+        return template;
+    }
+
+    /**
+     * @param list
+     * @param tagLibrary
+     * @return List<Node>
+     */
+    public List<Node> compact(List<Node> list, TagLibrary tagLibrary) throws Exception
+    {
         List<Node> nodes = new ArrayList<Node>();
 
         for(int i = 0, size = list.size(); i < size; i++)
         {
             Node node = list.get(i);
+            int nodeType = node.getNodeType();
 
-            if(node.getNodeType() == NodeType.TEXT || node.getNodeType() == NodeType.VARIABLE || node.getNodeType() == NodeType.EXPRESSION)
+            if(nodeType == NodeType.TEXT || nodeType == NodeType.EXPRESSION || nodeType == NodeType.VARIABLE)
             {
                 if(node.getTextContent().length() > 0)
                 {
@@ -1016,21 +969,53 @@ public class TemplateCompiler extends PageCompiler
             {
                 if(i == node.getOffset())
                 {
+                    TagInfo tagInfo = tagLibrary.getTagInfo(node.getNodeName());
+
+                    if(tagInfo != null)
+                    {
+                        int bodyContent = tagInfo.getBodyContent();
+    
+                        if(bodyContent == TagInfo.TAGDEPENDENT)
+                        {
+                            // clear TextNode
+                            for(int j = i + 1, length = i + node.getLength() - 1; j < length; j++)
+                            {
+                                Node n = list.get(j);
+    
+                                if(n instanceof DataNode)
+                                {
+                                    ((DataNode)n).clear();
+                                }
+                                else
+                                {
+                                    j = j + n.getLength() - 1;
+                                }
+                            }
+                        }
+                        else if(bodyContent == TagInfo.EMPTY)
+                        {
+                            // jump to node end
+                            i = i + node.getLength() - 2;
+                        }
+                    }
+
                     node.setOffset(nodes.size());
                 }
                 else
                 {
                     node.setLength(nodes.size() - node.getOffset() + 1);
+                    
+                    if(node.getLength() == 1)
+                    {
+                        throw new Exception("length == 1");
+                    }
                 }
 
                 nodes.add(node);
             }
         }
 
-        Template template = new Template(source.getHome(), source.getPath(), nodes);
-        template.setLastModified(source.getLastModified());
-        template.setUpdateTime(System.currentTimeMillis());
-        return template;
+        return nodes;
     }
     
     /**

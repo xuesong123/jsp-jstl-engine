@@ -10,12 +10,19 @@
  */
 package com.skin.ayada.jstl;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 /**
  * <p>Title: TagLibraryFactory</p>
@@ -26,7 +33,7 @@ import java.util.Map;
  */
 public class TagLibraryFactory
 {
-    private static final Map<String, String> map = load("UTF-8");
+    private static final Map<String, TagInfo> map = load();
 
     /**
      * @return TagLibrary
@@ -39,71 +46,106 @@ public class TagLibraryFactory
     };
 
     /**
-     * @param charset
-     * @return Map<String, String>
+     * @return Map<String, TagInfo>
      */
-    private static Map<String, String> load(String charset)
+    private static Map<String, TagInfo> load()
     {
-        ClassLoader classLoader = TagLibraryFactory.class.getClassLoader();
-        Map<String, String> map1 = load(classLoader.getResourceAsStream("ayada-taglib-default.tld"), charset);
-        Map<String, String> map2 = load(classLoader.getResourceAsStream("ayada-taglib.tld"), charset);
-        map1.putAll(map2);
-        return map1;
+        try
+        {
+            ClassLoader classLoader = TagLibraryFactory.class.getClassLoader();
+            Map<String, TagInfo> map1 = parse(classLoader.getResourceAsStream("ayada-taglib-default.xml"));
+            Map<String, TagInfo> map2 = parse(classLoader.getResourceAsStream("ayada-taglib.xml"));
+            map1.putAll(map2);
+            return map1;
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return new HashMap<String, TagInfo>();
     }
 
     /**
      * @param inputStream
-     * @param charset
-     * @return Map<String, String>
+     * @throws Exception
      */
-    private static Map<String, String> load(InputStream inputStream, String charset)
+    public static Map<String, TagInfo> parse(InputStream inputStream) throws Exception
     {
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, TagInfo> map = new LinkedHashMap<String, TagInfo>();
 
-        if(inputStream != null)
+        if(inputStream == null)
         {
-            BufferedReader reader = null;
-            InputStreamReader inputStreamReader = null;
+            return map;
+        }
 
-            try
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        documentBuilderFactory.setNamespaceAware(true);
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        Document document = documentBuilder.parse(new InputSource(inputStream));
+        Element element = document.getDocumentElement();
+        NodeList childNodes = element.getChildNodes();
+
+        for(int i = 0, length = childNodes.getLength(); i < length; i++)
+        {
+            Node node = childNodes.item(i);
+            int nodeType = node.getNodeType();
+
+            if(nodeType == Node.ELEMENT_NODE)
             {
-                String line = null;
-                inputStreamReader = new InputStreamReader(inputStream, charset);
-                reader = new BufferedReader(inputStreamReader);
+                String nodeName = node.getNodeName();
 
-                while((line = reader.readLine()) != null)
+                if(nodeName.equals("tag"))
                 {
-                    line = line.trim();
+                    TagInfo tagInfo = getTagInfo(node);
 
-                    if(line.length() < 1)
+                    if(tagInfo != null && tagInfo.getName() != null)
                     {
-                        continue;
-                    }
-
-                    if(line.startsWith("#"))
-                    {
-                        continue;
-                    }
-
-                    int i = line.indexOf(" ");
-
-                    if(i > -1)
-                    {
-                        String name = line.substring(0, i).trim();
-                        String className = line.substring(i + 1).trim();
-
-                        if(name.length() > 0 && className.length() > 0)
-                        {
-                            map.put(name, className);
-                        }
+                        map.put(tagInfo.getName(), tagInfo);
                     }
                 }
-            }
-            catch(IOException e)
-            {
             }
         }
 
         return map;
+    }
+
+    /**
+     * @param node
+     * @return TagInfo
+     */
+    public static TagInfo getTagInfo(Node node)
+    {
+        TagInfo tagInfo = new TagInfo();
+        NodeList childNodes = node.getChildNodes();
+
+        for(int i = 0, length = childNodes.getLength(); i < length; i++)
+        {
+            Node n = childNodes.item(i);
+
+            if(n.getNodeType() == Node.ELEMENT_NODE)
+            {
+                String nodeName = n.getNodeName();
+
+                if(nodeName.equals("name"))
+                {
+                    tagInfo.setName(n.getTextContent());
+                }
+                else if(nodeName.equals("tag-class"))
+                {
+                    tagInfo.setTagClass(n.getTextContent());
+                }
+                else if(nodeName.equals("body-content"))
+                {
+                    tagInfo.setBodyContent(TagInfo.getBodyContent(n.getTextContent()));
+                }
+                else if(nodeName.equals("description"))
+                {
+                    tagInfo.setDescription(n.getTextContent());
+                }
+            }
+        }
+
+        return tagInfo;
     }
 }

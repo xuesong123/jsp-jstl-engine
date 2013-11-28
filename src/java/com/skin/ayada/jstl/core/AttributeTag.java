@@ -43,8 +43,12 @@ public class AttributeTag extends BodyTagSupport
     @Override
     public int doEndTag()
     {
-        BodyContent body = this.getBodyContent();
-        this.setAttribute(this.name, (body != null ? body.getString() : null));
+        if(this.value == null)
+        {
+            BodyContent body = this.getBodyContent();
+            this.setAttribute(this.name, (body != null ? body.getString() : null));
+        }
+
         return Tag.EVAL_PAGE;
     }
 

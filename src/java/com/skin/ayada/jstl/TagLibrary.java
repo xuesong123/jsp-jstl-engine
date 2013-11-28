@@ -22,14 +22,23 @@ import java.util.Map;
  */
 public class TagLibrary
 {
-    private Map<String, String> library;
+    private Map<String, TagInfo> library;
 
     /**
      * 
      */
     protected TagLibrary()
     {
-        this.library = new HashMap<String, String>();
+        this.library = new HashMap<String, TagInfo>();
+    }
+
+    /**
+     * @param name
+     * @return TagInfo
+     */
+    public TagInfo getTagInfo(String name)
+    {
+        return this.library.get(name);
     }
 
     /**
@@ -38,7 +47,13 @@ public class TagLibrary
      */
     public String getTagClassName(String nodeName)
     {
-        return this.library.get(nodeName);
+        TagInfo tagInfo = this.library.get(nodeName);
+
+        if(tagInfo != null)
+        {
+            return tagInfo.getTagClass();
+        }
+        return null;
     }
 
     /**
@@ -47,13 +62,54 @@ public class TagLibrary
      */
     public void setup(String name, String className)
     {
-        this.library.put(name, className);
+        TagInfo tagInfo = this.library.get(name);
+
+        if(tagInfo != null)
+        {
+            tagInfo.setTagClass(className);
+            tagInfo.setBodyContent(0);
+            tagInfo.setDescription(null);
+        }
+        else
+        {
+            tagInfo = new TagInfo();
+            tagInfo.setName(name);
+            tagInfo.setTagClass(className);
+            tagInfo.setBodyContent(0);
+            tagInfo.setDescription(null);
+            this.library.put(name, tagInfo);
+        }
+    }
+
+    /**
+     * @param name
+     * @param className
+     */
+    public void setup(String name, String className, int bodyContent, String description)
+    {
+        TagInfo tagInfo = this.library.get(name);
+
+        if(tagInfo != null)
+        {
+            tagInfo.setTagClass(className);
+            tagInfo.setBodyContent(bodyContent);
+            tagInfo.setDescription(description);
+        }
+        else
+        {
+            tagInfo = new TagInfo();
+            tagInfo.setName(name);
+            tagInfo.setTagClass(className);
+            tagInfo.setBodyContent(bodyContent);
+            tagInfo.setDescription(description);
+            this.library.put(name, tagInfo);
+        }
     }
 
     /**
      * @param library
      */
-    public void setup(Map<String, String> library)
+    public void setup(Map<String, TagInfo> library)
     {
         this.library.putAll(library);
     }
@@ -61,7 +117,7 @@ public class TagLibrary
     /**
      * @return Map<String, String>
      */
-    public Map<String, String> getLibrary()
+    public Map<String, TagInfo> getLibrary()
     {
         return this.library;
     }
@@ -82,9 +138,9 @@ public class TagLibrary
             System.out.println("=============== " + name + " ===============");
         }
 
-        for(Map.Entry<String, String> entry : this.library.entrySet())
+        for(Map.Entry<String, TagInfo> entry : this.library.entrySet())
         {
-            System.out.println(entry.getKey() + " " + entry.getValue());
+            System.out.println(entry.getKey() + " " + entry.getValue().getTagClass());
         }
 
         System.out.println();

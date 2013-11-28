@@ -155,6 +155,33 @@ public class DefaultPageContext implements PageContext
     }
 
     /**
+     * @throws IOException
+     */
+    @Override
+    public void clear() throws IOException
+    {
+        this.out.clear();
+    }
+
+    /**
+     * @throws IOException
+     */
+    @Override
+    public void flush() throws IOException
+    {
+        this.out.flush();
+    }
+
+    /**
+     * @throws IOException
+     */
+    @Override
+    public void close() throws IOException
+    {
+        this.out.close();
+    }
+
+    /**
      * @return JspWriter
      */
     public JspWriter pushBody()
@@ -169,7 +196,7 @@ public class DefaultPageContext implements PageContext
     public JspWriter popBody()
     {
         BodyContent bodyContent = (BodyContent)(this.out);
-        this.out = (JspWriter)(bodyContent.getOut());
+        this.out = (JspWriter)(bodyContent.getEnclosingWriter());
         return this.out;
     }
 

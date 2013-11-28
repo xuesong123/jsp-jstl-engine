@@ -23,6 +23,8 @@ import java.io.Writer;
 public class JspWriter extends Writer
 {
     private Writer out;
+    private int position;
+    private char[] buffer;
     private static final char[] CRLF = new char[]{'\r', '\n'};
     private static final char[] NULL = new char[]{'n', 'u', 'l', 'l'};
 
@@ -40,12 +42,26 @@ public class JspWriter extends Writer
     public JspWriter(Writer out, int bufferSize)
     {
         this.out = out;
+        this.buffer = new char[bufferSize];
     }
 
     @Override
     public void write(char[] cbuf, int offset, int length) throws IOException
     {
-        this.out.write(cbuf, offset, length);
+        if(length > this.buffer.length - this.position)
+        {
+            this.flush();
+        }
+
+        if(length > this.buffer.length - this.position)
+        {
+            this.out.write(cbuf, offset, length);
+        }
+        else
+        {
+            System.arraycopy(cbuf, offset, this.buffer, this.position, length);
+            this.position += length;
+        }
     }
 
     /**
@@ -270,15 +286,26 @@ public class JspWriter extends Writer
         this.write(CRLF, 0, 2);
     }
 
+    /**
+     * @throws IOException
+     */
+    public void clear() throws IOException
+    {
+        this.position = 0;
+    }
+
     @Override
     public void flush() throws IOException
     {
+        this.out.write(this.buffer, 0, this.position);
+        this.position = 0;
         this.out.flush();
     }
 
     @Override
     public void close() throws IOException
     {
+        this.flush();
         this.out.close();
     }
 

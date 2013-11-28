@@ -52,7 +52,16 @@ public class TemplateDispatcher
             logger.debug("dispatch: " + page);
         }
 
-        Template template = templateContext.getTemplate(page);
+        Template template = null;
+
+        try
+        {
+            template = templateContext.getTemplate(page);
+        }
+        catch(Exception e)
+        {
+            throw new ServletException(e);
+        }
 
         if(template == null)
         {

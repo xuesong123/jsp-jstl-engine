@@ -12,7 +12,6 @@ package com.skin.ayada.template;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import com.skin.ayada.config.TemplateConfig;
@@ -82,14 +81,13 @@ public class Main
         PageContext pageContext = JspFactory.getPageContext(templateContext, stringWriter);
         Template template = templateContext.getTemplate(file.getName());
 
+        System.out.println("===================== template =====================");
+        TemplateUtil.print(template);
+
         long t3 = System.currentTimeMillis();
         template.execute(pageContext);
         long t4 = System.currentTimeMillis();
         System.out.println("run time: " + (t4 - t3));
-
-        System.out.println("===================== template =====================");
-        TemplateUtil.print(template, new PrintWriter(System.out));
-
         System.out.println("===================== result =====================");
         System.out.println(stringWriter.toString());
     }

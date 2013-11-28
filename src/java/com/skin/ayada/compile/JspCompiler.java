@@ -949,6 +949,7 @@ public class JspCompiler
     {
         String tagInstanceName = this.getTagInstanceName(node);
         String parentTagInstanceName = this.getTagInstanceName(node.getParent());
+        String startFlagName = this.getVariableName(node, "_jsp_start_flag_");
         String flagName = this.getVariableName(node, "_jsp_flag_");
         String bodyContentInstanceName = this.getVariableName(node, "_jsp_body_content_");
         boolean hasParent = this.hasParent(node);
@@ -968,49 +969,61 @@ public class JspCompiler
 
             writer.println(indent + tagInstanceName + ".setPageContext(pageContext);");
             this.setAttributes(indent, tagClassName, tagInstanceName, node.getAttributes(), writer);
-            writer.println(indent + "int " + flagName + " = " + tagInstanceName + ".doStartTag();");
+            writer.println(indent + "int " + startFlagName + " = " + tagInstanceName + ".doStartTag();");
             writer.println();
-            writer.println(indent + "if(" + flagName + " == Tag.SKIP_PAGE){");
+            writer.println(indent + "if(" + startFlagName + " == Tag.SKIP_PAGE){");
             writer.println(indent + "    return;");
             writer.println(indent + "}");
-
+            writer.println(indent + "if(" + startFlagName + " != Tag.SKIP_BODY){");
+            
             if(node.getLength() > 2)
             {
+                writer.println(indent + "    int " + flagName + " = 0;");
+
                 if(this.isAssignableFrom(tagClassName, BodyTag.class))
                 {
-                    writer.println(indent + "if(" + flagName + " != Tag.SKIP_BODY && " + flagName + " == BodyTag.EVAL_BODY_BUFFERED){");
-                    writer.println(indent + "    BodyContent " + bodyContentInstanceName + " = (BodyContent)(pageContext.pushBody());");
-                    writer.println(indent + "    " + tagInstanceName + ".setBodyContent(" + bodyContentInstanceName + ");");
-                    writer.println(indent + "    " + tagInstanceName + ".doInitBody();");
-                    writer.println(indent + "    out = " + bodyContentInstanceName + ";");
-                    writer.println(indent + "}");
+                    writer.println(indent + "    if(" + startFlagName + " == BodyTag.EVAL_BODY_BUFFERED){");
+                    writer.println(indent + "        BodyContent " + bodyContentInstanceName + " = (BodyContent)(pageContext.pushBody());");
+                    writer.println(indent + "        " + tagInstanceName + ".setBodyContent(" + bodyContentInstanceName + ");");
+                    writer.println(indent + "        " + tagInstanceName + ".doInitBody();");
+                    writer.println(indent + "        out = " + bodyContentInstanceName + ";");
+                    writer.println(indent + "    }");
                 }
-            }
 
-            writer.println();
-            writer.println(indent + "do{");
+                writer.println();
+                writer.println(indent + "    do{");
+            }
         }
         else
         {
-            if(this.isAssignableFrom(tagClassName, IterationTag.class))
+            if(node.getLength() > 2)
             {
-                writer.println(indent + "    " + flagName + " = " + tagInstanceName + ".doAfterBody();");
+                if(this.isAssignableFrom(tagClassName, IterationTag.class))
+                {
+                    writer.println(indent + "        " + flagName + " = " + tagInstanceName + ".doAfterBody();");
+                }
+
+                writer.println(indent + "    }");
+                writer.println(indent + "    while(" + flagName + " == IterationTag.EVAL_BODY_AGAIN);");
+
+                if(this.isAssignableFrom(tagClassName, BodyTag.class))
+                {
+                    writer.println(indent + "    if(" + startFlagName + " == BodyTag.EVAL_BODY_BUFFERED){");
+                    writer.println(indent + "        out = pageContext.popBody();");
+                    writer.println(indent + "    }");
+                }
+            }
+            else
+            {
+                if(this.isAssignableFrom(tagClassName, IterationTag.class))
+                {
+                    writer.println(indent + "    " + tagInstanceName + ".doAfterBody();");
+                }
             }
 
             writer.println(indent + "}");
-            writer.println(indent + "while(" + flagName + " == IterationTag.EVAL_BODY_AGAIN);");
             writer.println(indent + tagInstanceName+ ".doEndTag();");
             writer.println(indent + tagInstanceName + ".release();");
-
-            if(node.getLength() > 2)
-            {
-                if(this.isAssignableFrom(tagClassName, BodyTag.class))
-                {
-                    writer.println(indent + "if(" + flagName + " != Tag.SKIP_BODY && " + flagName + " == BodyTag.EVAL_BODY_BUFFERED){");
-                    writer.println(indent + "    out = pageContext.popBody();");
-                    writer.println(indent + "}");
-                }
-            }
         }
 
         return Tag.EVAL_PAGE;
@@ -1174,6 +1187,17 @@ public class JspCompiler
                         {
                             writer.println(indent + tagInstanceName + "." + methodName + "(\"" + StringUtil.escape(value) + "\");");
                         }
+                        else if(parameterType == Object.class)
+                        {
+                            if(parameterValue instanceof Number)
+                            {
+                                writer.println(indent + tagInstanceName + "." + methodName + "(" + parameterValue.toString() + ");");
+                            }
+                            else
+                            {
+                                writer.println(indent + tagInstanceName + "." + methodName + "(\"" + StringUtil.escape(value) + "\");");
+                            }
+                        }
                         else
                         {
                             writer.println(indent + tagInstanceName + "." + methodName + "(\"" + StringUtil.escape(value) + "\");");
@@ -1221,7 +1245,7 @@ public class JspCompiler
                         {
                             writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getDate(expressionContext, \"" + StringUtil.escape(value) + "\"));");
                         }
-                        else if(parameterType == Object.class)
+                        else
                         {
                             writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.evaluate(expressionContext, \"" + StringUtil.escape(value) + "\"));");
                         }
@@ -1323,7 +1347,7 @@ public class JspCompiler
             }
             else
             {
-                buffer.append("    ");
+                buffer.append("        ");
             }
         }
 

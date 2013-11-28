@@ -112,7 +112,7 @@ public class TemplateContext
      * @param file
      * @return Template
      */
-    public Template getTemplate(String path)
+    public Template getTemplate(String path) throws Exception
     {
         path = StringUtil.replace(path, "\\", "/");
         path = StringUtil.replace(path, "//", "/");
@@ -195,15 +195,15 @@ public class TemplateContext
             }
             catch(InterruptedException e)
             {
-                throw new RuntimeException(e);
+                throw e;
             }
             catch(ExecutionException e)
             {
-                throw new RuntimeException(e);
+                throw e;
             }
             catch(Exception e)
             {
-                throw new RuntimeException(e);
+                throw e;
             }
         }
     }

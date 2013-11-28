@@ -55,7 +55,7 @@ public class JspTemplateFactoryTest
         test1();
     }
 
-    public static Template getTemplate()
+    public static Template getTemplate() throws Exception
     {
         SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
         TemplateCompiler compiler = new TemplateCompiler(sourceFactory);
@@ -95,7 +95,7 @@ public class JspTemplateFactoryTest
         System.out.println(writer.toString());
     }
     
-    public static void test2()
+    public static void test2() throws Exception
     {
         SourceFactory sourceFactory = new ClassPathSourceFactory("com/skin/ayada/compile");
         TemplateCompiler compiler = new TemplateCompiler(sourceFactory);

@@ -14,7 +14,6 @@ import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTagSupport;
 import com.skin.ayada.tagext.ParameterSupportTag;
 import com.skin.ayada.tagext.Tag;
-import com.skin.ayada.tagext.TagSupport;
 
 /**
  * <p>Title: ParameterTag</p>
@@ -30,27 +29,45 @@ public class ParameterTag extends BodyTagSupport
     private String value;
 
     @Override
+    public int doStartTag()
+    {
+        if(this.value != null)
+        {
+            this.setParameter(this.name, this.value);
+            return Tag.SKIP_BODY;
+        }
+
+        return BodyTagSupport.EVAL_BODY_BUFFERED;
+    }
+
+    @Override
     public int doEndTag()
+    {
+        if(this.value == null)
+        {
+            BodyContent body = this.getBodyContent();
+            this.setParameter(this.name, (body != null ? body.getString() : null));
+        }
+
+        return Tag.EVAL_PAGE;
+    }
+
+    /**
+     * @param name
+     * @param value
+     */
+    protected void setParameter(String name, String value)
     {
         Tag parent = this.getParent();
 
         if(parent instanceof ParameterSupportTag)
         {
-            String value = this.getValue();
-
-            if(value == null)
-            {
-                BodyContent body = this.getBodyContent();
-                value = (body != null ? body.getString() : null);
-            }
-
             ParameterSupportTag tag = (ParameterSupportTag)(parent);
-            tag.setParameter(this.getName(), value);
-            return TagSupport.EVAL_PAGE;
+            tag.setParameter(name, value);
         }
         else
         {
-            throw new RuntimeException("Illegal use of parameter-style tag without servlet as its direct parent");
+            throw new RuntimeException("Illegal use of parameter-style tag without servlet as its direct parent: parent tag is not a ParameterSupportTag !");
         }
     }
 

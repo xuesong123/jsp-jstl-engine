@@ -74,6 +74,21 @@ public interface PageContext
     public TagLibrary getTagLibrary();
 
     /**
+     * @throws IOException
+     */
+    public void clear() throws IOException;
+
+    /**
+     * @throws IOException
+     */
+    public void flush() throws IOException;
+
+    /**
+     * @throws IOException
+     */
+    public void close() throws IOException;
+
+    /**
      * @return JspWriter
      */
     public JspWriter pushBody();

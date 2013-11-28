@@ -27,7 +27,7 @@ import com.skin.ayada.util.ClassUtil;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class BeanTag extends TagSupport implements ConstructorSupportTag, PropertySupportTag
+public class BeanTag extends TagSupport implements Tag, ConstructorSupportTag, PropertySupportTag
 {
     private String name;
     private String className;

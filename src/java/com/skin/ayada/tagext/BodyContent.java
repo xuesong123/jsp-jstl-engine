@@ -52,6 +52,12 @@ public class BodyContent extends JspWriter
     }
 
     @Override
+    public void clear() throws IOException
+    {
+        this.buffer.getBuffer().setLength(0);
+    }
+
+    @Override
     public void flush() throws IOException
     {
     }

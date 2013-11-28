@@ -10,6 +10,7 @@
  */
 package com.skin.ayada.util;
 
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,24 @@ import com.skin.ayada.template.Template;
  */
 public class TemplateUtil
 {
+    /**
+     * @param template
+     * @return String
+     */
+    public static void print(Template template)
+    {
+        print(template, new PrintWriter(System.out));
+    }
+
+    /**
+     * @param template
+     * @return String
+     */
+    public static void print(Template template, PrintStream stream)
+    {
+        print(template, new PrintWriter(stream));
+    }
+
     /**
      * @param template
      * @return String

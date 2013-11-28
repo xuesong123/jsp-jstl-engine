@@ -50,7 +50,7 @@ public class TemplateFactory
      * @param charset
      * @return Template
      */
-    public Template create(SourceFactory sourceFactory, String file, String encoding)
+    public Template create(SourceFactory sourceFactory, String file, String encoding) throws Exception
     {
         long t1 = System.currentTimeMillis();
         TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();

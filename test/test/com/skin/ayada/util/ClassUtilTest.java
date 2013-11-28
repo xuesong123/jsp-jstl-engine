@@ -14,8 +14,7 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-import test.com.skin.ayada.taglib.TestTag;
-
+import com.skin.ayada.jstl.core.TestTag;
 import com.skin.ayada.jstl.util.BeanUtil;
 import com.skin.ayada.util.ClassUtil;
 

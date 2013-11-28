@@ -8,7 +8,7 @@
  * This software is the proprietary information of Skin, Inc.
  * Use is subject to license terms.
  */
-package test.com.skin.ayada.taglib;
+package com.skin.ayada.jstl.core;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -26,6 +26,7 @@ public class TestTag extends TagSupport
     private boolean myBoolean;
     private char myChar;
     private byte myByte;
+    private byte myShort;
     private int myInt;
     private float myFloat;
     private double myDouble;
@@ -84,7 +85,8 @@ public class TestTag extends TagSupport
      */
     public void print(PrintWriter writer)
     {
-        writer.println("<p>myBoolean: " + this.myBoolean + "</p>");
+        writer.println("<p>---------------- " + this.getClass().getName() + " ----------------</p>");
+        writer.println("\r<p>myBoolean: " + this.myBoolean + "</p>");
 
         if(this.myChar == '\0')
         {
@@ -96,6 +98,7 @@ public class TestTag extends TagSupport
         }
 
         writer.println("<p>myByte: " + this.myByte + "</p>");
+        writer.println("<p>myShort: " + this.myShort + "</p>");
         writer.println("<p>myInt: " + this.myInt + "</p>");
         writer.println("<p>myFloat: " + this.myFloat + "</p>");
         writer.println("<p>myDouble: " + this.myDouble + "</p>");
@@ -150,6 +153,22 @@ public class TestTag extends TagSupport
     public void setMyByte(byte myByte)
     {
         this.myByte = myByte;
+    }
+    
+    /**
+     * @return the myShort
+     */
+    public byte getMyShort()
+    {
+        return this.myShort;
+    }
+
+    /**
+     * @param myShort the myShort to set
+     */
+    public void setMyShort(byte myShort)
+    {
+        this.myShort = myShort;
     }
 
     /**

@@ -40,33 +40,32 @@ public class DemoTest
 
     public static void classPathTest()
     {
-        String home = "com/skin/ayada/demo";
-        SourceFactory sourceFactory = new ClassPathSourceFactory(home);
-        TemplateFactory templateFactory = new TemplateFactory();
-
-        TemplateContext templateContext = new TemplateContext(home);
-        templateContext.setSourceFactory(sourceFactory);
-        templateContext.setTemplateFactory(templateFactory);
-        TemplateManager.add(templateContext);
-
-        Template template = templateContext.getTemplate("/hello.jsp");
-        StringWriter writer = new StringWriter();
-        PageContext pageContext = JspFactory.getPageContext(writer);
-
-        System.out.println("-------------- source result --------------");
-        System.out.println(TemplateUtil.toString(template));
-        System.out.println("-------------- System.out.print --------------");
-
         try
         {
+            String home = "com/skin/ayada/demo";
+            SourceFactory sourceFactory = new ClassPathSourceFactory(home);
+            TemplateFactory templateFactory = new TemplateFactory();
+
+            TemplateContext templateContext = new TemplateContext(home);
+            templateContext.setSourceFactory(sourceFactory);
+            templateContext.setTemplateFactory(templateFactory);
+            TemplateManager.add(templateContext);
+
+            Template template = templateContext.getTemplate("/hello.jsp");
+            StringWriter writer = new StringWriter();
+            PageContext pageContext = JspFactory.getPageContext(writer);
+
+            System.out.println("-------------- source result --------------");
+            System.out.println(TemplateUtil.toString(template));
+            System.out.println("-------------- System.out.print --------------");
             template.execute(pageContext);
+
+            System.out.println("-------------- run result --------------");
+            System.out.println(writer.toString());
         }
         catch(Exception e)
         {
             e.printStackTrace();
         }
-
-        System.out.println("-------------- run result --------------");
-        System.out.println(writer.toString());
     }
 }

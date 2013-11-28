@@ -79,42 +79,35 @@ public class TemplateTest
 
     public static void test(String home, String file)
     {
-        TemplateContext templateContext = new TemplateContext(home);
-        Template template = templateContext.getTemplate(file);
-        StringWriter writer = new StringWriter();
-        PageContext pageContext = getPageContext(writer);
         try
         {
+            TemplateContext templateContext = new TemplateContext(home);
+            Template template = templateContext.getTemplate(file);
+            StringWriter writer = new StringWriter();
+            PageContext pageContext = getPageContext(writer);
             template.execute(pageContext);
+            System.out.println("-------------- source result --------------");
+            System.out.println(TemplateUtil.toString(template));
+            System.out.println("-------------- run result --------------");
+            System.out.println(writer.toString());
         }
         catch(Exception e)
         {
             e.printStackTrace();
         }
-        System.out.println("-------------- source result --------------");
-        System.out.println(TemplateUtil.toString(template));
-        System.out.println("-------------- run result --------------");
-        System.out.println(writer.toString());
     }
 
     public static void test(String home, String file, int count)
     {
-        TemplateContext templateContext = new TemplateContext(home);
-        Template template = templateContext.getTemplate(file);
-        StringWriter writer = new StringWriter();
-        PageContext pageContext = getPageContext(writer);
         OutputStream outputStream = null;
 
         try
         {
-            try
-            {
-                template.execute(pageContext);
-            }
-            catch(Exception e)
-            {
-                e.printStackTrace();
-            }
+            TemplateContext templateContext = new TemplateContext(home);
+            Template template = templateContext.getTemplate(file);
+            StringWriter writer = new StringWriter();
+            PageContext pageContext = getPageContext(writer);
+            template.execute(pageContext);
 
             outputStream = new FileOutputStream("D:\\mem.log");
             PrintWriter out = new PrintWriter(outputStream);
@@ -135,7 +128,7 @@ public class TemplateTest
                 memMonitor.test(out, (i == 0), true);
             }
         }
-        catch(IOException e)
+        catch(Exception e)
         {
             e.printStackTrace();
         }
@@ -171,7 +164,7 @@ public class TemplateTest
         return pageContext;
     }
 
-    public static void test1()
+    public static void test1() throws Exception
     {
         SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
         TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();
@@ -220,25 +213,24 @@ public class TemplateTest
 
     public static void test3()
     {
-        TemplateContext templateContext = new TemplateContext("webapp");
-        Template template = templateContext.getTemplate("/user/userList.tml");
-        StringWriter writer = new StringWriter();
-        PageContext pageContext = JspFactory.getPageContext(templateContext, writer);
-        List<User> userList = UserHandler.getUserList(16);
-        pageContext.setAttribute("userList", userList);
-
         try
         {
+            TemplateContext templateContext = new TemplateContext("webapp");
+            Template template = templateContext.getTemplate("/user/userList.tml");
+            StringWriter writer = new StringWriter();
+            PageContext pageContext = JspFactory.getPageContext(templateContext, writer);
+            List<User> userList = UserHandler.getUserList(16);
+            pageContext.setAttribute("userList", userList);
             template.execute(pageContext);
+            System.out.println(writer.toString()); 
         }
         catch(Exception e)
         {
             e.printStackTrace();
         }
-        System.out.println(writer.toString()); 
     }
 
-    public static void noFileTest()
+    public static void noFileTest() throws Exception
     {
         Source source = new Source("webapp", "1.jsp", "<c:out value=\"123\"/>", Source.SCRIPT);
         SourceFactory sourceFactory = new MemorySourceFactory(source);
@@ -265,30 +257,30 @@ public class TemplateTest
 
     public static void classPathTest()
     {
-        String home = "com/skin/ayada/demo";
-        SourceFactory sourceFactory = new ClassPathSourceFactory(home);
-        TemplateContext templateContext = new TemplateContext(home);
-        templateContext.setSourceFactory(sourceFactory);
-
-        Template template = templateContext.getTemplate("/hello.jsp");
-        StringWriter writer = new StringWriter();
-        PageContext pageContext = JspFactory.getPageContext(writer);
-
-        System.out.println("-------------- source result --------------");
-        System.out.println(TemplateUtil.toString(template));
-
-        System.out.println("-------------- System.out.print --------------");
         try
         {
+            String home = "com/skin/ayada/demo";
+            SourceFactory sourceFactory = new ClassPathSourceFactory(home);
+            TemplateContext templateContext = new TemplateContext(home);
+            templateContext.setSourceFactory(sourceFactory);
+
+            Template template = templateContext.getTemplate("/hello.jsp");
+            StringWriter writer = new StringWriter();
+            PageContext pageContext = JspFactory.getPageContext(writer);
+
+            System.out.println("-------------- source result --------------");
+            System.out.println(TemplateUtil.toString(template));
+
+            System.out.println("-------------- System.out.print --------------");
             template.execute(pageContext);
+
+            System.out.println("-------------- run result --------------");
+            System.out.println(writer.toString());
         }
         catch(Exception e)
         {
             e.printStackTrace();
         }
-
-        System.out.println("-------------- run result --------------");
-        System.out.println(writer.toString());
     }
 
     public static void compareTest(Object v1, Object v2)

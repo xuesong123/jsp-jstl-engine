@@ -29,6 +29,7 @@ public class OutputTag extends BodyTagSupport
     private String encoding;
     private boolean escapeXml = false;
     private boolean out = false;
+    private boolean trim = false;
 
     @Override
     public int doStartTag() throws Exception
@@ -44,7 +45,12 @@ public class OutputTag extends BodyTagSupport
 
         if(bodyContent != null)
         {
-            content = bodyContent.getString().trim();
+            content = bodyContent.getString();
+
+            if(this.trim)
+            {
+                content = content.trim();
+            }
 
             if(this.escapeXml)
             {
@@ -56,11 +62,15 @@ public class OutputTag extends BodyTagSupport
                 this.encoding = "UTF-8";
             }
 
-            IO.write(content.getBytes(this.encoding), new File(this.file));
+            if(this.file != null)
+            {
+                IO.write(content.getBytes(this.encoding), new File(this.file));
+            }
 
             if(this.out)
             {
                 this.pageContext.getOut().write(content);
+                this.pageContext.getOut().flush();
             }
         }
 
@@ -171,18 +181,34 @@ public class OutputTag extends BodyTagSupport
     }
 
     /**
-     * @return the out
-     */
-    public boolean isOut()
-    {
-        return this.out;
-    }
-
-    /**
      * @param out the out to set
      */
     public void setOut(boolean out)
     {
         this.out = out;
+    }
+
+    /**
+     * @return the out
+     */
+    public boolean getOut()
+    {
+        return this.out;
+    }
+
+    /**
+     * @param trim the trim to set
+     */
+    public void setTrim(boolean trim)
+    {
+        this.trim = trim;
+    }
+
+    /**
+     * @return the trim
+     */
+    public boolean getTrim()
+    {
+        return this.trim;
     }
 }

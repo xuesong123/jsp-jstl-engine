@@ -1,45 +1,42 @@
-<p>myBoolean: false</p>
+<p>---------------- com.skin.ayada.jstl.core.TestTag ----------------</p>
+<p>myBoolean: false</p>
 <p>myChar: c</p>
 <p>myByte: 2</p>
+<p>myShort: 0</p>
 <p>myInt: 0</p>
 <p>myFloat: 0.0</p>
 <p>myDouble: 0.0</p>
 <p>myLong: 0</p>
 <p>myString: null</p>
-
-    <p>myBoolean: false</p>
+<p>---------------- com.skin.ayada.jstl.core.TestTag ----------------</p>
+<p>myBoolean: false</p>
 <p>myChar: \0</p>
 <p>myByte: 0</p>
+<p>myShort: 0</p>
 <p>myInt: 0</p>
 <p>myFloat: 0.0</p>
 <p>myDouble: 0.0</p>
 <p>myLong: 1200</p>
 <p>myString: Hello</p>
-
-    <p>myBoolean: true</p>
+<p>---------------- com.skin.ayada.jstl.core.TestTag ----------------</p>
+<p>myBoolean: true</p>
 <p>myChar: c</p>
 <p>myByte: 1</p>
+<p>myShort: 0</p>
 <p>myInt: -1</p>
 <p>myFloat: 1.2</p>
 <p>myDouble: 2.3</p>
 <p>myLong: 5</p>
 <p>myString: Hello</p>
-
-
-    
-        
-        
-        
-        
-    
-
-    [1, 2, 3, 4]
-
-
-    
-        
-        
-        
-    
-
-    {1=test1, 2=test2, 3=test3}
+[1, 2, 3, 4]
+{1=test1, 2=test2, 3=test3}
+<p>---------------- com.skin.ayada.jstl.core.TestTag ----------------</p>
+<p>myBoolean: false</p>
+<p>myChar: \0</p>
+<p>myByte: 0</p>
+<p>myShort: 0</p>
+<p>myInt: 0</p>
+<p>myFloat: 0.0</p>
+<p>myDouble: 0.0</p>
+<p>myLong: 0</p>
+<p>myString: null</p>

@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page import="java.io.IOException"%>
 <t:import name="app:scrollpage" className="test.com.skin.ayada.taglib.ScrollPage"/>
-<t:import name="app:test" className="test.com.skin.ayada.taglib.TestTag"/>
+<t:import name="app:test" className="com.skin.ayada.jstl.core.TestTag"/>
 <t:import name="app:bodytest" className="test.com.skin.ayada.taglib.TestBodyTag"/>
 <%!
     public void hello1(JspWriter out) throws IOException{
@@ -129,5 +129,6 @@
 
 <app:bodytest/>
 <app:bodytest>Hello World !</app:bodytest>
+<c:test/>
 </body>
 </html>
