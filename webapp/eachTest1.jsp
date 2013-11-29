@@ -7,7 +7,7 @@
         <c:entry name="nickName" value="ayada${status.index}"/>
     </c:map>
 
-    <c:execute result="${userList.add(user)}"/>
+    <c:execute value="${userList.add(user)}"/>
 </c:forEach>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">

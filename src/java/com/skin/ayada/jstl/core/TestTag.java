@@ -86,7 +86,7 @@ public class TestTag extends TagSupport
     public void print(PrintWriter writer)
     {
         writer.println("<p>---------------- " + this.getClass().getName() + " ----------------</p>");
-        writer.println("\r<p>myBoolean: " + this.myBoolean + "</p>");
+        writer.println("<p>myBoolean: " + this.myBoolean + "</p>");
 
         if(this.myChar == '\0')
         {

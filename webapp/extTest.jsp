@@ -1,4 +1,16 @@
+<c:output out="true" trim="false" file="webapp\extTest.log">
+    <p>1 - Hello World!</p>
+    <c:out>
+    <p>2 - Hello World!</p>
+    <c:execute value="${pageContext.clear()}"/>
+    <p>3 - Hello World!</p>
+    </c:out>
+    <c:set var="a1" value="a1"/>
+</c:output>
 <c:xml out="true" trim="false" file="webapp\extTest.log">
+    <p>This is a invalid text node !</p>
+    <c:out><p>3 - Hello World!</p></c:out>
+
     <c:set var="a1" value="a1"/>
     <c:set var="a2" value="${a1}"/>
     <c:set var="a3" value="${a2}"/>
@@ -28,10 +40,9 @@
         <c:property name="pageContext" value="${pageContext}"/>
     </c:bean>
 
-    <c:execute result="${pageContext.clear()}"/>
-    <c:execute result="${testTag1.print()}"/>
-    <c:execute result="${testTag2.print()}"/>
-    <c:execute result="${testTag3.print()}"/>
+    <c:execute value="${testTag1.print()}"/>
+    <c:execute value="${testTag2.print()}"/>
+    <c:execute value="${testTag3.print()}"/>
 
     <c:list name="list">
         <c:element value="1"/>
@@ -58,7 +69,7 @@
             <c:entry name="userName" value="test_${num}"/>
             <c:entry name="nickName" value="test_${num}"/>
         </c:map>
-        <c:execute result="${userList.add(user)}"/>
+        <c:execute value="${userList.add(user)}"/>
     </c:forEach>
 
     <c:print value="${userList}"/>

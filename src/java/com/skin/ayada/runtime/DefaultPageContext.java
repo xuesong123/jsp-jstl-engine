@@ -79,6 +79,11 @@ public class DefaultPageContext implements PageContext
      */
     public Object setAttribute(String key, Object value)
     {
+        if(key == null)
+        {
+            return null;
+        }
+
         if(value != null)
         {
             return this.attributes.put(key, value);
@@ -207,7 +212,7 @@ public class DefaultPageContext implements PageContext
      */
     public void printBodyContent(BodyContent bodyContent, boolean escapeXml) throws IOException
     {
-        String content = bodyContent.getString().trim();
+        String content = bodyContent.getString();
 
         if(escapeXml)
         {

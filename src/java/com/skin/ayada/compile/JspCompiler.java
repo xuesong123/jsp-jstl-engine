@@ -473,7 +473,15 @@ public class JspCompiler
         {
             String name = node.getAttribute("var");
             String value = this.getValueExpression(node.getAttribute("value"));
-            writer.println(indent + "pageContext.setAttribute(\"" + name + "\", " + value + ");");
+            
+            if(name != null)
+            {
+                writer.println(indent + "pageContext.setAttribute(\"" + name + "\", " + value + ");");
+            }
+            else
+            {
+                writer.println(indent + "pageContext.setAttribute((String)null, " + value + ");");
+            }
         }
         else
         {
@@ -900,7 +908,14 @@ public class JspCompiler
         {
             if(value != null)
             {
-                writer.println(indent + parentTagInstanceName + ".setAttribute(\"" + name + "\", " + this.getValueExpression(value) + ");");
+                if(name != null)
+                {
+                    writer.println(indent + parentTagInstanceName + ".setAttribute(\"" + name + "\", " + this.getValueExpression(value) + ");");
+                }
+                else
+                {
+                    writer.println(indent + parentTagInstanceName + ".setAttribute((String)null, " + this.getValueExpression(value) + ");");
+                }
                 return Tag.SKIP_BODY;
             }
             else if(node.getLength() > 2)
@@ -913,7 +928,14 @@ public class JspCompiler
         {
             if(value == null && node.getLength() > 2)
             {
-                writer.println(indent + parentTagInstanceName + ".setAttribute(\"" + name + "\", ((BodyContent)out).getString());");
+                if(name != null)
+                {
+                    writer.println(indent + parentTagInstanceName + ".setAttribute(\"" + name + "\", ((BodyContent)out).getString());");
+                }
+                else
+                {
+                    writer.println(indent + parentTagInstanceName + ".setAttribute((String)null, ((BodyContent)out).getString());");
+                }
                 writer.println(indent + "out = pageContext.popBody();");
             }
 
