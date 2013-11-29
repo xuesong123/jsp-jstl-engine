@@ -1,5 +1,5 @@
 /*
- * $RCSfile: BreakSupportTag.java,v $$
+ * $RCSfile: BreakTagSupport.java,v $$
  * $Revision: 1.1 $
  * $Date: 2013-11-27 $
  *
@@ -11,11 +11,11 @@
 package com.skin.ayada.tagext;
 
 /**
- * <p>Title: BreakSupportTag</p>
+ * <p>Title: BreakTagSupport</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public interface BreakSupportTag
+public interface BreakTagSupport
 {
 }

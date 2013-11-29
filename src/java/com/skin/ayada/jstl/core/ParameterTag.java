@@ -12,7 +12,7 @@ package com.skin.ayada.jstl.core;
 
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTagSupport;
-import com.skin.ayada.tagext.ParameterSupportTag;
+import com.skin.ayada.tagext.ParameterTagSupport;
 import com.skin.ayada.tagext.Tag;
 
 /**
@@ -60,9 +60,9 @@ public class ParameterTag extends BodyTagSupport
     {
         Tag parent = this.getParent();
 
-        if(parent instanceof ParameterSupportTag)
+        if(parent instanceof ParameterTagSupport)
         {
-            ParameterSupportTag tag = (ParameterSupportTag)(parent);
+            ParameterTagSupport tag = (ParameterTagSupport)(parent);
             tag.setParameter(name, value);
         }
         else

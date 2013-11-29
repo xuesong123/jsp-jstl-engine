@@ -10,7 +10,7 @@
  */
 package com.skin.ayada.jstl.core;
 
-import com.skin.ayada.tagext.AttributeSupportTag;
+import com.skin.ayada.tagext.AttributeTagSupport;
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTagSupport;
 import com.skin.ayada.tagext.Tag;
@@ -60,9 +60,9 @@ public class AttributeTag extends BodyTagSupport
     {
         Tag parent = this.getParent();
 
-        if(parent instanceof AttributeSupportTag)
+        if(parent instanceof AttributeTagSupport)
         {
-            AttributeSupportTag tag = (AttributeSupportTag)(parent);
+            AttributeTagSupport tag = (AttributeTagSupport)(parent);
             tag.setAttribute(name, value);
         }
         else

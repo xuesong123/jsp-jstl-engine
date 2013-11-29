@@ -10,7 +10,7 @@
  */
 package com.skin.ayada.jstl.core;
 
-import com.skin.ayada.tagext.ConstructorSupportTag;
+import com.skin.ayada.tagext.ConstructorTagSupport;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.tagext.TagSupport;
 import com.skin.ayada.util.ClassUtil;
@@ -40,19 +40,19 @@ public class ConstructorTag extends TagSupport
      */
     public static void setArgument(Tag tag, String type, Object value) throws Exception
     {
-        if(tag instanceof ConstructorSupportTag)
+        if(tag instanceof ConstructorTagSupport)
         {
-            ConstructorSupportTag constructorSupportTag = (ConstructorSupportTag)tag;
+            ConstructorTagSupport constructorTagSupport = (ConstructorTagSupport)tag;
 
             if(type != null)
             {
                 Class<?> parameterType = ClassUtil.getClass(type);
                 Object argument = ClassUtil.cast(value, parameterType);
-                constructorSupportTag.setArgument(parameterType, argument);
+                constructorTagSupport.setArgument(parameterType, argument);
             }
             else
             {
-                constructorSupportTag.setArgument(value.getClass(), value);
+                constructorTagSupport.setArgument(value.getClass(), value);
             }
         }
         else

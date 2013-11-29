@@ -20,8 +20,8 @@ import com.skin.ayada.statement.NodeType;
 import com.skin.ayada.statement.Statement;
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTag;
-import com.skin.ayada.tagext.BreakSupportTag;
-import com.skin.ayada.tagext.ContinueSupportTag;
+import com.skin.ayada.tagext.BreakTagSupport;
+import com.skin.ayada.tagext.ContinueTagSupport;
 import com.skin.ayada.tagext.IterationTag;
 import com.skin.ayada.tagext.SimpleTag;
 import com.skin.ayada.tagext.Tag;
@@ -178,7 +178,7 @@ public class ExtendExecutor
 
                     if(flag == Tag.CONTINUE)
                     {
-                        Statement parent = getParent(statement, ContinueSupportTag.class);
+                        Statement parent = getParent(statement, ContinueTagSupport.class);
 
                         if(parent != null)
                         {
@@ -193,7 +193,7 @@ public class ExtendExecutor
 
                     if(flag == Tag.BREAK)
                     {
-                        Statement parent = getParent(statement, BreakSupportTag.class);
+                        Statement parent = getParent(statement, BreakTagSupport.class);
 
                         if(parent != null)
                         {

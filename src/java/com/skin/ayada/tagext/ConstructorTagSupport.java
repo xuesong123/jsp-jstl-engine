@@ -1,5 +1,5 @@
 /*
- * $RCSfile: ConstructorSupportTag.java,v $$
+ * $RCSfile: ConstructorTagSupport.java,v $$
  * $Revision: 1.1 $
  * $Date: 2013-2-28 $
  *
@@ -11,13 +11,13 @@
 package com.skin.ayada.tagext;
 
 /**
- * <p>Title: ConstructorSupportTag</p>
+ * <p>Title: ConstructorTagSupport</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2006</p>
  * @author xuesong.net
  * @version 1.0
  */
-public interface ConstructorSupportTag
+public interface ConstructorTagSupport
 {
     /**
      * @param index

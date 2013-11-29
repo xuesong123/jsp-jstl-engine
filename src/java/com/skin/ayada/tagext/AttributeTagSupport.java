@@ -1,5 +1,5 @@
 /*
- * $RCSfile: ParameterSupportTag.java,v $$
+ * $RCSfile: AttributeTagSupport.java,v $$
  * $Revision: 1.1 $
  * $Date: 2013-2-28 $
  *
@@ -11,17 +11,17 @@
 package com.skin.ayada.tagext;
 
 /**
- * <p>Title: ParameterSupportTag</p>
+ * <p>Title: AttributeTagSupport</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2006</p>
  * @author xuesong.net
  * @version 1.0
  */
-public interface ParameterSupportTag
+public interface AttributeTagSupport
 {
     /**
      * @param name
      * @param value
      */
-    public void setParameter(String name, Object value);
+    public void setAttribute(String name, Object value);
 }
