@@ -10,6 +10,9 @@
  */
 package com.skin.ayada.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * <p>Title: StringUtil</p>
  * <p>Description: </p>
@@ -141,6 +144,36 @@ public class StringUtil
         }
 
         return content;
+    }
+
+    /**
+     * @param source
+     * @param limit
+     * @return String[]
+     */
+    public static String[] split(String source, String limit)
+    {
+        int s = 0;
+        int p = 0;
+        List<String> list = new ArrayList<String>();
+
+        while((p = source.indexOf(limit, s)) > -1)
+        {
+            if(p > s)
+            {
+                list.add(source.substring(s, p));
+            }
+
+            s = p + limit.length();
+        }
+
+        if(s < source.length())
+        {
+            list.add(source.substring(s));
+        }
+
+        String[] result = new String[list.size()];
+        return list.toArray(result);
     }
 
     /**

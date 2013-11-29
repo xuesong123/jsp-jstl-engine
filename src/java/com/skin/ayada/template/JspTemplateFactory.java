@@ -58,27 +58,20 @@ public class JspTemplateFactory extends TemplateFactory
      * @param charset
      * @return Template
      */
-    public Template create(SourceFactory sourceFactory, String file, String encoding)
+    public Template create(SourceFactory sourceFactory, String file, String encoding) throws Exception
     {
-        try
+        Template template = super.create(sourceFactory, file, encoding);
+
+        long t1 = System.currentTimeMillis();
+        JspTemplate jspTemplate = compile(template, this.getWork());
+        long t2 = System.currentTimeMillis();
+
+        if(logger.isDebugEnabled())
         {
-            Template template = super.create(sourceFactory, file, encoding);
-
-            long t1 = System.currentTimeMillis();
-            JspTemplate jspTemplate = compile(template, this.getWork());
-            long t2 = System.currentTimeMillis();
-
-            if(logger.isDebugEnabled())
-            {
-                logger.debug("jsp compile time: " + (t2 - t1));
-            }
-
-            return jspTemplate;
+            logger.debug("jsp compile time: " + (t2 - t1));
         }
-        catch(Exception e)
-        {
-            throw new RuntimeException(e);
-        }
+
+        return jspTemplate;
     }
 
     /**

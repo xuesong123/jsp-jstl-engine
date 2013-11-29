@@ -77,7 +77,7 @@ public class OutTag extends BodyTagSupport
 
         if(bodyContent != null)
         {
-            content = bodyContent.getString();
+            content = bodyContent.getString().trim();
 
             if(this.escapeXml)
             {

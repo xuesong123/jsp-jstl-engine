@@ -10,7 +10,11 @@
  */
 package com.skin.ayada.jstl.core;
 
-import com.skin.ayada.tagext.TagSupport;
+import com.skin.ayada.tagext.BodyContent;
+import com.skin.ayada.tagext.BodyTag;
+import com.skin.ayada.tagext.BodyTagSupport;
+import com.skin.ayada.tagext.Tag;
+import com.skin.ayada.util.ClassUtil;
 
 /**
  * <p>Title: SetTag</p>
@@ -19,31 +23,84 @@ import com.skin.ayada.tagext.TagSupport;
  * @author xuesong.net
  * @version 1.0
  */
-public class SetTag extends TagSupport
+public class SetTag extends BodyTagSupport
 {
     private String var;
+    private String property;
+    private Object target;
     private Object value;
 
     /**
      * @return int
      */
     @Override
-    public int doEndTag()
+    public int doStartTag() throws Exception
     {
-        if(this.var != null)
+        if(this.value == null)
         {
-            pageContext.setAttribute(this.var, this.value);
+            return BodyTag.EVAL_BODY_BUFFERED;
         }
 
-        return EVAL_PAGE;
+        if(this.var != null)
+        {
+            this.setValue(this.var, this.value);
+        }
+        else
+        {
+            if(this.target != null && this.property != null)
+            {
+                this.setProperty(this.target, this.property, this.value);
+            }
+        }
+
+        return Tag.SKIP_BODY;
     }
 
     /**
-     * @return the var
+     * @return int
      */
-    public String getVar()
+    @Override
+    public int doEndTag() throws Exception
     {
-        return var;
+        BodyContent bodyContent = this.getBodyContent();
+
+        if(bodyContent != null)
+        {
+            String value = bodyContent.getString().trim();
+
+            if(this.var != null)
+            {
+                this.setValue(this.var, value);
+            }
+            else
+            {
+                if(this.target != null && this.property != null)
+                {
+                    this.setProperty(this.target, this.property, value);
+                }
+            }
+        }
+
+        return Tag.EVAL_PAGE;
+    }
+
+    /**
+     * @param name
+     * @param value
+     */
+    public void setValue(String name, Object value)
+    {
+        this.pageContext.setAttribute(name, value);
+    }
+
+    /**
+     * @param name
+     * @param value
+     * @throws Exception 
+     */
+    public void setProperty(Object object, String name, Object value) throws Exception
+    {
+        ClassUtil.setProperty(object, name, value);
     }
 
     /**
@@ -55,11 +112,43 @@ public class SetTag extends TagSupport
     }
 
     /**
-     * @return the value
+     * @return the var
      */
-    public Object getValue()
+    public String getVar()
     {
-        return value;
+        return this.var;
+    }
+
+    /**
+     * @param property the property to set
+     */
+    public void setProperty(String property)
+    {
+        this.property = property;
+    }
+
+    /**
+     * @return the property
+     */
+    public String getProperty()
+    {
+        return this.property;
+    }
+
+    /**
+     * @param target the target to set
+     */
+    public void setTarget(Object target)
+    {
+        this.target = target;
+    }
+
+    /**
+     * @return the target
+     */
+    public Object getTarget()
+    {
+        return this.target;
     }
 
     /**
@@ -68,5 +157,13 @@ public class SetTag extends TagSupport
     public void setValue(Object value)
     {
         this.value = value;
+    }
+
+    /**
+     * @return the value
+     */
+    public Object getValue()
+    {
+        return this.value;
     }
 }

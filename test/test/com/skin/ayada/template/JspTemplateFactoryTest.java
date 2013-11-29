@@ -50,7 +50,7 @@ import example.model.User;
  */
 public class JspTemplateFactoryTest
 {
-    public static void main(String[] args)
+    public static void main(String[] args) throws Exception
     {
         test1();
     }
@@ -64,7 +64,7 @@ public class JspTemplateFactoryTest
         return compiler.compile("allTagTest.jsp", "UTF-8");
     }
 
-    public static void test1()
+    public static void test1() throws Exception
     {
         SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
 

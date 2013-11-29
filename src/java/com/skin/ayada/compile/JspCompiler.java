@@ -389,6 +389,10 @@ public class JspCompiler
             {
                 flag = this.writePrameterTag(index, indent, tagClassName, node, writer);
             }
+            else if(tagClassName.equals("com.skin.ayada.jstl.core.ExecuteTag"))
+            {
+                flag = this.writeExecuteTag(index, indent, tagClassName, node, writer);
+            }
             else if(tagClassName.equals("com.skin.ayada.jstl.core.ExitTag"))
             {
                 flag = this.writeExitTag(index, indent, tagClassName, node, writer);
@@ -469,22 +473,71 @@ public class JspCompiler
      */
     private int writeSetTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
     {
+        String name = node.getAttribute("var");
+        String value = this.getValueExpression(node.getAttribute("value"));
+        String target = this.getValueExpression(node.getAttribute("target"));
+        String property = node.getAttribute("property");
+
         if(node.getOffset() == index)
         {
-            String name = node.getAttribute("var");
-            String value = this.getValueExpression(node.getAttribute("value"));
-            
-            if(name != null)
+            if(value != null)
             {
-                writer.println(indent + "pageContext.setAttribute(\"" + name + "\", " + value + ");");
+                if(name != null)
+                {
+                    writer.println(indent + "pageContext.setAttribute(\"" + name + "\", " + value + ");");
+                }
+                else
+                {
+                    if(target != null && property != null)
+                    {
+                        writer.println(indent + "com.skin.ayada.util.ClassUtil.setProperty(" + target + ", \"" + property + "\", " + value + ");");
+                    }
+                }
             }
             else
             {
-                writer.println(indent + "pageContext.setAttribute((String)null, " + value + ");");
+                if(node.getLength() > 2)
+                {
+                    writer.println(indent + "out = pageContext.pushBody();");
+                }
             }
         }
         else
         {
+            if(value == null)
+            {
+                if(node.getLength() > 2)
+                {
+                    if(name != null)
+                    {
+                        writer.println(indent + "pageContext.setAttribute(\"" + name + "\", ((BodyContent)out).getString().trim());");
+                    }
+                    else
+                    {
+                        if(target != null && property != null)
+                        {
+                            writer.println(indent + "com.skin.ayada.util.ClassUtil.setProperty(" + target + ", \"" + property + "\", ((BodyContent)out).getString().trim());");
+                        }
+                    }
+
+                    writer.println(indent + "out = pageContext.popBody();");
+                }
+                else
+                {
+                    if(name != null)
+                    {
+                        writer.println(indent + "pageContext.setAttribute(\"" + name + "\", \"\");");
+                    }
+                    else
+                    {
+                        if(target != null && property != null)
+                        {
+                            writer.println(indent + "com.skin.ayada.util.ClassUtil.setProperty(" + target + ", \"" + property + "\", \"\");");
+                        }
+                    }
+                }
+            }
+
             writer.println(indent + "/* jsp.jstl.core.SetTag END */");
         }
 
@@ -1053,6 +1106,38 @@ public class JspCompiler
             }
 
             writer.println(indent + "/* jsp.jstl.core.PrameterTag END */");
+        }
+
+        return Tag.EVAL_PAGE;
+    }
+
+    /**
+     * @param index
+     * @param indent
+     * @param tagClassName
+     * @param node
+     * @param writer
+     * @return int
+     */
+    private int writeExecuteTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
+    {
+        if(node.getOffset() == index)
+        {
+            String name = node.getAttribute("var");
+            String value = this.getValueExpression(node.getAttribute("value"));
+
+            if(name != null)
+            {
+                writer.println(indent + "pageContext.setAttribute(\"" + name + "\", " + value + ");");
+            }
+            else
+            {
+                writer.println(indent + "pageContext.setAttribute((String)null, " + value + ");");
+            }
+        }
+        else
+        {
+            writer.println(indent + "/* jsp.jstl.core.ExecuteTag END */");
         }
 
         return Tag.EVAL_PAGE;

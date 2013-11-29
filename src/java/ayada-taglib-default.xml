@@ -16,7 +16,7 @@
     <tag>
         <name>c:set</name>
         <tag-class>com.skin.ayada.jstl.core.SetTag</tag-class>
-        <body-content>empty</body-content>
+        <body-content>jsp</body-content>
         <description></description>
     </tag>
     <tag>
@@ -147,7 +147,7 @@
     </tag>
     <tag>
         <name>c:execute</name>
-        <tag-class>com.skin.ayada.jstl.core.SetTag</tag-class>
+        <tag-class>com.skin.ayada.jstl.core.ExecuteTag</tag-class>
         <body-content>empty</body-content>
         <description></description>
     </tag>

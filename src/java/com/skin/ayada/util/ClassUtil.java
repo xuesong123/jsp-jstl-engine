@@ -141,32 +141,43 @@ public class ClassUtil
             return;
         }
 
-        Class<?> type = bean.getClass();
-
         for(Map.Entry<String, Object> entry : properties.entrySet())
         {
-            String name = entry.getKey();
-            Object value = entry.getValue();
-            name = "set" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
-            Method method = getSetMethod(type, name);
+            ClassUtil.setProperty(bean, entry.getKey(), entry.getValue());
+        }
+    }
 
-            if(method != null)
+    /**
+     * @param bean
+     * @param properties
+     */
+    public static void setProperty(Object bean, String name, Object value) throws Exception
+    {
+        if(bean == null)
+        {
+            return;
+        }
+
+        Class<?> type = bean.getClass();
+        String methodName = "set" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
+        Method method = getSetMethod(type, methodName);
+
+        if(method != null)
+        {
+            Class<?>[] parameterTypes = method.getParameterTypes();
+            Class<?> parameterType = parameterTypes[0];
+            Object arg = ClassUtil.cast(value, parameterType);
+
+            if(arg == null && parameterType.isPrimitive())
             {
-                Class<?>[] parameterTypes = method.getParameterTypes();
-                Class<?> parameterType = parameterTypes[0];
-                Object arg = ClassUtil.cast(value, parameterType);
-
-                if(arg == null && parameterType.isPrimitive())
-                {
-                    continue;
-                }
-
-                method.invoke(bean, new Object[]{arg});
+                return;
             }
-            else
-            {
-                throw new Exception("NoSuchMethodException: " + type.getName() + "." + name);
-            }
+
+            method.invoke(bean, new Object[]{arg});
+        }
+        else
+        {
+            throw new Exception("NoSuchMethodException: " + type.getName() + "." + methodName);
         }
     }
 

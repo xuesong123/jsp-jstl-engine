@@ -7,6 +7,7 @@
     </c:out>
     <c:set var="a1" value="a1"/>
 </c:output>
+
 <c:xml out="true" trim="false" file="webapp\extTest.log">
     <p>This is a invalid text node !</p>
     <c:out><p>3 - Hello World!</p></c:out>

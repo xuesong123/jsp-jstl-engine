@@ -40,4 +40,23 @@ public class StringUtil
     {
         return com.skin.ayada.util.StringUtil.replace(source, search, replacement);
     }
+
+    /**
+     * @param source
+     * @param limit
+     * @return String[]
+     */
+    public String[] split(String source, String limit)
+    {
+        return com.skin.ayada.util.StringUtil.split(source, limit);
+    }
+
+    /**
+     * @param source
+     * @return String
+     */
+    public String escape(String source)
+    {
+        return com.skin.ayada.util.StringUtil.escape(source);
+    }
 }
