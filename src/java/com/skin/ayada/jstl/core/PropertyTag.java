@@ -12,7 +12,7 @@ package com.skin.ayada.jstl.core;
 
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTagSupport;
-import com.skin.ayada.tagext.PropertySupportTag;
+import com.skin.ayada.tagext.PropertyTagSupport;
 import com.skin.ayada.tagext.Tag;
 
 /**
@@ -60,9 +60,9 @@ public class PropertyTag extends BodyTagSupport
     {
         Tag parent = this.getParent();
 
-        if(parent instanceof PropertySupportTag)
+        if(parent instanceof PropertyTagSupport)
         {
-            PropertySupportTag tag = (PropertySupportTag)(parent);
+            PropertyTagSupport tag = (PropertyTagSupport)(parent);
             tag.setProperty(name, value);
         }
         else

@@ -15,8 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.skin.ayada.tagext.ConstructorSupportTag;
-import com.skin.ayada.tagext.PropertySupportTag;
+import com.skin.ayada.tagext.ConstructorTagSupport;
+import com.skin.ayada.tagext.PropertyTagSupport;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.tagext.TagSupport;
 import com.skin.ayada.util.ClassUtil;
@@ -27,7 +27,7 @@ import com.skin.ayada.util.ClassUtil;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class BeanTag extends TagSupport implements Tag, ConstructorSupportTag, PropertySupportTag
+public class BeanTag extends TagSupport implements Tag, ConstructorTagSupport, PropertyTagSupport
 {
     private String name;
     private String className;

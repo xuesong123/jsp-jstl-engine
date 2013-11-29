@@ -1,7 +1,7 @@
 /*
- * $RCSfile: ContinueSupportTag.java,v $$
+ * $RCSfile: ParameterTagSupport.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-11-27 $
+ * $Date: 2013-2-28 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -11,11 +11,17 @@
 package com.skin.ayada.tagext;
 
 /**
- * <p>Title: ContinueSupportTag</p>
+ * <p>Title: ParameterTagSupport</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2006</p>
+ * @author xuesong.net
  * @version 1.0
  */
-public interface ContinueSupportTag
+public interface ParameterTagSupport
 {
+    /**
+     * @param name
+     * @param value
+     */
+    public void setParameter(String name, Object value);
 }

@@ -13,7 +13,7 @@ package com.skin.ayada.jstl.core;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.skin.ayada.tagext.AttributeSupportTag;
+import com.skin.ayada.tagext.AttributeTagSupport;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.tagext.TagSupport;
 
@@ -23,7 +23,7 @@ import com.skin.ayada.tagext.TagSupport;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class InvokeTag extends TagSupport implements AttributeSupportTag
+public class InvokeTag extends TagSupport implements AttributeTagSupport
 {
     private String page;
     private Map<String, Object> attributes;
