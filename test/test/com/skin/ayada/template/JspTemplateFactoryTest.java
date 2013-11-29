@@ -63,7 +63,7 @@ public class JspTemplateFactoryTest
         compiler.setTagLibrary(tagLibrary);
         return compiler.compile("allTagTest.jsp", "UTF-8");
     }
-    
+
     public static void test1()
     {
         SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
@@ -72,7 +72,7 @@ public class JspTemplateFactoryTest
         JspTemplateFactory jspTemplateFactory = new JspTemplateFactory("work", System.getProperty("java.class.path"));
         jspTemplateFactory.setIgnoreJspTag(false);
 
-        Template template = jspTemplateFactory.create(sourceFactory, "allTagTest.jsp", "UTF-8");
+        Template template = jspTemplateFactory.create(sourceFactory, "extTest.jsp", "UTF-8");
         long t2 = System.currentTimeMillis();
         System.out.println("compile time: " + (t2 - t1));
 

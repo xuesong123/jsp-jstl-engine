@@ -29,32 +29,30 @@ public class ConstructorTag extends TagSupport
     @Override
     public int doStartTag() throws Exception
     {
-        this.setArgument(this.type, this.value);
+        ConstructorTag.setArgument(this.getParent(), this.type, this.value);
         return Tag.SKIP_BODY;
     }
 
     /**
-     * @param index
+     * @param tag
+     * @param type
      * @param value
-     * @throws Exception
      */
-    protected void setArgument(String type, Object value) throws Exception
+    public static void setArgument(Tag tag, String type, Object value) throws Exception
     {
-        Tag parent = this.getParent();
-
-        if(parent instanceof ConstructorSupportTag)
+        if(tag instanceof ConstructorSupportTag)
         {
-            ConstructorSupportTag tag = (ConstructorSupportTag)(parent);
+            ConstructorSupportTag constructorSupportTag = (ConstructorSupportTag)tag;
 
             if(type != null)
             {
                 Class<?> parameterType = ClassUtil.getClass(type);
                 Object argument = ClassUtil.cast(value, parameterType);
-                tag.setArgument(parameterType, argument);
+                constructorSupportTag.setArgument(parameterType, argument);
             }
             else
             {
-                tag.setArgument(value.getClass(), value);
+                constructorSupportTag.setArgument(value.getClass(), value);
             }
         }
         else

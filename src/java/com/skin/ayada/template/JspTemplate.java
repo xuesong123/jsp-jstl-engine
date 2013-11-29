@@ -15,6 +15,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.skin.ayada.runtime.JspWriter;
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.statement.Node;
 
@@ -48,6 +49,8 @@ public abstract class JspTemplate extends Template
     @Override
     public void execute(final PageContext pageContext) throws Exception
     {
+        JspWriter out = pageContext.getOut();
+
         if(logger.isDebugEnabled())
         {
             long t1 = System.currentTimeMillis();
@@ -59,6 +62,8 @@ public abstract class JspTemplate extends Template
         {
             this._execute(pageContext);
         }
+
+        out.flush();
     }
 
     /**

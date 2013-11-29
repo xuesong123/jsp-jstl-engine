@@ -25,4 +25,9 @@ public class BreakTag extends TagSupport
     {
         return Tag.BREAK;
     }
+
+    public static boolean getTrue()
+    {
+        return true;
+    }
 }

@@ -1,3 +1,14 @@
+<%@ page contentType="text/html;charset=UTF-8"%>
+<c:list name="userList"/>
+
+<c:forEach begin="1" end="5" step="1" varStatus="status">
+    <c:map name="user">
+        <c:entry name="userName" value="ayada${status.index}"/>
+        <c:entry name="nickName" value="ayada${status.index}"/>
+    </c:map>
+
+    <c:execute result="${userList.add(user)}"/>
+</c:forEach>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html message="hello" xmlns="http://www.w3.org/1999/xhtml">
 <head><title>test</title></head>

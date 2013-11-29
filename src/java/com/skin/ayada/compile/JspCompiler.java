@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.skin.ayada.statement.Expression;
 import com.skin.ayada.statement.Node;
 import com.skin.ayada.statement.NodeType;
 import com.skin.ayada.tagext.BodyTag;
@@ -89,7 +90,7 @@ public class JspCompiler
         writer.println("        JspWriter jspWriter = pageContext.getOut();");
         writer.println("        ExpressionContext expressionContext = pageContext.getExpressionContext();");
         writer.println();
-        String indent = this.getIndent(2);
+        String indent = null;
 
         for(int index = 0, size = list.size(); index < size; index++)
         {
@@ -368,9 +369,29 @@ public class JspCompiler
             {
                 flag = this.writeCommentTag(index, indent, tagClassName, node, writer);
             }
-            else if(tagClassName.equals("com.skin.ayada.taglib.PrintTag"))
+            else if(tagClassName.equals("com.skin.ayada.jstl.core.PrintTag"))
             {
-                flag = this.writePrintTagTag(index, indent, tagClassName, node, writer);
+                flag = this.writePrintTag(index, indent, tagClassName, node, writer);
+            }
+            else if(tagClassName.equals("com.skin.ayada.jstl.core.AttributeTag"))
+            {
+                flag = this.writeAttributeTag(index, indent, tagClassName, node, writer);
+            }
+            else if(tagClassName.equals("com.skin.ayada.jstl.core.ConstructorTag"))
+            {
+                flag = this.writeConstructorTag(index, indent, tagClassName, node, writer);
+            }
+            else if(tagClassName.equals("com.skin.ayada.jstl.core.PropertyTag"))
+            {
+                flag = this.writePropertyTag(index, indent, tagClassName, node, writer);
+            }
+            else if(tagClassName.equals("com.skin.ayada.jstl.core.PrameterTag"))
+            {
+                flag = this.writePrameterTag(index, indent, tagClassName, node, writer);
+            }
+            else if(tagClassName.equals("com.skin.ayada.jstl.core.ExitTag"))
+            {
+                flag = this.writeExitTag(index, indent, tagClassName, node, writer);
             }
             else if(tagClassName.equals("com.skin.ayada.jstl.fmt.DateFormatTag"))
             {
@@ -451,39 +472,8 @@ public class JspCompiler
         if(node.getOffset() == index)
         {
             String name = node.getAttribute("var");
-            String value = node.getAttribute("value");
-
-            if(value != null)
-            {
-                if(value.indexOf("${") > -1)
-                {
-                    writer.println(indent + "pageContext.setAttribute(\"" + name + "\", ExpressionUtil.evaluate(expressionContext, \"" + StringUtil.escape(node.getAttribute("value")) + "\"));");
-                }
-                else
-                {
-                    Object constant = ExpressionUtil.getValue(value);
-
-                    if(constant != null)
-                    {
-                        if(constant instanceof String)
-                        {
-                            writer.println(indent + "pageContext.setAttribute(\"" + name + "\", \"" + StringUtil.escape(value) + "\");");
-                        }
-                        else
-                        {
-                            writer.println(indent + "pageContext.setAttribute(\"" + name + "\", " + constant.toString() + ");");
-                        }
-                    }
-                    else
-                    {
-                        writer.println(indent + "pageContext.setAttribute(\"" + name + "\", null);");
-                    }
-                }
-            }
-            else
-            {
-                writer.println(indent + "pageContext.setAttribute(\"" + name + "\", null));");
-            }
+            String value = this.getValueExpression(node.getAttribute("value"));
+            writer.println(indent + "pageContext.setAttribute(\"" + name + "\", " + value + ");");
         }
         else
         {
@@ -510,44 +500,15 @@ public class JspCompiler
         {
             if(value != null)
             {
-                if(value.indexOf("${") < 0)
-                {
-                    Object constant = ExpressionUtil.getValue(value);
-
-                    if(constant instanceof String)
-                    {
-                        if(escapeXml)
-                        {
-                            writer.println(indent + "/* out.write(\"" + StringUtil.escape(value) + "\"); */");
-                            writer.println(indent + "out.write(\"" + StringUtil.escape(HtmlUtil.encode(value)) + "\");");
-                        }
-                        else
-                        {
-                            writer.println(indent + "out.write(\"" + StringUtil.escape(value) + "\");");
-                        }
-                    }
-                    else
-                    {
-                        writer.println(indent + "out.print(" + value + ");");
-                    }
-                }
-                else
-                {
-                    if(escapeXml)
-                    {
-                        writer.println(indent + "out.write(ExpressionUtil.getHtml(expressionContext, \"" + StringUtil.escape(value) + "\"));");
-                    }
-                    else
-                    {
-                        writer.println(indent + "out.write(ExpressionUtil.getString(expressionContext, \"" + StringUtil.escape(value) + "\"));");
-                    }
-                }
+                writer.println(indent + "/* out.write(\"" + StringUtil.escape(value) + "\"); */");
+                writer.println(indent + "out.write(" + this.getStringExpression(value, escapeXml) + ");");
                 return Tag.SKIP_BODY;
             }
             else if(node.getLength() > 2)
             {
                 writer.println(indent + "out = pageContext.pushBody();");
             }
+
             return Tag.EVAL_PAGE;
         }
         else
@@ -798,7 +759,7 @@ public class JspCompiler
     {
         if(node.getOffset() == index)
         {
-            writer.println(indent + "if(1 == 1){ continue; }");
+            writer.println(indent + "if(com.skin.ayada.jstl.core.ContinueTag.getTrue()){ continue; }");
             writer.println(indent + "/* jsp.jstl.core.ContinueTag END */");
         }
 
@@ -817,7 +778,7 @@ public class JspCompiler
     {
         if(node.getOffset() == index)
         {
-            writer.println(indent + "if(1 == 1){ break; }");
+            writer.println(indent + "if(com.skin.ayada.jstl.core.BreakTag.getTrue()){ break; }");
             writer.println(indent + "/* jsp.jstl.core.BreakTag END */");
         }
 
@@ -895,13 +856,13 @@ public class JspCompiler
      * @param writer
      * @return int
      */
-    private int writePrintTagTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
+    private int writePrintTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
     {
         if(node.getOffset() == index)
         {
             String out = node.getAttribute("out");
             String value = node.getAttribute("value");
-            
+
             if(out == null || out.trim().length() < 1)
             {
                 out = "null";
@@ -910,24 +871,8 @@ public class JspCompiler
             {
                 out = "ExpressionUtil.evaluate(expressionContext, \"" + StringUtil.escape(out) + "\")";
             }
-            
-            if(value == null || value.trim().length() < 1)
-            {
-                value = "null";
-            }
-            else
-            {
-                if(value.indexOf("${") < 0)
-                {
-                    value = "\"" + StringUtil.escape(value) + "\"";
-                }
-                else
-                {
-                    value = "ExpressionUtil.evaluate(expressionContext, \"" + StringUtil.escape(value) + "\")";
-                }
-            }
 
-            writer.println(indent + "com.skin.ayada.taglib.PrintTag.print(pageContext, " + out + ", " + value + ");");
+            writer.println(indent + "com.skin.ayada.jstl.core.PrintTag.print(pageContext, " + out + ", " + this.getValueExpression(value) + ");");
         }
         else
         {
@@ -936,7 +881,195 @@ public class JspCompiler
 
         return Tag.EVAL_PAGE;
     }
-    
+
+    /**
+     * @param index
+     * @param indent
+     * @param tagClassName
+     * @param node
+     * @param writer
+     * @return int
+     */
+    private int writeAttributeTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
+    {
+        String name = node.getAttribute("name");
+        String value = node.getAttribute("value");
+        String parentTagInstanceName = this.getTagInstanceName(node.getParent());
+
+        if(node.getOffset() == index)
+        {
+            if(value != null)
+            {
+                writer.println(indent + parentTagInstanceName + ".setAttribute(\"" + name + "\", " + this.getValueExpression(value) + ");");
+                return Tag.SKIP_BODY;
+            }
+            else if(node.getLength() > 2)
+            {
+                writer.println(indent + "out = pageContext.pushBody();");
+            }
+            return Tag.EVAL_PAGE;
+        }
+        else
+        {
+            if(value == null && node.getLength() > 2)
+            {
+                writer.println(indent + parentTagInstanceName + ".setAttribute(\"" + name + "\", ((BodyContent)out).getString());");
+                writer.println(indent + "out = pageContext.popBody();");
+            }
+
+            writer.println(indent + "/* jsp.jstl.core.AttributeTag END */");
+        }
+
+        return Tag.EVAL_PAGE;
+    }
+
+    /**
+     * @param index
+     * @param indent
+     * @param tagClassName
+     * @param node
+     * @param writer
+     * @return int
+     */
+    private int writeConstructorTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
+    {
+        String name = node.getAttribute("type");
+        String value = node.getAttribute("value");
+        String parentTagInstanceName = this.getTagInstanceName(node.getParent());
+
+        if(node.getOffset() == index)
+        {
+            if(value != null)
+            {
+                writer.println(indent + "com.skin.ayada.jstl.core.ConstructorTag.setArgument(" + parentTagInstanceName + ", \"" + name + "\", " + this.getValueExpression(value) + ");");
+                return Tag.SKIP_BODY;
+            }
+            return Tag.EVAL_PAGE;
+        }
+        else
+        {
+            writer.println(indent + "/* jsp.jstl.core.ConstructorTag END */");
+        }
+
+        return Tag.EVAL_PAGE;
+    }
+
+    /**
+     * @param index
+     * @param indent
+     * @param tagClassName
+     * @param node
+     * @param writer
+     * @return int
+     */
+    private int writePropertyTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
+    {
+        String name = node.getAttribute("name");
+        String value = node.getAttribute("value");
+        String parentTagInstanceName = this.getTagInstanceName(node.getParent());
+
+        if(node.getOffset() == index)
+        {
+            if(value != null)
+            {
+                writer.println(indent + parentTagInstanceName + ".setProperty(\"" + name + "\", " + this.getValueExpression(value) + ");");
+                return Tag.SKIP_BODY;
+            }
+            else if(node.getLength() > 2)
+            {
+                writer.println(indent + "out = pageContext.pushBody();");
+            }
+            return Tag.EVAL_PAGE;
+        }
+        else
+        {
+            if(value == null && node.getLength() > 2)
+            {
+                writer.println(indent + parentTagInstanceName + ".setProperty(\"" + name + "\", ((BodyContent)out).getString());");
+                writer.println(indent + "out = pageContext.popBody();");
+            }
+
+            writer.println(indent + "/* jsp.jstl.core.PropertyTag END */");
+        }
+
+        return Tag.EVAL_PAGE;
+    }
+
+    /**
+     * @param index
+     * @param indent
+     * @param tagClassName
+     * @param node
+     * @param writer
+     * @return int
+     */
+    private int writePrameterTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
+    {
+        String name = node.getAttribute("name");
+        String value = node.getAttribute("value");
+        String parentTagInstanceName = this.getTagInstanceName(node.getParent());
+
+        if(node.getOffset() == index)
+        {
+            if(value != null)
+            {
+                writer.println(indent + parentTagInstanceName + ".setParameter(\"" + name + "\", " + this.getStringExpression(value, false) + ");");
+                return Tag.SKIP_BODY;
+            }
+            else if(node.getLength() > 2)
+            {
+                writer.println(indent + "out = pageContext.pushBody();");
+            }
+            return Tag.EVAL_PAGE;
+        }
+        else
+        {
+            if(value == null && node.getLength() > 2)
+            {
+                writer.println(indent + parentTagInstanceName + ".setParameter(\"" + name + "\", ((BodyContent)out).getString());");
+                writer.println(indent + "out = pageContext.popBody();");
+            }
+
+            writer.println(indent + "/* jsp.jstl.core.PrameterTag END */");
+        }
+
+        return Tag.EVAL_PAGE;
+    }
+
+    /**
+     * @param index
+     * @param indent
+     * @param tagClassName
+     * @param node
+     * @param writer
+     * @return int
+     */
+    private int writeExitTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
+    {
+        if(node.getOffset() == index)
+        {
+            String test = node.getAttribute("test");
+
+            if(test != null)
+            {
+                writer.println(indent + "if(ExpressionUtil.getBoolean(expressionContext, \"" + StringUtil.escape(node.getAttribute("test")) + "\")){");
+            }
+            else
+            {
+                writer.println(indent + "if(com.skin.ayada.jstl.core.ExitTag.getTrue()){");
+            }
+            writer.println(indent + "    return;");
+            writer.println(indent + "}");
+            return Tag.SKIP_BODY;
+        }
+        else
+        {
+            writer.println(indent + "/* jsp.jstl.core.ExitTag END */");
+        }
+
+        return Tag.EVAL_PAGE;
+    }
+
     /**
      * @param index
      * @param indent
@@ -1282,22 +1415,6 @@ public class JspCompiler
      * @param indent
      * @return String
      */
-    protected String getIndent(int indent)
-    {
-        StringBuilder buffer = new StringBuilder();
-
-        for(int i = 0; i < indent; i++)
-        {
-            buffer.append("    ");
-        }
-
-        return buffer.toString();
-    }
-
-    /**
-     * @param indent
-     * @return String
-     */
     protected String getIndent(Node node)
     {
         Node parent = node;
@@ -1339,7 +1456,13 @@ public class JspCompiler
             {
                 buffer.append("    ");
             }
-            else if(tagClassName.equals("com.skin.ayada.taglib.PrintTag"))
+            else if(tagClassName.equals("com.skin.ayada.jstl.core.AttributeTag"))
+            {
+            }
+            else if(tagClassName.equals("com.skin.ayada.jstl.core.PropertyTag"))
+            {
+            }
+            else if(tagClassName.equals("com.skin.ayada.jstl.core.PrintTag"))
             {
             }
             else if(tagClassName.equals("com.skin.ayada.jstl.fmt.DateFormatTag"))
@@ -1395,6 +1518,126 @@ public class JspCompiler
         else
         {
             return prefix + "undefined";
+        }
+    }
+
+    /**
+     * @param expression
+     * @return String
+     */
+    protected String getStringExpression(String expression, boolean escapeXml)
+    {
+        if(expression != null)
+        {
+            if(expression.indexOf("${") > -1)
+            {
+                if(escapeXml)
+                {
+                    return "ExpressionUtil.getHtml(expressionContext, \"" + StringUtil.escape(expression) + "\")";
+                }
+                else
+                {
+                    return "ExpressionUtil.getString(expressionContext, \"" + StringUtil.escape(expression) + "\")";
+                }
+            }
+            else
+            {
+                Object constant = ExpressionUtil.getValue(expression);
+
+                if(constant instanceof String)
+                {
+                    if(escapeXml)
+                    {
+                        return "\"" + StringUtil.escape(HtmlUtil.encode(expression)) + "\"";
+                    }
+                    else
+                    {
+                        return "\"" + StringUtil.escape(expression) + "\"";
+                    }
+                }
+                else if(constant instanceof Float)
+                {
+                    return constant.toString() + "f";
+                }
+                else if(constant instanceof Double)
+                {
+                    return constant.toString() + "d";
+                }
+                else if(constant instanceof Long)
+                {
+                    return constant.toString() + "L";
+                }
+                else
+                {
+                    return constant.toString();
+                }
+            }
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    /**
+     * @param expression
+     * @return String
+     */
+    protected String getValueExpression(String expression)
+    {
+        if(expression != null)
+        {
+            List<Node> nodes = ExpressionUtil.parse(expression);
+
+            if(nodes.size() == 1)
+            {
+                Node node = nodes.get(0);
+
+                if(node instanceof Expression)
+                {
+                    if(this.isJavaIdentifier(node.getTextContent()))
+                    {
+                        return "pageContext.getAttribute(\"" + node.getTextContent() + "\")";
+                    }
+                    else
+                    {
+                        return "ExpressionUtil.evaluate(expressionContext, \"" + StringUtil.escape(expression) + "\")";
+                    }
+                }
+                else
+                {
+                    Object constant = ExpressionUtil.getValue(node.getTextContent());
+
+                    if(constant instanceof String)
+                    {
+                        return "\"" + StringUtil.escape(expression) + "\"";
+                    }
+                    else if(constant instanceof Float)
+                    {
+                        return constant.toString() + "f";
+                    }
+                    else if(constant instanceof Double)
+                    {
+                        return constant.toString() + "d";
+                    }
+                    else if(constant instanceof Long)
+                    {
+                        return constant.toString() + "L";
+                    }
+                    else
+                    {
+                        return constant.toString();
+                    }
+                }
+            }
+            else
+            {
+                return "ExpressionUtil.evaluate(expressionContext, \"" + StringUtil.escape(expression) + "\")";
+            }
+        }
+        else
+        {
+            return null;
         }
     }
 

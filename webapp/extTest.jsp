@@ -1,8 +1,8 @@
 <c:xml out="true" trim="false" file="webapp\extTest.log">
     <c:set var="a1" value="a1"/>
-    <c:set var="a1" value="a1"/>
-    <c:set var="a1" value="a1"/>
-    <c:set var="a1" value="a1"/>
+    <c:set var="a2" value="${a1}"/>
+    <c:set var="a3" value="${a2}"/>
+    <c:set var="a4" value="${a3}"/>
 
     <c:bean name="testTag1" className="com.skin.ayada.jstl.core.TestTag">
         <c:constructor type="char" value="c"/>
@@ -50,5 +50,17 @@
 
     <c:print value="${map}"/>
     <c:test/>
+
+    <c:list name="userList"/>
+
+    <c:forEach items="1, 2, 3, 4, 5" var="num">
+        <c:map name="user">
+            <c:entry name="userName" value="test_${num}"/>
+            <c:entry name="nickName" value="test_${num}"/>
+        </c:map>
+        <c:execute result="${userList.add(user)}"/>
+    </c:forEach>
+
+    <c:print value="${userList}"/>
 </c:xml>
-<c:if test="${1==1}"><c:exit></c:if>
+<c:exit/>

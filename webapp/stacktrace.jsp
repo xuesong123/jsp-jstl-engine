@@ -1,4 +1,4 @@
-<t:taglib name="c:stackTrace" className="com.skin.ayada.jstl.core.StackTraceTag"/>
+<t:import name="c:stackTrace" className="com.skin.ayada.jstl.core.StackTraceTag"/>
 <html>
 <head>
 <title>test</title>
@@ -6,16 +6,16 @@
 </head>
 <body version="1.0">
 ${user.userName}
-<c:if test="1">
-    <c:if test="1">
-        <c:if test="1">
-            <c:if test="1">
-                <c:if test="1">
-                    <c:if test="1">
-                        <c:if test="1">
-                            <c:if test="1">
-                                <c:if test="1">
-                                    <c:if test="1">
+<c:if test="${1 == 1}">
+    <c:if test="${1 == 1}">
+        <c:if test="${1 == 1}">
+            <c:if test="${1 == 1}">
+                <c:if test="${1 == 1}">
+                    <c:if test="${1 == 1}">
+                        <c:if test="${1 == 1}">
+                            <c:if test="${1 == 1}">
+                                <c:if test="${1 == 1}">
+                                    <c:if test="${1 == 1}">
 ------------------------- StackTrace -------------------------
 <c:stackTrace/>
                                     </c:if>

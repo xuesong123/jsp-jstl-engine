@@ -32,21 +32,15 @@ public class MapTag extends TagSupport implements AttributeSupportTag
     public int doStartTag() throws Exception
     {
         super.doStartTag();
-        
+
         if(this.name == null)
         {
             return Tag.SKIP_BODY;
         }
 
         this.map = new LinkedHashMap<String, Object>();
-        return TagSupport.EVAL_BODY_INCLUDE;
-    }
-
-    @Override
-    public int doEndTag()
-    {
         this.pageContext.setAttribute(this.name, this.map);
-        return Tag.EVAL_PAGE;
+        return TagSupport.EVAL_BODY_INCLUDE;
     }
 
     /**

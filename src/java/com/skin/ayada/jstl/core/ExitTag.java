@@ -45,4 +45,12 @@ public class ExitTag extends ConditionalTagSupport
     {
         this.setCondition(b);
     }
+
+    /**
+     * @return boolean
+     */
+    public static boolean getTrue()
+    {
+        return true;
+    }
 }

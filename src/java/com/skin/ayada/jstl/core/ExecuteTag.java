@@ -21,17 +21,34 @@ import com.skin.ayada.tagext.TagSupport;
  */
 public class ExecuteTag extends TagSupport
 {
+    public String var;
     public Object result;
 
     @Override
     public int doStartTag() throws Exception
     {
-        if(this.result != null)
+        if(this.var != null)
         {
-            this.pageContext.getOut().write(this.result.toString());
+            this.pageContext.setAttribute(this.var, this.result);
         }
 
         return Tag.SKIP_BODY;
+    }
+
+    /**
+     * @return the var
+     */
+    public String getVar()
+    {
+        return this.var;
+    }
+
+    /**
+     * @param var the var to set
+     */
+    public void setVar(String var)
+    {
+        this.var = var;
     }
 
     /**
