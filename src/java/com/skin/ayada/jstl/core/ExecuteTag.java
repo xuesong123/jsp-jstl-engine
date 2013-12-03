@@ -37,4 +37,36 @@ public class ExecuteTag extends TagSupport
 
         return Tag.SKIP_BODY;
     }
+
+    /**
+     * @param var the var to set
+     */
+    public void setVar(String var)
+    {
+        this.var = var;
+    }
+
+    /**
+     * @return the var
+     */
+    public String getVar()
+    {
+        return var;
+    }
+
+    /**
+     * @param value the value to set
+     */
+    public void setValue(Object value)
+    {
+        this.value = value;
+    }
+
+    /**
+     * @return the value
+     */
+    public Object getValue()
+    {
+        return value;
+    }
 }
