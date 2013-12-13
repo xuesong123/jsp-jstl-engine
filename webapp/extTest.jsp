@@ -1,9 +1,9 @@
 <c:output out="true" trim="false" file="webapp\extTest.log">
     <p>1 - Hello World!</p>
     <c:out>
-    <p>2 - Hello World!</p>
-    <c:execute value="${pageContext.clear()}"/>
-    <p>3 - Hello World!</p>
+        <p>2 - Hello World!</p>
+        <c:execute value="${pageContext.clear()}"/>
+        <p>3 - Hello World!</p>
     </c:out>
     <c:set var="a1" value="a1"/>
 </c:output>
@@ -60,7 +60,7 @@
         <c:entry name="3" value="test3"/>
     </c:map>
 
-    <c:print value="${map}"/>
+    <c:print value="<p>"/><c:print value="${map}"/><c:print value="</p>"/>
     <c:test/>
 
     <c:list name="userList"/>
@@ -72,7 +72,12 @@
         </c:map>
         <c:execute value="${userList.add(user)}"/>
     </c:forEach>
+    <c:print value="${userList}"/>
 
+    <c:forEach items="1, 2, 3, 4, 5" var="num">
+        <c:map name="user" userName="${num}_test_${num}"/>
+        <c:execute value="${userList.add(user)}"/>
+    </c:forEach>
     <c:print value="${userList}"/>
 </c:xml>
 <c:exit/>

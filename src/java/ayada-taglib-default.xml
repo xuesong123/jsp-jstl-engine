@@ -129,7 +129,7 @@
     </tag>
     <tag>
         <name>c:element</name>
-        <tag-class>com.skin.ayada.jstl.core.AttributeTag</tag-class>
+        <tag-class>com.skin.ayada.jstl.core.ElementTag</tag-class>
         <body-content>jsp</body-content>
         <description></description>
     </tag>

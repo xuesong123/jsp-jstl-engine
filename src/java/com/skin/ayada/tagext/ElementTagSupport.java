@@ -1,7 +1,7 @@
 /*
- * $RCSfile: DynamicAttributes.java,v $$
+ * $RCSfile: ElementTagSupport.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-11-20 $
+ * $Date: 2013-12-13 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -11,16 +11,22 @@
 package com.skin.ayada.tagext;
 
 /**
- * <p>Title: DynamicAttributes</p>
+ * <p>Title: ElementTagSupport</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2006</p>
+ * @author xuesong.net
  * @version 1.0
  */
-public interface DynamicAttributes
+public interface ElementTagSupport
 {
     /**
-     * @param name
      * @param value
      */
-    public void setDynamicAttribute(String name, Object value);
+    public void addElement(Object value);
+
+    /**
+     * @param index
+     * @param value
+     */
+    public void setElement(int index, Object value);
 }

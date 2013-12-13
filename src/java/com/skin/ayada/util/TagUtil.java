@@ -17,10 +17,11 @@ import java.util.Map;
 import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.runtime.ExpressionContext;
 import com.skin.ayada.runtime.PageContext;
+import com.skin.ayada.tagext.DynamicAttributes;
 import com.skin.ayada.tagext.Tag;
 
 /**
- * <p>Title: TemplateExecutor</p>
+ * <p>Title: TagUtil</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2006</p>
  * @author xuesong.net
@@ -78,6 +79,21 @@ public class TagUtil
     {
         if(attributes == null || attributes.size() < 1)
         {
+            return;
+        }
+
+        if(tag instanceof DynamicAttributes)
+        {
+            DynamicAttributes dynamicAttributes = (DynamicAttributes)tag;
+
+            for(Map.Entry<String, String> entry : attributes.entrySet())
+            {
+                String name = entry.getKey();
+                String value = entry.getValue();
+                Object argument = ExpressionUtil.evaluate(expressionContext, value);
+                dynamicAttributes.setDynamicAttribute(name, argument);
+            }
+
             return;
         }
 

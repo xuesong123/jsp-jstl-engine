@@ -21,6 +21,7 @@ import com.skin.ayada.statement.Expression;
 import com.skin.ayada.statement.Node;
 import com.skin.ayada.statement.NodeType;
 import com.skin.ayada.tagext.BodyTag;
+import com.skin.ayada.tagext.DynamicAttributes;
 import com.skin.ayada.tagext.IterationTag;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.template.Template;
@@ -376,6 +377,10 @@ public class JspCompiler
             else if(tagClassName.equals("com.skin.ayada.jstl.core.AttributeTag"))
             {
                 flag = this.writeAttributeTag(index, indent, tagClassName, node, writer);
+            }
+            else if(tagClassName.equals("com.skin.ayada.jstl.core.ElementTag"))
+            {
+                flag = this.writeElementTag(index, indent, tagClassName, node, writer);
             }
             else if(tagClassName.equals("com.skin.ayada.jstl.core.ConstructorTag"))
             {
@@ -1006,6 +1011,61 @@ public class JspCompiler
      * @param writer
      * @return int
      */
+    private int writeElementTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
+    {
+        String indek = node.getAttribute("index");
+        String value = node.getAttribute("value");
+        String parentTagInstanceName = this.getTagInstanceName(node.getParent());
+
+        if(node.getOffset() == index)
+        {
+            if(value != null)
+            {
+                if(indek != null)
+                {
+                    writer.println(indent + parentTagInstanceName + ".setElement(" + indek + ", " + this.getValueExpression(value) + ");");
+                }
+                else
+                {
+                    writer.println(indent + parentTagInstanceName + ".addElement(" + this.getValueExpression(value) + ");");
+                }
+                return Tag.SKIP_BODY;
+            }
+            else if(node.getLength() > 2)
+            {
+                writer.println(indent + "out = pageContext.pushBody();");
+            }
+            return Tag.EVAL_PAGE;
+        }
+        else
+        {
+            if(value == null && node.getLength() > 2)
+            {
+                if(indek != null)
+                {
+                    writer.println(indent + parentTagInstanceName + ".setElement(" + indek + ", ((BodyContent)out).getString());");
+                }
+                else
+                {
+                    writer.println(indent + parentTagInstanceName + ".addElement(((BodyContent)out).getString());");
+                }
+                writer.println(indent + "out = pageContext.popBody();");
+            }
+
+            writer.println(indent + "/* jsp.jstl.core.ElementTag END */");
+        }
+
+        return Tag.EVAL_PAGE;
+    }
+
+    /**
+     * @param index
+     * @param indent
+     * @param tagClassName
+     * @param node
+     * @param writer
+     * @return int
+     */
     private int writeConstructorTag(int index, String indent, String tagClassName, Node node, PrintWriter writer)
     {
         String name = node.getAttribute("type");
@@ -1367,6 +1427,28 @@ public class JspCompiler
     {
         if(attributes == null || attributes.size() < 1)
         {
+            return;
+        }
+        
+        if(this.isAssignableFrom(tagClassName, DynamicAttributes.class))
+        {
+            for(Map.Entry<String, String> entry : attributes.entrySet())
+            {
+                String name = entry.getKey();
+                String value = entry.getValue();
+
+                if(value.indexOf("${") < 0)
+                {
+                    String valueExpression = this.getValueExpression(value);
+                    writer.println(indent + tagInstanceName + ".setDynamicAttribute(\"" + name + "\", " + valueExpression + ");");
+                }
+                else
+                {
+                    String valueExpression = this.getValueExpression(value);
+                    writer.println(indent + tagInstanceName + ".setDynamicAttribute(\"" + name + "\", " + valueExpression + ");");
+                }
+            }
+
             return;
         }
 

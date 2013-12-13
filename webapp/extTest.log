@@ -28,8 +28,10 @@
 <p>myDouble: 2.3</p>
 <p>myLong: 5</p>
 <p>myString: Hello</p>
-[1, 2, 3, 4]
+[]
+<p>
 {1=test1, 2=test2, 3=test3}
+</p>
 <p>---------------- com.skin.ayada.jstl.core.TestTag ----------------</p>
 <p>myBoolean: false</p>
 <p>myChar: \0</p>
@@ -42,17 +44,23 @@
 <p>myString: null</p>
 
         
+            
         
-    
+            
         
+            
         
-    
+            
         
+            [{userName=test_1, nickName=test_1}, {userName=test_2, nickName=test_2}, {userName=test_3, nickName=test_3}, {userName=test_4, nickName=test_4}, {userName=test_5, nickName=test_5}]
+
         
-    
+            
         
+            
         
-    
+            
         
+            
         
-    [{userName=test_1, nickName=test_1}, {userName=test_2, nickName=test_2}, {userName=test_3, nickName=test_3}, {userName=test_4, nickName=test_4}, {userName=test_5, nickName=test_5}]
+            [{userName=test_1, nickName=test_1}, {userName=test_2, nickName=test_2}, {userName=test_3, nickName=test_3}, {userName=test_4, nickName=test_4}, {userName=test_5, nickName=test_5}, {userName=1_test_1}, {userName=2_test_2}, {userName=3_test_3}, {userName=4_test_4}, {userName=5_test_5}]

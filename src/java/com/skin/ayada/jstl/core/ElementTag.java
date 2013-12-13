@@ -1,7 +1,7 @@
 /*
- * $RCSfile: JspAttributeTag.java,v $$
+ * $RCSfile: AttributeTag.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-11-20 $
+ * $Date: 2013-12-13 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -11,64 +11,66 @@
 package com.skin.ayada.jstl.core;
 
 import com.skin.ayada.tagext.BodyContent;
-import com.skin.ayada.tagext.BodyTag;
 import com.skin.ayada.tagext.BodyTagSupport;
-import com.skin.ayada.tagext.DynamicAttributes;
+import com.skin.ayada.tagext.ElementTagSupport;
 import com.skin.ayada.tagext.Tag;
 
 /**
- * <p>Title: JspAttributeTag</p>
+ * <p>Title: AttributeTag</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2006</p>
+ * @author xuesong.net
  * @version 1.0
  */
-public class JspAttributeTag extends BodyTagSupport
+public class ElementTag extends BodyTagSupport
 {
-    private String name;
-    private Object value = null;
+    private static final long serialVersionUID = 3337947213732345725L;
+    private int index = -1;
+    private Object value;
 
     @Override
     public int doStartTag()
     {
         if(this.value != null)
         {
-            this.setDynamicAttribute(this.name, this.value);
+            this.setElement(this.index, this.value);
             return Tag.SKIP_BODY;
         }
-        else
-        {
-            return BodyTag.EVAL_BODY_BUFFERED;
-        }
+
+        return BodyTagSupport.EVAL_BODY_BUFFERED;
     }
 
-    /**
-     * @return int
-     */
     @Override
     public int doEndTag()
     {
-        BodyContent bodyContent = (BodyContent)(this.getBodyContent());
-
-        if(bodyContent != null)
+        if(this.value == null)
         {
-            this.setDynamicAttribute(this.name, bodyContent.getString().trim());
+            BodyContent body = this.getBodyContent();
+            this.setElement(this.index, (body != null ? body.getString() : null));
         }
 
-        return EVAL_PAGE;
+        return Tag.EVAL_PAGE;
+    }
+
+    @Override
+    public void release()
+    {
+        this.index = -1;
+        this.value = null;
     }
 
     /**
-     * @param uri
      * @param name
      * @param value
      */
-    public void setDynamicAttribute(String name, Object value)
+    protected void setElement(int index, Object value)
     {
         Tag parent = this.getParent();
 
-        if(parent instanceof DynamicAttributes)
+        if(parent instanceof ElementTagSupport)
         {
-            ((DynamicAttributes)parent).setDynamicAttribute(name, value);
+            ElementTagSupport tag = (ElementTagSupport)(parent);
+            tag.setElement(index, value);
         }
         else
         {
@@ -77,19 +79,19 @@ public class JspAttributeTag extends BodyTagSupport
     }
 
     /**
-     * @return the name
+     * @return the index
      */
-    public String getName()
+    public int getIndex()
     {
-        return this.name;
+        return this.index;
     }
 
     /**
-     * @param name the name to set
+     * @param index the index to set
      */
-    public void setName(String name)
+    public void setIndex(int index)
     {
-        this.name = name;
+        this.index = index;
     }
 
     /**

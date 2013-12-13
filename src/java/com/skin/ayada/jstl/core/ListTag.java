@@ -13,7 +13,7 @@ package com.skin.ayada.jstl.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.skin.ayada.tagext.AttributeTagSupport;
+import com.skin.ayada.tagext.ElementTagSupport;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.tagext.TagSupport;
 
@@ -23,7 +23,7 @@ import com.skin.ayada.tagext.TagSupport;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class ListTag extends TagSupport implements AttributeTagSupport
+public class ListTag extends TagSupport implements ElementTagSupport
 {
     private String name;
     private List<Object> list;
@@ -44,13 +44,25 @@ public class ListTag extends TagSupport implements AttributeTagSupport
     }
 
     /**
-     * @param name
      * @param value
      */
     @Override
-    public void setAttribute(String name, Object value)
+    public void addElement(Object value)
     {
         this.list.add(value);
+    }
+
+    /**
+     * @param index
+     * @param value
+     */
+    @Override
+    public void setElement(int index, Object value)
+    {
+        if(index >= 0 && index < this.list.size())
+        {
+            this.list.set(index, value);
+        }
     }
 
     /**

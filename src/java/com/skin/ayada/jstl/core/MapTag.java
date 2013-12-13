@@ -14,6 +14,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.skin.ayada.tagext.AttributeTagSupport;
+import com.skin.ayada.tagext.DynamicAttributes;
+import com.skin.ayada.tagext.ElementTagSupport;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.tagext.TagSupport;
 
@@ -23,7 +25,7 @@ import com.skin.ayada.tagext.TagSupport;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class MapTag extends TagSupport implements AttributeTagSupport
+public class MapTag extends TagSupport implements AttributeTagSupport, DynamicAttributes
 {
     private String name;
     private Map<String, Object> map;
@@ -33,14 +35,50 @@ public class MapTag extends TagSupport implements AttributeTagSupport
     {
         super.doStartTag();
 
-        if(this.name == null)
+        if(this.map == null)
         {
-            return Tag.SKIP_BODY;
+            this.map = new LinkedHashMap<String, Object>();
         }
 
-        this.map = new LinkedHashMap<String, Object>();
-        this.pageContext.setAttribute(this.name, this.map);
-        return TagSupport.EVAL_BODY_INCLUDE;
+        Tag parent = this.getParent();
+
+        if(parent instanceof AttributeTagSupport)
+        {
+            if(this.name != null)
+            {
+                AttributeTagSupport tag = (AttributeTagSupport)(parent);
+                tag.setAttribute(this.name, this.map);
+                return TagSupport.EVAL_BODY_INCLUDE;
+            }
+            else
+            {
+                return Tag.SKIP_BODY;
+            }
+        }
+        else if(parent instanceof ElementTagSupport)
+        {
+            ElementTagSupport tag = (ElementTagSupport)(parent);
+            tag.addElement(this.map);
+            return TagSupport.EVAL_BODY_INCLUDE;
+        }
+        else
+        {
+            if(this.name != null)
+            {
+                this.pageContext.setAttribute(this.name, this.map);
+                return TagSupport.EVAL_BODY_INCLUDE;
+            }
+            else
+            {
+                return Tag.SKIP_BODY;
+            }
+        }
+    }
+
+    @Override
+    public void release()
+    {
+        this.map = null;
     }
 
     /**
@@ -50,7 +88,40 @@ public class MapTag extends TagSupport implements AttributeTagSupport
     @Override
     public void setAttribute(String name, Object value)
     {
+        if(this.map == null)
+        {
+            this.map = new LinkedHashMap<String, Object>();
+        }
+
         this.map.put(name, value);
+    }
+
+    /**
+     * @param name
+     * @param value
+     */
+    public void setDynamicAttribute(String name, Object value)
+    {
+        if(name != null)
+        {
+            if(this.map == null)
+            {
+                this.map = new LinkedHashMap<String, Object>();
+            }
+
+            if(name.equals("name"))
+            {
+                if(value != null)
+                {
+                    this.name = value.toString();
+                }
+            }
+            else
+            {
+    
+                this.map.put(name, value);
+            }
+        }
     }
 
     /**

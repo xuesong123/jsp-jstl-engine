@@ -454,6 +454,15 @@ public class TemplateCompiler extends PageCompiler
                     node.setLength(2);
                     node.setClosed(NodeType.SELF_CLOSED);
                     this.popNode(stack, list, nodeName);
+
+                    if(tagClassName.equals("com.skin.ayada.jstl.core.SetTag"))
+                    {
+                        this.skipCRLF();
+                    }
+                    else if(tagClassName.equals("com.skin.ayada.jstl.core.ExecuteTag"))
+                    {
+                        this.skipCRLF();
+                    }
                 }
             }
             else

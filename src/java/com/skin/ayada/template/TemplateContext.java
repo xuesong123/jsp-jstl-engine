@@ -10,6 +10,7 @@
  */
 package com.skin.ayada.template;
 
+import java.io.File;
 import java.io.Writer;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -72,7 +73,7 @@ public class TemplateContext
 
         if(template == null)
         {
-            throw new RuntimeException(path + " not exists!");
+            throw new Exception(new File(this.home, path).getAbsolutePath() + " not exists!");
         }
 
         this.execute(template, context, writer);
