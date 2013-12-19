@@ -124,11 +124,6 @@ public class TemplateContext
             return this.create(temp);
         }
 
-        if(this.cache.size() > 256)
-        {
-            this.clear();
-        }
-        
         int count = 0;
         int tryCount = 10;
 
@@ -141,7 +136,14 @@ public class TemplateContext
                 Callable<Template> callable = new Callable<Template>(){
                     public Template call() throws InterruptedException
                     {
-                        return TemplateContext.this.create(temp);
+                        try
+                        {
+                            return TemplateContext.this.create(temp);
+                        }
+                        catch(Exception e)
+                        {
+                            throw new RuntimeException(e);
+                        }
                     }
                 };
 
@@ -187,7 +189,7 @@ public class TemplateContext
 
                 if(count++ >= tryCount)
                 {
-                    throw new RuntimeException("get template time out...");
+                    throw new Exception("get template time out...");
                 }
             }
             catch(CancellationException e)
@@ -213,21 +215,12 @@ public class TemplateContext
      * @param path
      * @return Template
      */
-    private Template create(String path)
+    private Template create(String path) throws Exception
     {
-        try
-        {
-            return this.templateFactory.create(this.getSourceFactory(), path, this.charset);
-        }
-        catch(Throwable t)
-        {
-            t.printStackTrace();
-        }
-
-        return null;
+        return this.templateFactory.create(this.getSourceFactory(), path, this.charset);
     }
 
-    private synchronized void clear()
+    protected synchronized void clear()
     {
         long timeMillis = System.currentTimeMillis();
 

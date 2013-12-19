@@ -72,14 +72,7 @@ public class ActionTag extends TagSupport implements ParameterTagSupport
 
         if(this.getPage() != null)
         {
-            try
-            {
-                pageContext.include(this.getPage(), context);
-            }
-            catch(Exception e)
-            {
-                e.printStackTrace();
-            }
+            pageContext.include(this.getPage(), context);
         }
 
         return TagSupport.EVAL_PAGE;

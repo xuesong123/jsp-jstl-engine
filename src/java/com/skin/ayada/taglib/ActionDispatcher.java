@@ -35,19 +35,12 @@ public class ActionDispatcher
      * @param method
      */
     @SuppressWarnings("unchecked")
-    public static Map<String, Object> dispatch(PageContext pageContext, Parameters parameters, String className, String method)
+    public static Map<String, Object> dispatch(PageContext pageContext, Parameters parameters, String className, String method) throws Exception
     {
-        try
-        {
-            Class<?> type = ActionDispatcher.getClass(className);
-            Object instance = type.newInstance();
-            String methodName = ActionDispatcher.getMethod(className, method);
-            return (Map<String, Object>)(ActionDispatcher.invoke(instance, methodName, PARAMETERTYPES, new Object[]{pageContext, parameters}, false));
-        }
-        catch(Throwable t)
-        {
-            throw new RuntimeException(t);
-        }
+        Class<?> type = ActionDispatcher.getClass(className);
+        Object instance = type.newInstance();
+        String methodName = ActionDispatcher.getMethod(className, method);
+        return (Map<String, Object>)(ActionDispatcher.invoke(instance, methodName, PARAMETERTYPES, new Object[]{pageContext, parameters}, false));
     }
 
     /**
@@ -71,7 +64,7 @@ public class ActionDispatcher
      * @param className
      * @return Class<?>
      */
-    public static Class<?> getClass(String className)
+    public static Class<?> getClass(String className) throws ClassNotFoundException
     {
         Class<?> clazz = null;
 
@@ -96,13 +89,7 @@ public class ActionDispatcher
 
         if(clazz == null)
         {
-            try
-            {
-                clazz = Class.forName(className);
-            }
-            catch(ClassNotFoundException e)
-            {
-            }
+            clazz = Class.forName(className);
         }
 
         return clazz;

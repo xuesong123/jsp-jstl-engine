@@ -31,7 +31,7 @@ public class Main
     {
         String path = null;
         String encoding = "UTF-8";
-        
+
         if(args == null || args.length < 1)
         {
             usage();
@@ -39,7 +39,7 @@ public class Main
         else
         {
             path = args[0];
-            
+
             if(args.length > 1)
             {
                 encoding = args[1];
