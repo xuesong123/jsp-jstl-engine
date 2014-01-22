@@ -97,11 +97,8 @@ public class StreamTest
                     stream.skip(2);
                     break;
                 }
-                else
-                {
-                    stream.read();
-                    continue;
-                }
+                stream.read();
+                continue;
             }
             else if(i == '/')
             {
@@ -110,11 +107,8 @@ public class StreamTest
                     stream.skip(2);
                     break;
                 }
-                else
-                {
-                    stream.read();
-                    continue;
-                }
+                stream.read();
+                continue;
             }
 
             // read name
@@ -165,10 +159,8 @@ public class StreamTest
                 attributes.put(name, "");
                 continue;
             }
-            else
-            {
-                stream.read();
-            }
+            
+            stream.read();
 
             // skip space
             while((i = stream.read()) != -1)
@@ -182,10 +174,7 @@ public class StreamTest
                 {
                     continue;
                 }
-                else
-                {
-                    break;
-                }
+                break;
             }
 
             char quote = ' ';
@@ -291,11 +280,8 @@ public class StreamTest
 
                     break;
                 }
-                else
-                {
-                    buffer.append('/');
-                    buffer.append((char)i);
-                }
+                buffer.append('/');
+                buffer.append((char)i);
             }
             else
             {

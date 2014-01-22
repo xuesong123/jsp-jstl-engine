@@ -28,7 +28,7 @@ public class TestBodyTag extends BodyTagSupport
     @Override
     public int doStartTag()
     {
-        JspWriter out = pageContext.getOut();
+        JspWriter out = this.pageContext.getOut();
 
         try
         {
@@ -49,7 +49,7 @@ public class TestBodyTag extends BodyTagSupport
     public int doEndTag()
     {
         String content = null;
-        BodyContent bodyContent = (BodyContent)(this.getBodyContent());
+        BodyContent bodyContent = this.getBodyContent();
 
         if(bodyContent != null)
         {
@@ -57,7 +57,7 @@ public class TestBodyTag extends BodyTagSupport
 
             try
             {
-                pageContext.getOut().print(content);
+                this.pageContext.getOut().print(content);
             }
             catch(IOException e)
             {

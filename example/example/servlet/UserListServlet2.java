@@ -45,6 +45,7 @@ public class UserListServlet2 extends HttpServlet
         this.templateContext = TemplateManager.getTemplateContext(home, true);
     }
 
+    @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         response.setContentType("text/html; charset=UTF-8");
@@ -54,7 +55,7 @@ public class UserListServlet2 extends HttpServlet
 
         try
         {
-            templateContext.execute("/userList.jsp", context, response.getWriter());
+            this.templateContext.execute("/userList.jsp", context, response.getWriter());
         }
         catch(Exception e)
         {

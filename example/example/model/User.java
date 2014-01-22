@@ -31,7 +31,7 @@ public class User implements Serializable
      */
     public long getUserId()
     {
-        return userId;
+        return this.userId;
     }
 
     /**
@@ -47,7 +47,7 @@ public class User implements Serializable
      */
     public String getUserName()
     {
-        return userName;
+        return this.userName;
     }
 
     /**
@@ -63,7 +63,7 @@ public class User implements Serializable
      */
     public int getAge()
     {
-        return age;
+        return this.age;
     }
 
     /**

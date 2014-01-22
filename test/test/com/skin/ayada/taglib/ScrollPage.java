@@ -39,7 +39,7 @@ public class ScrollPage extends TagSupport
         try
         {
             String html = this.render();
-            pageContext.getOut().print(html);
+            this.pageContext.getOut().print(html);
         }
         catch(java.io.IOException e)
         {
@@ -254,11 +254,8 @@ public class ScrollPage extends TagSupport
                 buffer.append(source.substring(s));
                 break;
             }
-            else
-            {
-                buffer.append(source.substring(s, e)).append(page);
-                s = e + d;
-            }
+            buffer.append(source.substring(s, e)).append(page);
+            s = e + d;
         }
         while(true);
 

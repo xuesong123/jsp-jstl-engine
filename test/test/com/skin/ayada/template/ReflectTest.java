@@ -139,6 +139,6 @@ public class ReflectTest
 
     public MyTagFactory getMyTagFactory()
     {
-        return myTagFactory;
+        return this.myTagFactory;
     }
 }

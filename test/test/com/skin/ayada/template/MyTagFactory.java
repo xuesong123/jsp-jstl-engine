@@ -21,6 +21,7 @@ import com.skin.ayada.tagext.Tag;
  */
 public class MyTagFactory extends DefaultTagFactory
 {
+    @Override
     public Tag create()
     {
         return new com.skin.ayada.jstl.core.ForEachTag();
