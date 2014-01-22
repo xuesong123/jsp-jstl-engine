@@ -31,6 +31,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
 
     protected abstract void prepare();
 
+    @Override
     public int doStartTag() throws Exception
     {
         this.index = 0;
@@ -61,6 +62,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
         return EVAL_BODY_INCLUDE;
     }
 
+    @Override
     public int doAfterBody() throws Exception
     {
         if(this.hasNext())
@@ -68,10 +70,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
             this.setCurrent(this.next());
             return EVAL_BODY_AGAIN;
         }
-        else
-        {
-            return SKIP_BODY;
-        }
+        return SKIP_BODY;
     }
 
     @Override
@@ -96,7 +95,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
     public boolean isFirst()
     {
         return (this.count == 1) || (this.index == 0);
-    };
+    }
 
     /**
      * @return boolean
@@ -104,7 +103,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
     public boolean isLast()
     {
         return ((this.index + this.step) >= this.end);
-    };
+    }
 
     /**
      * @return boolean
@@ -121,7 +120,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      */
     public int getIndex()
     {
-        return index;
+        return this.index;
     }
 
     /**
@@ -137,7 +136,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      */
     public int getBegin()
     {
-        return begin;
+        return this.begin;
     }
 
     /**
@@ -153,7 +152,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      */
     public int getCount()
     {
-        return count;
+        return this.count;
     }
 
     /**
@@ -169,7 +168,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      */
     public int getEnd()
     {
-        return end;
+        return this.end;
     }
 
     /**
@@ -185,7 +184,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      */
     public int getStep()
     {
-        return step;
+        return this.step;
     }
 
     /**
@@ -201,7 +200,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      */
     public Object getCurrent()
     {
-        return current;
+        return this.current;
     }
 
     /**
@@ -222,7 +221,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      */
     public String getVar()
     {
-        return var;
+        return this.var;
     }
 
     /**
@@ -238,7 +237,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      */
     public String getVarStatus()
     {
-        return varStatus;
+        return this.varStatus;
     }
 
     /**
@@ -254,7 +253,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      */
     public LoopTagStatus getLoopStatus()
     {
-        return loopStatus;
+        return this.loopStatus;
     }
 
     /**
@@ -263,5 +262,5 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
     public void setLoopStatus(LoopTagStatus loopStatus)
     {
         this.loopStatus = loopStatus;
-    };
+    }
 }

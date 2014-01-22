@@ -44,6 +44,7 @@ public class Expression extends DataNode
     /**
      * @return TextNode
      */
+    @Override
     public Expression clone()
     {
         Expression node = new Expression();

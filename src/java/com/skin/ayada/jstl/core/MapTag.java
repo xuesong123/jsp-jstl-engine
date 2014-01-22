@@ -48,31 +48,24 @@ public class MapTag extends TagSupport implements AttributeTagSupport, DynamicAt
             {
                 AttributeTagSupport tag = (AttributeTagSupport)(parent);
                 tag.setAttribute(this.name, this.map);
-                return TagSupport.EVAL_BODY_INCLUDE;
+                return Tag.EVAL_BODY_INCLUDE;
             }
-            else
-            {
-                return Tag.SKIP_BODY;
-            }
+            return Tag.SKIP_BODY;
         }
         else if(parent instanceof ElementTagSupport)
         {
             ElementTagSupport tag = (ElementTagSupport)(parent);
             tag.addElement(this.map);
-            return TagSupport.EVAL_BODY_INCLUDE;
+            return Tag.EVAL_BODY_INCLUDE;
         }
-        else
+
+        if(this.name != null)
         {
-            if(this.name != null)
-            {
-                this.pageContext.setAttribute(this.name, this.map);
-                return TagSupport.EVAL_BODY_INCLUDE;
-            }
-            else
-            {
-                return Tag.SKIP_BODY;
-            }
+            this.pageContext.setAttribute(this.name, this.map);
+            return Tag.EVAL_BODY_INCLUDE;
         }
+
+        return Tag.SKIP_BODY;
     }
 
     @Override

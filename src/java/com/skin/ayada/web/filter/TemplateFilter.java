@@ -89,11 +89,11 @@ public class TemplateFilter implements Filter
 
         TemplateFactory templateFactory = null;
 
-        if(templateFactoryClassName != null)
+        if(this.templateFactoryClassName != null)
         {
             try
             {
-                templateFactory = this.getTemplateFactory(templateFactoryClassName);
+                templateFactory = this.getTemplateFactory(this.templateFactoryClassName);
 
                 if(templateFactory instanceof JspTemplateFactory)
                 {
@@ -106,9 +106,9 @@ public class TemplateFilter implements Filter
                     }
 
                     JspTemplateFactory jspTemplateFactory = (JspTemplateFactory)templateFactory;
-                    File work = new File(servletContext.getRealPath(jspWork));
+                    File work = new File(this.servletContext.getRealPath(jspWork));
                     jspTemplateFactory.setWork(work.getAbsolutePath());
-                    jspTemplateFactory.setClassPath(this.getClassPath(servletContext));
+                    jspTemplateFactory.setClassPath(this.getClassPath(this.servletContext));
                     jspTemplateFactory.setIgnoreJspTag(ignoreJspTag);
                 }
             }
@@ -128,9 +128,16 @@ public class TemplateFilter implements Filter
             throw new ServletException("templateFactory is null!");
         }
 
-        this.templateContext = TemplateManager.getTemplateContext(servletContext.getRealPath(this.home), true);
+        String sourcePattern = filterConfig.getInitParameter("source-pattern");
+        this.templateContext = TemplateManager.getTemplateContext(this.servletContext.getRealPath(this.home), true);
         this.templateContext.setExpire(timeout);
         this.templateContext.setTemplateFactory(templateFactory);
+
+        if(sourcePattern != null)
+        {
+            this.templateContext.setSourcePattern(sourcePattern);
+        }
+
         ExpressionFactory.setAttribute("servletContext", this.servletContext);
     }
 
@@ -236,10 +243,7 @@ public class TemplateFilter implements Filter
         {
             return (TemplateFactory)(clazz.newInstance());
         }
-        else
-        {
-            throw new ClassNotFoundException(className + " not found !");
-        }
+        throw new ClassNotFoundException(className + " not found !");
     }
 
     @Override

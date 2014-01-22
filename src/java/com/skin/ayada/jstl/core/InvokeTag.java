@@ -39,7 +39,7 @@ public class InvokeTag extends TagSupport implements AttributeTagSupport
         }
 
         this.attributes = new HashMap<String, Object>();
-        return TagSupport.EVAL_BODY_INCLUDE;
+        return Tag.EVAL_BODY_INCLUDE;
     }
 
     @Override
@@ -47,10 +47,10 @@ public class InvokeTag extends TagSupport implements AttributeTagSupport
     {
         if(this.getPage() != null)
         {
-            pageContext.include(this.getPage(), this.attributes);
+            this.pageContext.include(this.getPage(), this.attributes);
         }
 
-        return TagSupport.EVAL_PAGE;
+        return Tag.EVAL_PAGE;
     }
 
     /**

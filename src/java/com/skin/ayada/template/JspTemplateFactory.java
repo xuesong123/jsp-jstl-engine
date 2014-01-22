@@ -58,6 +58,7 @@ public class JspTemplateFactory extends TemplateFactory
      * @param charset
      * @return Template
      */
+    @Override
     public Template create(SourceFactory sourceFactory, String file, String encoding) throws Exception
     {
         Template template = super.create(sourceFactory, file, encoding);
@@ -140,10 +141,7 @@ public class JspTemplateFactory extends TemplateFactory
             jspTemplate.setUpdateTime(template.getUpdateTime());
             return jspTemplate;
         }
-        else
-        {
-            throw new Exception("compile error: " + status);
-        }
+        throw new Exception("compile error: " + status);
     }
 
     /**
@@ -258,10 +256,7 @@ public class JspTemplateFactory extends TemplateFactory
         {
             return className.substring(k + 1);
         }
-        else
-        {
-            return className;
-        }
+        return className;
     }
 
     /**
@@ -276,10 +271,7 @@ public class JspTemplateFactory extends TemplateFactory
         {
             return className.substring(0, k);
         }
-        else
-        {
-            return "_jsp";
-        }
+        return "_jsp";
     }
 
     /**

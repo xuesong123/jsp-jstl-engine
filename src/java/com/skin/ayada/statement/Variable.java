@@ -43,6 +43,7 @@ public class Variable extends DataNode
     /**
      * @return TextNode
      */
+    @Override
     public Variable clone()
     {
         Variable node = new Variable();

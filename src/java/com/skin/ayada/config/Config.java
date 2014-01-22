@@ -35,7 +35,7 @@ public abstract class Config
      */
     public Config(Map<String, String> map)
     {
-        parameters.putAll(map);
+        this.parameters.putAll(map);
     }
 
     /**
@@ -53,7 +53,7 @@ public abstract class Config
      */
     public String getValue(String name)
     {
-        return parameters.get(name);
+        return this.parameters.get(name);
     }
 
     /**
@@ -62,7 +62,7 @@ public abstract class Config
      */
     public String getValue(String name, String defaultValue)
     {
-        String value = parameters.get(name);
+        String value = this.parameters.get(name);
         return (value != null ? value : defaultValue);
     }
 
@@ -713,7 +713,7 @@ public abstract class Config
      */
     public void setValues(Map<String, String> map)
     {
-        parameters.putAll(map);
+        this.parameters.putAll(map);
     }
 
     /**
@@ -721,7 +721,7 @@ public abstract class Config
      */
     public void clear()
     {
-        parameters.clear();
+        this.parameters.clear();
     }
 
     /**

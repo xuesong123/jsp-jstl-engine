@@ -11,6 +11,7 @@
 package com.skin.ayada.source;
 
 import com.skin.ayada.config.TemplateConfig;
+import com.skin.ayada.util.StringUtil;
 
 /**
  * <p>Title: SourceFactory</p>
@@ -20,6 +21,8 @@ import com.skin.ayada.config.TemplateConfig;
  */
 public abstract class SourceFactory
 {
+    private String sourcePattern = "jsp,jspf,jspx,tpl";
+
     /**
      * @param home
      * @param path
@@ -27,7 +30,7 @@ public abstract class SourceFactory
      * @return Source
      */
     public abstract Source getSource(String path, String encoding);
-    
+
     /**
      * @param path
      * @return long
@@ -40,17 +43,19 @@ public abstract class SourceFactory
      */
     public int getSourceType(String path)
     {
-        String fileType = this.getExtension(path).toLowerCase();
-        TemplateConfig config = TemplateConfig.getInstance();
+        if(this.sourcePattern == null)
+        {
+            this.sourcePattern = TemplateConfig.getInstance().getString("ayada.compile.source-pattern");
+        }
 
-        if(config.contains("ayada.compile.source-pattern", fileType))
+        String fileType = this.getExtension(path).toLowerCase();
+        
+        if(StringUtil.contains(this.sourcePattern, fileType))
         {
             return Source.SCRIPT;
         }
-        else
-        {
-            return Source.STATIC;
-        }
+
+        return Source.STATIC;
     }
     
     /**
@@ -87,5 +92,21 @@ public abstract class SourceFactory
         }
 
         return "";
+    }
+
+    /**
+     * @return the sourcePattern
+     */
+    public String getSourcePattern()
+    {
+        return this.sourcePattern;
+    }
+
+    /**
+     * @param sourcePattern the sourcePattern to set
+     */
+    public void setSourcePattern(String sourcePattern)
+    {
+        this.sourcePattern = sourcePattern;
     }
 }

@@ -114,28 +114,25 @@ public class HtmlUtil
                         {
                             continue;
                         }
+                        if(c[j] != ';')
+                        {
+                            buffer.append('&');
+                        }
                         else
                         {
-                            if(c[j] != ';')
+                            try
                             {
-                                buffer.append('&');
+                                int charCode = Integer.parseInt(new String(c, i + 2, j - i - 2));
+                                buffer.append((char)charCode);
                             }
-                            else
+                            catch(NumberFormatException e)
                             {
-                                try
-                                {
-                                    int charCode = Integer.parseInt(new String(c, i + 2, j - i - 2));
-                                    buffer.append((char)charCode);
-                                }
-                                catch(NumberFormatException e)
-                                {
-                                }
-
-                                i = j;
                             }
 
-                            break;
+                            i = j;
                         }
+
+                        break;
                     }
                 }
                 else
@@ -177,20 +174,17 @@ public class HtmlUtil
                 buffer.append(HtmlUtil.encode(source.substring(s)));
                 break;
             }
+            k = source.indexOf('>', e + 1);
+
+            if(k > -1)
+            {
+                buffer.append(HtmlUtil.encode(source.substring(s, e)));
+                s = k + 1;
+            }
             else
             {
-                k = source.indexOf('>', e + 1);
-
-                if(k > -1)
-                {
-                    buffer.append(HtmlUtil.encode(source.substring(s, e)));
-                    s = k + 1;
-                }
-                else
-                {
-                    buffer.append(HtmlUtil.encode(source.substring(s)));
-                    break;
-                }
+                buffer.append(HtmlUtil.encode(source.substring(s)));
+                break;
             }
         }
         while(true);

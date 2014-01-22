@@ -30,6 +30,8 @@ public class DefaultSourceFactory extends SourceFactory
      */
     public DefaultSourceFactory(String home)
     {
+        super();
+
         if(home == null)
         {
             this.home = ".";
@@ -57,18 +59,14 @@ public class DefaultSourceFactory extends SourceFactory
      * @return Source
      */
     @Override
-    public Source getSource(String path, String encoding)
+    public Source getSource(String path, String charset)
     {
-        if(encoding == null)
-        {
-            encoding = "UTF-8";
-        }
-
+        String encoding = (charset != null ? charset : "UTF-8");
         File file = this.getFile(path);
 
         try
         {
-            Source source = new Source(home, path, IO.read(file, encoding, 4096), this.getSourceType(file.getName()));
+            Source source = new Source(this.home, path, IO.read(file, encoding, 4096), this.getSourceType(file.getName()));
             source.setLastModified(file.lastModified());
             return source;
         }
@@ -82,6 +80,7 @@ public class DefaultSourceFactory extends SourceFactory
      * @param path
      * @return long
      */
+    @Override
     public long getLastModified(String path)
     {
         return this.getFile(path).lastModified();

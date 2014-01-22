@@ -42,7 +42,7 @@ public class BBCode
         sig.put("attach", "1");
         sig.put("attachimg", "1");
         sig.put("flash", "1");
-    };
+    }
 
     /**
      * @param source
@@ -66,7 +66,11 @@ public class BBCode
 
             if(index > -1)
             {
-                buffer.append(HtmlUtil.encode(source.substring(begin, index)));
+                if(index > begin)
+                {
+                    buffer.append(HtmlUtil.encode(source.substring(begin, index)));
+                }
+
                 int k = source.indexOf(']', index + 1);
 
                 if(k > -1)
@@ -84,7 +88,6 @@ public class BBCode
                     else
                     {
                         name = content;
-                        attributes = null;
                     }
 
                     if(sig.get(name) != null)
@@ -172,7 +175,7 @@ public class BBCode
 
             if(attributes != null)
             {
-                array = attributes.split(",");
+                array = unquote(attributes.trim()).split(",");
             }
             else
             {
@@ -230,10 +233,7 @@ public class BBCode
                         name.setLength(0);
                         break;
                     }
-                    else
-                    {
-                        name.append(c);
-                    }
+                    name.append(c);
                 }
                 i = j;
             }
@@ -322,14 +322,10 @@ public class BBCode
                 buffer.append(source.substring(s));
                 break;
             }
-            else
-            {
-                buffer.append(source.substring(s, e)).append(replacement);
-                s = e + d;
-            }
+            buffer.append(source.substring(s, e)).append(replacement);
+            s = e + d;
         }
         while(true);
-
         return buffer.toString();
     }
 
@@ -378,7 +374,83 @@ public class BBCode
         return HtmlUtil.encode(buffer.toString());
     }
 
+    /**
+     * @param source
+     * @return String
+     */
+    public static String unquote(String source)
+    {
+        if(source == null)
+        {
+            return "";
+        }
+        
+        int start = 0;
+        int end = source.length();
+
+        char c;
+        for(int i = 0; i < end; i++)
+        {
+            c = source.charAt(i);
+
+            if(c == '\"' || c == '\'')
+            {
+                start = i + 1;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        for(int i = end - 1; i > -1; i--)
+        {
+            c = source.charAt(i);
+
+            if(c == '\"' || c == '\'')
+            {
+                end = i;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        if(end < 0)
+        {
+            end = 0;
+        }
+
+        if(start > 0 && end < source.length())
+        {
+            if(start < end)
+            {
+                return source.substring(start, end);
+            }
+            return "";
+        }
+        return source;
+    }
+
+    /**
+     * @return Map<String, String>
+     */
     private static Map<String, String> load()
+    {
+        ClassLoader classLoader = BBCode.class.getClassLoader();
+        Map<String, String> map1 = load(classLoader, "ayada-bbcode-default.properties");
+        Map<String, String> map2 = load(classLoader, "ayada-bbcode.properties");
+        map1.putAll(map2);
+        return map1;
+    }
+
+    /**
+     * @param classLoader
+     * @param resource
+     * @return Map<String, String>
+     */
+    private static Map<String, String> load(ClassLoader classLoader, String resource)
     {
         InputStream inputStream = null;
         InputStreamReader inputStreamReader = null;
@@ -387,7 +459,13 @@ public class BBCode
 
         try
         {
-            inputStream = BBCode.class.getClassLoader().getResourceAsStream("ayada-bbcode.properties");
+            inputStream = classLoader.getResourceAsStream(resource);
+
+            if(inputStream == null)
+            {
+                return map;
+            }
+
             inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
             bufferedReader = new BufferedReader(inputStreamReader);
 

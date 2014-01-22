@@ -185,10 +185,7 @@ public class ExtendExecutor
                             index = parent.getNode().getOffset() + 1;
                             continue;
                         }
-                        else
-                        {
-                            throw new Exception("Error: ContinueTag");
-                        }
+                        throw new Exception("Error: ContinueTag");
                     }
 
                     if(flag == Tag.BREAK)
@@ -200,17 +197,14 @@ public class ExtendExecutor
                             index = parent.getNode().getOffset() + parent.getNode().getLength();
                             continue;
                         }
-                        else
-                        {
-                            throw new Exception("Error: BreakTag");
-                        }
+                        throw new Exception("Error: BreakTag");
                     }
                 }
                 else
                 {
                     flag = doEndTag(statement, pageContext);
 
-                    if(flag == BodyTag.EVAL_BODY_AGAIN)
+                    if(flag == IterationTag.EVAL_BODY_AGAIN)
                     {
                         index = node.getOffset() + 1;
                         continue;
@@ -228,7 +222,12 @@ public class ExtendExecutor
         }
         catch(Throwable t)
         {
-            throw new Exception("\"" + template.getPath() + "\" Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node), t);
+            if(node != null)
+            {
+                throw new Exception("\"" + template.getPath() + "\" Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node), t);
+            }
+
+            throw new Exception(t.getCause());
         }
         finally
         {
@@ -287,26 +286,24 @@ public class ExtendExecutor
             IterationTag iterationTag = (IterationTag)tag;
             int flag = iterationTag.doAfterBody();
 
-            if(flag == BodyTag.EVAL_BODY_AGAIN)
+            if(flag == IterationTag.EVAL_BODY_AGAIN)
             {
                 return flag;
             }
-            else
+
+            int startTagFlag = statement.getStartTagFlag();
+
+            if(startTagFlag != Tag.SKIP_BODY)
             {
-                int startTagFlag = statement.getStartTagFlag();
-
-                if(startTagFlag != Tag.SKIP_BODY)
+                if(startTagFlag == BodyTag.EVAL_BODY_BUFFERED)
                 {
-                    if(startTagFlag == BodyTag.EVAL_BODY_BUFFERED)
-                    {
-                        Node node = statement.getNode();
+                    Node node = statement.getNode();
 
-                        if(node.getLength() > 2)
+                    if(node.getLength() > 2)
+                    {
+                        if(tag instanceof BodyTag)
                         {
-                            if(tag instanceof BodyTag)
-                            {
-                                pageContext.popBody();
-                            }
+                            pageContext.popBody();
                         }
                     }
                 }

@@ -21,6 +21,7 @@ import com.skin.ayada.tagext.TagSupport;
  */
 public class ContinueTag extends TagSupport
 {
+    @Override
     public int doStartTag()
     {
         return Tag.CONTINUE;

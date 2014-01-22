@@ -57,6 +57,7 @@ public class MessageTag extends BodyTagSupport
         this.parameters.add(value);
     }
 
+    @Override
     public int doEndTag() throws Exception
     {
         Object[] args = null;
@@ -78,7 +79,7 @@ public class MessageTag extends BodyTagSupport
             }
             else if(this.bundle instanceof String)
             {
-                localizationContext = (LocalizationContext)(this.getBundle((String)(this.bundle)));
+                localizationContext = this.getBundle((String)(this.bundle));
             }
         }
         else
@@ -86,7 +87,7 @@ public class MessageTag extends BodyTagSupport
             localizationContext = (LocalizationContext)this.pageContext.getAttribute("caucho.bundle");
         }
 
-        message = this.getLocalizedMessage(localizationContext, key, args);
+        message = this.getLocalizedMessage(localizationContext, this.key, args);
 
         if(this.var != null)
         {

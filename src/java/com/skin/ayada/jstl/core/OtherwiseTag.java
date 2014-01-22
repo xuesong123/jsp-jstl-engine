@@ -25,6 +25,7 @@ public class OtherwiseTag extends TagSupport
     /**
      * @return int
      */
+    @Override
     public int doStartTag()
     {
         Tag parent = this.getParent();
@@ -43,5 +44,5 @@ public class OtherwiseTag extends TagSupport
 
         chooseTag.finish();
         return EVAL_BODY_INCLUDE;
-    };
+    }
 }

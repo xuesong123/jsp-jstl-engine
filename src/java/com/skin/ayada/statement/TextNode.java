@@ -44,6 +44,7 @@ public class TextNode extends DataNode
     /**
      * @return TextNode
      */
+    @Override
     public TextNode clone()
     {
         TextNode node = new TextNode();

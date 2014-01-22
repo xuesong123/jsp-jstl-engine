@@ -35,10 +35,7 @@ public class JspAttributeTag extends BodyTagSupport
             this.setDynamicAttribute(this.name, this.value);
             return Tag.SKIP_BODY;
         }
-        else
-        {
-            return BodyTag.EVAL_BODY_BUFFERED;
-        }
+        return BodyTag.EVAL_BODY_BUFFERED;
     }
 
     /**
@@ -47,7 +44,7 @@ public class JspAttributeTag extends BodyTagSupport
     @Override
     public int doEndTag()
     {
-        BodyContent bodyContent = (BodyContent)(this.getBodyContent());
+        BodyContent bodyContent = this.getBodyContent();
 
         if(bodyContent != null)
         {

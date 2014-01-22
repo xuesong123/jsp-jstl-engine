@@ -22,6 +22,7 @@ import com.skin.ayada.tagext.TagSupport;
  */
 public class CommentTag extends TagSupport
 {
+    @Override
     public int doStartTag()
     {
         return Tag.SKIP_BODY;

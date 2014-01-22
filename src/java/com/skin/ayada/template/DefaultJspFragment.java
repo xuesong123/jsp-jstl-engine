@@ -54,7 +54,7 @@ public class DefaultJspFragment implements JspFragment
     {
         if(out != null)
         {
-            BodyContent bodyContent = (BodyContent)(pageContext.pushBody());
+            BodyContent bodyContent = (BodyContent)(this.pageContext.pushBody());
 
             try
             {
@@ -67,14 +67,14 @@ public class DefaultJspFragment implements JspFragment
             }
             finally
             {
-                pageContext.popBody();
+                this.pageContext.popBody();
             }
         }
         else
         {
             try
             {
-                DefaultExecutor.execute(template, pageContext, this.offset, this.length);
+                DefaultExecutor.execute(this.template, this.pageContext, this.offset, this.length);
             }
             catch(Throwable t)
             {

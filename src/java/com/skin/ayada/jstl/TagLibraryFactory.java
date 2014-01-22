@@ -43,7 +43,7 @@ public class TagLibraryFactory
         TagLibrary tagLibrary = new TagLibrary();
         tagLibrary.setup(map);
         return tagLibrary;
-    };
+    }
 
     /**
      * @return Map<String, TagInfo>

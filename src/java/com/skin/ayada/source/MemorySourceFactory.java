@@ -32,6 +32,7 @@ public class MemorySourceFactory extends SourceFactory
      * @param path
      * @return long
      */
+    @Override
     public long getLastModified(String path)
     {
         return this.source.getLastModified();

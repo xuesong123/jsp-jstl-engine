@@ -122,11 +122,8 @@ public class StringUtil
                     buffer.append(content.substring(s));
                     break;
                 }
-                else
-                {
-                    buffer.append(content.substring(s, e)).append(replacement);
-                    s = e + d;
-                }
+                buffer.append(content.substring(s, e)).append(replacement);
+                s = e + d;
             }
 
             content = buffer.toString();
@@ -355,5 +352,35 @@ public class StringUtil
         }
 
         return buffer.toString();
+    }
+
+    /**
+     * @param content
+     * @param value
+     * @return boolean
+     */
+    public static boolean contains(String content, String value)
+    {
+        if(content != null)
+        {
+            if(content.trim().equals("*"))
+            {
+                return true;
+            }
+
+            String[] array = content.split(",");
+    
+            for(int i = 0; i < array.length; i++)
+            {
+                array[i] = array[i].trim();
+                
+                if(array[i].equals(value))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

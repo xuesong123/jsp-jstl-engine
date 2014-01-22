@@ -24,10 +24,11 @@ import com.skin.ayada.tagext.TagSupport;
  */
 public class StackTraceTag extends TagSupport
 {
+    @Override
     public int doStartTag()
     {
         PrintWriter out = new PrintWriter(this.pageContext.getOut());
-        new RuntimeException().printStackTrace(out);
+        new Exception("StackTrace").printStackTrace(out);
         out.flush();
         return Tag.SKIP_BODY;
     }

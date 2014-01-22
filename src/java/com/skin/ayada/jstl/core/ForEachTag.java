@@ -34,6 +34,7 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
     private ForEachIterator items;
     private boolean hasItems = false;
 
+    @Override
     public void prepare()
     {
     }
@@ -62,6 +63,7 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
     /**
      * @return int
      */
+    @Override
     public int doStartTag() throws Exception
     {
         super.doStartTag();
@@ -77,7 +79,7 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
         }
 
         return EVAL_BODY_INCLUDE;
-    };
+    }
 
     /**
      * @param items
@@ -94,6 +96,7 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
     /**
      * @return boolean
      */
+    @Override
     public boolean hasNext()
     {
         return this.items.hasNext();
@@ -102,6 +105,7 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
     /**
      * @return boolean
      */
+    @Override
     public Object next()
     {
         this.setIndex(this.getIndex() + 1);
@@ -211,7 +215,7 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
         }
 
         return items;
-    };
+    }
 
     /**
      * @param items
@@ -219,7 +223,7 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
     public ForEachIterator getItems()
     {
         return this.items;
-    };
+    }
 
     public static ForEachIterator toForEachIterator(Object o)
     {
@@ -321,12 +325,12 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
 
             public boolean hasNext()
             {
-                return enumeration.hasMoreElements();
+                return this.enumeration.hasMoreElements();
             }
 
             public Object next()
             {
-                return enumeration.nextElement();
+                return this.enumeration.nextElement();
             }
 
             public EnumerationAdapter(Enumeration<?> enumeration)

@@ -11,6 +11,7 @@
 package com.skin.ayada.jstl.core;
 
 import com.skin.ayada.tagext.BodyContent;
+import com.skin.ayada.tagext.BodyTag;
 import com.skin.ayada.tagext.BodyTagSupport;
 import com.skin.ayada.tagext.ParameterTagSupport;
 import com.skin.ayada.tagext.Tag;
@@ -37,7 +38,7 @@ public class ParameterTag extends BodyTagSupport
             return Tag.SKIP_BODY;
         }
 
-        return BodyTagSupport.EVAL_BODY_BUFFERED;
+        return BodyTag.EVAL_BODY_BUFFERED;
     }
 
     @Override

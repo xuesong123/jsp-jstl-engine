@@ -15,6 +15,7 @@ import java.util.Map;
 
 import com.skin.ayada.component.Parameters;
 import com.skin.ayada.tagext.ParameterTagSupport;
+import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.tagext.TagSupport;
 
 /**
@@ -37,7 +38,7 @@ public class ActionTag extends TagSupport implements ParameterTagSupport
     {
         super.doStartTag();
         this.parameters.clear();
-        return TagSupport.EVAL_BODY_INCLUDE;
+        return Tag.EVAL_BODY_INCLUDE;
     }
 
     @Override
@@ -47,7 +48,7 @@ public class ActionTag extends TagSupport implements ParameterTagSupport
 
         if(this.className != null)
         {
-            context = ActionDispatcher.dispatch(pageContext, this.parameters, this.className, this.method);
+            context = ActionDispatcher.dispatch(this.pageContext, this.parameters, this.className, this.method);
         }
 
         if(context == null)
@@ -55,27 +56,27 @@ public class ActionTag extends TagSupport implements ParameterTagSupport
             context = new HashMap<String, Object>();
         }
 
-        if(pageContext.getAttribute("request") != null)
+        if(this.pageContext.getAttribute("request") != null)
         {
-            context.put("request", pageContext.getAttribute("request"));
+            context.put("request", this.pageContext.getAttribute("request"));
         }
 
-        if(pageContext.getAttribute("response") != null)
+        if(this.pageContext.getAttribute("response") != null)
         {
-            context.put("response", pageContext.getAttribute("response"));
+            context.put("response", this.pageContext.getAttribute("response"));
         }
 
-        if(pageContext.getAttribute("session") != null)
+        if(this.pageContext.getAttribute("session") != null)
         {
-            context.put("session", pageContext.getAttribute("session"));
+            context.put("session", this.pageContext.getAttribute("session"));
         }
 
         if(this.getPage() != null)
         {
-            pageContext.include(this.getPage(), context);
+            this.pageContext.include(this.getPage(), context);
         }
 
-        return TagSupport.EVAL_PAGE;
+        return Tag.EVAL_PAGE;
     }
 
     @Override

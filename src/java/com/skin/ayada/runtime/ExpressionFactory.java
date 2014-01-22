@@ -59,7 +59,7 @@ public class ExpressionFactory
         Map<String, String> map2 = load("ayada-tools.properties", charset);
         map1.putAll(map2);
 
-        if(map1 != null && map1.size() > 0)
+        if(map1.size() > 0)
         {
             for(Map.Entry<String, String> entry : map1.entrySet())
             {

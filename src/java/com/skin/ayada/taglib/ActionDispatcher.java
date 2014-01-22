@@ -102,16 +102,6 @@ public class ActionDispatcher
      */
     protected static String getMethod(String className, String method)
     {
-        if(method == null)
-        {
-            int k = className.indexOf("!");
-
-            if(k > -1)
-            {
-                method = className.substring(k + 1);
-            }
-        }
-
         return (method != null ? method : "execute");
     }
 
@@ -154,7 +144,7 @@ public class ActionDispatcher
             exception = e;
         }
 
-        if(safe == false && exception != null)
+        if(safe == false)
         {
             throw new RuntimeException(exception);
         }

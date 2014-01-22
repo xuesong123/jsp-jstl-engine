@@ -577,17 +577,15 @@ public class JspCompiler
 
             return Tag.EVAL_PAGE;
         }
-        else
-        {
-            if(value == null && node.getLength() > 2)
-            {
-                writer.println(indent + "pageContext.printBodyContent((BodyContent)out, " + escapeXml + ");");
-                writer.println(indent + "out = pageContext.popBody();");
-            }
 
-            writer.println(indent + "/* jsp.jstl.core.OutTag END */");
-            return Tag.EVAL_PAGE;
+        if(value == null && node.getLength() > 2)
+        {
+            writer.println(indent + "pageContext.printBodyContent((BodyContent)out, " + escapeXml + ");");
+            writer.println(indent + "out = pageContext.popBody();");
         }
+
+        writer.println(indent + "/* jsp.jstl.core.OutTag END */");
+        return Tag.EVAL_PAGE;
     }
     
     /**
@@ -982,23 +980,21 @@ public class JspCompiler
             }
             return Tag.EVAL_PAGE;
         }
-        else
-        {
-            if(value == null && node.getLength() > 2)
-            {
-                if(name != null)
-                {
-                    writer.println(indent + parentTagInstanceName + ".setAttribute(\"" + name + "\", ((BodyContent)out).getString());");
-                }
-                else
-                {
-                    writer.println(indent + parentTagInstanceName + ".setAttribute((String)null, ((BodyContent)out).getString());");
-                }
-                writer.println(indent + "out = pageContext.popBody();");
-            }
 
-            writer.println(indent + "/* jsp.jstl.core.AttributeTag END */");
+        if(value == null && node.getLength() > 2)
+        {
+            if(name != null)
+            {
+                writer.println(indent + parentTagInstanceName + ".setAttribute(\"" + name + "\", ((BodyContent)out).getString());");
+            }
+            else
+            {
+                writer.println(indent + parentTagInstanceName + ".setAttribute((String)null, ((BodyContent)out).getString());");
+            }
+            writer.println(indent + "out = pageContext.popBody();");
         }
+
+        writer.println(indent + "/* jsp.jstl.core.AttributeTag END */");
 
         return Tag.EVAL_PAGE;
     }
@@ -1037,24 +1033,20 @@ public class JspCompiler
             }
             return Tag.EVAL_PAGE;
         }
-        else
+        if(value == null && node.getLength() > 2)
         {
-            if(value == null && node.getLength() > 2)
+            if(indek != null)
             {
-                if(indek != null)
-                {
-                    writer.println(indent + parentTagInstanceName + ".setElement(" + indek + ", ((BodyContent)out).getString());");
-                }
-                else
-                {
-                    writer.println(indent + parentTagInstanceName + ".addElement(((BodyContent)out).getString());");
-                }
-                writer.println(indent + "out = pageContext.popBody();");
+                writer.println(indent + parentTagInstanceName + ".setElement(" + indek + ", ((BodyContent)out).getString());");
             }
-
-            writer.println(indent + "/* jsp.jstl.core.ElementTag END */");
+            else
+            {
+                writer.println(indent + parentTagInstanceName + ".addElement(((BodyContent)out).getString());");
+            }
+            writer.println(indent + "out = pageContext.popBody();");
         }
 
+        writer.println(indent + "/* jsp.jstl.core.ElementTag END */");
         return Tag.EVAL_PAGE;
     }
 
@@ -1081,11 +1073,7 @@ public class JspCompiler
             }
             return Tag.EVAL_PAGE;
         }
-        else
-        {
-            writer.println(indent + "/* jsp.jstl.core.ConstructorTag END */");
-        }
-
+        writer.println(indent + "/* jsp.jstl.core.ConstructorTag END */");
         return Tag.EVAL_PAGE;
     }
 
@@ -1116,17 +1104,13 @@ public class JspCompiler
             }
             return Tag.EVAL_PAGE;
         }
-        else
+        if(value == null && node.getLength() > 2)
         {
-            if(value == null && node.getLength() > 2)
-            {
-                writer.println(indent + parentTagInstanceName + ".setProperty(\"" + name + "\", ((BodyContent)out).getString());");
-                writer.println(indent + "out = pageContext.popBody();");
-            }
-
-            writer.println(indent + "/* jsp.jstl.core.PropertyTag END */");
+            writer.println(indent + parentTagInstanceName + ".setProperty(\"" + name + "\", ((BodyContent)out).getString());");
+            writer.println(indent + "out = pageContext.popBody();");
         }
 
+        writer.println(indent + "/* jsp.jstl.core.PropertyTag END */");
         return Tag.EVAL_PAGE;
     }
 
@@ -1157,17 +1141,13 @@ public class JspCompiler
             }
             return Tag.EVAL_PAGE;
         }
-        else
+        if(value == null && node.getLength() > 2)
         {
-            if(value == null && node.getLength() > 2)
-            {
-                writer.println(indent + parentTagInstanceName + ".setParameter(\"" + name + "\", ((BodyContent)out).getString());");
-                writer.println(indent + "out = pageContext.popBody();");
-            }
-
-            writer.println(indent + "/* jsp.jstl.core.PrameterTag END */");
+            writer.println(indent + parentTagInstanceName + ".setParameter(\"" + name + "\", ((BodyContent)out).getString());");
+            writer.println(indent + "out = pageContext.popBody();");
         }
 
+        writer.println(indent + "/* jsp.jstl.core.PrameterTag END */");
         return Tag.EVAL_PAGE;
     }
 
@@ -1229,11 +1209,7 @@ public class JspCompiler
             writer.println(indent + "}");
             return Tag.SKIP_BODY;
         }
-        else
-        {
-            writer.println(indent + "/* jsp.jstl.core.ExitTag END */");
-        }
-
+        writer.println(indent + "/* jsp.jstl.core.ExitTag END */");
         return Tag.EVAL_PAGE;
     }
 
@@ -1405,15 +1381,9 @@ public class JspCompiler
             {
                 return false;
             }
-            else
-            {
-                return true;
-            }
+            return true;
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
 
     /**
@@ -1682,15 +1652,9 @@ public class JspCompiler
             {
                 return this.getVariableName(node, "_jsp_" + tagClassName.substring(k + 1) + "_");
             }
-            else
-            {
-                return this.getVariableName(node, "_jsp_" + tagClassName + "_");
-            }
+            return this.getVariableName(node, "_jsp_" + tagClassName + "_");
         }
-        else
-        {
-            return "_jsp_undefined";
-        }
+        return "_jsp_undefined";
     }
 
     /**
@@ -1704,10 +1668,7 @@ public class JspCompiler
         {
             return prefix + (node.getOffset() + 1);
         }
-        else
-        {
-            return prefix + "undefined";
-        }
+        return prefix + "undefined";
     }
 
     /**
@@ -1724,48 +1685,33 @@ public class JspCompiler
                 {
                     return "ExpressionUtil.getHtml(expressionContext, \"" + StringUtil.escape(expression) + "\")";
                 }
-                else
-                {
-                    return "ExpressionUtil.getString(expressionContext, \"" + StringUtil.escape(expression) + "\")";
-                }
+                return "ExpressionUtil.getString(expressionContext, \"" + StringUtil.escape(expression) + "\")";
             }
-            else
-            {
-                Object constant = ExpressionUtil.getValue(expression);
+            Object constant = ExpressionUtil.getValue(expression);
 
-                if(constant instanceof String)
+            if(constant instanceof String)
+            {
+                if(escapeXml)
                 {
-                    if(escapeXml)
-                    {
-                        return "\"" + StringUtil.escape(HtmlUtil.encode(expression)) + "\"";
-                    }
-                    else
-                    {
-                        return "\"" + StringUtil.escape(expression) + "\"";
-                    }
+                    return "\"" + StringUtil.escape(HtmlUtil.encode(expression)) + "\"";
                 }
-                else if(constant instanceof Float)
-                {
-                    return constant.toString() + "f";
-                }
-                else if(constant instanceof Double)
-                {
-                    return constant.toString() + "d";
-                }
-                else if(constant instanceof Long)
-                {
-                    return constant.toString() + "L";
-                }
-                else
-                {
-                    return constant.toString();
-                }
+                return "\"" + StringUtil.escape(expression) + "\"";
             }
+            else if(constant instanceof Float)
+            {
+                return constant.toString() + "f";
+            }
+            else if(constant instanceof Double)
+            {
+                return constant.toString() + "d";
+            }
+            else if(constant instanceof Long)
+            {
+                return constant.toString() + "L";
+            }
+            return constant.toString();
         }
-        else
-        {
-            return null;
-        }
+        return null;
     }
 
     /**
@@ -1788,46 +1734,31 @@ public class JspCompiler
                     {
                         return "pageContext.getAttribute(\"" + node.getTextContent() + "\")";
                     }
-                    else
-                    {
-                        return "ExpressionUtil.evaluate(expressionContext, \"" + StringUtil.escape(expression) + "\")";
-                    }
+                    return "ExpressionUtil.evaluate(expressionContext, \"" + StringUtil.escape(expression) + "\")";
                 }
-                else
-                {
-                    Object constant = ExpressionUtil.getValue(node.getTextContent());
+                Object constant = ExpressionUtil.getValue(node.getTextContent());
 
-                    if(constant instanceof String)
-                    {
-                        return "\"" + StringUtil.escape(expression) + "\"";
-                    }
-                    else if(constant instanceof Float)
-                    {
-                        return constant.toString() + "f";
-                    }
-                    else if(constant instanceof Double)
-                    {
-                        return constant.toString() + "d";
-                    }
-                    else if(constant instanceof Long)
-                    {
-                        return constant.toString() + "L";
-                    }
-                    else
-                    {
-                        return constant.toString();
-                    }
+                if(constant instanceof String)
+                {
+                    return "\"" + StringUtil.escape(expression) + "\"";
                 }
+                else if(constant instanceof Float)
+                {
+                    return constant.toString() + "f";
+                }
+                else if(constant instanceof Double)
+                {
+                    return constant.toString() + "d";
+                }
+                else if(constant instanceof Long)
+                {
+                    return constant.toString() + "L";
+                }
+                return constant.toString();
             }
-            else
-            {
-                return "ExpressionUtil.evaluate(expressionContext, \"" + StringUtil.escape(expression) + "\")";
-            }
+            return "ExpressionUtil.evaluate(expressionContext, \"" + StringUtil.escape(expression) + "\")";
         }
-        else
-        {
-            return null;
-        }
+        return null;
     }
 
     /**

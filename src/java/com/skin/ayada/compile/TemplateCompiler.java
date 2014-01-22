@@ -77,7 +77,7 @@ public class TemplateCompiler extends PageCompiler
         if(source.getType() == Source.STATIC)
         {
             TextNode textNode = new TextNode();
-            textNode.setLineNumber(lineNumber);
+            textNode.setLineNumber(this.lineNumber);
             textNode.setOffset(0);
             textNode.setLength(1);
             textNode.setParent(null);
@@ -158,10 +158,7 @@ public class TemplateCompiler extends PageCompiler
 
                         break;
                     }
-                    else
-                    {
-                        expression.append((char)i);
-                    }
+                    expression.append((char)i);
                 }
             }
             else
@@ -181,15 +178,13 @@ public class TemplateCompiler extends PageCompiler
                         this.stream.back();
                         break;
                     }
-                    else
-                    {
-                        if(i == '\n')
-                        {
-                            this.lineNumber++;
-                        }
 
-                        buffer.append((char)i);
+                    if(i == '\n')
+                    {
+                        this.lineNumber++;
                     }
+
+                    buffer.append((char)i);
                 }
 
                 if(buffer.length() > 0)
@@ -239,9 +234,9 @@ public class TemplateCompiler extends PageCompiler
             {
                 String tagClassName = null;
 
-                if(tagLibrary != null)
+                if(this.tagLibrary != null)
                 {
-                    tagClassName = tagLibrary.getTagClassName(nodeName);
+                    tagClassName = this.tagLibrary.getTagClassName(nodeName);
                 }
 
                 if(tagClassName != null)
@@ -329,9 +324,9 @@ public class TemplateCompiler extends PageCompiler
 
             String tagClassName = null;
 
-            if(tagLibrary != null)
+            if(this.tagLibrary != null)
             {
-                tagClassName = tagLibrary.getTagClassName(nodeName);
+                tagClassName = this.tagLibrary.getTagClassName(nodeName);
             }
 
             if(nodeName.equals("t:import"))
@@ -435,7 +430,7 @@ public class TemplateCompiler extends PageCompiler
                 {
                     this.pushNode(stack, list, node);
                     this.popNode(stack, list, nodeName);
-                };
+                }
             }
             else if(tagClassName != null)
             {
@@ -520,10 +515,7 @@ public class TemplateCompiler extends PageCompiler
                 this.stream.read();
                 continue;
             }
-            else
-            {
-                break;
-            }
+            break;
         }
     }
 
@@ -561,10 +553,7 @@ public class TemplateCompiler extends PageCompiler
 
                     break;
                 }
-                else
-                {
-                    buffer.append("</");
-                }
+                buffer.append("</");
             }
             else
             {
@@ -676,15 +665,12 @@ public class TemplateCompiler extends PageCompiler
                     this.stream.read();
                     break;
                 }
-                else
+                if(i == '\n')
                 {
-                    if(i == '\n')
-                    {
-                        this.lineNumber++;
-                    }
-
-                    buffer.append((char)i);
+                    this.lineNumber++;
                 }
+
+                buffer.append((char)i);
             }
 
             if(t == '!')
@@ -832,7 +818,7 @@ public class TemplateCompiler extends PageCompiler
      * @param path
      * @param encoding
      */
-    public void include(Stack<Node> stack, List<Node> list, String type, String path, String encoding) throws Exception
+    public void include(Stack<Node> stack, List<Node> list, String type, String path, String charset) throws Exception
     {
         if(path == null)
         {
@@ -844,10 +830,7 @@ public class TemplateCompiler extends PageCompiler
             throw new Exception("t:include error: file must be starts with '/'");
         }
 
-        if(encoding == null)
-        {
-            encoding = "UTF-8";
-        }
+        String encoding = (charset != null ? charset : "UTF-8");
 
         int index = list.size();
         Node parent = stack.peek();
@@ -856,7 +839,7 @@ public class TemplateCompiler extends PageCompiler
         if(source.getType() == Source.STATIC || (type != null && type.equals("static")))
         {
             TextNode textNode = new TextNode();
-            textNode.setLineNumber(lineNumber);
+            textNode.setLineNumber(this.lineNumber);
             textNode.setOffset(list.size());
             textNode.setLength(1);
             textNode.setParent(parent);
@@ -900,15 +883,12 @@ public class TemplateCompiler extends PageCompiler
      */
     public void setupTagLibrary(String name, String className)
     {
-        if(name == null || className == null)
+        if(name == null || name.trim().length() < 1)
         {
             return;
         }
 
-        name = name.trim();
-        className = className.trim();
-
-        if(name.length() < 1 || className.length() < 1)
+        if(className == null || className.trim().length() < 1)
         {
             return;
         }
@@ -917,7 +897,7 @@ public class TemplateCompiler extends PageCompiler
 
         if(tagLibrary != null)
         {
-            tagLibrary.setup(name, className);
+            tagLibrary.setup(name.trim(), className.trim());
         }
     }
 
@@ -1052,7 +1032,7 @@ public class TemplateCompiler extends PageCompiler
      */
     public TagLibrary getTagLibrary()
     {
-        return tagLibrary;
+        return this.tagLibrary;
     }
 
     /**

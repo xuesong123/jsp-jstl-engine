@@ -88,10 +88,7 @@ public class DefaultPageContext implements PageContext
         {
             return this.attributes.put(key, value);
         }
-        else
-        {
-            return this.attributes.remove(key);
-        }
+        return this.attributes.remove(key);
     }
 
     /**
@@ -148,7 +145,7 @@ public class DefaultPageContext implements PageContext
      */
     public TagLibrary getTagLibrary()
     {
-        return tagLibrary;
+        return this.tagLibrary;
     }
 
     /**
@@ -201,7 +198,7 @@ public class DefaultPageContext implements PageContext
     public JspWriter popBody()
     {
         BodyContent bodyContent = (BodyContent)(this.out);
-        this.out = (JspWriter)(bodyContent.getEnclosingWriter());
+        this.out = bodyContent.getEnclosingWriter();
         return this.out;
     }
 
@@ -265,6 +262,7 @@ public class DefaultPageContext implements PageContext
                 case '\'':
                 {
                     buffer.append("&#39;");
+                    break;
                 }
                 default :
                 {

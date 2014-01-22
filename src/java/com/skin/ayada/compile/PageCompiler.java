@@ -58,7 +58,7 @@ public class PageCompiler
         }
 
         return buffer.toString();
-    };
+    }
 
     /**
      * read node name, after read nodeName
@@ -111,11 +111,8 @@ public class PageCompiler
                     stream.skip(2);
                     break;
                 }
-                else
-                {
-                    stream.read();
-                    continue;
-                }
+                stream.read();
+                continue;
             }
             else if(i == '/')
             {
@@ -124,11 +121,8 @@ public class PageCompiler
                     stream.skip(2);
                     break;
                 }
-                else
-                {
-                    stream.read();
-                    continue;
-                }
+                stream.read();
+                continue;
             }
 
             // read name
@@ -179,10 +173,8 @@ public class PageCompiler
                 attributes.put(name, "");
                 continue;
             }
-            else
-            {
-                stream.read();
-            }
+
+            stream.read();
 
             // skip space
             while((i = stream.read()) != -1)
@@ -196,10 +188,7 @@ public class PageCompiler
                 {
                     continue;
                 }
-                else
-                {
-                    break;
-                }
+                break;
             }
 
             char quote = ' ';
@@ -311,28 +300,26 @@ public class PageCompiler
                         {
                             continue;
                         }
+
+                        if(c[j] != ';')
+                        {
+                            buffer.append('&');
+                        }
                         else
                         {
-                            if(c[j] != ';')
+                            try
                             {
-                                buffer.append('&');
+                                int charCode = Integer.parseInt(new String(c, i + 2, j - i - 2));
+                                buffer.append((char)charCode);
                             }
-                            else
+                            catch(NumberFormatException e)
                             {
-                                try
-                                {
-                                    int charCode = Integer.parseInt(new String(c, i + 2, j - i - 2));
-                                    buffer.append((char)charCode);
-                                }
-                                catch(NumberFormatException e)
-                                {
-                                }
-
-                                i = j;
                             }
 
-                            break;
+                            i = j;
                         }
+
+                        break;
                     }
                 }
                 else
@@ -385,7 +372,7 @@ public class PageCompiler
     public void setStream(StringStream stream)
     {
         this.stream = stream;
-    };
+    }
 
     /**
      * @param lineNumber

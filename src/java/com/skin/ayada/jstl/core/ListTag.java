@@ -40,7 +40,7 @@ public class ListTag extends TagSupport implements ElementTagSupport
 
         this.list = new ArrayList<Object>();
         this.pageContext.setAttribute(this.name, this.list);
-        return TagSupport.EVAL_BODY_INCLUDE;
+        return Tag.EVAL_BODY_INCLUDE;
     }
 
     /**

@@ -93,12 +93,15 @@ public class ClassPathClassLoader extends ClassLoader
         }
         finally
         {
-            try
+            if(fileInputStream != null)
             {
-                fileInputStream.close();
-            }
-            catch(IOException e)
-            {
+                try
+                {
+                    fileInputStream.close();
+                }
+                catch(IOException e)
+                {
+                }
             }
         }
     }
@@ -110,7 +113,7 @@ public class ClassPathClassLoader extends ClassLoader
     private String getClassFile(String className)
     {
         String path = className.replace('.', File.separatorChar) + ".class";
-        File file = new File(classPath, path);
+        File file = new File(this.classPath, path);
         return file.getAbsolutePath();
     }
 }

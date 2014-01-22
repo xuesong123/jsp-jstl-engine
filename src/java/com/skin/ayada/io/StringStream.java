@@ -131,12 +131,9 @@ public class StringStream
             this.position = this.position + length;
             return length;
         }
-        else
-        {
-            int index = this.position;
-            this.position = this.length;
-            return this.length - index;
-        }
+        int index = this.position;
+        this.position = this.length;
+        return this.length - index;
     }
     
     /**

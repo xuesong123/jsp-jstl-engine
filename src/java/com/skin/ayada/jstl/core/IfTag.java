@@ -31,11 +31,8 @@ public class IfTag extends ConditionalTagSupport
         {
             return EVAL_BODY_INCLUDE;
         }
-        else
-        {
-            return SKIP_BODY;
-        }
-    };
+        return SKIP_BODY;
+    }
 
     public void setTest(boolean b)
     {

@@ -46,7 +46,7 @@ public class BeanTag extends TagSupport implements Tag, ConstructorTagSupport, P
         this.parameterTypes = new ArrayList<Class<?>>();
         this.parameters = new ArrayList<Object>();
         this.properties = new HashMap<String, Object>();
-        return TagSupport.EVAL_BODY_INCLUDE;
+        return Tag.EVAL_BODY_INCLUDE;
     }
 
     @Override

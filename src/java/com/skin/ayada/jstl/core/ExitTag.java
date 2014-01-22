@@ -35,10 +35,7 @@ public class ExitTag extends ConditionalTagSupport
         {
             return SKIP_PAGE;
         }
-        else
-        {
-            return EVAL_PAGE;
-        }
+        return EVAL_PAGE;
     }
 
     public void setTest(boolean b)

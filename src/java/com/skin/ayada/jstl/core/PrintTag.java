@@ -18,6 +18,7 @@ import java.util.Iterator;
 
 import com.skin.ayada.jstl.util.BeanUtil;
 import com.skin.ayada.runtime.PageContext;
+import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.tagext.TagSupport;
 
 /**
@@ -38,7 +39,7 @@ public class PrintTag extends TagSupport
     public int doEndTag() throws Exception
     {
         print(this.pageContext, this.out, this.value);
-        return TagSupport.EVAL_PAGE;
+        return Tag.EVAL_PAGE;
     }
 
     /**

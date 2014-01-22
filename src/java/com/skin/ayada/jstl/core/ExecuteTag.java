@@ -51,7 +51,7 @@ public class ExecuteTag extends TagSupport
      */
     public String getVar()
     {
-        return var;
+        return this.var;
     }
 
     /**
@@ -67,6 +67,6 @@ public class ExecuteTag extends TagSupport
      */
     public Object getValue()
     {
-        return value;
+        return this.value;
     }
 }

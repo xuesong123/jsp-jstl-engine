@@ -156,7 +156,7 @@ public class Node
      */
     public int getLineNumber()
     {
-        return lineNumber;
+        return this.lineNumber;
     }
 
     /**
@@ -190,7 +190,7 @@ public class Node
      */
     public Map<String, String> getAttributes()
     {
-        return attributes;
+        return this.attributes;
     }
 
     /**
@@ -331,6 +331,7 @@ public class Node
     /**
      * @return String
      */
+    @Override
     public String toString()
     {
         return this.toString(this.getOffset());

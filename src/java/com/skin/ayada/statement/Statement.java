@@ -39,7 +39,7 @@ public class Statement
      */
     public Tag getTag()
     {
-        return tag;
+        return this.tag;
     }
 
     /**
@@ -55,7 +55,7 @@ public class Statement
      */
     public Node getNode()
     {
-        return node;
+        return this.node;
     }
 
     /**
@@ -71,7 +71,7 @@ public class Statement
      */
     public Statement getParent()
     {
-        return parent;
+        return this.parent;
     }
 
     /**
@@ -87,7 +87,7 @@ public class Statement
      */
     public int getStartTagFlag()
     {
-        return startTagFlag;
+        return this.startTagFlag;
     }
 
     /**

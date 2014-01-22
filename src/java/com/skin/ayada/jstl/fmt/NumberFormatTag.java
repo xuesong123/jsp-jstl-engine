@@ -40,6 +40,7 @@ public class NumberFormatTag extends TagSupport
     private int minFractionDigits = -1;
     private String var;
 
+    @Override
     public int doEndTag()
     {
         NumberFormat format = getFormat();
@@ -106,7 +107,7 @@ public class NumberFormatTag extends TagSupport
                 decimalFormat.applyPattern(this.pattern);
             }
         }
-        else if(type.equals("percent"))
+        else if(this.type.equals("percent"))
         {
             if(locale != null)
             {
@@ -117,7 +118,7 @@ public class NumberFormatTag extends TagSupport
                 format = NumberFormat.getPercentInstance();
             }
         }
-        else if(type.equals("currency"))
+        else if(this.type.equals("currency"))
         {
             if(locale != null)
             {
@@ -146,7 +147,7 @@ public class NumberFormatTag extends TagSupport
         }
         else
         {
-            throw new RuntimeException("unknown formatNumber type " + type);
+            throw new RuntimeException("unknown formatNumber type " + this.type);
         }
 
         format.setGroupingUsed(this.groupingUsed);

@@ -61,19 +61,15 @@ public class ClassPathSourceFactory extends SourceFactory
      * @return Source
      */
     @Override
-    public Source getSource(String path, String encoding)
+    public Source getSource(String path, String charset)
     {
         if(path == null)
         {
             throw new RuntimeException("path must be not null !");
         }
 
-        if(encoding == null)
-        {
-            encoding = "UTF-8";
-        }
-
         String temp = path.trim();
+        String encoding = (charset != null ? charset : "UTF-8");
 
         if(temp.charAt(0) == '/')
         {
@@ -89,7 +85,7 @@ public class ClassPathSourceFactory extends SourceFactory
 
         if(homeUrl == null)
         {
-            throw new RuntimeException(home + " not exists !");
+            throw new RuntimeException(this.home + " not exists !");
         }
 
         if(tempUrl == null)
@@ -126,6 +122,7 @@ public class ClassPathSourceFactory extends SourceFactory
      * @param path
      * @return long
      */
+    @Override
     public long getLastModified(String path)
     {
         return 0L;

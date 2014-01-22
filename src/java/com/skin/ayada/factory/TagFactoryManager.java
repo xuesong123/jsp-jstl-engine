@@ -151,10 +151,7 @@ public class TagFactoryManager
         {
             return "com.skin.ayada.jstl.factory." + simpleClassName + "Factory";
         }
-        else
-        {
-            return packageName + ".proxy." + simpleClassName + "Factory";
-        }
+        return packageName + ".proxy." + simpleClassName + "Factory";
     }
 
     /**
@@ -164,11 +161,11 @@ public class TagFactoryManager
      */
     public Object getInstance(String className, byte[] bytes)
     {
-        Class<?> clazz = factoryClassLoader.create(className, bytes);
+        Class<?> clazz = this.factoryClassLoader.create(className, bytes);
 
         try
         {
-            return (TagFactory)(clazz.newInstance());
+            return clazz.newInstance();
         }
         catch(InstantiationException e)
         {

@@ -79,10 +79,7 @@ public class ExpressionContext extends OgnlContext
         {
             return Boolean.TRUE.equals(value);
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
 
     /**
@@ -102,10 +99,7 @@ public class ExpressionContext extends OgnlContext
         {
             return Boolean.TRUE.equals(value);
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
 
     /**
@@ -120,10 +114,7 @@ public class ExpressionContext extends OgnlContext
         {
             return "";
         }
-        else
-        {
-            return value.toString();
-        }
+        return value.toString();
     }
 
     /**

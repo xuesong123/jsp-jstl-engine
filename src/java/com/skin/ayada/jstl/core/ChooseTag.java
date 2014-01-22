@@ -1,7 +1,7 @@
 /*
  * $RCSfile: ChooseTag.java,v $$
- * $Revision: 1.1  $
- * $Date: 2013-2-19  $
+ * $Revision: 1.1$
+ * $Date: 2013-2-19$
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -24,6 +24,7 @@ public class ChooseTag extends TagSupport
 {
     private boolean flag = false;
 
+    @Override
     public int doStartTag()
     {
         this.flag = false;
@@ -32,7 +33,7 @@ public class ChooseTag extends TagSupport
 
     public boolean complete()
     {
-        return flag;
+        return this.flag;
     }
 
     public void finish()

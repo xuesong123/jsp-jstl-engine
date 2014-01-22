@@ -25,6 +25,7 @@ public class WhenTag extends ConditionalTagSupport
     /**
      * @return int
      */
+    @Override
     public int doStartTag()
     {
         Tag parent = this.getParent();
@@ -48,11 +49,12 @@ public class WhenTag extends ConditionalTagSupport
         }
 
         return SKIP_BODY;
-    };
+    }
 
     /**
      * @return int
      */
+    @Override
     public int doEndTag()
     {
         return EVAL_PAGE;

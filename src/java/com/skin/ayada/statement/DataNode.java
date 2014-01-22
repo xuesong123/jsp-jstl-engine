@@ -134,6 +134,7 @@ public abstract class DataNode extends Node
     /**
      * @return String
      */
+    @Override
     public String getTextContent()
     {
         return this.buffer.toString();
@@ -142,5 +143,6 @@ public abstract class DataNode extends Node
     /**
      * @return DataNode
      */
+    @Override
     public abstract DataNode clone();
 }

@@ -208,10 +208,8 @@ public class BeanUtil
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS".toString());
             return (dateFormat.format(date).toString());
         }
-        else
-        {
-            return ("null".toString());
-        }
+
+        return "null";
     }
 
     /**

@@ -25,9 +25,10 @@ public class SetBundleTag extends TagSupport
     private String basename;
     private String var = "javax.servlet.jsp.jstl.fmt.localizationContext";
 
+    @Override
     public int doStartTag()
     {
-        LocalizationContext bundle = this.getBundle(basename);
+        LocalizationContext bundle = this.getBundle(this.basename);
         this.pageContext.setAttribute(this.var, bundle);
         return Tag.EVAL_PAGE;
     }

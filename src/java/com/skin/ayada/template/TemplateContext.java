@@ -115,9 +115,10 @@ public class TemplateContext
      */
     public Template getTemplate(String path) throws Exception
     {
-        path = StringUtil.replace(path, "\\", "/");
-        path = StringUtil.replace(path, "//", "/");
-        final String temp = path;
+        String realPath = path;
+        realPath = StringUtil.replace(realPath, "\\", "/");
+        realPath = StringUtil.replace(realPath, "//", "/");
+        final String temp = realPath;
 
         if(this.expire == 0)
         {
@@ -165,26 +166,24 @@ public class TemplateContext
                 {
                     return template;
                 }
-                else
-                {
-                    long timeMillis = System.currentTimeMillis();
 
-                    if(timeMillis - template.getUpdateTime() > this.expire * 1000L)
+                long timeMillis = System.currentTimeMillis();
+
+                if(timeMillis - template.getUpdateTime() > this.expire * 1000L)
+                {
+                    if(template.getLastModified() != this.sourceFactory.getLastModified(template.getPath()))
                     {
-                        if(template.getLastModified() != sourceFactory.getLastModified(template.getPath()))
-                        {
-                            this.cache.remove(temp, f);
-                        }
-                        else
-                        {
-                            template.setUpdateTime(System.currentTimeMillis());
-                            return template;
-                        }
+                        this.cache.remove(temp, f);
                     }
                     else
                     {
+                        template.setUpdateTime(System.currentTimeMillis());
                         return template;
                     }
+                }
+                else
+                {
+                    return template;
                 }
 
                 if(count++ >= tryCount)
@@ -215,7 +214,7 @@ public class TemplateContext
      * @param path
      * @return Template
      */
-    private Template create(String path) throws Exception
+    protected Template create(String path) throws Exception
     {
         return this.templateFactory.create(this.getSourceFactory(), path, this.charset);
     }
@@ -260,7 +259,7 @@ public class TemplateContext
      */
     public String getHome()
     {
-        return home;
+        return this.home;
     }
 
     /**
@@ -268,7 +267,7 @@ public class TemplateContext
      */
     public int getExpire()
     {
-        return expire;
+        return this.expire;
     }
 
     /**
@@ -309,6 +308,30 @@ public class TemplateContext
     public void setTemplateFactory(TemplateFactory templateFactory)
     {
         this.templateFactory = templateFactory;
+    }
+
+    /**
+     * @return the sourcePattern
+     */
+    public String getSourcePattern()
+    {
+        if(this.sourceFactory != null)
+        {
+            return this.sourceFactory.getSourcePattern();
+        }
+
+        return null;
+    }
+
+    /**
+     * @param sourcePattern the sourcePattern to set
+     */
+    public void setSourcePattern(String sourcePattern)
+    {
+        if(this.sourceFactory != null)
+        {
+            this.sourceFactory.setSourcePattern(sourcePattern);
+        }
     }
 
     public void destory()

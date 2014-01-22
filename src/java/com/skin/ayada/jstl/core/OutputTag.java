@@ -41,7 +41,7 @@ public class OutputTag extends BodyTagSupport
     public int doEndTag() throws Exception
     {
         String content = null;
-        BodyContent bodyContent = (BodyContent)(this.getBodyContent());
+        BodyContent bodyContent = this.getBodyContent();
 
         if(bodyContent != null)
         {
@@ -120,6 +120,7 @@ public class OutputTag extends BodyTagSupport
                 case '\'':
                 {
                     buffer.append("&#39;");
+                    break;
                 }
                 default :
                 {

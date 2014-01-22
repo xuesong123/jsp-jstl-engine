@@ -51,10 +51,7 @@ public class ExpressionUtil
         {
             return "";
         }
-        else
-        {
-            return value.toString();
-        }
+        return value.toString();
     }
 
     /**
@@ -75,10 +72,7 @@ public class ExpressionUtil
         {
             return Boolean.TRUE.equals(value);
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
 
     /**
@@ -94,10 +88,7 @@ public class ExpressionUtil
         {
             return ((Number)value).byteValue();
         }
-        else
-        {
-            return null;
-        }
+        return null;
     }
 
     /**
@@ -113,10 +104,7 @@ public class ExpressionUtil
         {
             return ((Number)value).shortValue();
         }
-        else
-        {
-            return null;
-        }
+        return null;
     }
 
     /**
@@ -132,10 +120,7 @@ public class ExpressionUtil
         {
             return ((Number)value).intValue();
         }
-        else
-        {
-            return null;
-        }
+        return null;
     }
 
     /**
@@ -151,10 +136,7 @@ public class ExpressionUtil
         {
             return ((Number)value).floatValue();
         }
-        else
-        {
-            return null;
-        }
+        return null;
     }
 
     /**
@@ -170,10 +152,7 @@ public class ExpressionUtil
         {
             return ((Number)value).doubleValue();
         }
-        else
-        {
-            return null;
-        }
+        return null;
     }
 
     /**
@@ -189,10 +168,7 @@ public class ExpressionUtil
         {
             return ((Number)value).longValue();
         }
-        else
-        {
-            return null;
-        }
+        return null;
     }
 
     /**
@@ -231,36 +207,30 @@ public class ExpressionUtil
                 {
                     return expressionContext.getValue(node.getTextContent());
                 }
+                Object value = getValue(node.getTextContent());
+                return (value != null ? value : node.getTextContent());
+            }
+            Object value = null;
+            StringBuilder buffer = new StringBuilder();
+
+            for(Node node : list)
+            {
+                if(node instanceof Expression)
+                {
+                    value = expressionContext.getValue(node.getTextContent());
+
+                    if(value != null)
+                    {
+                        buffer.append(value.toString());
+                    }
+                }
                 else
                 {
-                    Object value = getValue(node.getTextContent());
-                    return (value != null ? value : node.getTextContent());
+                    buffer.append(node.getTextContent());
                 }
             }
-            else
-            {
-                Object value = null;
-                StringBuilder buffer = new StringBuilder();
 
-                for(Node node : list)
-                {
-                    if(node instanceof Expression)
-                    {
-                        value = expressionContext.getValue(node.getTextContent());
-
-                        if(value != null)
-                        {
-                            buffer.append(value.toString());
-                        }
-                    }
-                    else
-                    {
-                        buffer.append(node.getTextContent());
-                    }
-                }
-
-                return buffer.toString();
-            }
+            return buffer.toString();
         }
 
         return null;
@@ -291,10 +261,7 @@ public class ExpressionUtil
                     {
                         break;
                     }
-                    else
-                    {
-                        expression.append(cbuf[i]);
-                    }
+                    expression.append(cbuf[i]);
                 }
 
                 if(expression.getTextContent().length() > 0)
@@ -467,10 +434,7 @@ public class ExpressionUtil
                     d = 4;
                     continue;
                 }
-                else
-                {
-                    return 0;
-                }
+                return 0;
             }
 
             if(c < 48 || c > 57)
