@@ -39,13 +39,16 @@ public class ConnectTag extends TagSupport implements TryCatchFinally
         {
             if(this.connection == null)
             {
-                if(this.properties != null)
+                if(this.url != null)
                 {
-                    this.connection = Jdbc.connect(url, driverClass, Jdbc.parse(this.properties));
-                }
-                else
-                {
-                    this.connection = Jdbc.connect(url, driverClass, userName, password);
+                    if(this.properties != null)
+                    {
+                        this.connection = Jdbc.connect(url, driverClass, Jdbc.parse(this.properties));
+                    }
+                    else
+                    {
+                        this.connection = Jdbc.connect(url, driverClass, userName, password);
+                    }
                 }
             }
 

@@ -39,12 +39,12 @@ public class Jdbc
     {
         if(url == null)
         {
-            throw new SQLException("The Url must be not null !");
+            throw new SQLException("The url must be not null !");
         }
 
         if(driverClass == null)
         {
-            throw new SQLException("The DriverClass must be not null !");
+            throw new SQLException("The driverClass must be not null !");
         }
 
         try
@@ -70,12 +70,12 @@ public class Jdbc
     {
         if(url == null)
         {
-            throw new SQLException("The Url must be not null !");
+            throw new SQLException("The url must be not null !");
         }
 
         if(driverClass == null)
         {
-            throw new SQLException("The DriverClass must be not null !");
+            throw new SQLException("The driverClass must be not null !");
         }
 
         try
