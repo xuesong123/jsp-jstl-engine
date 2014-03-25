@@ -193,4 +193,28 @@
         <body-content>empty</body-content>
         <description></description>
     </tag>
+    <tag>
+        <name>c:tryCatchTest</name>
+        <tag-class>com.skin.ayada.jstl.core.TryCatchTestTag</tag-class>
+        <body-content>jsp</body-content>
+        <description></description>
+    </tag>
+    <tag>
+        <name>sql:connect</name>
+        <tag-class>com.skin.ayada.jstl.sql.ConnectTag</tag-class>
+        <body-content>jsp</body-content>
+        <description></description>
+    </tag>
+    <tag>
+        <name>sql:execute</name>
+        <tag-class>com.skin.ayada.jstl.sql.SqlTag</tag-class>
+        <body-content>jsp</body-content>
+        <description></description>
+    </tag>
+    <tag>
+        <name>sql:query</name>
+        <tag-class>com.skin.ayada.jstl.sql.QueryTag</tag-class>
+        <body-content>jsp</body-content>
+        <description></description>
+    </tag>
 </taglib>

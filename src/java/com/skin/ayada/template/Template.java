@@ -10,7 +10,9 @@
  */
 package com.skin.ayada.template;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +57,12 @@ public class Template
      */
     public void execute(final PageContext pageContext) throws Exception
     {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("home", this.home);
+        map.put("path", this.path);
+        map.put("lastModified", this.lastModified);
+        pageContext.setAttribute("template", map);
+
         if(logger.isDebugEnabled())
         {
             long t1 = System.currentTimeMillis();

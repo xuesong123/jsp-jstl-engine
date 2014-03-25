@@ -20,9 +20,11 @@ import com.skin.ayada.statement.NodeType;
 import com.skin.ayada.statement.Statement;
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTag;
+import com.skin.ayada.tagext.FinallyException;
 import com.skin.ayada.tagext.IterationTag;
 import com.skin.ayada.tagext.SimpleTag;
 import com.skin.ayada.tagext.Tag;
+import com.skin.ayada.tagext.TryCatchFinally;
 import com.skin.ayada.util.NodeUtil;
 import com.skin.ayada.util.TagUtil;
 
@@ -87,108 +89,155 @@ public class DefaultExecutor
 
             while(index < end)
             {
-                out = pageContext.getOut();
-                statement = statements[index];
-                node = statement.getNode();
-                nodeType = node.getNodeType();
-
-                if(nodeType == NodeType.TEXT)
+                try
                 {
-                    out.write(node.getTextContent());
-                    index++;
-                    continue;
-                }
-
-                if(nodeType == NodeType.EXPRESSION)
-                {
-                    Object value = expressionContext.getValue(node.getTextContent());
-
-                    if(value != null)
+                    out = pageContext.getOut();
+                    statement = statements[index];
+                    node = statement.getNode();
+                    nodeType = node.getNodeType();
+    
+                    if(nodeType == NodeType.TEXT)
                     {
-                        out.write(value.toString());
+                        out.write(node.getTextContent());
+                        index++;
+                        continue;
                     }
-                    index++;
-                    continue;
-                }
-
-                if(nodeType == NodeType.VARIABLE)
-                {
-                    Object value = pageContext.getAttribute(node.getTextContent());
-
-                    if(value != null)
+    
+                    if(nodeType == NodeType.EXPRESSION)
                     {
-                        out.write(value.toString());
-                    }
-                    index++;
-                    continue;
-                }
-
-                if(nodeType != NodeType.NODE)
-                {
-                    index++;
-                    continue;
-                }
-
-                if(node.getOffset() == index)
-                {
-                    Tag tag = statement.getTag();
-
-                    if(tag == null)
-                    {
-                        tag = node.getTagFactory().create();
-                        tag.setPageContext(pageContext);
-                        statement.setTag(tag);
-                        Statement parent = statement.getParent();
-
-                        if(parent != null)
+                        Object value = expressionContext.getValue(node.getTextContent());
+    
+                        if(value != null)
                         {
-                            tag.setParent(parent.getTag());
+                            out.write(value.toString());
+                        }
+                        index++;
+                        continue;
+                    }
+    
+                    if(nodeType == NodeType.VARIABLE)
+                    {
+                        Object value = pageContext.getAttribute(node.getTextContent());
+    
+                        if(value != null)
+                        {
+                            out.write(value.toString());
+                        }
+                        index++;
+                        continue;
+                    }
+    
+                    if(nodeType != NodeType.NODE)
+                    {
+                        index++;
+                        continue;
+                    }
+
+                    if(node.getOffset() == index)
+                    {
+                        Tag tag = statement.getTag();
+
+                        if(tag == null)
+                        {
+                            tag = node.getTagFactory().create();
+                            tag.setPageContext(pageContext);
+                            statement.setTag(tag);
+                            Statement parent = statement.getParent();
+    
+                            if(parent != null)
+                            {
+                                tag.setParent(parent.getTag());
+                            }
+                        }
+    
+                        // create - doStartTag
+                        TagUtil.setAttributes(tag, node.getAttributes(), expressionContext);
+    
+                        if(tag instanceof SimpleTag)
+                        {
+                            DefaultJspFragment jspFragment = new DefaultJspFragment(template, statements, pageContext);
+                            jspFragment.setOffset(node.getOffset() + 1);
+                            jspFragment.setLength(node.getLength() - 2);
+                            SimpleTag simpleTag = (SimpleTag)tag;
+                            simpleTag.setPageBody(jspFragment);
+                            simpleTag.doTag();
+                            index = node.getOffset() + node.getLength();
+                            continue;
+                        }
+    
+                        flag = doStartTag(statement, pageContext);
+    
+                        if(flag == Tag.SKIP_BODY)
+                        {
+                            index = node.getOffset() + node.getLength();
+                            continue;
+                        }
+    
+                        if(flag == Tag.SKIP_PAGE)
+                        {
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        flag = doEndTag(statement, pageContext);
+
+                        if(flag == IterationTag.EVAL_BODY_AGAIN)
+                        {
+                            index = node.getOffset() + 1;
+                            continue;
+                        }
+
+                        if(flag == Tag.SKIP_PAGE)
+                        {
+                            break;
+                        }
+                    }
+                }
+                catch(Throwable throwable)
+                {
+                    if(throwable instanceof FinallyException)
+                    {
+                        Throwable cause = throwable.getCause();
+
+                        if(cause != null)
+                        {
+                            throw cause;
+                        }
+                        else
+                        {
+                            throw throwable;
                         }
                     }
 
-                    // create - doStartTag
-                    TagUtil.setAttributes(tag, node.getAttributes(), expressionContext);
+                    Statement s = getTryCatchFinallyStatement(statements, index);
 
-                    if(tag instanceof SimpleTag)
+                    if(s == null)
                     {
-                        DefaultJspFragment jspFragment = new DefaultJspFragment(template, statements, pageContext);
-                        jspFragment.setOffset(node.getOffset() + 1);
-                        jspFragment.setLength(node.getLength() - 2);
-                        SimpleTag simpleTag = (SimpleTag)tag;
-                        simpleTag.setPageBody(jspFragment);
-                        simpleTag.doTag();
-                        index = node.getOffset() + node.getLength();
-                        continue;
+                        throw throwable;
                     }
 
-                    flag = doStartTag(statement, pageContext);
+                    Tag t = s.getTag();
+                    Node n = s.getNode();
+                    TryCatchFinally tryCatchFinally = (TryCatchFinally)(t);
 
-                    if(flag == Tag.SKIP_BODY)
+                    if(tryCatchFinally == null)
                     {
-                        index = node.getOffset() + node.getLength();
-                        continue;
+                        throw throwable;
                     }
 
-                    if(flag == Tag.SKIP_PAGE)
+                    try
                     {
-                        break;
+                        tryCatchFinally.doCatch(throwable);
                     }
-                }
-                else
-                {
-                    flag = doEndTag(statement, pageContext);
-
-                    if(flag == IterationTag.EVAL_BODY_AGAIN)
+                    finally
                     {
-                        index = node.getOffset() + 1;
-                        continue;
-                    }
-
-                    if(flag == Tag.SKIP_PAGE)
-                    {
-                        break;
+                        tryCatchFinally.doFinally();
+                        t.release();
+                        index = n.getOffset() + n.getLength();
                     }
                 }
+
                 index++;
             }
 
@@ -285,8 +334,47 @@ public class DefaultExecutor
         }
 
         int flag = tag.doEndTag();
+
+        if(tag instanceof TryCatchFinally)
+        {
+            try
+            {
+                ((TryCatchFinally)tag).doFinally();
+            }
+            catch(Throwable throwable)
+            {
+                throw new FinallyException(throwable);
+            }
+        }
+
         tag.release();
         return flag;
+    }
+
+    /**
+     * @param statements
+     * @param index
+     * @return Tag
+     */
+    public static Statement getTryCatchFinallyStatement(final Statement[] statements, int index)
+    {
+        Node node = statements[index].getNode();
+        Node parent = node;
+
+        while(parent != null)
+        {
+            Statement statement = statements[parent.getOffset()];
+            Tag tag = statement.getTag();
+
+            if(tag instanceof TryCatchFinally)
+            {
+                return statement;
+            }
+
+            parent = parent.getParent();
+        }
+
+        return null;
     }
 
     /**
