@@ -86,7 +86,7 @@ public class SqlTag extends BodyTagSupport
             printWriter = new PrintWriter((Writer)(this.out));
         }
 
-        SqlPlus sqlPlus = new SqlPlus(this.connection);
+        SqlPlus sqlPlus = new SqlPlus(this.connection, printWriter);
         sqlPlus.setHome(this.home);
 
         try
