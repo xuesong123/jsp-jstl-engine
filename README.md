@@ -84,7 +84,8 @@ sql:connect
     <sql:connect var="connection" url="jdbc:mysql://localhost:3306?user=root&password=1234&characterEncoding=utf8" driverClass="com.mysql.jdbc.Driver">...</sql:connect>
 
 sql:execute
-    <sql:execute out="${pageContext.getOut()}">...</sql:execute>
+
+    <sql:execute>...</sql:execute>
 
     <sql:execute sql="update mytest2 set a=1 where b=1">...</sql:execute>
 
