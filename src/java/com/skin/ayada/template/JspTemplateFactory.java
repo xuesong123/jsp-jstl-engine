@@ -111,10 +111,12 @@ public class JspTemplateFactory extends TemplateFactory
         write(this.getTemplateDescription(template), tplFile);
 
         String lib = this.getClassPath();
+        System.out.println("classPath: " + lib);
 
         if(lib == null)
         {
             lib = System.getProperty("java.class.path");
+            System.out.println("java.class.path: " + lib);
         }
 
         String[] args = new String[]{

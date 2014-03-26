@@ -233,7 +233,6 @@ public class DefaultExecutor
                     finally
                     {
                         tryCatchFinally.doFinally();
-                        t.release();
                         index = n.getOffset() + n.getLength();
                     }
                 }

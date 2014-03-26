@@ -53,7 +53,7 @@ public class Jdbc
         }
         catch(ClassNotFoundException e)
         {
-            throw new SQLException(e.getMessage());
+            throw new SQLException(e);
         }
 
         return DriverManager.getConnection(url, userName, password);

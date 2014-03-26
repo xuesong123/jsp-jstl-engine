@@ -111,7 +111,7 @@ public class TemplateDispatcher
         {
             templateContext.execute(template, context, writer);
         }
-        catch(Exception e)
+        catch(Throwable e)
         {
             throw new ServletException(e);
         }

@@ -24,6 +24,7 @@ import com.skin.ayada.tagext.BodyTag;
 import com.skin.ayada.tagext.DynamicAttributes;
 import com.skin.ayada.tagext.IterationTag;
 import com.skin.ayada.tagext.Tag;
+import com.skin.ayada.tagext.TryCatchFinally;
 import com.skin.ayada.template.Template;
 import com.skin.ayada.util.ClassUtil;
 import com.skin.ayada.util.DateUtil;
@@ -82,10 +83,10 @@ public class JspCompiler
 
         writer.println("    /**");
         writer.println("     * @param pageContext");
-        writer.println("     * @throws Exception");
+        writer.println("     * @throws Throwable");
         writer.println("     */");
         writer.println("    @Override");
-        writer.println("    public void _execute(final PageContext pageContext) throws Exception");
+        writer.println("    public void _execute(final PageContext pageContext) throws Throwable");
         writer.println("    {");
         writer.println("        JspWriter out = pageContext.getOut();");
         writer.println("        JspWriter jspWriter = pageContext.getOut();");
@@ -1234,6 +1235,11 @@ public class JspCompiler
         {
             writer.println(indent + tagClassName + " " + tagInstanceName + " = new " + tagClassName + "();");
 
+            if(this.isAssignableFrom(tagClassName, TryCatchFinally.class))
+            {
+                writer.println(indent + "try{");
+            }
+
             if(hasParent)
             {
                 writer.println(indent + tagInstanceName + ".setParent(" + parentTagInstanceName + ");");
@@ -1300,6 +1306,17 @@ public class JspCompiler
             writer.println(indent + "}");
             writer.println(indent + tagInstanceName+ ".doEndTag();");
             writer.println(indent + tagInstanceName + ".release();");
+
+            if(this.isAssignableFrom(tagClassName, TryCatchFinally.class))
+            {
+                writer.println(indent + "}");
+                writer.println(indent + "catch(Throwable throwable){");
+                writer.println(indent + "    " + tagInstanceName + ".doCatch(throwable);");
+                writer.println(indent + "}");
+                writer.println(indent + "finally{");
+                writer.println(indent + "    " + tagInstanceName + ".doFinally();");
+                writer.println(indent + "}");
+            }
         }
 
         return Tag.EVAL_PAGE;
@@ -1492,7 +1509,7 @@ public class JspCompiler
                         }
                         else
                         {
-                            writer.println(indent + tagInstanceName + "." + methodName + "(\"" + StringUtil.escape(value) + "\");");
+                            writer.println(indent + tagInstanceName + "." + methodName + "(\"" + StringUtil.escape(value) + "\"); /* parameterType: object */");
                         }
                     }
                     else
@@ -1539,7 +1556,7 @@ public class JspCompiler
                         }
                         else
                         {
-                            writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.evaluate(expressionContext, \"" + StringUtil.escape(value) + "\"));");
+                            writer.println(indent + tagInstanceName + "." + methodName + "((" + parameterType.getName() + ")(ExpressionUtil.evaluate(expressionContext, \"" + StringUtil.escape(value) + "\", " + parameterType.getName() + ".class)));");
                         }
                     }
                 }

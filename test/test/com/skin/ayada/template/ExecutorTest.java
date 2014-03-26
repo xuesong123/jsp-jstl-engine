@@ -56,7 +56,7 @@ public class ExecutorTest
         {
             template.execute(pageContext);
         }
-        catch(Exception e)
+        catch(Throwable e)
         {
             e.printStackTrace();
         }

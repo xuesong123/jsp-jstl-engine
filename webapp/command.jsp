@@ -15,6 +15,8 @@
 <p>3. get from parent tag</p>
 <p>4. throws exception</p>
 
+<p>template.home: ${template.home}</p>
+
 <!-- use external connection -->
 <sql:connect var="connection2" connection="${myConnection}"></sql:connect>
 
@@ -27,7 +29,7 @@
 
 <sql:connect var="connection" url="jdbc:mysql://localhost:3306/mytest2?user=root&password=1234&characterEncoding=utf8" driverClass="com.mysql.jdbc.Driver">
     <sql:execute home="${template.home}/database" file="create.sql" encoding="UTF-8" out="${pageContext.getOut()}"/>
-
+    <sql:execute sql="delete from my_test1;" out="${pageContext.getOut()}"/>
     <sql:execute sql="delete from my_test2;" out="${pageContext.getOut()}"/>
     <sql:execute sql="insert into my_test2(my_id, my_code, my_name) values (1, '1', '1');"/>
 

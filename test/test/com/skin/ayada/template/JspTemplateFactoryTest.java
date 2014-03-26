@@ -52,7 +52,8 @@ public class JspTemplateFactoryTest
 {
     public static void main(String[] args) throws Exception
     {
-        test1();
+        // test1("extTest.jsp");
+        test1("command.jsp");
     }
 
     public static Template getTemplate() throws Exception
@@ -64,7 +65,7 @@ public class JspTemplateFactoryTest
         return compiler.compile("allTagTest.jsp", "UTF-8");
     }
 
-    public static void test1() throws Exception
+    public static void test1(String file) throws Exception
     {
         SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
 
@@ -72,7 +73,7 @@ public class JspTemplateFactoryTest
         JspTemplateFactory jspTemplateFactory = new JspTemplateFactory("work", System.getProperty("java.class.path"));
         jspTemplateFactory.setIgnoreJspTag(false);
 
-        Template template = jspTemplateFactory.create(sourceFactory, "extTest.jsp", "UTF-8");
+        Template template = jspTemplateFactory.create(sourceFactory, file, "UTF-8");
         long t2 = System.currentTimeMillis();
         System.out.println("compile time: " + (t2 - t1));
 
@@ -86,7 +87,7 @@ public class JspTemplateFactoryTest
             long t4 = System.currentTimeMillis();
             System.out.println("run time: " + (t4 - t3));
         }
-        catch(Exception e)
+        catch(Throwable e)
         {
             e.printStackTrace();
         }
@@ -126,7 +127,7 @@ public class JspTemplateFactoryTest
         {
             template.execute(pageContext);
         }
-        catch(Exception e)
+        catch(Throwable e)
         {
             e.printStackTrace();
         }

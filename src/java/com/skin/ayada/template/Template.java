@@ -54,6 +54,7 @@ public class Template
 
     /**
      * @param pageContext
+     * @throws Throwable
      */
     public void execute(final PageContext pageContext) throws Exception
     {
@@ -63,16 +64,23 @@ public class Template
         map.put("lastModified", this.lastModified);
         pageContext.setAttribute("template", map);
 
-        if(logger.isDebugEnabled())
+        try
         {
-            long t1 = System.currentTimeMillis();
-            DefaultExecutor.execute(this, pageContext);
-            long t2 = System.currentTimeMillis();
-            logger.debug(this.getPath() + " - render time: " + (t2 - t1));
+            if(logger.isDebugEnabled())
+            {
+                long t1 = System.currentTimeMillis();
+                DefaultExecutor.execute(this, pageContext);
+                long t2 = System.currentTimeMillis();
+                logger.debug(this.getPath() + " - render time: " + (t2 - t1));
+            }
+            else
+            {
+                DefaultExecutor.execute(this, pageContext);
+            }
         }
-        else
+        catch(Throwable throwable)
         {
-            DefaultExecutor.execute(this, pageContext);
+            throw new Exception(throwable);
         }
     }
 

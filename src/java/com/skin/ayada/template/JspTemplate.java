@@ -10,7 +10,9 @@
  */
 package com.skin.ayada.template;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,22 +47,35 @@ public abstract class JspTemplate extends Template
 
     /**
      * @param pageContext
+     * @throws Throwable
      */
     @Override
     public void execute(final PageContext pageContext) throws Exception
     {
         JspWriter out = pageContext.getOut();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("home", this.getHome());
+        map.put("path", this.getPath());
+        map.put("lastModified", this.getLastModified());
+        pageContext.setAttribute("template", map);
 
-        if(logger.isDebugEnabled())
+        try
         {
-            long t1 = System.currentTimeMillis();
-            this._execute(pageContext);
-            long t2 = System.currentTimeMillis();
-            logger.debug(this.getPath() + " - render time: " + (t2 - t1));
+            if(logger.isDebugEnabled())
+            {
+                long t1 = System.currentTimeMillis();
+                this._execute(pageContext);
+                long t2 = System.currentTimeMillis();
+                logger.debug(this.getPath() + " - render time: " + (t2 - t1));
+            }
+            else
+            {
+                this._execute(pageContext);
+            }
         }
-        else
+        catch(Throwable throwable)
         {
-            this._execute(pageContext);
+            throw new Exception(throwable);
         }
 
         out.flush();
@@ -68,6 +83,7 @@ public abstract class JspTemplate extends Template
 
     /**
      * @param pageContext
+     * @throws Throwable
      */
-    public abstract void _execute(final PageContext pageContext) throws Exception;
+    public abstract void _execute(final PageContext pageContext) throws Throwable;
 }
