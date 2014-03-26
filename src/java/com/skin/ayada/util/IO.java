@@ -123,6 +123,36 @@ public class IO
     }
 
     /**
+     * @param inputStream
+     * @param outputStream
+     * @throws IOException 
+     */
+    public static void copy(File source, File target) throws IOException
+    {
+        InputStream inputStream = null;
+        OutputStream outputStream = null;
+
+        try
+        {
+            File parent = target.getParentFile();
+
+            if(parent.exists() == false)
+            {
+                parent.mkdirs();
+            }
+
+            inputStream = new FileInputStream(source);
+            outputStream = new FileOutputStream(target);
+            IO.copy(inputStream, outputStream, 8192);
+        }
+        finally
+        {
+            IO.close(inputStream);
+            IO.close(outputStream);
+        }
+    }
+
+    /**
      * 
      * @param inputStream
      * @param outputStream

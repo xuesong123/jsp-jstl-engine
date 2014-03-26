@@ -1,0 +1,30 @@
+body{font-size: 14px;}
+table{
+    width: 100%;
+    border-spacing: 0px 0px;
+    border-collapse: collapse;
+    background-color: #ffffff;
+}
+
+table, table td, table th{
+    border: 1px #cdcdcd solid;
+    border-collapse: collapse;
+}
+
+table tr td{padding-left: 4px;}
+
+table.highlight tr.old{
+    background-color: #ffffff;
+}
+
+table.highlight tr.even{
+    background-color: #f9f9f9;
+}
+
+table.highlight tr.hover{
+    background-color: #e8f5fe;
+}
+
+table.highlight tr.clicked{
+    background-color: #ffffdd;
+}

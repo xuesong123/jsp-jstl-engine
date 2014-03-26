@@ -1,0 +1,66 @@
+/*
+ * $RCSfile: DeleteTag.java,v $$
+ * $Revision: 1.1 $
+ * $Date: 2014-3-26 $
+ *
+ * Copyright (C) 2008 WanMei, Inc. All rights reserved.
+ *
+ * This software is the proprietary information of WanMei, Inc.
+ * Use is subject to license terms.
+ */
+package com.skin.ayada.jstl.io;
+
+import java.io.File;
+import java.io.IOException;
+
+import com.skin.ayada.tagext.Tag;
+
+/**
+ * <p>Title: DeleteTag</p>
+ * <p>Description: </p>
+ * <p>Copyright: Copyright (c) 2006</p>
+ * @version 1.0
+ */
+public class DeleteTag extends FileTag
+{
+    /**
+     * @return int
+     */
+    @Override
+    public int doEndTag() throws Exception
+    {
+        File source = new File(this.getFile());
+
+        if(source.isFile())
+        {
+            source.delete();
+        }
+        else
+        {
+            this.execute(new File(this.file));
+        }
+
+        return Tag.EVAL_PAGE;
+    }
+
+    @Override
+    public void process(File file) throws IOException
+    {
+        file.delete();
+    }
+
+    public static void main(String[] args)
+    {
+        DeleteTag deleteTag = new DeleteTag();
+        deleteTag.setFile("E:/WorkSpace/ayada/test2");
+
+        try
+        {
+            deleteTag.doEndTag();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+}

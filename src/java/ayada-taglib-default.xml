@@ -217,4 +217,22 @@
         <body-content>jsp</body-content>
         <description></description>
     </tag>
+    <tag>
+        <name>io:copy</name>
+        <tag-class>com.skin.ayada.jstl.io.CopyTag</tag-class>
+        <body-content>tagdependent</body-content>
+        <description></description>
+    </tag>
+    <tag>
+        <name>io:delete</name>
+        <tag-class>com.skin.ayada.jstl.io.DeleteTag</tag-class>
+        <body-content>tagdependent</body-content>
+        <description></description>
+    </tag>
+    <tag>
+        <name>io:mkdir</name>
+        <tag-class>com.skin.ayada.jstl.io.MakeDirTag</tag-class>
+        <body-content>empty</body-content>
+        <description></description>
+    </tag>
 </taglib>
