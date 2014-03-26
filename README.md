@@ -79,6 +79,21 @@ fmt:formatDate
 
     <fmt:formatDate var="mydate1" value="${mydate}" pattern="yyyy-MM-dd"/>
 
+sql:connect
+
+    <sql:connect var="connection" url="jdbc:mysql://localhost:3306?user=root&password=1234&characterEncoding=utf8" driverClass="com.mysql.jdbc.Driver">...</sql:connect>
+
+sql:execute
+    <sql:execute out="${pageContext.getOut()}">...</sql:execute>
+
+    <sql:execute sql="update mytest2 set a=1 where b=1">...</sql:execute>
+
+    <sql:execute file="/user/db/create.sql">...</sql:execute>
+
+sql:query
+
+    <sql:query var="resultSet" sql="select * from my_test2 where my_id > 1001" offset="2">...</sql:query>
+
 t:import
 
     <t:import name="app:cache" className="com.mytest.taglib.CacheTag"/>
