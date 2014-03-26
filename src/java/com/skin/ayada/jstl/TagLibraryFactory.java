@@ -99,7 +99,7 @@ public class TagLibraryFactory
                 {
                     TagInfo tagInfo = getTagInfo(node);
 
-                    if(tagInfo != null && tagInfo.getName() != null)
+                    if(tagInfo != null)
                     {
                         map.put(tagInfo.getName(), tagInfo);
                     }
@@ -129,11 +129,11 @@ public class TagLibraryFactory
 
                 if(nodeName.equals("name"))
                 {
-                    tagInfo.setName(n.getTextContent());
+                    tagInfo.setName(n.getTextContent().trim());
                 }
                 else if(nodeName.equals("tag-class"))
                 {
-                    tagInfo.setTagClass(n.getTextContent());
+                    tagInfo.setTagClass(n.getTextContent().trim());
                 }
                 else if(nodeName.equals("body-content"))
                 {
@@ -141,9 +141,22 @@ public class TagLibraryFactory
                 }
                 else if(nodeName.equals("description"))
                 {
-                    tagInfo.setDescription(n.getTextContent());
+                    tagInfo.setDescription(n.getTextContent().trim());
                 }
             }
+        }
+
+        String name = tagInfo.getName();
+        String tagClass = tagInfo.getTagClass();
+
+        if(name == null || name.length() < 1)
+        {
+            return null;
+        }
+
+        if(tagClass == null || tagClass.length() < 1)
+        {
+            return null;
         }
 
         return tagInfo;

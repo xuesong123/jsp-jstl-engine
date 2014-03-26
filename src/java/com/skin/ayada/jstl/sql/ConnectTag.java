@@ -72,7 +72,11 @@ public class ConnectTag extends TagSupport implements TryCatchFinally
     {
         if(throwable != null)
         {
-            throwable.printStackTrace(System.out);
+            throw throwable;
+        }
+        else
+        {
+            throw new RuntimeException("RuntimeExceptione: UnknownException - null");
         }
     }
 

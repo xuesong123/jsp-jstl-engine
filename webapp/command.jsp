@@ -1,11 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
-<io:copy file="E:/WorkSpace/ayada/webapp/test1" todir="E:/WorkSpace/ayada/webapp/test2"/>
-<io:delete file="E:/WorkSpace/ayada/webapp/test2/style.css"/>
-<io:mkdir file="E:/WorkSpace/ayada/webapp/test2/empty1"/>
-<io:mkdir file="E:/WorkSpace/ayada/webapp/test2/empty2"/>
-<io:delete file="E:/WorkSpace/ayada/webapp/test2/empty2"/>
-
-<c:exit test="${1 == 2}"/>
+<c:if test="${1 == 2}">
+    <io:copy   file="E:/WorkSpace/ayada/webapp/test1" todir="E:/WorkSpace/ayada/webapp/test2"/>
+    <io:delete file="E:/WorkSpace/ayada/webapp/test2/style.css"/>
+    <io:mkdir  file="E:/WorkSpace/ayada/webapp/test2/empty1"/>
+    <io:mkdir  file="E:/WorkSpace/ayada/webapp/test2/empty2"/>
+    <io:delete file="E:/WorkSpace/ayada/webapp/test2/empty2"/>
+    <c:exit test="${1 == 1}"/>
+</c:if>
 
 <h1>sql:execute</h1>
 <h2>connection</h2>
@@ -59,7 +60,7 @@
             <td>userName</td>
             <td>nickName</td>
         </tr>
-        <sql:query var="resultSet" sql="select * from my_test2 where my_id > 1001" offset="2">
+        <sql:query var="resultSet" sql="select * from my_test2 where my_id > 1001" offset="2" length="3">
         <tr>
             <td>${resultSet.getLong("my_id")}</td>
             <td>${resultSet.getString("my_code")}</td>
