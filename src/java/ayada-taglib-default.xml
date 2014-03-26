@@ -8,6 +8,18 @@
         <description></description>
     </tag>
     <tag>
+        <name>t:dependent</name>
+        <tag-class>com.skin.ayada.jstl.core.DependentTag</tag-class>
+        <body-content>tagdependent</body-content>
+        <description></description>
+    </tag>
+    <tag>
+        <name>c:command</name>
+        <tag-class>com.skin.ayada.jstl.core.DependentTag</tag-class>
+        <body-content>tagdependent</body-content>
+        <description></description>
+    </tag>
+    <tag>
         <name>c:if</name>
         <tag-class>com.skin.ayada.jstl.core.IfTag</tag-class>
         <body-content>jsp</body-content>

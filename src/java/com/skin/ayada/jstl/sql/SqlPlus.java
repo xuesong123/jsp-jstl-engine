@@ -16,7 +16,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.io.Reader;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -35,7 +34,7 @@ public class SqlPlus
 {
     private String home;
     private Connection connection;
-    private PrintWriter out;
+    private Logger logger;
 
     /**
      */
@@ -54,10 +53,10 @@ public class SqlPlus
     /**
      * @param connection
      */
-    public SqlPlus(Connection connection, PrintWriter out)
+    public SqlPlus(Connection connection, Logger logger)
     {
         this.connection = connection;
-        this.out = out;
+        this.logger = logger;
     }
 
     /**
@@ -277,11 +276,6 @@ public class SqlPlus
                     buffer.append(line);
                     buffer.append("\r\n");
                 }
-            }
-
-            if(this.out != null)
-            {
-                this.out.flush();
             }
         }
         finally
@@ -515,9 +509,9 @@ public class SqlPlus
      */
     public void log(String info)
     {
-        if(this.out != null)
+        if(this.logger != null)
         {
-            this.out.println(info);
+            this.logger.log(info);
         }
     }
 
@@ -538,19 +532,19 @@ public class SqlPlus
     }
 
     /**
-     * @return the out
+     * @return the logger
      */
-    public PrintWriter getOut()
+    public Logger getLogger()
     {
-        return this.out;
+        return this.logger;
     }
 
     /**
-     * @param out the out to set
+     * @param logger the logger to set
      */
-    public void setOut(PrintWriter out)
+    public void setLogger(Logger logger)
     {
-        this.out = out;
+        this.logger = logger;
     }
 
     /**

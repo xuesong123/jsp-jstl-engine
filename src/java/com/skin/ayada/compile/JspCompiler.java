@@ -97,7 +97,7 @@ public class JspCompiler
         for(int index = 0, size = list.size(); index < size; index++)
         {
             node = list.get(index);
-            indent = getIndent(node);
+            indent = this.getIndent(node);
 
             if(node.getNodeType() == NodeType.TEXT)
             {
@@ -1230,14 +1230,16 @@ public class JspCompiler
         String flagName = this.getVariableName(node, "_jsp_flag_");
         String bodyContentInstanceName = this.getVariableName(node, "_jsp_body_content_");
         boolean hasParent = this.hasParent(node);
+        boolean isTryCatchFinallyTag = this.isAssignableFrom(tagClassName, TryCatchFinally.class);
 
         if(node.getOffset() == index)
         {
             writer.println(indent + tagClassName + " " + tagInstanceName + " = new " + tagClassName + "();");
 
-            if(this.isAssignableFrom(tagClassName, TryCatchFinally.class))
+            if(isTryCatchFinallyTag)
             {
                 writer.println(indent + "try{");
+                indent = indent + "    ";
             }
 
             if(hasParent)
@@ -1278,6 +1280,11 @@ public class JspCompiler
         }
         else
         {
+            if(isTryCatchFinallyTag)
+            {
+                indent = indent + "    ";
+            }
+
             if(node.getLength() > 2)
             {
                 if(this.isAssignableFrom(tagClassName, IterationTag.class))
@@ -1307,8 +1314,9 @@ public class JspCompiler
             writer.println(indent + tagInstanceName+ ".doEndTag();");
             writer.println(indent + tagInstanceName + ".release();");
 
-            if(this.isAssignableFrom(tagClassName, TryCatchFinally.class))
+            if(isTryCatchFinallyTag)
             {
+                indent = indent.substring(4);
                 writer.println(indent + "}");
                 writer.println(indent + "catch(Throwable throwable){");
                 writer.println(indent + "    " + tagInstanceName + ".doCatch(throwable);");
@@ -1647,6 +1655,11 @@ public class JspCompiler
             else
             {
                 buffer.append("        ");
+
+                if(this.isAssignableFrom(tagClassName, TryCatchFinally.class))
+                {
+                    buffer.append("    ");
+                }
             }
         }
 

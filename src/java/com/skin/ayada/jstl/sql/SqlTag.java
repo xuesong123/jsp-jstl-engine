@@ -71,22 +71,35 @@ public class SqlTag extends BodyTagSupport
             throw new NullPointerException("connection must be not null");
         }
 
+        Logger logger = null;
         PrintWriter printWriter = null;
 
-        if(this.out instanceof PrintWriter)
+        if(this.out instanceof Logger)
         {
-            printWriter = ((PrintWriter)(this.out));
+            logger = (Logger)(this.out);
         }
-        else if(out instanceof OutputStream)
+        else
         {
-            printWriter = new PrintWriter((OutputStream)(this.out));
-        }
-        else if(out instanceof Writer)
-        {
-            printWriter = new PrintWriter((Writer)(this.out));
+            if(this.out instanceof PrintWriter)
+            {
+                printWriter = ((PrintWriter)(this.out));
+            }
+            else if(out instanceof OutputStream)
+            {
+                printWriter = new PrintWriter((OutputStream)(this.out));
+            }
+            else if(out instanceof Writer)
+            {
+                printWriter = new PrintWriter((Writer)(this.out));
+            }
+
+            if(printWriter != null)
+            {
+                logger = new Logger(printWriter);
+            }
         }
 
-        SqlPlus sqlPlus = new SqlPlus(this.connection, printWriter);
+        SqlPlus sqlPlus = new SqlPlus(this.connection, logger);
         sqlPlus.setHome(this.home);
 
         try

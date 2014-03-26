@@ -53,7 +53,7 @@ public class JspTemplateFactoryTest
     public static void main(String[] args) throws Exception
     {
         // test1("extTest.jsp");
-        test1("command.jsp");
+        test1("command.jsp", false);
     }
 
     public static Template getTemplate() throws Exception
@@ -65,7 +65,7 @@ public class JspTemplateFactoryTest
         return compiler.compile("allTagTest.jsp", "UTF-8");
     }
 
-    public static void test1(String file) throws Exception
+    public static void test1(String file, boolean execute) throws Exception
     {
         SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
 
@@ -80,22 +80,25 @@ public class JspTemplateFactoryTest
         StringWriter writer = new StringWriter();
         PageContext pageContext = getPageContext(writer);
 
-        try
+        if(execute)
         {
-            long t3 = System.currentTimeMillis();
-            template.execute(pageContext);
-            long t4 = System.currentTimeMillis();
-            System.out.println("run time: " + (t4 - t3));
-        }
-        catch(Throwable e)
-        {
-            e.printStackTrace();
-        }
-
-        System.out.println("===================== result =====================");
-        System.out.println(writer.toString());
-    }
+            try
+            {
+                long t3 = System.currentTimeMillis();
+                template.execute(pageContext);
+                long t4 = System.currentTimeMillis();
+                System.out.println("run time: " + (t4 - t3));
+            }
+            catch(Throwable e)
+            {
+                e.printStackTrace();
+            }
     
+            System.out.println("===================== result =====================");
+            System.out.println(writer.toString());
+        }
+    }
+
     public static void test2() throws Exception
     {
         SourceFactory sourceFactory = new ClassPathSourceFactory("com/skin/ayada/compile");

@@ -1,12 +1,15 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
-<c:if test="${1 == 2}">
-    <io:copy   file="E:/WorkSpace/ayada/webapp/test1" todir="E:/WorkSpace/ayada/webapp/test2"/>
-    <io:delete file="E:/WorkSpace/ayada/webapp/test2/style.css"/>
-    <io:mkdir  file="E:/WorkSpace/ayada/webapp/test2/empty1"/>
-    <io:mkdir  file="E:/WorkSpace/ayada/webapp/test2/empty2"/>
-    <io:delete file="E:/WorkSpace/ayada/webapp/test2/empty2"/>
-    <c:exit test="${1 == 1}"/>
-</c:if>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<!-- c:command 不会向页面输出任何东西，但其中的内容仍然会被执行 -->
+<c:command>
+    <c:if test="${1 == 2}">
+        <io:copy   file="E:/WorkSpace/ayada/webapp/test1" todir="E:/WorkSpace/ayada/webapp/test2"/>
+        <io:delete file="E:/WorkSpace/ayada/webapp/test2/style.css"/>
+        <io:mkdir  file="E:/WorkSpace/ayada/webapp/test2/empty1"/>
+        <io:mkdir  file="E:/WorkSpace/ayada/webapp/test2/empty2"/>
+        <io:delete file="E:/WorkSpace/ayada/webapp/test2/empty2"/>
+        <c:exit test="${1 == 1}"/>
+    </c:if>
+</c:command>
 
 <h1>sql:execute</h1>
 <h2>connection</h2>
@@ -14,12 +17,10 @@
 <p>2. get from pageContext by name: connection</p>
 <p>3. get from parent tag</p>
 <p>4. throws exception</p>
-
 <p>template.home: ${template.home}</p>
 
 <!-- use external connection -->
 <sql:connect var="connection2" connection="${myConnection}"></sql:connect>
-
 <sql:connect var="connection" url="jdbc:mysql://localhost:3306?user=root&password=1234&characterEncoding=utf8" driverClass="com.mysql.jdbc.Driver">
     <sql:execute out="${pageContext.getOut()}">
         drop database if exists mytest2;
