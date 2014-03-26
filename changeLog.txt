@@ -1,0 +1,11 @@
+============ 1.0.8
+1. 增加TryCatchFinally支持
+2. 增加com.skin.ayada.jstl.sql.ConnectTag  <sql:connect/>
+3. 增加com.skin.ayada.jstl.sql.SqlTag      <sql:execute/>
+4. 增加com.skin.ayada.jstl.sql.QueryTag    <sql:query/>
+5. 增加com.skin.ayada.jstl.io.CopyTag      <io:copy/>
+6. 增加com.skin.ayada.jstl.io.DeleteTag    <io:delete/>
+7. 增加com.skin.ayada.jstl.io.MakeDirTag   <io:mkdir/>
+8. 修复编译模式下自定义Tag的setXXX方法编译错误
+
+对应的demo和test页面参看: /webapp/command.jsp
