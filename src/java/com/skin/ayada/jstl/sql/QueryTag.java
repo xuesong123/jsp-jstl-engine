@@ -101,15 +101,6 @@ public class QueryTag extends TagSupport implements IterationTag, TryCatchFinall
         return SKIP_BODY;
     }
 
-    /**
-     * @return int
-     */
-    @Override
-    public int doEndTag() throws Exception
-    {
-        return EVAL_PAGE;
-    }
-
     @Override
     public void doCatch(Throwable throwable) throws Throwable
     {

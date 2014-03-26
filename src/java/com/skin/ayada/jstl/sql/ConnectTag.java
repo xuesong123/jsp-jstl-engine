@@ -11,6 +11,7 @@
 package com.skin.ayada.jstl.sql;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.tagext.TagSupport;
@@ -39,31 +40,12 @@ public class ConnectTag extends TagSupport implements TryCatchFinally
         {
             if(this.connection == null)
             {
-                if(this.url != null)
-                {
-                    if(this.properties != null)
-                    {
-                        this.connection = Jdbc.connect(url, driverClass, Jdbc.parse(this.properties));
-                    }
-                    else
-                    {
-                        this.connection = Jdbc.connect(url, driverClass, userName, password);
-                    }
-                }
+                this.connection = this.connect();
             }
 
             this.pageContext.setAttribute(this.var, this.connection);
         }
 
-        return Tag.EVAL_PAGE;
-    }
-
-    /**
-     * @return int
-     */
-    @Override
-    public int doEndTag() throws Exception
-    {
         return Tag.EVAL_PAGE;
     }
 
@@ -84,6 +66,27 @@ public class ConnectTag extends TagSupport implements TryCatchFinally
     public void doFinally()
     {
         Jdbc.close(this.connection);
+    }
+
+    /**
+     * @return Connection
+     * @throws SQLException 
+     */
+    private Connection connect() throws SQLException
+    {
+        if(this.url != null)
+        {
+            if(this.properties != null)
+            {
+                return Jdbc.connect(url, driverClass, Jdbc.parse(this.properties));
+            }
+            else
+            {
+                return Jdbc.connect(url, driverClass, userName, password);
+            }
+        }
+
+        return null;
     }
 
     /**

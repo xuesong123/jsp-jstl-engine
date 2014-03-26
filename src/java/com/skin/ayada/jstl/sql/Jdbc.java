@@ -250,7 +250,8 @@ public class Jdbc
                 resultSet.close();
             }
             catch(SQLException e)
-            {}
+            {
+            }
         }
     }
 }
