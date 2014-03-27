@@ -120,7 +120,15 @@ public class TemplateCompiler extends PageCompiler
                 {
                     if(i == '}')
                     {
-                        String temp = expression.toString().trim();
+                        String temp = this.ltrim(expression.toString());
+
+                        if(temp.startsWith("?"))
+                        {
+                            this.pushTextNode(stack, list, "${" + temp.substring(1) + "}", this.lineNumber);
+                            break;
+                        }
+
+                        temp = temp.trim();
 
                         if(temp.length() > 0)
                         {
@@ -469,6 +477,27 @@ public class TemplateCompiler extends PageCompiler
         {
             this.pushTextNode(stack, list, "<", this.lineNumber);
         }
+    }
+
+    /**
+     * @param source
+     */
+    public String ltrim(String source)
+    {
+        if(source == null)
+        {
+            return "";
+        }
+
+        int i = 0;
+        int length = source.length();
+
+        while(i < length && source.charAt(i) <= ' ')
+        {
+            i++;
+        }
+
+        return (i > 0 ? source.substring(i) : source);
     }
 
     /**

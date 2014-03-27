@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
+<c:set var="template_print" value="true"/>
 <!-- c:command 不会向页面输出任何东西，但其中的内容仍然会被执行 -->
 <c:command>
     <c:if test="${1 == 2}">
@@ -13,12 +14,12 @@
 
 <h1>sql:execute</h1>
 <h2>connection</h2>
-<p>1. get from attribute, example: connection="[expression]"</p>
+<p>1. get from attribute, example: connection="${?expression}"</p>
 <p>2. get from pageContext by name: connection</p>
 <p>3. get from parent tag</p>
 <p>4. throws exception</p>
 <p>template.home: ${template.home}</p>
-
+<c:exit test="${1 == 1}"/>
 <!-- use external connection -->
 <sql:connect var="connection2" connection="${myConnection}"></sql:connect>
 <sql:connect var="connection" url="jdbc:mysql://localhost:3306?user=root&password=1234&characterEncoding=utf8" driverClass="com.mysql.jdbc.Driver">
