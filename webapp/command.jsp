@@ -19,7 +19,7 @@
 <p>3. get from parent tag</p>
 <p>4. throws exception</p>
 <p>template.home: ${template.home}</p>
-<c:exit test="${1 == 1}"/>
+
 <!-- use external connection -->
 <sql:connect var="connection2" connection="${myConnection}"></sql:connect>
 <sql:connect var="connection" url="jdbc:mysql://localhost:3306?user=root&password=1234&characterEncoding=utf8" driverClass="com.mysql.jdbc.Driver">
