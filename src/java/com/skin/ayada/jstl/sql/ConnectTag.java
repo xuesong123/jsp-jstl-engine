@@ -32,13 +32,14 @@ public class ConnectTag extends TagSupport implements TryCatchFinally
     private String password;
     private String properties;
     private Connection connection;
+    protected boolean connectionSpecified;
 
     @Override
     public int doStartTag() throws Exception
     {
         if(this.var != null)
         {
-            if(this.connection == null)
+            if(this.connectionSpecified == false)
             {
                 this.connection = this.connect();
             }
@@ -65,6 +66,10 @@ public class ConnectTag extends TagSupport implements TryCatchFinally
     @Override
     public void doFinally()
     {
+        if(this.connectionSpecified)
+        {
+            return;
+        }
         Jdbc.close(this.connection);
     }
 
@@ -199,5 +204,6 @@ public class ConnectTag extends TagSupport implements TryCatchFinally
     public void setConnection(Connection connection)
     {
         this.connection = connection;
+        this.connectionSpecified = true;
     }
 }

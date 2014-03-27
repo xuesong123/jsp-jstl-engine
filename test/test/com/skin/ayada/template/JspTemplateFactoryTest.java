@@ -53,7 +53,7 @@ public class JspTemplateFactoryTest
     public static void main(String[] args) throws Exception
     {
         // test1("extTest.jsp");
-        test1("command.jsp", false);
+        test1("command.jsp", true);
     }
 
     public static Template getTemplate() throws Exception
