@@ -64,23 +64,16 @@ public class Template
         map.put("lastModified", this.lastModified);
         pageContext.setAttribute("template", map);
 
-        try
+        if(logger.isDebugEnabled())
         {
-            if(logger.isDebugEnabled())
-            {
-                long t1 = System.currentTimeMillis();
-                DefaultExecutor.execute(this, pageContext);
-                long t2 = System.currentTimeMillis();
-                logger.debug(this.getPath() + " - render time: " + (t2 - t1));
-            }
-            else
-            {
-                DefaultExecutor.execute(this, pageContext);
-            }
+            long t1 = System.currentTimeMillis();
+            DefaultExecutor.execute(this, pageContext);
+            long t2 = System.currentTimeMillis();
+            logger.debug(this.getPath() + " - render time: " + (t2 - t1));
         }
-        catch(Throwable throwable)
+        else
         {
-            throw new Exception(throwable);
+            DefaultExecutor.execute(this, pageContext);
         }
     }
 

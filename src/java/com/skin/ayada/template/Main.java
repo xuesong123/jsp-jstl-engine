@@ -93,7 +93,7 @@ public class Main
 
         System.out.println("run time: " + (t4 - t3));
         System.out.println("===================== result =====================");
-        System.out.print(stringWriter.toString());
+        System.out.println(stringWriter.toString());
     }
 
     public static void usage()

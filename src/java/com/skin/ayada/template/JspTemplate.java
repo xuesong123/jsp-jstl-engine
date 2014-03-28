@@ -75,7 +75,14 @@ public abstract class JspTemplate extends Template
         }
         catch(Throwable throwable)
         {
-            throw new Exception(throwable);
+            if(throwable instanceof Exception)
+            {
+                throw ((Exception)throwable);
+            }
+            else
+            {
+                throw new Exception(throwable);
+            }
         }
 
         out.flush();

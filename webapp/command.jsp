@@ -1,7 +1,39 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
+<!--
+t:import: 编译指令
+1. 可以放在任何位置, 但必须在使用之前引入
+2. 如果多次引入同一个tag, tag的bodyContent以最后一次引入的为准, 引擎在编译结束之后才会根据bodyContent的类型做一次紧缩处理
+   bodyContent: jsp|tagdependent|empty
+   如果是tagdependent, 那么该tag内部的所有文本节点和表达式节点都会被清除, 其子节点的内容不会清除(但是会根据子节点的bodyContent决定是否清除)
+   如果是empty, 那么内部的任何节点都会被清除
+   如果是jsp, 则保持现有内容不便
+   因此所有的引入操作最好放在文件头, 并且对同一个tag只引入一次
+
+3. className不是必选项, 可以为空, 如果为空则使用ayada-taglib-default.xml或者ayada-taglib.xml文件中配置的className, 因此下面的两种写法都是合法的
+    <t:import name="c:if" bodyContent="tagdependent" description="重写c:if标签, 不输出内容"/>
+    <t:import name="c:if" className="com.skin.ayada.jstl.core.IfTag" bodyContent="tagdependent" description="重写c:if标签, 不输出内容"/>
+
+4. bodyContent和description都不是必选项, 可以为空, bodyContent默认为jsp
+-->
+
+<t:import name="c:if" bodyContent="tagdependent" description="重写c:if标签, 不输出内容"/>
+<t:import name="c:if" className="com.skin.ayada.jstl.core.IfTag" bodyContent="tagdependent" description="重写c:if标签, 不输出内容"/>
 <c:set var="template_print" value="true"/>
-<!-- c:command 不会向页面输出任何东西，但其中的内容仍然会被执行 -->
+
+<h1>tag.bodyContent</h1>
+<p>1. jsp: any content</p>
+<p>2. tagdependent: tag only</p>
+<p>3. empty: ignore any content</p>
+
+<!-- 使用重新定义的c:if标签, 该标签内部的所有文本内容在编译期都会被清除, 但是自标签的文本仍然可以输出 -->
+<c:if test="${1 == 1}">
+    <p>I'm hidden!</p>
+    <c:out escapeXml="true">"I'm here !"</c:out></c:if>
+<c:exit/>
+
+<!-- c:command的bodyContent被定义为tagdependent，因此内部的文本内容都会被忽略。-->
 <c:command>
+    <p>I'm hidden!</p>
     <c:if test="${1 == 2}">
         <io:copy   file="E:/WorkSpace/ayada/webapp/test1" todir="E:/WorkSpace/ayada/webapp/test2"/>
         <io:delete file="E:/WorkSpace/ayada/webapp/test2/style.css"/>

@@ -24,6 +24,8 @@ public class ImportTag extends TagSupport
 {
     private String name;
     private String className;
+    private String bodyContent;
+    private String description;
 
     @Override
     public int doStartTag()
@@ -62,5 +64,37 @@ public class ImportTag extends TagSupport
     public String getClassName()
     {
         return this.className;
+    }
+
+    /**
+     * @return the bodyContent
+     */
+    public String getBodyContent()
+    {
+        return this.bodyContent;
+    }
+
+    /**
+     * @param bodyContent the bodyContent to set
+     */
+    public void setBodyContent(String bodyContent)
+    {
+        this.bodyContent = bodyContent;
+    }
+
+    /**
+     * @return the description
+     */
+    public String getDescription()
+    {
+        return this.description;
+    }
+
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description)
+    {
+        this.description = description;
     }
 }

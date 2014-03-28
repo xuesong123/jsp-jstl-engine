@@ -37,9 +37,12 @@ public class BodyTagSupport extends TagSupport implements BodyTag
 
     public void setBodyContent(BodyContent bodyContent)
     {
-      this.bodyContent = bodyContent;
+        this.bodyContent = bodyContent;
     }
 
+    /**
+     * @return int
+     */
     public void doInitBody() throws Exception
     {
     }

@@ -356,7 +356,8 @@ public class TemplateCompiler extends PageCompiler
                 this.skipCRLF();
                 String name = attributes.get("name");
                 String className = attributes.get("className");
-                this.setupTagLibrary(name, className);
+                String bodyContent = attributes.get("bodyContent");
+                this.setupTagLibrary(name, className, bodyContent);
                 this.popNode(stack, list, nodeName);
                 return;
             }
@@ -907,14 +908,19 @@ public class TemplateCompiler extends PageCompiler
     }
 
     /**
-     * @param name
+     * @param tagName
      * @param className
      */
-    public void setupTagLibrary(String name, String className)
+    public void setupTagLibrary(String tagName, String className, String bodyContent)
     {
-        if(name == null || name.trim().length() < 1)
+        if(tagName == null || tagName.trim().length() < 1)
         {
             return;
+        }
+
+        if(className == null || className.trim().length() < 1)
+        {
+            className = tagLibrary.getTagClassName(tagName);
         }
 
         if(className == null || className.trim().length() < 1)
@@ -926,7 +932,7 @@ public class TemplateCompiler extends PageCompiler
 
         if(tagLibrary != null)
         {
-            tagLibrary.setup(name.trim(), className.trim());
+            tagLibrary.setup(tagName.trim(), className.trim(), bodyContent, null);
         }
     }
 
@@ -1026,7 +1032,7 @@ public class TemplateCompiler extends PageCompiler
                 else
                 {
                     node.setLength(nodes.size() - node.getOffset() + 1);
-                    
+
                     if(node.getLength() == 1)
                     {
                         throw new Exception("length == 1");

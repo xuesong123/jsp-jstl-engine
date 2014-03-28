@@ -33,21 +33,21 @@ public class TagLibrary
     }
 
     /**
-     * @param name
+     * @param tagName
      * @return TagInfo
      */
-    public TagInfo getTagInfo(String name)
+    public TagInfo getTagInfo(String tagName)
     {
-        return this.library.get(name);
+        return this.library.get(tagName);
     }
 
     /**
-     * @param nodeName
+     * @param tagName
      * @return String
      */
-    public String getTagClassName(String nodeName)
+    public String getTagClassName(String tagName)
     {
-        TagInfo tagInfo = this.library.get(nodeName);
+        TagInfo tagInfo = this.library.get(tagName);
 
         if(tagInfo != null)
         {
@@ -57,12 +57,12 @@ public class TagLibrary
     }
 
     /**
-     * @param name
+     * @param tagName
      * @param className
      */
-    public void setup(String name, String className)
+    public void setup(String tagName, String className)
     {
-        TagInfo tagInfo = this.library.get(name);
+        TagInfo tagInfo = this.library.get(tagName);
 
         if(tagInfo != null)
         {
@@ -73,21 +73,23 @@ public class TagLibrary
         else
         {
             tagInfo = new TagInfo();
-            tagInfo.setName(name);
+            tagInfo.setName(tagName);
             tagInfo.setTagClass(className);
             tagInfo.setBodyContent(0);
             tagInfo.setDescription(null);
-            this.library.put(name, tagInfo);
+            this.library.put(tagName, tagInfo);
         }
     }
 
     /**
-     * @param name
+     * @param tagName
      * @param className
+     * @param bodyContent
+     * @param description
      */
-    public void setup(String name, String className, int bodyContent, String description)
+    public void setup(String tagName, String className, int bodyContent, String description)
     {
-        TagInfo tagInfo = this.library.get(name);
+        TagInfo tagInfo = this.library.get(tagName);
 
         if(tagInfo != null)
         {
@@ -98,12 +100,23 @@ public class TagLibrary
         else
         {
             tagInfo = new TagInfo();
-            tagInfo.setName(name);
+            tagInfo.setName(tagName);
             tagInfo.setTagClass(className);
             tagInfo.setBodyContent(bodyContent);
             tagInfo.setDescription(description);
-            this.library.put(name, tagInfo);
+            this.library.put(tagName, tagInfo);
         }
+    }
+
+    /**
+     * @param tagName
+     * @param className
+     * @param bodyContent
+     * @param description
+     */
+    public void setup(String tagName, String className, String bodyContent, String description)
+    {
+        this.setup(tagName, className, TagInfo.getBodyContent(bodyContent), description);
     }
 
     /**

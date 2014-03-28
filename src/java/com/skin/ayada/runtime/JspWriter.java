@@ -51,10 +51,6 @@ public class JspWriter extends Writer
         if(length > this.buffer.length - this.position)
         {
             this.flush();
-        }
-
-        if(length > this.buffer.length - this.position)
-        {
             this.out.write(cbuf, offset, length);
         }
         else

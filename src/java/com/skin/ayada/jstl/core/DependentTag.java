@@ -10,7 +10,7 @@
  */
 package com.skin.ayada.jstl.core;
 
-import com.skin.ayada.tagext.BodyTagSupport;
+import com.skin.ayada.tagext.TagSupport;
 
 /**
  * <p>Title: DependentTag</p>
@@ -18,6 +18,6 @@ import com.skin.ayada.tagext.BodyTagSupport;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class DependentTag extends BodyTagSupport
+public class DependentTag extends TagSupport
 {
 }

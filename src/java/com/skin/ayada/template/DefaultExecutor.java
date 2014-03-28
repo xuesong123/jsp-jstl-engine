@@ -242,14 +242,21 @@ public class DefaultExecutor
 
             jspWriter.flush();
         }
-        catch(Throwable t)
+        catch(Throwable throwable)
         {
             if(node != null)
             {
-                throw new Exception("\"" + template.getPath() + "\" Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node), t);
+                throw new Exception("\"" + template.getPath() + "\" Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node), throwable);
             }
 
-            throw new Exception(t.getCause());
+            if(throwable instanceof Exception)
+            {
+                throw ((Exception)throwable);
+            }
+            else
+            {
+                throw new Exception(throwable);
+            }
         }
         finally
         {
