@@ -54,7 +54,7 @@ public class TryCatchTestTag extends TagSupport implements TryCatchFinally
 
         return Tag.EVAL_PAGE;
     }
-    
+
     @Override
     public void doCatch(Throwable throwable) throws Throwable
     {
@@ -94,11 +94,11 @@ public class TryCatchTestTag extends TagSupport implements TryCatchFinally
             }
 
             String[] array = content.split(",");
-    
+
             for(int i = 0; i < array.length; i++)
             {
                 array[i] = array[i].trim();
-                
+
                 if(array[i].equals(value))
                 {
                     return true;
@@ -108,7 +108,7 @@ public class TryCatchTestTag extends TagSupport implements TryCatchFinally
 
         return false;
     }
-    
+
     /**
      * @return the exception
      */

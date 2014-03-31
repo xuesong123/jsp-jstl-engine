@@ -148,7 +148,7 @@ public class OutputTag extends BodyTagSupport
     {
         this.file = file;
     }
-    
+
     /**
      * @return the encoding
      */

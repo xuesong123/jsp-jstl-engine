@@ -77,7 +77,7 @@ public class AssistTest
             t.printStackTrace();
         }
     }
-    
+
     public static void test3()
     {
         ClassPool classPool = ClassPool.getDefault();
@@ -126,7 +126,7 @@ public class AssistTest
             e.printStackTrace();
         }
     }
-    
+
 
     public static void test1()
     {
@@ -185,10 +185,10 @@ public class AssistTest
         {
             e.printStackTrace();
         }
-        
+
         return null;
     }
-    
+
     public static void invoke(Object object, String methodName, Class<?>[] types, Object[] parameters) throws Throwable
     {
         Method method = object.getClass().getMethod(methodName, types);

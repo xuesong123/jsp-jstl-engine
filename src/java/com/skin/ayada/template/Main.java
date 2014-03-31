@@ -72,7 +72,7 @@ public class Main
 
         TemplateConfig config = TemplateConfig.getInstance();
         config.setValue("ayada.compile.source-pattern", "*");
-        
+
         File parent = file.getParentFile();
         TemplateContext templateContext = TemplateManager.getTemplateContext(parent.getAbsolutePath(), true);
 

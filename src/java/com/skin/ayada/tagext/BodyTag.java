@@ -31,7 +31,7 @@ public interface BodyTag extends IterationTag
      * Prepare for evaluation of the body. This method is invoked by the JSP page implementation object after setBodyContent and before the first time the body is to be evaluated.
      * This method will not be invoked for empty tags or for non-empty tags whose doStartTag() method returns SKIP_BODY or EVAL_BODY_INCLUDE.
      * The JSP container will resynchronize the values of any AT_BEGIN and NESTED variables (defined by the associated TagExtraInfo or TLD) after the invocation of doInitBody().
-     * @throws Exception 
+     * @throws Exception
      */
     public void doInitBody() throws Exception;
 

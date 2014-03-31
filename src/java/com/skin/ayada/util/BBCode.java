@@ -384,7 +384,7 @@ public class BBCode
         {
             return "";
         }
-        
+
         int start = 0;
         int end = source.length();
 

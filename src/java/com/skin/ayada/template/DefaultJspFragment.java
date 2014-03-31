@@ -106,7 +106,7 @@ public class DefaultJspFragment implements JspFragment
     {
         this.statements = statements;
     }
-    
+
     /**
      * @return the statements
      */

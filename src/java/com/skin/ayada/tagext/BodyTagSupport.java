@@ -41,7 +41,7 @@ public class BodyTagSupport extends TagSupport implements BodyTag
     }
 
     /**
-     * @return int
+     *
      */
     public void doInitBody() throws Exception
     {

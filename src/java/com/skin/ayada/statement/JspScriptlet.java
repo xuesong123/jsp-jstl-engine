@@ -42,7 +42,7 @@ public class JspScriptlet extends DataNode
         super(NodeType.JSP_SCRIPTLET_NAME, NodeType.JSP_SCRIPTLET);
         this.setClosed(NodeType.PAIR_CLOSED);
     }
-    
+
     @Override
     public JspScriptlet clone()
     {

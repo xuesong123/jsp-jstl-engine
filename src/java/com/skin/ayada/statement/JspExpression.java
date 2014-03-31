@@ -42,7 +42,7 @@ public class JspExpression extends DataNode
         super(NodeType.JSP_EXPRESSION_NAME, NodeType.JSP_EXPRESSION);
         this.setClosed(NodeType.PAIR_CLOSED);
     }
-    
+
     @Override
     public JspExpression clone()
     {

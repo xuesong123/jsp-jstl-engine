@@ -95,18 +95,18 @@ public class DefaultExecutor
                     statement = statements[index];
                     node = statement.getNode();
                     nodeType = node.getNodeType();
-    
+
                     if(nodeType == NodeType.TEXT)
                     {
                         out.write(node.getTextContent());
                         index++;
                         continue;
                     }
-    
+
                     if(nodeType == NodeType.EXPRESSION)
                     {
                         Object value = expressionContext.getValue(node.getTextContent());
-    
+
                         if(value != null)
                         {
                             out.write(value.toString());
@@ -114,11 +114,11 @@ public class DefaultExecutor
                         index++;
                         continue;
                     }
-    
+
                     if(nodeType == NodeType.VARIABLE)
                     {
                         Object value = pageContext.getAttribute(node.getTextContent());
-    
+
                         if(value != null)
                         {
                             out.write(value.toString());
@@ -126,7 +126,7 @@ public class DefaultExecutor
                         index++;
                         continue;
                     }
-    
+
                     if(nodeType != NodeType.NODE)
                     {
                         index++;
@@ -143,16 +143,16 @@ public class DefaultExecutor
                             tag.setPageContext(pageContext);
                             statement.setTag(tag);
                             Statement parent = statement.getParent();
-    
+
                             if(parent != null)
                             {
                                 tag.setParent(parent.getTag());
                             }
                         }
-    
+
                         // create - doStartTag
                         TagUtil.setAttributes(tag, node.getAttributes(), expressionContext);
-    
+
                         if(tag instanceof SimpleTag)
                         {
                             DefaultJspFragment jspFragment = new DefaultJspFragment(template, statements, pageContext);
@@ -164,15 +164,15 @@ public class DefaultExecutor
                             index = node.getOffset() + node.getLength();
                             continue;
                         }
-    
+
                         flag = doStartTag(statement, pageContext);
-    
+
                         if(flag == Tag.SKIP_BODY)
                         {
                             index = node.getOffset() + node.getLength();
                             continue;
                         }
-    
+
                         if(flag == Tag.SKIP_PAGE)
                         {
                             break;

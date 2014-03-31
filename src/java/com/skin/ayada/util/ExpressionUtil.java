@@ -407,7 +407,7 @@ public class ExpressionUtil
         {
             return 0;
         }
-        
+
         if(source.equals("true") || source.equals("false"))
         {
             return 1;

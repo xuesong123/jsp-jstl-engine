@@ -685,11 +685,11 @@ public abstract class Config
             }
 
             String[] array = content.split(",");
-    
+
             for(int i = 0; i < array.length; i++)
             {
                 array[i] = array[i].trim();
-                
+
                 if(array[i].equals(value))
                 {
                     return true;

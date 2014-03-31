@@ -89,11 +89,11 @@ public class JspTemplateFactoryTest
                 long t4 = System.currentTimeMillis();
                 System.out.println("run time: " + (t4 - t3));
             }
-            catch(Throwable e)
+            catch(Exception e)
             {
                 e.printStackTrace();
             }
-    
+
             System.out.println("===================== result =====================");
             System.out.println(writer.toString());
         }
@@ -130,7 +130,7 @@ public class JspTemplateFactoryTest
         {
             template.execute(pageContext);
         }
-        catch(Throwable e)
+        catch(Exception e)
         {
             e.printStackTrace();
         }
@@ -140,7 +140,7 @@ public class JspTemplateFactoryTest
         String result = writer.toString();
         System.out.println(format(result));
     }
-    
+
     public static void test4(String[] args)
     {
         try
@@ -155,7 +155,7 @@ public class JspTemplateFactoryTest
             e.printStackTrace();
         }
     }
-    
+
     public static void arrayListTest()
     {
         ArrayList<String> list = new ArrayList<String>(4);
@@ -195,7 +195,7 @@ public class JspTemplateFactoryTest
         pageContext.setAttribute("userList", userList);
         return pageContext;
     }
-    
+
     public static Map<String, Integer> getNodeType()
     {
         Map<String, Integer> map = new HashMap<String, Integer>();
@@ -289,5 +289,5 @@ public class JspTemplateFactoryTest
 
         return buffer.toString();
     }
-    
+
 }

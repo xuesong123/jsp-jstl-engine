@@ -174,7 +174,7 @@ public class JspTemplateFactory extends TemplateFactory
     public String getRootPath(String home)
     {
         String temp = StringUtil.replace(home.trim(), "\\", "/");
-        
+
         if(temp.endsWith("/"))
         {
             temp = temp.substring(0, temp.length() - 1);
@@ -342,7 +342,7 @@ public class JspTemplateFactory extends TemplateFactory
     {
         this.work = work;
     }
-    
+
     /**
      * @param classPath the classPath to set
      */

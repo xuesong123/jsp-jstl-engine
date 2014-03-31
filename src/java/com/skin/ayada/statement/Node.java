@@ -241,7 +241,7 @@ public class Node
                 buffer.append(entry.getValue());
                 buffer.append("\" ");
             }
-    
+
             if(buffer.length() > 0)
             {
                 buffer.setLength(buffer.length() - 1);

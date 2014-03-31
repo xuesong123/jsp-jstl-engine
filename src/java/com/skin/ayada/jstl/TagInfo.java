@@ -103,7 +103,7 @@ public class TagInfo
         }
 
         String type = bodyContent.trim().toLowerCase();
-        
+
         if(type.equals("tagdependent"))
         {
             return TAGDEPENDENT;

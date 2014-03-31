@@ -54,7 +54,7 @@ public class StreamTest
         System.out.println("content: [" + content + "]");
         System.out.println("compact: " + StringUtil.escape(compact("\r\n\r\n\r\n\r\n123\r\nabc\r\n\r\nedf")) + "]");
     }
-    
+
     /**
      * read node name, after read nodeName
      * @return String
@@ -159,7 +159,7 @@ public class StreamTest
                 attributes.put(name, "");
                 continue;
             }
-            
+
             stream.read();
 
             // skip space
@@ -318,7 +318,7 @@ public class StreamTest
 
         return false;
     }
-    
+
     /**
      * @param source
      * @return String
@@ -329,7 +329,7 @@ public class StreamTest
         boolean b = true;
         int length = source.length();
         StringBuilder buffer = new StringBuilder();
-        
+
         for(int i = 0; i < length; i++)
         {
             c = source.charAt(i);

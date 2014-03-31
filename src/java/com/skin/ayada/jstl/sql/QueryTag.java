@@ -148,7 +148,7 @@ public class QueryTag extends TagSupport implements IterationTag, TryCatchFinall
     {
         this.sql = sql;
     }
-    
+
     /**
      * @return the count
      */

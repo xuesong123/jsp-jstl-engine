@@ -42,7 +42,7 @@ public class JspDeclaration extends DataNode
         super(NodeType.JSP_DECLARATION_NAME, NodeType.JSP_DECLARATION);
         this.setClosed(NodeType.PAIR_CLOSED);
     }
-    
+
     @Override
     public JspDeclaration clone()
     {

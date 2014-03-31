@@ -36,7 +36,7 @@ public class ForEachTagTest
             e.printStackTrace();
         }
     }
-    
+
     public static void test1() throws Exception
     {
         StringWriter out = new StringWriter();

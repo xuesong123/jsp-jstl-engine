@@ -134,7 +134,7 @@ public class ReflectTest
     public static void testTag(Tag tag)
     {
     }
-    
+
     private MyTagFactory myTagFactory = new MyTagFactory();
 
     public MyTagFactory getMyTagFactory()

@@ -154,7 +154,7 @@ public class TestTag extends TagSupport
     {
         this.myByte = myByte;
     }
-    
+
     /**
      * @return the myShort
      */

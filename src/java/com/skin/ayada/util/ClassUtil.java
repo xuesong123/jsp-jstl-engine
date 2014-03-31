@@ -331,7 +331,7 @@ public class ClassUtil
     public static Byte getByte(Object value)
     {
         Integer i = getInteger(value);
-        
+
         if(i != null)
         {
             return i.byteValue();
@@ -370,7 +370,7 @@ public class ClassUtil
         if(value != null)
         {
             String content = value.toString();
-            
+
             if(content.length() > 0)
             {
                 return content.charAt(0);
@@ -403,7 +403,7 @@ public class ClassUtil
 
         return null;
     }
-    
+
     /**
      * @param value
      * @return Float

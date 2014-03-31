@@ -215,23 +215,23 @@ public class TemplateUtil
             buffer.append("\" length=\"");
             buffer.append(node.getLength());
             buffer.append("\"");
-    
+
             if(node.getTagClassName() != null)
             {
                 buffer.append(" tagClass=\"");
                 buffer.append(node.getTagClassName());
                 buffer.append("\"");
             }
-    
+
             if(node.getTagFactory() != null)
             {
                 buffer.append(" tagFactory=\"");
                 buffer.append(node.getTagFactory().getClass().getName());
                 buffer.append("\"");
             }
-    
+
             Map<String, String> attributes = node.getAttributes();
-    
+
             if(attributes != null && attributes.size() > 0)
             {
                 for(Map.Entry<String, String> entrySet : attributes.entrySet())

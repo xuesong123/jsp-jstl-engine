@@ -111,7 +111,7 @@ public class ConnectTag extends TagSupport implements TryCatchFinally
     {
         return this.url;
     }
-    
+
     /**
      * @param url the url to set
      */
@@ -119,7 +119,7 @@ public class ConnectTag extends TagSupport implements TryCatchFinally
     {
         this.url = url;
     }
-    
+
     /**
      * @return the driverClass
      */
@@ -127,7 +127,7 @@ public class ConnectTag extends TagSupport implements TryCatchFinally
     {
         return this.driverClass;
     }
-    
+
     /**
      * @param driverClass the driverClass to set
      */
@@ -135,7 +135,7 @@ public class ConnectTag extends TagSupport implements TryCatchFinally
     {
         this.driverClass = driverClass;
     }
-    
+
     /**
      * @return the userName
      */
@@ -143,7 +143,7 @@ public class ConnectTag extends TagSupport implements TryCatchFinally
     {
         return this.userName;
     }
-    
+
     /**
      * @param userName the userName to set
      */
@@ -151,7 +151,7 @@ public class ConnectTag extends TagSupport implements TryCatchFinally
     {
         this.userName = userName;
     }
-    
+
     /**
      * @return the password
      */
@@ -159,7 +159,7 @@ public class ConnectTag extends TagSupport implements TryCatchFinally
     {
         return this.password;
     }
-    
+
     /**
      * @param password the password to set
      */
@@ -167,7 +167,7 @@ public class ConnectTag extends TagSupport implements TryCatchFinally
     {
         this.password = password;
     }
-    
+
     /**
      * @return the properties
      */
@@ -175,7 +175,7 @@ public class ConnectTag extends TagSupport implements TryCatchFinally
     {
         return this.properties;
     }
-    
+
     /**
      * @param properties the properties to set
      */

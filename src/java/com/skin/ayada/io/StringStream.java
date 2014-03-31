@@ -135,7 +135,7 @@ public class StringStream
         this.position = this.length;
         return this.length - index;
     }
-    
+
     /**
      * @param cbuf
      * @return int

@@ -49,7 +49,7 @@ public abstract class SourceFactory
         }
 
         String fileType = this.getExtension(path).toLowerCase();
-        
+
         if(StringUtil.contains(this.sourcePattern, fileType))
         {
             return Source.SCRIPT;
@@ -57,7 +57,7 @@ public abstract class SourceFactory
 
         return Source.STATIC;
     }
-    
+
     /**
      * @param path
      * @return String

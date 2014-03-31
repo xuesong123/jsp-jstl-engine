@@ -71,7 +71,7 @@ public class JspDirective extends DataNode
     {
         return new JspDirective(NodeType.JSP_DIRECTIVE_PAGE_NAME, NodeType.JSP_DIRECTIVE_PAGE);
     }
-    
+
     /**
      * @return JspDirective
      */
@@ -79,7 +79,7 @@ public class JspDirective extends DataNode
     {
         return new JspDirective(NodeType.JSP_DIRECTIVE_TAGLIB_NAME, NodeType.JSP_DIRECTIVE_TAGLIB);
     }
-    
+
     /**
      * @return JspDirective
      */

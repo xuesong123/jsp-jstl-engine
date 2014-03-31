@@ -211,7 +211,7 @@ public class TemplateFilter implements Filter
 
         return buffer.toString();
     }
-    
+
     /**
      * @param className
      * @return TemplateFactory

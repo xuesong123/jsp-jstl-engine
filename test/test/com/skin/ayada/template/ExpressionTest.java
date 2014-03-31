@@ -110,7 +110,7 @@ public class ExpressionTest
             }
         }
     }
-    
+
     public static void test3()
     {
         List<Node> list = ExpressionUtil.parse("123${abc}xyz");

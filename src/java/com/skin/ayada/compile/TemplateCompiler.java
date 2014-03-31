@@ -154,7 +154,7 @@ public class TemplateCompiler extends PageCompiler
                                 expr.setLength(1);
                                 expr.setLineNumber(this.lineNumber);
                                 expr.append(temp);
-    
+
                                 if(stack.peek() != null)
                                 {
                                     expr.setParent(stack.peek());
@@ -1004,14 +1004,14 @@ public class TemplateCompiler extends PageCompiler
                     if(tagInfo != null)
                     {
                         int bodyContent = tagInfo.getBodyContent();
-    
+
                         if(bodyContent == TagInfo.TAGDEPENDENT)
                         {
                             // clear TextNode
                             for(int j = i + 1, length = i + node.getLength() - 1; j < length; j++)
                             {
                                 Node n = list.get(j);
-    
+
                                 if(n instanceof DataNode)
                                 {
                                     ((DataNode)n).clear();
@@ -1047,7 +1047,7 @@ public class TemplateCompiler extends PageCompiler
 
         return nodes;
     }
-    
+
     /**
      * @return the sourceFactory
      */

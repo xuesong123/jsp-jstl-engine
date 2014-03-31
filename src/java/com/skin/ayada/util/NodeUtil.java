@@ -31,7 +31,7 @@ public class NodeUtil
     public static String getDescription(List<Node> nodes)
     {
         StringBuilder buffer = new StringBuilder();
-        
+
         for(Node node : nodes)
         {
             buffer.append(getDescription(node));
@@ -40,7 +40,7 @@ public class NodeUtil
 
         return buffer.toString();
     }
-    
+
     /**
      * @param node
      * @return String

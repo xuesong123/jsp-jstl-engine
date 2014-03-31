@@ -164,7 +164,7 @@ public class JspCompiler
         writer.flush();
         return stringWriter.toString();
     }
-    
+
     /**
      * @param className
      * @param packageName
@@ -216,7 +216,7 @@ public class JspCompiler
                 }
             }
         }
-        
+
         writer.println();
     }
 
@@ -324,7 +324,7 @@ public class JspCompiler
         }
 
         int flag = Tag.EVAL_PAGE;
-        
+
         if(this.fast)
         {
             if(tagClassName.equals("com.skin.ayada.jstl.core.ImportTag"))
@@ -468,7 +468,7 @@ public class JspCompiler
 
         return Tag.EVAL_PAGE;
     }
-    
+
     /**
      * @param index
      * @param indent
@@ -549,7 +549,7 @@ public class JspCompiler
 
         return Tag.EVAL_PAGE;
     }
-    
+
     /**
      * @param index
      * @param indent
@@ -588,7 +588,7 @@ public class JspCompiler
         writer.println(indent + "/* jsp.jstl.core.OutTag END */");
         return Tag.EVAL_PAGE;
     }
-    
+
     /**
      * @param index
      * @param indent
@@ -787,7 +787,7 @@ public class JspCompiler
 
         return Tag.EVAL_PAGE;
     }
-    
+
     /**
      * @param index
      * @param indent
@@ -1260,7 +1260,7 @@ public class JspCompiler
             writer.println(prefix + "    return;");
             writer.println(prefix + "}");
             writer.println(prefix + "if(" + startFlagName + " != Tag.SKIP_BODY){");
-            
+
             if(node.getLength() > 2)
             {
                 writer.println(prefix + "    int " + flagName + " = 0;");
@@ -1425,7 +1425,7 @@ public class JspCompiler
         {
             return;
         }
-        
+
         if(this.isAssignableFrom(tagClassName, DynamicAttributes.class))
         {
             for(Map.Entry<String, String> entry : attributes.entrySet())
@@ -1518,7 +1518,7 @@ public class JspCompiler
                         }
                         else
                         {
-                            writer.println(indent + tagInstanceName + "." + methodName + "(\"" + StringUtil.escape(value) + "\"); /* parameterType: object */");
+                            writer.println(indent + tagInstanceName + "." + methodName + "(\"" + StringUtil.escape(value) + "\");");
                         }
                     }
                     else

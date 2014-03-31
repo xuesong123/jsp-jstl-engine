@@ -38,7 +38,7 @@ public class MySql
         StringBuilder url = new StringBuilder();
         url.append("jdbc:mysql://");
         url.append(host);
-        
+
         if(port != null && port.trim().length() > 0)
         {
             url.append(":");

@@ -327,7 +327,7 @@ public class StringUtil
         boolean b = true;
         int length = source.length();
         StringBuilder buffer = new StringBuilder();
-        
+
         for(int i = 0; i < length; i++)
         {
             c = source.charAt(i);
@@ -369,11 +369,11 @@ public class StringUtil
             }
 
             String[] array = content.split(",");
-    
+
             for(int i = 0; i < array.length; i++)
             {
                 array[i] = array[i].trim();
-                
+
                 if(array[i].equals(value))
                 {
                     return true;
