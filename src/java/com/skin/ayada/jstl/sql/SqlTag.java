@@ -21,6 +21,7 @@ import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTag;
 import com.skin.ayada.tagext.BodyTagSupport;
 import com.skin.ayada.tagext.Tag;
+import com.skin.ayada.tagext.TagSupport;
 
 /**
  * <p>Title: SqlTag</p>
@@ -51,17 +52,7 @@ public class SqlTag extends BodyTagSupport
     {
         if(this.connection == null)
         {
-            this.connection = (Connection)(this.pageContext.getAttribute("connection"));
-        }
-
-        if(this.connection == null)
-        {
-            Tag tag = this.getParent();
-
-            if(tag instanceof ConnectTag)
-            {
-                this.connection = ((ConnectTag)tag).getConnection();
-            }
+            this.connection = SqlTag.getConnection(this);
         }
 
         if(this.connection == null)
@@ -136,6 +127,27 @@ public class SqlTag extends BodyTagSupport
         }
 
         return EVAL_PAGE;
+    }
+
+    /**
+     * @param tag
+     * @return Connection
+     */
+    public static Connection getConnection(TagSupport tag)
+    {
+        Connection connection = (Connection)(tag.getPageContext().getAttribute("connection"));
+
+        if(connection == null)
+        {
+            Tag parent = tag.getParent();
+
+            if(parent instanceof ConnectTag)
+            {
+                connection = ((ConnectTag)parent).getConnection();
+            }
+        }
+
+        return connection;
     }
 
     /**

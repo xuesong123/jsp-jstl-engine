@@ -15,7 +15,6 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 import com.skin.ayada.tagext.IterationTag;
-import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.tagext.TagSupport;
 import com.skin.ayada.tagext.TryCatchFinally;
 
@@ -41,17 +40,7 @@ public class QueryTag extends TagSupport implements IterationTag, TryCatchFinall
     {
         if(this.connection == null)
         {
-            this.connection = (Connection)(this.pageContext.getAttribute("connection"));
-        }
-
-        if(this.connection == null)
-        {
-            Tag tag = this.getParent();
-
-            if(tag instanceof ConnectTag)
-            {
-                this.connection = ((ConnectTag)tag).getConnection();
-            }
+            this.connection = SqlTag.getConnection(this);
         }
 
         if(this.connection == null)
