@@ -90,9 +90,7 @@ sql:connect
 sql:execute
 
     <sql:execute>...</sql:execute>
-
     <sql:execute sql="update mytest2 set a=1 where b=1">...</sql:execute>
-
     <sql:execute file="/user/db/create.sql">...</sql:execute>
 
 sql:query
