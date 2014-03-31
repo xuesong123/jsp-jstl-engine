@@ -16,8 +16,6 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.Writer;
 import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTag;
@@ -84,11 +82,11 @@ public class SqlTag extends BodyTagSupport
             {
                 printWriter = ((PrintWriter)(this.out));
             }
-            else if(out instanceof OutputStream)
+            else if(this.out instanceof OutputStream)
             {
                 printWriter = new PrintWriter((OutputStream)(this.out));
             }
-            else if(out instanceof Writer)
+            else if(this.out instanceof Writer)
             {
                 printWriter = new PrintWriter((Writer)(this.out));
             }
@@ -138,34 +136,6 @@ public class SqlTag extends BodyTagSupport
         }
 
         return EVAL_PAGE;
-    }
-
-    /**
-     * @param sql
-     */
-    public void execute(Statement statement, String sql)
-    {
-        try
-        {
-            statement = this.connection.createStatement();
-            statement.execute(sql);
-        }
-        catch(SQLException e)
-        {
-        }
-        finally
-        {
-            if(statement != null)
-            {
-                try
-                {
-                    statement.close();
-                }
-                catch(SQLException e)
-                {
-                }
-            }
-        }
     }
 
     /**

@@ -295,15 +295,7 @@ public class DefaultPageContext implements PageContext
         {
             throw new NullPointerException("NullPointerException: templateContext");
         }
-
-        try
-        {
-            this.templateContext.execute(page, context, this.getOut());
-        }
-        catch(Throwable throwable)
-        {
-            throw new Exception(throwable);
-        }
+        this.templateContext.execute(page, context, this.getOut());
     }
 
     /**

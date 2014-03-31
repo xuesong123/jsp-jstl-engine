@@ -62,13 +62,13 @@ public class QueryTag extends TagSupport implements IterationTag, TryCatchFinall
         if(this.offset > 1)
         {
             this.statement = this.connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            this.resultSet = this.statement.executeQuery(sql);
+            this.resultSet = this.statement.executeQuery(this.sql);
             this.resultSet.absolute(this.offset - 1);
         }
         else
         {
             this.statement = this.connection.createStatement();
-            this.resultSet = this.statement.executeQuery(sql);
+            this.resultSet = this.statement.executeQuery(this.sql);
         }
 
         if(this.resultSet.next())

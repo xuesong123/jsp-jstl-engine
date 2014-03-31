@@ -918,12 +918,14 @@ public class TemplateCompiler extends PageCompiler
             return;
         }
 
-        if(className == null || className.trim().length() < 1)
+        String tagClassName = className;
+
+        if(tagClassName == null || tagClassName.trim().length() < 1)
         {
-            className = tagLibrary.getTagClassName(tagName);
+            tagClassName = this.tagLibrary.getTagClassName(tagName);
         }
 
-        if(className == null || className.trim().length() < 1)
+        if(tagClassName == null)
         {
             return;
         }
@@ -932,7 +934,7 @@ public class TemplateCompiler extends PageCompiler
 
         if(tagLibrary != null)
         {
-            tagLibrary.setup(tagName.trim(), className.trim(), bodyContent, null);
+            tagLibrary.setup(tagName.trim(), tagClassName.trim(), bodyContent, null);
         }
     }
 

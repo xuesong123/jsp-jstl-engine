@@ -1231,99 +1231,100 @@ public class JspCompiler
         String bodyContentInstanceName = this.getVariableName(node, "_jsp_body_content_");
         boolean hasParent = this.hasParent(node);
         boolean isTryCatchFinallyTag = this.isAssignableFrom(tagClassName, TryCatchFinally.class);
+        String prefix = indent;
 
         if(node.getOffset() == index)
         {
-            writer.println(indent + tagClassName + " " + tagInstanceName + " = new " + tagClassName + "();");
+            writer.println(prefix + tagClassName + " " + tagInstanceName + " = new " + tagClassName + "();");
 
             if(isTryCatchFinallyTag)
             {
-                writer.println(indent + "try{");
-                indent = indent + "    ";
+                writer.println(prefix + "try{");
+                prefix = prefix + "    ";
             }
 
             if(hasParent)
             {
-                writer.println(indent + tagInstanceName + ".setParent(" + parentTagInstanceName + ");");
+                writer.println(prefix + tagInstanceName + ".setParent(" + parentTagInstanceName + ");");
             }
             else
             {
-                writer.println(indent + tagInstanceName + ".setParent((Tag)null);");
+                writer.println(prefix + tagInstanceName + ".setParent((Tag)null);");
             }
 
-            writer.println(indent + tagInstanceName + ".setPageContext(pageContext);");
-            this.setAttributes(indent, tagClassName, tagInstanceName, node.getAttributes(), writer);
-            writer.println(indent + "int " + startFlagName + " = " + tagInstanceName + ".doStartTag();");
+            writer.println(prefix + tagInstanceName + ".setPageContext(pageContext);");
+            this.setAttributes(prefix, tagClassName, tagInstanceName, node.getAttributes(), writer);
+            writer.println(prefix + "int " + startFlagName + " = " + tagInstanceName + ".doStartTag();");
             writer.println();
-            writer.println(indent + "if(" + startFlagName + " == Tag.SKIP_PAGE){");
-            writer.println(indent + "    return;");
-            writer.println(indent + "}");
-            writer.println(indent + "if(" + startFlagName + " != Tag.SKIP_BODY){");
+            writer.println(prefix + "if(" + startFlagName + " == Tag.SKIP_PAGE){");
+            writer.println(prefix + "    return;");
+            writer.println(prefix + "}");
+            writer.println(prefix + "if(" + startFlagName + " != Tag.SKIP_BODY){");
             
             if(node.getLength() > 2)
             {
-                writer.println(indent + "    int " + flagName + " = 0;");
+                writer.println(prefix + "    int " + flagName + " = 0;");
 
                 if(this.isAssignableFrom(tagClassName, BodyTag.class))
                 {
-                    writer.println(indent + "    if(" + startFlagName + " == BodyTag.EVAL_BODY_BUFFERED){");
-                    writer.println(indent + "        BodyContent " + bodyContentInstanceName + " = (BodyContent)(pageContext.pushBody());");
-                    writer.println(indent + "        " + tagInstanceName + ".setBodyContent(" + bodyContentInstanceName + ");");
-                    writer.println(indent + "        " + tagInstanceName + ".doInitBody();");
-                    writer.println(indent + "        out = " + bodyContentInstanceName + ";");
-                    writer.println(indent + "    }");
+                    writer.println(prefix + "    if(" + startFlagName + " == BodyTag.EVAL_BODY_BUFFERED){");
+                    writer.println(prefix + "        BodyContent " + bodyContentInstanceName + " = (BodyContent)(pageContext.pushBody());");
+                    writer.println(prefix + "        " + tagInstanceName + ".setBodyContent(" + bodyContentInstanceName + ");");
+                    writer.println(prefix + "        " + tagInstanceName + ".doInitBody();");
+                    writer.println(prefix + "        out = " + bodyContentInstanceName + ";");
+                    writer.println(prefix + "    }");
                 }
 
                 writer.println();
-                writer.println(indent + "    do{");
+                writer.println(prefix + "    do{");
             }
         }
         else
         {
             if(isTryCatchFinallyTag)
             {
-                indent = indent + "    ";
+                prefix = prefix + "    ";
             }
 
             if(node.getLength() > 2)
             {
                 if(this.isAssignableFrom(tagClassName, IterationTag.class))
                 {
-                    writer.println(indent + "        " + flagName + " = " + tagInstanceName + ".doAfterBody();");
+                    writer.println(prefix + "        " + flagName + " = " + tagInstanceName + ".doAfterBody();");
                 }
 
-                writer.println(indent + "    }");
-                writer.println(indent + "    while(" + flagName + " == IterationTag.EVAL_BODY_AGAIN);");
+                writer.println(prefix + "    }");
+                writer.println(prefix + "    while(" + flagName + " == IterationTag.EVAL_BODY_AGAIN);");
 
                 if(this.isAssignableFrom(tagClassName, BodyTag.class))
                 {
-                    writer.println(indent + "    if(" + startFlagName + " == BodyTag.EVAL_BODY_BUFFERED){");
-                    writer.println(indent + "        out = pageContext.popBody();");
-                    writer.println(indent + "    }");
+                    writer.println(prefix + "    if(" + startFlagName + " == BodyTag.EVAL_BODY_BUFFERED){");
+                    writer.println(prefix + "        out = pageContext.popBody();");
+                    writer.println(prefix + "    }");
                 }
             }
             else
             {
                 if(this.isAssignableFrom(tagClassName, IterationTag.class))
                 {
-                    writer.println(indent + "    " + tagInstanceName + ".doAfterBody();");
+                    writer.println(prefix + "    " + tagInstanceName + ".doAfterBody();");
                 }
             }
 
-            writer.println(indent + "}");
-            writer.println(indent + tagInstanceName+ ".doEndTag();");
-            writer.println(indent + tagInstanceName + ".release();");
+            writer.println(prefix + "}");
+            writer.println(prefix + tagInstanceName+ ".doEndTag();");
+            writer.println(prefix + tagInstanceName + ".release();");
 
             if(isTryCatchFinallyTag)
             {
-                indent = indent.substring(4);
-                writer.println(indent + "}");
-                writer.println(indent + "catch(Throwable throwable){");
-                writer.println(indent + "    " + tagInstanceName + ".doCatch(throwable);");
-                writer.println(indent + "}");
-                writer.println(indent + "finally{");
-                writer.println(indent + "    " + tagInstanceName + ".doFinally();");
-                writer.println(indent + "}");
+                prefix = prefix.substring(4);
+                writer.println(prefix + "}");
+                writer.println(prefix + "catch(Throwable throwable){");
+                writer.println(prefix + "    " + tagInstanceName + ".doCatch(throwable);");
+                writer.println(prefix + "}");
+                writer.println(prefix + "finally{");
+                writer.println(prefix + "    " + tagInstanceName + ".doFinally();");
+                writer.println(prefix + "}");
             }
         }
 
@@ -1561,6 +1562,10 @@ public class JspCompiler
                         else if(parameterType == java.util.Date.class)
                         {
                             writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.getDate(expressionContext, \"" + StringUtil.escape(value) + "\"));");
+                        }
+                        else if(parameterType == Object.class)
+                        {
+                            writer.println(indent + tagInstanceName + "." + methodName + "(ExpressionUtil.evaluate(expressionContext, \"" + StringUtil.escape(value) + "\"));");
                         }
                         else
                         {

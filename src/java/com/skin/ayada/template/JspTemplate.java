@@ -79,10 +79,7 @@ public abstract class JspTemplate extends Template
             {
                 throw ((Exception)throwable);
             }
-            else
-            {
-                throw new Exception(throwable);
-            }
+            throw new Exception(throwable);
         }
 
         out.flush();

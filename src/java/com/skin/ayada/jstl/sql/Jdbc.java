@@ -104,10 +104,12 @@ public class Jdbc
         }
 
         char c;
+        int offset = 0;
+        int length = query.length();
         StringBuilder name = new StringBuilder();
         StringBuilder value = new StringBuilder();
 
-        for(int i = 0, length = query.length(); i < length; i++)
+        for(int i = 0; i < length; i++)
         {
             c = query.charAt(i);
 
@@ -115,18 +117,18 @@ public class Jdbc
             {
                 if(i + 1 < length)
                 {
-                    query = query.substring(i + 1);
+                    offset = i + 1;
                 }
                 else
                 {
-                    query = "";
+                    offset = length;
                 }
 
                 break;
             }
         }
 
-        for(int i = 0, length = query.length(); i < length; i++)
+        for(int i = offset; i < length; i++)
         {
             c = query.charAt(i);
 
@@ -162,10 +164,7 @@ public class Jdbc
 
                         break;
                     }
-                    else
-                    {
-                        value.append(c);
-                    }
+                    value.append(c);
                 }
 
                 if(name.length() > 0)

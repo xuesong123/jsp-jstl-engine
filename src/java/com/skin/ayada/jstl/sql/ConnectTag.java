@@ -57,10 +57,7 @@ public class ConnectTag extends TagSupport implements TryCatchFinally
         {
             throw throwable;
         }
-        else
-        {
-            throw new RuntimeException("RuntimeExceptione: UnknownException - null");
-        }
+        throw new RuntimeException("RuntimeExceptione: UnknownException - null");
     }
 
     @Override
@@ -83,12 +80,9 @@ public class ConnectTag extends TagSupport implements TryCatchFinally
         {
             if(this.properties != null)
             {
-                return Jdbc.connect(url, driverClass, Jdbc.parse(this.properties));
+                return Jdbc.connect(this.url, this.driverClass, Jdbc.parse(this.properties));
             }
-            else
-            {
-                return Jdbc.connect(url, driverClass, userName, password);
-            }
+            return Jdbc.connect(this.url, this.driverClass, this.userName, this.password);
         }
 
         return null;

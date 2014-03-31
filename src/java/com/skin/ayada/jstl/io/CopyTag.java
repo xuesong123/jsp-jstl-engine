@@ -33,13 +33,13 @@ public class CopyTag extends FileTag
     public int doEndTag() throws Exception
     {
         File source = new File(this.getFile());
-        File target = new File(todir);
+        File target = new File(this.todir);
 
         if(source.equals(target) == false)
         {
             if(source.isFile())
             {
-                IO.copy(source, new File(todir, source.getName()));
+                IO.copy(source, new File(this.todir, source.getName()));
             }
             else
             {
@@ -55,7 +55,7 @@ public class CopyTag extends FileTag
     {
         File source = new File(this.getFile());
         String suffix = file.getAbsolutePath().substring(source.getAbsolutePath().length());
-        File target = new File(todir, suffix);
+        File target = new File(this.todir, suffix);
 
         if(file.isFile())
         {

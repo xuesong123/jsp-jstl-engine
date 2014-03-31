@@ -204,10 +204,7 @@ public class DefaultExecutor
                         {
                             throw cause;
                         }
-                        else
-                        {
-                            throw throwable;
-                        }
+                        throw throwable;
                     }
 
                     Statement s = getTryCatchFinallyStatement(statements, index);
@@ -253,10 +250,7 @@ public class DefaultExecutor
             {
                 throw ((Exception)throwable);
             }
-            else
-            {
-                throw new Exception(throwable);
-            }
+            throw new Exception(throwable);
         }
         finally
         {
