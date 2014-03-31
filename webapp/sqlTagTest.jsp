@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
-    <sql:execute sql="delete from my_test2;" out="${pageContext.getOut()}"/>
-    <sql:execute sql="insert into my_test2(my_id, my_code, my_name) values (1, '1', '1');"/>
+<sql:execute sql="delete from my_test2;" out="${pageContext.getOut()}"/>
+<sql:execute sql="insert into my_test2(my_id, my_code, my_name) values (1, '1', '1');"/>
 <sql:execute home="${template.home}/database" file="create.sql" encoding="UTF-8" out="${pageContext.getOut()}"/>
 
 <sql:execute>

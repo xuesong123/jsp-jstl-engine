@@ -15,10 +15,8 @@ t:import: 编译指令
 
 4. bodyContent和description都不是必选项, 可以为空, bodyContent默认为jsp
 -->
-
 <t:import name="c:if" bodyContent="tagdependent" description="重写c:if标签, 不输出内容"/>
 <t:import name="c:if" className="com.skin.ayada.jstl.core.IfTag" bodyContent="tagdependent" description="重写c:if标签, 不输出内容"/>
-<c:set var="template_print" value="true"/>
 
 <h1>tag.bodyContent</h1>
 <p>1. jsp: any content</p>
@@ -28,8 +26,8 @@ t:import: 编译指令
 <!-- 使用重新定义的c:if标签, 该标签内部的所有文本内容在编译期都会被清除, 但是自标签的文本仍然可以输出 -->
 <c:if test="${1 == 1}">
     <p>I'm hidden!</p>
-    <c:out escapeXml="true">"I'm here !"</c:out></c:if>
-<c:exit/>
+    <c:out escapeXml="true">"I'm here !"</c:out>
+</c:if>
 
 <!-- c:command的bodyContent被定义为tagdependent，因此内部的文本内容都会被忽略。-->
 <c:command>
@@ -54,20 +52,37 @@ t:import: 编译指令
 
 <!-- use external connection -->
 <sql:connect var="connection2" connection="${myConnection}"></sql:connect>
-<sql:connect var="connection" url="jdbc:mysql://localhost:3306?user=root&password=1234&characterEncoding=utf8" driverClass="com.mysql.jdbc.Driver">
-    <sql:execute out="${pageContext.getOut()}">
-        drop database if exists mytest2;
-        create database mytest2 character set utf8;
-    </sql:execute>
+
+<c:if test="${1 == 1}">
+    <c:set var="createDatabaseUrl" value="jdbc:mysql://10.3.254.97:3307?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&autoReconnection=true"/>
+    <c:set var="url" value="jdbc:mysql://10.3.254.97:3307/mytest2?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&autoReconnection=true"/>
+    <c:set var="driverClass" value="com.mysql.jdbc.Driver"/>
+    <c:set var="userName" value="bookAdmin"/>
+    <c:set var="password" value="bookAdmin"/>
+</c:if>
+
+<c:if test="${1 == 2}">
+    <c:set var="createDatabaseUrl" value="jdbc:mysql://localhost:3306?user=root&password=1234&characterEncoding=utf8"/>
+    <c:set var="url" value="jdbc:mysql://localhost:3306/mytest2?user=root&password=1234&characterEncoding=utf8"/>
+    <c:set var="driverClass" value="com.mysql.jdbc.Driver"/>
+    <c:set var="userName" value=""/>
+    <c:set var="password" value=""/>
+</c:if>
+
+<sql:connect var="connection" url="${createDatabaseUrl}" driverClass="com.mysql.jdbc.Driver" userName="${userName}" password="${password}">
+<sql:execute out="${pageContext}">
+    drop database if exists mytest2;
+    create database mytest2 character set utf8;
+</sql:execute>
 </sql:connect>
 
-<sql:connect var="connection" url="jdbc:mysql://localhost:3306/mytest2?user=root&password=1234&characterEncoding=utf8" driverClass="com.mysql.jdbc.Driver">
-    <sql:execute home="${template.home}/database" file="create.sql" encoding="UTF-8" out="${pageContext.getOut()}"/>
-    <sql:execute sql="delete from my_test1;" out="${pageContext.getOut()}"/>
-    <sql:execute sql="delete from my_test2;" out="${pageContext.getOut()}"/>
+<sql:connect var="connection" url="${url}" driverClass="com.mysql.jdbc.Driver" userName="${userName}" password="${password}">
+    <sql:execute home="${template.home}/database" file="create.sql" encoding="UTF-8" out="${pageContext}"/>
+    <sql:execute sql="delete from my_test1;" out="${pageContext}"/>
+    <sql:execute sql="delete from my_test2;" out="${pageContext}"/>
     <sql:execute sql="insert into my_test2(my_id, my_code, my_name) values (1, '1', '1');"/>
 
-    <sql:execute out="${pageContext.getOut()}">
+    <sql:execute out="${pageContext}">
         <c:forEach items="1, 2, 3, 4, 5" var="id">
             insert into my_test1(my_id, my_code, my_name) values (${id}, '${id}', '${id}');
         </c:forEach>
@@ -89,7 +104,6 @@ t:import: 编译指令
     </sql:execute>
 
     <sql:execute connection="${connection}" sql="insert into my_test2(my_id, my_code, my_name) values (1009, '1001', '1001');"/>
-
     <table>
         <tr>
             <td>id</td>

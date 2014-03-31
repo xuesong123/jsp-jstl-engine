@@ -12,7 +12,7 @@ package com.skin.ayada.template;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.StringWriter;
+import java.io.PrintWriter;
 
 import com.skin.ayada.config.TemplateConfig;
 import com.skin.ayada.runtime.JspFactory;
@@ -76,24 +76,19 @@ public class Main
         File parent = file.getParentFile();
         TemplateContext templateContext = TemplateManager.getTemplateContext(parent.getAbsolutePath(), true);
 
-        StringWriter stringWriter = new StringWriter();
         /* CompactWriter compactWriter = new CompactWriter(stringWriter); */
-        PageContext pageContext = JspFactory.getPageContext(templateContext, stringWriter);
+        PrintWriter printWriter = new PrintWriter(System.out);
+        PageContext pageContext = JspFactory.getPageContext(templateContext, printWriter);
         Template template = templateContext.getTemplate(file.getName());
 
+        System.out.println("===================== template =====================");
+        TemplateUtil.print(template);
+
+        System.out.println("===================== result =====================");
         long t3 = System.currentTimeMillis();
         template.execute(pageContext);
         long t4 = System.currentTimeMillis();
-
-        if(pageContext.getAttribute("template_print") != null)
-        {
-            System.out.println("===================== template =====================");
-            TemplateUtil.print(template);
-        }
-
         System.out.println("run time: " + (t4 - t3));
-        System.out.println("===================== result =====================");
-        System.out.println(stringWriter.toString());
     }
 
     public static void usage()

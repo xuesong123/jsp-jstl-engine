@@ -17,6 +17,7 @@ import java.io.StringReader;
 import java.io.Writer;
 import java.sql.Connection;
 
+import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTag;
 import com.skin.ayada.tagext.BodyTagSupport;
@@ -60,69 +61,32 @@ public class SqlTag extends BodyTagSupport
             throw new NullPointerException("connection must be not null");
         }
 
-        Logger logger = null;
-        PrintWriter printWriter = null;
-
-        if(this.out instanceof Logger)
-        {
-            logger = (Logger)(this.out);
-        }
-        else
-        {
-            if(this.out instanceof PrintWriter)
-            {
-                printWriter = ((PrintWriter)(this.out));
-            }
-            else if(this.out instanceof OutputStream)
-            {
-                printWriter = new PrintWriter((OutputStream)(this.out));
-            }
-            else if(this.out instanceof Writer)
-            {
-                printWriter = new PrintWriter((Writer)(this.out));
-            }
-
-            if(printWriter != null)
-            {
-                logger = new Logger(printWriter);
-            }
-        }
-
+        Logger logger = SqlTag.getLogger(this.out);
         SqlPlus sqlPlus = new SqlPlus(this.connection, logger);
         sqlPlus.setHome(this.home);
 
-        try
+        if(this.encoding == null)
         {
-            if(this.encoding == null)
-            {
-                this.encoding = "UTF-8";
-            }
-
-            if(this.sql != null)
-            {
-                sqlPlus.execute(this.sql);
-            }
-            else if(this.file != null)
-            {
-                sqlPlus.execute(new File(this.home, this.file), this.encoding);
-            }
-            else
-            {
-                BodyContent bodyContent = this.getBodyContent();
-
-                if(bodyContent != null)
-                {
-                    String content = bodyContent.getString().trim();
-                    StringReader stringReader = new StringReader(content);
-                    sqlPlus.execute(stringReader, this.encoding);
-                }
-            }
+            this.encoding = "UTF-8";
         }
-        finally
+
+        if(this.sql != null)
         {
-            if(printWriter != null)
+            sqlPlus.execute(this.sql);
+        }
+        else if(this.file != null)
+        {
+            sqlPlus.execute(new File(this.home, this.file), this.encoding);
+        }
+        else
+        {
+            BodyContent bodyContent = this.getBodyContent();
+
+            if(bodyContent != null)
             {
-                printWriter.flush();
+                String content = bodyContent.getString().trim();
+                StringReader stringReader = new StringReader(content);
+                sqlPlus.execute(stringReader, this.encoding);
             }
         }
 
@@ -148,6 +112,55 @@ public class SqlTag extends BodyTagSupport
         }
 
         return connection;
+    }
+
+    /**
+     * @param out
+     * @return Logger
+     */
+    public static Logger getLogger(Object out)
+    {
+        if(out instanceof Logger)
+        {
+            return (Logger)(out);
+        }
+        else
+        {
+            PrintWriter printWriter = SqlTag.getPrintWriter(out);
+
+            if(printWriter != null)
+            {
+                return new Logger(printWriter);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param out
+     * @return PrintWriter
+     */
+    public static PrintWriter getPrintWriter(Object out)
+    {
+        if(out instanceof PrintWriter)
+        {
+            return ((PrintWriter)(out));
+        }
+        else if(out instanceof OutputStream)
+        {
+            return new PrintWriter((OutputStream)(out));
+        }
+        else if(out instanceof Writer)
+        {
+            return new PrintWriter((Writer)(out));
+        }
+        else if(out instanceof PageContext)
+        {
+            return new PrintWriter(((PageContext)out).getOut());
+        }
+
+        return null;
     }
 
     /**

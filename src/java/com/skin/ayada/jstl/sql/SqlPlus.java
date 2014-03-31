@@ -173,13 +173,13 @@ public class SqlPlus
 
                 if(command.startsWith("--"))
                 {
-                    this.log(line);
+                    this.log(text);
                     continue;
                 }
 
                 if(command.equals("remark"))
                 {
-                    this.log(line);
+                    this.log(text);
                     continue;
                 }
 
@@ -314,7 +314,7 @@ public class SqlPlus
 
         try
         {
-            this.log(sql);
+            this.log(sql.trim());
             statement = this.connection.createStatement();
             statement.executeUpdate(sql);
         }
