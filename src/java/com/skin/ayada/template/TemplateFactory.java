@@ -20,6 +20,7 @@ import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.jstl.TagLibraryFactory;
 import com.skin.ayada.source.SourceFactory;
 import com.skin.ayada.statement.Node;
+import com.skin.ayada.web.filter.TemplateFilter;
 
 /**
  * <p>Title: TemplateFactory</p>
@@ -32,6 +33,41 @@ public class TemplateFactory
 {
     private boolean ignoreJspTag = true;
     private static final Logger logger = LoggerFactory.getLogger(TemplateFactory.class);
+
+    /**
+     * @param className
+     * @return TemplateFactory
+     * @throws Exception 
+     */
+    public static TemplateFactory getTemplateFactory(String className) throws Exception
+    {
+        Class<?> clazz = null;
+
+        try
+        {
+            clazz = Thread.currentThread().getContextClassLoader().loadClass(className);
+        }
+        catch(Exception e)
+        {
+        }
+
+        if(clazz == null)
+        {
+            clazz = TemplateFilter.class.getClassLoader().loadClass(className);
+        }
+
+        if(clazz == null)
+        {
+            clazz = Class.forName(className);
+        }
+
+        if(clazz != null)
+        {
+            return (TemplateFactory)(clazz.newInstance());
+        }
+
+        throw new ClassNotFoundException(className + " not found !");
+    }
 
     /**
      * @param home

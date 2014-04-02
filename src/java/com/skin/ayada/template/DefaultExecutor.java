@@ -175,7 +175,26 @@ public class DefaultExecutor
 
                         if(flag == Tag.SKIP_PAGE)
                         {
-                            doFinally(statements, index);
+                            Statement s = getTryCatchFinallyStatement(statements, index);
+
+                            if(s != null)
+                            {
+                                statement = s;
+                                node = statement.getNode();
+                                TryCatchFinally tryCatchFinally = (TryCatchFinally)(statement.getTag());
+    
+                                if(tryCatchFinally != null)
+                                {
+                                    try
+                                    {
+                                        tryCatchFinally.doFinally();
+                                    }
+                                    catch(Throwable throwable)
+                                    {
+                                        throw new FinallyException(throwable);
+                                    }
+                                }
+                            }
                             break;
                         }
                     }
@@ -191,7 +210,26 @@ public class DefaultExecutor
 
                         if(flag == Tag.SKIP_PAGE)
                         {
-                            doFinally(statements, index);
+                            Statement s = getTryCatchFinallyStatement(statements, index);
+
+                            if(s != null)
+                            {
+                                statement = s;
+                                node = statement.getNode();
+                                TryCatchFinally tryCatchFinally = (TryCatchFinally)(statement.getTag());
+    
+                                if(tryCatchFinally != null)
+                                {
+                                    try
+                                    {
+                                        tryCatchFinally.doFinally();
+                                    }
+                                    catch(Throwable throwable)
+                                    {
+                                        throw new FinallyException(throwable);
+                                    }
+                                }
+                            }
                             break;
                         }
                     }
@@ -352,15 +390,16 @@ public class DefaultExecutor
      * @param index
      * @throws Exception
      */
-    public static void doFinally(final Statement[] statements, int index) throws Exception
+    public static int doFinally(final Statement[] statements, int index) throws FinallyException
     {
         Statement statement = getTryCatchFinallyStatement(statements, index);
 
         if(statement == null)
         {
-            return;
+            return -1;
         }
 
+        Node node = statement.getNode();
         TryCatchFinally tryCatchFinally = (TryCatchFinally)(statement.getTag());
 
         if(tryCatchFinally != null)
@@ -374,6 +413,8 @@ public class DefaultExecutor
                 throw new FinallyException(throwable);
             }
         }
+
+        return node.getOffset() + node.getLength();
     }
 
     /**

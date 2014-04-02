@@ -31,6 +31,8 @@ public class Main
     {
         String path = null;
         String encoding = "UTF-8";
+        String templateFactoryClassName = null;
+        System.out.println("args: " + Main.getArguments(args));
 
         if(args == null || args.length < 1)
         {
@@ -45,9 +47,14 @@ public class Main
                 encoding = args[1];
             }
 
+            if(args.length > 2)
+            {
+                templateFactoryClassName = args[2];
+            }
+
             try
             {
-                execute(path, encoding);
+                execute(path, encoding, templateFactoryClassName);
             }
             catch(Exception e)
             {
@@ -56,7 +63,7 @@ public class Main
         }
     }
 
-    public static void execute(String path, String encoding) throws Exception
+    public static void execute(String path, String encoding, String templateFactoryClassName) throws Exception
     {
         File file = new File(path);
 
@@ -75,13 +82,19 @@ public class Main
 
         File parent = file.getParentFile();
         TemplateContext templateContext = TemplateManager.getTemplateContext(parent.getAbsolutePath(), true);
+        TemplateFactory templateFactory = Main.getTemplateFactory(templateFactoryClassName, "work");
+
+        if(templateFactory != null)
+        {
+            templateContext.setTemplateFactory(templateFactory);
+        }
 
         /* CompactWriter compactWriter = new CompactWriter(stringWriter); */
         PrintWriter printWriter = new PrintWriter(System.out);
         PageContext pageContext = JspFactory.getPageContext(templateContext, printWriter);
         Template template = templateContext.getTemplate(file.getName());
 
-        System.out.println("===================== template =====================");
+        System.out.println("===================== " + template.getClass().getName() + " =====================");
         TemplateUtil.print(template);
 
         System.out.println("===================== result =====================");
@@ -89,6 +102,119 @@ public class Main
         template.execute(pageContext);
         long t4 = System.currentTimeMillis();
         System.out.println("run time: " + (t4 - t3));
+    }
+
+    /**
+     * @param templateFactoryClassName
+     * @param jspWork
+     * @return TemplateFactory
+     */
+    public static TemplateFactory getTemplateFactory(String templateFactoryClassName, String jspWork)
+    {
+        TemplateFactory templateFactory = null;
+
+        if(templateFactoryClassName != null)
+        {
+            try
+            {
+                templateFactory = TemplateFactory.getTemplateFactory(templateFactoryClassName);
+
+                if(templateFactory instanceof JspTemplateFactory)
+                {
+                    boolean ignoreJspTag = true;
+
+                    if(jspWork == null)
+                    {
+                        jspWork = "work";
+                    }
+
+                    String classPath = Main.getClassPath();
+                    System.out.println("CLASS_PATH: " + classPath);
+                    JspTemplateFactory jspTemplateFactory = (JspTemplateFactory)templateFactory;
+                    File work = new File(jspWork);
+                    jspTemplateFactory.setWork(work.getAbsolutePath());
+                    jspTemplateFactory.setClassPath(classPath);
+                    jspTemplateFactory.setIgnoreJspTag(ignoreJspTag);
+                }
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        return templateFactory;
+    }
+
+    /**
+     * @param servletContext
+     * @return String
+     */
+    public static String getClassPath()
+    {
+        String seperator = ";";
+        StringBuilder buffer = new StringBuilder();
+        File lib = new File("lib");
+
+        if(System.getProperty("os.name").indexOf("Windows") < 0)
+        {
+            seperator = ":";
+        }
+
+        if(lib.exists())
+        {
+            File[] files = lib.listFiles();
+
+            if(files != null && files.length > 0)
+            {
+                for(File file : files)
+                {
+                    buffer.append(file.getAbsolutePath());
+                    buffer.append(seperator);
+                }
+            }
+        }
+
+        File clazz = new File("build/classes");
+
+        if(clazz.exists() && clazz.isDirectory())
+        {
+            buffer.append(clazz.getAbsolutePath());
+            buffer.append(seperator);
+        }
+
+        if(buffer.length() > 0)
+        {
+            buffer.delete(buffer.length() - seperator.length(), buffer.length());
+        }
+
+        return buffer.toString();
+    }
+
+    /**
+     * @param args
+     * @return String
+     */
+    public static String getArguments(String[] args)
+    {
+        StringBuilder buffer = new StringBuilder();
+
+        if(args != null && args.length > 0)
+        {
+            for(int i = 0; i < args.length; i++)
+            {
+                buffer.append("\"");
+                buffer.append(args[i]);
+                buffer.append("\" ");
+            }
+
+            if(buffer.length() > 0)
+            {
+                buffer.deleteCharAt(buffer.length() - 1);
+            }
+        }
+
+        return buffer.toString();
     }
 
     public static void usage()

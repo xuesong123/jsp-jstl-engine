@@ -25,6 +25,8 @@ public class JspWriter extends Writer
     private Writer out;
     private int position;
     private char[] buffer;
+    private int bufferSize = 8192;
+    private boolean autoFlush = false;
     private static final char[] CRLF = new char[]{'\r', '\n'};
     private static final char[] NULL = new char[]{'n', 'u', 'l', 'l'};
 
@@ -33,21 +35,42 @@ public class JspWriter extends Writer
      */
     public JspWriter(Writer out)
     {
-        this(out, 4096);
+        this(out, 8192, false);
     }
 
     /**
      * @param out
+     * @param bufferSize
      */
     public JspWriter(Writer out, int bufferSize)
     {
+        this(out, bufferSize, false);
+    }
+
+    /**
+     * @param out
+     * @param bufferSize
+     * @param autoFlush
+     */
+    public JspWriter(Writer out, int bufferSize, boolean autoFlush)
+    {
         this.out = out;
+        this.bufferSize = bufferSize;
         this.buffer = new char[bufferSize];
+        this.autoFlush = autoFlush;
     }
 
     @Override
     public void write(char[] cbuf, int offset, int length) throws IOException
     {
+        if(this.autoFlush)
+        {
+            this.flush();
+            this.out.write(cbuf, offset, length);
+            this.out.flush();
+            return;
+        }
+
         if(length > this.buffer.length - this.position)
         {
             this.flush();
@@ -127,7 +150,7 @@ public class JspWriter extends Writer
     /**
      * @param value
      */
-    public void print(java.lang.Object value) throws IOException
+    public void print(Object value) throws IOException
     {
         if(value != null)
         {
@@ -142,7 +165,7 @@ public class JspWriter extends Writer
     /**
      * @param value
      */
-    public void print(java.lang.Object value, boolean nullable) throws IOException
+    public void print(Object value, boolean nullable) throws IOException
     {
         if(value != null)
         {
@@ -231,7 +254,7 @@ public class JspWriter extends Writer
     /**
      * @param value
      */
-    public void println(java.lang.Object value) throws IOException
+    public void println(Object value) throws IOException
     {
         if(value != null)
         {
@@ -248,7 +271,7 @@ public class JspWriter extends Writer
     /**
      * @param value
      */
-    public void println(java.lang.Object value, boolean nullable) throws IOException
+    public void println(Object value, boolean nullable) throws IOException
     {
         if(value != null)
         {
@@ -263,6 +286,14 @@ public class JspWriter extends Writer
         }
 
         this.write(CRLF, 0, 2);
+    }
+
+    /**
+     * @throws IOException
+     */
+    public void newLine() throws IOException
+    {
+        this.write(CRLF);
     }
 
     /**
@@ -281,6 +312,67 @@ public class JspWriter extends Writer
 
         this.write(CRLF, 0, 2);
     }
+    
+    /**
+     * @return int
+     */
+    public int getBufferSize()
+    {
+        return this.bufferSize;
+    }
+
+    /**
+     * @return int
+     */
+    public int getRemaining()
+    {
+        return this.bufferSize - this.position;
+    }
+
+    /**
+     * @param bufferSize the bufferSize to set
+     */
+    public void setBufferSize(int bufferSize)
+    {
+        try
+        {
+            this.flush();
+        }
+        catch(IOException e)
+        {
+        }
+
+        this.position = 0;
+        this.bufferSize = bufferSize;
+        this.buffer = new char[bufferSize];
+    }
+
+    /**
+     * @param autoFlush the autoFlush to set
+     */
+    public void setAutoFlush(boolean autoFlush)
+    {
+        this.autoFlush = autoFlush;
+
+        if(this.autoFlush)
+        {
+            try
+            {
+                this.flush();
+            }
+            catch(IOException e)
+            {
+            }
+        }
+    }
+
+    /**
+     * @return boolean
+     */
+    public boolean isAutoFlush()
+    {
+        return this.autoFlush;
+    }
 
     /**
      * @throws IOException
@@ -290,12 +382,23 @@ public class JspWriter extends Writer
         this.position = 0;
     }
 
+    /**
+     * @throws IOException
+     */
+    public void clearBuffer() throws IOException
+    {
+        this.position = 0;
+    }
+
     @Override
     public void flush() throws IOException
     {
-        this.out.write(this.buffer, 0, this.position);
-        this.position = 0;
-        this.out.flush();
+        if(this.position > 0)
+        {
+            this.out.write(this.buffer, 0, this.position);
+            this.position = 0;
+            this.out.flush();
+        }
     }
 
     @Override

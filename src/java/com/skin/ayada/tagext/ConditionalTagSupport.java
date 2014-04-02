@@ -57,4 +57,20 @@ public abstract class ConditionalTagSupport extends TagSupport
     {
         this.condition = condition;
     }
+
+    /**
+     * @return boolean
+     */
+    public static boolean getTrue()
+    {
+        return true;
+    }
+
+    /**
+     * @return boolean
+     */
+    public static boolean getFalse()
+    {
+        return false;
+    }
 }

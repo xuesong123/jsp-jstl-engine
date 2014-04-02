@@ -46,7 +46,16 @@ public class JspFactory
      */
     public static PageContext getPageContext(TemplateContext templateContext, Writer out)
     {
-        JspWriter jspWriter = new JspWriter(out);
+        return getPageContext(templateContext, out, 8192, false);
+    }
+
+    /**
+     * @param out
+     * @return PageContext
+     */
+    public static PageContext getPageContext(TemplateContext templateContext, Writer out, int buffserSize, boolean autoFlush)
+    {
+        JspWriter jspWriter = new JspWriter(out, buffserSize, autoFlush);
         DefaultPageContext pageContext = new DefaultPageContext(jspWriter);
         ExpressionContext expressionContext = ExpressionFactory.getExpressionContext(pageContext);
         TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();

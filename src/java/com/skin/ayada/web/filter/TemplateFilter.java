@@ -196,9 +196,9 @@ public class TemplateFilter implements Filter
             }
         }
 
-        File clazz = new File(servletContext.getRealPath("/WEB-INF/class"));
+        File clazz = new File(servletContext.getRealPath("/WEB-INF/classes"));
 
-        if(clazz.exists() && clazz.isFile())
+        if(clazz.exists() && clazz.isDirectory())
         {
             buffer.append(clazz.getAbsolutePath());
             buffer.append(seperator);
