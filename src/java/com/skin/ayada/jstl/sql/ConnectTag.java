@@ -67,6 +67,7 @@ public class ConnectTag extends TagSupport implements TryCatchFinally
         {
             return;
         }
+
         Jdbc.close(this.connection);
     }
 

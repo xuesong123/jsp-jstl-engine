@@ -47,9 +47,10 @@ public class NodeUtil
      */
     public static String getDescription(Node node)
     {
+        int nodeType = node.getNodeType();
         StringBuilder buffer = new StringBuilder();
 
-        if(node.getNodeType() == NodeType.TEXT)
+        if(nodeType == NodeType.TEXT)
         {
             buffer.append("<text>");
             buffer.append(node.getTextContent());
@@ -57,13 +58,13 @@ public class NodeUtil
             return buffer.toString();
         }
 
-        if(node.getNodeType() == NodeType.COMMENT)
+        if(nodeType == NodeType.COMMENT)
         {
             buffer.append(node.getTextContent());
             return buffer.toString();
         }
 
-        if(node.getNodeType() == NodeType.VARIABLE || node.getNodeType() == NodeType.EXPRESSION)
+        if(nodeType == NodeType.VARIABLE || nodeType == NodeType.EXPRESSION)
         {
             buffer.append("${");
             buffer.append(node.getTextContent());

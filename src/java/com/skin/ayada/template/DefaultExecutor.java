@@ -175,6 +175,7 @@ public class DefaultExecutor
 
                         if(flag == Tag.SKIP_PAGE)
                         {
+                            doFinally(statements, index);
                             break;
                         }
                     }
@@ -190,6 +191,7 @@ public class DefaultExecutor
 
                         if(flag == Tag.SKIP_PAGE)
                         {
+                            doFinally(statements, index);
                             break;
                         }
                     }
@@ -198,13 +200,7 @@ public class DefaultExecutor
                 {
                     if(throwable instanceof FinallyException)
                     {
-                        Throwable cause = throwable.getCause();
-
-                        if(cause != null)
-                        {
-                            throw cause;
-                        }
-                        throw throwable;
+                        throw throwable.getCause();
                     }
 
                     Statement s = getTryCatchFinallyStatement(statements, index);
@@ -349,6 +345,35 @@ public class DefaultExecutor
 
         tag.release();
         return flag;
+    }
+
+    /**
+     * @param statements
+     * @param index
+     * @throws Exception
+     */
+    public static void doFinally(final Statement[] statements, int index) throws Exception
+    {
+        Statement statement = getTryCatchFinallyStatement(statements, index);
+
+        if(statement == null)
+        {
+            return;
+        }
+
+        TryCatchFinally tryCatchFinally = (TryCatchFinally)(statement.getTag());
+
+        if(tryCatchFinally != null)
+        {
+            try
+            {
+                tryCatchFinally.doFinally();
+            }
+            catch(Throwable throwable)
+            {
+                throw new FinallyException(throwable);
+            }
+        }
     }
 
     /**

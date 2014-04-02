@@ -6,7 +6,7 @@ t:import: 编译指令
    bodyContent: jsp|tagdependent|empty
    如果是tagdependent, 那么该tag内部的所有文本节点和表达式节点都会被清除, 其子节点的内容不会清除(但是会根据子节点的bodyContent决定是否清除)
    如果是empty, 那么内部的任何节点都会被清除
-   如果是jsp, 则保持现有内容不便
+   如果是jsp, 则保持现有内容不变
    因此所有的引入操作最好放在文件头, 并且对同一个tag只引入一次
 
 3. className不是必选项, 可以为空, 如果为空则使用ayada-taglib-default.xml或者ayada-taglib.xml文件中配置的className, 因此下面的两种写法都是合法的
@@ -70,10 +70,10 @@ t:import: 编译指令
 </c:if>
 
 <sql:connect var="connection" url="${createDatabaseUrl}" driverClass="com.mysql.jdbc.Driver" userName="${userName}" password="${password}">
-<sql:execute out="${pageContext}">
-    drop database if exists mytest2;
-    create database mytest2 character set utf8;
-</sql:execute>
+    <sql:execute out="${pageContext}">
+        drop database if exists mytest2;
+        create database mytest2 character set utf8;
+    </sql:execute>
 </sql:connect>
 
 <sql:connect var="connection" url="${url}" driverClass="com.mysql.jdbc.Driver" userName="${userName}" password="${password}">

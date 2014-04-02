@@ -93,17 +93,7 @@ public class TemplateCompiler extends PageCompiler
         StringBuilder expression = new StringBuilder();
         List<Node> list = new ArrayList<Node>();
         this.stream = new StringStream(source.getSource());
-
-        while((i = this.stream.read()) != -1)
-        {
-            if(Character.isISOControl(i) || i == ' ')
-            {
-                continue;
-            }
-
-            this.stream.back();
-            break;
-        }
+        this.skipWhitespace();
 
         while((i = this.stream.read()) != -1)
         {
@@ -210,18 +200,19 @@ public class TemplateCompiler extends PageCompiler
             throw new Exception("Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node) + " not match !");
         }
 
-        long t3 = System.currentTimeMillis();
-        Template template = this.getTemplate(source, list, this.tagLibrary);
-        long t4 = System.currentTimeMillis();
-
         if(logger.isDebugEnabled())
         {
+            long t3 = System.currentTimeMillis();
+            Template template = this.getTemplate(source, list, this.tagLibrary);
+            long t4 = System.currentTimeMillis();
+
             logger.debug("getSource: " + (t2 - t1));
             logger.debug("compile time: " + (t3 - t2));
             logger.debug("create tagFactory: " + (t4 - t3));
+            return template;
         }
 
-        return template;
+        return this.getTemplate(source, list, this.tagLibrary);
     }
 
     /**

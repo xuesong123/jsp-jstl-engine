@@ -10,6 +10,10 @@
  */
 package com.skin.ayada.tagext;
 
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.Writer;
+
 import com.skin.ayada.runtime.PageContext;
 
 /**
@@ -53,17 +57,43 @@ public class TagSupport implements IterationTag
     }
 
     /**
+     * @param out
+     * @return PrintWriter
+     */
+    public static PrintWriter getPrintWriter(Object out)
+    {
+        if(out instanceof PrintWriter)
+        {
+            return ((PrintWriter)(out));
+        }
+        else if(out instanceof OutputStream)
+        {
+            return new PrintWriter((OutputStream)(out));
+        }
+        else if(out instanceof Writer)
+        {
+            return new PrintWriter((Writer)(out));
+        }
+        else if(out instanceof PageContext)
+        {
+            return new PrintWriter(((PageContext)out).getOut());
+        }
+
+        return null;
+    }
+
+    @Override
+    public void release()
+    {
+    }
+
+    /**
      * @return Tag
      */
     @Override
     public Tag getParent()
     {
         return this.parent;
-    }
-
-    @Override
-    public void release()
-    {
     }
 
     /**

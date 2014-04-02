@@ -92,14 +92,17 @@ public class JspCompiler
         writer.println("        JspWriter jspWriter = pageContext.getOut();");
         writer.println("        ExpressionContext expressionContext = pageContext.getExpressionContext();");
         writer.println();
+        
+        int nodeType = 0;
         String indent = null;
 
         for(int index = 0, size = list.size(); index < size; index++)
         {
             node = list.get(index);
             indent = this.getIndent(node);
+            nodeType = node.getNodeType();
 
-            if(node.getNodeType() == NodeType.TEXT)
+            if(nodeType == NodeType.TEXT)
             {
                 writer.println(indent + "/* TEXT: lineNumber: " + node.getLineNumber() + " */");
                 writer.println(indent + "out.write(\"" + StringUtil.escape(node.getTextContent()) + "\");");
@@ -111,7 +114,7 @@ public class JspCompiler
                 continue;
             }
 
-            if(node.getNodeType() == NodeType.VARIABLE)
+            if(nodeType == NodeType.VARIABLE)
             {
                 String textContent = node.getTextContent();
                 writer.println(indent + "/* VARIABLE: lineNumber: " + node.getLineNumber() + " */");
@@ -124,7 +127,7 @@ public class JspCompiler
                 continue;
             }
 
-            if(node.getNodeType() == NodeType.EXPRESSION)
+            if(nodeType == NodeType.EXPRESSION)
             {
                 String textContent = node.getTextContent();
                 writer.println(indent + "/* EXPRESSION: lineNumber: " + node.getLineNumber() + " */");

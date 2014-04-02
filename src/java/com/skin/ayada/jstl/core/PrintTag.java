@@ -11,9 +11,7 @@
 package com.skin.ayada.jstl.core;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.util.Iterator;
 
 import com.skin.ayada.jstl.util.BeanUtil;
@@ -49,22 +47,14 @@ public class PrintTag extends TagSupport
      */
     public static void print(PageContext pageContext, Object out, Object value) throws IOException
     {
-        Writer writer = null;
+        PrintWriter printWriter = TagSupport.getPrintWriter(out);
 
-        if(out == null)
+        if(printWriter == null)
         {
-            writer = pageContext.getOut();
-        }
-        else if(out instanceof Writer)
-        {
-            writer = ((Writer)out);
-        }
-        else if(out instanceof OutputStream)
-        {
-            writer = new PrintWriter((OutputStream)out);
+            printWriter = new PrintWriter(pageContext.getOut());
         }
 
-        if(writer != null)
+        if(printWriter != null)
         {
             if(value instanceof PageContext)
             {
@@ -78,19 +68,19 @@ public class PrintTag extends TagSupport
                     name = iterator.next();
                     bean = pc.getAttribute(name);
 
-                    writer.write((name != null ? name : "null"));
-                    writer.write(": ");
-                    writer.write((bean != null ? bean.toString() : "null"));
-                    writer.write("\r\n");
+                    printWriter.write((name != null ? name : "null"));
+                    printWriter.write(": ");
+                    printWriter.write((bean != null ? bean.toString() : "null"));
+                    printWriter.write("\r\n");
                 }
             }
             else
             {
-                writer.write(beanUtil.toString(value));
-                writer.write("\r\n");
+                printWriter.write(beanUtil.toString(value));
+                printWriter.write("\r\n");
             }
 
-            writer.flush();
+            printWriter.flush();
         }
     }
 

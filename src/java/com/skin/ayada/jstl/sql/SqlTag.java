@@ -11,13 +11,10 @@
 package com.skin.ayada.jstl.sql;
 
 import java.io.File;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
-import java.io.Writer;
 import java.sql.Connection;
 
-import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTag;
 import com.skin.ayada.tagext.BodyTagSupport;
@@ -126,38 +123,12 @@ public class SqlTag extends BodyTagSupport
         }
         else
         {
-            PrintWriter printWriter = SqlTag.getPrintWriter(out);
+            PrintWriter printWriter = TagSupport.getPrintWriter(out);
 
             if(printWriter != null)
             {
                 return new Logger(printWriter);
             }
-        }
-
-        return null;
-    }
-
-    /**
-     * @param out
-     * @return PrintWriter
-     */
-    public static PrintWriter getPrintWriter(Object out)
-    {
-        if(out instanceof PrintWriter)
-        {
-            return ((PrintWriter)(out));
-        }
-        else if(out instanceof OutputStream)
-        {
-            return new PrintWriter((OutputStream)(out));
-        }
-        else if(out instanceof Writer)
-        {
-            return new PrintWriter((Writer)(out));
-        }
-        else if(out instanceof PageContext)
-        {
-            return new PrintWriter(((PageContext)out).getOut());
         }
 
         return null;
