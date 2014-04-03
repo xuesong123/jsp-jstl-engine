@@ -121,14 +121,12 @@ public class SqlTag extends BodyTagSupport
         {
             return (Logger)(out);
         }
-        else
-        {
-            PrintWriter printWriter = TagSupport.getPrintWriter(out);
 
-            if(printWriter != null)
-            {
-                return new Logger(printWriter);
-            }
+        PrintWriter printWriter = TagSupport.getPrintWriter(out);
+
+        if(printWriter != null)
+        {
+            return new Logger(printWriter);
         }
 
         return null;

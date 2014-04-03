@@ -54,34 +54,31 @@ public class PrintTag extends TagSupport
             printWriter = new PrintWriter(pageContext.getOut());
         }
 
-        if(printWriter != null)
+        if(value instanceof PageContext)
         {
-            if(value instanceof PageContext)
-            {
-                String name = null;
-                Object bean = null;
-                PageContext pc = ((PageContext)value);
-                Iterator<String> iterator = pc.getAttributeNames();
+            String name = null;
+            Object bean = null;
+            PageContext pc = ((PageContext)value);
+            Iterator<String> iterator = pc.getAttributeNames();
 
-                while(iterator.hasNext())
-                {
-                    name = iterator.next();
-                    bean = pc.getAttribute(name);
-
-                    printWriter.write((name != null ? name : "null"));
-                    printWriter.write(": ");
-                    printWriter.write((bean != null ? bean.toString() : "null"));
-                    printWriter.write("\r\n");
-                }
-            }
-            else
+            while(iterator.hasNext())
             {
-                printWriter.write(beanUtil.toString(value));
+                name = iterator.next();
+                bean = pc.getAttribute(name);
+
+                printWriter.write((name != null ? name : "null"));
+                printWriter.write(": ");
+                printWriter.write((bean != null ? bean.toString() : "null"));
                 printWriter.write("\r\n");
             }
-
-            printWriter.flush();
         }
+        else
+        {
+            printWriter.write(beanUtil.toString(value));
+            printWriter.write("\r\n");
+        }
+
+        printWriter.flush();
     }
 
     /**

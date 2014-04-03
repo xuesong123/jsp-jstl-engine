@@ -20,7 +20,6 @@ import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.jstl.TagLibraryFactory;
 import com.skin.ayada.source.SourceFactory;
 import com.skin.ayada.statement.Node;
-import com.skin.ayada.web.filter.TemplateFilter;
 
 /**
  * <p>Title: TemplateFactory</p>
@@ -53,7 +52,7 @@ public class TemplateFactory
 
         if(clazz == null)
         {
-            clazz = TemplateFilter.class.getClassLoader().loadClass(className);
+            clazz = TemplateFactory.class.getClassLoader().loadClass(className);
         }
 
         if(clazz == null)

@@ -388,38 +388,6 @@ public class DefaultExecutor
     /**
      * @param statements
      * @param index
-     * @throws Exception
-     */
-    public static int doFinally(final Statement[] statements, int index) throws FinallyException
-    {
-        Statement statement = getTryCatchFinallyStatement(statements, index);
-
-        if(statement == null)
-        {
-            return -1;
-        }
-
-        Node node = statement.getNode();
-        TryCatchFinally tryCatchFinally = (TryCatchFinally)(statement.getTag());
-
-        if(tryCatchFinally != null)
-        {
-            try
-            {
-                tryCatchFinally.doFinally();
-            }
-            catch(Throwable throwable)
-            {
-                throw new FinallyException(throwable);
-            }
-        }
-
-        return node.getOffset() + node.getLength();
-    }
-
-    /**
-     * @param statements
-     * @param index
      * @return Tag
      */
     public static Statement getTryCatchFinallyStatement(final Statement[] statements, int index)
