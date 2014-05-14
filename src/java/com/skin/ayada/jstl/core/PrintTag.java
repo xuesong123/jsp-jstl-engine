@@ -28,7 +28,6 @@ import com.skin.ayada.tagext.TagSupport;
  */
 public class PrintTag extends TagSupport
 {
-    private static final long serialVersionUID = 3337947213732345725L;
     private static final BeanUtil beanUtil = new BeanUtil();
     private Object out;
     private Object value;

@@ -20,7 +20,6 @@ import java.util.Set;
  */
 public class TemplateConfig extends Config
 {
-    private static final long serialVersionUID = 1L;
     private static final TemplateConfig instance = TemplateConfig.create();
 
     public static TemplateConfig getInstance()

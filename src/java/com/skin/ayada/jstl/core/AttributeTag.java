@@ -25,7 +25,6 @@ import com.skin.ayada.tagext.Tag;
  */
 public class AttributeTag extends BodyTagSupport
 {
-    private static final long serialVersionUID = 3337947213732345725L;
     private String name;
     private Object value;
 

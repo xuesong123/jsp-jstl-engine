@@ -104,5 +104,15 @@ public class CompactWriter extends Writer
         {
             e.printStackTrace();
         }
+        finally
+        {
+        	try
+        	{
+				compactWriter.close();
+			}
+        	catch (IOException e)
+        	{
+			}
+        }
     }
 }

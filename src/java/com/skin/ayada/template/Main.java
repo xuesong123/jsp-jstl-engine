@@ -111,36 +111,43 @@ public class Main
      */
     public static TemplateFactory getTemplateFactory(String templateFactoryClassName, String jspWork)
     {
+        if(templateFactoryClassName == null)
+        {
+            return null;
+        }
+
+        if(templateFactoryClassName.trim().length() < 1)
+        {
+            return null;
+        }
+
         TemplateFactory templateFactory = null;
 
-        if(templateFactoryClassName != null)
+        try
         {
-            try
-            {
-                templateFactory = TemplateFactory.getTemplateFactory(templateFactoryClassName);
+            templateFactory = TemplateFactory.getTemplateFactory(templateFactoryClassName.trim());
 
-                if(templateFactory instanceof JspTemplateFactory)
+            if(templateFactory instanceof JspTemplateFactory)
+            {
+                boolean ignoreJspTag = true;
+
+                if(jspWork == null)
                 {
-                    boolean ignoreJspTag = true;
-
-                    if(jspWork == null)
-                    {
-                        jspWork = "work";
-                    }
-
-                    String classPath = Main.getClassPath();
-                    System.out.println("CLASS_PATH: " + classPath);
-                    JspTemplateFactory jspTemplateFactory = (JspTemplateFactory)templateFactory;
-                    File work = new File(jspWork);
-                    jspTemplateFactory.setWork(work.getAbsolutePath());
-                    jspTemplateFactory.setClassPath(classPath);
-                    jspTemplateFactory.setIgnoreJspTag(ignoreJspTag);
+                    jspWork = "work";
                 }
+
+                String classPath = Main.getClassPath();
+                System.out.println("CLASS_PATH: " + classPath);
+                JspTemplateFactory jspTemplateFactory = (JspTemplateFactory)templateFactory;
+                File work = new File(jspWork);
+                jspTemplateFactory.setWork(work.getAbsolutePath());
+                jspTemplateFactory.setClassPath(classPath);
+                jspTemplateFactory.setIgnoreJspTag(ignoreJspTag);
             }
-            catch(Exception e)
-            {
-                e.printStackTrace();
-            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
         }
 
         return templateFactory;

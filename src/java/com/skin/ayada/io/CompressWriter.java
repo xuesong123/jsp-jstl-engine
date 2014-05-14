@@ -92,18 +92,28 @@ public class CompressWriter extends Writer
     {
         String source = "\r\n\r\n\r\n\r\n    123\r\nabc\r\n\r\nedf\r\n\r\n\r\n        xyz";
         StringWriter stringWriter = new StringWriter();
-        CompressWriter compactWriter = new CompressWriter(stringWriter);
+        CompressWriter compressWriter = new CompressWriter(stringWriter);
 
         try
         {
-            compactWriter.write(source);
-            compactWriter.write(source);
-            compactWriter.flush();
+        	compressWriter.write(source);
+        	compressWriter.write(source);
+        	compressWriter.flush();
             System.out.println(StringUtil.escape(stringWriter.toString()));
         }
         catch(IOException e)
         {
             e.printStackTrace();
+        }
+        finally
+        {
+        	try
+        	{
+        		compressWriter.close();
+			}
+        	catch (IOException e)
+        	{
+			}
         }
     }
 }

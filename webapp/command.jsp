@@ -53,7 +53,7 @@ t:import: 编译指令
 <!-- use external connection -->
 <sql:connect var="connection2" connection="${myConnection}"></sql:connect>
 
-<c:if test="${1 == 1}">
+<c:if test="${1 == 2}">
     <c:set var="createDatabaseUrl" value="jdbc:mysql://10.3.254.97:3307?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&autoReconnection=true"/>
     <c:set var="url" value="jdbc:mysql://10.3.254.97:3307/mytest2?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&autoReconnection=true"/>
     <c:set var="driverClass" value="com.mysql.jdbc.Driver"/>
@@ -61,12 +61,12 @@ t:import: 编译指令
     <c:set var="password" value="bookAdmin"/>
 </c:if>
 
-<c:if test="${1 == 2}">
+<c:if test="${1 == 1}">
     <c:set var="createDatabaseUrl" value="jdbc:mysql://localhost:3306?user=root&password=1234&characterEncoding=utf8"/>
     <c:set var="url" value="jdbc:mysql://localhost:3306/mytest2?user=root&password=1234&characterEncoding=utf8"/>
     <c:set var="driverClass" value="com.mysql.jdbc.Driver"/>
-    <c:set var="userName" value=""/>
-    <c:set var="password" value=""/>
+    <c:set var="userName" value="root"/>
+    <c:set var="password" value="1234"/>
 </c:if>
 
 <sql:connect var="connection" url="${createDatabaseUrl}" driverClass="com.mysql.jdbc.Driver" userName="${userName}" password="${password}">

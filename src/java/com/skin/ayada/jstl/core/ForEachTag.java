@@ -45,7 +45,7 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
         {
             List<Integer> list = new ArrayList<Integer>();
 
-            for(int i = 0, j = this.getBegin(), end = this.getEnd(); j <= end; i++, j += this.getStep())
+            for(int j = this.getBegin(), end = this.getEnd(); j <= end; j += this.getStep())
             {
                 list.add(Integer.valueOf(j));
             }
@@ -133,7 +133,7 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
             int x = end.intValue();
             int k = (step != null ? step.intValue() : 1);
 
-            for(int i = 0, j = begin.intValue(); j <= x; i++, j += k)
+            for(int j = begin.intValue(); j <= x; j += k)
             {
                 list.add(Integer.valueOf(j));
             }
@@ -374,7 +374,7 @@ public class ForEachTag extends LoopTagSupport implements LoopTagStatus
         int iStep = 2;
         List<Integer> list = new ArrayList<Integer>();
 
-        for(int i = 0, j = iBegin, end = iEnd; j <= end; i++, j += iStep)
+        for(int j = iBegin, end = iEnd; j <= end; j += iStep)
         {
             list.add(Integer.valueOf(j));
         }

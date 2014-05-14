@@ -92,7 +92,7 @@ public class JspCompiler
         writer.println("        JspWriter jspWriter = pageContext.getOut();");
         writer.println("        ExpressionContext expressionContext = pageContext.getExpressionContext();");
         writer.println();
-        
+
         int nodeType = 0;
         String indent = null;
 

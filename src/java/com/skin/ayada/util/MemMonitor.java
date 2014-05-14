@@ -154,6 +154,7 @@ public class MemMonitor
                     out.println(buffer.toString());
                 }
             }
+            formatter.close();
             out.flush();
         }
     }

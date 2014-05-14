@@ -27,7 +27,6 @@ import com.skin.ayada.tagext.TagSupport;
  */
 public class ActionTag extends TagSupport implements ParameterTagSupport
 {
-    private static final long serialVersionUID = 1L;
     private String className;
     private String method;
     private String page;

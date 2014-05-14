@@ -23,7 +23,6 @@ import com.skin.ayada.tagext.TagSupport;
  */
 public class ScrollPage extends TagSupport
 {
-    private static final long serialVersionUID = 1L;
     private int pageNum;
     private int pageSize;
     private int count;
