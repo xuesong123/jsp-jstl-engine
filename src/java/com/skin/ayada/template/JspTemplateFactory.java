@@ -82,7 +82,7 @@ public class JspTemplateFactory extends TemplateFactory
     public JspTemplate compile(Template template, String work) throws Exception
     {
         String home = template.getHome();
-        String root = this.getRootPath(home);
+        String root = ""; // this.getRootPath(home);
         String path = this.join(root, template.getPath().trim());
         String className = this.getClassName(path);
         String simpleName = this.getSimpleName(className);
@@ -94,8 +94,8 @@ public class JspTemplateFactory extends TemplateFactory
             logger.debug("home: " + home + "\r\n"
                 + "root: " + root + "\r\n"
                 + "path: " + path + "\r\n"
+            	+ "className: " + className + "\r\n"
                 + "simpleName: " + simpleName + "\r\n"
-                + "className: " + className + "\r\n"
                 + "packageName: " + packageName + "\r\n"
                 + "classPath: " + classPath + "\r\n"
                 + "work: " + work + "\r\n");
