@@ -81,7 +81,7 @@ public class Main
         config.setValue("ayada.compile.source-pattern", "*");
 
         File parent = file.getParentFile();
-        TemplateContext templateContext = TemplateManager.getTemplateContext(parent.getAbsolutePath(), true);
+        TemplateContext templateContext = TemplateManager.getTemplateContext(parent.getCanonicalPath(), true);
         TemplateFactory templateFactory = Main.getTemplateFactory(templateFactoryClassName, "work");
 
         if(templateFactory != null)
@@ -89,7 +89,6 @@ public class Main
             templateContext.setTemplateFactory(templateFactory);
         }
 
-        /* CompactWriter compactWriter = new CompactWriter(stringWriter); */
         PrintWriter printWriter = new PrintWriter(System.out);
         PageContext pageContext = JspFactory.getPageContext(templateContext, printWriter);
         Template template = templateContext.getTemplate(file.getName());

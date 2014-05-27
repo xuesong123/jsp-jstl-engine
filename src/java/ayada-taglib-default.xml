@@ -104,6 +104,12 @@
         <description></description>
     </tag>
     <tag>
+        <name>c:buffer</name>
+        <tag-class>com.skin.ayada.jstl.core.BufferTag</tag-class>
+        <body-content>jsp</body-content>
+        <description></description>
+    </tag>
+    <tag>
         <name>c:bean</name>
         <tag-class>com.skin.ayada.jstl.core.BeanTag</tag-class>
         <body-content>tagdependent</body-content>
@@ -153,6 +159,12 @@
     </tag>
     <tag>
         <name>c:invoke</name>
+        <tag-class>com.skin.ayada.jstl.core.InvokeTag</tag-class>
+        <body-content>tagdependent</body-content>
+        <description></description>
+    </tag>
+    <tag>
+        <name>c:layout</name>
         <tag-class>com.skin.ayada.jstl.core.InvokeTag</tag-class>
         <body-content>tagdependent</body-content>
         <description></description>

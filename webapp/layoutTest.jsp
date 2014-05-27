@@ -1,4 +1,3 @@
-<t:import name="c:layout" className="com.skin.ayada.jstl.core.InvokeTag"/>
 <c:layout page="/tags/layout.jsp">
     <c:attribute name="title" value="base layout test"/>
     <c:attribute name="header">

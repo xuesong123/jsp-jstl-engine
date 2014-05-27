@@ -96,16 +96,17 @@ public class SqlTag extends BodyTagSupport
      */
     public static Connection getConnection(TagSupport tag)
     {
-        Connection connection = (Connection)(tag.getPageContext().getAttribute("connection"));
+        Connection connection = null;
+        Tag parent = tag.getParent();
+
+        if(parent instanceof ConnectTag)
+        {
+            connection = ((ConnectTag)parent).getConnection();
+        }
 
         if(connection == null)
         {
-            Tag parent = tag.getParent();
-
-            if(parent instanceof ConnectTag)
-            {
-                connection = ((ConnectTag)parent).getConnection();
-            }
+        	connection = (Connection)(tag.getPageContext().getAttribute("connection"));
         }
 
         return connection;
