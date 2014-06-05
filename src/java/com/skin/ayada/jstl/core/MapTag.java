@@ -111,7 +111,6 @@ public class MapTag extends TagSupport implements AttributeTagSupport, DynamicAt
             }
             else
             {
-
                 this.map.put(name, value);
             }
         }

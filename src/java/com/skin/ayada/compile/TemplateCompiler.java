@@ -74,6 +74,21 @@ public class TemplateCompiler extends PageCompiler
         Source source = this.getSourceFactory().getSource(path, encoding);
         long t2 = System.currentTimeMillis();
 
+        if(logger.isDebugEnabled())
+        {
+            logger.debug("load source: " + (t2 - t1));
+        }
+
+        return this.compile(source);
+    }
+
+    /**
+     * @param source
+     * @return Template
+     * @throws Exception
+     */
+    public Template compile(Source source) throws Exception
+    {
         if(source.getType() == Source.STATIC)
         {
             TextNode textNode = new TextNode();
@@ -88,6 +103,7 @@ public class TemplateCompiler extends PageCompiler
         }
 
         int i;
+        long t1 = System.currentTimeMillis();
         Stack<Node> stack = new Stack<Node>();
         StringBuilder buffer = new StringBuilder();
         StringBuilder expression = new StringBuilder();
@@ -202,13 +218,12 @@ public class TemplateCompiler extends PageCompiler
 
         if(logger.isDebugEnabled())
         {
-            long t3 = System.currentTimeMillis();
+            long t2 = System.currentTimeMillis();
             Template template = this.getTemplate(source, list, this.tagLibrary);
-            long t4 = System.currentTimeMillis();
+            long t3 = System.currentTimeMillis();
 
-            logger.debug("getSource: " + (t2 - t1));
-            logger.debug("compile time: " + (t3 - t2));
-            logger.debug("create tagFactory: " + (t4 - t3));
+            logger.debug("compile time: " + (t2 - t1));
+            logger.debug("create tagFactory: " + (t3 - t2));
             return template;
         }
 
@@ -851,13 +866,17 @@ public class TemplateCompiler extends PageCompiler
             throw new Exception("t:include error: file must be starts with '/'");
         }
 
-        String encoding = (charset != null ? charset : "UTF-8");
-
         int index = list.size();
         Node parent = stack.peek();
+        String encoding = (charset != null ? charset : "UTF-8");
         Source source = this.getSourceFactory().getSource(path, encoding);
+        int sourceType = Source.valueOf(type, source.getType());
 
-        if(source.getType() == Source.STATIC || (type != null && type.equals("static")))
+        System.out.println("type: " + type);
+        System.out.println("sourceType: " + sourceType);
+        System.out.println("source: " + source.getSource());
+
+        if(sourceType == Source.STATIC)
         {
             TextNode textNode = new TextNode();
             textNode.setLineNumber(this.lineNumber);
@@ -869,11 +888,12 @@ public class TemplateCompiler extends PageCompiler
             return;
         }
 
+        source.setType(sourceType);
         TemplateCompiler compiler = new TemplateCompiler(this.sourceFactory);
         compiler.setTagLibrary(this.getTagLibrary());
         compiler.setIgnoreJspTag(this.getIgnoreJspTag());
 
-        Template template = compiler.compile(path, encoding);
+        Template template = compiler.compile(source);
         List<Node> nodes = template.getNodes();
 
         for(Node node : nodes)

@@ -28,7 +28,7 @@
 <p>myDouble: 2.3</p>
 <p>myLong: 5</p>
 <p>myString: Hello</p>
-[]
+[1, 2, 3, 4]
 <p>
 {1=test1, 2=test2, 3=test3}
 </p>

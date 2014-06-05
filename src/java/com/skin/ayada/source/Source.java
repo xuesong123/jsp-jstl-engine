@@ -45,6 +45,30 @@ public class Source
     }
 
     /**
+     * @param type
+     * @return int
+     */
+    public static int valueOf(String type, int defaultValue)
+    {
+        if(type == null)
+        {
+        	return defaultValue;
+        }
+        else if(type.equalsIgnoreCase("static"))
+        {
+        	return Source.STATIC;
+        }
+        else if(type.equalsIgnoreCase("script"))
+        {
+        	return Source.SCRIPT;
+        }
+        else
+        {
+        	return defaultValue;
+        }
+    }
+
+    /**
      * @param home the home to set
      */
     public void setHome(String home)

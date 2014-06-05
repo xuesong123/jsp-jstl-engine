@@ -1,12 +1,6 @@
 <c:list name="myList">
-    <c:map test1="test1" test2="test2"/>
-    <c:map test1="test1" test2="test2"/>
+    <c:element index="0" value="123"/>
+    <c:element index="1" value="234"/>
+    <c:element index="2" value="456"/>
 </c:list>
-
-<c:forEach items="${myList}" var="myObj" varStatus="status">
-<p>myObj=${status.index}: ${myObj.test1}</p>
-</c:forEach>
-
-<c:forEach items="${myList}" var="myObj" varStatus="status">
-<p>myObj=${status.index}: ${myObj.test1}</p>
-</c:forEach>
+${myList}

@@ -1,0 +1,1 @@
+<t:include file="/include/script.html" type="script" encoding="UTF-8"/>

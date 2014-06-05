@@ -13,6 +13,7 @@ package com.skin.ayada.jstl.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.skin.ayada.tagext.AttributeTagSupport;
 import com.skin.ayada.tagext.ElementTagSupport;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.tagext.TagSupport;
@@ -33,14 +34,37 @@ public class ListTag extends TagSupport implements ElementTagSupport
     {
         super.doStartTag();
 
-        if(this.name == null)
+        if(this.list == null)
         {
-            return Tag.SKIP_BODY;
+            this.list = new ArrayList<Object>();
         }
 
-        this.list = new ArrayList<Object>();
-        this.pageContext.setAttribute(this.name, this.list);
-        return Tag.EVAL_BODY_INCLUDE;
+        Tag parent = this.getParent();
+
+        if(parent instanceof AttributeTagSupport)
+        {
+            if(this.name != null)
+            {
+                AttributeTagSupport tag = (AttributeTagSupport)(parent);
+                tag.setAttribute(this.name, this.list);
+                return Tag.EVAL_BODY_INCLUDE;
+            }
+            return Tag.SKIP_BODY;
+        }
+        else if(parent instanceof ElementTagSupport)
+        {
+            ElementTagSupport tag = (ElementTagSupport)(parent);
+            tag.addElement(this.list);
+            return Tag.EVAL_BODY_INCLUDE;
+        }
+
+        if(this.name != null)
+        {
+            this.pageContext.setAttribute(this.name, this.list);
+            return Tag.EVAL_BODY_INCLUDE;
+        }
+
+        return Tag.SKIP_BODY;
     }
 
     /**
@@ -62,6 +86,10 @@ public class ListTag extends TagSupport implements ElementTagSupport
         if(index >= 0 && index < this.list.size())
         {
             this.list.set(index, value);
+        }
+        else
+        {
+        	this.list.add(value);
         }
     }
 

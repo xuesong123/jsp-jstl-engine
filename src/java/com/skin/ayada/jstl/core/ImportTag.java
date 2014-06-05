@@ -30,7 +30,7 @@ public class ImportTag extends TagSupport
     @Override
     public int doStartTag()
     {
-        this.pageContext.getTagLibrary().setup(this.name, this.className);
+        this.pageContext.getTagLibrary().setup(this.name, this.className, this.bodyContent, this.description);
         return Tag.SKIP_BODY;
     }
 
