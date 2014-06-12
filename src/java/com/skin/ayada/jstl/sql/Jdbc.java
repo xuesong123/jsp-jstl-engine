@@ -1,7 +1,7 @@
 /*
  * $RCSfile: Jdbc.java,v $$
  * $Revision: 1.1 $
- * $Date: 2014-3-25 $
+ * $Date: 2014-03-25 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *

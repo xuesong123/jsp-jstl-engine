@@ -1,7 +1,7 @@
 /*
  * $RCSfile: StringUtil.java,v $$
- * $Revision: 1.1  $
- * $Date: 2013-3-2  $
+ * $Revision: 1.1 $
+ * $Date: 2013-3-2 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *

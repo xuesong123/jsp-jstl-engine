@@ -41,6 +41,8 @@
         <c:property name="pageContext" value="${pageContext}"/>
     </c:bean>
 
+    <c:out><p>#########################</p>${"\r\n"}</c:out>
+
     <c:execute value="${testTag1.print()}"/>
     <c:execute value="${testTag2.print()}"/>
     <c:execute value="${testTag3.print()}"/>
@@ -72,12 +74,12 @@
         </c:map>
         <c:execute value="${userList.add(user)}"/>
     </c:forEach>
-    <c:print value="${userList}"/>
+    <c:out>userList: </c:out><c:print value="${userList}"/>
 
     <c:forEach items="1, 2, 3, 4, 5" var="num">
         <c:map name="user" userName="${num}_test_${num}"/>
         <c:execute value="${userList.add(user)}"/>
     </c:forEach>
-    <c:print value="${userList}"/>
+    <c:out>userList: </c:out><c:print value="${userList}"/>
 </c:xml>
 <c:exit/>

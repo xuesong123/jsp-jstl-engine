@@ -1,7 +1,7 @@
 /*
  * $RCSfile: BufferTag.java,v $$
  * $Revision: 1.1 $
- * $Date: 2014-2-19 $
+ * $Date: 2014-02-19 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *

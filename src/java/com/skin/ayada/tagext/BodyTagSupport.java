@@ -1,7 +1,7 @@
 /*
  * $RCSfile: BodyTagSupport.java,v $$
- * $Revision: 1.1  $
- * $Date: 2013-2-19  $
+ * $Revision: 1.1 $
+ * $Date: 2013-2-19 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -21,7 +21,7 @@ import com.skin.ayada.runtime.JspWriter;
  */
 public class BodyTagSupport extends TagSupport implements BodyTag
 {
-    private BodyContent bodyContent;
+    protected BodyContent bodyContent;
 
     @Override
     public int doStartTag() throws Exception

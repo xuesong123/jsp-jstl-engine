@@ -1,7 +1,7 @@
 /*
  * $RCSfile: JspFactory.java,v $$
- * $Revision: 1.1  $
- * $Date: 2013-2-19  $
+ * $Revision: 1.1 $
+ * $Date: 2013-2-19 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -31,13 +31,7 @@ public class JspFactory
      */
     public static PageContext getPageContext(Writer out)
     {
-        JspWriter jspWriter = new JspWriter(out);
-        DefaultPageContext pageContext = new DefaultPageContext(jspWriter);
-        ExpressionContext expressionContext = ExpressionFactory.getExpressionContext(pageContext);
-        TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();
-        pageContext.setExpressionContext(expressionContext);
-        pageContext.setTagLibrary(tagLibrary);
-        return pageContext;
+        return getPageContext(null, out, 8192, false);
     }
 
     /**

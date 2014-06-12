@@ -1,7 +1,7 @@
 /*
  * $RCSfile: PageContext.java,v $$
- * $Revision: 1.1  $
- * $Date: 2013-2-19  $
+ * $Revision: 1.1 $
+ * $Date: 2013-2-19 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -12,9 +12,12 @@ package com.skin.ayada.runtime;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import com.skin.ayada.jstl.TagLibrary;
+import com.skin.ayada.jstl.fmt.LocalizationContext;
 import com.skin.ayada.tagext.BodyContent;
 
 /**
@@ -26,6 +29,10 @@ import com.skin.ayada.tagext.BodyContent;
  */
 public interface PageContext
 {
+    public static final String LOCALE_KEY = "com.skin.ayada.locale";
+    public static final String TIMEZONE_KEY = "com.skin.ayada.time-zone";
+    public static final String BUNDLE_KEY = "com.skin.ayada.bundle";
+    
     /**
      * @param out the out to set
      */
@@ -57,6 +64,59 @@ public interface PageContext
      * @return Iterator<String>
      */
     public Iterator<String> getAttributeNames();
+    
+    /**
+     * @return TimeZone
+     */
+    public void setTimeZone(TimeZone timeZone);
+    
+    /**
+     * @return TimeZone
+     */
+    public TimeZone getTimeZone();
+
+    /**
+     * @return Locale
+     */
+    public void setLocale(Locale locale);
+
+    /**
+     * @return Locale
+     */
+    public Locale getLocale();
+
+    /**
+     * @param value
+     * @param variant
+     * @return Locale
+     */
+    public Locale getLocale(String value, String variant);
+    
+    /**
+     * @param bundle
+     */
+    public void setBundle(LocalizationContext bundle);
+
+    /**
+     * @return LocalizationContext
+     */
+    public LocalizationContext getBundle();
+
+    /**
+     * @param basename
+     * @param key
+     * @param args
+     * @return String
+     */
+    public String getLocalizedMessage(String basename, String key, Object[] args);
+
+    /**
+     * @param localizationContext
+     * @param key
+     * @param args
+     * @return String
+     */
+    public String getLocalizedMessage(LocalizationContext localizationContext, String key, Object[] args);
 
     /**
      * @param expressionContext

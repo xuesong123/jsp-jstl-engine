@@ -15,6 +15,7 @@ import java.io.StringWriter;
 import com.skin.ayada.jstl.core.ForEachTag;
 import com.skin.ayada.runtime.JspFactory;
 import com.skin.ayada.runtime.PageContext;
+import com.skin.ayada.tagext.LoopTagStatus;
 import com.skin.ayada.tagext.Tag;
 
 /**
@@ -63,7 +64,9 @@ public class ForEachTagTest
         forEachTag.setPageContext(pageContext);
         forEachTag.setItems("1, 2, 3");
         int flag = forEachTag.doStartTag();
-        System.out.println("index: " + forEachTag.getIndex());
+
+        LoopTagStatus loopTagStatus = forEachTag.getLoopStatus();
+        System.out.println("index: " + loopTagStatus.getIndex());
         System.out.println("flag: " + flag);
 
         while(forEachTag.hasNext())

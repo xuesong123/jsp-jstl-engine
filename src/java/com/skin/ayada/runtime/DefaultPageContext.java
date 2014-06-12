@@ -1,7 +1,7 @@
 /*
  * $RCSfile: DefaultPageContext.java,v $$
- * $Revision: 1.1  $
- * $Date: 2013-2-19  $
+ * $Revision: 1.1 $
+ * $Date: 2013-2-19 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -11,11 +11,17 @@
 package com.skin.ayada.runtime;
 
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.TimeZone;
 
+import com.skin.ayada.config.TemplateConfig;
 import com.skin.ayada.jstl.TagLibrary;
+import com.skin.ayada.jstl.fmt.LocalizationContext;
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.template.TemplateContext;
 
@@ -47,6 +53,8 @@ public class DefaultPageContext implements PageContext
         this.out = out;
         this.attributes = new HashMap<String, Object>();
         this.setAttribute("pageContext", this);
+        this.setAttribute(PageContext.LOCALE_KEY, TemplateConfig.getInstance().getString("ayada.locale"));
+        this.setAttribute(PageContext.TIMEZONE_KEY, TemplateConfig.getInstance().getString("ayada.time-zone"));
     }
 
     /**
@@ -106,6 +114,194 @@ public class DefaultPageContext implements PageContext
     public Object removeAttribute(String key)
     {
         return this.attributes.remove(key);
+    }
+
+    /**
+     * @return TimeZone
+     */
+    public void setTimeZone(TimeZone timeZone)
+    {
+    	this.setAttribute(PageContext.LOCALE_KEY, timeZone);
+    }
+
+    /**
+     * @return TimeZone
+     */
+    public TimeZone getTimeZone()
+    {
+    	Object value = this.getAttribute(PageContext.TIMEZONE_KEY);
+
+        if((value instanceof TimeZone))
+        {
+            return (TimeZone)value;
+        }
+
+        if((value instanceof String))
+        {
+            return TimeZone.getTimeZone((String)value);
+        }
+
+        return null;
+    }
+
+    /**
+     * @return Locale
+     */
+    public void setLocale(Locale locale)
+    {
+    	this.setAttribute(PageContext.LOCALE_KEY, locale);
+    }
+
+    /**
+     * @return Locale
+     */
+    public Locale getLocale()
+    {
+        Object value = this.getAttribute(PageContext.LOCALE_KEY);
+    	
+        if((value instanceof Locale))
+        {
+            return (Locale)value;
+        }
+
+        if((value instanceof String))
+        {
+            return this.getLocale((String)value, null);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param value
+     * @param variant
+     * @return Local
+     */
+    public Locale getLocale(String value, String variant)
+    {
+        int i = 0;
+        char ch = '\000';
+        int length = value.length();
+        StringBuilder buffer = new StringBuilder();
+
+        for(; i < length; i++)
+        {
+            ch = value.charAt(i);
+
+            if(ch != '_' && ch != '-')
+            {
+                buffer.append(ch);
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        String language = buffer.toString();
+        String country = "";
+
+        if((ch == '_') || (ch == '-'))
+        {
+            buffer.setLength(0);
+
+            for(i++; i < length; i++)
+            {
+                ch = value.charAt(i);
+
+                if(ch != '_' && ch != '-')
+                {
+                    buffer.append(ch);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            country = buffer.toString();
+        }
+
+        if(variant != null && variant.length() > 0)
+        {
+            return new Locale(language, country, variant);
+        }
+
+        return new Locale(language, country);
+    }
+
+    /**
+     * @param bundle
+     */
+    public void setBundle(LocalizationContext bundle)
+    {
+        this.setAttribute(PageContext.BUNDLE_KEY, bundle);
+    }
+
+    /**
+     * @return LocalizationContext
+     */
+    public LocalizationContext getBundle()
+    {
+        return (LocalizationContext)(this.getAttribute(PageContext.BUNDLE_KEY));
+    }
+
+    /**
+     * @param basename
+     * @param key
+     * @param args
+     * @return String
+     */
+    public String getLocalizedMessage(String basename, String key, Object[] args)
+    {
+        LocalizationContext localizationContext = this.getBundle();
+        return this.getLocalizedMessage(localizationContext, key, args);
+    }
+
+    /**
+     * @param localizationContext
+     * @param key
+     * @param args
+     * @return String
+     */
+    public String getLocalizedMessage(LocalizationContext localizationContext, String key, Object[] args)
+    {
+        String result = null;
+        ResourceBundle bundle = localizationContext.getResourceBundle();
+        Locale locale = localizationContext.getLocale();
+
+        if(bundle != null)
+        {
+            try
+            {
+                result = bundle.getString(key);
+            }
+            catch(Exception e)
+            {
+            }
+        }
+
+        if(result == null)
+        {
+            return "???" + key + "???";
+        }
+
+        if((args == null) || (args.length == 0))
+        {
+            return result;
+        }
+
+        if(locale == null)
+        {
+            locale = this.getLocale();
+        }
+
+        if(locale != null)
+        {
+            return new MessageFormat(result, locale).format(args);
+        }
+
+        return new MessageFormat(result).format(args);
     }
 
     /**

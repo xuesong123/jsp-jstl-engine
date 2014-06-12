@@ -89,6 +89,9 @@ public class Main
             templateContext.setTemplateFactory(templateFactory);
         }
 
+        templateContext.getTemplateFactory().setIgnoreJspTag(false);
+        templateContext.getSourceFactory().setSourcePattern("*");
+
         PrintWriter printWriter = new PrintWriter(System.out);
         PageContext pageContext = JspFactory.getPageContext(templateContext, printWriter);
         Template template = templateContext.getTemplate(file.getName());
@@ -128,8 +131,6 @@ public class Main
 
             if(templateFactory instanceof JspTemplateFactory)
             {
-                boolean ignoreJspTag = true;
-
                 if(jspWork == null)
                 {
                     jspWork = "work";
@@ -141,7 +142,7 @@ public class Main
                 File work = new File(jspWork);
                 jspTemplateFactory.setWork(work.getAbsolutePath());
                 jspTemplateFactory.setClassPath(classPath);
-                jspTemplateFactory.setIgnoreJspTag(ignoreJspTag);
+                jspTemplateFactory.setIgnoreJspTag(false);
             }
         }
         catch(Exception e)

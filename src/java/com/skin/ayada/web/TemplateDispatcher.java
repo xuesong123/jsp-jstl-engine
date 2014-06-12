@@ -1,7 +1,7 @@
 /*
  * $RCSfile: TemplateDispatcher.java,v $$
- * $Revision: 1.1  $
- * $Date: 2013-3-10  $
+ * $Revision: 1.1 $
+ * $Date: 2013-3-10 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -24,7 +24,9 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.skin.ayada.config.TemplateConfig;
 import com.skin.ayada.runtime.ExpressionFactory;
+import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.template.Template;
 import com.skin.ayada.template.TemplateContext;
 
@@ -78,7 +80,7 @@ public class TemplateDispatcher
         ServletContext servletContext = getServletContext(session, request);
         Map<String, Object> context = new HashMap<String, Object>();
 
-        // priority: request > session > servletContext 
+        // priority: request > session > servletContext
         if(servletContext != null)
         {
             context.put("servletContext", servletContext);
@@ -86,6 +88,29 @@ public class TemplateDispatcher
             if(request.getAttribute("TemplateFilter$servletContext") == null)
             {
                 request.setAttribute("TemplateFilter$servletContext", servletContext);
+            }
+
+            String locale = servletContext.getInitParameter("javax.servlet.jsp.jstl.fmt.locale");
+            String timeZone = servletContext.getInitParameter("javax.servlet.jsp.jstl.fmt.timeZone");
+
+            if(locale == null)
+            {
+                locale = TemplateConfig.getInstance().getString("ayada.locale");
+            }
+
+            if(locale != null)
+            {
+                context.put(PageContext.LOCALE_KEY, locale);
+            }
+
+            if(timeZone == null)
+            {
+                timeZone = TemplateConfig.getInstance().getString("ayada.time-zone");
+            }
+
+            if(timeZone != null)
+            {
+                context.put(PageContext.TIMEZONE_KEY, timeZone);
             }
 
             TemplateDispatcher.setAttributes(servletContext, context);

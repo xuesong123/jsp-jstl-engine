@@ -1,7 +1,7 @@
 /*
  * $RCSfile: CompressWriter.java,v $$
- * $Revision: 1.1  $
- * $Date: 2013-11-17  $
+ * $Revision: 1.1 $
+ * $Date: 2013-11-17 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *

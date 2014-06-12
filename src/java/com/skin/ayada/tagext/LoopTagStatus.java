@@ -1,7 +1,7 @@
 /*
  * $RCSfile: LoopTagStatus.java,v $$
- * $Revision: 1.1  $
- * $Date: 2013-2-19  $
+ * $Revision: 1.1 $
+ * $Date: 2013-2-19 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -22,7 +22,7 @@ public interface LoopTagStatus
     /**
      * @return int
      */
-    public int getBegin();
+    public Integer getBegin();
 
     /**
      * @return int
@@ -37,7 +37,7 @@ public interface LoopTagStatus
     /**
      * @return int
      */
-    public int getEnd();
+    public Integer getEnd();
 
     /**
      * @return int
@@ -47,7 +47,7 @@ public interface LoopTagStatus
     /**
      * @return int
      */
-    public int getStep();
+    public Integer getStep();
 
     /**
      * @return boolean

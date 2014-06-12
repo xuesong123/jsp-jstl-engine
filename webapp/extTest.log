@@ -1,4 +1,5 @@
-<p>3 - Hello World!</p><p>---------------- com.skin.ayada.jstl.core.TestTag ----------------</p>
+<p>3 - Hello World!</p><p>#########################</p>
+<p>---------------- com.skin.ayada.jstl.core.TestTag ----------------</p>
 <p>myBoolean: false</p>
 <p>myChar: c</p>
 <p>myByte: 2</p>
@@ -52,7 +53,7 @@
         
             
         
-            [{userName=test_1, nickName=test_1}, {userName=test_2, nickName=test_2}, {userName=test_3, nickName=test_3}, {userName=test_4, nickName=test_4}, {userName=test_5, nickName=test_5}]
+            userList: [{userName=test_1, nickName=test_1}, {userName=test_ 2, nickName=test_ 2}, {userName=test_ 3, nickName=test_ 3}, {userName=test_ 4, nickName=test_ 4}, {userName=test_ 5, nickName=test_ 5}]
 
         
             
@@ -63,4 +64,4 @@
         
             
         
-            [{userName=test_1, nickName=test_1}, {userName=test_2, nickName=test_2}, {userName=test_3, nickName=test_3}, {userName=test_4, nickName=test_4}, {userName=test_5, nickName=test_5}, {userName=1_test_1}, {userName=2_test_2}, {userName=3_test_3}, {userName=4_test_4}, {userName=5_test_5}]
+            userList: [{userName=test_1, nickName=test_1}, {userName=test_ 2, nickName=test_ 2}, {userName=test_ 3, nickName=test_ 3}, {userName=test_ 4, nickName=test_ 4}, {userName=test_ 5, nickName=test_ 5}, {userName=1_test_1}, {userName= 2_test_ 2}, {userName= 3_test_ 3}, {userName= 4_test_ 4}, {userName= 5_test_ 5}]

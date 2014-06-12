@@ -1,7 +1,7 @@
 /*
  * $RCSfile: DateUtil.java,v $$
- * $Revision: 1.1  $
- * $Date: 2013-2-16  $
+ * $Revision: 1.1 $
+ * $Date: 2013-2-16 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -48,6 +48,17 @@ public class DateUtil
         }
 
         return null;
+    }
+
+    /**
+     * @param timeMillis
+     * @param pattern
+     * @return String
+     */
+    public static String format(long timeMillis, String pattern)
+    {
+        DateFormat dateFormat = new SimpleDateFormat(pattern);
+        return dateFormat.format(new Date(timeMillis));
     }
 
     /**

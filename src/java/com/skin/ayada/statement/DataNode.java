@@ -1,7 +1,7 @@
 /*
  * $RCSfile: DataNode.java,v $$
- * $Revision: 1.1  $
- * $Date: 2012-7-6  $
+ * $Revision: 1.1 $
+ * $Date: 2012-7-6 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *

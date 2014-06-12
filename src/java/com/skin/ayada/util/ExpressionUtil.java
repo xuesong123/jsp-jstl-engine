@@ -1,7 +1,7 @@
 /*
  * $RCSfile: ExpressionUtil.java,v $$
- * $Revision: 1.1  $
- * $Date: 2013-11-10  $
+ * $Revision: 1.1 $
+ * $Date: 2013-11-10 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -180,7 +180,18 @@ public class ExpressionUtil
     public static Object evaluate(ExpressionContext expressionContext, String expresion, Class<?> resultType)
     {
         Object value = evaluate(expressionContext, expresion);
-        return ClassUtil.cast(value, resultType);
+
+        if(resultType != String.class && value instanceof String)
+        {
+            value = getValue((String)value);
+        }
+
+        if(resultType != null)
+        {
+            return ClassUtil.cast(value, resultType);
+        }
+
+        return value;
     }
 
     /**
@@ -188,7 +199,7 @@ public class ExpressionUtil
      * @param expresion
      * @return Object
      */
-    public static Object evaluate(ExpressionContext expressionContext, String expresion)
+    private static Object evaluate(ExpressionContext expressionContext, String expresion)
     {
         if(expresion == null)
         {
@@ -207,8 +218,8 @@ public class ExpressionUtil
                 {
                     return expressionContext.getValue(node.getTextContent());
                 }
-                Object value = getValue(node.getTextContent());
-                return (value != null ? value : node.getTextContent());
+
+                return node.getTextContent();
             }
             Object value = null;
             StringBuilder buffer = new StringBuilder();

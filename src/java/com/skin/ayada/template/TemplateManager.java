@@ -1,7 +1,7 @@
 /*
  * $RCSfile: TemplateManager.java,v $$
- * $Revision: 1.1  $
- * $Date: 2013-3-10  $
+ * $Revision: 1.1 $
+ * $Date: 2013-3-10 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *

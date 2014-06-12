@@ -1,7 +1,7 @@
 /*
  * $RCSfile: DomainConfigFactory.java,v $$
- * $Revision: 1.1  $
- * $Date: 2009-7-14  $
+ * $Revision: 1.1 $
+ * $Date: 2009-7-14 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *

@@ -1,7 +1,7 @@
 /*
  * $RCSfile: DateFormatTag.java,v $$
- * $Revision: 1.1  $
- * $Date: 2013-2-26  $
+ * $Revision: 1.1 $
+ * $Date: 2013-2-26 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -118,11 +118,11 @@ public class DateFormatTag extends TagSupport
 
         if(format != null)
         {
-            TimeZone timeZone = getTimeZone(this.timeZone);
+            TimeZone timeZone = this.getTimeZone(this.timeZone);
 
             if(timeZone == null)
             {
-                timeZone = this.getTimeZone(this.pageContext.getAttribute("javax.servlet.jsp.jstl.fmt.timeZone"));
+                timeZone = this.pageContext.getTimeZone();
             }
 
             if(timeZone != null)

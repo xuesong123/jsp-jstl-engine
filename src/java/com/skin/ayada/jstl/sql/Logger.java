@@ -1,7 +1,7 @@
 /*
  * $RCSfile: Logger.java,v $$
  * $Revision: 1.1 $
- * $Date: 2014-3-24 $
+ * $Date: 2014-03-24 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *

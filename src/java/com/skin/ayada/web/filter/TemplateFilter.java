@@ -1,7 +1,7 @@
 /*
  * $RCSfile: TemplateFilter.java,v $$
- * $Revision: 1.1  $
- * $Date: 2013-2-27  $
+ * $Revision: 1.1 $
+ * $Date: 2013-2-27 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -27,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.skin.ayada.config.TemplateConfig;
-import com.skin.ayada.runtime.ExpressionFactory;
 import com.skin.ayada.template.JspTemplateFactory;
 import com.skin.ayada.template.TemplateContext;
 import com.skin.ayada.template.TemplateFactory;
@@ -137,8 +136,6 @@ public class TemplateFilter implements Filter
         {
             this.templateContext.setSourcePattern(sourcePattern);
         }
-
-        ExpressionFactory.setAttribute("servletContext", this.servletContext);
     }
 
     @Override

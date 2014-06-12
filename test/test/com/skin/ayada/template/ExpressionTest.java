@@ -40,7 +40,7 @@ public class ExpressionTest
         StringWriter stringWriter = new StringWriter();
         PageContext pageContext = JspFactory.getPageContext(stringWriter);
         ExpressionContext expressionContext = ExpressionFactory.getExpressionContext(pageContext);
-        Object arg = ExpressionUtil.evaluate(expressionContext, "-1.0");
+        Object arg = ExpressionUtil.evaluate(expressionContext, "-1.0", null);
         Object value = ClassUtil.cast(arg, int.class);
 
         if(value != null)

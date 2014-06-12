@@ -1,7 +1,7 @@
 /*
  * $RCSfile: SetTag.java,v $$
- * $Revision: 1.1  $
- * $Date: 2013-2-19  $
+ * $Revision: 1.1 $
+ * $Date: 2013-2-19 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -10,6 +10,7 @@
  */
 package com.skin.ayada.jstl.core;
 
+import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTag;
 import com.skin.ayada.tagext.BodyTagSupport;
@@ -101,6 +102,17 @@ public class SetTag extends BodyTagSupport
     public void setProperty(Object object, String name, Object value) throws Exception
     {
         ClassUtil.setProperty(object, name, value);
+    }
+
+    /**
+     * @param pageContext
+     * @param name
+     * @param scope
+     * @param value
+     */
+    public static void setValue(PageContext pageContext, String name, String scope, Object value)
+    {
+    	pageContext.setAttribute(name, value);
     }
 
     /**

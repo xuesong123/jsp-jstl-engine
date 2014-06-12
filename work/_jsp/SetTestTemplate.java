@@ -18,7 +18,6 @@ import com.skin.ayada.runtime.ExpressionContext;
 import com.skin.ayada.runtime.JspWriter;
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.tagext.BodyContent;
-import com.skin.ayada.tagext.BodyTag;
 import com.skin.ayada.tagext.IterationTag;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.template.JspTemplate;
@@ -127,7 +126,7 @@ public class SetTestTemplate extends JspTemplate
 
         /* NODE START: lineNumber: 11, offset: 22, length: 2, tagClassName: com.skin.ayada.jstl.core.ExecuteTag, tagInstanceName: _jsp_ExecuteTag_23 */
         /* <c:execute value="${testTag1.print()}"/> */
-        pageContext.setAttribute((String)null, ExpressionUtil.evaluate(expressionContext, "${testTag1.print()}"));
+        pageContext.setAttribute((String)null, ExpressionUtil.evaluate(expressionContext, "${testTag1.print()}", null));
         /* jsp.jstl.core.ExecuteTag END */
         /* NODE END: lineNumber: 11, tagClassName: com.skin.ayada.jstl.core.ExecuteTag, tagInstanceName: _jsp_ExecuteTag_23 */
 
@@ -146,7 +145,7 @@ public class SetTestTemplate extends JspTemplate
 
         /* NODE START: lineNumber: 13, offset: 28, length: 2, tagClassName: com.skin.ayada.jstl.core.ExecuteTag, tagInstanceName: _jsp_ExecuteTag_29 */
         /* <c:execute value="${testTag1.print()}"/> */
-        pageContext.setAttribute((String)null, ExpressionUtil.evaluate(expressionContext, "${testTag1.print()}"));
+        pageContext.setAttribute((String)null, ExpressionUtil.evaluate(expressionContext, "${testTag1.print()}", null));
         /* jsp.jstl.core.ExecuteTag END */
         /* NODE END: lineNumber: 13, tagClassName: com.skin.ayada.jstl.core.ExecuteTag, tagInstanceName: _jsp_ExecuteTag_29 */
 

@@ -1,14 +1,14 @@
 /*
  * $RCSfile: LocalizationContext.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-2-28 $
+ * $Date: 2013-2-26 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
  * This software is the proprietary information of Skin, Inc.
  * Use is subject to license terms.
  */
-package com.skin.ayada.jstl.core;
+package com.skin.ayada.jstl.fmt;
 
 import java.util.Locale;
 import java.util.ResourceBundle;

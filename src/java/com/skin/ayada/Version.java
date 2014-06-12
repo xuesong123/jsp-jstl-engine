@@ -1,7 +1,7 @@
 /*
  * $RCSfile: Version.java,v $$
- * $Revision: 1.1  $
- * $Date: 2013-12-21  $
+ * $Revision: 1.1 $
+ * $Date: 2013-12-21 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -21,8 +21,9 @@ import java.util.Calendar;
  */
 public class Version
 {
+    public static final int LEVEL = 4;
     public static final int majorVersion = 1;
-    public static final int minorVersion = 0;
+    public static final int minorVersion = 8;
     public static final String name = "skinfourm";
     public static final String developer = "skinsoft";
     public static final String version = getVersion();
@@ -64,7 +65,7 @@ public class Version
      */
     public static String getVersion()
     {
-        return getVersion(majorVersion, minorVersion);
+        return getVersion(majorVersion, minorVersion, LEVEL);
     }
 
     /**
@@ -74,12 +75,39 @@ public class Version
      */
     public static String getVersion(int majorVersion, int minorVersion)
     {
+        return getVersion(majorVersion, minorVersion, LEVEL);
+    }
+
+    /**
+     * @param majorVersion
+     * @param minorVersion
+     * @return String
+     */
+    public static String getVersion(int majorVersion, int minorVersion, int level)
+    {
+        int mod = minorVersion;
+        int[] temp = new int[level];
         StringBuilder buffer = new StringBuilder();
-        buffer.append((majorVersion + minorVersion / 100));
-        buffer.append(".");
-        buffer.append((minorVersion % 100) / 10);
-        buffer.append(".");
-        buffer.append(minorVersion % 10);
+
+        for(int i = 0; i < level; i++)
+        {
+            temp[level - 1 - i] = mod % 10;
+            mod = mod / 10;
+        }
+
+        temp[0] = majorVersion + (mod * 10) + temp[0];
+
+        for(int i = 0; i < level; i++)
+        {
+            buffer.append(temp[i]);
+            buffer.append(".");
+        }
+
+        if(buffer.length() > 0)
+        {
+            buffer.deleteCharAt(buffer.length() - 1);
+        }
+
         return buffer.toString();
     }
 
@@ -89,14 +117,20 @@ public class Version
     public static String getCopyright()
     {
         int year = Calendar.getInstance().get(Calendar.YEAR);
-        return "(C) Copyright 1998-" + year + developer;
+        return "(C) Copyright 1998-" + year + " " + developer;
     }
 
     public static void main(String[] args)
     {
+        int majorVersion = 1;
+
         for(int i = 0; i < 1000; i++)
         {
-            System.out.println(Version.getVersion(0, i));
+            String v0 = Version.getVersion(majorVersion, i, 4);
+            System.out.println(i + " - " + v0);
         }
+
+        System.out.println(Version.getName() + " V" + Version.getVersion());
+        System.out.println(Version.getCopyright());
     }
 }

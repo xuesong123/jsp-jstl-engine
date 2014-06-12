@@ -1,7 +1,7 @@
 /*
  * $RCSfile: ClassPathResource.java,v $
- * $Revision: 1.1  $
- * $Date: 2009-3-26  $
+ * $Revision: 1.1 $
+ * $Date: 2009-3-26 $
  *
  * Copyright (C) 2005 Skin, Inc. All rights reserved.
  *

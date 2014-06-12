@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.skin.ayada.compile.JspCompiler;
+import com.skin.ayada.config.TemplateConfig;
 import com.skin.ayada.factory.FactoryClassLoader;
 import com.skin.ayada.source.SourceFactory;
 import com.skin.ayada.util.IO;
@@ -101,7 +102,10 @@ public class JspTemplateFactory extends TemplateFactory
                 + "work: " + work + "\r\n");
         }
 
+        boolean fastJstl = TemplateConfig.getInstance().getBoolean("ayada.compile.fast-jstl");
         JspCompiler jspCompiler = new JspCompiler();
+        jspCompiler.setFastJstl(fastJstl);
+
         String source = jspCompiler.compile(template, simpleName, packageName);
         File srcFile = new File(work, classPath + ".java");
         File clsFile = new File(work, classPath + ".class");

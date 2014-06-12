@@ -1,7 +1,7 @@
 /*
  * $RCSfile: MemMonitor.java,v $$
- * $Revision: 1.1  $
- * $Date: 2010-7-24  $
+ * $Revision: 1.1 $
+ * $Date: 2010-7-24 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *

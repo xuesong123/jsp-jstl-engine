@@ -44,13 +44,13 @@ public class TryCatchFinallyTestTemplate extends JspTemplate
 
         /* NODE START: lineNumber: 2, offset: 0, length: 2, tagClassName: com.skin.ayada.jstl.core.ExecuteTag, tagInstanceName: _jsp_ExecuteTag_1 */
         /* <c:execute value="${pageContext.getOut().setBufferSize(4096)}"/> */
-        pageContext.setAttribute((String)null, ExpressionUtil.evaluate(expressionContext, "${pageContext.getOut().setBufferSize(4096)}"));
+        pageContext.setAttribute((String)null, ExpressionUtil.evaluate(expressionContext, "${pageContext.getOut().setBufferSize(4096)}", null));
         /* jsp.jstl.core.ExecuteTag END */
         /* NODE END: lineNumber: 2, tagClassName: com.skin.ayada.jstl.core.ExecuteTag, tagInstanceName: _jsp_ExecuteTag_1 */
 
         /* NODE START: lineNumber: 3, offset: 2, length: 2, tagClassName: com.skin.ayada.jstl.core.ExecuteTag, tagInstanceName: _jsp_ExecuteTag_3 */
         /* <c:execute value="${pageContext.getOut().setAutoFlush(true)}"/> */
-        pageContext.setAttribute((String)null, ExpressionUtil.evaluate(expressionContext, "${pageContext.getOut().setAutoFlush(true)}"));
+        pageContext.setAttribute((String)null, ExpressionUtil.evaluate(expressionContext, "${pageContext.getOut().setAutoFlush(true)}", null));
         /* jsp.jstl.core.ExecuteTag END */
         /* NODE END: lineNumber: 3, tagClassName: com.skin.ayada.jstl.core.ExecuteTag, tagInstanceName: _jsp_ExecuteTag_3 */
 

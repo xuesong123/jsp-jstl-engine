@@ -1,7 +1,7 @@
 /*
  * $RCSfile: ForEachTag.java,v $$
- * $Revision: 1.1  $
- * $Date: 2013-2-19  $
+ * $Revision: 1.1 $
+ * $Date: 2013-2-19 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -10,16 +10,12 @@
  */
 package com.skin.ayada.jstl.core;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
-import com.skin.ayada.tagext.LoopTagStatus;
 import com.skin.ayada.tagext.LoopTagSupport;
 
 /**
@@ -29,359 +25,298 @@ import com.skin.ayada.tagext.LoopTagSupport;
  * @author xuesong.net
  * @version 1.0
  */
-public class ForEachTag extends LoopTagSupport implements LoopTagStatus
+public class ForEachTag extends LoopTagSupport
 {
-    private ForEachIterator items;
+    private Object items;
+    private Iterator<?> iterator;
     private boolean hasItems = false;
 
+    public void setItems(Object items)
+    {
+      this.items = items;
+      this.hasItems = true;
+    }
+
+    public void setBegin(int begin)
+    {
+      this.begin = begin;
+      this.beginSpecified = true;
+    }
+
+    public void setEnd(int end)
+    {
+      this.end = end;
+      this.endSpecified = true;
+    }
+
+    public void setStep(int step)
+    {
+      this.step = step;
+      this.stepSpecified = true;
+    }
+
     @Override
-    public void prepare()
+    public void prepare() throws Exception
     {
+      if(this.hasItems)
+      {
+        this.iterator = ForEachTag.getIterator(this.items);
+      }
+      else
+      {
+        this.beginSpecified = true;
+        this.endSpecified = true;
+        this.iterator = new RangeIterator<Integer>(this.begin, this.end);
+      }
     }
 
-    public void init()
-    {
-        if(this.hasItems == false)
-        {
-            List<Integer> list = new ArrayList<Integer>();
-
-            for(int j = this.getBegin(), end = this.getEnd(); j <= end; j += this.getStep())
-            {
-                list.add(Integer.valueOf(j));
-            }
-
-            this.items = new SimpleForEachIterator(list.iterator());
-        }
-
-        if(this.getVarStatus() != null)
-        {
-            this.setLoopStatus(this);
-            this.pageContext.setAttribute(this.getVarStatus(), this);
-        }
-    }
-
-    /**
-     * @return int
-     */
-    @Override
-    public int doStartTag() throws Exception
-    {
-        super.doStartTag();
-        this.init();
-
-        if(this.hasNext())
-        {
-            this.setCurrent(this.next());
-        }
-        else
-        {
-            return SKIP_BODY;
-        }
-
-        return EVAL_BODY_INCLUDE;
-    }
-
-    /**
-     * @param items
-     */
-    public void setItems(Object object)
-    {
-        if(object != null)
-        {
-            this.items = getIterator(object);
-            this.hasItems = true;
-        }
-    }
-
-    /**
-     * @return boolean
-     */
-    @Override
     public boolean hasNext()
     {
-        return this.items.hasNext();
+      return this.iterator.hasNext();
     }
 
-    /**
-     * @return boolean
-     */
-    @Override
     public Object next()
     {
-        this.setIndex(this.getIndex() + 1);
-        return this.items.next();
-    }
-
-    @Override
-    public LoopTagStatus getLoopStatus()
-    {
-        return this;
-    }
-
-    /**
-     * @param begin
-     * @param end
-     * @param step
-     * @return ForEachIterator
-     */
-    public static ForEachIterator getIterator(Integer begin, Integer end, Integer step)
-    {
-        List<Integer> list = new ArrayList<Integer>();
-
-        if(begin != null && end != null)
-        {
-            int x = end.intValue();
-            int k = (step != null ? step.intValue() : 1);
-
-            for(int j = begin.intValue(); j <= x; j += k)
-            {
-                list.add(Integer.valueOf(j));
-            }
-        }
-
-        return new SimpleForEachIterator(list.iterator());
+      return this.iterator.next();
     }
 
     /**
      * @param items
      */
-    public static ForEachIterator getIterator(Object object)
+    @SuppressWarnings("unchecked")
+    public static Iterator<?> getIterator(Object object)
     {
-        ForEachIterator items = null;
+        if(object == null)
+        {
+            return new NullIterator<String>();
+        }
 
-        if(object instanceof ForEachIterator)
+        if(object instanceof Iterator)
         {
-            items = (ForEachIterator)(object);
+            return (Iterator<?>)(object);
         }
-        else if(object instanceof Object[])
+
+        if(object.getClass().isArray())
         {
-            items = toForEachIterator((Object[])object);
+            return new ArrayIterator<Object>(object);
         }
-        else if(object instanceof boolean[])
+
+        if(object instanceof Collection<?>)
         {
-            items = toForEachIterator((boolean[])object);
+            return ((Collection<?>)object).iterator();
         }
-        else if(object instanceof byte[])
+
+        if(object instanceof Enumeration<?>)
         {
-            items = toForEachIterator((byte[])object);
+            Enumeration<Object> enu = (Enumeration<Object>)object;
+            return new EnuIterator<Object>(enu);
         }
-        else if(object instanceof char[])
+
+        if(object instanceof Map<?, ?>)
         {
-            items = toForEachIterator((char[])object);
+            return ((Map<?, ?>)object).entrySet().iterator();
         }
-        else if(object instanceof short[])
+
+        if(object instanceof String)
         {
-            items = toForEachIterator((short[])object);
-        }
-        else  if(object instanceof int[])
-        {
-            items = toForEachIterator((int[])object);
-        }
-        else  if(object instanceof long[])
-        {
-            items = toForEachIterator((long[])object);
-        }
-        else  if(object instanceof float[])
-        {
-            items = toForEachIterator((float[])object);
-        }
-        else if(object instanceof double[])
-        {
-            items = toForEachIterator((double[])object);
-        }
-        else if(object instanceof Collection<?>)
-        {
-            items = toForEachIterator((Collection<?>)object);
-        }
-        else  if(object instanceof Iterator<?>)
-        {
-            items = toForEachIterator((Iterator<?>)object);
-        }
-        else  if(object instanceof Enumeration<?>)
-        {
-            items = toForEachIterator((Enumeration<?>)object);
-        }
-        else if(object instanceof Map<?, ?>)
-        {
-            items = toForEachIterator((Map<?, ?>)object);
-        }
-        else  if(object instanceof String)
-        {
-            items = toForEachIterator((String)object);
+            return new StringIterator((String)object, ",");
         }
         else
         {
-            items = toForEachIterator(object);
+            throw new RuntimeException("Can't cast to iterator !");
         }
-
-        return items;
     }
 
     /**
      * @param items
      */
-    public ForEachIterator getItems()
+    public Object getItems()
     {
         return this.items;
     }
 
-    public static ForEachIterator toForEachIterator(Object o)
+    /**
+     * <p>Title: ArrayIterator</p>
+     * <p>Description: </p>
+     * <p>Copyright: Copyright (c) 2006</p>
+     * @author xuesong.net
+     * @version 1.0
+     */
+    public static class ArrayIterator<E> implements Iterator<Object>
     {
-        throw new RuntimeException("Can't cast to iterator !");
-    }
+        private Object array;
+        private int index;
+        private int length;
 
-    public static ForEachIterator toForEachIterator(Object a[])
-    {
-        return new SimpleForEachIterator(Arrays.asList(a).iterator());
-    }
-
-    public static ForEachIterator toForEachIterator(boolean a[])
-    {
-        Boolean wrapped[] = new Boolean[a.length];
-        for(int i = 0; i < a.length; i++)
-            wrapped[i] = Boolean.valueOf(a[i]);
-
-        return new SimpleForEachIterator(Arrays.asList(wrapped).iterator());
-    }
-
-    public static ForEachIterator toForEachIterator(byte a[])
-    {
-        Byte wrapped[] = new Byte[a.length];
-        for(int i = 0; i < a.length; i++)
-            wrapped[i] = Byte.valueOf(a[i]);
-
-        return new SimpleForEachIterator(Arrays.asList(wrapped).iterator());
-    }
-
-    public static ForEachIterator toForEachIterator(char a[])
-    {
-        Character wrapped[] = new Character[a.length];
-        for(int i = 0; i < a.length; i++)
-            wrapped[i] = Character.valueOf(a[i]);
-
-        return new SimpleForEachIterator(Arrays.asList(wrapped).iterator());
-    }
-
-    public static ForEachIterator toForEachIterator(short a[])
-    {
-        Short wrapped[] = new Short[a.length];
-        for(int i = 0; i < a.length; i++)
-            wrapped[i] = Short.valueOf(a[i]);
-
-        return new SimpleForEachIterator(Arrays.asList(wrapped).iterator());
-    }
-
-    public static ForEachIterator toForEachIterator(int a[])
-    {
-        Integer wrapped[] = new Integer[a.length];
-        for(int i = 0; i < a.length; i++)
-            wrapped[i] = Integer.valueOf(a[i]);
-
-        return new SimpleForEachIterator(Arrays.asList(wrapped).iterator());
-    }
-
-    public static ForEachIterator toForEachIterator(long a[])
-    {
-        Long wrapped[] = new Long[a.length];
-        for(int i = 0; i < a.length; i++)
-            wrapped[i] = Long.valueOf(a[i]);
-
-        return new SimpleForEachIterator(Arrays.asList(wrapped).iterator());
-    }
-
-    public static ForEachIterator toForEachIterator(float a[])
-    {
-        Float wrapped[] = new Float[a.length];
-        for(int i = 0; i < a.length; i++)
-            wrapped[i] = new Float(a[i]);
-
-        return new SimpleForEachIterator(Arrays.asList(wrapped).iterator());
-    }
-
-    public static ForEachIterator toForEachIterator(double a[])
-    {
-        Double wrapped[] = new Double[a.length];
-        for(int i = 0; i < a.length; i++)
-            wrapped[i] = new Double(a[i]);
-
-        return new SimpleForEachIterator(Arrays.asList(wrapped).iterator());
-    }
-
-    public static ForEachIterator toForEachIterator(Collection<?> c)
-    {
-        return new SimpleForEachIterator(c.iterator());
-    }
-
-    public static ForEachIterator toForEachIterator(Iterator<?> i)
-    {
-        return new SimpleForEachIterator(i);
-    }
-
-    public static ForEachIterator toForEachIterator(Enumeration<?> e)
-    {
-        class EnumerationAdapter implements ForEachIterator
+        public ArrayIterator(Object array)
         {
-            private Enumeration<?> enumeration;
-
-            public boolean hasNext()
-            {
-                return this.enumeration.hasMoreElements();
-            }
-
-            public Object next()
-            {
-                return this.enumeration.nextElement();
-            }
-
-            public EnumerationAdapter(Enumeration<?> enumeration)
-            {
-                this.enumeration = enumeration;
-            }
+            this.index = 0;
+            this.array = array;
+            this.length = Array.getLength(array);
         }
 
-        return new EnumerationAdapter(e);
-    }
-
-    public static ForEachIterator toForEachIterator(Map<?, ?> m)
-    {
-        return new SimpleForEachIterator(m.entrySet().iterator());
-    }
-
-    public static ForEachIterator toForEachIterator(String s)
-    {
-        String value = null;
-        List<String> list = new ArrayList<String>();
-        StringTokenizer st = new StringTokenizer(s, ",");
-
-        while(st.hasMoreElements())
+        public boolean hasNext()
         {
-            value = (String)(st.nextElement());
-            value = value.trim();
+            return this.index < this.length;
+        }
 
-            if(value.length() > 0)
+        public Object next()
+        {
+            if(this.index < this.length)
             {
-                list.add(value);
+                return Array.get(this.array, this.index++);
             }
+
+            return null;
         }
 
-        return toForEachIterator(list);
+        public void remove()
+        {
+            throw new UnsupportedOperationException();
+        }
     }
 
-    public static void main(String[] args)
+    /**
+     * <p>Title: EnuIterator</p>
+     * <p>Description: </p>
+     * <p>Copyright: Copyright (c) 2006</p>
+     * @author xuesong.net
+     * @version 1.0
+     */
+    public static class EnuIterator<E> implements Iterator<E>
     {
-        int iBegin = -2;
-        int iEnd = -4;
-        int iStep = 2;
-        List<Integer> list = new ArrayList<Integer>();
+        public Enumeration<E> enumeration;
 
-        for(int j = iBegin, end = iEnd; j <= end; j += iStep)
+        public EnuIterator(Enumeration<E> enumeration)
         {
-            list.add(Integer.valueOf(j));
+            this.enumeration = enumeration;
         }
 
-        for(Integer i : list)
+        public boolean hasNext()
         {
-            System.out.println(i);
+            return this.enumeration.hasMoreElements();
+        }
+
+        public E next()
+        {
+            return this.enumeration.nextElement();
+        }
+
+        public void remove()
+        {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    /**
+     * <p>Title: RangeIterator</p>
+     * <p>Description: </p>
+     * <p>Copyright: Copyright (c) 2006</p>
+     * @author xuesong.net
+     * @version 1.0
+     */
+    public static class RangeIterator<E> implements Iterator<Integer>
+    {
+        private int begin;
+        private int end;
+
+        RangeIterator(int begin, int end)
+        {
+            this.begin = begin;
+            this.end = end;
+        }
+
+        public boolean hasNext()
+        {
+            return this.begin <= this.end;
+        }
+
+        public Integer next()
+        {
+            if(this.begin <= this.end)
+            {
+                return new Integer(this.begin++);
+            }
+
+            return null;
+        }
+
+        public void remove()
+        {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    /**
+     * <p>Title: StringIterator</p>
+     * <p>Description: </p>
+     * <p>Copyright: Copyright (c) 2006</p>
+     * @author xuesong.net
+     * @version 1.0
+     */
+    public static class StringIterator implements Iterator<String>
+    {
+        private String value;
+        private String delims;
+        private int index;
+        private int length;
+
+        protected StringIterator(String value, String delims)
+        {
+            this.index = 0;
+            this.value = value;
+            this.delims = delims;
+            this.length = value.length();
+        }
+
+        public boolean hasNext()
+        {
+            return this.index < this.length;
+        }
+
+        public String next()
+        {
+            int i = this.index;
+            int k = this.value.indexOf(this.delims, this.index);
+
+            if(k > -1)
+            {
+                this.index = k + this.delims.length();
+                return this.value.substring(i, k);
+            }
+
+            this.index = length;
+            return this.value.substring(i);
+        }
+
+        public void remove()
+        {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    /**
+     * <p>Title: NullIterator</p>
+     * <p>Description: </p>
+     * <p>Copyright: Copyright (c) 2006</p>
+     * @author xuesong.net
+     * @version 1.0
+     */
+    public static class NullIterator<E> implements Iterator<E>
+    {
+        public boolean hasNext()
+        {
+            return false;
+        }
+
+        public E next()
+        {
+            return null;
+        }
+
+        public void remove()
+        {
+            throw new UnsupportedOperationException();
         }
     }
 }

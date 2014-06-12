@@ -62,7 +62,7 @@ public class TemplateTest
 
         // test1();
         // test("webapp", "/includeTest.jsp");
-        test("webapp", "/whenTest.jsp");
+        // test("webapp", "/whenTest.jsp");
         // test("webapp", "/emptyTest.jsp");
         // test("webapp", "/jspTagTest.jsp");
         // test("webapp", "/eachTest.jsp");
@@ -75,6 +75,7 @@ public class TemplateTest
         System.out.println(b);
         System.out.println(TemplateConfig.getInstance().getString("ayada.compile.ignore-jsptag"));
         */
+        test2();
     }
 
     public static void test(String home, String file)
@@ -207,7 +208,7 @@ public class TemplateTest
         pageContext.setAttribute("user", user);
         pageContext.setAttribute("userList", userList);
 
-        Object result = ExpressionUtil.evaluate(pageContext.getExpressionContext(), "a${user.userName}#");
+        Object result = ExpressionUtil.evaluate(pageContext.getExpressionContext(), "a${user.userName}#", Object.class);
         System.out.println(result.getClass().getName() + ": " + result);
     }
 

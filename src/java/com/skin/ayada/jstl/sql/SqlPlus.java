@@ -1,7 +1,7 @@
 /*
  * $RCSfile: SqlPlus.java,v $$
- * $Revision: 1.1  $
- * $Date: 2011-4-11  $
+ * $Revision: 1.1 $
+ * $Date: 2011-4-11 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *

@@ -1,7 +1,7 @@
 /*
  * $RCSfile: OutTag.java,v $$
- * $Revision: 1.1  $
- * $Date: 2013-2-19  $
+ * $Revision: 1.1 $
+ * $Date: 2013-2-19 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -13,6 +13,7 @@ package com.skin.ayada.jstl.core;
 import java.io.IOException;
 
 import com.skin.ayada.runtime.JspWriter;
+import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTag;
 import com.skin.ayada.tagext.BodyTagSupport;
@@ -34,29 +35,13 @@ public class OutTag extends BodyTagSupport
     @Override
     public int doStartTag() throws Exception
     {
-        JspWriter out = this.pageContext.getOut();
-
         if(this.value != null)
         {
-            if(this.escapeXml)
-            {
-                out.print(this.escape(this.value.toString()));
-            }
-            else
-            {
-                out.print(this.value);
-            }
+            OutTag.print(this.pageContext, this.value, this.escapeXml);
         }
         else if(this.defaultValue != null)
         {
-            if(this.escapeXml)
-            {
-                out.print(this.escape(this.defaultValue));
-            }
-            else
-            {
-                out.print(this.defaultValue);
-            }
+            OutTag.print(this.pageContext, this.defaultValue, this.escapeXml);
         }
         else
         {
@@ -72,35 +57,44 @@ public class OutTag extends BodyTagSupport
     @Override
     public int doEndTag() throws Exception
     {
-        String content = null;
         BodyContent bodyContent = this.getBodyContent();
 
         if(bodyContent != null)
         {
-            content = bodyContent.getString().trim();
-
-            if(this.escapeXml)
-            {
-                content = this.escape(content);
-            }
-
-            try
-            {
-                this.pageContext.getOut().write(content);
-            }
-            catch(IOException e)
-            {
-            }
+            print(this.pageContext, bodyContent.getString().trim(), this.escapeXml);
         }
 
         return EVAL_PAGE;
     }
 
     /**
+     * @param pageContext
+     * @param value
+     * @param escapeXml
+     */
+    public static void print(PageContext pageContext, Object value, boolean escapeXml) throws IOException
+    {
+    	if(value != null)
+    	{
+    		String content = value.toString();
+    		JspWriter out = pageContext.getOut();
+
+    		if(escapeXml)
+    		{
+    			out.print(escape(content));
+    		}
+    		else
+    		{
+    			out.print(content);
+    		}
+    	}
+    }
+
+    /**
      * @param source
      * @return String
      */
-    private String escape(String source)
+    private static String escape(String source)
     {
         if(source == null)
         {

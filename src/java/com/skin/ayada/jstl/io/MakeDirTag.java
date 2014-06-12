@@ -1,7 +1,7 @@
 /*
  * $RCSfile: CopyTag.java,v $$
  * $Revision: 1.1 $
- * $Date: 2014-3-26 $
+ * $Date: 2014-03-26 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *

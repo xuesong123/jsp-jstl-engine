@@ -8,15 +8,13 @@
  * This software is the proprietary information of Skin, Inc.
  * Use is subject to license terms.
  */
-package com.skin.ayada.jstl.core;
+package com.skin.ayada.jstl.fmt;
 
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 import com.skin.ayada.tagext.BodyTagSupport;
+import com.skin.ayada.tagext.ParamContainerTag;
 import com.skin.ayada.tagext.Tag;
 
 /**
@@ -26,7 +24,7 @@ import com.skin.ayada.tagext.Tag;
  * @author xuesong.net
  * @version 1.0
  */
-public class MessageTag extends BodyTagSupport
+public class MessageTag extends BodyTagSupport implements ParamContainerTag
 {
     private String key;
     private Object bundle;
@@ -48,6 +46,7 @@ public class MessageTag extends BodyTagSupport
         this.var = var;
     }
 
+    @Override
     public void addParam(Object value)
     {
         if(this.parameters == null)
@@ -79,15 +78,20 @@ public class MessageTag extends BodyTagSupport
             }
             else if(this.bundle instanceof String)
             {
-                localizationContext = this.getBundle((String)(this.bundle));
+                localizationContext = BundleTag.getBundle(this.pageContext, (String)(this.bundle));
             }
         }
         else
         {
-            localizationContext = (LocalizationContext)this.pageContext.getAttribute("caucho.bundle");
+            localizationContext = this.pageContext.getBundle();
         }
 
-        message = this.getLocalizedMessage(localizationContext, this.key, args);
+        if(localizationContext == null)
+        {
+            throw new Exception("[key: " + this.key + "]localizationContext not found !");
+        }
+
+        message = this.pageContext.getLocalizedMessage(localizationContext, this.key, args);
 
         if(this.var != null)
         {
@@ -100,43 +104,17 @@ public class MessageTag extends BodyTagSupport
 
         return Tag.EVAL_PAGE;
     }
-
-    /**
-     * @param name
-     * @return LocalizationContext
-     */
-    private LocalizationContext getBundle(String name)
+    
+    @Override
+    public void release()
     {
-        return null;
-    }
+        this.key = null;
+        this.var = null;
+        this.bundle = null;
 
-    /**
-     * @param localizationContext
-     * @param key
-     * @param args
-     * @return String
-     */
-    private String getLocalizedMessage(LocalizationContext localizationContext, String key, Object[] args)
-    {
-        String result = null;
-        ResourceBundle bundle = localizationContext.getResourceBundle();
-        Locale locale = localizationContext.getLocale();
-
-        if(bundle != null)
+        if(this.parameters != null)
         {
-            result = bundle.getString(key);
+            this.parameters.clear();
         }
-
-        if((args == null) || (args.length == 0))
-        {
-            return result;
-        }
-
-        if(locale != null)
-        {
-            return new MessageFormat(result, locale).format(args);
-        }
-
-        return new MessageFormat(result).format(args);
     }
 }

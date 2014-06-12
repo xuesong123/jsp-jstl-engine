@@ -1,7 +1,7 @@
 /*
  * $RCSfile: TagUtil.java,v $$
- * $Revision: 1.1  $
- * $Date: 2013-2-19  $
+ * $Revision: 1.1 $
+ * $Date: 2013-2-19 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -90,7 +90,7 @@ public class TagUtil
             {
                 String name = entry.getKey();
                 String value = entry.getValue();
-                Object argument = ExpressionUtil.evaluate(expressionContext, value);
+                Object argument = ExpressionUtil.evaluate(expressionContext, value, Object.class);
                 dynamicAttributes.setDynamicAttribute(name, argument);
             }
 

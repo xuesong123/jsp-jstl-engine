@@ -32,8 +32,20 @@
         <description></description>
     </tag>
     <tag>
+        <name>c:remove</name>
+        <tag-class>com.skin.ayada.jstl.core.RemoveTag</tag-class>
+        <body-content>empty</body-content>
+        <description></description>
+    </tag>
+    <tag>
         <name>c:out</name>
         <tag-class>com.skin.ayada.jstl.core.OutTag</tag-class>
+        <body-content>jsp</body-content>
+        <description></description>
+    </tag>
+    <tag>
+        <name>c:catch</name>
+        <tag-class>com.skin.ayada.jstl.core.CatchTag</tag-class>
         <body-content>jsp</body-content>
         <description></description>
     </tag>
@@ -46,6 +58,12 @@
     <tag>
         <name>c:forEach</name>
         <tag-class>com.skin.ayada.jstl.core.ForEachTag</tag-class>
+        <body-content>jsp</body-content>
+        <description></description>
+    </tag>
+    <tag>
+        <name>c:forTokens</name>
+        <tag-class>com.skin.ayada.jstl.core.ForTokensTag</tag-class>
         <body-content>jsp</body-content>
         <description></description>
     </tag>
@@ -209,6 +227,60 @@
         <name>fmt:formatNumber</name>
         <tag-class>com.skin.ayada.jstl.fmt.NumberFormatTag</tag-class>
         <body-content>empty</body-content>
+        <description></description>
+    </tag>
+    <tag>
+        <name>fmt:parseDate</name>
+        <tag-class>com.skin.ayada.jstl.fmt.ParseDateTag</tag-class>
+        <body-content>jsp</body-content>
+        <description></description>
+    </tag>
+    <tag>
+        <name>fmt:parseNumber</name>
+        <tag-class>com.skin.ayada.jstl.fmt.ParseNumberTag</tag-class>
+        <body-content>jsp</body-content>
+        <description></description>
+    </tag>
+    <tag>
+        <name>fmt:setTimeZone</name>
+        <tag-class>com.skin.ayada.jstl.fmt.SetTimeZoneTag</tag-class>
+        <body-content>empty</body-content>
+        <description></description>
+    </tag>
+    <tag>
+        <name>fmt:timeZone</name>
+        <tag-class>com.skin.ayada.jstl.fmt.TimeZoneTag</tag-class>
+        <body-content>jsp</body-content>
+        <description></description>
+    </tag>
+    <tag>
+        <name>fmt:setLocale</name>
+        <tag-class>com.skin.ayada.jstl.fmt.SetLocaleTag</tag-class>
+        <body-content>empty</body-content>
+        <description></description>
+    </tag>
+    <tag>
+        <name>fmt:bundle</name>
+        <tag-class>com.skin.ayada.jstl.fmt.BundleTag</tag-class>
+        <body-content>jsp</body-content>
+        <description></description>
+    </tag>
+    <tag>
+        <name>fmt:setBundle</name>
+        <tag-class>com.skin.ayada.jstl.fmt.SetBundleTag</tag-class>
+        <body-content>empty</body-content>
+        <description></description>
+    </tag>
+    <tag>
+        <name>fmt:message</name>
+        <tag-class>com.skin.ayada.jstl.fmt.MessageTag</tag-class>
+        <body-content>tagdependent</body-content>
+        <description></description>
+    </tag>
+    <tag>
+        <name>fmt:param</name>
+        <tag-class>com.skin.ayada.jstl.fmt.FmtParamTag</tag-class>
+        <body-content>jsp</body-content>
         <description></description>
     </tag>
     <tag>
