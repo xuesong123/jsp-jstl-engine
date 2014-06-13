@@ -10,7 +10,7 @@
         <property name="Version" value="1.0.0.8"/>
 
         <!-- src directories -->
-        <property name="src.java" value="${basedir}/src"/>
+        <property name="src.java" value="${basedir}/src/main/java"/>
         <property name="src.lib" value="${basedir}/lib"/>
         <property name="src.doc" value="${basedir}/doc"/>
 
@@ -59,7 +59,7 @@
             verbose="no">
             <compilerarg line="-Xlint:unchecked"/>
 
-            <src path="${src.java}/java"/>
+            <src path="${src.java}"/>
 
             <classpath>
                 <fileset dir="${src.lib}">
@@ -70,7 +70,7 @@
         </javac>
 
         <copy todir="${build.classes}" includeEmptyDirs="no">
-            <fileset dir="${src.java}/java">
+            <fileset dir="${src.java}">
                 <patternset>
                     <exclude name="**/*.java"/>
                 </patternset>
@@ -82,17 +82,17 @@
     <!-- Compiles the source directory and creates a .jar file               -->
     <!-- =================================================================== -->
     <target name="buildjar" depends="compile">
-        <delete file="${basedir}/release/${JarFileName}"/>
-        <mkdir dir="${build.release}"/>
+        <delete file="${basedir}/release/${Version}"/>
+        <mkdir dir="${basedir}/release/${Version}"/>
 
-        <jar destfile="${basedir}/release/${JarFileName}">
+        <jar destfile="${basedir}/release/${Version}/${JarFileName}">
             <fileset dir="${build.classes}"/>
             <manifest>
                 <attribute name="Built-By" value="xuesong.net"/>
             </manifest>
         </jar>
 
-        <echo>Jar: ${build.release}/${JarFileName}</echo>
+        <echo>Jar: ${basedir}/release/${Version}/${JarFileName}</echo>
     </target>
 
     <!-- =================================================================== -->

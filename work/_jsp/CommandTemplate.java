@@ -38,6 +38,7 @@ public class CommandTemplate extends JspTemplate
      * @throws Throwable
      */
     @Override
+    @SuppressWarnings("resource")
     public void _execute(final PageContext pageContext) throws Throwable
     {
         JspWriter out = pageContext.getOut();
