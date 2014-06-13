@@ -209,12 +209,8 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
         // let the subclass conduct any necessary preparation
         this.prepare();
 
-        System.out.println("1 doStartTag: " + this.getCurrent());
-
         // throw away the first 'begin' items (if they exist)
         discardIgnoreSubset(begin);
-
-        System.out.println("2 doStartTag: " + this.getCurrent());
 
         // get the item we're interested in
         if(hasNext())
@@ -227,8 +223,6 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
             return SKIP_BODY;
         }
 
-        System.out.println("3 doStartTag: " + this.getCurrent());
-
         /**
          * now discard anything we have to "step" over.
          * (we do this in advance to support LoopTagStatus.isLast())
@@ -237,7 +231,6 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
         // prepare to include our body...
         exposeVariables();
         calibrateLast();
-        System.out.println("doStartTag: " + this.getCurrent());
         return EVAL_BODY_INCLUDE;
     }
 
@@ -247,8 +240,6 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      */
     public int doAfterBody() throws Exception
     {
-        System.out.println("doAfterBody: " + this.getCurrent());
-
         // re-sync the index, given our prior behind-the-scenes 'step'
         index += step - 1;
 

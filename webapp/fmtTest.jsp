@@ -1,4 +1,3 @@
-<c:comment>
 <c:set var="i18n" value="${I18n.getBundle('ayada_i18n', 'zh_cn')}"/>
 message1: ${i18n.format("test.common.test4", "000", "111", "222", "333")}
 message2: ${i18n.message("test.common.test4")}
@@ -34,7 +33,6 @@ message3: ${myI18n.format("test.common.test4", "000", "111", "222", "333")}
 
 <fmt:setLocale value="fr_fr"/>
 <fmt:formatNumber value="123456789.012"/>
-</c:comment>
 
 <c:list name="userList"/>
 <c:forEach begin="1" end="5" var="myInt" varStatus="status">
@@ -47,6 +45,6 @@ message3: ${myI18n.format("test.common.test4", "000", "111", "222", "333")}
 </c:forEach>
 
 <c:comment>
-<c:forEach begin="1" end="5" step="2" var="user" varStatus="status">
-    <div>2 index: ${status.index}, begin: ${status.begin}, end: ${status.end}, step: ${status.step}, count: ${status.count}, user.userName: ${user}</div></c:forEach>
+    <c:forEach begin="1" end="5" step="2" var="user" varStatus="status">
+        <div>2 index: ${status.index}, begin: ${status.begin}, end: ${status.end}, step: ${status.step}, count: ${status.count}, user.userName: ${user}</div></c:forEach>
 </c:comment>
