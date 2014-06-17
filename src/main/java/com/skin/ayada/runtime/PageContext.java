@@ -32,7 +32,7 @@ public interface PageContext
     public static final String LOCALE_KEY = "com.skin.ayada.locale";
     public static final String TIMEZONE_KEY = "com.skin.ayada.time-zone";
     public static final String BUNDLE_KEY = "com.skin.ayada.bundle";
-    
+
     /**
      * @param out the out to set
      */

@@ -45,15 +45,67 @@ public class BundleManager
     }
 
     /**
-     * @param name
+     * @param baseName
      * @param locale
      * @return LocalizationContext
      */
-    public LocalizationContext getBundle(final String name, final Locale locale)
+    public LocalizationContext getBundle(final String baseName, final Locale locale)
     {
-        final String fullName = this.getFullName(name, locale);
-        FutureTask<LocalizationContext> f = this.cache.get(fullName);
+        String language = locale.getLanguage();
+        String country = locale.getCountry();
+        String variant = locale.getVariant();
+        int length = baseName.length() + language.length() + 1;
+
+        StringBuilder buffer = new StringBuilder();
+        buffer.append(baseName);
+        buffer.append("_");
+        buffer.append(language);
         
+        if(country != null && country.length() > 0)
+        {
+            buffer.append("_");
+            buffer.append(country);
+        }
+
+        if(variant != null && variant.length() > 0)
+        {
+            buffer.append("_");
+            buffer.append(variant);
+        }
+
+        LocalizationContext localizationContext = this.getCachedBundle(buffer.toString(), locale);
+
+        if(localizationContext == null)
+        {
+            buffer.setLength(length);
+
+            if(country != null && country.length() > 0)
+            {
+                buffer.append("_");
+                buffer.append(country);
+            }
+
+            localizationContext = this.getCachedBundle(buffer.toString(), locale);
+        }
+
+        if(localizationContext == null)
+        {
+            buffer.setLength(length);
+            localizationContext = this.getCachedBundle(buffer.toString(), locale);
+        }
+
+        return localizationContext;
+    }
+
+    /**
+     * @param fullName
+     * @param locale
+     * @return LocalizationContext
+     */
+    public LocalizationContext getCachedBundle(final String fullName, final Locale locale)
+    {
+        FutureTask<LocalizationContext> f = this.cache.get(fullName);
+
         if(f == null)
         {
             Callable<LocalizationContext> callable = new Callable<LocalizationContext>(){
@@ -67,7 +119,7 @@ public class BundleManager
                         {
                             return new LocalizationContext(resourceBundle, locale);
                         }
-                        
+
                         return null;
                     }
                     catch(Exception e)
@@ -87,36 +139,36 @@ public class BundleManager
             }
         }
 
-        LocalizationContext LocalizationContext = null;
+        LocalizationContext localizationContext = null;
 
         try
         {
-            LocalizationContext = f.get();
+            localizationContext = f.get();
         }
         catch(Exception e)
         {
             e.printStackTrace();
         }
 
-        return LocalizationContext;
+        return localizationContext;
     }
 
     /**
-     * @param basename
+     * @param baseName
      * @param locale
      * @return String
      */
-    protected String getFullName(String basename, Locale locale)
+    protected String getFullName(String baseName, Locale locale)
     {
         String language = locale.getLanguage();
         String country = locale.getCountry();
         String variant = locale.getVariant();
 
         StringBuilder buffer = new StringBuilder();
-        buffer.append(basename);
+        buffer.append(baseName);
         buffer.append("_");
         buffer.append(language);
-        
+
         if(country != null && country.length() > 0)
         {
             buffer.append("_");
@@ -133,32 +185,24 @@ public class BundleManager
     }
 
     /**
+     * @param basename
+     * @param locale
+     * @param classLoader
+     * @return ResourceBundle
+     */
+    public ResourceBundle getBundle2(String basename, Locale locale, ClassLoader classLoader)
+    {
+        return ResourceBundle.getBundle(basename, locale, classLoader);
+    }
+
+    /**
      * @param name
      * @return ResourceBundle
      */
-    private ResourceBundle getBaseBundle(String name)
+    public ResourceBundle getBaseBundle(String name)
     {
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
-
-        try
-        {
-            Class<?> type = Class.forName(name, false, loader);
-
-            if(type != null)
-            {
-                ResourceBundle resourceBundle = (ResourceBundle)type.newInstance();
-
-                if(resourceBundle != null)
-                {
-                    return resourceBundle;
-                }
-            }
-        }
-        catch(Throwable e)
-        {
-        }
-
         InputStream inputStream = null;
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
 
         try
         {
@@ -187,8 +231,18 @@ public class BundleManager
 
     public static void main(String[] args)
     {
-        LocalizationContext localizationContext = BundleManager.getInstance().getBundle("ayada_i18n", new Locale("zh_cn"));
-        ResourceBundle resourceBundle = localizationContext.getResourceBundle();
-        System.out.println(resourceBundle.getString("test.common.test1"));
+        test("ayada_i18n", new Locale("zh", "cn", "myvar"));
+    }
+
+    /**
+     * @param baseName
+     * @param locale
+     */
+    public static void test(String baseName, Locale locale)
+    {
+        BundleManager bundleManager = BundleManager.getInstance();
+        LocalizationContext localizationContext = bundleManager.getBundle("ayada_i18n", locale);
+        ResourceBundle resourceBundle1 = localizationContext.getResourceBundle();
+        System.out.println(resourceBundle1.getString("test.common.test1"));
     }
 }

@@ -808,14 +808,8 @@ public class TemplateCompiler extends PageCompiler
      */
     private void pushTextNode(Stack<Node> stack, List<Node> list, String text, int lineNumber)
     {
-        Node parent = stack.peek();
-
-        if(parent != null && parent.getNodeName().equals("c:choose"))
-        {
-            return;
-        }
-
         TextNode textNode = null;
+        Node parent = stack.peek();
         int size = list.size();
 
         if(size > 0)
@@ -873,10 +867,6 @@ public class TemplateCompiler extends PageCompiler
         String encoding = (charset != null ? charset : "UTF-8");
         Source source = this.getSourceFactory().getSource(path, encoding);
         int sourceType = Source.valueOf(type, source.getType());
-
-        System.out.println("type: " + type);
-        System.out.println("sourceType: " + sourceType);
-        System.out.println("source: " + source.getSource());
 
         if(sourceType == Source.STATIC)
         {

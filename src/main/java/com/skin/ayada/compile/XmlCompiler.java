@@ -42,11 +42,11 @@ public class XmlCompiler
         writer.write(HtmlUtil.encode(template.getHome()));
         writer.write("\"\r\n    path=\"");
         writer.write(HtmlUtil.encode(template.getPath()));
-        writer.write("\"\r\n    astModified=\"");
+        writer.write("\"\r\n    lastModified=\"");
         writer.write(String.valueOf(template.getLastModified()));
         writer.write("\"\r\n    updateTime=\"");
         writer.write(String.valueOf(template.getUpdateTime()));
-        writer.write("\"");
+        writer.write("\"\r\n    ");
 
         Node node = null;
         String indent = "    ";
@@ -57,11 +57,11 @@ public class XmlCompiler
         {
             for(Map.Entry<String, String> entry : namespaces.entrySet())
             {
-                writer.write(" xmlns:");
+                writer.write("xmlns:");
                 writer.write(entry.getKey());
                 writer.write("=\"");
                 writer.write(entry.getValue());
-                writer.write("\"");
+                writer.write("\"\r\n    ");
             }
             writer.println(">");
         }

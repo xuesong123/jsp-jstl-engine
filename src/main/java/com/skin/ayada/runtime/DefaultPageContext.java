@@ -129,19 +129,24 @@ public class DefaultPageContext implements PageContext
      */
     public TimeZone getTimeZone()
     {
+        TimeZone timeZone = null;
     	Object value = this.getAttribute(PageContext.TIMEZONE_KEY);
 
         if((value instanceof TimeZone))
         {
-            return (TimeZone)value;
+            timeZone = (TimeZone)value;
         }
-
-        if((value instanceof String))
+        else if((value instanceof String))
         {
-            return TimeZone.getTimeZone((String)value);
+            timeZone = TimeZone.getTimeZone((String)value);
         }
 
-        return null;
+        if(timeZone == null)
+        {
+            timeZone = TimeZone.getDefault();
+        }
+
+        return timeZone;
     }
 
     /**
@@ -157,19 +162,24 @@ public class DefaultPageContext implements PageContext
      */
     public Locale getLocale()
     {
+        Locale locale = null;
         Object value = this.getAttribute(PageContext.LOCALE_KEY);
 
         if((value instanceof Locale))
         {
-            return (Locale)value;
+            locale = (Locale)value;
         }
-
-        if((value instanceof String))
+        else if((value instanceof String))
         {
-            return this.getLocale((String)value, null);
+            locale = this.getLocale((String)value, null);
         }
 
-        return null;
+        if(locale == null)
+        {
+            locale = Locale.getDefault();
+        }
+
+        return locale;
     }
 
     /**
