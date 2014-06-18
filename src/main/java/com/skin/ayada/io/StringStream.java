@@ -174,6 +174,14 @@ public class StringStream
     }
 
     /**
+     * @return String
+     */
+    public String getRemain()
+    {
+        return new String(this.buffer, this.position, this.length - this.position);
+    }
+
+    /**
      * @param search
      */
     public boolean match(String search)
