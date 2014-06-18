@@ -1,7 +1,7 @@
 /*
  * $RCSfile: CommentTag.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-2-19 $
+ * $Date: 2013-02-19 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *

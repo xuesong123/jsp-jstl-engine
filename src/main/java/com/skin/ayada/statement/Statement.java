@@ -1,7 +1,7 @@
 /*
  * $RCSfile: Statement.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-3-2 $
+ * $Date: 2013-03-02 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *

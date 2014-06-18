@@ -1,7 +1,7 @@
 /*
  * $RCSfile: AssistTest.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-11-7 $
+ * $Date: 2013-11-07 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -27,9 +27,10 @@ import javassist.compiler.Javac;
 
 import com.skin.ayada.factory.DefaultTagFactory;
 import com.skin.ayada.factory.FactoryClassLoader;
-import com.skin.ayada.runtime.JspFactory;
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.runtime.TagFactory;
+import com.skin.ayada.template.TemplateContext;
+import com.skin.ayada.template.TemplateManager;
 import com.skin.ayada.util.IO;
 
 /**
@@ -67,8 +68,10 @@ public class AssistTest
                 System.out.println(method.toGenericString());
             }
 
+            TemplateContext templateContext = TemplateManager.getTemplateContext("webapp");
+
             StringWriter writer = new StringWriter();
-            PageContext pageContext = JspFactory.getPageContext(writer);
+            PageContext pageContext = templateContext.getPageContext(writer);
             invoke(object, "execute", new Class<?>[]{PageContext.class}, new Object[]{pageContext});
             System.out.println(writer.toString());
         }

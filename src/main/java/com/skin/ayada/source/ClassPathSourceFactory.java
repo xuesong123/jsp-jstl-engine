@@ -1,7 +1,7 @@
 /*
  * $RCSfile: ClassPathSourceFactory.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-11-4 $
+ * $Date: 2013-11-04 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -68,56 +68,19 @@ public class ClassPathSourceFactory extends SourceFactory
 
     /**
      * @param path
-     * @param charset
+     * @param encoding
      * @return Source
      */
     @Override
-    public Source getSource(String path, String charset)
+    public Source getSource(String path, String encoding)
     {
-        if(path == null)
-        {
-            throw new RuntimeException("path must be not null !");
-        }
-
-        String temp = path.trim();
-        String encoding = (charset != null ? charset : "UTF-8");
-
-        if(temp.charAt(0) == '/')
-        {
-            temp = this.home + temp;
-        }
-        else
-        {
-            temp = this.home + "/" + temp;
-        }
-
-        ClassLoader classLoader = ClassPathSourceFactory.class.getClassLoader();
-        URL homeUrl = classLoader.getResource(this.home);
-        URL tempUrl = classLoader.getResource(temp);
-
-        if(homeUrl == null)
-        {
-            throw new RuntimeException(this.home + " not exists !");
-        }
-
-        if(tempUrl == null)
-        {
-            throw new RuntimeException(temp + " not exists !");
-        }
-
-        String homePath = homeUrl.getPath();
-        String realPath = tempUrl.getPath();
-
-        if(realPath.startsWith(homePath) == false)
-        {
-            throw new RuntimeException(realPath + " can't access !");
-        }
-
+        URL url = this.getResource(path);
+        String realPath = url.getPath();
         InputStream inputStream = null;
 
         try
         {
-            inputStream = tempUrl.openStream();
+            inputStream = url.openStream();
             return new Source(this.home, realPath, IO.read(inputStream, encoding, 4096), this.getSourceType(realPath));
         }
         catch(IOException e)
@@ -137,7 +100,73 @@ public class ClassPathSourceFactory extends SourceFactory
     @Override
     public long getLastModified(String path)
     {
-        return 0L;
+        return 1;
+    }
+
+    /**
+     * @param path
+     * @return boolean
+     */
+    public boolean exists(String path)
+    {
+        URL url = null;
+
+        try
+        {
+            url = this.getResource(path);
+        }
+        catch(Exception e)
+        {
+        }
+
+        return (url != null);
+    }
+
+    /**
+     * @param path
+     * @return URL
+     */
+    public URL getResource(String path)
+    {
+        if(path == null)
+        {
+            throw new RuntimeException("path must be not null !");
+        }
+
+        String temp = path.trim();
+
+        if(temp.charAt(0) == '/')
+        {
+            temp = this.home + temp;
+        }
+        else
+        {
+            temp = this.home + "/" + temp;
+        }
+
+        ClassLoader classLoader = ClassPathSourceFactory.class.getClassLoader();
+        URL homeUrl = classLoader.getResource(this.home);
+        URL realUrl = classLoader.getResource(temp);
+
+        if(homeUrl == null)
+        {
+            throw new RuntimeException(this.home + " not exists !");
+        }
+
+        if(realUrl == null)
+        {
+            throw new RuntimeException(temp + " not exists !");
+        }
+
+        String homePath = homeUrl.getPath();
+        String realPath = realUrl.getPath();
+
+        if(realPath.startsWith(homePath) == false)
+        {
+            throw new RuntimeException(realPath + " can't access !");
+        }
+
+        return realUrl;
     }
 
     /**

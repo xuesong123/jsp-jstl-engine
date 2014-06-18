@@ -1,7 +1,7 @@
 /*
  * $RCSfile: DateUtilTest.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-5-15 $
+ * $Date: 2013-05-15 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *

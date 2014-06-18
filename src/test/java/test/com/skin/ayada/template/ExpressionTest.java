@@ -14,10 +14,10 @@ import java.io.StringWriter;
 import java.util.List;
 
 import com.skin.ayada.runtime.ExpressionContext;
-import com.skin.ayada.runtime.ExpressionFactory;
-import com.skin.ayada.runtime.JspFactory;
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.statement.Node;
+import com.skin.ayada.template.TemplateContext;
+import com.skin.ayada.template.TemplateManager;
 import com.skin.ayada.util.ClassUtil;
 import com.skin.ayada.util.ExpressionUtil;
 import com.skin.ayada.util.NodeUtil;
@@ -32,14 +32,16 @@ public class ExpressionTest
 {
     public static void main(String[] args)
     {
-        test2();
+        test1();
     }
 
     public static void test1()
     {
+        TemplateContext templateContext = TemplateManager.getTemplateContext("webapp");
+
         StringWriter stringWriter = new StringWriter();
-        PageContext pageContext = JspFactory.getPageContext(stringWriter);
-        ExpressionContext expressionContext = ExpressionFactory.getExpressionContext(pageContext);
+        PageContext pageContext = templateContext.getPageContext(stringWriter);
+        ExpressionContext expressionContext = pageContext.getExpressionContext();
         Object arg = ExpressionUtil.evaluate(expressionContext, "-1.0", null);
         Object value = ClassUtil.cast(arg, int.class);
 

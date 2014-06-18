@@ -1,7 +1,7 @@
 /*
  * $RCSfile: NodeType.java,v $$
  * $Revision: 1.1 $
- * $Date: 2012-7-3 $
+ * $Date: 2012-7-03 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *

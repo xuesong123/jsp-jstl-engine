@@ -222,7 +222,7 @@ public class XmlTemplateParser
             }
         }
 
-        if(jspNode.getNodeType() != NodeType.TEXT && node.getNodeType() != NodeType.VARIABLE && jspNode.getNodeType() != NodeType.EXPRESSION)
+        if(jspNode.getNodeType() != NodeType.TEXT && jspNode.getNodeType() != NodeType.VARIABLE && jspNode.getNodeType() != NodeType.EXPRESSION)
         {
             list.add(jspNode);
         }

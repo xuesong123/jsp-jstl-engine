@@ -1,7 +1,7 @@
 /*
  * $RCSfile: NodeUtil.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-11-4 $
+ * $Date: 2013-11-04 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -125,6 +125,83 @@ public class NodeUtil
             if(buffer.length() > 0)
             {
                 buffer.deleteCharAt(buffer.length() - 1);
+            }
+        }
+
+        return buffer.toString();
+    }
+
+    /**
+     * @param index
+     * @return String
+     */
+    public static String toString(Node node, int index, boolean sort)
+    {
+        StringBuilder buffer = new StringBuilder();
+
+        if(index == node.getOffset())
+        {
+            buffer.append("<");
+            buffer.append(node.getNodeName());
+            buffer.append(" lineNumber=\"");
+            buffer.append(node.getLineNumber());
+            buffer.append("\" offset=\"");
+            buffer.append(node.getOffset());
+            buffer.append("\" length=\"");
+            buffer.append(node.getLength());
+            buffer.append("\"");
+
+            if(node.getTagClassName() != null)
+            {
+                buffer.append(" tagClass=\"");
+                buffer.append(node.getTagClassName());
+                buffer.append("\"");
+            }
+
+            if(node.getTagFactory() != null)
+            {
+                buffer.append(" tagFactory=\"");
+                buffer.append(node.getTagFactory().getClass().getName());
+                buffer.append("\"");
+            }
+
+            Map<String, String> attributes = node.getAttributes();
+
+            if(attributes != null && attributes.size() > 0)
+            {
+                if(sort == true)
+                {
+                    java.util.TreeMap<String, String> treeMap = new java.util.TreeMap<String, String>();
+                    treeMap.putAll(attributes);
+                    attributes = treeMap;
+                }
+
+                for(Map.Entry<String, String> entry : attributes.entrySet())
+                {
+                    buffer.append(" ");
+                    buffer.append(entry.getKey());
+                    buffer.append("=\"");
+                    buffer.append(node.encode(entry.getValue()));
+                    buffer.append("\"");
+                }
+            }
+
+            if(node.getClosed() == NodeType.SELF_CLOSED)
+            {
+                buffer.append("/>");
+            }
+            else
+            {
+                buffer.append(">");
+            }
+        }
+        else
+        {
+            if(node.getClosed() == NodeType.PAIR_CLOSED)
+            {
+                buffer.append("</");
+                buffer.append(node.getNodeName());
+                buffer.append(">");
             }
         }
 

@@ -1,7 +1,7 @@
 /*
  * $RCSfile: IO.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-2-19 $
+ * $Date: 2013-02-19 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -63,7 +63,14 @@ public class IO
 
         try
         {
-            inputStreamReader = new InputStreamReader(inputStream, charset);
+            if(charset == null || charset.trim().length() < 1)
+            {
+                inputStreamReader = new InputStreamReader(inputStream);
+            }
+            else
+            {
+                inputStreamReader = new InputStreamReader(inputStream, charset);
+            }
 
             int length = 0;
             char[] buffer = new char[bufferSize];

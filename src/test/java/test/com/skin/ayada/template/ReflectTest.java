@@ -1,7 +1,7 @@
 /*
  * $RCSfile: ReflectTest.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-11-5 $
+ * $Date: 2013-11-05 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -17,11 +17,12 @@ import java.util.Map;
 import com.skin.ayada.factory.DefaultTagFactory;
 import com.skin.ayada.factory.TagFactoryManager;
 import com.skin.ayada.jstl.core.ForEachTag;
-import com.skin.ayada.runtime.JspFactory;
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.runtime.TagFactory;
 import com.skin.ayada.statement.Node;
 import com.skin.ayada.tagext.Tag;
+import com.skin.ayada.template.TemplateContext;
+import com.skin.ayada.template.TemplateManager;
 import com.skin.ayada.util.TagUtil;
 
 /**
@@ -50,7 +51,8 @@ public class ReflectTest
     public static void reflectTest()
     {
         StringWriter out = new StringWriter();
-        PageContext pageContext = JspFactory.getPageContext(out);
+        TemplateContext templateContext = TemplateManager.getTemplateContext("webapp");
+        PageContext pageContext = templateContext.getPageContext(out);
 
         int count = 10000000;
         long t1 = System.currentTimeMillis();

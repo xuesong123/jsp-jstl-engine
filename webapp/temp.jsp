@@ -1,3 +1,6 @@
+<c:set var="myString" value="${StringUtil.replace('abc', 'b', '-')}"/>
+<p>myString: [<c:out value="${myString}"/>]</p>
+
 <c:list name="userList"/>
 
 <c:forEach items="1, 2, 3, 4, 5" step="2" var="num">

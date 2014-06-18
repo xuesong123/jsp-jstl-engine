@@ -1,7 +1,7 @@
 /*
  * $RCSfile: Config.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-5-3 $
+ * $Date: 2013-05-03 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -21,7 +21,7 @@ import java.util.Set;
  * @author xuesong.net
  * @version 1.0
  */
-public abstract class Config
+public class Config
 {
     public static final long serialVersionUID = 1L;
     private Map<String, String> parameters = new LinkedHashMap<String, String>();

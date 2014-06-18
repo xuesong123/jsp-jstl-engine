@@ -1,7 +1,7 @@
 /*
  * $RCSfile: DefaultTagFactory.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-11-6 $
+ * $Date: 2013-11-06 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *

@@ -1,7 +1,7 @@
 /*
  * $RCSfile: ActionTag.java,v $$
  * $Revision: 1.1 $
- * $Date: 2011-12-9 $
+ * $Date: 2011-12-09 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *

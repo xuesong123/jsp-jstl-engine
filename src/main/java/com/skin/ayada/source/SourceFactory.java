@@ -1,7 +1,7 @@
 /*
  * $RCSfile: SourceFactory.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-11-4 $
+ * $Date: 2013-11-04 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -35,6 +35,12 @@ public abstract class SourceFactory
      * @return long
      */
     public abstract long getLastModified(String path);
+
+    /**
+     * @param path
+     * @return boolean
+     */
+    public abstract boolean exists(String path);
 
     /**
      * @param path

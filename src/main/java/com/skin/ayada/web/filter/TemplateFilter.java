@@ -1,7 +1,7 @@
 /*
  * $RCSfile: TemplateFilter.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-2-27 $
+ * $Date: 2013-02-27 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -134,7 +134,7 @@ public class TemplateFilter implements Filter
 
         if(sourcePattern != null)
         {
-            this.templateContext.setSourcePattern(sourcePattern);
+            this.templateContext.getSourceFactory().setSourcePattern(sourcePattern);
         }
     }
 

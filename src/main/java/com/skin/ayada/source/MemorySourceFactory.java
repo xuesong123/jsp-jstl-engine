@@ -1,7 +1,7 @@
 /*
  * $RCSfile: MemorySourceFactory.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-11-4 $
+ * $Date: 2013-11-04 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -9,6 +9,9 @@
  * Use is subject to license terms.
  */
 package com.skin.ayada.source;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>Title: MemorySourceFactory</p>
@@ -18,24 +21,15 @@ package com.skin.ayada.source;
  */
 public class MemorySourceFactory extends SourceFactory
 {
-    private Source source;
+    private Map<String, Source> cache;
 
     /**
      * @param source
      */
     public MemorySourceFactory(Source source)
     {
-        this.source = source;
-    }
-
-    /**
-     * @param path
-     * @return long
-     */
-    @Override
-    public long getLastModified(String path)
-    {
-        return this.source.getLastModified();
+        this.cache = new HashMap<String, Source>();
+        this.cache.put(source.getPath(), source);
     }
 
     /**
@@ -46,6 +40,32 @@ public class MemorySourceFactory extends SourceFactory
     @Override
     public Source getSource(String path, String encoding)
     {
-        return this.source;
+        return this.cache.get(path);
+    }
+
+    /**
+     * @param path
+     * @return long
+     */
+    @Override
+    public long getLastModified(String path)
+    {
+        Source source = this.getSource(path, null);
+
+        if(source == null)
+        {
+            throw new RuntimeException(path + " can't access !");
+        }
+
+        return source.getLastModified();
+    }
+
+    /**
+     * @param path
+     * @return boolean
+     */
+    public boolean exists(String path)
+    {
+        return (this.getSource(path, null) != null);
     }
 }

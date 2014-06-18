@@ -1,7 +1,7 @@
 /*
  * $RCSfile: ForEachTagTest.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-8-26 $
+ * $Date: 2013-08-26 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -41,7 +41,7 @@ public class ForEachTagTest
     public static void test1() throws Exception
     {
         StringWriter out = new StringWriter();
-        PageContext pageContext = JspFactory.getPageContext(out);
+        PageContext pageContext = JspFactory.getDefaultPageContext(out);
 
         ForEachTag forEachTag = new ForEachTag();
         forEachTag.setParent((Tag)null);
@@ -58,7 +58,7 @@ public class ForEachTagTest
     public static void test2() throws Exception
     {
         StringWriter out = new StringWriter();
-        PageContext pageContext = JspFactory.getPageContext(out);
+        PageContext pageContext = JspFactory.getDefaultPageContext(out);
 
         ForEachTag forEachTag = new ForEachTag();
         forEachTag.setPageContext(pageContext);

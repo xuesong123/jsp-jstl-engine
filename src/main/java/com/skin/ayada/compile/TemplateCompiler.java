@@ -1,7 +1,7 @@
 /*
  * $RCSfile: TemplateCompiler.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-2-19 $
+ * $Date: 2013-02-19 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -77,6 +77,11 @@ public class TemplateCompiler extends PageCompiler
         if(logger.isDebugEnabled())
         {
             logger.debug("load source: " + (t2 - t1));
+        }
+        
+        if(source == null)
+        {
+            throw new NullPointerException("source \"" + path + "\" not exists !");
         }
 
         return this.compile(source);

@@ -1,7 +1,7 @@
 /*
  * $RCSfile: TemplateContext.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-2-19 $
+ * $Date: 2013-02-19 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -10,22 +10,13 @@
  */
 package com.skin.ayada.template;
 
-import java.io.File;
 import java.io.Writer;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.FutureTask;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.skin.ayada.runtime.JspFactory;
+import com.skin.ayada.runtime.ExpressionContext;
+import com.skin.ayada.runtime.ExpressionFactory;
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.source.SourceFactory;
-import com.skin.ayada.util.StringUtil;
 
 /**
  * <p>Title: TemplateContext</p>
@@ -34,23 +25,14 @@ import com.skin.ayada.util.StringUtil;
  * @author xuesong.net
  * @version 1.0
  */
-public class TemplateContext
+public abstract class TemplateContext
 {
     private String home;
     private int expire;
-    private String charset;
+    private String encoding;
     private SourceFactory sourceFactory;
     private TemplateFactory templateFactory;
-    private ConcurrentHashMap<String, FutureTask<Template>> cache;
-    private static final Logger logger = LoggerFactory.getLogger(TemplateContext.class);
-
-    /**
-     * @param home
-     */
-    public TemplateContext(String home)
-    {
-        this(home, 300);
-    }
+    private ExpressionFactory expressionFactory;
 
     /**
      * @param home
@@ -59,7 +41,6 @@ public class TemplateContext
     {
         this.home = home;
         this.expire = expire;
-        this.cache = new ConcurrentHashMap<String, FutureTask<Template>>();
     }
 
     /**
@@ -73,7 +54,7 @@ public class TemplateContext
 
         if(template == null)
         {
-            throw new Exception(new File(this.home, path).getAbsolutePath() + " not exists!");
+            throw new Exception(this.home + "/" + path + " not exists!");
         }
 
         this.execute(template, context, writer);
@@ -84,182 +65,74 @@ public class TemplateContext
      * @param context
      * @param writer
      */
-    public void execute(Template template, Map<String, Object> context, Writer writer) throws Exception
+    public abstract void execute(Template template, Map<String, Object> context, Writer writer) throws Exception;
+
+    /**
+     * @param path
+     * @return Template
+     * @throws Exception
+     */
+    public Template getTemplate(final String path) throws Exception
     {
-        PageContext pageContext = JspFactory.getPageContext(this, writer);
-
-        if(context != null)
-        {
-            for(Map.Entry<String, Object> entry : context.entrySet())
-            {
-                if(entry.getValue() != null)
-                {
-                    pageContext.setAttribute(entry.getKey(), entry.getValue());
-                }
-            }
-        }
-
-        try
-        {
-            template.execute(pageContext);
-        }
-        finally
-        {
-            pageContext.release();
-        }
+        return this.getTemplate(path, this.encoding);
     }
 
     /**
      * @param path
      * @return Template
+     * @throws Exception
      */
-    public Template getTemplate(String path) throws Exception
+    public abstract Template getTemplate(final String path, final String encoding) throws Exception;
+
+    /**
+     * @param out
+     * @return PageContext
+     */
+    public PageContext getPageContext(Writer out)
     {
-        String realPath = path;
-        realPath = StringUtil.replace(realPath, "\\", "/");
-        realPath = StringUtil.replace(realPath, "//", "/");
-        final String temp = realPath;
-
-        if(this.expire == 0)
-        {
-            return this.create(temp);
-        }
-
-        int count = 0;
-        int tryCount = 10;
-
-        while(true)
-        {
-            FutureTask<Template> f = this.cache.get(temp);
-
-            if(f == null)
-            {
-                Callable<Template> callable = new Callable<Template>(){
-                    public Template call() throws InterruptedException
-                    {
-                        try
-                        {
-                            return TemplateContext.this.create(temp);
-                        }
-                        catch(Exception e)
-                        {
-                            throw new RuntimeException(e);
-                        }
-                    }
-                };
-
-                FutureTask<Template> futureTask = new FutureTask<Template>(callable);
-                f = this.cache.putIfAbsent(temp, futureTask);
-
-                if(f == null)
-                {
-                    f = futureTask;
-                    futureTask.run();
-                }
-            }
-
-            try
-            {
-                Template template = f.get();
-
-                if(template == null || this.expire < 0)
-                {
-                    return template;
-                }
-
-                long timeMillis = System.currentTimeMillis();
-
-                if(timeMillis - template.getUpdateTime() > this.expire * 1000L)
-                {
-                    if(template.getLastModified() != this.sourceFactory.getLastModified(template.getPath()))
-                    {
-                        this.cache.remove(temp, f);
-                    }
-                    else
-                    {
-                        template.setUpdateTime(System.currentTimeMillis());
-                        return template;
-                    }
-                }
-                else
-                {
-                    return template;
-                }
-
-                if(count++ >= tryCount)
-                {
-                    throw new Exception("get template time out...");
-                }
-            }
-            catch(CancellationException e)
-            {
-                this.cache.remove(temp, f);
-            }
-            catch(InterruptedException e)
-            {
-                throw e;
-            }
-            catch(ExecutionException e)
-            {
-                throw e;
-            }
-            catch(Exception e)
-            {
-                throw e;
-            }
-        }
+        return this.getPageContext(out, 8192, false);
     }
 
     /**
-     * @param path
-     * @return Template
+     * @param out
+     * @param buffserSize
+     * @param autoFlush
+     * @return PageContext
      */
-    protected Template create(String path) throws Exception
+    public abstract PageContext getPageContext(Writer out, int buffserSize, boolean autoFlush);
+
+    /**
+     * @return ExpressionContext
+     */
+    public abstract ExpressionContext getExpressionContext(PageContext pageContext);
+
+    /**
+     * destory the current TemplateContext
+     */
+    public abstract void destory();
+
+    /**
+     * @param home the home to set
+     */
+    public void setHome(String home)
     {
-        return this.templateFactory.create(this.getSourceFactory(), path, this.charset);
-    }
-
-    protected synchronized void clear()
-    {
-        long timeMillis = System.currentTimeMillis();
-
-        for(Map.Entry<String, FutureTask<Template>> entry : this.cache.entrySet())
-        {
-            FutureTask<Template> f = entry.getValue();
-
-            try
-            {
-                Template template = f.get();
-
-                if(timeMillis - template.getUpdateTime() > this.expire * 1000L)
-                {
-                    String key = entry.getKey();
-
-                    if(logger.isDebugEnabled())
-                    {
-                        logger.debug("template.remove: " + key);
-                    }
-
-                    this.cache.remove(key, f);
-                }
-            }
-            catch(InterruptedException e)
-            {
-                e.printStackTrace();
-            }
-            catch(ExecutionException e)
-            {
-                e.printStackTrace();
-            }
-        }
+        this.home = home;
     }
 
     /**
-     * @return String
+     * @return the home
      */
     public String getHome()
     {
         return this.home;
+    }
+
+    /**
+     * @param expire the expire to set
+     */
+    public void setExpire(int expire)
+    {
+        this.expire = expire;
     }
 
     /**
@@ -271,11 +144,19 @@ public class TemplateContext
     }
 
     /**
-     * @param expire the expire to set
+     * @param encoding the encoding to set
      */
-    public void setExpire(int expire)
+    public void setEncoding(String encoding)
     {
-        this.expire = expire;
+        this.encoding = encoding;
+    }
+
+    /**
+     * @return the encoding
+     */
+    public String getEncoding()
+    {
+        return this.encoding;
     }
 
     /**
@@ -295,14 +176,6 @@ public class TemplateContext
     }
 
     /**
-     * @return the templateFactory
-     */
-    public TemplateFactory getTemplateFactory()
-    {
-        return this.templateFactory;
-    }
-
-    /**
      * @param templateFactory the templateFactory to set
      */
     public void setTemplateFactory(TemplateFactory templateFactory)
@@ -311,34 +184,26 @@ public class TemplateContext
     }
 
     /**
-     * @return the sourcePattern
+     * @return the templateFactory
      */
-    public String getSourcePattern()
+    public TemplateFactory getTemplateFactory()
     {
-        if(this.sourceFactory != null)
-        {
-            return this.sourceFactory.getSourcePattern();
-        }
-
-        return null;
+        return this.templateFactory;
     }
 
     /**
-     * @param sourcePattern the sourcePattern to set
+     * @param expressionFactory the expressionFactory to set
      */
-    public void setSourcePattern(String sourcePattern)
+    public void setExpressionFactory(ExpressionFactory expressionFactory)
     {
-        if(this.sourceFactory != null)
-        {
-            this.sourceFactory.setSourcePattern(sourcePattern);
-        }
+        this.expressionFactory = expressionFactory;
     }
 
-    public void destory()
+    /**
+     * @return the expressionFactory
+     */
+    public ExpressionFactory getExpressionFactory()
     {
-        this.cache.clear();
-        this.cache = null;
-        this.sourceFactory = null;
-        this.templateFactory = null;
+        return this.expressionFactory;
     }
 }

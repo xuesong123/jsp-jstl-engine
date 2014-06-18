@@ -1,7 +1,7 @@
 /*
  * $RCSfile: TemplateTest.java,v $$
- * $Revision: 1.1  $
- * $Date: 2013-2-19  $
+ * $Revision: 1.1 $
+ * $Date: 2013-02-19 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -15,31 +15,35 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.io.Writer;
+import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import test.com.skin.ayada.handler.UserHandler;
+import test.com.skin.ayada.model.User;
+
 import com.skin.ayada.compile.TemplateCompiler;
 import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.jstl.TagLibraryFactory;
+import com.skin.ayada.runtime.DefaultExpressionFactory;
+import com.skin.ayada.runtime.ExpressionFactory;
 import com.skin.ayada.runtime.JspFactory;
-import com.skin.ayada.runtime.JspWriter;
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.source.ClassPathSourceFactory;
 import com.skin.ayada.source.DefaultSourceFactory;
 import com.skin.ayada.source.MemorySourceFactory;
 import com.skin.ayada.source.Source;
 import com.skin.ayada.source.SourceFactory;
+import com.skin.ayada.template.DefaultTemplateContext;
 import com.skin.ayada.template.Template;
 import com.skin.ayada.template.TemplateContext;
+import com.skin.ayada.template.TemplateFactory;
+import com.skin.ayada.template.TemplateManager;
 import com.skin.ayada.util.ExpressionUtil;
 import com.skin.ayada.util.MemMonitor;
 import com.skin.ayada.util.TemplateUtil;
-
-import example.handler.UserHandler;
-import example.model.User;
 
 /**
  * <p>Title: TemplateTest</p>
@@ -57,7 +61,6 @@ public class TemplateTest
         // System.out.println(Object.class.isAssignableFrom(String.class));
         // compareTest(new Object(), "test");
         // compareTest("test", new Object());
-
         // classPathTest();
 
         // test1();
@@ -69,23 +72,32 @@ public class TemplateTest
         // test("webapp", "/stacktrace.jsp");
         // test("E:\\WorkSpace\\fmbak\\webapps\\template", "/category.jsp");
         // noFileTest();
+        // test3();
+        // test("webapp", "/whenTest.jsp", 100);
+        stringTest();
 
         /*
         boolean b = TemplateConfig.getInstance().getBoolean("ayada.compile.ignore-jsptag");
         System.out.println(b);
         System.out.println(TemplateConfig.getInstance().getString("ayada.compile.ignore-jsptag"));
         */
-        test2();
     }
 
     public static void test(String home, String file)
     {
         try
         {
-            TemplateContext templateContext = new TemplateContext(home);
+            SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
+            TemplateFactory templateFactory = new TemplateFactory();
+            ExpressionFactory expressionFactory = new DefaultExpressionFactory();
+            TemplateContext templateContext = new DefaultTemplateContext(home);
+            templateContext.setSourceFactory(sourceFactory);
+            templateContext.setTemplateFactory(templateFactory);
+            templateContext.setExpressionFactory(expressionFactory);
+
             Template template = templateContext.getTemplate(file);
             StringWriter writer = new StringWriter();
-            PageContext pageContext = getPageContext(writer);
+            PageContext pageContext = templateContext.getPageContext(writer);
             template.execute(pageContext);
             System.out.println("-------------- source result --------------");
             System.out.println(TemplateUtil.toString(template));
@@ -98,36 +110,37 @@ public class TemplateTest
         }
     }
 
+    /**
+     * @param home
+     * @param file
+     * @param count
+     */
     public static void test(String home, String file, int count)
     {
         OutputStream outputStream = null;
 
         try
         {
-            TemplateContext templateContext = new TemplateContext(home);
-            Template template = templateContext.getTemplate(file);
-            StringWriter writer = new StringWriter();
-            PageContext pageContext = getPageContext(writer);
-            template.execute(pageContext);
+            TemplateContext templateContext = TemplateManager.create(home, 0);
 
+            // warmup
+            templateContext.execute(file, new HashMap<String, Object>(), new StringWriter());
+            System.out.println("test...");
+
+            long t1 = System.currentTimeMillis();
             outputStream = new FileOutputStream("D:\\mem.log");
             PrintWriter out = new PrintWriter(outputStream);
             MemMonitor memMonitor = new MemMonitor();
 
             for(int i = 0; i < count; i++)
             {
-                writer = new StringWriter();
-                pageContext.setOut(new JspWriter(writer));
-                try
-                {
-                    template.execute(pageContext);
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
-                }
+                StringWriter writer = new StringWriter();
+                templateContext.execute(file, new HashMap<String, Object>(), writer);
                 memMonitor.test(out, (i == 0), true);
             }
+
+            long t2 = System.currentTimeMillis();
+            System.out.println("time: " + (t2 - t1));
         }
         catch(Exception e)
         {
@@ -146,12 +159,9 @@ public class TemplateTest
                 }
             }
         }
-
-        // System.out.println("-------------- run result --------------");
-        // System.out.println(writer.toString());
     }
 
-    public static PageContext getPageContext(Writer out)
+    public static void setTestData(PageContext pageContext)
     {
         User user = new User();
         user.setUserId(1L);
@@ -159,27 +169,23 @@ public class TemplateTest
         user.setAge(1);
 
         List<User> userList = UserHandler.getUserList(16);
-        PageContext pageContext = JspFactory.getPageContext(out);
         pageContext.setAttribute("user", user);
         pageContext.setAttribute("userList", userList);
-        return pageContext;
     }
 
     public static void test1() throws Exception
     {
-        SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
-        TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();
-        TemplateCompiler compiler = new TemplateCompiler(sourceFactory);
-        compiler.setTagLibrary(tagLibrary);
+        TemplateContext templateContext = TemplateManager.getTemplateContext("webapp");
 
         long t1 = System.currentTimeMillis();
-        Template template = compiler.compile("/large.html", "UTF-8");
+        Template template = templateContext.getTemplate("/large.html");
         long t2 = System.currentTimeMillis();
         System.out.println("compile time: " + (t2 - t1));
 
         long t3 = System.currentTimeMillis();
         StringWriter writer = new StringWriter();
-        PageContext pageContext = getPageContext(writer);
+        PageContext pageContext = templateContext.getPageContext(writer);
+
         try
         {
             template.execute(pageContext);
@@ -198,7 +204,8 @@ public class TemplateTest
     public static void test2()
     {
         StringWriter writer = new StringWriter();
-        PageContext pageContext = JspFactory.getPageContext(writer);
+        TemplateContext templateContext = TemplateManager.getTemplateContext("webapp");
+        PageContext pageContext = templateContext.getPageContext(writer);
 
         User user = new User();
         user.setUserId(1);
@@ -216,10 +223,11 @@ public class TemplateTest
     {
         try
         {
-            TemplateContext templateContext = new TemplateContext("webapp");
-            Template template = templateContext.getTemplate("/user/userList.tml");
             StringWriter writer = new StringWriter();
-            PageContext pageContext = JspFactory.getPageContext(templateContext, writer);
+            TemplateContext templateContext = TemplateManager.getTemplateContext("webapp");
+
+            Template template = templateContext.getTemplate("/user/userList.tml");
+            PageContext pageContext = templateContext.getPageContext(writer);
             List<User> userList = UserHandler.getUserList(16);
             pageContext.setAttribute("userList", userList);
             template.execute(pageContext);
@@ -231,29 +239,38 @@ public class TemplateTest
         }
     }
 
-    public static void noFileTest() throws Exception
+    public static void noFileTest()
     {
         Source source = new Source("webapp", "1.jsp", "<c:out value=\"123\"/>", Source.SCRIPT);
         SourceFactory sourceFactory = new MemorySourceFactory(source);
+        TemplateFactory templateFactory = new TemplateFactory();
+        ExpressionFactory expressionFactory = new DefaultExpressionFactory();
+
+        TemplateContext templateContext = new DefaultTemplateContext("");
+        templateContext.setSourceFactory(sourceFactory);
+        templateContext.setTemplateFactory(templateFactory);
+        templateContext.setExpressionFactory(expressionFactory);
+
         TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();
         TemplateCompiler compiler = new TemplateCompiler(sourceFactory);
         compiler.setTagLibrary(tagLibrary);
-        Template template = compiler.compile("", "UTF-8");
-        StringWriter writer = new StringWriter();
 
-        TemplateContext templateContext = new TemplateContext("");
-        PageContext pageContext = JspFactory.getPageContext(templateContext, writer);
-        List<User> userList = UserHandler.getUserList(16);
-        pageContext.setAttribute("userList", userList);
         try
         {
+            StringWriter writer = new StringWriter();
+            Template template = templateContext.getTemplate("1.jsp");
+            templateContext.getTemplate("1.jsp");
+
+            PageContext pageContext = templateContext.getPageContext(writer);
+            List<User> userList = UserHandler.getUserList(16);
+            pageContext.setAttribute("userList", userList);
             template.execute(pageContext);
+            System.out.println(writer.toString());
         }
         catch(Exception e)
         {
             e.printStackTrace();
         }
-        System.out.println(writer.toString()); 
     }
 
     public static void classPathTest()
@@ -262,12 +279,14 @@ public class TemplateTest
         {
             String home = "com/skin/ayada/demo";
             SourceFactory sourceFactory = new ClassPathSourceFactory(home);
-            TemplateContext templateContext = new TemplateContext(home);
+            TemplateFactory templateFactory = new TemplateFactory();
+            TemplateContext templateContext = new DefaultTemplateContext("");
             templateContext.setSourceFactory(sourceFactory);
+            templateContext.setTemplateFactory(templateFactory);
 
             Template template = templateContext.getTemplate("/hello.jsp");
             StringWriter writer = new StringWriter();
-            PageContext pageContext = JspFactory.getPageContext(writer);
+            PageContext pageContext = templateContext.getPageContext(writer);
 
             System.out.println("-------------- source result --------------");
             System.out.println(TemplateUtil.toString(template));
@@ -297,6 +316,26 @@ public class TemplateTest
         else
         {
             System.out.println("error");
+        }
+    }
+
+    public static void stringTest()
+    {
+        try
+        {
+            TemplateFactory templateFactory = new TemplateFactory();
+            Template template = templateFactory.compile("123<c:if test=\"${1 == 1}\">abc</c:if>xyz");
+
+            StringWriter out = new StringWriter();
+            PageContext pageContext = JspFactory.getDefaultPageContext(out);
+            template.execute(pageContext);
+
+            TemplateUtil.print(template);
+            System.out.println(out.toString());
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
         }
     }
 }

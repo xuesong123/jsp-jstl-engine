@@ -1,7 +1,7 @@
 /*
  * $RCSfile: BBCodeTest.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-3-19 $
+ * $Date: 2013-03-19 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *

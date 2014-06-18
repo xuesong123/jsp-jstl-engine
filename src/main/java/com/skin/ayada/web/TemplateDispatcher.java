@@ -1,7 +1,7 @@
 /*
  * $RCSfile: TemplateDispatcher.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-3-10 $
+ * $Date: 2013-03-10 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -21,14 +21,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.skin.ayada.config.TemplateConfig;
-import com.skin.ayada.runtime.ExpressionFactory;
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.template.Template;
 import com.skin.ayada.template.TemplateContext;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>Title: TemplateDispatcher</p>
@@ -93,19 +91,9 @@ public class TemplateDispatcher
             String locale = servletContext.getInitParameter("javax.servlet.jsp.jstl.fmt.locale");
             String timeZone = servletContext.getInitParameter("javax.servlet.jsp.jstl.fmt.timeZone");
 
-            if(locale == null)
-            {
-                locale = TemplateConfig.getInstance().getString("ayada.locale");
-            }
-
             if(locale != null)
             {
                 context.put(PageContext.LOCALE_KEY, locale);
-            }
-
-            if(timeZone == null)
-            {
-                timeZone = TemplateConfig.getInstance().getString("ayada.time-zone");
             }
 
             if(timeZone != null)
@@ -213,16 +201,6 @@ public class TemplateDispatcher
         if(servletContext == null)
         {
             Object value = request.getAttribute("TemplateFilter$servletContext");
-
-            if(value != null && value instanceof ServletContext)
-            {
-                servletContext = (ServletContext)(value);
-            }
-        }
-
-        if(servletContext == null)
-        {
-            Object value = ExpressionFactory.getAttribute("servletContext");
 
             if(value != null && value instanceof ServletContext)
             {

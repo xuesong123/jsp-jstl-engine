@@ -1,7 +1,7 @@
 /*
  * $RCSfile: TagUtilTest.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-8-26 $
+ * $Date: 2013-08-26 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *

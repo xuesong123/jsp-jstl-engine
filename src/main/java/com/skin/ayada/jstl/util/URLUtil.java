@@ -1,7 +1,7 @@
 /*
  * $RCSfile: URLUtil.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-3-29 $
+ * $Date: 2013-03-29 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *

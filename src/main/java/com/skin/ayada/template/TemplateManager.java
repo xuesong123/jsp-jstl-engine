@@ -1,7 +1,7 @@
 /*
  * $RCSfile: TemplateManager.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-3-10 $
+ * $Date: 2013-03-10 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -13,6 +13,8 @@ package com.skin.ayada.template;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.skin.ayada.runtime.DefaultExpressionFactory;
+import com.skin.ayada.runtime.ExpressionFactory;
 import com.skin.ayada.source.DefaultSourceFactory;
 import com.skin.ayada.source.SourceFactory;
 
@@ -25,7 +27,7 @@ import com.skin.ayada.source.SourceFactory;
  */
 public class TemplateManager
 {
-    private static final Map<String, TemplateContext> map = new HashMap<String, TemplateContext>();
+    private static final Map<String, TemplateContext> cache = new HashMap<String, TemplateContext>();
     private TemplateManager(){}
 
     /**
@@ -34,7 +36,7 @@ public class TemplateManager
      */
     public static TemplateContext getTemplateContext(String home)
     {
-        return getTemplateContext(home, false);
+        return getTemplateContext(home, true);
     }
 
     /**
@@ -44,12 +46,12 @@ public class TemplateManager
      */
     public static TemplateContext getTemplateContext(String home, boolean create)
     {
-        TemplateContext templateContext = map.get(home);
+        TemplateContext templateContext = cache.get(home);
 
         if(templateContext == null && create == true)
         {
             templateContext = create(home, 600);
-            map.put(home, templateContext);
+            cache.put(home, templateContext);
         }
 
         return templateContext;
@@ -64,9 +66,11 @@ public class TemplateManager
     {
         SourceFactory sourceFactory = new DefaultSourceFactory(home);
         TemplateFactory templateFactory = new TemplateFactory();
-        TemplateContext templateContext = new TemplateContext(home, expire);
+        TemplateContext templateContext = new DefaultTemplateContext(home, expire);
+        ExpressionFactory expressionFactory = new DefaultExpressionFactory();
         templateContext.setSourceFactory(sourceFactory);
         templateContext.setTemplateFactory(templateFactory);
+        templateContext.setExpressionFactory(expressionFactory);
         return templateContext;
     }
 
@@ -75,9 +79,9 @@ public class TemplateManager
      */
     public static void add(TemplateContext templateContext)
     {
-        if(map.get(templateContext.getHome()) == null)
+        if(cache.get(templateContext.getHome()) == null)
         {
-            map.put(templateContext.getHome(), templateContext);
+            cache.put(templateContext.getHome(), templateContext);
         }
         else
         {

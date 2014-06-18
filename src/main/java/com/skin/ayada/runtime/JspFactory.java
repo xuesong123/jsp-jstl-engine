@@ -1,7 +1,7 @@
 /*
  * $RCSfile: JspFactory.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-2-19 $
+ * $Date: 2013-02-19 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -14,7 +14,6 @@ import java.io.Writer;
 
 import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.jstl.TagLibraryFactory;
-import com.skin.ayada.template.TemplateContext;
 
 /**
  * <p>Title: JspFactory</p>
@@ -26,35 +25,28 @@ import com.skin.ayada.template.TemplateContext;
 public class JspFactory
 {
     /**
-     * @param out
+     * @param writer
      * @return PageContext
      */
-    public static PageContext getPageContext(Writer out)
+    public static PageContext getDefaultPageContext(Writer writer)
     {
-        return getPageContext(null, out, 8192, false);
+        return getDefaultPageContext(writer, 8192, false);
     }
 
     /**
-     * @param out
+     * @param writer
+     * @param buffserSize
+     * @param autoFlush
      * @return PageContext
      */
-    public static PageContext getPageContext(TemplateContext templateContext, Writer out)
+    public static PageContext getDefaultPageContext(Writer writer, int buffserSize, boolean autoFlush)
     {
-        return getPageContext(templateContext, out, 8192, false);
-    }
-
-    /**
-     * @param out
-     * @return PageContext
-     */
-    public static PageContext getPageContext(TemplateContext templateContext, Writer out, int buffserSize, boolean autoFlush)
-    {
-        JspWriter jspWriter = new JspWriter(out, buffserSize, autoFlush);
-        DefaultPageContext pageContext = new DefaultPageContext(jspWriter);
-        ExpressionContext expressionContext = ExpressionFactory.getExpressionContext(pageContext);
+        JspWriter out = new JspWriter(writer, buffserSize, autoFlush);
+        DefaultPageContext pageContext = new DefaultPageContext(out);
+        ExpressionContext expressionContext = DefaultExpressionFactory.getDefaultExpressionContext(pageContext);
         TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();
         pageContext.setTagLibrary(tagLibrary);
-        pageContext.setTemplateContext(templateContext);
+        pageContext.setTemplateContext(null);
         pageContext.setExpressionContext(expressionContext);
         return pageContext;
     }

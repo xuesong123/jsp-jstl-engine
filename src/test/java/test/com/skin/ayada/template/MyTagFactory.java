@@ -1,7 +1,7 @@
 /*
  * $RCSfile: MyTagFactor.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-11-7 $
+ * $Date: 2013-11-07 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *

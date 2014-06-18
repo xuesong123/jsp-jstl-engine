@@ -78,10 +78,31 @@ public class JspTemplateFactory extends TemplateFactory
     }
 
     /**
+     * @param source
+     * @return Template
+     */
+    @Override
+    public Template compile(String source) throws Exception
+    {
+        Template template = super.compile(source);
+
+        long t1 = System.currentTimeMillis();
+        JspTemplate jspTemplate = this.compile(template, this.getWork());
+        long t2 = System.currentTimeMillis();
+
+        if(logger.isDebugEnabled())
+        {
+            logger.debug("jsp compile time: " + (t2 - t1));
+        }
+
+        return jspTemplate;
+    }
+
+    /**
      * @param template
      * @return TemplateHandler
      */
-    public JspTemplate compile(Template template, String work) throws Exception
+    private JspTemplate compile(Template template, String work) throws Exception
     {
         String home = template.getHome();
         String root = ""; // this.getRootPath(home);
@@ -154,7 +175,7 @@ public class JspTemplateFactory extends TemplateFactory
      * @param child
      * @return String
      */
-    public String join(String parent, String child)
+    private String join(String parent, String child)
     {
         StringBuilder buffer = new StringBuilder();
         buffer.append(parent.trim());
@@ -176,7 +197,7 @@ public class JspTemplateFactory extends TemplateFactory
      * @param home
      * @return String
      */
-    public String getRootPath(String home)
+    protected String getRootPath(String home)
     {
         String temp = StringUtil.replace(home.trim(), "\\", "/");
 
@@ -200,7 +221,7 @@ public class JspTemplateFactory extends TemplateFactory
      * @return byte[]
      * @throws IOException
      */
-    public byte[] getBytes(File file) throws IOException
+    private byte[] getBytes(File file) throws IOException
     {
         InputStream inputStream = null;
 
@@ -268,7 +289,7 @@ public class JspTemplateFactory extends TemplateFactory
      * @param className
      * @return String
      */
-    public String getPackageName(String className)
+    private String getPackageName(String className)
     {
         int k = className.lastIndexOf(".");
 
@@ -284,7 +305,7 @@ public class JspTemplateFactory extends TemplateFactory
      * @param bytes
      * @return Object
      */
-    public Object getInstance(String className, byte[] bytes)
+    private Object getInstance(String className, byte[] bytes)
     {
         FactoryClassLoader factoryClassLoader = FactoryClassLoader.getInstance();
         Class<?> clazz = factoryClassLoader.create(className, bytes);
@@ -308,7 +329,7 @@ public class JspTemplateFactory extends TemplateFactory
     /**
      * @return String
      */
-    public String getTemplateDescription(Template template)
+    private String getTemplateDescription(Template template)
     {
         StringWriter stringWriter = new StringWriter();
         TemplateUtil.print(template, new PrintWriter(stringWriter));
@@ -320,7 +341,7 @@ public class JspTemplateFactory extends TemplateFactory
      * @param file
      * @throws IOException
      */
-    public void write(String source, File file) throws IOException
+    private void write(String source, File file) throws IOException
     {
         File parent = file.getParentFile();
 

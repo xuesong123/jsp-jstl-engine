@@ -119,8 +119,8 @@ public class MemMonitor
                 formatter.format("%-10s", "");
                 formatter.format("%-16s", "Total");
                 formatter.format("%-10s", "");
-                formatter.format("%-24s", "Start");
-                formatter.format("%-24s", "End");
+                formatter.format("%-28s", "Start");
+                formatter.format("%-28s", "End");
                 formatter.format("%-20s", "Time");
                 out.println(buffer.toString());
             }
@@ -147,7 +147,7 @@ public class MemMonitor
                     formatter.format("%-6s", (this.total / unit));
                     formatter.format("%-4s", "M");
 
-                    formatter.format("%1$tY-%1$2tm-%1$2td %1$2tH:%1$2tM:%1$2tS.%1$3tL     ", new Date(this.start));
+                    formatter.format("%1$tY-%1$2tm-%1$2td %1$2tH:%1$2tM:%1$2tS.%1$3tL     ", new Date(this.temp));
                     formatter.format("%1$tY-%1$2tm-%1$2td %1$2tH:%1$2tM:%1$2tS.%1$3tL     ", new Date(this.end));
                     formatter.format("%-16s", format(this.start - this.temp));
                     out.println(buffer.toString());

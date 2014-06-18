@@ -12,9 +12,9 @@ package com.skin.ayada.compile;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import com.skin.ayada.statement.Node;
 import com.skin.ayada.statement.NodeType;
@@ -55,13 +55,25 @@ public class XmlCompiler
 
         if(namespaces.size() > 0)
         {
+            int count = namespaces.size();
+
             for(Map.Entry<String, String> entry : namespaces.entrySet())
             {
                 writer.write("xmlns:");
                 writer.write(entry.getKey());
                 writer.write("=\"");
                 writer.write(entry.getValue());
-                writer.write("\"\r\n    ");
+
+                if(count > 1)
+                {
+                    writer.write("\"\r\n    ");
+                }
+                else
+                {
+                    writer.write("\"");
+                }
+
+                count--;
             }
             writer.println(">");
         }
@@ -108,12 +120,12 @@ public class XmlCompiler
             {
                 if(node.getNodeType() == NodeType.JSP_DECLARATION || node.getNodeType() == NodeType.JSP_SCRIPTLET || node.getNodeType() == NodeType.JSP_EXPRESSION)
                 {
-                    writer.write(indent + node.toString(index));
+                    writer.write(indent + NodeUtil.toString(node, index, true));
                     writer.write(StringUtil.escape(HtmlUtil.encode(node.getTextContent())));
                 }
                 else
                 {
-                    writer.println(indent + node.toString(index));
+                    writer.println(indent + NodeUtil.toString(node, index, true));
                 }
             }
             else
@@ -143,7 +155,7 @@ public class XmlCompiler
     private Map<String, String> getNamespaces(List<Node> list)
     {
         Node node = null;
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new TreeMap<String, String>();
 
         for(int index = 0, size = list.size(); index < size; index++)
         {

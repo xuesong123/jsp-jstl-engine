@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import com.skin.ayada.runtime.JspFactory;
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.util.TemplateUtil;
 
@@ -73,7 +72,7 @@ public class Example
         File parent = file.getParentFile();
         TemplateContext templateContext = TemplateManager.getTemplateContext(parent.getCanonicalPath(), true);
 
-        PageContext pageContext = JspFactory.getPageContext(templateContext, new PrintWriter(System.out));
+        PageContext pageContext = templateContext.getPageContext(new PrintWriter(System.out));
         Template template = templateContext.getTemplate(file.getName());
 
         System.out.println("===================== " + template.getClass().getName() + " =====================");

@@ -1,5 +1,5 @@
 @ECHO OFF
-copy "..\..\..\release\ayada-1.0.8.jar" "."
+copy "..\..\..\release\ayada-1.0.0.8.jar" "."
 copy "..\..\..\lib\javassist-3.11.0.GA.jar" "."
 copy "..\..\..\lib\libcopy.bat" "."
 copy "..\..\..\lib\logback-classic-0.9.24.jar" "."

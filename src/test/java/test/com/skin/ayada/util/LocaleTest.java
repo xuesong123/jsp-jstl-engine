@@ -1,7 +1,7 @@
 /*
  * $RCSfile: LocaleTest.java,v $$
  * $Revision: 1.1 $
- * $Date: 2014年6月16日 $
+ * $Date: 2013-03-18 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *

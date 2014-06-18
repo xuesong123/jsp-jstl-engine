@@ -1,7 +1,7 @@
 /*
  * $RCSfile: JspTemplateFactoryTest.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-11-8 $
+ * $Date: 2013-11-08 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.io.Writer;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,21 +25,21 @@ import com.skin.ayada.compile.TemplateCompiler;
 import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.jstl.TagLibraryFactory;
 import com.skin.ayada.runtime.ExpressionContext;
-import com.skin.ayada.runtime.JspFactory;
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.source.ClassPathSourceFactory;
 import com.skin.ayada.source.DefaultSourceFactory;
 import com.skin.ayada.source.SourceFactory;
 import com.skin.ayada.statement.Node;
 import com.skin.ayada.statement.NodeType;
+import com.skin.ayada.template.DefaultTemplateContext;
 import com.skin.ayada.template.JspTemplateFactory;
 import com.skin.ayada.template.Template;
+import com.skin.ayada.template.TemplateContext;
+import com.skin.ayada.template.TemplateFactory;
+import com.skin.ayada.template.TemplateManager;
 import com.skin.ayada.util.ExpressionUtil;
 import com.skin.ayada.util.IO;
 import com.skin.ayada.util.StringUtil;
-
-import example.handler.UserHandler;
-import example.model.User;
 
 /**
  * <p>Title: JspTemplateFactoryTest</p>
@@ -68,17 +67,21 @@ public class JspTemplateFactoryTest
     public static void test1(String file, boolean execute) throws Exception
     {
         SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
+        TemplateFactory templateFactory = new JspTemplateFactory("work", System.getProperty("java.class.path"));
+        templateFactory.setIgnoreJspTag(false);
 
+        TemplateContext templateContext = new DefaultTemplateContext("webapp");
+        templateContext.setSourceFactory(sourceFactory);
+        templateContext.setTemplateFactory(templateFactory);
+        
         long t1 = System.currentTimeMillis();
-        JspTemplateFactory jspTemplateFactory = new JspTemplateFactory("work", System.getProperty("java.class.path"));
-        jspTemplateFactory.setIgnoreJspTag(false);
 
-        Template template = jspTemplateFactory.create(sourceFactory, file, "UTF-8");
+        Template template = templateFactory.create(sourceFactory, file, "UTF-8");
         long t2 = System.currentTimeMillis();
         System.out.println("compile time: " + (t2 - t1));
 
         StringWriter writer = new StringWriter();
-        PageContext pageContext = getPageContext(writer);
+        PageContext pageContext = templateContext.getPageContext(writer);
 
         if(execute)
         {
@@ -101,20 +104,22 @@ public class JspTemplateFactoryTest
 
     public static void test2() throws Exception
     {
-        SourceFactory sourceFactory = new ClassPathSourceFactory("com/skin/ayada/compile");
-        TemplateCompiler compiler = new TemplateCompiler(sourceFactory);
-        TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();
-        compiler.setTagLibrary(tagLibrary);
-
+        String home = "com/skin/ayada/compile";
+        SourceFactory sourceFactory = new ClassPathSourceFactory(home);
+        TemplateFactory templateFactory = new TemplateFactory();
+        TemplateContext templateContext = new DefaultTemplateContext("");
+        templateContext.setSourceFactory(sourceFactory);
+        templateContext.setTemplateFactory(templateFactory);
+        
         long t1 = System.currentTimeMillis();
-        Template template = compiler.compile("class.jsp", "UTF-8");
+        Template template = templateContext.getTemplate("class.jsp", "UTF-8");
         long t2 = System.currentTimeMillis();
 
         System.out.println("compile time: " + (t2 - t1));
         List<Node> nodes = getTemplate().getNodes();
 
         StringWriter writer = new StringWriter();
-        PageContext pageContext = getPageContext(writer);
+        PageContext pageContext = templateContext.getPageContext(writer);
         pageContext.setAttribute("className", "Test1");
         pageContext.setAttribute("packageName", "test.com.skin.ayada.template");
         pageContext.setAttribute("date", "2013-11-8");
@@ -123,7 +128,7 @@ public class JspTemplateFactoryTest
         pageContext.setAttribute("NodeType", JspTemplateFactoryTest.getNodeType());
         pageContext.setAttribute("CodeUtil", new JspTemplateFactoryTest());
         pageContext.setAttribute("NodeUtil", new JspTemplateFactoryTest());
-        pageContext.setAttribute("tagLibrary", tagLibrary);
+        pageContext.setAttribute("tagLibrary", pageContext.getTagLibrary());
 
         long t3 = System.currentTimeMillis();
         try
@@ -188,14 +193,6 @@ public class JspTemplateFactoryTest
         }
     }
 
-    public static PageContext getPageContext(Writer out)
-    {
-        List<User> userList = UserHandler.getUserList(5);
-        PageContext pageContext = JspFactory.getPageContext(out);
-        pageContext.setAttribute("userList", userList);
-        return pageContext;
-    }
-
     public static Map<String, Integer> getNodeType()
     {
         Map<String, Integer> map = new HashMap<String, Integer>();
@@ -207,7 +204,8 @@ public class JspTemplateFactoryTest
     public static void expressionTest()
     {
         StringWriter writer = new StringWriter();
-        PageContext pageContext = getPageContext(writer);
+        TemplateContext templateContext = TemplateManager.getTemplateContext("webapp");
+        PageContext pageContext = templateContext.getPageContext(writer);
         ExpressionContext expressionContext = pageContext.getExpressionContext();
         ExpressionUtil.getBoolean(expressionContext, "${1 == 1}");
     }

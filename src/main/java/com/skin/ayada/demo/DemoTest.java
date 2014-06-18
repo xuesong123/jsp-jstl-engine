@@ -1,7 +1,7 @@
 /*
  * $RCSfile: DemoTest.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-11-4 $
+ * $Date: 2013-11-04 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -12,10 +12,10 @@ package com.skin.ayada.demo;
 
 import java.io.StringWriter;
 
-import com.skin.ayada.runtime.JspFactory;
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.source.ClassPathSourceFactory;
 import com.skin.ayada.source.SourceFactory;
+import com.skin.ayada.template.DefaultTemplateContext;
 import com.skin.ayada.template.Template;
 import com.skin.ayada.template.TemplateContext;
 import com.skin.ayada.template.TemplateFactory;
@@ -46,14 +46,14 @@ public class DemoTest
             SourceFactory sourceFactory = new ClassPathSourceFactory(home);
             TemplateFactory templateFactory = new TemplateFactory();
 
-            TemplateContext templateContext = new TemplateContext(home);
+            TemplateContext templateContext = new DefaultTemplateContext(home);
             templateContext.setSourceFactory(sourceFactory);
             templateContext.setTemplateFactory(templateFactory);
             TemplateManager.add(templateContext);
 
             Template template = templateContext.getTemplate("/hello.jsp");
             StringWriter writer = new StringWriter();
-            PageContext pageContext = JspFactory.getPageContext(writer);
+            PageContext pageContext = templateContext.getPageContext(writer);
 
             System.out.println("-------------- source result --------------");
             System.out.println(TemplateUtil.toString(template));

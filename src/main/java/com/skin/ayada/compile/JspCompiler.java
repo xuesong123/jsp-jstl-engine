@@ -1,7 +1,7 @@
 /*
  * $RCSfile: ClassCompiler.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-11-8 $
+ * $Date: 2013-11-08 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -66,7 +66,7 @@ public class JspCompiler
         writer.println("    public static void main(String[] args)");
         writer.println("    {");
         writer.println("        java.io.StringWriter writer = new java.io.StringWriter();");
-        writer.println("        PageContext pageContext = com.skin.ayada.runtime.JspFactory.getPageContext(writer);");
+        writer.println("        PageContext pageContext = com.skin.ayada.runtime.JspFactory.getDefaultPageContext(writer);");
         writer.println("        " + className + " template = new " + className + "();");
         writer.println();
         writer.println("        try{");

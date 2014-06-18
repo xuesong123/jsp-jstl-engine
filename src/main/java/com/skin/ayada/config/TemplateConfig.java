@@ -18,19 +18,19 @@ import java.util.Set;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class TemplateConfig extends Config
+public class TemplateConfig
 {
-    private static final TemplateConfig instance = TemplateConfig.create();
+    private static final Config instance = TemplateConfig.create();
 
-    public static TemplateConfig getInstance()
+    public static Config getInstance()
     {
         return instance;
     }
 
-    public static TemplateConfig create()
+    public static Config create()
     {
-        TemplateConfig c1 = ConfigFactory.getConfig("ayada-default.properties", TemplateConfig.class);
-        TemplateConfig c2 = ConfigFactory.getConfig("ayada.properties", TemplateConfig.class);
+        Config c1 = ConfigFactory.getConfig("ayada-default.properties", Config.class);
+        Config c2 = ConfigFactory.getConfig("ayada.properties", Config.class);
 
         if(c1 == null)
         {

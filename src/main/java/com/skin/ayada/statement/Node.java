@@ -1,7 +1,7 @@
 /*
  * $RCSfile: Node.java,v $$
  * $Revision: 1.1 $
- * $Date: 2012-7-3 $
+ * $Date: 2012-7-03 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -289,7 +289,7 @@ public class Node
      * @param source
      * @return String
      */
-    private String encode(String source)
+    public String encode(String source)
     {
         if(source == null)
         {

@@ -1,7 +1,7 @@
 /*
  * $RCSfile: DefaultSourceFactory.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-11-4 $
+ * $Date: 2013-11-04 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -55,18 +55,18 @@ public class DefaultSourceFactory extends SourceFactory
 
     /**
      * @param path
-     * @param charset
+     * @param encoding
      * @return Source
      */
     @Override
-    public Source getSource(String path, String charset)
+    public Source getSource(String path, String encoding)
     {
-        String encoding = (charset != null ? charset : "UTF-8");
         File file = this.getFile(path);
 
         try
         {
-            Source source = new Source(this.home, path, IO.read(file, encoding, 4096), this.getSourceType(file.getName()));
+            String content = IO.read(file, encoding, 4096);
+            Source source = new Source(this.home, path, content, this.getSourceType(file.getName()));
             source.setLastModified(file.lastModified());
             return source;
         }
@@ -86,6 +86,29 @@ public class DefaultSourceFactory extends SourceFactory
         return this.getFile(path).lastModified();
     }
 
+    /**
+     * @param path
+     * @return boolean
+     */
+    public boolean exists(String path)
+    {
+        File file = null;
+
+        try
+        {
+            file = this.getFile(path);
+        }
+        catch(Exception e)
+        {
+        }
+
+        return (file != null);
+    }
+
+    /**
+     * @param path
+     * @return File
+     */
     public File getFile(String path)
     {
         if(path == null)
@@ -99,22 +122,22 @@ public class DefaultSourceFactory extends SourceFactory
         {
             if(file.getCanonicalPath().startsWith(this.home) == false)
             {
-                throw new RuntimeException(file.getAbsolutePath() + " can't access !");
+                throw new RuntimeException(file.getAbsolutePath() + " not exists !");
             }
         }
         catch(Exception e)
         {
-            throw new RuntimeException(file.getAbsolutePath() + " can't access !");
+            throw new RuntimeException(file.getAbsolutePath() + " not exists !");
         }
 
         if(file.exists() == false)
         {
-            throw new RuntimeException(file.getAbsolutePath() + " can't access !");
+            throw new RuntimeException(file.getAbsolutePath() + " not exists !");
         }
 
         if(file.isFile() == false)
         {
-            throw new RuntimeException(file.getAbsolutePath() + " can't access !");
+            throw new RuntimeException(file.getAbsolutePath() + " not exists !");
         }
 
         return file;

@@ -1,7 +1,7 @@
 /*
  * $RCSfile: OgnlTest.java,v $$
- * $Revision: 1.1  $
- * $Date: 2013-2-26  $
+ * $Revision: 1.1 $
+ * $Date: 2013-02-26 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -16,11 +16,10 @@ import java.util.Map;
 
 import ognl.Ognl;
 import ognl.OgnlException;
+import test.com.skin.ayada.handler.UserHandler;
+import test.com.skin.ayada.model.User;
 
 import com.skin.ayada.jstl.util.BeanUtil;
-
-import example.handler.UserHandler;
-import example.model.User;
 
 /**
  * <p>Title: OgnlTest</p>

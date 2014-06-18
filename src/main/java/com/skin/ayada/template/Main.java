@@ -14,8 +14,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import com.skin.ayada.config.Config;
 import com.skin.ayada.config.TemplateConfig;
-import com.skin.ayada.runtime.JspFactory;
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.util.TemplateUtil;
 
@@ -77,7 +77,7 @@ public class Main
             throw new IOException(path + " not exists!");
         }
 
-        TemplateConfig config = TemplateConfig.getInstance();
+        Config config = TemplateConfig.getInstance();
         config.setValue("ayada.compile.source-pattern", "*");
 
         File parent = file.getParentFile();
@@ -93,7 +93,7 @@ public class Main
         templateContext.getSourceFactory().setSourcePattern("*");
 
         PrintWriter printWriter = new PrintWriter(System.out);
-        PageContext pageContext = JspFactory.getPageContext(templateContext, printWriter);
+        PageContext pageContext = templateContext.getPageContext(printWriter);
         Template template = templateContext.getTemplate(file.getName());
 
         System.out.println("===================== " + template.getClass().getName() + " =====================");

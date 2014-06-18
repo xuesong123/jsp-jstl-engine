@@ -14,7 +14,6 @@ import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.skin.ayada.runtime.JspFactory;
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.template.Template;
 import com.skin.ayada.template.TemplateContext;
@@ -47,7 +46,7 @@ public class SqlTagTest
         {
             template = templateContext.getTemplate("sqlTagTest.jsp");
             StringWriter writer = new StringWriter();
-            PageContext pageContext = JspFactory.getPageContext(templateContext, writer);
+            PageContext pageContext = templateContext.getPageContext(writer);
             connection = getConnection();
             pageContext.setAttribute("connection", connection);
 

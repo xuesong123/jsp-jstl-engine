@@ -1,7 +1,7 @@
 /*
  * $RCSfile: DefaultPageContext.java,v $$
  * $Revision: 1.1 $
- * $Date: 2013-2-19 $
+ * $Date: 2013-02-19 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 
-import com.skin.ayada.config.TemplateConfig;
 import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.jstl.fmt.LocalizationContext;
 import com.skin.ayada.tagext.BodyContent;
@@ -40,7 +39,7 @@ public class DefaultPageContext implements PageContext
     private TemplateContext templateContext;
     private ExpressionContext expressionContext;
 
-    protected DefaultPageContext()
+    public DefaultPageContext()
     {
         this(null);
     }
@@ -48,13 +47,11 @@ public class DefaultPageContext implements PageContext
     /**
      * @param out
      */
-    protected DefaultPageContext(JspWriter out)
+    public DefaultPageContext(JspWriter out)
     {
         this.out = out;
         this.attributes = new HashMap<String, Object>();
         this.setAttribute("pageContext", this);
-        this.setAttribute(PageContext.LOCALE_KEY, TemplateConfig.getInstance().getString("ayada.locale"));
-        this.setAttribute(PageContext.TIMEZONE_KEY, TemplateConfig.getInstance().getString("ayada.time-zone"));
     }
 
     /**

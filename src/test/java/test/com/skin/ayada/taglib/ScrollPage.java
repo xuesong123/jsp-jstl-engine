@@ -1,7 +1,7 @@
 /*
  * $RCSfile: ScrollPage.java,v $$
- * $Revision: 1.1  $
- * $Date: 2011-11-3  $
+ * $Revision: 1.1 $
+ * $Date: 2011-11-03 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
