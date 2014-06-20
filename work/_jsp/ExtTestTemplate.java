@@ -100,7 +100,7 @@ public class ExtTestTemplate extends JspTemplate
 
                 /* TEXT: lineNumber: 6 */
                 out.write("        <p>3 - Hello World!</p>\r\n    ");
-                pageContext.printBodyContent((BodyContent)out, false);
+                pageContext.print((BodyContent)out, false);
                 out = pageContext.popBody();
                 /* jsp.jstl.core.OutTag END */
                 /* NODE END: lineNumber: 3, tagClassName: com.skin.ayada.jstl.core.OutTag, tagInstanceName: _jsp_OutTag_3 */
@@ -156,7 +156,7 @@ public class ExtTestTemplate extends JspTemplate
                 out = pageContext.pushBody();
                 /* TEXT: lineNumber: 13 */
                 out.write("<p>3 - Hello World!</p>");
-                pageContext.printBodyContent((BodyContent)out, false);
+                pageContext.print((BodyContent)out, false);
                 out = pageContext.popBody();
                 /* jsp.jstl.core.OutTag END */
                 /* NODE END: lineNumber: 13, tagClassName: com.skin.ayada.jstl.core.OutTag, tagInstanceName: _jsp_OutTag_15 */
@@ -354,7 +354,7 @@ public class ExtTestTemplate extends JspTemplate
                 out.write("<p>#########################</p>");
                 /* EXPRESSION: lineNumber: 44 */
                 out.write(expressionContext.getString("\"\\r\\n\""));
-                pageContext.printBodyContent((BodyContent)out, false);
+                pageContext.print((BodyContent)out, false);
                 out = pageContext.popBody();
                 /* jsp.jstl.core.OutTag END */
                 /* NODE END: lineNumber: 44, tagClassName: com.skin.ayada.jstl.core.OutTag, tagInstanceName: _jsp_OutTag_62 */
@@ -598,7 +598,7 @@ public class ExtTestTemplate extends JspTemplate
                 out = pageContext.pushBody();
                 /* TEXT: lineNumber: 77 */
                 out.write("userList: ");
-                pageContext.printBodyContent((BodyContent)out, false);
+                pageContext.print((BodyContent)out, false);
                 out = pageContext.popBody();
                 /* jsp.jstl.core.OutTag END */
                 /* NODE END: lineNumber: 77, tagClassName: com.skin.ayada.jstl.core.OutTag, tagInstanceName: _jsp_OutTag_115 */
@@ -667,7 +667,7 @@ public class ExtTestTemplate extends JspTemplate
                 out = pageContext.pushBody();
                 /* TEXT: lineNumber: 83 */
                 out.write("userList: ");
-                pageContext.printBodyContent((BodyContent)out, false);
+                pageContext.print((BodyContent)out, false);
                 out = pageContext.popBody();
                 /* jsp.jstl.core.OutTag END */
                 /* NODE END: lineNumber: 83, tagClassName: com.skin.ayada.jstl.core.OutTag, tagInstanceName: _jsp_OutTag_129 */

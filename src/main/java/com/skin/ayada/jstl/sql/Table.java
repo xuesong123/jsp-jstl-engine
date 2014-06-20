@@ -385,6 +385,88 @@ public class Table
     /**
      * @return String
      */
+    public String getCreateString()
+    {
+        return this.getCreateString("%s");
+    }
+
+    /**
+     * @param pattern
+     * @return String
+     */
+    public String getCreateString(String pattern)
+    {
+        int maxLength = 0;
+        String columnName = null;
+        List<Column> columns = this.listColumns();
+        StringBuilder buffer = new StringBuilder();
+        buffer.append("CREATE TABLE ");
+        buffer.append(String.format(pattern, this.getTableName()));
+        buffer.append("(\r\n");
+
+        for(int i = 0, size = columns.size(); i < size; i++)
+        {
+            Column column = columns.get(i);
+            columnName = String.format(pattern, column.getColumnName());
+
+            if(columnName.length() > maxLength)
+            {
+                maxLength = columnName.length();
+            }
+        }
+
+        maxLength = maxLength + 4;
+
+        for(int i = 0, size = columns.size(); i < size; i++)
+        {
+            Column column = columns.get(i);
+            columnName = String.format(pattern, column.getColumnName());
+            buffer.append("    ");
+            buffer.append(this.padding(columnName, maxLength, " "));
+            buffer.append(" ");
+            buffer.append(column.getTypeName());
+
+            if(column.getPrecision() > 0)
+            {
+                buffer.append("(");
+                buffer.append(column.getPrecision());
+                buffer.append(")");
+            }
+
+            if(column.getAutoIncrement() == 1)
+            {
+                buffer.append(" AUTO_INCREMENT");
+            }
+
+            if(column.getNullable() == 0)
+            {
+                buffer.append(" not null");
+            }
+
+            String remarks = column.getRemarks();
+
+            if(remarks != null && remarks.length() > 0)
+            {
+                buffer.append(" comment '");
+                buffer.append(this.escape(remarks));
+                buffer.append("'");
+            }
+            
+            if(i < size - 1)
+            {
+                buffer.append(",");
+            }
+
+            buffer.append("\r\n");
+        }
+
+        buffer.append(");");
+        return buffer.toString();
+    }
+
+    /**
+     * @return String
+     */
     public String getQueryString()
     {
         List<Column> columns = this.listColumns();
@@ -403,7 +485,56 @@ public class Table
             buffer.append(column.getColumnName());
         }
 
-        buffer.append(" FROM ").append(this.getQueryName());
+        buffer.append(" FROM ").append(this.getTableName());
+        return buffer.toString();
+    }
+
+    /**
+     * @param source
+     * @param length
+     * @param pad
+     * @return String
+     */
+    public String padding(String source, int length, String pad)
+    {
+        StringBuilder buffer = new StringBuilder(source);
+
+        while(buffer.length() < length)
+        {
+            buffer.append(pad);
+        }
+
+        if(buffer.length() > length)
+        {
+            return buffer.substring(0, length);
+        }
+
+        return buffer.toString();
+    }
+    
+    /**
+     * @param source
+     * @return String
+     */
+    private String escape(String source)
+    {
+        char ch;
+        StringBuilder buffer = new StringBuilder(source);
+        
+        for(int i = 0, length = source.length(); i < length; i++)
+        {
+            ch = source.charAt(i);
+            
+            if(ch == '\'')
+            {
+                buffer.append("\\'");
+            }
+            else
+            {
+                buffer.append(ch);
+            }
+        }
+
         return buffer.toString();
     }
 

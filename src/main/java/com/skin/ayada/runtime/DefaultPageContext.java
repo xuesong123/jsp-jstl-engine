@@ -409,7 +409,7 @@ public class DefaultPageContext implements PageContext
      * @param escapeXml
      * @throws IOException 
      */
-    public void printBodyContent(BodyContent bodyContent, boolean escapeXml) throws IOException
+    public void print(BodyContent bodyContent, boolean escapeXml) throws IOException
     {
         String content = bodyContent.getString();
 

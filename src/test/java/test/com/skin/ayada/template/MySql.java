@@ -1,7 +1,7 @@
 /*
  * $RCSfile: MySql.java,v $$
  * $Revision: 1.1 $
- * $Date: 2014-3-25 $
+ * $Date: 2014-03-25 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -99,7 +99,8 @@ public class MySql
                 statement.close();
             }
             catch(SQLException e)
-            {}
+            {
+            }
         }
     }
 
@@ -115,7 +116,8 @@ public class MySql
                 resultSet.close();
             }
             catch(SQLException e)
-            {}
+            {
+            }
         }
     }
 

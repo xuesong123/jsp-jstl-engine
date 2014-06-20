@@ -39,11 +39,6 @@ public class Column
     private Object value;
     private Table table;
 
-    public Table getTable()
-    {
-        return this.table;
-    }
-
     public Column()
     {
     }
@@ -57,6 +52,8 @@ public class Column
     {
         this.alias = alias;
         this.columnName = columnName;
+        this.autoIncrement = 0;
+        this.nullable = 1;
     }
 
     public Column(Column c)
@@ -86,6 +83,11 @@ public class Column
     public void setTable(Table table)
     {
         this.table = table;
+    }
+
+    public Table getTable()
+    {
+        return this.table;
     }
 
     public String getTableName()

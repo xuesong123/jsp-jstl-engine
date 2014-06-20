@@ -184,6 +184,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
     /***
      * Releases any resources this LoopTagSupport may have (or inherit).
      */
+    @Override
     public void release()
     {
         super.release();
@@ -193,9 +194,10 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
     /***
      * Begins iterating by processing the first item.
      */
+    @Override
     public int doStartTag() throws Exception
     {
-        if(end != -1 && begin > end)
+        if(this.end != -1 && this.begin > this.end)
         {
             // JSTL 1.1. We simply do not execute the loop.
             return SKIP_BODY;
@@ -210,13 +212,13 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
         this.prepare();
 
         // throw away the first 'begin' items (if they exist)
-        discardIgnoreSubset(begin);
+        discardIgnoreSubset(this.begin);
 
         // get the item we're interested in
         if(hasNext())
         {
             // index is 0-based, so we don't update it for the first item
-            item = next();
+            this.item = next();
         }
         else
         {
@@ -227,7 +229,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
          * now discard anything we have to "step" over.
          * (we do this in advance to support LoopTagStatus.isLast())
          */
-        discard(step - 1);
+        discard(this.step - 1);
         // prepare to include our body...
         exposeVariables();
         calibrateLast();
@@ -238,19 +240,20 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * Continues the iteration when appropriate -- that is, if we (a) have
      * more items and (b) don't run over our 'end' (given our 'step').
      */
+    @Override
     public int doAfterBody() throws Exception
     {
         // re-sync the index, given our prior behind-the-scenes 'step'
-        index += step - 1;
+        this.index += this.step - 1;
 
         // increment the count by 1 for each round
-        count++;
+        this.count++;
 
         // everything's been prepared for us, so just get the next item
         if(hasNext() && !atEnd())
         {
-            index++;
-            item = next();
+            this.index++;
+            this.item = next();
         }
         else
         {
@@ -261,7 +264,8 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
          * now discard anything we have to "step" over.
          * (we do this in advance to support LoopTagStatus.isLast())
          */
-        discard(step - 1);
+        discard(this.step - 1);
+
         // prepare to re-iterate...
         exposeVariables();
         calibrateLast();
@@ -343,29 +347,29 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
 
             public int getIndex()
             {
-                return (index + begin); // our 'index' isn't getIndex()
+                return (LoopTagSupport.this.index + LoopTagSupport.this.begin); // our 'index' isn't getIndex()
             }
 
             public int getCount()
             {
-                return (count);
+                return (LoopTagSupport.this.count);
             }
 
             public boolean isFirst()
             {
-                return (index == 0); // our 'index' isn't getIndex()
+                return (LoopTagSupport.this.index == 0); // our 'index' isn't getIndex()
             }
 
             public boolean isLast()
             {
-                return last; // use cached value
+                return LoopTagSupport.this.last; // use cached value
             }
 
             public Integer getBegin()
             {
-                if(beginSpecified)
+                if(LoopTagSupport.this.beginSpecified)
                 {
-                    return Integer.valueOf(begin);
+                    return Integer.valueOf(LoopTagSupport.this.begin);
                 }
                 else
                 {
@@ -375,9 +379,9 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
 
             public Integer getEnd()
             {
-                if(endSpecified)
+                if(LoopTagSupport.this.endSpecified)
                 {
-                    return Integer.valueOf(end);
+                    return Integer.valueOf(LoopTagSupport.this.end);
                 }
                 else
                 {
@@ -387,9 +391,9 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
 
             public Integer getStep()
             {
-                if(stepSpecified)
+                if(LoopTagSupport.this.stepSpecified)
                 {
-                    return Integer.valueOf(step);
+                    return Integer.valueOf(LoopTagSupport.this.step);
                 }
                 else
                 {
@@ -451,7 +455,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      */
     protected void validateBegin() throws Exception
     {
-        if(begin < 0)
+        if(this.begin < 0)
         {
             throw new Exception("'begin' < 0");
         }
@@ -463,7 +467,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      */
     protected void validateEnd() throws Exception
     {
-        if(end < 0)
+        if(this.end < 0)
         {
             throw new Exception("'end' < 0");
         }
@@ -475,7 +479,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      */
     protected void validateStep() throws Exception
     {
-        if(step < 1)
+        if(this.step < 1)
         {
             throw new Exception("'step' <= 0");
         }
@@ -510,7 +514,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
          * the current round is the last one if (a) there are no remaining
          * elements, or (b) the next one is beyond the 'end'.
          */
-        last = !hasNext() || atEnd() || (end != -1 && (begin + index + step > end));
+        this.last = !hasNext() || atEnd() || (this.end != -1 && (this.begin + this.index + this.step > this.end));
     }
 
     /***
@@ -538,11 +542,11 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
          */
         if(this.var != null)
         {
-            pageContext.setAttribute(this.var, this.getCurrent());
+            this.pageContext.setAttribute(this.var, this.getCurrent());
         }
         if(this.varStatus != null)
         {
-            pageContext.setAttribute(this.varStatus, this.getLoopStatus());
+            this.pageContext.setAttribute(this.varStatus, this.getLoopStatus());
         }
     }
 
@@ -554,11 +558,11 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
     {
         if(this.var != null)
         {
-            pageContext.setAttribute(this.var, null);
+            this.pageContext.setAttribute(this.var, null);
         }
         if(this.varStatus != null)
         {
-            pageContext.setAttribute(this.varStatus, null);
+            this.pageContext.setAttribute(this.varStatus, null);
         }
     }
 
@@ -581,13 +585,13 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
          * copy index so we can restore it, but we need to update it
          * as we work so that atEnd() works
          */
-        int oldIndex = index;
+        int oldIndex = this.index;
         while(n-- > 0 && !atEnd() && hasNext())
         {
-            index++;
+            this.index++;
             next();
         }
-        index = oldIndex;
+        this.index = oldIndex;
     }
 
     /***
@@ -611,6 +615,6 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      */
     private boolean atEnd()
     {
-        return ((end != -1) && (begin + index >= end));
+        return ((this.end != -1) && (this.begin + this.index >= this.end));
     }
 }

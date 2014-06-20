@@ -1,7 +1,7 @@
 /*
  * $RCSfile: ConnectTag.java,v $$
  * $Revision: 1.1 $
- * $Date: 2014-3-25 $
+ * $Date: 2014-03-25 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.tagext.TagSupport;
 import com.skin.ayada.tagext.TryCatchFinally;
+import com.skin.ayada.util.Jdbc;
 
 /**
  * <p>Title: ConnectTag</p>

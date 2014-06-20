@@ -315,7 +315,7 @@
     </tag>
     <tag>
         <name>sql:parse</name>
-        <tag-class>com.skin.ayada.jstl.sql.ParseTag</tag-class>
+        <tag-class>com.skin.ayada.jstl.sql.SqlParseTag</tag-class>
         <body-content>jsp</body-content>
         <description></description>
     </tag>

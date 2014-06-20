@@ -120,25 +120,25 @@ public class XmlCompiler
             {
                 if(node.getNodeType() == NodeType.JSP_DECLARATION || node.getNodeType() == NodeType.JSP_SCRIPTLET || node.getNodeType() == NodeType.JSP_EXPRESSION)
                 {
-                    writer.write(indent + NodeUtil.toString(node, index, true));
+                    writer.write(indent + node.toString(index, true));
                     writer.write(StringUtil.escape(HtmlUtil.encode(node.getTextContent())));
                 }
                 else
                 {
-                    writer.println(indent + NodeUtil.toString(node, index, true));
+                    writer.println(indent + node.toString(index, true));
                 }
             }
             else
             {
                 if(node.getNodeType() == NodeType.JSP_DECLARATION || node.getNodeType() == NodeType.JSP_SCRIPTLET || node.getNodeType() == NodeType.JSP_EXPRESSION)
                 {
-                    writer.println(node.toString(index));
+                    writer.println(node.toString(index, true));
                 }
                 else
                 {
                     if(node.getClosed() == NodeType.PAIR_CLOSED)
                     {
-                        writer.println(indent + node.toString(index));
+                        writer.println(indent + node.toString(index, true));
                     }
                 }
             }

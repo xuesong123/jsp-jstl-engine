@@ -605,7 +605,7 @@ public class JspCompiler
 
         if(value == null && node.getLength() > 2)
         {
-            writer.println(indent + "pageContext.printBodyContent((BodyContent)out, " + escapeXml + ");");
+            writer.println(indent + "pageContext.print((BodyContent)out, " + escapeXml + ");");
             writer.println(indent + "out = pageContext.popBody();");
         }
 
@@ -676,10 +676,6 @@ public class JspCompiler
                 {
                     writer.println(indent + tagInstanceName + ".setItems(\"" + StringUtil.escape(items) + "\");");
                 }
-            }
-            else
-            {
-                // writer.println(indent + tagInstanceName + ".setItems(null);");
             }
 
             if(begin != null && end != null)

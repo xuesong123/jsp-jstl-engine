@@ -10,7 +10,6 @@
  */
 package com.skin.ayada.jstl.core;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
 
@@ -44,7 +43,7 @@ public class PrintTag extends TagSupport
      * @param out
      * @param value
      */
-    public static void print(PageContext pageContext, Object out, Object value) throws IOException
+    public static void print(PageContext pageContext, Object out, Object value)
     {
         PrintWriter printWriter = TagSupport.getPrintWriter(out);
 

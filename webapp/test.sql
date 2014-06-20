@@ -1,5 +1,23 @@
 create table my_table(
-    my_id          int(11) auto_increment not null comment '主键',
-    my_name        varchar(64) not null default '' comment '名称',
-    create_time    datetime not null default 0     comment '创建时间'
+    f1      bigint(20) unsigned not null comment '主键',
+    f2      datetime not null comment '注释',
+    f3      datetime not null comment '注释',
+    f4      bigint(20) unsigned not null comment '注释',
+    f5      bigint(20) unsigned not null comment '注释',
+    f6      bigint(20) unsigned comment '注释',
+    f7      varchar(64) comment '注释',
+    f8      varchar(64) comment '注释',
+    f9      varchar(256) comment '注释',
+    f10     varchar(256) comment '注释',
+    f11     varchar(64) comment '注释',
+    f12     varchar(64) comment '注释',
+    f13     varchar(64) comment '注释',
+    f14     varchar(8192) comment '注释',
+    f15     bigint(20) unsigned comment '注释',
+    f16     bigint(20) unsigned comment '注释',
+    f17     varchar(256) comment '注释',
+    f18     varchar(2048) comment '注释',
+    f19     varchar(2048) comment '注释',
+    f20     varchar(2048) comment '注释',
+    primary key (f1)
 )  ENGINE=InnoDB DEFAULT CHARSET=utf8 ;

@@ -131,15 +131,20 @@ public class Main
 
             if(templateFactory instanceof JspTemplateFactory)
             {
+                File work = null;
+
                 if(jspWork == null)
                 {
-                    jspWork = "work";
+                    work = new File("work");
+                }
+                else
+                {
+                    work = new File(jspWork);
                 }
 
                 String classPath = Main.getClassPath();
                 System.out.println("CLASS_PATH: " + classPath);
                 JspTemplateFactory jspTemplateFactory = (JspTemplateFactory)templateFactory;
-                File work = new File(jspWork);
                 jspTemplateFactory.setWork(work.getAbsolutePath());
                 jspTemplateFactory.setClassPath(classPath);
                 jspTemplateFactory.setIgnoreJspTag(false);

@@ -334,14 +334,14 @@ public class Node
     @Override
     public String toString()
     {
-        return this.toString(this.getOffset());
+        return this.toString(this.getOffset(), true);
     }
 
     /**
      * @param index
      * @return String
      */
-    public String toString(int index)
+    public String toString(int index, boolean sort)
     {
         StringBuilder buffer = new StringBuilder();
 
@@ -370,10 +370,19 @@ public class Node
                 buffer.append(this.tagFactory.getClass().getName());
                 buffer.append("\"");
             }
+            
+            Map<String, String> attributes = this.getAttributes();
 
-            if(this.attributes != null && this.attributes.size() > 0)
+            if(attributes != null && attributes.size() > 0)
             {
-                for(Map.Entry<String, String> entry : this.attributes.entrySet())
+                if(sort == true)
+                {
+                    java.util.TreeMap<String, String> treeMap = new java.util.TreeMap<String, String>();
+                    treeMap.putAll(attributes);
+                    attributes = treeMap;
+                }
+
+                for(Map.Entry<String, String> entry : attributes.entrySet())
                 {
                     buffer.append(" ");
                     buffer.append(entry.getKey());

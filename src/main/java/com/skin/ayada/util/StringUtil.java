@@ -89,6 +89,29 @@ public class StringUtil
 
     /**
      * @param source
+     * @param length
+     * @param pad
+     * @return String
+     */
+    public static String padding(String source, int length, String pad)
+    {
+        StringBuilder buffer = new StringBuilder(source);
+
+        while(buffer.length() < length)
+        {
+            buffer.append(pad);
+        }
+
+        if(buffer.length() > length)
+        {
+            return buffer.substring(0, length);
+        }
+
+        return buffer.toString();
+    }
+
+    /**
+     * @param source
      * @param search
      * @param replacement
      * @return String

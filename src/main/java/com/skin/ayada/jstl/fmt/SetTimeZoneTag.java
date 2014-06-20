@@ -58,7 +58,7 @@ public class SetTimeZoneTag extends TagSupport
 
         if(this.var != null)
         {
-            SetTag.setValue(this.pageContext, this.var, scope, timeZone);
+            SetTag.setValue(this.pageContext, this.var, this.scope, timeZone);
         }
         else
         {

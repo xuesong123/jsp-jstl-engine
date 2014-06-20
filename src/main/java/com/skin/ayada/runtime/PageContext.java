@@ -161,7 +161,7 @@ public interface PageContext
      * @param bodyContent
      * @param escapeXml
      */
-    public void printBodyContent(BodyContent bodyContent, boolean escapeXml) throws IOException;
+    public void print(BodyContent bodyContent, boolean escapeXml) throws IOException;
 
     /**
      * @param page

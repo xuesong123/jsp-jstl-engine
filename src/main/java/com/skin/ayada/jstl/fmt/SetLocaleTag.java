@@ -40,7 +40,7 @@ public class SetLocaleTag extends TagSupport
         }
         else if(this.value instanceof String)
         {
-            locale = this.pageContext.getLocale((String)(this.value), variant);
+            locale = this.pageContext.getLocale((String)(this.value), this.variant);
         }
 
         this.pageContext.setLocale(locale);

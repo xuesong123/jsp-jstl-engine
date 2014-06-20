@@ -48,11 +48,19 @@ public class ForEachTag extends LoopTagSupport
         }  
     }
 
+    /**
+     * @return boolean
+     */
+    @Override
     public boolean hasNext()
     {
         return this.iterator.hasNext();
     }
 
+    /**
+     * @return Object
+     */
+    @Override
     public Object next()
     {
         return this.iterator.next();
@@ -299,7 +307,7 @@ public class ForEachTag extends LoopTagSupport
                 return this.value.substring(i, k);
             }
 
-            this.index = length;
+            this.index = this.length;
             return this.value.substring(i);
         }
 

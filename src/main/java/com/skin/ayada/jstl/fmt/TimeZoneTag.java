@@ -35,13 +35,13 @@ public class TimeZoneTag extends TagSupport implements TryCatchFinally
         TimeZone timeZone = null;
         this.oldTimeZone = this.pageContext.getTimeZone();
 
-        if((value instanceof TimeZone))
+        if((this.value instanceof TimeZone))
         {
-            timeZone = (TimeZone)value;
+            timeZone = (TimeZone)(this.value);
         }
-        else if((value instanceof String))
+        else if((this.value instanceof String))
         {
-            String string = ((String)value).trim();
+            String string = ((String)(this.value)).trim();
 
             if (string.length() < 1)
             {

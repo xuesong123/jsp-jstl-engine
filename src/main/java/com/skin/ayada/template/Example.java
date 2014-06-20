@@ -25,8 +25,8 @@ import com.skin.ayada.util.TemplateUtil;
  */
 public class Example
 {
-	public static void main(String[] args)
-	{
+    public static void main(String[] args)
+    {
         String path = null;
         String encoding = "UTF-8";
 
@@ -53,9 +53,9 @@ public class Example
                 e.printStackTrace();
             }
         }
-	}
+    }
 
-	public static void execute(String path, String encoding) throws Exception
+    public static void execute(String path, String encoding) throws Exception
     {
         File file = new File(path);
 
@@ -71,7 +71,6 @@ public class Example
 
         File parent = file.getParentFile();
         TemplateContext templateContext = TemplateManager.getTemplateContext(parent.getCanonicalPath(), true);
-
         PageContext pageContext = templateContext.getPageContext(new PrintWriter(System.out));
         Template template = templateContext.getTemplate(file.getName());
 
@@ -80,5 +79,5 @@ public class Example
 
         System.out.println("===================== result =====================");
         template.execute(pageContext);
-	}
+    }
 }

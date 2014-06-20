@@ -64,6 +64,7 @@ public class MemorySourceFactory extends SourceFactory
      * @param path
      * @return boolean
      */
+    @Override
     public boolean exists(String path)
     {
         return (this.getSource(path, null) != null);

@@ -20,6 +20,8 @@ import com.skin.ayada.statement.NodeType;
 import com.skin.ayada.statement.Statement;
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTag;
+import com.skin.ayada.tagext.BreakTagSupport;
+import com.skin.ayada.tagext.ContinueTagSupport;
 import com.skin.ayada.tagext.FinallyException;
 import com.skin.ayada.tagext.IterationTag;
 import com.skin.ayada.tagext.SimpleTag;
@@ -183,7 +185,7 @@ public class DefaultExecutor
                                 statement = s;
                                 node = statement.getNode();
                                 TryCatchFinally tryCatchFinally = (TryCatchFinally)(statement.getTag());
-    
+
                                 if(tryCatchFinally != null)
                                 {
                                     try
@@ -197,6 +199,30 @@ public class DefaultExecutor
                                 }
                             }
                             break;
+                        }
+
+                        if(flag == Tag.CONTINUE)
+                        {
+                            Statement parent = getParent(statement, ContinueTagSupport.class);
+
+                            if(parent != null)
+                            {
+                                index = parent.getNode().getOffset() + 1;
+                                continue;
+                            }
+                            throw new Exception("Error: ContinueTag");
+                        }
+
+                        if(flag == Tag.BREAK)
+                        {
+                            Statement parent = getParent(statement, BreakTagSupport.class);
+
+                            if(parent != null)
+                            {
+                                index = parent.getNode().getOffset() + parent.getNode().getLength();
+                                continue;
+                            }
+                            throw new Exception("Error: BreakTag");
                         }
                     }
                     else
@@ -218,7 +244,7 @@ public class DefaultExecutor
                                 statement = s;
                                 node = statement.getNode();
                                 TryCatchFinally tryCatchFinally = (TryCatchFinally)(statement.getTag());
-    
+
                                 if(tryCatchFinally != null)
                                 {
                                     try
@@ -268,7 +294,6 @@ public class DefaultExecutor
                         index = n.getOffset() + n.getLength();
                     }
                 }
-
                 index++;
             }
 
@@ -384,6 +409,26 @@ public class DefaultExecutor
 
         tag.release();
         return flag;
+    }
+
+    /**
+     * @param statement
+     * @param target
+     * @return Tag
+     */
+    public static Statement getParent(Statement statement, Class<?> target)
+    {
+        Statement parent = statement;
+
+        while(parent != null && (parent = parent.getParent()) != null)
+        {
+            if(parent.getTag().getClass() == target)
+            {
+                return parent;
+            }
+        }
+
+        return null;
     }
 
     /**

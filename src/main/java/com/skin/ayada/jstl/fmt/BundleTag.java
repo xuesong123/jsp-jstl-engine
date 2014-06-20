@@ -36,17 +36,18 @@ public class BundleTag extends TagSupport implements TryCatchFinally
      * @return int
      * @throws Exception
      */
+    @Override
     public int doStartTag() throws Exception
     {
         this.oldBundle = this.pageContext.getBundle();
         this.oldPrefix = this.pageContext.getAttribute(BUNDLE_PREFIX_KEY);
 
-        LocalizationContext bundle = BundleTag.getBundle(this.pageContext, basename);
+        LocalizationContext bundle = BundleTag.getBundle(this.pageContext, this.basename);
         this.pageContext.setBundle(bundle);
 
         if(this.prefix != null)
         {
-            this.pageContext.setAttribute(BUNDLE_PREFIX_KEY, prefix);
+            this.pageContext.setAttribute(BUNDLE_PREFIX_KEY, this.prefix);
         }
         else if(this.oldPrefix != null)
         {

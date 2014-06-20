@@ -34,6 +34,7 @@ public class ParseNumberTag extends BodyTagSupport
     private boolean integerOnly = false;
     private String scope;
 
+    @Override
     public int doEndTag() throws Exception
     {
         String string = null;
@@ -48,10 +49,6 @@ public class ParseNumberTag extends BodyTagSupport
             if(this.bodyContent != null)
             {
                 string = this.bodyContent.getString().trim();
-            }
-            else
-            {
-                string = null;
             }
         }
 

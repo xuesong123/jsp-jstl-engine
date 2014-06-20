@@ -1,7 +1,7 @@
 /*
  * $RCSfile: ConnectTag.java,v $$
  * $Revision: 1.1 $
- * $Date: 2014-3-25 $
+ * $Date: 2014-03-25 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -34,7 +34,7 @@ public class SimpleSqlParser
             String source = IO.read(new File("webapp/test.sql"), "UTF-8", 1024);
             System.out.println(source);
             Table table = parser.parse(source);
-            System.out.println(toString(table));
+            System.out.println(table.getCreateString());
             System.out.println(table.getQueryString());
             System.out.println(table.getInsertString());
             System.out.println(table.getUpdateString());
@@ -123,8 +123,24 @@ public class SimpleSqlParser
                 stream.back();
             }
 
-            String columnName = this.getToken(stream);
-            Column column = new Column(columnName);
+            token = this.getToken(stream);
+
+            /**
+             * @TODO: keyword check
+             */
+            if(token.equals("primary") || token.equals("primary"))
+            {
+                while((i = stream.read()) != -1)
+                {
+                    if(i == '\n')
+                    {
+                        break;
+                    }
+                }
+                continue;
+            }
+
+            Column column = new Column(token);
             this.skipWhitespace(stream);
 
             if(quoto != '\0')
@@ -203,6 +219,8 @@ public class SimpleSqlParser
                     {
                         throw new RuntimeException("except keyword 'NULL'!");
                     }
+
+                    column.setNullable(0);
                 }
                 else if(token.equalsIgnoreCase("AUTO_INCREMENT"))
                 {
@@ -338,7 +356,7 @@ public class SimpleSqlParser
         }
 
         return buffer.toString();
-    };
+    }
 
     /**
      * skip whitespace
@@ -465,7 +483,7 @@ public class SimpleSqlParser
         }
 
         return (i >= 97 && i <= 122) || (i >= 65 && i <= 97);
-    };
+    }
 
     public boolean isSqlIdentifierPart(int i)
     {
@@ -504,7 +522,7 @@ public class SimpleSqlParser
             Column column = columns.get(i);
             buffer.append("    ");
             buffer.append(String.format(pattern, column.getColumnName()));
-            
+
             buffer.append(" ");
             buffer.append(column.getTypeName());
 

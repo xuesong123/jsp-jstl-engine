@@ -288,7 +288,7 @@ public class AllTagTestTemplate extends JspTemplate
         out = pageContext.pushBody();
         /* TEXT: lineNumber: 88 */
         out.write("<h1>Hello World!</h1>");
-        pageContext.printBodyContent((BodyContent)out, true);
+        pageContext.print((BodyContent)out, true);
         out = pageContext.popBody();
         /* jsp.jstl.core.OutTag END */
         /* NODE END: lineNumber: 88, tagClassName: com.skin.ayada.jstl.core.OutTag, tagInstanceName: _jsp_OutTag_75 */

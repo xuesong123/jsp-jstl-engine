@@ -89,7 +89,7 @@ public class CommandTemplate extends JspTemplate
             out = pageContext.pushBody();
             /* TEXT: lineNumber: 29 */
             out.write("\"I\'m here !\"");
-            pageContext.printBodyContent((BodyContent)out, true);
+            pageContext.print((BodyContent)out, true);
             out = pageContext.popBody();
             /* jsp.jstl.core.OutTag END */
             /* NODE END: lineNumber: 29, tagClassName: com.skin.ayada.jstl.core.OutTag, tagInstanceName: _jsp_OutTag_14 */

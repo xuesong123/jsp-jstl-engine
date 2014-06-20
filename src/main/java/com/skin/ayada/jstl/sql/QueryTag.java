@@ -17,6 +17,7 @@ import java.sql.Statement;
 import com.skin.ayada.tagext.IterationTag;
 import com.skin.ayada.tagext.TagSupport;
 import com.skin.ayada.tagext.TryCatchFinally;
+import com.skin.ayada.util.Jdbc;
 
 /**
  * <p>Title: QueryTag</p>

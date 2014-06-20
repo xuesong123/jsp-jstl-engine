@@ -107,6 +107,7 @@ public class ClassPathSourceFactory extends SourceFactory
      * @param path
      * @return boolean
      */
+    @Override
     public boolean exists(String path)
     {
         URL url = null;

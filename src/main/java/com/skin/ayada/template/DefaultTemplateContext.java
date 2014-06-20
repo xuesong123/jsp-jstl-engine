@@ -25,6 +25,7 @@ import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.jstl.TagLibraryFactory;
 import com.skin.ayada.runtime.DefaultPageContext;
 import com.skin.ayada.runtime.ExpressionContext;
+import com.skin.ayada.runtime.ExpressionFactory;
 import com.skin.ayada.runtime.JspWriter;
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.source.SourceFactory;
@@ -37,8 +38,14 @@ import com.skin.ayada.util.StringUtil;
  * @author xuesong.net
  * @version 1.0
  */
-public class DefaultTemplateContext extends TemplateContext
+public class DefaultTemplateContext implements TemplateContext
 {
+    private String home;
+    private int expire;
+    private String encoding;
+    private SourceFactory sourceFactory;
+    private TemplateFactory templateFactory;
+    private ExpressionFactory expressionFactory;
     private ConcurrentHashMap<String, FutureTask<Template>> cache;
     private static final Logger logger = LoggerFactory.getLogger(DefaultTemplateContext.class);
 
@@ -56,8 +63,28 @@ public class DefaultTemplateContext extends TemplateContext
      */
     public DefaultTemplateContext(String home, int expire)
     {
-        super(home, expire);
+        this.home = home;
+        this.expire = expire;
         this.cache = new ConcurrentHashMap<String, FutureTask<Template>>();
+    }
+
+    /**
+     * @param path
+     * @param context
+     * @param writer
+     * @throws Exception
+     */
+    @Override
+    public void execute(String path, Map<String, Object> context, Writer writer) throws Exception
+    {
+        Template template = this.getTemplate(path);
+
+        if(template == null)
+        {
+            throw new Exception(this.home + "/" + path + " not exists!");
+        }
+
+        this.execute(template, context, writer);
     }
 
     /**
@@ -88,6 +115,17 @@ public class DefaultTemplateContext extends TemplateContext
         {
             pageContext.release();
         }
+    }
+
+    /**
+     * @param path
+     * @return Template
+     * @throws Exception
+     */
+    @Override
+    public Template getTemplate(String path) throws Exception
+    {
+        return this.getTemplate(path, this.encoding);
     }
 
     /**
@@ -187,6 +225,16 @@ public class DefaultTemplateContext extends TemplateContext
 
     /**
      * @param out
+     * @return PageContext
+     */
+    @Override
+    public PageContext getPageContext(Writer out)
+    {
+        return this.getPageContext(out, 8192, false);
+    }
+
+    /**
+     * @param out
      * @param buffserSize
      * @param autoFlush
      * @return PageContext
@@ -206,7 +254,7 @@ public class DefaultTemplateContext extends TemplateContext
     /**
      * @return ExpressionContext
      */
-    public ExpressionContext getExpressionContext(PageContext pageContext)
+    private ExpressionContext getExpressionContext(PageContext pageContext)
     {
         return this.getExpressionFactory().getExpressionContext(pageContext);
     }
@@ -263,5 +311,101 @@ public class DefaultTemplateContext extends TemplateContext
     {
         this.cache.clear();
         this.cache = null;
+    }
+
+    /**
+     * @param home the home to set
+     */
+    public void setHome(String home)
+    {
+        this.home = home;
+    }
+
+    /**
+     * @return the home
+     */
+    public String getHome()
+    {
+        return this.home;
+    }
+
+    /**
+     * @param expire the expire to set
+     */
+    public void setExpire(int expire)
+    {
+        this.expire = expire;
+    }
+
+    /**
+     * @return the expire
+     */
+    public int getExpire()
+    {
+        return this.expire;
+    }
+
+    /**
+     * @param encoding the encoding to set
+     */
+    public void setEncoding(String encoding)
+    {
+        this.encoding = encoding;
+    }
+
+    /**
+     * @return the encoding
+     */
+    public String getEncoding()
+    {
+        return this.encoding;
+    }
+
+    /**
+     * @param sourceFactory the sourceFactory to set
+     */
+    public void setSourceFactory(SourceFactory sourceFactory)
+    {
+        this.sourceFactory = sourceFactory;
+    }
+
+    /**
+     * @return the sourceFactory
+     */
+    public SourceFactory getSourceFactory()
+    {
+        return this.sourceFactory;
+    }
+
+    /**
+     * @param templateFactory the templateFactory to set
+     */
+    public void setTemplateFactory(TemplateFactory templateFactory)
+    {
+        this.templateFactory = templateFactory;
+    }
+
+    /**
+     * @return the templateFactory
+     */
+    public TemplateFactory getTemplateFactory()
+    {
+        return this.templateFactory;
+    }
+
+    /**
+     * @param expressionFactory the expressionFactory to set
+     */
+    public void setExpressionFactory(ExpressionFactory expressionFactory)
+    {
+        this.expressionFactory = expressionFactory;
+    }
+
+    /**
+     * @return the expressionFactory
+     */
+    public ExpressionFactory getExpressionFactory()
+    {
+        return this.expressionFactory;
     }
 }

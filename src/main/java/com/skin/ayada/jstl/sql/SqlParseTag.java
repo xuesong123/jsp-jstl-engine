@@ -1,7 +1,7 @@
 /*
- * $RCSfile: ConnectTag.java,v $$
+ * $RCSfile: SqlParseTag.java,v $$
  * $Revision: 1.1 $
- * $Date: 2014-3-25 $
+ * $Date: 2014-03-25 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -14,17 +14,18 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.skin.ayada.tagext.BodyTag;
 import com.skin.ayada.tagext.BodyTagSupport;
 import com.skin.ayada.tagext.Tag;
 
 /**
- * <p>Title: ParseTag</p>
+ * <p>Title: SqlParseTag</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2014</p>
  * @author xuesong.net
  * @version 1.0
  */
-public class ParseTag extends BodyTagSupport
+public class SqlParseTag extends BodyTagSupport
 {
     private String name;
     private String source;
@@ -45,8 +46,7 @@ public class ParseTag extends BodyTagSupport
             return Tag.SKIP_BODY;
         }
 
-        System.out.println("2 name: " + name + ", source: " + source);
-        return Tag.EVAL_PAGE;
+        return BodyTag.EVAL_BODY_BUFFERED;
     }
 
     /**
@@ -59,15 +59,11 @@ public class ParseTag extends BodyTagSupport
 
         if(sql == null)
         {
-            System.out.println("4 name: " + name + ", source: " + source);
             if(this.bodyContent != null)
             {
                 sql = this.bodyContent.getString().trim();
-                System.out.println("3 name: " + name + ", source: " + source);
             }
         }
-
-        System.out.println("sql: " + sql);
 
         if(sql != null)
         {
