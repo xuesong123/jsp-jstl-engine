@@ -370,7 +370,7 @@ public class Node
                 buffer.append(this.tagFactory.getClass().getName());
                 buffer.append("\"");
             }
-            
+
             Map<String, String> attributes = this.getAttributes();
 
             if(attributes != null && attributes.size() > 0)

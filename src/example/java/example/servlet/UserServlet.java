@@ -34,7 +34,7 @@ public class UserServlet extends HttpServlet
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         long userId = 1L;
-        
+
         try
         {
             userId = Long.parseLong(request.getParameter("userId"));
@@ -42,7 +42,7 @@ public class UserServlet extends HttpServlet
         catch(NumberFormatException e)
         {
         }
-        
+
         User user = UserHandler.getUserById(userId);
         request.setAttribute("user", user);
 

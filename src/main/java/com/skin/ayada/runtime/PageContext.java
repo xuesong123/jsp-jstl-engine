@@ -64,12 +64,12 @@ public interface PageContext
      * @return Iterator<String>
      */
     public Iterator<String> getAttributeNames();
-    
+
     /**
      * @param timeZone
      */
     public void setTimeZone(TimeZone timeZone);
-    
+
     /**
      * @return TimeZone
      */
@@ -91,7 +91,7 @@ public interface PageContext
      * @return Locale
      */
     public Locale getLocale(String value, String variant);
-    
+
     /**
      * @param bundle
      */

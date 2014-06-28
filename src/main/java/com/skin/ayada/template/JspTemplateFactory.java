@@ -37,6 +37,7 @@ import com.skin.ayada.util.TemplateUtil;
 public class JspTemplateFactory extends TemplateFactory
 {
     private String work;
+    private String prefix;
     private String classPath;
     private static final Logger logger = LoggerFactory.getLogger(JspTemplateFactory.class);
 
@@ -85,7 +86,6 @@ public class JspTemplateFactory extends TemplateFactory
     public Template compile(String source) throws Exception
     {
         Template template = super.compile(source);
-
         long t1 = System.currentTimeMillis();
         JspTemplate jspTemplate = this.compile(template, this.getWork());
         long t2 = System.currentTimeMillis();
@@ -132,16 +132,15 @@ public class JspTemplateFactory extends TemplateFactory
         File srcFile = new File(work, classPath + ".java");
         File clsFile = new File(work, classPath + ".class");
         File tplFile = new File(work, classPath + ".tpl");
-
-        write(source, srcFile);
-        write(this.getTemplateDescription(template), tplFile);
-
         String lib = this.getClassPath();
 
         if(lib == null)
         {
             lib = System.getProperty("java.class.path");
         }
+
+        write(source, srcFile);
+        write(this.getTemplateDescription(template), tplFile);
 
         String[] args = new String[]{
             "-d", work,
@@ -245,6 +244,8 @@ public class JspTemplateFactory extends TemplateFactory
     private String getClassName(String path)
     {
         String className = path;
+        String simpleName = null;
+        String packageName = null;
         int k = className.lastIndexOf(".");
 
         if(k > -1)
@@ -255,19 +256,30 @@ public class JspTemplateFactory extends TemplateFactory
         className = StringUtil.replace(className, "/", ".");
         className = StringUtil.replace(className, "\\", ".");
         className = StringUtil.replace(className, "..", ".");
+        k = className.lastIndexOf(".");
 
-        if(className.startsWith("."))
+        if(k > -1)
         {
-            className = "_jsp" + className;
+        	simpleName = className.substring(k + 1) + "Template";
+            packageName = className.substring(0, k);
         }
         else
         {
-            className = "_jsp." + className;
+        	packageName = "";
+        	simpleName = className + "Template";
         }
 
-        k = className.lastIndexOf(".");
-        String simpleName = className.substring(k + 1) + "Template";
-        return className.substring(0, k + 1) + Character.toUpperCase(simpleName.charAt(0)) + simpleName.substring(1);
+        String[] temp = StringUtil.split(packageName, ".");
+        StringBuilder buffer = new StringBuilder(this.getPrefix());
+
+        for(int i = 0, length = temp.length; i < length; i++)
+        {
+    		buffer.append("._");
+    		buffer.append(temp[i]);
+        }
+
+        packageName = buffer.toString();
+        return packageName + "." + Character.toUpperCase(simpleName.charAt(0)) + simpleName.substring(1);
     }
 
     /**
@@ -297,7 +309,7 @@ public class JspTemplateFactory extends TemplateFactory
         {
             return className.substring(0, k);
         }
-        return "_jsp";
+        return this.getPrefix();
     }
 
     /**
@@ -354,14 +366,6 @@ public class JspTemplateFactory extends TemplateFactory
     }
 
     /**
-     * @return the work
-     */
-    public String getWork()
-    {
-        return this.work;
-    }
-
-    /**
      * @param work the work to set
      */
     public void setWork(String work)
@@ -370,6 +374,35 @@ public class JspTemplateFactory extends TemplateFactory
     }
 
     /**
+     * @return the prefix
+     */
+    public String getWork()
+    {
+        return this.work;
+    }
+
+    /**
+     * @param prefix the prefix to set
+     */
+	public void setPrefix(String prefix)
+	{
+		this.prefix = prefix;
+	}
+
+	/**
+     * @return the prefix
+     */
+    public String getPrefix()
+    {
+    	if(this.prefix == null)
+    	{
+    		this.prefix = "_tpl._jsp";
+    	}
+
+		return this.prefix;
+	}
+
+	/**
      * @param classPath the classPath to set
      */
     public void setClassPath(String classPath)
@@ -385,18 +418,26 @@ public class JspTemplateFactory extends TemplateFactory
         return this.classPath;
     }
 
-    public static void main(String[] args)
+    public static void test1(String home, String path)
     {
-        String home = "/web/resin_vhost/finder.com/template";
-        String path = "/web/resin_vhost/finder.com/template/finder/workspace.jsp";
-        path = path.substring(home.length());
-
         JspTemplateFactory jspTemplateFactory = new JspTemplateFactory();
         String className = jspTemplateFactory.getClassName(path);
         String simpleName = jspTemplateFactory.getSimpleName(className);
         String packageName = jspTemplateFactory.getPackageName(className);
+        System.out.println("path: " + path);
         System.out.println("className: " + className);
         System.out.println("simpleName: " + simpleName);
         System.out.println("packageName: " + packageName);
+        System.out.println();
+    }
+
+    public static void main(String[] args)
+    {
+        test1("/finder.com/template", "workspace.jsp");
+        test1("/finder.com/template", "/workspace.jsp");
+        test1("/finder.com/template", "finder/workspace.jsp");
+        test1("/finder.com/template", "/finder/workspace.jsp");
+        test1("/finder.com/template", "default/workspace.jsp");
+        test1("/finder.com/template", "/default/workspace.jsp");
     }
 }

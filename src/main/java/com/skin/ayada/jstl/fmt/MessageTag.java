@@ -104,7 +104,7 @@ public class MessageTag extends BodyTagSupport implements ParamContainerTag
 
         return Tag.EVAL_PAGE;
     }
-    
+
     @Override
     public void release()
     {

@@ -214,13 +214,13 @@ public class DefaultExpressionFactory implements ExpressionFactory
     {
         private String name;
         private Object value;
-        
+
         public Entry(String name, Object value)
         {
             this.name = name;
             this.value = value;
         }
-        
+
         /**
          * @return the name
          */
@@ -228,7 +228,7 @@ public class DefaultExpressionFactory implements ExpressionFactory
         {
             return this.name;
         }
-        
+
         /**
          * @param name the name to set
          */
@@ -236,7 +236,7 @@ public class DefaultExpressionFactory implements ExpressionFactory
         {
             this.name = name;
         }
-        
+
         /**
          * @return the value
          */

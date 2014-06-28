@@ -23,6 +23,8 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import com.skin.ayada.util.Jdbc;
+
 /**
  * <p>Title: SqlPlus</p>
  * <p>Description: </p>

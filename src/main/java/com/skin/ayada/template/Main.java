@@ -42,18 +42,21 @@ public class Main
         {
             path = args[0];
 
-            if(args.length > 1)
+            if(args.length > 1 && args[1] != null && args[1].trim().length() > 0)
             {
-                encoding = args[1];
+                encoding = args[1].trim();
             }
 
-            if(args.length > 2)
+            if(args.length > 2 && args[2] != null && args[2].trim().length() > 0)
             {
-                templateFactoryClassName = args[2];
+                templateFactoryClassName = args[2].trim();
             }
 
             try
             {
+                System.out.println("path: " + path);
+                System.out.println("encoding: " + encoding);
+                System.out.println("templateFactoryClassName: " + templateFactoryClassName);
                 execute(path, encoding, templateFactoryClassName);
             }
             catch(Exception e)
@@ -94,7 +97,7 @@ public class Main
 
         PrintWriter printWriter = new PrintWriter(System.out);
         PageContext pageContext = templateContext.getPageContext(printWriter);
-        Template template = templateContext.getTemplate(file.getName());
+        Template template = templateContext.getTemplate(file.getName(), encoding);
 
         System.out.println("===================== " + template.getClass().getName() + " =====================");
         TemplateUtil.print(template);

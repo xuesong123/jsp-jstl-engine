@@ -1,7 +1,7 @@
 /*
  * $RCSfile: Table.java,v $
- * $Revision: 1.1  $
- * $Date: 2009-02-16  $
+ * $Revision: 1.1 $
+ * $Date: 2009-02-16 $
  *
  * Copyright (C) 2005 Skin, Inc. All rights reserved.
  *
@@ -294,7 +294,7 @@ public class Table
     }
 
     /**
-     * @return
+     * @return List<Column>
      */
     public List<Column> listColumns()
     {
@@ -451,7 +451,7 @@ public class Table
                 buffer.append(this.escape(remarks));
                 buffer.append("'");
             }
-            
+
             if(i < size - 1)
             {
                 buffer.append(",");
@@ -511,7 +511,7 @@ public class Table
 
         return buffer.toString();
     }
-    
+
     /**
      * @param source
      * @return String
@@ -520,11 +520,11 @@ public class Table
     {
         char ch;
         StringBuilder buffer = new StringBuilder(source);
-        
+
         for(int i = 0, length = source.length(); i < length; i++)
         {
             ch = source.charAt(i);
-            
+
             if(ch == '\'')
             {
                 buffer.append("\\'");

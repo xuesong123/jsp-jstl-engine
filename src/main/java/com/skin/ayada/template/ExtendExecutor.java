@@ -1,5 +1,5 @@
 /*
- * $RCSfile: DefaultExecutor.java,v $$
+ * $RCSfile: ExtendExecutor.java,v $$
  * $Revision: 1.1 $
  * $Date: 2013-02-19 $
  *
@@ -31,7 +31,7 @@ import com.skin.ayada.util.NodeUtil;
 import com.skin.ayada.util.TagUtil;
 
 /**
- * <p>Title: DefaultExecutor</p>
+ * <p>Title: ExtendExecutor</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2006</p>
  * @author xuesong.net

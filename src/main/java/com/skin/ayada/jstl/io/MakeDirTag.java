@@ -29,18 +29,25 @@ public class MakeDirTag extends FileTag
     @Override
     public int doEndTag() throws Exception
     {
-        File source = new File(this.getFile());
-
-        if(source.exists() == false)
-        {
-            source.mkdirs();
-        }
-
+        MakeDirTag.mkdirs(this.file);
         return Tag.EVAL_PAGE;
     }
 
     @Override
     public void process(File file) throws IOException
     {
+    }
+
+    /**
+     * @param path
+     */
+    public static void mkdirs(String path)
+    {
+        File file = new File(path);
+
+        if(file.exists() == false)
+        {
+            file.mkdirs();
+        }   
     }
 }

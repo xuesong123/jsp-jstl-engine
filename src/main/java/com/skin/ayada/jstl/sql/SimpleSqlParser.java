@@ -61,7 +61,7 @@ public class SimpleSqlParser
         }
 
         token = this.getToken(stream);
-        
+
         if(token.equalsIgnoreCase("TEMPORARY"))
         {
             token = this.getToken(stream);
@@ -93,7 +93,7 @@ public class SimpleSqlParser
 
         String tableName = token;
         Table table = new Table(tableName);
-        
+
         this.skipWhitespace(stream);
         int i = stream.read();
 
@@ -113,7 +113,7 @@ public class SimpleSqlParser
             }
 
             char quoto = '\0';
-    
+
             if(i == '`' || i == '\'' || i == '"' || i == '[')
             {
                 quoto = (char)i;
@@ -146,7 +146,7 @@ public class SimpleSqlParser
             if(quoto != '\0')
             {
                 i = stream.read();
-                
+
                 if(quoto == '[')
                 {
                     if(i != ']')
@@ -214,7 +214,7 @@ public class SimpleSqlParser
                 {
                     this.skipWhitespace(stream);
                     token = this.getToken(stream);
-    
+
                     if(token.equalsIgnoreCase("NULL") == false)
                     {
                         throw new RuntimeException("except keyword 'NULL'!");
@@ -296,7 +296,7 @@ public class SimpleSqlParser
 
         return null;
     }
-    
+
     /**
      * @param stream
      * @return String
@@ -328,7 +328,7 @@ public class SimpleSqlParser
                 buffer.append((char)i);
             }
         }
-        
+
         return buffer.toString();
     }
 
@@ -551,7 +551,7 @@ public class SimpleSqlParser
                 buffer.append(remarks);
                 buffer.append("'");
             }
-            
+
             if(i < size - 1)
             {
                 buffer.append(",");

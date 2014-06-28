@@ -177,7 +177,7 @@ public class ClassPathSourceFactory extends SourceFactory
     {
         this.classLoader = classLoader;
     }
-    
+
     /**
      * @return the classLoader
      */

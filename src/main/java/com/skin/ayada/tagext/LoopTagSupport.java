@@ -73,16 +73,16 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * allow this value to be supplied directly by the user.
      */
     protected int end;
-    
+
     /*** Iteration step ('step' attribute) */
     protected int step;
-    
+
     /*** Boolean flag indicating whether 'begin' was specified. */
     protected boolean beginSpecified;
-    
+
     /*** Boolean flag indicating whether 'end' was specified. */
     protected boolean endSpecified;
-    
+
     /*** Boolean flag indicating whether 'step' was specified. */
     protected boolean stepSpecified;
 

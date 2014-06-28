@@ -105,7 +105,7 @@ public class BundleTag extends TagSupport implements TryCatchFinally
     {
         return this.basename;
     }
-    
+
     /**
      * @return the prefix
      */
@@ -113,7 +113,7 @@ public class BundleTag extends TagSupport implements TryCatchFinally
     {
         return this.prefix;
     }
-    
+
     /**
      * @param prefix the prefix to set
      */

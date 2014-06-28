@@ -60,7 +60,7 @@ public class BundleManager
         buffer.append(baseName);
         buffer.append("_");
         buffer.append(language);
-        
+
         if(country != null && country.length() > 0)
         {
             buffer.append("_");

@@ -73,7 +73,7 @@ public class JspTemplateFactoryTest
         TemplateContext templateContext = new DefaultTemplateContext("webapp");
         templateContext.setSourceFactory(sourceFactory);
         templateContext.setTemplateFactory(templateFactory);
-        
+
         long t1 = System.currentTimeMillis();
 
         Template template = templateFactory.create(sourceFactory, file, "UTF-8");
@@ -110,7 +110,7 @@ public class JspTemplateFactoryTest
         TemplateContext templateContext = new DefaultTemplateContext("");
         templateContext.setSourceFactory(sourceFactory);
         templateContext.setTemplateFactory(templateFactory);
-        
+
         long t1 = System.currentTimeMillis();
         Template template = templateContext.getTemplate("class.jsp", "UTF-8");
         long t2 = System.currentTimeMillis();

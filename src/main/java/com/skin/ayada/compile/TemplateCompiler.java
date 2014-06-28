@@ -78,7 +78,7 @@ public class TemplateCompiler extends PageCompiler
         {
             logger.debug("load source: " + (t2 - t1));
         }
-        
+
         if(source == null)
         {
             throw new NullPointerException("source \"" + path + "\" not exists !");
@@ -357,7 +357,7 @@ public class TemplateCompiler extends PageCompiler
                 node.setOffset(list.size());
                 node.setAttributes(attributes);
                 node.setClosed(NodeType.SELF_CLOSED);
-                this.pushNode(stack, list, node);
+                // this.pushNode(stack, list, node);
 
                 if(this.stream.peek(-2) != '/')
                 {
@@ -369,7 +369,7 @@ public class TemplateCompiler extends PageCompiler
                 String className = attributes.get("className");
                 String bodyContent = attributes.get("bodyContent");
                 this.setupTagLibrary(name, className, bodyContent);
-                this.popNode(stack, list, nodeName);
+                // this.popNode(stack, list, nodeName);
                 return;
             }
 

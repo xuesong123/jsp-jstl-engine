@@ -65,6 +65,7 @@ public class DefaultTemplateContext implements TemplateContext
     {
         this.home = home;
         this.expire = expire;
+        this.encoding = "UTF-8";
         this.cache = new ConcurrentHashMap<String, FutureTask<Template>>();
     }
 

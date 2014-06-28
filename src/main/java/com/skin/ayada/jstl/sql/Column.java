@@ -159,7 +159,7 @@ public class Column
     {
         this.typeName = typeName;
     }
-    
+
     /**
      * @return the autoIncrement
      */

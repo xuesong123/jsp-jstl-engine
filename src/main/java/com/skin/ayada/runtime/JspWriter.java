@@ -312,7 +312,7 @@ public class JspWriter extends Writer
 
         this.write(CRLF, 0, 2);
     }
-    
+
     /**
      * @return int
      */
