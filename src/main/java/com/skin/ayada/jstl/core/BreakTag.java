@@ -10,6 +10,7 @@
  */
 package com.skin.ayada.jstl.core;
 
+import com.skin.ayada.tagext.BreakTagSupport;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.tagext.TagSupport;
 
@@ -19,16 +20,11 @@ import com.skin.ayada.tagext.TagSupport;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class BreakTag extends TagSupport
+public class BreakTag extends TagSupport implements BreakTagSupport
 {
     @Override
     public int doStartTag()
     {
         return Tag.BREAK;
-    }
-
-    public static boolean getTrue()
-    {
-        return true;
     }
 }

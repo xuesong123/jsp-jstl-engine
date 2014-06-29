@@ -387,7 +387,7 @@ public class JspWriter extends Writer
      */
     public void clearBuffer() throws IOException
     {
-        this.position = 0;
+        this.clear();
     }
 
     @Override

@@ -21,8 +21,6 @@ import java.util.concurrent.FutureTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.skin.ayada.jstl.TagLibrary;
-import com.skin.ayada.jstl.TagLibraryFactory;
 import com.skin.ayada.runtime.DefaultPageContext;
 import com.skin.ayada.runtime.ExpressionContext;
 import com.skin.ayada.runtime.ExpressionFactory;
@@ -243,10 +241,8 @@ public class DefaultTemplateContext implements TemplateContext
     public PageContext getPageContext(Writer out, int buffserSize, boolean autoFlush)
     {
         JspWriter jspWriter = new JspWriter(out, buffserSize, autoFlush);
-        TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();
         DefaultPageContext pageContext = new DefaultPageContext(jspWriter);
         ExpressionContext expressionContext = this.getExpressionContext(pageContext);
-        pageContext.setTagLibrary(tagLibrary);
         pageContext.setTemplateContext(this);
         pageContext.setExpressionContext(expressionContext);
         return pageContext;

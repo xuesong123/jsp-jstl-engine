@@ -344,7 +344,7 @@ public class ExtendExecutor
                     if(tag instanceof BodyTag)
                     {
                         BodyTag bodyTag = (BodyTag)tag;
-                        BodyContent bodyContent = (BodyContent)(pageContext.pushBody());
+                        BodyContent bodyContent = pageContext.pushBody();
                         bodyTag.setBodyContent(bodyContent);
                         bodyTag.doInitBody();
                     }

@@ -16,6 +16,8 @@
  */
 package _tpl._jsp;
 
+import java.io.IOException;
+
 import com.skin.ayada.runtime.ExpressionContext;
 import com.skin.ayada.runtime.JspWriter;
 import com.skin.ayada.runtime.PageContext;
@@ -25,7 +27,6 @@ import com.skin.ayada.tagext.IterationTag;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.template.JspTemplate;
 import com.skin.ayada.util.ExpressionUtil;
-import java.io.IOException; /* jsp:directive.import: lineNumber: 4 */
 
 /**
  * <p>Title: AllTagTestTemplate</p>

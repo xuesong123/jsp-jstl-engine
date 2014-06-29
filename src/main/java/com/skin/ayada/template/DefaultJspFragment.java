@@ -54,7 +54,7 @@ public class DefaultJspFragment implements JspFragment
     {
         if(out != null)
         {
-            BodyContent bodyContent = (BodyContent)(this.pageContext.pushBody());
+            BodyContent bodyContent = this.pageContext.pushBody();
 
             try
             {

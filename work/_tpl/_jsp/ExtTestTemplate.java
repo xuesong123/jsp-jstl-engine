@@ -144,7 +144,7 @@ public class ExtTestTemplate extends JspTemplate
         if(_jsp_start_flag_14 != Tag.SKIP_BODY){
             int _jsp_flag_14 = 0;
             if(_jsp_start_flag_14 == BodyTag.EVAL_BODY_BUFFERED){
-                BodyContent _jsp_body_content_14 = (BodyContent)(pageContext.pushBody());
+                BodyContent _jsp_body_content_14 = pageContext.pushBody();
                 _jsp_OutputTag_14.setBodyContent(_jsp_body_content_14);
                 _jsp_OutputTag_14.doInitBody();
                 out = _jsp_body_content_14;

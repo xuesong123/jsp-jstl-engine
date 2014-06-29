@@ -333,7 +333,6 @@ public class TemplateCompiler extends PageCompiler
                     throw new Exception("The 't:include' direction must be self-closed!");
                 }
 
-                this.skipCRLF();
                 String type = attributes.get("type");
                 String file = attributes.get("file");
                 String encoding = attributes.get("encoding");

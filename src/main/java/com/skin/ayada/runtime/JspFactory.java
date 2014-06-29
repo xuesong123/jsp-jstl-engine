@@ -12,9 +12,6 @@ package com.skin.ayada.runtime;
 
 import java.io.Writer;
 
-import com.skin.ayada.jstl.TagLibrary;
-import com.skin.ayada.jstl.TagLibraryFactory;
-
 /**
  * <p>Title: JspFactory</p>
  * <p>Description: </p>
@@ -44,8 +41,6 @@ public class JspFactory
         JspWriter out = new JspWriter(writer, buffserSize, autoFlush);
         DefaultPageContext pageContext = new DefaultPageContext(out);
         ExpressionContext expressionContext = DefaultExpressionFactory.getDefaultExpressionContext(pageContext);
-        TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();
-        pageContext.setTagLibrary(tagLibrary);
         pageContext.setTemplateContext(null);
         pageContext.setExpressionContext(expressionContext);
         return pageContext;

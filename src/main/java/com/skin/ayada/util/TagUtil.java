@@ -15,8 +15,8 @@ import java.lang.reflect.Modifier;
 import java.util.Map;
 
 import com.skin.ayada.jstl.TagLibrary;
+import com.skin.ayada.jstl.TagLibraryFactory;
 import com.skin.ayada.runtime.ExpressionContext;
-import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.tagext.DynamicAttributes;
 import com.skin.ayada.tagext.Tag;
 
@@ -34,30 +34,13 @@ public class TagUtil
     }
 
     /**
-     * @param className
-     * @return Tag
-     * @throws Exception
-     */
-    public static Tag create(String className)
-    {
-        try
-        {
-            return (Tag)(ClassUtil.getInstance(className));
-        }
-        catch(Exception e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
      * @param tagName
      * @return Tag
      * @throws Exception
      */
-    public static Tag create(PageContext pageContext, String tagName)
+    public static Tag create(String tagName)
     {
-        TagLibrary tagLibrary = pageContext.getTagLibrary();
+        TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();
         String className = tagLibrary.getTagClassName(tagName);
 
         try

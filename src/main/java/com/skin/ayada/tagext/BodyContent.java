@@ -25,6 +25,7 @@ import com.skin.ayada.runtime.JspWriter;
  */
 public class BodyContent extends JspWriter
 {
+    private Writer writer;
     private StringWriter buffer;
 
     /**
@@ -36,10 +37,33 @@ public class BodyContent extends JspWriter
         this.buffer = new StringWriter();
     }
 
-    @Override
-    public void write(char[] cbuf, int off, int len) throws IOException
+    /**
+     * @return the writer
+     */
+    public Writer getWriter()
     {
-        this.buffer.write(cbuf, off, len);
+        return this.writer;
+    }
+
+    /**
+     * @param writer the writer to set
+     */
+    public void setWriter(Writer writer)
+    {
+        this.writer = writer;
+    }
+
+    @Override
+    public void write(char[] cbuf, int offset, int length) throws IOException
+    {
+        if(this.writer != null)
+        {
+            this.writer.write(cbuf, offset, length);
+        }
+        else
+        {
+            this.buffer.write(cbuf, offset, length);
+        }
     }
 
     /**
@@ -51,20 +75,76 @@ public class BodyContent extends JspWriter
         out.write(this.buffer.toString());
     }
 
+    /**
+     * @param bufferSize the bufferSize to set
+     */
+    @Override
+    public void setBufferSize(int bufferSize)
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @return int
+     */
+    @Override
+    public int getBufferSize()
+    {
+        if(this.writer != null)
+        {
+            return 0;
+        }
+        else
+        {
+            return super.getBufferSize();
+        }
+    }
+
+    /**
+     * @return int
+     */
+    @Override
+    public int getRemaining()
+    {
+        if(this.writer != null)
+        {
+            return 0;
+        }
+        else
+        {
+            return super.getRemaining();
+        }
+    }
+
     @Override
     public void clear() throws IOException
     {
-        this.buffer.getBuffer().setLength(0);
+        if(this.writer == null)
+        {
+            this.buffer.getBuffer().setLength(0);
+        }
+        else
+        {
+            throw new IOException("Unsupported operation: clear !");
+        }
     }
 
     @Override
     public void flush() throws IOException
     {
+        if(this.writer != null)
+        {
+            this.writer.flush();
+        }
     }
 
     @Override
     public void close() throws IOException
     {
+        if(this.writer != null)
+        {
+            this.writer.close();
+        }
     }
 
     /**

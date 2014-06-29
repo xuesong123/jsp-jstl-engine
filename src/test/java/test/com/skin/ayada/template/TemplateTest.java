@@ -90,6 +90,7 @@ public class TemplateTest
             SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
             TemplateFactory templateFactory = new TemplateFactory();
             ExpressionFactory expressionFactory = new DefaultExpressionFactory();
+
             TemplateContext templateContext = new DefaultTemplateContext(home);
             templateContext.setSourceFactory(sourceFactory);
             templateContext.setTemplateFactory(templateFactory);

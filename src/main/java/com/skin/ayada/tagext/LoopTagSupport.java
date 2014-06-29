@@ -52,6 +52,7 @@ package com.skin.ayada.tagext;
  *
  * @author Shawn Bayern
  */
+@SuppressWarnings("synthetic-access")
 public abstract class LoopTagSupport extends TagSupport implements LoopTag, IterationTag, TryCatchFinally
 {
     /**
@@ -585,8 +586,9 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
          * copy index so we can restore it, but we need to update it
          * as we work so that atEnd() works
          */
+        int i = n;
         int oldIndex = this.index;
-        while(n-- > 0 && !atEnd() && hasNext())
+        while(i-- > 0 && !atEnd() && hasNext())
         {
             this.index++;
             next();
@@ -601,7 +603,8 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      */
     private void discardIgnoreSubset(int n) throws Exception
     {
-        while(n-- > 0 && hasNext())
+        int i = n;
+        while(i-- > 0 && hasNext())
         {
             this.next();
         }

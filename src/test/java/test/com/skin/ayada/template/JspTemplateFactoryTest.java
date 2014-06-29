@@ -128,7 +128,6 @@ public class JspTemplateFactoryTest
         pageContext.setAttribute("NodeType", JspTemplateFactoryTest.getNodeType());
         pageContext.setAttribute("CodeUtil", new JspTemplateFactoryTest());
         pageContext.setAttribute("NodeUtil", new JspTemplateFactoryTest());
-        pageContext.setAttribute("tagLibrary", pageContext.getTagLibrary());
 
         long t3 = System.currentTimeMillis();
         try

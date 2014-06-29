@@ -198,7 +198,7 @@ public class FmtTestTemplate extends JspTemplate
         if(_jsp_start_flag_23 != Tag.SKIP_BODY){
             int _jsp_flag_23 = 0;
             if(_jsp_start_flag_23 == BodyTag.EVAL_BODY_BUFFERED){
-                BodyContent _jsp_body_content_23 = (BodyContent)(pageContext.pushBody());
+                BodyContent _jsp_body_content_23 = pageContext.pushBody();
                 _jsp_MessageTag_23.setBodyContent(_jsp_body_content_23);
                 _jsp_MessageTag_23.doInitBody();
                 out = _jsp_body_content_23;
@@ -306,7 +306,7 @@ public class FmtTestTemplate extends JspTemplate
         if(_jsp_start_flag_34 != Tag.SKIP_BODY){
             int _jsp_flag_34 = 0;
             if(_jsp_start_flag_34 == BodyTag.EVAL_BODY_BUFFERED){
-                BodyContent _jsp_body_content_34 = (BodyContent)(pageContext.pushBody());
+                BodyContent _jsp_body_content_34 = pageContext.pushBody();
                 _jsp_MessageTag_34.setBodyContent(_jsp_body_content_34);
                 _jsp_MessageTag_34.doInitBody();
                 out = _jsp_body_content_34;
@@ -326,7 +326,7 @@ public class FmtTestTemplate extends JspTemplate
                 if(_jsp_start_flag_35 != Tag.SKIP_BODY){
                     int _jsp_flag_35 = 0;
                     if(_jsp_start_flag_35 == BodyTag.EVAL_BODY_BUFFERED){
-                        BodyContent _jsp_body_content_35 = (BodyContent)(pageContext.pushBody());
+                        BodyContent _jsp_body_content_35 = pageContext.pushBody();
                         _jsp_FmtParamTag_35.setBodyContent(_jsp_body_content_35);
                         _jsp_FmtParamTag_35.doInitBody();
                         out = _jsp_body_content_35;
@@ -359,7 +359,7 @@ public class FmtTestTemplate extends JspTemplate
                 if(_jsp_start_flag_38 != Tag.SKIP_BODY){
                     int _jsp_flag_38 = 0;
                     if(_jsp_start_flag_38 == BodyTag.EVAL_BODY_BUFFERED){
-                        BodyContent _jsp_body_content_38 = (BodyContent)(pageContext.pushBody());
+                        BodyContent _jsp_body_content_38 = pageContext.pushBody();
                         _jsp_FmtParamTag_38.setBodyContent(_jsp_body_content_38);
                         _jsp_FmtParamTag_38.doInitBody();
                         out = _jsp_body_content_38;
@@ -392,7 +392,7 @@ public class FmtTestTemplate extends JspTemplate
                 if(_jsp_start_flag_41 != Tag.SKIP_BODY){
                     int _jsp_flag_41 = 0;
                     if(_jsp_start_flag_41 == BodyTag.EVAL_BODY_BUFFERED){
-                        BodyContent _jsp_body_content_41 = (BodyContent)(pageContext.pushBody());
+                        BodyContent _jsp_body_content_41 = pageContext.pushBody();
                         _jsp_FmtParamTag_41.setBodyContent(_jsp_body_content_41);
                         _jsp_FmtParamTag_41.doInitBody();
                         out = _jsp_body_content_41;
@@ -425,7 +425,7 @@ public class FmtTestTemplate extends JspTemplate
                 if(_jsp_start_flag_44 != Tag.SKIP_BODY){
                     int _jsp_flag_44 = 0;
                     if(_jsp_start_flag_44 == BodyTag.EVAL_BODY_BUFFERED){
-                        BodyContent _jsp_body_content_44 = (BodyContent)(pageContext.pushBody());
+                        BodyContent _jsp_body_content_44 = pageContext.pushBody();
                         _jsp_FmtParamTag_44.setBodyContent(_jsp_body_content_44);
                         _jsp_FmtParamTag_44.doInitBody();
                         out = _jsp_body_content_44;
@@ -474,7 +474,7 @@ public class FmtTestTemplate extends JspTemplate
         if(_jsp_start_flag_49 != Tag.SKIP_BODY){
             int _jsp_flag_49 = 0;
             if(_jsp_start_flag_49 == BodyTag.EVAL_BODY_BUFFERED){
-                BodyContent _jsp_body_content_49 = (BodyContent)(pageContext.pushBody());
+                BodyContent _jsp_body_content_49 = pageContext.pushBody();
                 _jsp_MessageTag_49.setBodyContent(_jsp_body_content_49);
                 _jsp_MessageTag_49.doInitBody();
                 out = _jsp_body_content_49;

@@ -16,7 +16,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
-import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.jstl.fmt.LocalizationContext;
 import com.skin.ayada.tagext.BodyContent;
 
@@ -128,11 +127,6 @@ public interface PageContext
     public ExpressionContext getExpressionContext();
 
     /**
-     * @return the tagLibrary
-     */
-    public TagLibrary getTagLibrary();
-
-    /**
      * @throws IOException
      */
     public void clear() throws IOException;
@@ -148,9 +142,9 @@ public interface PageContext
     public void close() throws IOException;
 
     /**
-     * @return JspWriter
+     * @return BodyContent
      */
-    public JspWriter pushBody();
+    public BodyContent pushBody();
 
     /**
      * @return JspWriter

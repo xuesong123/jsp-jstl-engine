@@ -17,6 +17,7 @@ package _tpl._jsp;
 import com.skin.ayada.runtime.ExpressionContext;
 import com.skin.ayada.runtime.JspWriter;
 import com.skin.ayada.runtime.PageContext;
+import com.skin.ayada.tagext.ConditionalTagSupport;
 import com.skin.ayada.tagext.IterationTag;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.template.JspTemplate;
@@ -78,7 +79,7 @@ public class TryCatchFinallyTestTemplate extends JspTemplate
 
                     /* NODE START: lineNumber: 13, offset: 7, length: 2, tagClassName: com.skin.ayada.jstl.core.ExitTag, tagInstanceName: _jsp_ExitTag_8 */
                     /* <c:exit/> */
-                    if(com.skin.ayada.jstl.core.ExitTag.getTrue()){
+                    if(ConditionalTagSupport.getTrue()){
                         return;
                     }
                     /* jsp.jstl.core.ExitTag END */

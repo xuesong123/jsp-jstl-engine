@@ -871,7 +871,7 @@ public class JspCompiler
     {
         if(node.getOffset() == index)
         {
-            writer.println(indent + "if(com.skin.ayada.jstl.core.BreakTag.getTrue()){ break; }");
+            writer.println(indent + "if(com.skin.ayada.jstl.core.ContinueTag.getTrue()){ break; }");
             writer.println(indent + "/* jsp.jstl.core.BreakTag END */");
         }
 
@@ -1232,7 +1232,7 @@ public class JspCompiler
             }
             else
             {
-                writer.println(indent + "if(com.skin.ayada.jstl.core.ExitTag.getTrue()){");
+                writer.println(indent + "if(com.skin.ayada.jstl.core.ContinueTag.getTrue()){");
             }
             writer.println(indent + "    return;");
             writer.println(indent + "}");
@@ -1296,7 +1296,7 @@ public class JspCompiler
                 if(this.isAssignableFrom(tagClassName, BodyTag.class))
                 {
                     writer.println(prefix + "    if(" + startFlagName + " == BodyTag.EVAL_BODY_BUFFERED){");
-                    writer.println(prefix + "        BodyContent " + bodyContentInstanceName + " = (BodyContent)(pageContext.pushBody());");
+                    writer.println(prefix + "        BodyContent " + bodyContentInstanceName + " = pageContext.pushBody();");
                     writer.println(prefix + "        " + tagInstanceName + ".setBodyContent(" + bodyContentInstanceName + ");");
                     writer.println(prefix + "        " + tagInstanceName + ".doInitBody();");
                     writer.println(prefix + "        out = " + bodyContentInstanceName + ";");

@@ -11,6 +11,7 @@
 package com.skin.ayada.runtime;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -19,7 +20,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 
-import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.jstl.fmt.LocalizationContext;
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.template.TemplateContext;
@@ -34,7 +34,6 @@ import com.skin.ayada.template.TemplateContext;
 public class DefaultPageContext implements PageContext
 {
     private JspWriter out;
-    private TagLibrary tagLibrary;
     private Map<String, Object> attributes;
     private TemplateContext templateContext;
     private ExpressionContext expressionContext;
@@ -343,22 +342,6 @@ public class DefaultPageContext implements PageContext
     }
 
     /**
-     * @return the tagLibrary
-     */
-    public TagLibrary getTagLibrary()
-    {
-        return this.tagLibrary;
-    }
-
-    /**
-     * @param tagLibrary the tagLibrary to set
-     */
-    public void setTagLibrary(TagLibrary tagLibrary)
-    {
-        this.tagLibrary = tagLibrary;
-    }
-
-    /**
      * @throws IOException
      */
     @Override
@@ -388,10 +371,23 @@ public class DefaultPageContext implements PageContext
     /**
      * @return JspWriter
      */
-    public JspWriter pushBody()
+    public BodyContent pushBody()
     {
-        this.out = new BodyContent(this.out);
-        return this.out;
+        BodyContent bodyContent = new BodyContent(this.out);
+        this.out = bodyContent;
+        return bodyContent;
+    }
+
+    /**
+     * @param writer
+     * @return JspWriter
+     */
+    public JspWriter pushBody(Writer writer)
+    {
+        BodyContent bodyContent = new BodyContent(this.out);
+        bodyContent.setWriter(writer);
+        this.out = bodyContent;
+        return bodyContent;
     }
 
     /**
@@ -399,9 +395,15 @@ public class DefaultPageContext implements PageContext
      */
     public JspWriter popBody()
     {
-        BodyContent bodyContent = (BodyContent)(this.out);
-        this.out = bodyContent.getEnclosingWriter();
-        return this.out;
+        if(this.out instanceof BodyContent)
+        {
+            BodyContent bodyContent = (BodyContent)(this.out);
+            return (this.out = bodyContent.getEnclosingWriter());
+        }
+        else
+        {
+            return null;
+        }
     }
 
     /**
@@ -507,10 +509,8 @@ public class DefaultPageContext implements PageContext
     {
         this.attributes.clear();
         this.expressionContext.release();
-        this.tagLibrary.release();
         this.attributes = null;
         this.expressionContext = null;
-        this.tagLibrary = null;
         this.out = null;
     }
 }

@@ -10,19 +10,15 @@
  */
 package test.com.skin.ayada.template;
 
-import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.skin.ayada.factory.DefaultTagFactory;
 import com.skin.ayada.factory.TagFactoryManager;
 import com.skin.ayada.jstl.core.ForEachTag;
-import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.runtime.TagFactory;
 import com.skin.ayada.statement.Node;
 import com.skin.ayada.tagext.Tag;
-import com.skin.ayada.template.TemplateContext;
-import com.skin.ayada.template.TemplateManager;
 import com.skin.ayada.util.TagUtil;
 
 /**
@@ -50,15 +46,11 @@ public class ReflectTest
 
     public static void reflectTest()
     {
-        StringWriter out = new StringWriter();
-        TemplateContext templateContext = TemplateManager.getTemplateContext("webapp");
-        PageContext pageContext = templateContext.getPageContext(out);
-
         int count = 10000000;
         long t1 = System.currentTimeMillis();
         for(int i = 0; i < count; i++)
         {
-            testTag(TagUtil.create(pageContext, "c:if"));
+            testTag(TagUtil.create("c:if"));
         }
         long t2 = System.currentTimeMillis();
         System.out.println("reflectTest - count: " + count + ", times: " + (t2 - t1));

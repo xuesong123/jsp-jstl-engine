@@ -12,6 +12,8 @@ package com.skin.ayada.demo;
 
 import java.io.StringWriter;
 
+import com.skin.ayada.runtime.DefaultExpressionFactory;
+import com.skin.ayada.runtime.ExpressionFactory;
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.source.ClassPathSourceFactory;
 import com.skin.ayada.source.SourceFactory;
@@ -45,22 +47,25 @@ public class DemoTest
             String home = "com/skin/ayada/demo";
             SourceFactory sourceFactory = new ClassPathSourceFactory(home);
             TemplateFactory templateFactory = new TemplateFactory();
+            ExpressionFactory expressionFactory = new DefaultExpressionFactory();
 
             TemplateContext templateContext = new DefaultTemplateContext(home);
             templateContext.setSourceFactory(sourceFactory);
             templateContext.setTemplateFactory(templateFactory);
+            templateContext.setExpressionFactory(expressionFactory);
+
             TemplateManager.add(templateContext);
 
             Template template = templateContext.getTemplate("/hello.jsp");
             StringWriter writer = new StringWriter();
             PageContext pageContext = templateContext.getPageContext(writer);
 
-            System.out.println("-------------- source result --------------");
+            System.out.println("-------------- source --------------");
             System.out.println(TemplateUtil.toString(template));
-            System.out.println("-------------- System.out.print --------------");
+            System.out.println("-------------- System.out.println --------------");
             template.execute(pageContext);
 
-            System.out.println("-------------- run result --------------");
+            System.out.println("-------------- result --------------");
             System.out.println(writer.toString());
         }
         catch(Exception e)
