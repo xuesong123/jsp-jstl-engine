@@ -34,7 +34,7 @@ public class TemplateConfig
 
         if(c1 == null)
         {
-            throw new NullPointerException("\"config-default.properties\" not found !");
+            throw new NullPointerException("\"ayada-default.properties\" not found !");
         }
 
         if(c2 != null)

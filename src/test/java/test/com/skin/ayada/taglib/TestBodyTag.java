@@ -14,8 +14,8 @@ import java.io.IOException;
 
 import com.skin.ayada.runtime.JspWriter;
 import com.skin.ayada.tagext.BodyContent;
+import com.skin.ayada.tagext.BodyTag;
 import com.skin.ayada.tagext.BodyTagSupport;
-import com.skin.ayada.tagext.Tag;
 
 /**
  * <p>Title: TestBodyTag</p>
@@ -32,14 +32,13 @@ public class TestBodyTag extends BodyTagSupport
 
         try
         {
-            out.print("test.com.skin.ayada.taglib.TestBodyTag");
+            out.print(TestBodyTag.class.getName());
         }
         catch(IOException e)
         {
             e.printStackTrace();
         }
-
-        return Tag.EVAL_PAGE;
+        return BodyTag.EVAL_BODY_BUFFERED;
     }
 
     /**
@@ -48,16 +47,15 @@ public class TestBodyTag extends BodyTagSupport
     @Override
     public int doEndTag()
     {
-        String content = null;
         BodyContent bodyContent = this.getBodyContent();
 
         if(bodyContent != null)
         {
-            content = bodyContent.getString().trim();
+            String content = bodyContent.getString().trim();
 
             try
             {
-                this.pageContext.getOut().print(content);
+                bodyContent.getEnclosingWriter().print(" - " + content);
             }
             catch(IOException e)
             {

@@ -23,9 +23,9 @@ public class Version
 {
     public static final int LEVEL = 4;
     public static final int majorVersion = 1;
-    public static final int minorVersion = 8;
-    public static final String name = "skinfourm";
-    public static final String developer = "skinsoft";
+    public static final int minorVersion = 10;
+    public static final String name = "ayada";
+    public static final String developer = "skin";
     public static final String version = getVersion();
 
     /**

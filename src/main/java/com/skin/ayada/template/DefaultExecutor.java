@@ -162,8 +162,9 @@ public class DefaultExecutor
                             jspFragment.setOffset(node.getOffset() + 1);
                             jspFragment.setLength(node.getLength() - 2);
                             SimpleTag simpleTag = (SimpleTag)tag;
-                            simpleTag.setPageBody(jspFragment);
+                            simpleTag.setJspBody(jspFragment);
                             simpleTag.doTag();
+                            simpleTag.release();
                             index = node.getOffset() + node.getLength();
                             continue;
                         }
@@ -173,6 +174,7 @@ public class DefaultExecutor
                         if(flag == Tag.SKIP_BODY)
                         {
                             index = node.getOffset() + node.getLength();
+                            doFinally(tag);
                             continue;
                         }
 
@@ -208,6 +210,7 @@ public class DefaultExecutor
                             if(parent != null)
                             {
                                 index = parent.getNode().getOffset() + 1;
+                                doFinally(tag);
                                 continue;
                             }
                             throw new Exception("Error: ContinueTag");
@@ -220,6 +223,7 @@ public class DefaultExecutor
                             if(parent != null)
                             {
                                 index = parent.getNode().getOffset() + parent.getNode().getLength();
+                                doFinally(tag);
                                 continue;
                             }
                             throw new Exception("Error: BreakTag");
@@ -409,6 +413,25 @@ public class DefaultExecutor
 
         tag.release();
         return flag;
+    }
+
+    /**
+     * @param tag
+     * @throws FinallyException 
+     */
+    public static void doFinally(Tag tag) throws FinallyException
+    {
+        if(tag instanceof TryCatchFinally)
+        {
+            try
+            {
+                ((TryCatchFinally)tag).doFinally();
+            }
+            catch(Throwable throwable)
+            {
+                throw new FinallyException(throwable);
+            }
+        }
     }
 
     /**

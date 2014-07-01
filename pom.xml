@@ -6,7 +6,7 @@
     <groupId>com.skin</groupId>
     <artifactId>ayada</artifactId>
     <name>ayada template engine</name>
-    <version>1.0.0.8</version>
+    <version>1.0.1.0</version>
     <packaging>jar</packaging>
 
     <properties> 
@@ -14,7 +14,7 @@
     </properties>
 
     <build>
-        <finalName>ayada-1.0.0.8</finalName>
+        <finalName>ayada-1.0.1.0</finalName>
         <defaultGoal>compile</defaultGoal>
 
         <directory>target</directory>

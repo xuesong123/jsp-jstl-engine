@@ -275,10 +275,27 @@ public class ExpressionUtil
                     expression.append(cbuf[i]);
                 }
 
-                if(expression.getTextContent().length() > 0)
+                String content = expression.trim();
+
+                if(content.length() > 0)
                 {
-                    list.add(expression);
-                    textNode = null;
+                    if(content.startsWith("?"))
+                    {
+                        if(textNode == null)
+                        {
+                            textNode = new TextNode();
+                            list.add(textNode);
+                        }
+
+                        textNode.append("${");
+                        textNode.append(content.substring(1));
+                        textNode.append("}");
+                    }
+                    else
+                    {
+                        list.add(expression);
+                        textNode = null;
+                    }
                 }
             }
             else

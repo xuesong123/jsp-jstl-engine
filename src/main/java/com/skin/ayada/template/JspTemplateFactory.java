@@ -65,7 +65,6 @@ public class JspTemplateFactory extends TemplateFactory
     public Template create(SourceFactory sourceFactory, String file, String encoding) throws Exception
     {
         Template template = super.create(sourceFactory, file, encoding);
-
         long t1 = System.currentTimeMillis();
         JspTemplate jspTemplate = compile(template, this.getWork());
         long t2 = System.currentTimeMillis();
@@ -124,13 +123,16 @@ public class JspTemplateFactory extends TemplateFactory
                 + "work: " + work + "\r\n");
         }
 
-        boolean fastJstl = TemplateConfig.getInstance().getBoolean("ayada.compile.fast-jstl");
-        JspCompiler jspCompiler = new JspCompiler();
-        jspCompiler.setFastJstl(fastJstl);
+        long lastModified = template.getLastModified();
+        File classFile = new File(work, classPath + ".class");
 
-        String source = jspCompiler.compile(template, simpleName, packageName);
+        if(classFile.exists() && classFile.isFile() && classFile.lastModified() == lastModified)
+        {
+            System.out.println("load from file system !");
+            return this.load(template, className, classFile);
+        }
+
         File srcFile = new File(work, classPath + ".java");
-        File clsFile = new File(work, classPath + ".class");
         File tplFile = new File(work, classPath + ".tpl");
         String lib = this.getClassPath();
 
@@ -139,8 +141,14 @@ public class JspTemplateFactory extends TemplateFactory
             lib = System.getProperty("java.class.path");
         }
 
-        write(source, srcFile);
-        write(this.getTemplateDescription(template), tplFile);
+        boolean fastJstl = TemplateConfig.getInstance().getBoolean("ayada.compile.fast-jstl");
+        JspCompiler jspCompiler = new JspCompiler();
+        jspCompiler.setFastJstl(fastJstl);
+        String source = jspCompiler.compile(template, simpleName, packageName);
+        this.write(source, srcFile);
+        this.write(this.getTemplateDescription(template), tplFile);
+        tplFile.setLastModified(lastModified);
+        srcFile.setLastModified(lastModified);
 
         String[] args = new String[]{
             "-d", work,
@@ -157,16 +165,32 @@ public class JspTemplateFactory extends TemplateFactory
 
         if(status == 0)
         {
-            byte[] bytes = getBytes(clsFile);
-            JspTemplate jspTemplate = (JspTemplate)(getInstance(className, bytes));
-            jspTemplate.setHome(template.getHome());
-            jspTemplate.setPath(template.getPath());
-            jspTemplate.setNodes(template.getNodes());
-            jspTemplate.setLastModified(template.getLastModified());
-            jspTemplate.setUpdateTime(template.getUpdateTime());
-            return jspTemplate;
+            classFile.setLastModified(lastModified);
+            return this.load(template, className, classFile);
         }
-        throw new Exception("compile error: " + status);
+        else
+        {
+            throw new Exception("compile error: " + status);
+        }
+    }
+
+    /**
+     * @param template
+     * @param className
+     * @param classFile
+     * @return JspTemplate
+     * @throws IOException
+     */
+    private JspTemplate load(Template template, String className, File classFile) throws IOException
+    {
+        byte[] bytes = getBytes(classFile);
+        JspTemplate jspTemplate = (JspTemplate)(getInstance(className, bytes));
+        jspTemplate.setHome(template.getHome());
+        jspTemplate.setPath(template.getPath());
+        jspTemplate.setNodes(template.getNodes());
+        jspTemplate.setLastModified(template.getLastModified());
+        jspTemplate.setUpdateTime(template.getUpdateTime());
+        return jspTemplate;
     }
 
     /**
@@ -226,8 +250,9 @@ public class JspTemplateFactory extends TemplateFactory
 
         try
         {
+            int length = (int)(file.length());
             inputStream = new FileInputStream(file);
-            byte[] buffer = new byte[(int)file.length()];
+            byte[] buffer = new byte[length];
             inputStream.read(buffer, 0, buffer.length);
             return buffer;
         }

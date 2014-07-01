@@ -10,6 +10,8 @@
  */
 package com.skin.ayada.tagext;
 
+import com.skin.ayada.runtime.PageContext;
+
 /**
  * <p>Title: SimpleTag</p>
  * <p>Description: </p>
@@ -18,10 +20,15 @@ package com.skin.ayada.tagext;
  */
 public abstract class SimpleTag implements Tag
 {
+    private Tag parent;
+    protected PageContext pageContext;
+    private JspFragment jspBody;
+
     /**
      * @return int
      */
-    public int doStartTag()
+    @Override
+    public int doStartTag() throws Exception
     {
         throw new UnsupportedOperationException("doStartTag unsupported !");
     }
@@ -30,15 +37,66 @@ public abstract class SimpleTag implements Tag
      * @return int
      */
     @Override
-    public int doEndTag()
+    public int doEndTag() throws Exception
     {
         throw new UnsupportedOperationException("doStartTag unsupported !");
     }
 
-    public abstract void doTag();
+    /**
+     * @throws Exception
+     */
+    public abstract void doTag() throws Exception;
 
     /**
-     * @param jspBody
+     * @return the parent
      */
-    public abstract void setPageBody(JspFragment jspBody);
+    public Tag getParent()
+    {
+        return this.parent;
+    }
+
+    /**
+     * @param parent the parent to set
+     */
+    public void setParent(Tag parent)
+    {
+        this.parent = parent;
+    }
+
+    /**
+     * @return the pageContext
+     */
+    public PageContext getPageContext()
+    {
+        return this.pageContext;
+    }
+
+    /**
+     * @param pageContext the pageContext to set
+     */
+    public void setPageContext(PageContext pageContext)
+    {
+        this.pageContext = pageContext;
+    }
+
+    /**
+     * @return the jspBody
+     */
+    public JspFragment getJspBody()
+    {
+        return this.jspBody;
+    }
+
+    /**
+     * @param jspBody the jspBody to set
+     */
+    public void setJspBody(JspFragment jspBody)
+    {
+        this.jspBody = jspBody;
+    }
+
+    @Override
+    public void release()
+    {
+    }
 }

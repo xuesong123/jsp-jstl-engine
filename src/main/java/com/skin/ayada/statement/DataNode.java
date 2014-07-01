@@ -45,6 +45,7 @@ public abstract class DataNode extends Node
     }
 
     /**
+     * @return String
      */
     public String getNodeHtml()
     {
@@ -124,11 +125,32 @@ public abstract class DataNode extends Node
     }
 
     /**
-     * 
+     * @return String
      */
+    public String trim()
+    {
+        String content = this.buffer.toString().trim();
+        this.buffer.setLength(0);
+        this.buffer.append(content);
+        return content;
+    }
+
     public void clear()
     {
         this.buffer.setLength(0);
+    }
+
+    /**
+     * @param content
+     */
+    public void setTextContent(String content)
+    {
+        this.buffer.setLength(0);
+
+        if(content != null)
+        {
+            this.buffer.append(content);
+        }
     }
 
     /**

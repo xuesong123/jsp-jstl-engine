@@ -1,4 +1,15 @@
-============ 1.0.8
+2014-07-01 ============ 1.0.1.0
+比较大的版本改动
+1. EL表达式引擎可以自由更换, 默认使用OGNL
+2. 修复解释模式下TryCatchFinally在某些情况下不执行finally的bug
+3. 修改编译模式下生成文件的路径, 统一添加下划线作为前缀以避免与java关键字冲突
+4. BodyContent增强
+5. PageContext删除获取TagLibraray的方法
+6. t:import明确为编译指令, 运行期不再支持动态修改标签库
+7. 编译模式下增加SimpleTag的支持, 原来只在解释模式下支持, 参见/webapp/simpleTagTest.jsp
+8. 其他的一些性能优化
+
+2014-04-22 ============ 1.0.0.8
 1. 增加TryCatchFinally支持
 2. 增加com.skin.ayada.jstl.sql.ConnectTag  <sql:connect/>
 3. 增加com.skin.ayada.jstl.sql.SqlTag      <sql:execute/>

@@ -162,7 +162,7 @@ public class ExtendExecutor
                             jspFragment.setOffset(node.getOffset() + 1);
                             jspFragment.setLength(node.getLength() - 2);
                             SimpleTag simpleTag = (SimpleTag)tag;
-                            simpleTag.setPageBody(jspFragment);
+                            simpleTag.setJspBody(jspFragment);
                             simpleTag.doTag();
                             index = node.getOffset() + node.getLength();
                             continue;
