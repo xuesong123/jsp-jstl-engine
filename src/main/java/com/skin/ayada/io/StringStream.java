@@ -201,6 +201,16 @@ public class StringStream
     }
 
     /**
+     * @param offset
+     * @param length
+     * @return String
+     */
+    public String getString(int offset, int length)
+    {
+        return new String(this.buffer, offset, length);
+    }
+
+    /**
      * @param position
      */
     public void setPosition(int position)

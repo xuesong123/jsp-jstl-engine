@@ -20,6 +20,7 @@ import java.io.Writer;
  * @author xuesong.net
  * @version 1.0
  */
+@SuppressWarnings("resource")
 public class ChunkWriter extends Writer
 {
     private int position;
@@ -81,7 +82,6 @@ public class ChunkWriter extends Writer
     /**
      * @return int
      */
-    @SuppressWarnings("resource")
     public int getChunkSize()
     {
         int size = 0;
@@ -99,7 +99,6 @@ public class ChunkWriter extends Writer
     /**
      * @return int
      */
-    @SuppressWarnings("resource")
     public int length()
     {
         int length = 0;
@@ -162,7 +161,6 @@ public class ChunkWriter extends Writer
     {
     }
 
-    @SuppressWarnings("resource")
     public void free()
     {
         ChunkWriter next = this;
@@ -179,7 +177,6 @@ public class ChunkWriter extends Writer
     }
 
     @Override
-    @SuppressWarnings("resource")
     public String toString()
     {
         int length = this.length();
@@ -195,7 +192,6 @@ public class ChunkWriter extends Writer
         return buffer.toString();
     }
 
-    @SuppressWarnings("resource")
     public static void main(String[] args)
     {
         char[] cbuf = "1234567890".toCharArray();

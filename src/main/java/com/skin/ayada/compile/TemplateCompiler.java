@@ -251,6 +251,11 @@ public class TemplateCompiler extends PageCompiler
 
             if(nodeName.length() > 0)
             {
+                if(nodeName.equals("t:import") || nodeName.equals("t:include") || nodeName.equals("t:text"))
+                {
+                    throw new Exception("at line " + this.lineNumber + ": " + nodeName + " not match !");
+                }
+
                 String tagClassName = null;
 
                 if(this.tagLibrary != null)
@@ -324,7 +329,23 @@ public class TemplateCompiler extends PageCompiler
         {
             String nodeName = this.getNodeName();
 
-            if(nodeName.equals("t:include"))
+            if(nodeName.equals("t:import"))
+            {
+                Map<String, String> attributes = this.getAttributes();
+
+                if(this.stream.peek(-2) != '/')
+                {
+                    throw new Exception("The 't:import' direction must be self-closed!");
+                }
+
+                this.skipCRLF();
+                String name = attributes.get("name");
+                String className = attributes.get("className");
+                String bodyContent = attributes.get("bodyContent");
+                this.setupTagLibrary(name, className, bodyContent);
+                return;
+            }
+            else if(nodeName.equals("t:include"))
             {
                 Map<String, String> attributes = this.getAttributes();
 
@@ -339,37 +360,30 @@ public class TemplateCompiler extends PageCompiler
                 this.include(stack, list, type, file, encoding);
                 return;
             }
+            else if(nodeName.equals("t:text"))
+            {
+                int line = this.lineNumber;
+                this.getAttributes();
+                this.skipCRLF();
+                String content = this.readNodeContent(nodeName);
+                this.pushTextNode(stack, list, content, line);
+                this.skipCRLF();
+                return;
+            }
+            else if(nodeName.equals("t:comment"))
+            {
+                this.getAttributes();
+                this.skipCRLF();
+                this.readNodeContent(nodeName);
+                this.skipCRLF();
+                return;
+            }
 
             String tagClassName = null;
 
             if(this.tagLibrary != null)
             {
                 tagClassName = this.tagLibrary.getTagClassName(nodeName);
-            }
-
-            if(nodeName.equals("t:import"))
-            {
-                Node node = new Node(nodeName);
-                node.setTagClassName(tagClassName);
-                node.setLineNumber(this.getLineNumber());
-                Map<String, String> attributes = this.getAttributes();
-                node.setOffset(list.size());
-                node.setAttributes(attributes);
-                node.setClosed(NodeType.SELF_CLOSED);
-                // this.pushNode(stack, list, node);
-
-                if(this.stream.peek(-2) != '/')
-                {
-                    throw new Exception("The 't:import' direction must be self-closed!");
-                }
-
-                this.skipCRLF();
-                String name = attributes.get("name");
-                String className = attributes.get("className");
-                String bodyContent = attributes.get("bodyContent");
-                this.setupTagLibrary(name, className, bodyContent);
-                // this.popNode(stack, list, nodeName);
-                return;
             }
 
             if(nodeName.equals("jsp:directive.page") || nodeName.equals("jsp:directive.taglib") || nodeName.equals("jsp:directive.include"))
@@ -566,7 +580,8 @@ public class TemplateCompiler extends PageCompiler
     public String readNodeContent(String nodeName)
     {
         int i = 0;
-        StringBuilder buffer = new StringBuilder();
+        int offset = this.stream.getPosition();
+        int end = this.stream.length();
 
         while((i = this.stream.read()) != -1)
         {
@@ -576,6 +591,7 @@ public class TemplateCompiler extends PageCompiler
 
                 if(this.match(nodeName))
                 {
+                    end = this.stream.getPosition() - 2;
                     this.stream.skip(nodeName.length());
 
                     while((i = this.stream.read()) != -1)
@@ -593,7 +609,6 @@ public class TemplateCompiler extends PageCompiler
 
                     break;
                 }
-                buffer.append("</");
             }
             else
             {
@@ -601,12 +616,88 @@ public class TemplateCompiler extends PageCompiler
                 {
                     this.lineNumber++;
                 }
-
-                buffer.append((char)i);
             }
         }
 
-        return buffer.toString();
+        return this.stream.getString(offset, end - offset);
+    }
+
+    /**
+     * @param nodeName
+     * @return String
+     */
+    public String readNodeContent2(String nodeName)
+    {
+        int i = 0;
+        int depth = 0;
+        int offset = this.stream.getPosition();
+        int end = this.stream.length();
+
+        while((i = this.stream.read()) != -1)
+        {
+            if(i == '<')
+            {
+                if(this.stream.peek() == '/')
+                {
+                    this.stream.read();
+    
+                    if(this.match(nodeName))
+                    {
+                        if(depth == 0)
+                        {
+                            end = this.stream.getPosition() - 2;
+                            this.stream.skip(nodeName.length());
+                            while((i = this.stream.read()) != -1)
+                            {
+                                if(i == '\n')
+                                {
+                                    this.lineNumber++;
+                                }
+        
+                                if(i == '>')
+                                {
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                        else
+                        {
+                            this.stream.skip(nodeName.length());
+                            while((i = this.stream.read()) != -1)
+                            {
+                                if(i == '\n')
+                                {
+                                    this.lineNumber++;
+                                }
+
+                                if(i == '>')
+                                {
+                                    break;
+                                }
+                            }
+                            depth--;
+                        }
+                    }
+                }
+                else
+                {
+                    if(this.match(nodeName))
+                    {
+                        depth++;
+                    }
+                }
+            }
+            else
+            {
+                if(i == '\n')
+                {
+                    this.lineNumber++;
+                }
+            }
+        }
+
+        return this.stream.getString(offset, end - offset);
     }
 
     /**

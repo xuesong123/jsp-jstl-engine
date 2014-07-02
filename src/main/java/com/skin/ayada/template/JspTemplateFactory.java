@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URL;
+import java.net.URLClassLoader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -124,21 +126,21 @@ public class JspTemplateFactory extends TemplateFactory
         }
 
         long lastModified = template.getLastModified();
-        File classFile = new File(work, classPath + ".class");
-
-        if(classFile.exists() && classFile.isFile() && classFile.lastModified() == lastModified)
-        {
-            System.out.println("load from file system !");
-            return this.load(template, className, classFile);
-        }
-
-        File srcFile = new File(work, classPath + ".java");
         File tplFile = new File(work, classPath + ".tpl");
+        File srcFile = new File(work, classPath + ".java");
+        File classFile = new File(work, classPath + ".class");
+        File parent = classFile.getParentFile();
+        
         String lib = this.getClassPath();
 
         if(lib == null)
         {
             lib = System.getProperty("java.class.path");
+        }
+
+        if(parent.exists() == false)
+        {
+            parent.mkdirs();
         }
 
         boolean fastJstl = TemplateConfig.getInstance().getBoolean("ayada.compile.fast-jstl");
@@ -149,6 +151,24 @@ public class JspTemplateFactory extends TemplateFactory
         this.write(this.getTemplateDescription(template), tplFile);
         tplFile.setLastModified(lastModified);
         srcFile.setLastModified(lastModified);
+        
+        File[] files = classFile.getParentFile().listFiles();
+        
+        if(files != null && files.length > 0)
+        {
+            String name = null;
+            String prefix = simpleName + "$";
+
+            for(File file : files)
+            {
+                name = file.getName();
+
+                if(name.startsWith(prefix) && name.endsWith(".class"))
+                {
+                    file.delete();
+                }
+            }
+        }
 
         String[] args = new String[]{
             "-d", work,
@@ -160,13 +180,18 @@ public class JspTemplateFactory extends TemplateFactory
             srcFile.getCanonicalPath()
         };
 
+        if(logger.isDebugEnabled())
+        {
+            logger.debug("compile: " + srcFile.getAbsolutePath());
+        }
+
         javax.tools.JavaCompiler javaCompiler = javax.tools.ToolProvider.getSystemJavaCompiler();
         int status = javaCompiler.run(System.in, System.out, System.out, args);
 
         if(status == 0)
         {
             classFile.setLastModified(lastModified);
-            return this.load(template, className, classFile);
+            return this.load(template, className, new File[]{new File(work)});
         }
         else
         {
@@ -181,10 +206,28 @@ public class JspTemplateFactory extends TemplateFactory
      * @return JspTemplate
      * @throws IOException
      */
-    private JspTemplate load(Template template, String className, File classFile) throws IOException
+    protected JspTemplate load(Template template, String className, File classFile) throws IOException
     {
         byte[] bytes = getBytes(classFile);
         JspTemplate jspTemplate = (JspTemplate)(getInstance(className, bytes));
+        jspTemplate.setHome(template.getHome());
+        jspTemplate.setPath(template.getPath());
+        jspTemplate.setNodes(template.getNodes());
+        jspTemplate.setLastModified(template.getLastModified());
+        jspTemplate.setUpdateTime(template.getUpdateTime());
+        return jspTemplate;
+    }
+
+    /**
+     * @param template
+     * @param className
+     * @param classPath
+     * @return JspTemplate
+     * @throws IOException
+     */
+    protected JspTemplate load(Template template, String className, File[] classPath) throws IOException
+    {
+        JspTemplate jspTemplate = (JspTemplate)(getInstance(className, classPath));
         jspTemplate.setHome(template.getHome());
         jspTemplate.setPath(template.getPath());
         jspTemplate.setNodes(template.getNodes());
@@ -342,7 +385,7 @@ public class JspTemplateFactory extends TemplateFactory
      * @param bytes
      * @return Object
      */
-    private Object getInstance(String className, byte[] bytes)
+    protected Object getInstance(String className, byte[] bytes)
     {
         FactoryClassLoader factoryClassLoader = FactoryClassLoader.getInstance();
         Class<?> clazz = factoryClassLoader.create(className, bytes);
@@ -356,6 +399,33 @@ public class JspTemplateFactory extends TemplateFactory
             e.printStackTrace();
         }
         catch(IllegalAccessException e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
+     * @param className
+     * @param files
+     * @return Object
+     */
+    protected Object getInstance(String className, File[] files)
+    {
+        try
+        {
+            URL[] urls = new URL[files.length];
+
+            for(int i = 0, length = files.length; i < length; i++)
+            {
+                urls[i] = files[i].toURI().toURL();
+            }
+
+            URLClassLoader classLoader = URLClassLoader.newInstance(urls);
+            return Class.forName(className, true, classLoader).newInstance();
+        }
+        catch(Exception e)
         {
             e.printStackTrace();
         }

@@ -25,12 +25,20 @@ import com.skin.ayada.util.StringUtil;
  */
 public class StreamTest
 {
-    protected int lineNumber = 1;
+    protected static int lineNumber = 1;
 
     /**
      * @param args
      */
     public static void main(String[] args)
+    {
+        String source = "<t:text><t:text><t:text><t:text>123</t:text></t:text></t:text></t:text>\r\n    <c:if test=\"${1 == 1}\">\r\n\r\n        <c:forEach items=\"1,2\" var=\"myvar\">${myvar}</c:forEach>\r\n    </c:if>\r\n</t:text>";
+        StringStream stream = new StringStream(source);
+        String content = readNodeContent(stream, "t:text");
+        System.out.println("content: [" + content + "]");
+    }
+
+    public static void test1()
     {
         StreamTest st = new StreamTest();
         String source = " % \\ / a=\"1\" % b=\"2\" \\ / c=\"3\" d=\"4\" %%///\\\\%>abc</jsp:scriptlet   >abc";
@@ -74,7 +82,7 @@ public class StreamTest
             {
                 if(i == '\n')
                 {
-                    this.lineNumber++;
+                    lineNumber++;
                 }
 
                 if(Character.isLetter(i) || Character.isDigit(i) || i == ':' || i == '-' || i == '_' || i == '%' || i == '/' || i == '>')
@@ -116,7 +124,7 @@ public class StreamTest
             {
                 if(i == '\n')
                 {
-                    this.lineNumber++;
+                    lineNumber++;
                 }
 
                 if(Character.isLetter(i) || Character.isDigit(i) || i == ':' || i == '-' || i == '_')
@@ -143,7 +151,7 @@ public class StreamTest
             {
                 if(i == '\n')
                 {
-                    this.lineNumber++;
+                    lineNumber++;
                 }
 
                 if(i != ' ')
@@ -167,7 +175,7 @@ public class StreamTest
             {
                 if(i == '\n')
                 {
-                    this.lineNumber++;
+                    lineNumber++;
                 }
 
                 if(i == ' ' || i == '\t' || i == '\r' || i == '\n')
@@ -194,7 +202,7 @@ public class StreamTest
                 {
                     if(i == '\n')
                     {
-                        this.lineNumber++;
+                        lineNumber++;
                     }
 
                     if(i == ' ' || i == '\t' || i == '\r' || i == '\n' || i == '>')
@@ -246,7 +254,7 @@ public class StreamTest
 
         while(stream.peek() == '\n')
         {
-            this.lineNumber++;
+            lineNumber++;
             stream.read();
         }
     }
@@ -258,7 +266,8 @@ public class StreamTest
     public static String readNodeContent(StringStream stream, String nodeName)
     {
         int i = 0;
-        StringBuilder buffer = new StringBuilder();
+        int offset = stream.getPosition();
+        int end = stream.length();
 
         while((i = stream.read()) != -1)
         {
@@ -268,6 +277,7 @@ public class StreamTest
 
                 if(match(stream, nodeName))
                 {
+                    end = stream.getPosition() - 2;
                     stream.skip(nodeName.length());
 
                     while((i = stream.read()) != -1)
@@ -280,16 +290,90 @@ public class StreamTest
 
                     break;
                 }
-                buffer.append('/');
-                buffer.append((char)i);
-            }
-            else
-            {
-                buffer.append((char)i);
             }
         }
 
-        return buffer.toString();
+        return stream.getString(offset, end - offset);
+    }
+
+    /**
+     * @param nodeName
+     * @return String
+     */
+    public static String readNodeContent2(StringStream stream, String nodeName)
+    {
+        int i = 0;
+        int depth = 0;
+        int offset = stream.getPosition();
+        int end = stream.length();
+
+        while((i = stream.read()) != -1)
+        {
+            if(i == '<')
+            {
+                if(stream.peek() == '/')
+                {
+                    stream.read();
+    
+                    if(match(stream, nodeName))
+                    {
+                        if(depth == 0)
+                        {
+                            end = stream.getPosition() - 2;
+                            stream.skip(nodeName.length());
+                            while((i = stream.read()) != -1)
+                            {
+                                if(i == '\n')
+                                {
+                                    lineNumber++;
+                                }
+        
+                                if(i == '>')
+                                {
+                                    break;
+                                }
+                            }
+
+                            break;
+                        }
+                        else
+                        {
+                            stream.skip(nodeName.length());
+                            while((i = stream.read()) != -1)
+                            {
+                                if(i == '\n')
+                                {
+                                    lineNumber++;
+                                }
+        
+                                if(i == '>')
+                                {
+                                    break;
+                                }
+                            }
+
+                            depth--;
+                        }
+                    }
+                }
+                else
+                {
+                    if(match(stream, nodeName))
+                    {
+                        depth++;
+                    }
+                }
+            }
+            else
+            {
+                if(i == '\n')
+                {
+                    lineNumber++;
+                }
+            }
+        }
+
+        return stream.getString(offset, end - offset);
     }
 
     /**
