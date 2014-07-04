@@ -11,6 +11,7 @@
 package com.skin.ayada.runtime;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
@@ -166,6 +167,11 @@ public interface PageContext
      * @param page
      */
     public void include(String page, Map<String, Object> context) throws Exception;
+
+    /**
+     * @param page
+     */
+    public void include(String page, Map<String, Object> context, Writer out) throws Exception;
 
     /**
      * release

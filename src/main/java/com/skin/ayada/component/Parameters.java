@@ -713,53 +713,52 @@ public class Parameters
     public <T> T getValue(Class<T> model, String name)
     {
         Object value = null;
-        String className = model.getName();
-
-        if(className.equals("char") || className.equals("java.lang.Character"))
+        
+        if(model.equals(char.class) || model.equals(Character.class))
         {
             value = getCharacter(name);
         }
-        else if(className.equals("boolean") || className.equals("java.lang.Boolean"))
+        else if(model.equals(boolean.class) || model.equals(Boolean.class))
         {
             value = getBoolean(name);
         }
-        else if(className.equals("byte") || className.equals("java.lang.Byte"))
+        else if(model.equals(byte.class) || model.equals(Byte.class))
         {
             value = getByte(name);
         }
-        else if(className.equals("short") || className.equals("java.lang.Short"))
+        else if(model.equals(short.class) || model.equals(Short.class))
         {
             value = getShort(name);
         }
-        else if(className.equals("int") || className.equals("java.lang.Integer"))
+        else if(model.equals(int.class) || model.equals(Integer.class))
         {
             value = getInteger(name);
         }
-        else if(className.equals("float") || className.equals("java.lang.Float"))
+        else if(model.equals(float.class) || model.equals(Float.class))
         {
             value = getFloat(name);
         }
-        else if(className.equals("double") || className.equals("java.lang.Double"))
+        else if(model.equals(double.class) || model.equals(Double.class))
         {
             value = getDouble(name);
         }
-        else if(className.equals("long") || className.equals("java.lang.Long"))
+        else if(model.equals(long.class) || model.equals(Long.class))
         {
             value = getLong(name);
         }
-        else if(className.equals("java.lang.String"))
+        else if(model.equals(String.class))
         {
             value = getString(name);
         }
-        else if(className.equals("java.util.Date"))
+        else if(model.equals(java.util.Date.class))
         {
             value = getDate(name, "yyyy-MM-dd hh:mm:ss");
         }
-        else if(className.equals("java.sql.Date"))
+        else if(model.equals(java.sql.Date.class))
         {
             value = getSqlDate(name, "yyyy-MM-dd hh:mm:ss");
         }
-        else if(className.equals("java.sql.Timestamp"))
+        else if(model.equals(java.sql.Timestamp.class))
         {
             value = getTimestamp(name, "yyyy-MM-dd hh:mm:ss");
         }

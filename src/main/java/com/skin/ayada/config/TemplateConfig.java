@@ -10,8 +10,6 @@
  */
 package com.skin.ayada.config;
 
-import java.util.Set;
-
 /**
  * <p>Title: TemplateConfig</p>
  * <p>Description: </p>
@@ -29,24 +27,13 @@ public class TemplateConfig
 
     public static Config create()
     {
-        Config c1 = ConfigFactory.getConfig("ayada-default.properties", Config.class);
-        Config c2 = ConfigFactory.getConfig("ayada.properties", Config.class);
+        Config config = ConfigFactory.getConfig("ayada.properties", Config.class);
 
-        if(c1 == null)
+        if(config.size() < 1)
         {
-            throw new NullPointerException("\"ayada-default.properties\" not found !");
+            config = ConfigFactory.getConfig("ayada-default.properties", Config.class);
         }
 
-        if(c2 != null)
-        {
-            Set<String> set = c2.getNames();
-
-            for(String name : set)
-            {
-                c1.setValue(name, c2.getValue(name));
-            }
-        }
-
-        return c1;
+        return config;
     }
 }

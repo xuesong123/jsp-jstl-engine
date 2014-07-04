@@ -10,7 +10,6 @@
  */
 package com.skin.ayada.template;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +18,7 @@ import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.jstl.TagLibraryFactory;
 import com.skin.ayada.source.Source;
 import com.skin.ayada.source.SourceFactory;
+import com.skin.ayada.util.ClassUtil;
 
 /**
  * <p>Title: TemplateFactory</p>
@@ -39,32 +39,7 @@ public class TemplateFactory
      */
     public static TemplateFactory getTemplateFactory(String className) throws Exception
     {
-        Class<?> clazz = null;
-
-        try
-        {
-            clazz = Thread.currentThread().getContextClassLoader().loadClass(className);
-        }
-        catch(Exception e)
-        {
-        }
-
-        if(clazz == null)
-        {
-            clazz = TemplateFactory.class.getClassLoader().loadClass(className);
-        }
-
-        if(clazz == null)
-        {
-            clazz = Class.forName(className);
-        }
-
-        if(clazz != null)
-        {
-            return (TemplateFactory)(clazz.newInstance());
-        }
-
-        throw new ClassNotFoundException(className + " not found !");
+        return (TemplateFactory)(ClassUtil.getInstance(className));
     }
 
     /**

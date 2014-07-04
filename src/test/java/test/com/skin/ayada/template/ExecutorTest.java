@@ -40,7 +40,7 @@ public class ExecutorTest
     {
         SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
         TemplateFactory templateFactory = new TemplateFactory();
-        TemplateContext templateContext = new DefaultTemplateContext("webapp", 0);
+        TemplateContext templateContext = new DefaultTemplateContext("webapp");
         templateContext.setSourceFactory(sourceFactory);
         templateContext.setTemplateFactory(templateFactory);
 

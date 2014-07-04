@@ -717,6 +717,14 @@ public class Config
     }
 
     /**
+     * @return int
+     */
+    public int size()
+    {
+        return this.parameters.size();
+    }
+    
+    /**
      * 
      */
     public void clear()

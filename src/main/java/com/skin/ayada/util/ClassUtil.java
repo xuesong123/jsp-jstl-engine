@@ -67,7 +67,7 @@ public class ClassUtil
         }
         else if(className.equals("short"))
         {
-            return byte.class;
+            return short.class;
         }
         else if(className.equals("char"))
         {
@@ -102,15 +102,16 @@ public class ClassUtil
 
         if(clazz == null)
         {
-            clazz = ClassUtil.class.getClassLoader().loadClass(className);
+            try
+            {
+                clazz = ClassUtil.class.getClassLoader().loadClass(className);
+            }
+            catch(Exception e)
+            {
+            }
         }
 
-        if(clazz == null)
-        {
-            clazz = Class.forName(className);
-        }
-
-        return clazz;
+        return Class.forName(className);
     }
 
     /**

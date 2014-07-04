@@ -11,20 +11,16 @@
 package com.skin.ayada.template;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.net.URL;
-import java.net.URLClassLoader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.skin.ayada.compile.JspCompiler;
 import com.skin.ayada.config.TemplateConfig;
-import com.skin.ayada.factory.FactoryClassLoader;
+import com.skin.ayada.factory.ClassFactory;
 import com.skin.ayada.source.SourceFactory;
 import com.skin.ayada.util.IO;
 import com.skin.ayada.util.StringUtil;
@@ -67,16 +63,19 @@ public class JspTemplateFactory extends TemplateFactory
     public Template create(SourceFactory sourceFactory, String file, String encoding) throws Exception
     {
         Template template = super.create(sourceFactory, file, encoding);
-        long t1 = System.currentTimeMillis();
-        JspTemplate jspTemplate = compile(template, this.getWork());
-        long t2 = System.currentTimeMillis();
 
         if(logger.isDebugEnabled())
         {
+            long t1 = System.currentTimeMillis();
+            JspTemplate jspTemplate = compile(template, this.getWork());
+            long t2 = System.currentTimeMillis();
             logger.debug("jsp compile time: " + (t2 - t1));
+            return jspTemplate;
         }
-
-        return jspTemplate;
+        else
+        {
+            return compile(template, this.getWork());   
+        }
     }
 
     /**
@@ -87,16 +86,19 @@ public class JspTemplateFactory extends TemplateFactory
     public Template compile(String source) throws Exception
     {
         Template template = super.compile(source);
-        long t1 = System.currentTimeMillis();
-        JspTemplate jspTemplate = this.compile(template, this.getWork());
-        long t2 = System.currentTimeMillis();
 
         if(logger.isDebugEnabled())
         {
+            long t1 = System.currentTimeMillis();
+            JspTemplate jspTemplate = this.compile(template, this.getWork());
+            long t2 = System.currentTimeMillis();
             logger.debug("jsp compile time: " + (t2 - t1));
+            return jspTemplate;
         }
-
-        return jspTemplate;
+        else
+        {
+            return this.compile(template, this.getWork());
+        }
     }
 
     /**
@@ -115,10 +117,11 @@ public class JspTemplateFactory extends TemplateFactory
 
         if(logger.isDebugEnabled())
         {
-            logger.debug("home: " + home + "\r\n"
+            logger.debug("\r\n"
                 + "root: " + root + "\r\n"
+                + "home: " + home + "\r\n"
                 + "path: " + path + "\r\n"
-            	+ "className: " + className + "\r\n"
+                + "className: " + className + "\r\n"
                 + "simpleName: " + simpleName + "\r\n"
                 + "packageName: " + packageName + "\r\n"
                 + "classPath: " + classPath + "\r\n"
@@ -130,12 +133,11 @@ public class JspTemplateFactory extends TemplateFactory
         File srcFile = new File(work, classPath + ".java");
         File classFile = new File(work, classPath + ".class");
         File parent = classFile.getParentFile();
-        
         String lib = this.getClassPath();
 
         if(lib == null)
         {
-            lib = System.getProperty("java.class.path");
+            lib = ClassFactory.getClassPath();
         }
 
         if(parent.exists() == false)
@@ -151,9 +153,9 @@ public class JspTemplateFactory extends TemplateFactory
         this.write(this.getTemplateDescription(template), tplFile);
         tplFile.setLastModified(lastModified);
         srcFile.setLastModified(lastModified);
-        
+
         File[] files = classFile.getParentFile().listFiles();
-        
+
         if(files != null && files.length > 0)
         {
             String name = null;
@@ -202,32 +204,13 @@ public class JspTemplateFactory extends TemplateFactory
     /**
      * @param template
      * @param className
-     * @param classFile
-     * @return JspTemplate
-     * @throws IOException
-     */
-    protected JspTemplate load(Template template, String className, File classFile) throws IOException
-    {
-        byte[] bytes = getBytes(classFile);
-        JspTemplate jspTemplate = (JspTemplate)(getInstance(className, bytes));
-        jspTemplate.setHome(template.getHome());
-        jspTemplate.setPath(template.getPath());
-        jspTemplate.setNodes(template.getNodes());
-        jspTemplate.setLastModified(template.getLastModified());
-        jspTemplate.setUpdateTime(template.getUpdateTime());
-        return jspTemplate;
-    }
-
-    /**
-     * @param template
-     * @param className
      * @param classPath
      * @return JspTemplate
      * @throws IOException
      */
-    protected JspTemplate load(Template template, String className, File[] classPath) throws IOException
+    protected JspTemplate load(Template template, String className, File[] classPath) throws Exception
     {
-        JspTemplate jspTemplate = (JspTemplate)(getInstance(className, classPath));
+        JspTemplate jspTemplate = (JspTemplate)(ClassFactory.getInstance(className, classPath));
         jspTemplate.setHome(template.getHome());
         jspTemplate.setPath(template.getPath());
         jspTemplate.setNodes(template.getNodes());
@@ -283,29 +266,6 @@ public class JspTemplateFactory extends TemplateFactory
     }
 
     /**
-     * @param file
-     * @return byte[]
-     * @throws IOException
-     */
-    private byte[] getBytes(File file) throws IOException
-    {
-        InputStream inputStream = null;
-
-        try
-        {
-            int length = (int)(file.length());
-            inputStream = new FileInputStream(file);
-            byte[] buffer = new byte[length];
-            inputStream.read(buffer, 0, buffer.length);
-            return buffer;
-        }
-        finally
-        {
-            IO.close(inputStream);
-        }
-    }
-
-    /**
      * @param className
      * @return String
      */
@@ -328,13 +288,13 @@ public class JspTemplateFactory extends TemplateFactory
 
         if(k > -1)
         {
-        	simpleName = className.substring(k + 1) + "Template";
+            simpleName = className.substring(k + 1) + "Template";
             packageName = className.substring(0, k);
         }
         else
         {
-        	packageName = "";
-        	simpleName = className + "Template";
+            packageName = "";
+            simpleName = className + "Template";
         }
 
         String[] temp = StringUtil.split(packageName, ".");
@@ -342,8 +302,8 @@ public class JspTemplateFactory extends TemplateFactory
 
         for(int i = 0, length = temp.length; i < length; i++)
         {
-    		buffer.append("._");
-    		buffer.append(temp[i]);
+            buffer.append("._");
+            buffer.append(temp[i]);
         }
 
         packageName = buffer.toString();
@@ -378,59 +338,6 @@ public class JspTemplateFactory extends TemplateFactory
             return className.substring(0, k);
         }
         return this.getPrefix();
-    }
-
-    /**
-     * @param className
-     * @param bytes
-     * @return Object
-     */
-    protected Object getInstance(String className, byte[] bytes)
-    {
-        FactoryClassLoader factoryClassLoader = FactoryClassLoader.getInstance();
-        Class<?> clazz = factoryClassLoader.create(className, bytes);
-
-        try
-        {
-            return clazz.newInstance();
-        }
-        catch(InstantiationException e)
-        {
-            e.printStackTrace();
-        }
-        catch(IllegalAccessException e)
-        {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    /**
-     * @param className
-     * @param files
-     * @return Object
-     */
-    protected Object getInstance(String className, File[] files)
-    {
-        try
-        {
-            URL[] urls = new URL[files.length];
-
-            for(int i = 0, length = files.length; i < length; i++)
-            {
-                urls[i] = files[i].toURI().toURL();
-            }
-
-            URLClassLoader classLoader = URLClassLoader.newInstance(urls);
-            return Class.forName(className, true, classLoader).newInstance();
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        return null;
     }
 
     /**
@@ -479,25 +386,25 @@ public class JspTemplateFactory extends TemplateFactory
     /**
      * @param prefix the prefix to set
      */
-	public void setPrefix(String prefix)
-	{
-		this.prefix = prefix;
-	}
+    public void setPrefix(String prefix)
+    {
+        this.prefix = prefix;
+    }
 
-	/**
+    /**
      * @return the prefix
      */
     public String getPrefix()
     {
-    	if(this.prefix == null)
-    	{
-    		this.prefix = "_tpl._jsp";
-    	}
+        if(this.prefix == null)
+        {
+            this.prefix = "_tpl._jsp";
+        }
 
-		return this.prefix;
-	}
+        return this.prefix;
+    }
 
-	/**
+    /**
      * @param classPath the classPath to set
      */
     public void setClassPath(String classPath)

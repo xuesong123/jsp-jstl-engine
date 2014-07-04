@@ -39,7 +39,6 @@ import com.skin.ayada.util.StringUtil;
 public class DefaultTemplateContext implements TemplateContext
 {
     private String home;
-    private int expire;
     private String encoding;
     private SourceFactory sourceFactory;
     private TemplateFactory templateFactory;
@@ -52,17 +51,7 @@ public class DefaultTemplateContext implements TemplateContext
      */
     public DefaultTemplateContext(String home)
     {
-        this(home, 300);
-    }
-
-    /**
-     * @param home
-     * @param expire
-     */
-    public DefaultTemplateContext(String home, int expire)
-    {
         this.home = home;
-        this.expire = expire;
         this.encoding = "UTF-8";
         this.cache = new ConcurrentHashMap<String, FutureTask<Template>>();
     }
@@ -134,15 +123,9 @@ public class DefaultTemplateContext implements TemplateContext
      */
     public Template getTemplate(final String path, final String encoding) throws Exception
     {
-        final int expire = this.getExpire();
         final String realPath = this.repair(path);
         final SourceFactory sourceFactory = this.getSourceFactory();
         final TemplateFactory templateFactory = this.getTemplateFactory();
-
-        if(expire == 0)
-        {
-            return templateFactory.create(sourceFactory, realPath, encoding);
-        }
 
         int count = 0;
         int tryCount = 10;
@@ -191,28 +174,20 @@ public class DefaultTemplateContext implements TemplateContext
                 throw e;
             }
 
-            if(template == null || expire < 0)
+            
+            if(template != null)
             {
-                return template;
-            }
+                long timeMillis = System.currentTimeMillis();
 
-            long timeMillis = System.currentTimeMillis();
-
-            if(timeMillis - template.getUpdateTime() > expire * 1000L)
-            {
                 if(template.getLastModified() != sourceFactory.getLastModified(template.getPath()))
                 {
                     this.cache.remove(realPath, f);
                 }
                 else
                 {
-                    template.setUpdateTime(System.currentTimeMillis());
+                    template.setUpdateTime(timeMillis);
                     return template;
                 }
-            }
-            else
-            {
-                return template;
             }
 
             if(count++ >= tryCount)
@@ -240,7 +215,17 @@ public class DefaultTemplateContext implements TemplateContext
      */
     public PageContext getPageContext(Writer out, int buffserSize, boolean autoFlush)
     {
-        JspWriter jspWriter = new JspWriter(out, buffserSize, autoFlush);
+        JspWriter jspWriter = null;
+
+        if(out instanceof JspWriter)
+        {
+            jspWriter = (JspWriter)out;
+        }
+        else
+        {
+            jspWriter = new JspWriter(out, buffserSize, autoFlush);
+        }
+
         DefaultPageContext pageContext = new DefaultPageContext(jspWriter);
         ExpressionContext expressionContext = this.getExpressionContext(pageContext);
         pageContext.setTemplateContext(this);
@@ -258,9 +243,6 @@ public class DefaultTemplateContext implements TemplateContext
 
     protected synchronized void clear()
     {
-        int expire = this.getExpire();
-        long timeMillis = System.currentTimeMillis();
-
         for(Map.Entry<String, FutureTask<Template>> entry : this.cache.entrySet())
         {
             FutureTask<Template> f = entry.getValue();
@@ -269,7 +251,7 @@ public class DefaultTemplateContext implements TemplateContext
             {
                 Template template = f.get();
 
-                if(timeMillis - template.getUpdateTime() > expire * 1000L)
+                if(template.getUpdateTime() != this.sourceFactory.getLastModified(template.getPath()))
                 {
                     String key = entry.getKey();
 
@@ -324,22 +306,6 @@ public class DefaultTemplateContext implements TemplateContext
     public String getHome()
     {
         return this.home;
-    }
-
-    /**
-     * @param expire the expire to set
-     */
-    public void setExpire(int expire)
-    {
-        this.expire = expire;
-    }
-
-    /**
-     * @return the expire
-     */
-    public int getExpire()
-    {
-        return this.expire;
     }
 
     /**

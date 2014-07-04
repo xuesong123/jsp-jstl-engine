@@ -304,7 +304,7 @@ public class ForEachTag extends LoopTagSupport
             if(k > -1)
             {
                 this.index = k + this.delims.length();
-                return this.value.substring(i, k);
+                return this.value.substring(i, k).trim();
             }
 
             this.index = this.length;

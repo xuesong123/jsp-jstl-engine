@@ -79,16 +79,6 @@ public interface TemplateContext
     public String getHome();
 
     /**
-     * @param expire
-     */
-    public void setExpire(int expire);
-
-    /**
-     * @return int
-     */
-    public int getExpire();
-
-    /**
      * @param sourceFactory the sourceFactory to set
      */
     public void setSourceFactory(SourceFactory sourceFactory);

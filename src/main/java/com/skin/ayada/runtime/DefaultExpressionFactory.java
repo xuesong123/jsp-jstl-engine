@@ -10,13 +10,10 @@
  */
 package com.skin.ayada.runtime;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.skin.ayada.resource.PropertyResource;
 import com.skin.ayada.util.ClassUtil;
 
 /**
@@ -66,13 +63,16 @@ public class DefaultExpressionFactory implements ExpressionFactory
     private static Map<String, Object> getAttributes(String charset)
     {
         Map<String, Object> attributes = new HashMap<String, Object>();
-        Map<String, String> map1 = load("ayada-tools-default.properties", charset);
-        Map<String, String> map2 = load("ayada-tools.properties", charset);
-        map1.putAll(map2);
+        Map<String, String> map = PropertyResource.load("ayada-tools.properties", charset);
 
-        if(map1.size() > 0)
+        if(map.size() < 1)
         {
-            for(Map.Entry<String, String> entry : map1.entrySet())
+            map = PropertyResource.load("ayada-tools-default.properties", charset);
+        }
+
+        if(map.size() > 0)
+        {
+            for(Map.Entry<String, String> entry : map.entrySet())
             {
                 Entry pair = getEntry(entry.getKey(), entry.getValue());
                 attributes.put(pair.getName(), pair.getValue());
@@ -138,72 +138,6 @@ public class DefaultExpressionFactory implements ExpressionFactory
     }
 
     /**
-     * @param resource
-     * @param charset
-     * @return Map<String, String>
-     */
-    private static Map<String, String> load(String resource, String charset)
-    {
-        return load(ExpressionFactory.class.getClassLoader().getResourceAsStream(resource), charset);
-    }
-
-    /**
-     * @param inputStream
-     * @param charset
-     * @return Map<String, String>
-     */
-    private static Map<String, String> load(InputStream inputStream, String charset)
-    {
-        Map<String, String> map = new HashMap<String, String>();
-
-        if(inputStream != null)
-        {
-            BufferedReader reader = null;
-            InputStreamReader inputStreamReader = null;
-
-            try
-            {
-                String line = null;
-                inputStreamReader = new InputStreamReader(inputStream, charset);
-                reader = new BufferedReader(inputStreamReader);
-
-                while((line = reader.readLine()) != null)
-                {
-                    line = line.trim();
-
-                    if(line.length() < 1)
-                    {
-                        continue;
-                    }
-
-                    if(line.startsWith("#"))
-                    {
-                        continue;
-                    }
-
-                    int i = line.indexOf("=");
-
-                    if(i > -1)
-                    {
-                        String name = line.substring(0, i).trim();
-                        String value = line.substring(i + 1).trim();
-
-                        if(name.length() > 0 && value.length() > 0)
-                        {
-                            map.put(name, value);
-                        }
-                    }
-                }
-            }
-            catch(IOException e)
-            {
-            }
-        }
-
-        return map;
-    }
-
-    /**
      * <p>Title: Entry</p>
      * <p>Description: </p>
      * <p>Copyright: Copyright (c) 2006</p>
@@ -253,8 +187,8 @@ public class DefaultExpressionFactory implements ExpressionFactory
             this.value = value;
         }
     }
-
-    public static void main(String[] args)
+    
+    public static void print(Map<String, Object> attributes)
     {
         System.out.println("---------- objects ----------");
 
@@ -280,6 +214,18 @@ public class DefaultExpressionFactory implements ExpressionFactory
             {
                 System.out.println(key + ": " + value);
             }
+        }
+    }
+
+    public static void main(String[] args)
+    {
+        Map<String, String> attributes = PropertyResource.load("1.properties", "UTF-8");
+
+        for(Map.Entry<String, String> entry : attributes.entrySet())
+        {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            System.out.println(key + ": " + value);
         }
     }
 }

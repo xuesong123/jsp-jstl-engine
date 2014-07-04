@@ -227,7 +227,7 @@ public class TemplateCompiler extends PageCompiler
             Template template = this.getTemplate(source, list, this.tagLibrary);
             long t3 = System.currentTimeMillis();
 
-            logger.debug("compile time: " + (t2 - t1));
+            logger.debug("tpl compile time: " + (t2 - t1));
             logger.debug("create tagFactory: " + (t3 - t2));
             return template;
         }

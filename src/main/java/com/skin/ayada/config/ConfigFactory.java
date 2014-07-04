@@ -12,12 +12,10 @@ package com.skin.ayada.config;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Map;
 
 import com.skin.ayada.resource.ClassPathResource;
@@ -40,19 +38,9 @@ public class ConfigFactory
      */
     public static <T extends Config> T getConfig(String resource, Class<T> type)
     {
-        InputStream inputStream = null;
-
         try
         {
-            inputStream = ClassPathResource.getResourceAsStream(resource);
-
-            if(inputStream == null)
-            {
-                return null;
-            }
-
-            Map<String, String> map = new HashMap<String, String>();
-            PropertyResource.load(inputStream, map);
+            Map<String, String> map = PropertyResource.load(resource, "UTF-8");
             T config = type.newInstance();
             config.setValues(map);
             return config;
@@ -64,19 +52,6 @@ public class ConfigFactory
         catch(IllegalAccessException e)
         {
             e.printStackTrace();
-        }
-        finally
-        {
-            if(inputStream != null)
-            {
-                try
-                {
-                    inputStream.close();
-                }
-                catch(IOException e)
-                {
-                }
-            }
         }
 
         return null;

@@ -16,6 +16,7 @@ import java.io.PrintWriter;
 
 import com.skin.ayada.config.Config;
 import com.skin.ayada.config.TemplateConfig;
+import com.skin.ayada.factory.ClassFactory;
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.util.TemplateUtil;
 
@@ -66,6 +67,12 @@ public class Main
         }
     }
 
+    /**
+     * @param path
+     * @param encoding
+     * @param templateFactoryClassName
+     * @throws Exception
+     */
     public static void execute(String path, String encoding, String templateFactoryClassName) throws Exception
     {
         File file = new File(path);
@@ -145,7 +152,7 @@ public class Main
                     work = new File(jspWork);
                 }
 
-                String classPath = Main.getClassPath();
+                String classPath = ClassFactory.getClassPath();
                 System.out.println("CLASS_PATH: " + classPath);
                 JspTemplateFactory jspTemplateFactory = (JspTemplateFactory)templateFactory;
                 jspTemplateFactory.setWork(work.getAbsolutePath());
@@ -159,50 +166,6 @@ public class Main
         }
 
         return templateFactory;
-    }
-
-    /**
-     * @return String
-     */
-    public static String getClassPath()
-    {
-        String seperator = ";";
-        StringBuilder buffer = new StringBuilder();
-        File lib = new File("lib");
-
-        if(System.getProperty("os.name").indexOf("Windows") < 0)
-        {
-            seperator = ":";
-        }
-
-        if(lib.exists())
-        {
-            File[] files = lib.listFiles();
-
-            if(files != null && files.length > 0)
-            {
-                for(File file : files)
-                {
-                    buffer.append(file.getAbsolutePath());
-                    buffer.append(seperator);
-                }
-            }
-        }
-
-        File clazz = new File("build/classes");
-
-        if(clazz.exists() && clazz.isDirectory())
-        {
-            buffer.append(clazz.getAbsolutePath());
-            buffer.append(seperator);
-        }
-
-        if(buffer.length() > 0)
-        {
-            buffer.delete(buffer.length() - seperator.length(), buffer.length());
-        }
-
-        return buffer.toString();
     }
 
     /**

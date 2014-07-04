@@ -8,7 +8,7 @@
  * This software is the proprietary information of Skin, Inc.
  * Use is subject to license terms.
  */
-package com.skin.ayada.demo;
+package example.demo;
 
 import java.io.StringWriter;
 
@@ -44,7 +44,7 @@ public class DemoTest
     {
         try
         {
-            String home = "com/skin/ayada/demo";
+            String home = "example/demo";
             SourceFactory sourceFactory = new ClassPathSourceFactory(home);
             TemplateFactory templateFactory = new TemplateFactory();
             ExpressionFactory expressionFactory = new DefaultExpressionFactory();

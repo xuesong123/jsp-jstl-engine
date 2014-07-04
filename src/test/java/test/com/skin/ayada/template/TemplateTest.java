@@ -122,7 +122,7 @@ public class TemplateTest
 
         try
         {
-            TemplateContext templateContext = TemplateManager.create(home, 0);
+            TemplateContext templateContext = TemplateManager.create(home);
 
             // warmup
             templateContext.execute(file, new HashMap<String, Object>(), new StringWriter());

@@ -83,12 +83,27 @@ public class JspWriter extends Writer
         }
     }
 
+    @Override
+    public void write(String str, int offset, int length) throws IOException
+    {
+        char[] cbuf = new char[length];
+        str.getChars(offset, (offset + length), cbuf, 0);
+        this.write(cbuf, 0, length);
+    }
+
     /**
      * @param b
      */
     public void print(boolean b) throws IOException
     {
-        this.write(String.valueOf(b));
+        if(b)
+        {
+            this.write(new char[]{'t', 'r', 'u', 'e'});
+        }
+        else
+        {
+            this.write(new char[]{'f', 'a', 'l', 's', 'e'});
+        }
     }
 
     /**
@@ -96,7 +111,7 @@ public class JspWriter extends Writer
      */
     public void print(char c) throws IOException
     {
-        this.write(String.valueOf(c));
+        this.write(new char[]{c}, 0, 1);
     }
 
     /**
@@ -104,7 +119,7 @@ public class JspWriter extends Writer
      */
     public void print(char[] cbuf) throws IOException
     {
-        this.write(cbuf);
+        this.write(cbuf, 0, cbuf.length);
     }
 
     /**
@@ -112,7 +127,7 @@ public class JspWriter extends Writer
      */
     public void print(double d) throws IOException
     {
-        this.write(String.valueOf(d));
+        this.write(Double.toString(d));
     }
 
     /**
@@ -120,7 +135,7 @@ public class JspWriter extends Writer
      */
     public void print(float f) throws IOException
     {
-        this.write(String.valueOf(f));
+        this.write(Float.toString(f));
     }
 
     /**
@@ -128,7 +143,7 @@ public class JspWriter extends Writer
      */
     public void print(int i) throws IOException
     {
-        this.write(String.valueOf(i));
+        this.write(Integer.toString(i));
     }
 
     /**
@@ -136,7 +151,7 @@ public class JspWriter extends Writer
      */
     public void print(long l) throws IOException
     {
-        this.write(String.valueOf(l));
+        this.write(Long.toString(l));
     }
 
     /**
@@ -144,7 +159,14 @@ public class JspWriter extends Writer
      */
     public void print(String content) throws IOException
     {
-        this.write(content, 0, content.length());
+        if(content != null)
+        {
+            this.write(content, 0, content.length());
+        }
+        else
+        {
+            this.write(NULL, 0, 4);
+        }
     }
 
     /**
@@ -193,8 +215,15 @@ public class JspWriter extends Writer
      */
     public void println(boolean b) throws IOException
     {
-        this.write(String.valueOf(b));
-        this.write(CRLF, 0, 2);
+        if(b)
+        {
+            this.write(new char[]{'t', 'r', 'u', 'e'});
+        }
+        else
+        {
+            this.write(new char[]{'f', 'a', 'l', 's', 'e'});
+        }
+        this.write(CRLF, 0, 2);    
     }
 
     /**
@@ -202,7 +231,7 @@ public class JspWriter extends Writer
      */
     public void println(char c) throws IOException
     {
-        this.write(String.valueOf(c));
+        this.write(new char[]{c}, 0, 1);
         this.write(CRLF, 0, 2);
     }
 
@@ -211,7 +240,7 @@ public class JspWriter extends Writer
      */
     public void println(char[] cbuf) throws IOException
     {
-        this.write(cbuf);
+        this.write(cbuf, 0, cbuf.length);
         this.write(CRLF, 0, 2);
     }
 
@@ -229,7 +258,7 @@ public class JspWriter extends Writer
      */
     public void println(float f) throws IOException
     {
-        this.write(String.valueOf(f));
+        this.write(Float.toString(f));
         this.write(CRLF, 0, 2);
     }
 
@@ -238,7 +267,7 @@ public class JspWriter extends Writer
      */
     public void println(int i) throws IOException
     {
-        this.write(String.valueOf(i));
+        this.write(Integer.toString(i));
         this.write(CRLF, 0, 2);
     }
 
@@ -247,7 +276,24 @@ public class JspWriter extends Writer
      */
     public void println(long l) throws IOException
     {
-        this.write(String.valueOf(l));
+        this.write(Long.toString(l));
+        this.write(CRLF, 0, 2);
+    }
+
+    /**
+     * @param content
+     */
+    public void println(String content) throws IOException
+    {
+        if(content != null)
+        {
+            this.write(content, 0, content.length());
+        }
+        else
+        {
+            this.write(NULL, 0, 4);
+        }
+
         this.write(CRLF, 0, 2);
     }
 
@@ -277,12 +323,9 @@ public class JspWriter extends Writer
         {
             this.write(value.toString());
         }
-        else
+        else if(nullable)
         {
-            if(nullable)
-            {
-                this.write(NULL, 0, 4);
-            }
+            this.write(NULL, 0, 4);
         }
 
         this.write(CRLF, 0, 2);
@@ -294,23 +337,6 @@ public class JspWriter extends Writer
     public void newLine() throws IOException
     {
         this.write(CRLF);
-    }
-
-    /**
-     * @param content
-     */
-    public void println(String content) throws IOException
-    {
-        if(content != null)
-        {
-            this.write(content, 0, content.length());
-        }
-        else
-        {
-            this.write(NULL, 0, 4);
-        }
-
-        this.write(CRLF, 0, 2);
     }
 
     /**

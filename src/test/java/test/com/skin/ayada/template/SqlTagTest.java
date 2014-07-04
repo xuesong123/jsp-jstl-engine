@@ -37,7 +37,6 @@ public class SqlTagTest
         String home = "E:\\WorkSpace\\ayada\\webapp";
         TemplateFactory templateFactory = new TemplateFactory();
         TemplateContext templateContext = TemplateManager.getTemplateContext(home, true);
-        templateContext.setExpire(300);
         templateContext.setTemplateFactory(templateFactory);
         Template template = null;
         Connection connection = null;

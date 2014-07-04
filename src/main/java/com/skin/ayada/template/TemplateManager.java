@@ -50,7 +50,7 @@ public class TemplateManager
 
         if(templateContext == null && create == true)
         {
-            templateContext = create(home, 600);
+            templateContext = create(home);
             cache.put(home, templateContext);
         }
 
@@ -59,14 +59,13 @@ public class TemplateManager
 
     /**
      * @param home
-     * @param expire
      * @return TemplateContext
      */
-    public static TemplateContext create(String home, int expire)
+    public static TemplateContext create(String home)
     {
         SourceFactory sourceFactory = new DefaultSourceFactory(home);
         TemplateFactory templateFactory = new TemplateFactory();
-        TemplateContext templateContext = new DefaultTemplateContext(home, expire);
+        TemplateContext templateContext = new DefaultTemplateContext(home);
         ExpressionFactory expressionFactory = new DefaultExpressionFactory();
         templateContext.setSourceFactory(sourceFactory);
         templateContext.setTemplateFactory(templateFactory);

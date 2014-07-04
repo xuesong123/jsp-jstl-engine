@@ -12,6 +12,7 @@ package com.skin.ayada.web.filter;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -31,6 +32,7 @@ import com.skin.ayada.template.JspTemplateFactory;
 import com.skin.ayada.template.TemplateContext;
 import com.skin.ayada.template.TemplateFactory;
 import com.skin.ayada.template.TemplateManager;
+import com.skin.ayada.util.DateUtil;
 import com.skin.ayada.util.StringUtil;
 import com.skin.ayada.web.TemplateDispatcher;
 
@@ -44,7 +46,6 @@ import com.skin.ayada.web.TemplateDispatcher;
 public class TemplateFilter implements Filter
 {
     private String home;
-    private String expire = "600";
     private String templateFactoryClassName;
     private ServletContext servletContext;
     private TemplateContext templateContext;
@@ -66,24 +67,9 @@ public class TemplateFilter implements Filter
             this.home = "/";
         }
 
-        int timeout = -1;
-        this.expire = filterConfig.getInitParameter("expire");
-
-        if(this.expire != null)
+        if(logger.isInfoEnabled())
         {
-            try
-            {
-                timeout = Integer.parseInt(this.expire);
-            }
-            catch(NumberFormatException e)
-            {
-                e.printStackTrace();
-            }
-        }
-
-        if(logger.isDebugEnabled())
-        {
-            logger.debug("home: " + this.home + ", expire: " + timeout);
+            logger.info("jsp.home: " + this.home);
         }
 
         TemplateFactory templateFactory = null;
@@ -92,23 +78,28 @@ public class TemplateFilter implements Filter
         {
             try
             {
-                templateFactory = this.getTemplateFactory(this.templateFactoryClassName);
+                templateFactory = TemplateFactory.getTemplateFactory(this.templateFactoryClassName);
 
                 if(templateFactory instanceof JspTemplateFactory)
                 {
-                    String jspWork = filterConfig.getInitParameter("jsp-work");
-                    boolean ignoreJspTag = TemplateConfig.getInstance().getBoolean("ayada.compile.ignore-jsptag");
+                    String jspWork = this.getJspWork(filterConfig);
+                    String ignoreJspTag = filterConfig.getInitParameter("ignore-jsptag");
 
-                    if(jspWork == null)
+                    if(ignoreJspTag == null)
                     {
-                        jspWork = "/WEB-INF/work/ayada";
+                        ignoreJspTag = TemplateConfig.getInstance().getString("ayada.compile.ignore-jsptag", "true");
                     }
 
+                    if(logger.isInfoEnabled())
+                    {
+                        logger.info("jsp.work: " + jspWork);
+                    }
+
+                    File work = new File(jspWork);
                     JspTemplateFactory jspTemplateFactory = (JspTemplateFactory)templateFactory;
-                    File work = new File(this.servletContext.getRealPath(jspWork));
                     jspTemplateFactory.setWork(work.getAbsolutePath());
                     jspTemplateFactory.setClassPath(this.getClassPath(this.servletContext));
-                    jspTemplateFactory.setIgnoreJspTag(ignoreJspTag);
+                    jspTemplateFactory.setIgnoreJspTag(ignoreJspTag.equals("true"));
                 }
             }
             catch(Exception e)
@@ -129,7 +120,6 @@ public class TemplateFilter implements Filter
 
         String sourcePattern = filterConfig.getInitParameter("source-pattern");
         this.templateContext = TemplateManager.getTemplateContext(this.servletContext.getRealPath(this.home), true);
-        this.templateContext.setExpire(timeout);
         this.templateContext.setTemplateFactory(templateFactory);
 
         if(sourcePattern != null)
@@ -210,37 +200,96 @@ public class TemplateFilter implements Filter
     }
 
     /**
-     * @param className
-     * @return TemplateFactory
-     * @throws Exception 
+     * @param servletContext
+     * @return String
      */
-    public TemplateFactory getTemplateFactory(String className) throws Exception
+    private String getContextPath(ServletContext servletContext)
     {
-        Class<?> clazz = null;
-
         try
         {
-            clazz = Thread.currentThread().getContextClassLoader().loadClass(className);
+            Method method = ServletContext.class.getMethod("getContextPath", new Class[0]);
+            return (String)(method.invoke(servletContext, new Object[0]));
         }
         catch(Exception e)
         {
         }
 
-        if(clazz == null)
+        return null;
+    }
+
+    /**
+     * @param filterConfig
+     * @return String
+     */
+    private String getJspWork(FilterConfig filterConfig)
+    {
+        String jspWork = filterConfig.getInitParameter("jsp-work");
+        ServletContext servletContext = filterConfig.getServletContext();
+
+        if(jspWork == null)
         {
-            clazz = TemplateFilter.class.getClassLoader().loadClass(className);
+            jspWork = this.getTempWork(this.getContextPath(servletContext));
+
+            if(jspWork == null)
+            {
+                jspWork = servletContext.getRealPath("/WEB-INF/ayada");
+            }
+        }
+        else
+        {
+            if(jspWork.startsWith("context:"))
+            {
+                jspWork = servletContext.getRealPath(jspWork.substring(8).trim());
+            }
         }
 
-        if(clazz == null)
+        return jspWork;
+    }
+
+    /**
+     * @return String
+     */
+    private String getTempWork(String prefix)
+    {
+        String work = System.getProperty("java.io.tmpdir");
+
+        if(work == null)
         {
-            clazz = Class.forName(className);
+            return null;
         }
 
-        if(clazz != null)
+        long timeMillis = System.currentTimeMillis();
+        String pattern = "yyyyMMddHHmmss";
+        String name = prefix;
+
+        if(name == null || name.length() < 1 || name.equals("/"))
         {
-            return (TemplateFactory)(clazz.newInstance());
+            name = "";
         }
-        throw new ClassNotFoundException(className + " not found !");
+        else
+        {
+            name = name.replace('\\', '.');
+            name = name.replace('/', '.');
+        }
+
+        if(name.length() > 0)
+        {
+            name = "ayada_" + name + "_";
+        }
+        else
+        {
+            name = "ayada_";
+        }
+
+        File file = new File(work, name + DateUtil.format(timeMillis, pattern));
+
+        while(file.exists())
+        {
+            timeMillis += 1000;
+            file = new File(work, name + DateUtil.format(timeMillis, pattern));
+        }
+
+        return file.getAbsolutePath();
     }
 
     @Override
