@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.skin.ayada.Version;
+import com.skin.ayada.io.CharBuffer;
 import com.skin.ayada.io.ChunkWriter;
 import com.skin.ayada.statement.Expression;
 import com.skin.ayada.statement.Node;
@@ -93,12 +94,9 @@ public class JspCompiler
 
             if(node.getNodeType() == NodeType.JSP_DIRECTIVE_PAGE)
             {
-                if(node.getAttribute("import") != null)
+                if(node.getOffset() == index && node.getAttribute("import") != null)
                 {
-                    if(node.getOffset() == index)
-                    {
-                        writer.println("import " + node.getAttribute("import") + "; /* jsp:directive.import: lineNumber: " + node.getLineNumber() + " */");
-                    }
+                    writer.println("import " + node.getAttribute("import") + "; /* jsp:directive.import: lineNumber: " + node.getLineNumber() + " */");
                 }
             }
         }
@@ -185,17 +183,7 @@ public class JspCompiler
             node = list.get(index);
             nodeType = node.getNodeType();
 
-            if(nodeType == NodeType.TEXT)
-            {
-                continue;
-            }
-
-            if(nodeType == NodeType.VARIABLE)
-            {
-                continue;
-            }
-
-            if(nodeType == NodeType.EXPRESSION)
+            if(nodeType != NodeType.NODE)
             {
                 continue;
             }
@@ -1901,12 +1889,12 @@ public class JspCompiler
 
             int length = 0;
             char[] cbuf = new char[2048];
-            
+
             while((length = inputStreamReader.read(cbuf)) > 0)
             {
                 buffer.append(cbuf, 0, length);
             }
-            
+
             return buffer.toString();
         }
         catch(IOException e)
@@ -1927,7 +1915,7 @@ public class JspCompiler
             }
         }
 
-        return null;   
+        return null;
     }
 
     /**
@@ -1939,7 +1927,7 @@ public class JspCompiler
     {
         char c;
         StringBuilder name = new StringBuilder();
-        StringBuilder result = new StringBuilder();
+        CharBuffer result = new CharBuffer(4096);
 
         for(int i = 0; i < source.length(); i++)
         {

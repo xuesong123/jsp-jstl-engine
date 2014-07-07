@@ -20,63 +20,22 @@ import java.io.Writer;
  * @author xuesong.net
  * @version 1.0
  */
-@SuppressWarnings("resource")
 public class ChunkWriter extends Writer
 {
-    private int position;
-    private char[] buffer;
-    private int bufferSize = 8192;
-    private ChunkWriter next;
-    private ChunkWriter tail;
+    private CharBuffer buffer;
 
     /**
      * @param bufferSize
      */
     public ChunkWriter(int bufferSize)
     {
-        this.bufferSize = bufferSize;
-        this.buffer = new char[bufferSize];
-        this.position = 0;
+        this.buffer = new CharBuffer(bufferSize);
     }
 
     @Override
-    public void write(char[] cbuf, int off, int len) throws IOException
+    public void write(char[] cbuf, int offset, int length) throws IOException
     {
-        int count = 0;
-        int offset = off;
-        int remain = len;
-        ChunkWriter tail = this.tail;
-
-        if(tail == null)
-        {
-            tail = this;
-        }
-
-        while(remain > 0)
-        {
-            count = Math.min(tail.bufferSize - tail.position, remain);
-
-            if(count > 0)
-            {
-                System.arraycopy(cbuf, offset, tail.buffer, tail.position, count);
-                tail.position += count;
-                remain -= count;
-                offset += count;
-            }
-
-            if(remain > 0)
-            {
-                tail.tail = new ChunkWriter(this.bufferSize);
-                tail.next = tail.tail;
-                this.tail = tail.tail;
-                tail = tail.tail;
-
-                if(this.next == null)
-                {
-                    this.next = this.tail;
-                }
-            }
-        }
+        this.buffer.append(cbuf, offset, length);
     }
 
     /**
@@ -84,16 +43,7 @@ public class ChunkWriter extends Writer
      */
     public int getChunkSize()
     {
-        int size = 0;
-        ChunkWriter writer = this;
-
-        while(writer != null)
-        {
-            size++;
-            writer = writer.next;
-        }
-
-        return size;
+        return this.buffer.getChunkSize();
     }
 
     /**
@@ -101,48 +51,7 @@ public class ChunkWriter extends Writer
      */
     public int length()
     {
-        int length = 0;
-        ChunkWriter writer = this;
-
-        while(writer != null)
-        {
-            length += writer.position;
-            writer = writer.next;
-        }
-
-        return length;
-    }
-
-    /**
-     * @return the next
-     */
-    public ChunkWriter getNext()
-    {
-        return this.next;
-    }
-
-    /**
-     * @param next the next to set
-     */
-    public void setNext(ChunkWriter next)
-    {
-        this.next = next;
-    }
-
-    /**
-     * @return the tail
-     */
-    public ChunkWriter getTail()
-    {
-        return this.tail;
-    }
-
-    /**
-     * @param tail the tail to set
-     */
-    public void setTail(ChunkWriter tail)
-    {
-        this.tail = tail;
+        return this.buffer.length();
     }
 
     /**
@@ -163,53 +72,12 @@ public class ChunkWriter extends Writer
 
     public void free()
     {
-        ChunkWriter next = this;
-        ChunkWriter temp = this;
-
-        while(next != null)
-        {
-            temp = next.next;
-            next.next = null;
-            next.tail = null;
-            next.position = 0;
-            next = temp;
-        }
+        this.buffer.free();
     }
 
     @Override
     public String toString()
     {
-        int length = this.length();
-        ChunkWriter writer = this;
-        StringBuilder buffer = new StringBuilder(length);
-
-        while(writer != null)
-        {
-            buffer.append(writer.buffer, 0, writer.position);
-            writer = writer.next;
-        }
-
-        return buffer.toString();
-    }
-
-    public static void main(String[] args)
-    {
-        char[] cbuf = "1234567890".toCharArray();
-        ChunkWriter writer = new ChunkWriter(2);
-
-        for(int i = 0; i < 3; i++)
-        {
-            try
-            {
-                writer.write(cbuf);
-            }
-            catch(IOException e)
-            {
-                e.printStackTrace();
-            }
-        }
-
-        System.out.println("012345678901234567890123456789012345678901234567890123456789");
-        System.out.println(writer.toString());
+        return this.buffer.toString();
     }
 }

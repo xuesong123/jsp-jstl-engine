@@ -174,7 +174,6 @@ public class DefaultTemplateContext implements TemplateContext
                 throw e;
             }
 
-            
             if(template != null)
             {
                 long timeMillis = System.currentTimeMillis();
@@ -182,6 +181,7 @@ public class DefaultTemplateContext implements TemplateContext
                 if(template.getLastModified() != sourceFactory.getLastModified(template.getPath()))
                 {
                     this.cache.remove(realPath, f);
+                    template = null;
                 }
                 else
                 {

@@ -117,18 +117,16 @@ public class JspTemplateFactory extends TemplateFactory
 
         if(logger.isDebugEnabled())
         {
-            logger.debug("\r\n"
-                + "root: " + root + "\r\n"
-                + "home: " + home + "\r\n"
-                + "path: " + path + "\r\n"
-                + "className: " + className + "\r\n"
-                + "simpleName: " + simpleName + "\r\n"
-                + "packageName: " + packageName + "\r\n"
-                + "classPath: " + classPath + "\r\n"
-                + "work: " + work + "\r\n");
+            logger.debug("root: " + root
+                + ", home: " + home
+                + ", path: " + path
+                + ", className: " + className
+                + ", simpleName: " + simpleName
+                + ", packageName: " + packageName
+                + ", classPath: " + classPath
+                + ", work: " + work);
         }
 
-        long lastModified = template.getLastModified();
         File tplFile = new File(work, classPath + ".tpl");
         File srcFile = new File(work, classPath + ".java");
         File classFile = new File(work, classPath + ".class");
@@ -151,8 +149,6 @@ public class JspTemplateFactory extends TemplateFactory
         String source = jspCompiler.compile(template, simpleName, packageName);
         this.write(source, srcFile);
         this.write(this.getTemplateDescription(template), tplFile);
-        tplFile.setLastModified(lastModified);
-        srcFile.setLastModified(lastModified);
 
         File[] files = classFile.getParentFile().listFiles();
 
@@ -188,11 +184,16 @@ public class JspTemplateFactory extends TemplateFactory
         }
 
         javax.tools.JavaCompiler javaCompiler = javax.tools.ToolProvider.getSystemJavaCompiler();
+
+        if(javaCompiler == null)
+        {
+            throw new NullPointerException("'javax.tools.JavaCompiler' not found!, please add 'tools.jar' to class_path!");
+        }
+
         int status = javaCompiler.run(System.in, System.out, System.out, args);
 
         if(status == 0)
         {
-            classFile.setLastModified(lastModified);
             return this.load(template, className, new File[]{new File(work)});
         }
         else

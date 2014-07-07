@@ -308,7 +308,7 @@ public class ForEachTag extends LoopTagSupport
             }
 
             this.index = this.length;
-            return this.value.substring(i);
+            return this.value.substring(i).trim();
         }
 
         public void remove()
