@@ -2,12 +2,6 @@
 <taglib>
     <tlib-version>1.0</tlib-version>
     <tag>
-        <name>t:import</name>
-        <tag-class>com.skin.ayada.jstl.core.ImportTag</tag-class>
-        <body-content>empty</body-content>
-        <description></description>
-    </tag>
-    <tag>
         <name>t:dependent</name>
         <tag-class>com.skin.ayada.jstl.core.DependentTag</tag-class>
         <body-content>tagdependent</body-content>
@@ -173,6 +167,18 @@
         <name>c:attribute</name>
         <tag-class>com.skin.ayada.jstl.core.AttributeTag</tag-class>
         <body-content>jsp</body-content>
+        <description></description>
+    </tag>
+    <tag>
+        <name>c:macro</name>
+        <tag-class>com.skin.ayada.jstl.core.MacroTag</tag-class>
+        <body-content>tagdependent</body-content>
+        <description></description>
+    </tag>
+    <tag>
+        <name>c:include</name>
+        <tag-class>com.skin.ayada.jstl.core.IncludeTag</tag-class>
+        <body-content>tagdependent</body-content>
         <description></description>
     </tag>
     <tag>

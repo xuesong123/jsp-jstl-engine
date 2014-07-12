@@ -344,7 +344,7 @@ public class SimpleSqlParser
 
         while((c = stream.read()) != -1)
         {
-            if(c <= ' ' || c == '(' || c == ')')
+            if(c <= ' ' || c == '(' || c == ')' || c == ',')
             {
                 stream.back();
                 break;

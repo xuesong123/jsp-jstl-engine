@@ -26,7 +26,7 @@ import com.skin.ayada.tagext.Tag;
 public class ParameterTag extends BodyTagSupport
 {
     private String name;
-    private String value;
+    private Object value;
 
     @Override
     public int doStartTag()
@@ -56,7 +56,7 @@ public class ParameterTag extends BodyTagSupport
      * @param name
      * @param value
      */
-    protected void setParameter(String name, String value)
+    protected void setParameter(String name, Object value)
     {
         Tag parent = this.getParent();
 
@@ -90,7 +90,7 @@ public class ParameterTag extends BodyTagSupport
     /**
      * @return the value
      */
-    public String getValue()
+    public Object getValue()
     {
         return this.value;
     }
@@ -98,7 +98,7 @@ public class ParameterTag extends BodyTagSupport
     /**
      * @param value the value to set
      */
-    public void setValue(String value)
+    public void setValue(Object value)
     {
         this.value = value;
     }

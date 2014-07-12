@@ -36,11 +36,6 @@ public class SqlParseTag extends BodyTagSupport
     @Override
     public int doStartTag()
     {
-        if(this.name == null)
-        {
-            return Tag.SKIP_BODY;
-        }
-
         if(this.source != null)
         {
             return Tag.SKIP_BODY;
@@ -69,6 +64,12 @@ public class SqlParseTag extends BodyTagSupport
         {
             SimpleSqlParser parser = new SimpleSqlParser();
             Table table = parser.parse(sql);
+
+            if(this.name == null)
+            {
+                this.name = table.getTableName();
+            }
+
             this.pageContext.setAttribute(this.name, table);
         }
 

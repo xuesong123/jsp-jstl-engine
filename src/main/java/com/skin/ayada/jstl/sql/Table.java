@@ -519,7 +519,7 @@ public class Table
     private String escape(String source)
     {
         char ch;
-        StringBuilder buffer = new StringBuilder(source);
+        StringBuilder buffer = new StringBuilder();
 
         for(int i = 0, length = source.length(); i < length; i++)
         {
