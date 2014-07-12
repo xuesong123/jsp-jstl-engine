@@ -97,9 +97,17 @@ sql:query
 
     <sql:query var="resultSet" sql="select * from my_test2 where my_id > 1001" offset="2">...</sql:query>
 
-t:import
+c:include
 
-    <t:import name="app:cache" className="com.mytest.taglib.CacheTag"/>
+    <c:include page="/include/mytest.jsp">
+        <c:param name="user" value="${user}"/>
+    </c:include>
+
+c:macro
+
+    <c:macro name="myTestMacro">
+        <c:param name="user" value="${user}"/>
+    </c:macro>
 
 import a tag, scope: current page
 
