@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+for test
+-->
+<taglib>
+    <tlib-version>1.0</tlib-version>
+    <tag>
+        <name>simpleTag</name>
+        <tag-class>test.com.skin.ayada.taglib.MySimpleTag</tag-class>
+        <body-content>jsp</body-content>
+        <description></description>
+    </tag>
+</taglib>

@@ -67,6 +67,48 @@ public class TagLibraryFactory
     }
 
     /**
+     * @param prifix
+     * @param uri
+     * @return Map<String, TagInfo>
+     */
+    public static Map<String, TagInfo> load(String prefix, String uri) throws Exception
+    {
+        String resource = uri;
+
+        if(resource.startsWith("http://"))
+        {
+            int k = resource.indexOf("/", 7);
+            
+            if(k > -1)
+            {
+                resource = resource.substring(k + 1);
+            }
+        }
+
+        ClassLoader classLoader = TagLibraryFactory.class.getClassLoader();
+        Map<String, TagInfo> map = parse(classLoader.getResourceAsStream(resource + ".xml"));
+        Map<String, TagInfo> result = new HashMap<String, TagInfo>(map.size());
+
+        for(Map.Entry<String, TagInfo> entry : map.entrySet())
+        {
+            TagInfo tagInfo = entry.getValue();
+            String name = tagInfo.getName();
+            int k = name.indexOf(":");
+
+            if(k > -1)
+            {
+                name = name.substring(k + 1);
+            }
+
+            name = prefix + ":" + name;
+            tagInfo.setName(name);
+            result.put(name, tagInfo);
+        }
+
+        return result;
+    }
+
+    /**
      * @param inputStream
      * @throws Exception
      */
@@ -114,7 +156,7 @@ public class TagLibraryFactory
      * @param node
      * @return TagInfo
      */
-    public static TagInfo getTagInfo(Node node)
+    private static TagInfo getTagInfo(Node node)
     {
         TagInfo tagInfo = new TagInfo();
         NodeList childNodes = node.getChildNodes();

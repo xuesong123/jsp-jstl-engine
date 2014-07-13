@@ -2,7 +2,7 @@
 <taglib>
     <tlib-version>1.0</tlib-version>
     <tag>
-        <name>t:dependent</name>
+        <name>c:dependent</name>
         <tag-class>com.skin.ayada.jstl.core.DependentTag</tag-class>
         <body-content>tagdependent</body-content>
         <description></description>

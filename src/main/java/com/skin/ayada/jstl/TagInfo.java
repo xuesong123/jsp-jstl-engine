@@ -115,4 +115,19 @@ public class TagInfo
 
         return JSP;
     }
+
+    @Override
+    public String toString()
+    {
+        StringBuilder buffer = new StringBuilder();
+        buffer.append(this.getName());
+        buffer.append(": ");
+        buffer.append(this.getTagClass());
+        buffer.append(", ");
+        buffer.append("bodyContent: ");
+        buffer.append(this.getBodyContent());
+        buffer.append(", description: ");
+        buffer.append(this.getDescription());
+        return buffer.toString();
+    }
 }

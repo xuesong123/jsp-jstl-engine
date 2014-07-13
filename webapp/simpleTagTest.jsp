@@ -1,4 +1,9 @@
-<t:import name="test:simpleTag" className="test.com.skin.ayada.taglib.MySimpleTag"/>
+<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ page import="java.io.IOException"%>
+<t:taglib prefix="test" uri="http://www.skin-ayada.com/ayada-taglib-test"/>
+<!-- t:import name="test:simpleTag" className="test.com.skin.ayada.taglib.MySimpleTag"/ -->
 <c:forEach items="1,1" var="myvar">${myvar}</c:forEach>
 <test:simpleTag>123${mytest}
     <test:simpleTag>${mytest}xyz</test:simpleTag>

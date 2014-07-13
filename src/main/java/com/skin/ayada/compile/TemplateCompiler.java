@@ -23,6 +23,7 @@ import com.skin.ayada.factory.TagFactoryManager;
 import com.skin.ayada.io.StringStream;
 import com.skin.ayada.jstl.TagInfo;
 import com.skin.ayada.jstl.TagLibrary;
+import com.skin.ayada.jstl.TagLibraryFactory;
 import com.skin.ayada.runtime.TagFactory;
 import com.skin.ayada.source.Source;
 import com.skin.ayada.source.SourceFactory;
@@ -251,7 +252,7 @@ public class TemplateCompiler extends PageCompiler
 
             if(nodeName.length() > 0)
             {
-                if(nodeName.equals("t:import") || nodeName.equals("t:include") || nodeName.equals("t:text"))
+                if(nodeName.equals("t:taglib") || nodeName.equals("t:import") || nodeName.equals("t:include") || nodeName.equals("t:text"))
                 {
                     throw new Exception("at line " + this.lineNumber + ": " + nodeName + " not match !");
                 }
@@ -329,7 +330,22 @@ public class TemplateCompiler extends PageCompiler
         {
             String nodeName = this.getNodeName();
 
-            if(nodeName.equals("t:import"))
+            if(nodeName.equals("t:taglib"))
+            {
+                Map<String, String> attributes = this.getAttributes();
+
+                if(this.stream.peek(-2) != '/')
+                {
+                    throw new Exception("The 't:taglib' direction must be self-closed!");
+                }
+
+                this.skipCRLF();
+                String prefix = attributes.get("prefix");
+                String uri = attributes.get("uri");
+                this.loadTagLibrary(prefix, uri);
+                return;
+            }
+            else if(nodeName.equals("t:import"))
             {
                 Map<String, String> attributes = this.getAttributes();
 
@@ -1003,6 +1019,30 @@ public class TemplateCompiler extends PageCompiler
             list.add(node);
             index++;
         }
+    }
+
+    /**
+     * @param prefix
+     * @param uri
+     */
+    public void loadTagLibrary(String prefix, String uri) throws Exception
+    {
+        if(prefix == null || prefix.trim().length() < 1)
+        {
+            throw new NullPointerException("prefix must be not null !");
+        }
+
+        if(uri == null || uri.trim().length() < 1)
+        {
+            throw new NullPointerException("prefix must be not null !");
+        }
+
+        Map<String, TagInfo> library = TagLibraryFactory.load(prefix, uri);
+        
+        
+        
+        TagLibrary tagLibrary = this.getTagLibrary();
+        tagLibrary.setup(library);
     }
 
     /**
