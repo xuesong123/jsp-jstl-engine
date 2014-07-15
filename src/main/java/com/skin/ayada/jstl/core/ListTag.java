@@ -89,7 +89,7 @@ public class ListTag extends TagSupport implements ElementTagSupport
         }
         else
         {
-        	this.list.add(value);
+            this.list.add(value);
         }
     }
 

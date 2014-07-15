@@ -72,12 +72,12 @@ public class ParseDateTag extends BodyTagSupport
         {
             if(value != null)
             {
-            	this.pageContext.getOut().print(value);
+                this.pageContext.getOut().print(value);
             }
         }
         else
         {
-        	this.pageContext.setAttribute(this.var, value);
+            this.pageContext.setAttribute(this.var, value);
         }
 
         return Tag.EVAL_PAGE;

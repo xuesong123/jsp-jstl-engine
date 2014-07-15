@@ -10,12 +10,12 @@
  */
 package com.skin.ayada.taglib;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
 
 import com.skin.ayada.component.Parameters;
 import com.skin.ayada.runtime.PageContext;
+import com.skin.ayada.util.ClassUtil;
 
 /**
  * <p>Title: ActionDispatcher</p>
@@ -32,123 +32,31 @@ public class ActionDispatcher
      * @param pageContext
      * @param parameters
      * @param className
-     * @param method
+     * @param methodName
      * @return Map<String, Object>
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    public static Map<String, Object> dispatch(PageContext pageContext, Parameters parameters, String className, String method) throws Exception
+    public static Map<String, Object> dispatch(PageContext pageContext, Parameters parameters, String className, String methodName) throws Exception
     {
-        Class<?> type = ActionDispatcher.getClass(className);
-        Object instance = type.newInstance();
-        String methodName = ActionDispatcher.getMethod(className, method);
-        return (Map<String, Object>)(ActionDispatcher.invoke(instance, methodName, PARAMETERTYPES, new Object[]{pageContext, parameters}, false));
-    }
+        Object instance = ClassUtil.getInstance(className);
+        Class<?> type = instance.getClass();
+        Method method = null;
 
-    /**
-     * @param className
-     * @return Object
-     * @throws Exception
-     */
-    public Object getInstance(String className) throws Exception
-    {
-        Class<?> type = ActionDispatcher.getClass(className);
-
-        if(type == null)
+        if(methodName != null)
         {
-            throw new ClassNotFoundException("class " + className + " not found !");
+            method = type.getMethod(methodName, PARAMETERTYPES);
+        }
+        else
+        {
+            method = type.getMethod("execute", PARAMETERTYPES);
         }
 
-        return type.newInstance();
-    }
+        Object context = method.invoke(instance, new Object[]{pageContext, parameters});
 
-    /**
-     * @param className
-     * @return Class<?>
-     */
-    public static Class<?> getClass(String className) throws ClassNotFoundException
-    {
-        Class<?> clazz = null;
-
-        try
+        if(context instanceof Map)
         {
-            clazz = Thread.currentThread().getContextClassLoader().loadClass(className);
-        }
-        catch(ClassNotFoundException e)
-        {
-        }
-
-        if(clazz == null)
-        {
-            try
-            {
-                clazz = ActionDispatcher.class.getClassLoader().loadClass(className);
-            }
-            catch(ClassNotFoundException e)
-            {
-            }
-        }
-
-        if(clazz == null)
-        {
-            clazz = Class.forName(className);
-        }
-
-        return clazz;
-    }
-
-    /**
-     * @param className
-     * @param method
-     * @return String
-     */
-    protected static String getMethod(String className, String method)
-    {
-        return (method != null ? method : "execute");
-    }
-
-    /**
-     * @param instance
-     * @param name
-     * @param types
-     * @param parameters
-     * @param safe
-     * @return Object
-     */
-    protected static Object invoke(Object instance, String name, Class<?>[] types, Object[] parameters, boolean safe)
-    {
-        Exception exception = null;
-
-        try
-        {
-            Class<?> type = instance.getClass();
-            Method method = type.getMethod(name, types);
-            return method.invoke(instance, parameters);
-        }
-        catch(SecurityException e)
-        {
-            exception = e;
-        }
-        catch(NoSuchMethodException e)
-        {
-            exception = e;
-        }
-        catch(IllegalArgumentException e)
-        {
-            exception = e;
-        }
-        catch(IllegalAccessException e)
-        {
-            exception = e;
-        }
-        catch(InvocationTargetException e)
-        {
-            exception = e;
-        }
-
-        if(safe == false)
-        {
-            throw new RuntimeException(exception);
+            return (Map<String, Object>)context;
         }
 
         return null;

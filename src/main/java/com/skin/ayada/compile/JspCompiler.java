@@ -59,6 +59,7 @@ public class JspCompiler
         String jspDeclaration = this.getJspDeclaration(template);
         String methodBody = this.getMethodBody(template);
         String subClassBOdy = this.getSubClassBody(template);
+        String staticDeclaration = this.getStaticDeclaration(template);
 
         Map<String, String> context = new HashMap<String, String>();
         context.put("java.className", className);
@@ -74,6 +75,7 @@ public class JspCompiler
         context.put("jsp.declaration", jspDeclaration);
         context.put("jsp.method.body", methodBody);
         context.put("jsp.subclass.body", subClassBOdy);
+        context.put("jsp.static.declaration", staticDeclaration);
         return this.replace(JAVA_TEMPLATE, context);
     }
 
@@ -132,6 +134,35 @@ public class JspCompiler
                     writer.println("    /* jsp:declaration END */");
                     writer.println();
                 }
+            }
+        }
+
+        writer.flush();
+        writer.close();
+        return chunkWriter.toString();
+    }
+
+    /**
+     * @param template
+     * @return String
+     */
+    public String getStaticDeclaration(Template template)
+    {
+        Node node = null;
+        List<Node> list = template.getNodes();
+        ChunkWriter chunkWriter = new ChunkWriter(4096);
+        PrintWriter writer = new PrintWriter(chunkWriter);
+
+        for(int index = 0, size = list.size(); index < size; index++)
+        {
+            node = list.get(index);
+
+            if(node.getNodeType() == NodeType.TEXT)
+            {
+                writer.print("    private static final char[] " + this.getVariableName(node, "_jsp_string_"));
+                writer.print(" = \"");
+                writer.print(StringUtil.escape(node.getTextContent()));
+                writer.println("\".toCharArray();");
             }
         }
 
@@ -225,6 +256,7 @@ public class JspCompiler
         int nodeType = 0;
         Node node = null;
         String indent = null;
+        String variable = null;
 
         for(int index = offset, end = offset + length; index < end; index++)
         {
@@ -234,8 +266,11 @@ public class JspCompiler
 
             if(nodeType == NodeType.TEXT)
             {
+                variable = this.getVariableName(node, "_jsp_string_");
+                
                 writer.println(indent + "/* TEXT: lineNumber: " + node.getLineNumber() + " */");
-                writer.println(indent + "out.write(\"" + StringUtil.escape(node.getTextContent()) + "\");");
+                // writer.println(indent + "out.write(\"" + StringUtil.escape(node.getTextContent()) + "\");");
+                writer.println(indent + "out.write(" + variable + ", 0, " + variable + ".length);");
 
                 if(this.isTagNode(list, index + 1))
                 {

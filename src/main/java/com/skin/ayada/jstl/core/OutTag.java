@@ -74,20 +74,20 @@ public class OutTag extends BodyTagSupport
      */
     public static void print(PageContext pageContext, Object value, boolean escapeXml) throws IOException
     {
-    	if(value != null)
-    	{
-    		String content = value.toString();
-    		JspWriter out = pageContext.getOut();
+        if(value != null)
+        {
+            String content = value.toString();
+            JspWriter out = pageContext.getOut();
 
-    		if(escapeXml)
-    		{
-    			out.print(escape(content));
-    		}
-    		else
-    		{
-    			out.print(content);
-    		}
-    	}
+            if(escapeXml)
+            {
+                out.print(escape(content));
+            }
+            else
+            {
+                out.print(content);
+            }
+        }
     }
 
     /**

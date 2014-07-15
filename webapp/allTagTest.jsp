@@ -2,8 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page import="java.io.IOException"%>
-<t:import name="app:scrollpage" className="test.com.skin.ayada.taglib.ScrollPage"/>
-<t:import name="app:test" className="com.skin.ayada.jstl.core.TestTag"/>
+<t:import name="app:scrollpage" className="test.com.skin.ayada.taglib.ScrollPage" bodyContent="jsp"/>
+<t:import name="app:test" className="com.skin.ayada.jstl.core.TestTag" bodyContent="jsp"/>
 <t:import name="app:bodytest" className="test.com.skin.ayada.taglib.TestBodyTag"/>
 <%!
     public void hello1(JspWriter out) throws IOException{

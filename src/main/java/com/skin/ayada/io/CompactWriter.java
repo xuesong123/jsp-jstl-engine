@@ -106,13 +106,13 @@ public class CompactWriter extends Writer
         }
         finally
         {
-        	try
-        	{
-				compactWriter.close();
-			}
-        	catch (IOException e)
-        	{
-			}
+            try
+            {
+                compactWriter.close();
+            }
+            catch (IOException e)
+            {
+            }
         }
     }
 }

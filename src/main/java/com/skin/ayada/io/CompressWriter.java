@@ -96,9 +96,9 @@ public class CompressWriter extends Writer
 
         try
         {
-        	compressWriter.write(source);
-        	compressWriter.write(source);
-        	compressWriter.flush();
+            compressWriter.write(source);
+            compressWriter.write(source);
+            compressWriter.flush();
             System.out.println(StringUtil.escape(stringWriter.toString()));
         }
         catch(IOException e)
@@ -107,13 +107,13 @@ public class CompressWriter extends Writer
         }
         finally
         {
-        	try
-        	{
-        		compressWriter.close();
-			}
-        	catch (IOException e)
-        	{
-			}
+            try
+            {
+                compressWriter.close();
+            }
+            catch (IOException e)
+            {
+            }
         }
     }
 }

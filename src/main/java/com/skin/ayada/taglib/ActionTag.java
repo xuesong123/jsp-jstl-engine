@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.skin.ayada.component.Parameters;
+import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.tagext.ParameterTagSupport;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.tagext.TagSupport;
@@ -31,6 +32,10 @@ public class ActionTag extends TagSupport implements ParameterTagSupport
     private String method;
     private String page;
     private Parameters parameters = new Parameters();
+    private static final String[] EXPORTS = new String[]{
+        "request", "response", "session", "servletContext",
+        PageContext.LOCALE_KEY, PageContext.TIMEZONE_KEY
+    };
 
     @Override
     public int doStartTag() throws Exception
@@ -55,19 +60,16 @@ public class ActionTag extends TagSupport implements ParameterTagSupport
             context = new HashMap<String, Object>();
         }
 
-        if(this.pageContext.getAttribute("request") != null)
-        {
-            context.put("request", this.pageContext.getAttribute("request"));
-        }
+        Object value = null;
 
-        if(this.pageContext.getAttribute("response") != null)
+        for(String name : EXPORTS)
         {
-            context.put("response", this.pageContext.getAttribute("response"));
-        }
+            value = this.pageContext.getAttribute(name);
 
-        if(this.pageContext.getAttribute("session") != null)
-        {
-            context.put("session", this.pageContext.getAttribute("session"));
+            if(value != null)
+            {
+                context.put(name, value);
+            }
         }
 
         if(this.getPage() != null)

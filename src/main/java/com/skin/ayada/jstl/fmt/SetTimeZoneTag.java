@@ -70,48 +70,48 @@ public class SetTimeZoneTag extends TagSupport
     /**
      * @param var the var to set
      */
-	public void setVar(String var)
-	{
-		this.var = var;
-	}
+    public void setVar(String var)
+    {
+        this.var = var;
+    }
 
     /**
      * @return the var
      */
-	public String getVar()
-	{
-		return this.var;
-	}
+    public String getVar()
+    {
+        return this.var;
+    }
 
     /**
      * @param value the value to set
      */
-	public void setValue(Object value)
-	{
-		this.value = value;
-	}
+    public void setValue(Object value)
+    {
+        this.value = value;
+    }
 
     /**
      * @return the value
      */
-	public Object getValue()
-	{
-		return this.value;
-	}
+    public Object getValue()
+    {
+        return this.value;
+    }
 
     /**
      * @param scope the scope to set
      */
-	public void setScope(String scope)
-	{
-		this.scope = scope;
-	}
+    public void setScope(String scope)
+    {
+        this.scope = scope;
+    }
 
     /**
      * @return the scope
      */
-	public String getScope()
-	{
-		return this.scope;
-	}
+    public String getScope()
+    {
+        return this.scope;
+    }
 }

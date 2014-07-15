@@ -107,7 +107,7 @@ public class SqlTag extends BodyTagSupport
 
         if(connection == null)
         {
-        	connection = (Connection)(tag.getPageContext().getAttribute("connection"));
+            connection = (Connection)(tag.getPageContext().getAttribute("connection"));
         }
 
         return connection;

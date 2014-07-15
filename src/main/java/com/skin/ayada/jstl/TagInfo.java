@@ -120,14 +120,19 @@ public class TagInfo
     public String toString()
     {
         StringBuilder buffer = new StringBuilder();
+        buffer.append("{\"");
         buffer.append(this.getName());
-        buffer.append(": ");
+        buffer.append("\": \"");
         buffer.append(this.getTagClass());
-        buffer.append(", ");
-        buffer.append("bodyContent: ");
+        buffer.append("\", ");
+        buffer.append("\"bodyContent\": \"");
         buffer.append(this.getBodyContent());
-        buffer.append(", description: ");
-        buffer.append(this.getDescription());
+        buffer.append("\", \"description\": \"");
+        if(this.getDescription() != null)
+        {
+            buffer.append(this.getDescription());
+        }
+        buffer.append("\"}");
         return buffer.toString();
     }
 }

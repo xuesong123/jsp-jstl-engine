@@ -67,26 +67,14 @@ public class TagLibraryFactory
     }
 
     /**
-     * @param prifix
-     * @param uri
+     * @param prefix
+     * @param resource
      * @return Map<String, TagInfo>
      */
-    public static Map<String, TagInfo> load(String prefix, String uri) throws Exception
+    public static Map<String, TagInfo> load(String prefix, String resource) throws Exception
     {
-        String resource = uri;
-
-        if(resource.startsWith("http://"))
-        {
-            int k = resource.indexOf("/", 7);
-            
-            if(k > -1)
-            {
-                resource = resource.substring(k + 1);
-            }
-        }
-
         ClassLoader classLoader = TagLibraryFactory.class.getClassLoader();
-        Map<String, TagInfo> map = parse(classLoader.getResourceAsStream(resource + ".xml"));
+        Map<String, TagInfo> map = parse(classLoader.getResourceAsStream(resource));
         Map<String, TagInfo> result = new HashMap<String, TagInfo>(map.size());
 
         for(Map.Entry<String, TagInfo> entry : map.entrySet())

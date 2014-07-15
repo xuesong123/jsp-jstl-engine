@@ -72,4 +72,6 @@ ${jsp.method.body}
     }
 
 ${jsp.subclass.body}
+
+${jsp.static.declaration}
 }

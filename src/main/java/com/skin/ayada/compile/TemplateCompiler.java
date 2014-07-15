@@ -23,7 +23,7 @@ import com.skin.ayada.factory.TagFactoryManager;
 import com.skin.ayada.io.StringStream;
 import com.skin.ayada.jstl.TagInfo;
 import com.skin.ayada.jstl.TagLibrary;
-import com.skin.ayada.jstl.TagLibraryFactory;
+import com.skin.ayada.jstl.TagLibraryManager;
 import com.skin.ayada.runtime.TagFactory;
 import com.skin.ayada.source.Source;
 import com.skin.ayada.source.SourceFactory;
@@ -53,6 +53,11 @@ public class TemplateCompiler extends PageCompiler
     private SourceFactory sourceFactory;
     private TagLibrary tagLibrary = null;
     private boolean ignoreJspTag = true;
+    public static final String TPL_DIRECTIVE_TAGLIB  = "t:taglib";
+    public static final String TPL_DIRECTIVE_IMPORT  = "t:import";
+    public static final String TPL_DIRECTIVE_INCLUDE = "t:include";
+    public static final String TPL_DIRECTIVE_TEXT    = "t:text";
+    public static final String TPL_DIRECTIVE_COMMENT = "t:comment";
     private static final Logger logger = LoggerFactory.getLogger(TemplateCompiler.class);
 
     /**
@@ -252,7 +257,7 @@ public class TemplateCompiler extends PageCompiler
 
             if(nodeName.length() > 0)
             {
-                if(nodeName.equals("t:taglib") || nodeName.equals("t:import") || nodeName.equals("t:include") || nodeName.equals("t:text"))
+                if(this.isDirective(nodeName))
                 {
                     throw new Exception("at line " + this.lineNumber + ": " + nodeName + " not match !");
                 }
@@ -281,12 +286,9 @@ public class TemplateCompiler extends PageCompiler
                     this.popNode(stack, list, nodeName);
                     TagInfo tagInfo = this.tagLibrary.getTagInfo(nodeName);
 
-                    if(tagInfo != null)
+                    if(tagInfo.getBodyContent() == TagInfo.EMPTY)
                     {
-                        if(tagInfo.getBodyContent() == TagInfo.EMPTY)
-                        {
-                            this.skipCRLF();
-                        }
+                        this.skipCRLF();
                     }
                 }
                 else
@@ -330,69 +332,73 @@ public class TemplateCompiler extends PageCompiler
         {
             String nodeName = this.getNodeName();
 
-            if(nodeName.equals("t:taglib"))
+            if(nodeName.startsWith("t"))
             {
-                Map<String, String> attributes = this.getAttributes();
-
-                if(this.stream.peek(-2) != '/')
+                if(nodeName.equals(TPL_DIRECTIVE_TAGLIB))
                 {
-                    throw new Exception("The 't:taglib' direction must be self-closed!");
+                    Map<String, String> attributes = this.getAttributes();
+    
+                    if(this.stream.peek(-2) != '/')
+                    {
+                        throw new Exception("The 't:taglib' direction must be self-closed!");
+                    }
+    
+                    this.skipCRLF();
+                    String prefix = attributes.get("prefix");
+                    String uri = attributes.get("uri");
+                    this.loadTagLibrary(prefix, uri);
+                    return;
                 }
-
-                this.skipCRLF();
-                String prefix = attributes.get("prefix");
-                String uri = attributes.get("uri");
-                this.loadTagLibrary(prefix, uri);
-                return;
-            }
-            else if(nodeName.equals("t:import"))
-            {
-                Map<String, String> attributes = this.getAttributes();
-
-                if(this.stream.peek(-2) != '/')
+                else if(nodeName.equals(TPL_DIRECTIVE_IMPORT))
                 {
-                    throw new Exception("The 't:import' direction must be self-closed!");
+                    Map<String, String> attributes = this.getAttributes();
+    
+                    if(this.stream.peek(-2) != '/')
+                    {
+                        throw new Exception("The 't:import' direction must be self-closed!");
+                    }
+    
+                    this.skipCRLF();
+                    String name = attributes.get("name");
+                    String className = attributes.get("className");
+                    String bodyContent = attributes.get("bodyContent");
+                    String description = attributes.get("description");
+                    this.setupTagLibrary(name, className, bodyContent, description);
+                    return;
                 }
-
-                this.skipCRLF();
-                String name = attributes.get("name");
-                String className = attributes.get("className");
-                String bodyContent = attributes.get("bodyContent");
-                this.setupTagLibrary(name, className, bodyContent);
-                return;
-            }
-            else if(nodeName.equals("t:include"))
-            {
-                Map<String, String> attributes = this.getAttributes();
-
-                if(this.stream.peek(-2) != '/')
+                else if(nodeName.equals(TPL_DIRECTIVE_INCLUDE))
                 {
-                    throw new Exception("The 't:include' direction must be self-closed!");
+                    Map<String, String> attributes = this.getAttributes();
+    
+                    if(this.stream.peek(-2) != '/')
+                    {
+                        throw new Exception("The 't:include' direction must be self-closed!");
+                    }
+    
+                    String type = attributes.get("type");
+                    String file = attributes.get("file");
+                    String encoding = attributes.get("encoding");
+                    this.include(stack, list, type, file, encoding);
+                    return;
                 }
-
-                String type = attributes.get("type");
-                String file = attributes.get("file");
-                String encoding = attributes.get("encoding");
-                this.include(stack, list, type, file, encoding);
-                return;
-            }
-            else if(nodeName.equals("t:text"))
-            {
-                int line = this.lineNumber;
-                this.getAttributes();
-                this.skipCRLF();
-                String content = this.readNodeContent(nodeName);
-                this.pushTextNode(stack, list, content, line);
-                this.skipCRLF();
-                return;
-            }
-            else if(nodeName.equals("t:comment"))
-            {
-                this.getAttributes();
-                this.skipCRLF();
-                this.readNodeContent(nodeName);
-                this.skipCRLF();
-                return;
+                else if(nodeName.equals(TPL_DIRECTIVE_TEXT))
+                {
+                    int line = this.lineNumber;
+                    this.getAttributes();
+                    this.skipCRLF();
+                    String content = this.readNodeContent(nodeName);
+                    this.pushTextNode(stack, list, content, line);
+                    this.skipCRLF();
+                    return;
+                }
+                else if(nodeName.equals(TPL_DIRECTIVE_COMMENT))
+                {
+                    this.getAttributes();
+                    this.skipCRLF();
+                    this.readNodeContent(nodeName);
+                    this.skipCRLF();
+                    return;
+                }
             }
 
             String tagClassName = null;
@@ -518,6 +524,24 @@ public class TemplateCompiler extends PageCompiler
         {
             this.pushTextNode(stack, list, "<", this.lineNumber);
         }
+    }
+
+    /**
+     * @param nodeName
+     * @return boolean
+     */
+    private boolean isDirective(String nodeName)
+    {
+        if(nodeName.startsWith("t"))
+        {
+            return (nodeName.equals(TPL_DIRECTIVE_TAGLIB)
+                    || nodeName.equals(TPL_DIRECTIVE_IMPORT)
+                    || nodeName.equals(TPL_DIRECTIVE_INCLUDE)
+                    || nodeName.equals(TPL_DIRECTIVE_TEXT)
+                    || nodeName.equals(TPL_DIRECTIVE_COMMENT));
+        }
+
+        return false;
     }
 
     /**
@@ -1034,45 +1058,46 @@ public class TemplateCompiler extends PageCompiler
 
         if(uri == null || uri.trim().length() < 1)
         {
-            throw new NullPointerException("prefix must be not null !");
-        }
-
-        Map<String, TagInfo> library = TagLibraryFactory.load(prefix, uri);
-        
-        
-        
-        TagLibrary tagLibrary = this.getTagLibrary();
-        tagLibrary.setup(library);
-    }
-
-    /**
-     * @param tagName
-     * @param className
-     */
-    public void setupTagLibrary(String tagName, String className, String bodyContent)
-    {
-        if(tagName == null || tagName.trim().length() < 1)
-        {
-            return;
-        }
-
-        String tagClassName = className;
-
-        if(tagClassName == null || tagClassName.trim().length() < 1)
-        {
-            tagClassName = this.tagLibrary.getTagClassName(tagName);
-        }
-
-        if(tagClassName == null)
-        {
-            return;
+            throw new NullPointerException("uri must be not null !");
         }
 
         TagLibrary tagLibrary = this.getTagLibrary();
 
         if(tagLibrary != null)
         {
-            tagLibrary.setup(tagName.trim(), tagClassName.trim(), bodyContent, null);
+            Map<String, TagInfo> library = TagLibraryManager.getTagLibrary(prefix, uri);
+            tagLibrary.setup(library);
+        }
+    }
+
+    /**
+     * @param tagName
+     * @param className
+     */
+    public void setupTagLibrary(String tagName, String className, String bodyContent, String description)
+    {
+        TagLibrary tagLibrary = this.getTagLibrary();
+
+        if(tagLibrary != null)
+        {
+            if(tagName == null || tagName.trim().length() < 1)
+            {
+                return;
+            }
+
+            String tagClassName = className;
+
+            if(tagClassName == null || tagClassName.trim().length() < 1)
+            {
+                tagClassName = tagLibrary.getTagClassName(tagName);
+            }
+
+            if(tagClassName == null)
+            {
+                return;
+            }
+
+            tagLibrary.setup(tagName.trim(), tagClassName.trim(), bodyContent, description);
         }
     }
 
@@ -1126,7 +1151,9 @@ public class TemplateCompiler extends PageCompiler
 
             if(nodeType == NodeType.TEXT || nodeType == NodeType.EXPRESSION || nodeType == NodeType.VARIABLE)
             {
-                if(node.getTextContent().length() > 0)
+                String content = node.getTextContent();
+
+                if(content.length() > 0)
                 {
                     node.setOffset(nodes.size());
                     node.setLength(1);

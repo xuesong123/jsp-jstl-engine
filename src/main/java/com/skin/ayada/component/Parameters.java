@@ -774,6 +774,16 @@ public class Parameters
         return this.parameters;
     }
 
+    /**
+     * @param map
+     * @return Map<String, Object>
+     */
+    public Map<String, Object> export(Map<String, Object> map)
+    {
+        map.putAll(this.parameters);
+        return map;
+    }
+
     public void clear()
     {
         this.parameters.clear();

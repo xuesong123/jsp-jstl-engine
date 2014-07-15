@@ -33,7 +33,7 @@ public class RemoveTag extends BodyTagSupport
     {
         if(this.var != null)
         {
-        	this.pageContext.removeAttribute(this.var);
+            this.pageContext.removeAttribute(this.var);
         }
 
         return Tag.SKIP_BODY;
@@ -58,16 +58,16 @@ public class RemoveTag extends BodyTagSupport
     /**
      * @param scope the scope to set
      */
-	public void setScope(String scope)
-	{
-		this.scope = scope;
-	}
+    public void setScope(String scope)
+    {
+        this.scope = scope;
+    }
 
     /**
      * @return the var
      */
-	public String getScope()
-	{
-		return this.scope;
-	}
+    public String getScope()
+    {
+        return this.scope;
+    }
 }

@@ -47,17 +47,17 @@ public class BufferTag extends BodyTagSupport
     @Override
     public int doEndTag() throws Exception
     {
-    	if(this.var != null)
+        if(this.var != null)
         {
             BodyContent bodyContent = this.getBodyContent();
 
             if(bodyContent != null)
             {
-            	this.pageContext.setAttribute(this.var, bodyContent.getString());
+                this.pageContext.setAttribute(this.var, bodyContent.getString());
             }
             else
             {
-            	this.pageContext.setAttribute(this.var, "");
+                this.pageContext.setAttribute(this.var, "");
             }
         }
 

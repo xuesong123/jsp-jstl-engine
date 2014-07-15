@@ -21,16 +21,16 @@ import java.util.TimeZone;
  */
 public class TimeZoneTest
 {
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args)
-	{
-		String[] ids = TimeZone.getAvailableIDs();
+    /**
+     * @param args
+     */
+    public static void main(String[] args)
+    {
+        String[] ids = TimeZone.getAvailableIDs();
 
-		for(String id : ids)
-		{
-			System.out.println(id);
-		}
-	}
+        for(String id : ids)
+        {
+            System.out.println(id);
+        }
+    }
 }

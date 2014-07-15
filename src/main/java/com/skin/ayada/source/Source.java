@@ -52,19 +52,19 @@ public class Source
     {
         if(type == null)
         {
-        	return defaultValue;
+            return defaultValue;
         }
         else if(type.equalsIgnoreCase("static"))
         {
-        	return Source.STATIC;
+            return Source.STATIC;
         }
         else if(type.equalsIgnoreCase("script"))
         {
-        	return Source.SCRIPT;
+            return Source.SCRIPT;
         }
         else
         {
-        	return defaultValue;
+            return defaultValue;
         }
     }
 

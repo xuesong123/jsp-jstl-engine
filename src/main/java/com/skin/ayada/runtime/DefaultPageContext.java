@@ -117,7 +117,7 @@ public class DefaultPageContext implements PageContext
      */
     public void setTimeZone(TimeZone timeZone)
     {
-    	this.setAttribute(PageContext.LOCALE_KEY, timeZone);
+        this.setAttribute(PageContext.LOCALE_KEY, timeZone);
     }
 
     /**
@@ -126,7 +126,7 @@ public class DefaultPageContext implements PageContext
     public TimeZone getTimeZone()
     {
         TimeZone timeZone = null;
-    	Object value = this.getAttribute(PageContext.TIMEZONE_KEY);
+        Object value = this.getAttribute(PageContext.TIMEZONE_KEY);
 
         if((value instanceof TimeZone))
         {
@@ -150,7 +150,7 @@ public class DefaultPageContext implements PageContext
      */
     public void setLocale(Locale locale)
     {
-    	this.setAttribute(PageContext.LOCALE_KEY, locale);
+        this.setAttribute(PageContext.LOCALE_KEY, locale);
     }
 
     /**

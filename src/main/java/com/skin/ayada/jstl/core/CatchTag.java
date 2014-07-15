@@ -28,7 +28,7 @@ public class CatchTag extends TagSupport implements TryCatchFinally
     {
         if(this.var != null)
         {
-        	this.pageContext.setAttribute(this.var, throwable);
+            this.pageContext.setAttribute(this.var, throwable);
         }
     }
 

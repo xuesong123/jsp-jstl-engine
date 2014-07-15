@@ -112,7 +112,7 @@ public class SetTag extends BodyTagSupport
      */
     public static void setValue(PageContext pageContext, String name, String scope, Object value)
     {
-    	pageContext.setAttribute(name, value);
+        pageContext.setAttribute(name, value);
     }
 
     /**
