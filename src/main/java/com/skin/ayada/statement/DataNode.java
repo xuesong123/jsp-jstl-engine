@@ -163,6 +163,14 @@ public abstract class DataNode extends Node
     }
 
     /**
+     * @return String
+     */
+    public int length()
+    {
+        return this.buffer.length();
+    }
+
+    /**
      * @return DataNode
      */
     @Override

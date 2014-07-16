@@ -33,9 +33,45 @@ public interface ExpressionContext
 
     /**
      * @param expression
+     * @return Byte
+     */
+    public Byte getByte(String expression);
+
+    /**
+     * @param expression
+     * @return Short
+     */
+    public Short getShort(String expression);
+
+    /**
+     * @param expression
      * @return Object
      */
-    public boolean getInteger(String expression);
+    public Integer getInteger(String expression);
+
+    /**
+     * @param expression
+     * @return Float
+     */
+    public Float getFloat(String expression);
+
+    /**
+     * @param expression
+     * @return Double
+     */
+    public Double getDouble(String expression);
+
+    /**
+     * @param expression
+     * @return Long
+     */
+    public Long getLong(String expression);
+
+    /**
+     * @param expression
+     * @return Character
+     */
+    public Character getCharacter(String expression);
 
     /**
      * @param expression

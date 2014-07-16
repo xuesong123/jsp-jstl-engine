@@ -26,7 +26,7 @@ import com.skin.ayada.util.ClassUtil;
  */
 public class ActionDispatcher
 {
-    private static final Class<?>[] PARAMETERTYPES= new Class[]{PageContext.class, Parameters.class};
+    private static final Class<?>[] PARAMETERTYPES = new Class[]{PageContext.class, Parameters.class};
 
     /**
      * @param pageContext

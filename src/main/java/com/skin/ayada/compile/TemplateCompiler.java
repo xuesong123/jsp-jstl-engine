@@ -1151,9 +1151,7 @@ public class TemplateCompiler extends PageCompiler
 
             if(nodeType == NodeType.TEXT || nodeType == NodeType.EXPRESSION || nodeType == NodeType.VARIABLE)
             {
-                String content = node.getTextContent();
-
-                if(content.length() > 0)
+                if(((DataNode)node).length() > 0)
                 {
                     node.setOffset(nodes.size());
                     node.setLength(1);

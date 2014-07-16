@@ -57,6 +57,7 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
      * @param expression
      * @return Object
      */
+    @Override
     public Object getValue(String expression)
     {
         return OgnlUtil.getValue(expression, this, this);
@@ -64,16 +65,12 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
 
     /**
      * @param expression
-     * @return Object
+     * @return boolean
      */
+    @Override
     public boolean getBoolean(String expression)
     {
         Object value = OgnlUtil.getValue(expression, this, this);
-
-        if(value == null)
-        {
-            return false;
-        }
 
         if(value instanceof Boolean)
         {
@@ -84,28 +81,137 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
 
     /**
      * @param expression
-     * @return Object
+     * @return Byte
      */
-    public boolean getInteger(String expression)
+    public Byte getByte(String expression)
     {
         Object value = OgnlUtil.getValue(expression, this, this);
 
-        if(value == null)
+        if(value instanceof Number)
         {
-            return false;
+            return ((Number)value).byteValue();
         }
 
-        if(value instanceof Integer)
+        return null;
+    }
+
+    /**
+     * @param expression
+     * @return Short
+     */
+    @Override
+    public Short getShort(String expression)
+    {
+        Object value = OgnlUtil.getValue(expression, this, this);
+
+        if(value instanceof Number)
         {
-            return Boolean.TRUE.equals(value);
+            return ((Number)value).shortValue();
         }
-        return false;
+
+        return null;
+    }
+
+    /**
+     * @param expression
+     * @return Integer
+     */
+    @Override
+    public Integer getInteger(String expression)
+    {
+        Object value = OgnlUtil.getValue(expression, this, this);
+
+        if(value instanceof Number)
+        {
+            return ((Number)value).intValue();
+        }
+
+        return null;
+    }
+
+    /**
+     * @param expression
+     * @return Float
+     */
+    @Override
+    public Float getFloat(String expression)
+    {
+        Object value = OgnlUtil.getValue(expression, this, this);
+
+        if(value instanceof Number)
+        {
+            return ((Number)value).floatValue();
+        }
+
+        return null;
+    }
+
+    /**
+     * @param expression
+     * @return Double
+     */
+    @Override
+    public Double getDouble(String expression)
+    {
+        Object value = OgnlUtil.getValue(expression, this, this);
+
+        if(value instanceof Number)
+        {
+            return ((Number)value).doubleValue();
+        }
+
+        return null;
+    }
+
+    /**
+     * @param expression
+     * @return Long
+     */
+    @Override
+    public Long getLong(String expression)
+    {
+        Object value = OgnlUtil.getValue(expression, this, this);
+
+        if(value instanceof Number)
+        {
+            return ((Number)value).longValue();
+        }
+
+        return null;
+    }
+
+    /**
+     * @param expression
+     * @return Character
+     */
+    @Override
+    public Character getCharacter(String expression)
+    {
+        Object value = OgnlUtil.getValue(expression, this, this);
+
+        if(value instanceof Character)
+        {
+            return (Character)value;
+        }
+
+        if(value != null)
+        {
+            String content = value.toString();
+
+            if(content.length() > 0)
+            {
+                return content.charAt(0);
+            }
+        }
+
+        return null;
     }
 
     /**
      * @param expression
      * @return Object
      */
+    @Override
     public String getString(String expression)
     {
         Object value = OgnlUtil.getValue(expression, this, this);
