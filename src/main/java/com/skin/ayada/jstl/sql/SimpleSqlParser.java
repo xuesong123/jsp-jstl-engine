@@ -73,7 +73,7 @@ public class SimpleSqlParser
         }
 
         token = this.getToken(stream);
-
+        
         if(token.equalsIgnoreCase("IF"))
         {
             token = this.getToken(stream);
@@ -99,7 +99,7 @@ public class SimpleSqlParser
 
         if(i != '(')
         {
-            throw new RuntimeException("except '('!");
+            throw new RuntimeException("tableName: " + tableName + ", except '('");
         }
 
         while(true)
@@ -128,7 +128,7 @@ public class SimpleSqlParser
             /**
              * @TODO: keyword check
              */
-            if(token.equals("primary") || token.equals("primary"))
+            if(token.equalsIgnoreCase("PRIMARY") || token.equalsIgnoreCase("UNIQUE") || token.equalsIgnoreCase("KEY"))
             {
                 while((i = stream.read()) != -1)
                 {
@@ -154,12 +154,9 @@ public class SimpleSqlParser
                         throw new RuntimeException("except ']'!");
                     }
                 }
-                else
+                else if(quoto != i)
                 {
-                    if(quoto != i)
-                    {
-                        throw new RuntimeException("except ']'!");
-                    }
+                    throw new RuntimeException("column '" + token + "', except '" + quoto + "': found '" + (char)i);
                 }
             }
 
@@ -176,7 +173,7 @@ public class SimpleSqlParser
 
                 if(precision == null)
                 {
-                    throw new RuntimeException("except number!");
+                    throw new RuntimeException(column.getColumnName() + ", except number!");
                 }
 
                 column.setPrecision(precision.intValue());
@@ -237,12 +234,21 @@ public class SimpleSqlParser
                     }
                     else
                     {
+                        String defaultValue = this.getToken(stream);
+                        
+                        if(defaultValue.length() < 1)
+                        {
+                            throw new RuntimeException(column.getColumnName() + " - default value except default value!");
+                        }
+
+                        /*
                         Integer value = this.getInteger(stream);
 
                         if(value == null)
                         {
-                            throw new RuntimeException("except number!");
+                            throw new RuntimeException(column.getColumnName() + " - default value except number!");
                         }
+                        */
                     }
                 }
                 else if(token.equalsIgnoreCase("COMMENT"))

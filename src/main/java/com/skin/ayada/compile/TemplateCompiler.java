@@ -435,12 +435,12 @@ public class TemplateCompiler extends PageCompiler
             {
                 JspDeclaration node = new JspDeclaration();
                 node.setTagClassName((String)null);
-                node.setLineNumber(this.getLineNumber());
                 Map<String, String> attributes = this.getAttributes();
                 node.setOffset(list.size());
                 node.setAttributes(attributes);
                 node.setClosed(NodeType.PAIR_CLOSED);
                 this.skipCRLF();
+                node.setLineNumber(this.getLineNumber());
                 node.append(this.readNodeContent(nodeName));
                 this.skipCRLF();
 
@@ -454,12 +454,12 @@ public class TemplateCompiler extends PageCompiler
             {
                 JspScriptlet node = new JspScriptlet();
                 node.setTagClassName((String)null);
-                node.setLineNumber(this.getLineNumber());
                 Map<String, String> attributes = this.getAttributes();
                 node.setOffset(list.size());
                 node.setAttributes(attributes);
                 node.setClosed(NodeType.PAIR_CLOSED);
                 this.skipCRLF();
+                node.setLineNumber(this.getLineNumber());
                 node.append(this.readNodeContent(nodeName));
                 this.skipCRLF();
 
@@ -473,12 +473,12 @@ public class TemplateCompiler extends PageCompiler
             {
                 JspExpression node = new JspExpression();
                 node.setTagClassName((String)null);
-                node.setLineNumber(this.getLineNumber());
                 Map<String, String> attributes = this.getAttributes();
                 node.setOffset(list.size());
                 node.setAttributes(attributes);
                 node.setClosed(NodeType.PAIR_CLOSED);
                 this.skipCRLF();
+                node.setLineNumber(this.getLineNumber());
                 node.append(this.readNodeContent(nodeName));
 
                 if(this.ignoreJspTag == false)

@@ -40,7 +40,7 @@ public class MySimpleTag extends SimpleTag
 
         for(int i = 0; i < 3; i++)
         {
-            jspFrgment.invoke(pageContext.getOut());
+            jspFrgment.invoke(this.pageContext.getOut());
         }
     }
 }

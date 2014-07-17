@@ -106,7 +106,5 @@ public abstract class AbstractJspFragment implements JspFragment
     /**
      * @param writer
      */
-    public void execute(JspWriter writer) throws Exception
-    {
-    }
+    public abstract void execute(JspWriter writer) throws Exception;
 }

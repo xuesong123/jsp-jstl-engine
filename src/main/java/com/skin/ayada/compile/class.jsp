@@ -52,9 +52,7 @@ public class ${java.className} extends JspTemplate{
             throwable.printStackTrace();
         }
     }
-
 ${jsp.declaration}
-
     /**
      * @param pageContext
      * @throws Throwable
@@ -64,14 +62,10 @@ ${jsp.declaration}
         JspWriter out = pageContext.getOut();
         JspWriter jspWriter = pageContext.getOut();
         ExpressionContext expressionContext = pageContext.getExpressionContext();
-
 ${jsp.method.body}
-
         out.flush();
         jspWriter.flush();
     }
-
 ${jsp.subclass.body}
-
 ${jsp.static.declaration}
 }

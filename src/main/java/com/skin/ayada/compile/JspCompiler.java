@@ -98,7 +98,7 @@ public class JspCompiler
             {
                 if(node.getOffset() == index && node.getAttribute("import") != null)
                 {
-                    writer.println("import " + node.getAttribute("import") + "; /* jsp:directive.import: lineNumber: " + node.getLineNumber() + " */");
+                    writer.println("import " + node.getAttribute("import") + "; // jsp:directive.import: lineNumber: " + node.getLineNumber());
                 }
             }
         }
@@ -126,12 +126,12 @@ public class JspCompiler
             {
                 if(node.getOffset() == index)
                 {
-                    writer.println("    /* JSP_DECLARATION: lineNumber: " + node.getLineNumber() + " */");
+                    writer.println("    // JSP_DECLARATION: lineNumber: " + node.getLineNumber());
                     writer.print(node.getTextContent());
                 }
                 else
                 {
-                    writer.println("    /* jsp:declaration END */");
+                    writer.println("    // jsp:declaration END");
                     writer.println();
                 }
             }
@@ -226,8 +226,8 @@ public class JspCompiler
                 String tagInstanceName = this.getTagInstanceName(node);
                 String jspFragmentClassName = this.getVariableName(node, "JspFragment_");
                 writer.println();
-                writer.println("    /* NODE START: lineNumber: " + node.getLineNumber() + ", offset: " + node.getOffset() + ", length: " + node.getLength() + ", tagClassName: " + tagClassName + ", tagInstanceName: " + tagInstanceName + " */");
-                writer.println("    /* " + NodeUtil.getDescription(node) + " */");
+                writer.println("    // NODE START: lineNumber: " + node.getLineNumber() + ", offset: " + node.getOffset() + ", length: " + node.getLength() + ", tagClassName: " + tagClassName + ", tagInstanceName: " + tagInstanceName);
+                writer.println("    // " + NodeUtil.getDescription(node));
                 writer.println("    public class " + jspFragmentClassName + " extends com.skin.ayada.tagext.AbstractJspFragment{");
                 writer.println("        @Override");
                 writer.println("        public void execute(final JspWriter writer) throws Exception{");
@@ -236,11 +236,11 @@ public class JspCompiler
                 writer.println("            ExpressionContext expressionContext = pageContext.getExpressionContext();");
                 writer.println("            Tag " + tagInstanceName + " = this.getParent();");
                 writer.println();
-                writer.println("            /* offset: " + (index + 1) + ", length: " + (node.getLength() - 2) + " */");
+                writer.println("            // offset: " + (index + 1) + ", length: " + (node.getLength() - 2));
                 this.writeBody(writer, list, index + 1, node.getLength() - 2);
                 writer.println("        }");
                 writer.println("    }");
-                writer.println("    /* NODE END: lineNumber: " + node.getLineNumber() + ", tagClassName: " + tagClassName + ", tagInstanceName: " + tagInstanceName + " */");
+                writer.println("    // NODE END: lineNumber: " + node.getLineNumber() + ", tagClassName: " + tagClassName + ", tagInstanceName: " + tagInstanceName);
             }
         }
     }
@@ -267,9 +267,8 @@ public class JspCompiler
             if(nodeType == NodeType.TEXT)
             {
                 variable = this.getVariableName(node, "_jsp_string_");
-                
-                writer.println(indent + "/* TEXT: lineNumber: " + node.getLineNumber() + " */");
-                // writer.println(indent + "out.write(\"" + StringUtil.escape(node.getTextContent()) + "\");");
+                writer.println(indent + "// TEXT: lineNumber: " + node.getLineNumber());
+                writer.println(indent + "// out.write(\"" + StringUtil.escape(node.getTextContent()) + "\");");
                 writer.println(indent + "out.write(" + variable + ", 0, " + variable + ".length);");
 
                 if(this.isTagNode(list, index + 1))
@@ -282,7 +281,7 @@ public class JspCompiler
             if(nodeType == NodeType.VARIABLE)
             {
                 String textContent = node.getTextContent();
-                writer.println(indent + "/* VARIABLE: lineNumber: " + node.getLineNumber() + " */");
+                writer.println(indent + "// VARIABLE: lineNumber: " + node.getLineNumber());
                 writer.println(indent + "out.print(pageContext.getAttribute(\"" + textContent + "\"), false);");
 
                 if(this.isTagNode(list, index + 1))
@@ -295,7 +294,7 @@ public class JspCompiler
             if(nodeType == NodeType.EXPRESSION)
             {
                 String textContent = node.getTextContent();
-                writer.println(indent + "/* EXPRESSION: lineNumber: " + node.getLineNumber() + " */");
+                writer.println(indent + "// EXPRESSION: lineNumber: " + node.getLineNumber());
                 writer.println(indent + "out.write(expressionContext.getString(\"" + StringUtil.escape(textContent) + "\"));");
 
                 if(this.isTagNode(list, index + 1))
@@ -345,39 +344,39 @@ public class JspCompiler
             {
                 case NodeType.JSP_DECLARATION:
                 {
-                    writer.println(indent + "/* jsp:declaration: lineNumber: " + node.getLineNumber() + " */");
-                    writer.println(indent + "/* " + NodeUtil.getDescription(node) + " */");
+                    writer.println(indent + "// jsp:declaration: lineNumber: " + node.getLineNumber());
+                    writer.println(indent + "// " + NodeUtil.getDescription(node));
                     return Tag.EVAL_PAGE;
                 }
                 case NodeType.JSP_DIRECTIVE_PAGE:
                 {
-                    writer.println(indent + "/* jsp:directive.page: lineNumber: " + node.getLineNumber() + " */");
-                    writer.println(indent + "/* " + NodeUtil.getDescription(node) + " */");
+                    writer.println(indent + "// jsp:directive.page: lineNumber: " + node.getLineNumber());
+                    writer.println(indent + "// " + NodeUtil.getDescription(node));
                     return Tag.EVAL_PAGE;
                 }
                 case NodeType.JSP_DIRECTIVE_TAGLIB:
                 {
-                    writer.println(indent + "/* jsp:directive.taglib: lineNumber: " + node.getLineNumber() + " */");
-                    writer.println(indent + "/* " + NodeUtil.getDescription(node) + " */");
+                    writer.println(indent + "// jsp:directive.taglib: lineNumber: " + node.getLineNumber());
+                    writer.println(indent + "// " + NodeUtil.getDescription(node));
                     return Tag.EVAL_PAGE;
                 }
 
                 case NodeType.JSP_DIRECTIVE_INCLUDE:
                 {
-                    writer.println(indent + "/* jsp:directive.include: lineNumber: " + node.getLineNumber() + " */");
-                    writer.println(indent + "/* " + NodeUtil.getDescription(node) + " */");
+                    writer.println(indent + "// jsp:directive.include: lineNumber: " + node.getLineNumber());
+                    writer.println(indent + "// " + NodeUtil.getDescription(node));
                     return Tag.EVAL_PAGE;
                 }
 
                 case NodeType.JSP_SCRIPTLET:
                 {
-                    writer.println(indent + "/* jsp:scriptlet: lineNumber: " + node.getLineNumber() + " */");
+                    writer.println(indent + "// jsp:scriptlet: lineNumber: " + node.getLineNumber());
                     writer.println(node.getTextContent());
                     return Tag.SKIP_BODY;
                 }
                 case NodeType.JSP_EXPRESSION:
                 {
-                    writer.println(indent + "/* jsp:expression: lineNumber: " + node.getLineNumber() + " */");
+                    writer.println(indent + "// jsp:expression: lineNumber: " + node.getLineNumber());
                     writer.println(indent + "out.print(" + node.getTextContent() + ");");
                     return Tag.SKIP_BODY;
                 }
@@ -389,32 +388,32 @@ public class JspCompiler
             {
                 case NodeType.JSP_DECLARATION:
                 {
-                    writer.println(indent + "/* jsp:declaration END */");
+                    // writer.println(indent + "// jsp:declaration END");
                     return Tag.EVAL_PAGE;
                 }
                 case NodeType.JSP_DIRECTIVE_PAGE:
                 {
-                    writer.println(indent + "/* jsp:directive.page END */");
+                    // writer.println(indent + "// jsp:directive.page END");
                     return Tag.EVAL_PAGE;
                 }
                 case NodeType.JSP_DIRECTIVE_TAGLIB:
                 {
-                    writer.println(indent + "/* jsp:directive.taglib END */");
+                    // writer.println(indent + "// jsp:directive.taglib END");
                     return Tag.EVAL_PAGE;
                 }
                 case NodeType.JSP_DIRECTIVE_INCLUDE:
                 {
-                    writer.println(indent + "/* jsp:directive.include END */");
+                    // writer.println(indent + "// jsp:directive.include END");
                     return Tag.EVAL_PAGE;
                 }
                 case NodeType.JSP_SCRIPTLET:
                 {
-                    writer.println(indent + "/* jsp:scriptlet END */");
+                    writer.println(indent + "// jsp:scriptlet END");
                     return Tag.EVAL_PAGE;
                 }
                 case NodeType.JSP_EXPRESSION:
                 {
-                    writer.println(indent + "/* jsp:expression END */");
+                    writer.println(indent + "// jsp:expression END");
                     return Tag.EVAL_PAGE;
                 }
             }
@@ -426,8 +425,8 @@ public class JspCompiler
 
         if(node.getOffset() == index)
         {
-            writer.println(indent + "/* NODE START: lineNumber: " + node.getLineNumber() + ", offset: " + node.getOffset() + ", length: " + node.getLength() + ", tagClassName: " + tagClassName + ", tagInstanceName: " + tagInstanceName + " */");
-            writer.println(indent + "/* " + NodeUtil.getDescription(node) + " */");
+            writer.println(indent + "// NODE START: lineNumber: " + node.getLineNumber() + ", offset: " + node.getOffset() + ", length: " + node.getLength() + ", tagClassName: " + tagClassName + ", tagInstanceName: " + tagInstanceName);
+            writer.println(indent + "// " + NodeUtil.getDescription(node));
         }
 
         int flag = Tag.EVAL_PAGE;
@@ -522,7 +521,7 @@ public class JspCompiler
 
         if(node.getOffset() != index)
         {
-            writer.println(indent + "/* NODE END: lineNumber: " + node.getLineNumber() + ", tagClassName: " + tagClassName + ", tagInstanceName: " + tagInstanceName + " */");
+            writer.println(indent + "// NODE END: lineNumber: " + node.getLineNumber() + ", tagClassName: " + tagClassName + ", tagInstanceName: " + tagInstanceName);
         }
 
         return flag;
@@ -543,7 +542,7 @@ public class JspCompiler
         }
         else
         {
-            writer.println(indent + "} /* jsp.jstl.core.IfTag END */");
+            writer.println(indent + "} // jsp.jstl.core.IfTag END");
         }
 
         return Tag.EVAL_PAGE;
@@ -623,7 +622,7 @@ public class JspCompiler
                 }
             }
 
-            writer.println(indent + "/* jsp.jstl.core.SetTag END */");
+            writer.println(indent + "// jsp.jstl.core.SetTag END");
         }
 
         return Tag.EVAL_PAGE;
@@ -645,8 +644,7 @@ public class JspCompiler
         {
             if(value != null)
             {
-                writer.println(indent + "/* out.write(\"" + StringUtil.escape(value) + "\"); */");
-                writer.println(indent + "out.write(" + this.getStringExpression(value, escapeXml) + ");");
+                writer.println(indent + "out.print(" + this.getStringExpression(value, escapeXml) + ");");
                 return Tag.SKIP_BODY;
             }
             else if(node.getLength() > 2)
@@ -663,7 +661,7 @@ public class JspCompiler
             writer.println(indent + "out = pageContext.popBody();");
         }
 
-        writer.println(indent + "/* jsp.jstl.core.OutTag END */");
+        writer.println(indent + "// jsp.jstl.core.OutTag END");
         return Tag.EVAL_PAGE;
     }
 
@@ -807,7 +805,7 @@ public class JspCompiler
                 writer.println(indent + "pageContext.setAttribute(\"" + varStatus.trim() + "\", " + forEachOldVarStatus + ");");
             }
 
-            writer.println(indent + "/* jsp.jstl.core.ForEachTag END */");
+            writer.println(indent + "// jsp.jstl.core.ForEachTag END");
         }
 
         return Tag.EVAL_PAGE;
@@ -830,7 +828,7 @@ public class JspCompiler
         }
         else
         {
-            writer.println(indent + "/* jsp.jstl.core.ChooseTag END */");
+            writer.println(indent + "// jsp.jstl.core.ChooseTag END");
         }
 
         return Tag.EVAL_PAGE;
@@ -853,7 +851,7 @@ public class JspCompiler
         }
         else
         {
-            writer.println(indent + "} /* jsp.jstl.core.WhenTag END */");
+            writer.println(indent + "} // jsp.jstl.core.WhenTag END");
         }
 
         return Tag.EVAL_PAGE;
@@ -876,7 +874,7 @@ public class JspCompiler
         }
         else
         {
-            writer.println(indent + "} /* jsp.jstl.core.OtherwiseTag END */");
+            writer.println(indent + "} // jsp.jstl.core.OtherwiseTag END");
         }
 
         return Tag.EVAL_PAGE;
@@ -894,7 +892,7 @@ public class JspCompiler
         if(node.getOffset() == index)
         {
             writer.println(indent + "if(com.skin.ayada.jstl.core.ContinueTag.getTrue()){ continue; }");
-            writer.println(indent + "/* jsp.jstl.core.ContinueTag END */");
+            writer.println(indent + "// jsp.jstl.core.ContinueTag END");
         }
 
         return Tag.EVAL_PAGE;
@@ -912,7 +910,7 @@ public class JspCompiler
         if(node.getOffset() == index)
         {
             writer.println(indent + "if(com.skin.ayada.jstl.core.ContinueTag.getTrue()){ break; }");
-            writer.println(indent + "/* jsp.jstl.core.BreakTag END */");
+            writer.println(indent + "// jsp.jstl.core.BreakTag END");
         }
 
         return Tag.EVAL_PAGE;
@@ -953,7 +951,7 @@ public class JspCompiler
         }
         else
         {
-            writer.println(indent + "/* jsp.jstl.fmt.FormatDateTag END */");
+            writer.println(indent + "// jsp.jstl.fmt.FormatDateTag END");
         }
 
         return Tag.EVAL_PAGE;
@@ -970,11 +968,11 @@ public class JspCompiler
     {
         if(node.getOffset() == index)
         {
-            writer.println(indent + "if(pageContext == null){");
+            writer.println(indent + "if(com.skin.ayada.jstl.core.ContinueTag.getTrue()){");
         }
         else
         {
-            writer.println(indent + "} /* jsp.jstl.core.CommentTag END */");
+            writer.println(indent + "} // jsp.jstl.core.CommentTag END");
         }
 
         return Tag.EVAL_PAGE;
@@ -1007,7 +1005,7 @@ public class JspCompiler
         }
         else
         {
-            writer.println(indent + "/* jsp.jstl.core.PrintTag END */");
+            writer.println(indent + "// jsp.jstl.core.PrintTag END");
         }
 
         return Tag.EVAL_PAGE;
@@ -1060,7 +1058,7 @@ public class JspCompiler
             writer.println(indent + "out = pageContext.popBody();");
         }
 
-        writer.println(indent + "/* jsp.jstl.core.AttributeTag END */");
+        writer.println(indent + "// jsp.jstl.core.AttributeTag END");
         return Tag.EVAL_PAGE;
     }
 
@@ -1110,7 +1108,7 @@ public class JspCompiler
             writer.println(indent + "out = pageContext.popBody();");
         }
 
-        writer.println(indent + "/* jsp.jstl.core.ElementTag END */");
+        writer.println(indent + "// jsp.jstl.core.ElementTag END");
         return Tag.EVAL_PAGE;
     }
 
@@ -1136,7 +1134,7 @@ public class JspCompiler
             }
             return Tag.EVAL_PAGE;
         }
-        writer.println(indent + "/* jsp.jstl.core.ConstructorTag END */");
+        writer.println(indent + "// jsp.jstl.core.ConstructorTag END");
         return Tag.EVAL_PAGE;
     }
 
@@ -1172,7 +1170,7 @@ public class JspCompiler
             writer.println(indent + "out = pageContext.popBody();");
         }
 
-        writer.println(indent + "/* jsp.jstl.core.PropertyTag END */");
+        writer.println(indent + "// jsp.jstl.core.PropertyTag END");
         return Tag.EVAL_PAGE;
     }
 
@@ -1208,7 +1206,7 @@ public class JspCompiler
             writer.println(indent + "out = pageContext.popBody();");
         }
 
-        writer.println(indent + "/* jsp.jstl.core.PrameterTag END */");
+        writer.println(indent + "// jsp.jstl.core.PrameterTag END");
         return Tag.EVAL_PAGE;
     }
 
@@ -1237,7 +1235,7 @@ public class JspCompiler
         }
         else
         {
-            writer.println(indent + "/* jsp.jstl.core.ExecuteTag END */");
+            writer.println(indent + "// jsp.jstl.core.ExecuteTag END");
         }
 
         return Tag.EVAL_PAGE;
@@ -1268,7 +1266,7 @@ public class JspCompiler
             writer.println(indent + "}");
             return Tag.SKIP_BODY;
         }
-        writer.println(indent + "/* jsp.jstl.core.ExitTag END */");
+        writer.println(indent + "// jsp.jstl.core.ExitTag END");
         return Tag.EVAL_PAGE;
     }
 
