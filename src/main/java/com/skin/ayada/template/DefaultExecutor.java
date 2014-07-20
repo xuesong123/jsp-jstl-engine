@@ -20,8 +20,6 @@ import com.skin.ayada.statement.NodeType;
 import com.skin.ayada.statement.Statement;
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTag;
-import com.skin.ayada.tagext.BreakTagSupport;
-import com.skin.ayada.tagext.ContinueTagSupport;
 import com.skin.ayada.tagext.FinallyException;
 import com.skin.ayada.tagext.IterationTag;
 import com.skin.ayada.tagext.SimpleTag;
@@ -173,13 +171,17 @@ public class DefaultExecutor
 
                         if(flag == Tag.SKIP_BODY)
                         {
-                            index = node.getOffset() + node.getLength();
-                            doFinally(tag);
+                            // goto end tag, then execute doEndTag();
+                            index = node.getOffset() + node.getLength() - 1;
                             continue;
                         }
 
                         if(flag == Tag.SKIP_PAGE)
                         {
+                            /**
+                             * Tag.SKIP_PAGE: Valid return value for doEndTag().
+                             * throw new java.lang.IllegalStateException("SKIP_PAGE: " + flag); 
+                             */
                             Statement s = getTryCatchFinallyStatement(statements, index);
 
                             if(s != null)
@@ -201,32 +203,6 @@ public class DefaultExecutor
                                 }
                             }
                             break;
-                        }
-
-                        if(flag == Tag.CONTINUE)
-                        {
-                            Statement parent = getParent(statement, ContinueTagSupport.class);
-
-                            if(parent != null)
-                            {
-                                index = parent.getNode().getOffset() + 1;
-                                doFinally(tag);
-                                continue;
-                            }
-                            throw new Exception("Error: ContinueTag");
-                        }
-
-                        if(flag == Tag.BREAK)
-                        {
-                            Statement parent = getParent(statement, BreakTagSupport.class);
-
-                            if(parent != null)
-                            {
-                                index = parent.getNode().getOffset() + parent.getNode().getLength();
-                                doFinally(tag);
-                                continue;
-                            }
-                            throw new Exception("Error: BreakTag");
                         }
                     }
                     else

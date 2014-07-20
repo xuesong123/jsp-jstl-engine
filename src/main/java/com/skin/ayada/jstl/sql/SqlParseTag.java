@@ -10,6 +10,8 @@
  */
 package com.skin.ayada.jstl.sql;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +19,13 @@ import java.util.Map;
 import com.skin.ayada.tagext.BodyTag;
 import com.skin.ayada.tagext.BodyTagSupport;
 import com.skin.ayada.tagext.Tag;
+import com.skin.ayada.util.ClassUtil;
+import com.skin.ayada.util.IO;
+import com.skin.ayada.util.StringUtil;
+import com.skin.database.dialect.Dialect;
+import com.skin.database.dialect.MySQLDialect;
+import com.skin.database.sql.Column;
+import com.skin.database.sql.Table;
 
 /**
  * <p>Title: SqlParseTag</p>
@@ -28,7 +37,9 @@ import com.skin.ayada.tagext.Tag;
 public class SqlParseTag extends BodyTagSupport
 {
     private String name;
-    private String source;
+    private String file;
+    private String charset;
+    private String database;
 
     /**
      * @return int
@@ -36,7 +47,7 @@ public class SqlParseTag extends BodyTagSupport
     @Override
     public int doStartTag()
     {
-        if(this.source != null)
+        if(this.file != null)
         {
             return Tag.SKIP_BODY;
         }
@@ -50,9 +61,24 @@ public class SqlParseTag extends BodyTagSupport
     @Override
     public int doEndTag()
     {
-        String sql = this.source;
+        String sql = null;
 
-        if(sql == null)
+        if(this.file != null)
+        {
+            try
+            {
+                if(this.charset == null)
+                {
+                    this.charset = "UTF-8";
+                }
+
+                sql = IO.read(new File(this.file), this.charset, 2048);
+            }
+            catch(IOException e)
+            {
+            }
+        }
+        else
         {
             if(this.bodyContent != null)
             {
@@ -62,15 +88,21 @@ public class SqlParseTag extends BodyTagSupport
 
         if(sql != null)
         {
-            SimpleSqlParser parser = new SimpleSqlParser();
-            Table table = parser.parse(sql);
+            Dialect dialect = this.getDialect(this.database);
+            SimpleSqlParser parser = new SimpleSqlParser(dialect);
+            Map<String, Table> map = parser.parse(sql);
 
-            if(this.name == null)
+            for(Map.Entry<String, Table> entry : map.entrySet())
             {
-                this.name = table.getTableName();
+                String name = entry.getKey();
+                Table table = entry.getValue();
+                this.pageContext.setAttribute(name, table);
             }
 
-            this.pageContext.setAttribute(this.name, table);
+            if(this.name != null)
+            {
+                this.pageContext.setAttribute(this.name, map);
+            }
         }
 
         return Tag.EVAL_PAGE;
@@ -97,6 +129,50 @@ public class SqlParseTag extends BodyTagSupport
     }
 
     /**
+     * @param productName
+     * @return Dialect
+     */
+    public Dialect getDialect(String productName)
+    {
+        String className = null;
+
+        if(productName != null && productName.length() > 1)
+        {
+            String product = StringUtil.replace(productName, " ",  "").toLowerCase();
+            String[] names = {"DB2", "HSQL", "MySQL", "Oracle", "Oracle11g", "Oracle10g", "Oracle9", "SQLServer", "Access"};
+
+            for(String name : names)
+            {
+                if(product.indexOf(name.toLowerCase()) > -1)
+                {
+                    className = Dialect.class.getName();
+                    className = className.substring(0, className.length() - Dialect.class.getSimpleName().length());
+                    className = className + name + "Dialect";
+                    break;
+                }
+            }
+        }
+
+        if(className == null)
+        {
+            return new MySQLDialect();
+        }
+
+        Dialect dialect = null;
+
+        try
+        {
+            dialect = (Dialect)(ClassUtil.getInstance(className));
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return dialect;
+    }
+
+    /**
      * @return the name
      */
     public String getName()
@@ -113,18 +189,50 @@ public class SqlParseTag extends BodyTagSupport
     }
 
     /**
-     * @return the source
+     * @return the file
      */
-    public String getSource()
+    public String getFile()
     {
-        return this.source;
+        return this.file;
     }
 
     /**
-     * @param source the source to set
+     * @param file the file to set
      */
-    public void setSource(String source)
+    public void setFile(String file)
     {
-        this.source = source;
+        this.file = file;
+    }
+
+    /**
+     * @return the charset
+     */
+    public String getCharset()
+    {
+        return this.charset;
+    }
+
+    /**
+     * @param charset the charset to set
+     */
+    public void setCharset(String charset)
+    {
+        this.charset = charset;
+    }
+
+    /**
+     * @return the database
+     */
+    public String getDatabase()
+    {
+        return this.database;
+    }
+
+    /**
+     * @param database the database to set
+     */
+    public void setDatabase(String database)
+    {
+        this.database = database;
     }
 }

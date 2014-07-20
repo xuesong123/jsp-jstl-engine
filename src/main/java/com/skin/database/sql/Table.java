@@ -8,7 +8,7 @@
  * This software is the proprietary information of Skin, Inc.
  * Use is subject to license terms.
  */
-package com.skin.ayada.jstl.sql;
+package com.skin.database.sql;
 
 import java.util.ArrayList;
 import java.util.Iterator;

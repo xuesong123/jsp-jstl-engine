@@ -461,14 +461,6 @@ public class JspCompiler
             {
                 flag = this.writeOtherwiseTag(writer, node, index, indent);
             }
-            else if(tagClassName.endsWith(".ContinueTag"))
-            {
-                flag = this.writeContinueTag(writer, node, index, indent);
-            }
-            else if(tagClassName.endsWith(".BreakTag"))
-            {
-                flag = this.writeBreakTag(writer, node, index, indent);
-            }
             else if(tagClassName.endsWith(".CommentTag"))
             {
                 flag = this.writeCommentTag(writer, node, index, indent);
@@ -875,42 +867,6 @@ public class JspCompiler
         else
         {
             writer.println(indent + "} // jsp.jstl.core.OtherwiseTag END");
-        }
-
-        return Tag.EVAL_PAGE;
-    }
-
-    /**
-     * @param writer
-     * @param node
-     * @param index
-     * @param indent
-     * @return int
-     */
-    private int writeContinueTag(PrintWriter writer, Node node, int index, String indent)
-    {
-        if(node.getOffset() == index)
-        {
-            writer.println(indent + "if(com.skin.ayada.jstl.core.ContinueTag.getTrue()){ continue; }");
-            writer.println(indent + "// jsp.jstl.core.ContinueTag END");
-        }
-
-        return Tag.EVAL_PAGE;
-    }
-
-    /**
-     * @param writer
-     * @param node
-     * @param index
-     * @param indent
-     * @return int
-     */
-    private int writeBreakTag(PrintWriter writer, Node node, int index, String indent)
-    {
-        if(node.getOffset() == index)
-        {
-            writer.println(indent + "if(com.skin.ayada.jstl.core.ContinueTag.getTrue()){ break; }");
-            writer.println(indent + "// jsp.jstl.core.BreakTag END");
         }
 
         return Tag.EVAL_PAGE;

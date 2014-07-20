@@ -38,17 +38,16 @@ public class OutTag extends BodyTagSupport
         if(this.value != null)
         {
             OutTag.print(this.pageContext, this.value, this.escapeXml);
-        }
-        else if(this.defaultValue != null)
-        {
-            OutTag.print(this.pageContext, this.defaultValue, this.escapeXml);
-        }
-        else
-        {
-            return BodyTag.EVAL_BODY_BUFFERED;
+            return Tag.SKIP_BODY;
         }
 
-        return Tag.SKIP_BODY;
+        if(this.defaultValue != null)
+        {
+            OutTag.print(this.pageContext, this.defaultValue, this.escapeXml);
+            return Tag.SKIP_BODY;
+        }
+
+        return BodyTag.EVAL_BODY_BUFFERED;
     }
 
     /**

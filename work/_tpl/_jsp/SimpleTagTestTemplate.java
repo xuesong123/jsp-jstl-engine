@@ -281,7 +281,7 @@ public class SimpleTagTestTemplate extends JspTemplate{
 
     private static final char[] _jsp_string_9 = "<!-- t:import name=\"test:simpleTag\" className=\"test.com.skin.ayada.taglib.MySimpleTag\"/ -->\r\n".toCharArray();
     private static final char[] _jsp_string_13 = "\r\n".toCharArray();
-    static final char[] _jsp_string_15 = "123".toCharArray();
+    private static final char[] _jsp_string_15 = "123".toCharArray();
     private static final char[] _jsp_string_17 = "\r\n    ".toCharArray();
     private static final char[] _jsp_string_20 = "xyz".toCharArray();
     private static final char[] _jsp_string_22 = "\r\n    ".toCharArray();

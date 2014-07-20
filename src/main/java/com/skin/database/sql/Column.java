@@ -8,7 +8,7 @@
  * This software is the proprietary information of Skin, Inc.
  * Use is subject to license terms.
  */
-package com.skin.ayada.jstl.sql;
+package com.skin.database.sql;
 
 /**
  * <p>Title: Column</p>
@@ -309,15 +309,24 @@ public class Column
     public String toString()
     {
         StringBuilder buffer = new StringBuilder();
-        buffer.append("<Column");
-        buffer.append(" ColumnName=\"" + this.columnName).append("\"");
-        buffer.append(" DataType=\"" + this.dataType).append("\"");
-        buffer.append(" TypeName=\"" + this.typeName).append("\"");
-        buffer.append(" Length=\"" + this.columnSize).append("\"");
-        buffer.append(" DecimalDigits=\"" + this.decimalDigits).append("\"");
-        buffer.append(" ColumnDef=\"" + this.columnDef).append("\"");
-        buffer.append(" Remarks=\"" + this.remarks).append("\"");
-        buffer.append(" Nullable=\"" + this.nullable).append("\"");
+        buffer.append("<column");
+        buffer.append(" alias=\"" + this.alias).append("\"");
+        buffer.append(" columnCode=\"" + this.columnCode).append("\"");
+        buffer.append(" columnName=\"" + this.columnName).append("\"");
+        buffer.append(" dataType=\"" + this.dataType).append("\"");
+        buffer.append(" typeName=\"" + this.typeName).append("\"");
+        buffer.append(" autoIncrement=\"" + this.autoIncrement).append("\"");
+        buffer.append(" length=\"" + this.columnSize).append("\"");
+        buffer.append(" decimalDigits=\"" + this.decimalDigits).append("\"");
+        buffer.append(" columnDef=\"" + this.columnDef).append("\"");
+        buffer.append(" precision=\"" + this.precision).append("\"");
+        buffer.append(" nullable=\"" + this.nullable).append("\"");
+        buffer.append(" primaryKey=\"" + this.primaryKey).append("\"");
+        buffer.append(" variableName=\"" + this.variableName).append("\"");
+        buffer.append(" javaTypeName=\"" + this.javaTypeName).append("\"");
+        buffer.append(" methodSetter=\"" + this.methodSetter).append("\"");
+        buffer.append(" methodGetter=\"" + this.methodGetter).append("\"");
+        buffer.append(" remarks=\"" + this.remarks).append("\"");
         buffer.append("/>");
         return buffer.toString();
     }
