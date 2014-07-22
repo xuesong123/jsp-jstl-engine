@@ -14,8 +14,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>Title: PropertyResource</p>
@@ -25,6 +29,8 @@ import java.util.Map;
  */
 public class PropertyResource
 {
+    private static final Logger logger = LoggerFactory.getLogger(PropertyResource.class);
+
     /**
      * @param resource
      * @param charset
@@ -32,8 +38,24 @@ public class PropertyResource
      */
     public static Map<String, String> load(String resource, String charset)
     {
-        InputStream inputStream = PropertyResource.class.getClassLoader().getResourceAsStream(resource);
+        InputStream inputStream = null;
+        URL url = PropertyResource.class.getClassLoader().getResource(resource);
 
+        if(url != null)
+        {
+            if(logger.isDebugEnabled())
+            {
+                logger.debug("load: " + url.toString());
+            }
+
+            try
+            {
+                inputStream = url.openStream();
+            }
+            catch(IOException e)
+            {
+            }
+        }
         try
         {
             return load(inputStream, charset);

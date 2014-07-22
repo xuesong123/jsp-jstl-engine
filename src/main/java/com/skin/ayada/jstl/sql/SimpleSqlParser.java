@@ -11,9 +11,8 @@
 package com.skin.ayada.jstl.sql;
 
 import java.io.File;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.skin.ayada.io.StringStream;
 import com.skin.ayada.util.IO;
@@ -40,11 +39,10 @@ public class SimpleSqlParser
         {
             String source = IO.read(new File("webapp/test.sql"), "UTF-8", 1024);
             System.out.println(source);
-            Map<String, Table> map = parser.parse(source);
+            List<Table> list = parser.parse(source);
 
-            for(Map.Entry<String, Table> entry : map.entrySet())
+            for(Table table : list)
             {
-                Table table = entry.getValue();
                 System.out.println(table.getCreateString("`%s`"));
                 System.out.println(table.getQueryString());
                 System.out.println(table.getInsertString());
@@ -76,20 +74,20 @@ public class SimpleSqlParser
 
     /**
      * @param source
-     * @return Map<String, Table>
+     * @return List<Table>
      */
-    public Map<String, Table> parse(String source)
+    public List<Table> parse(String source)
     {
         Table table = null;
         StringStream stream = new StringStream(source);
-        Map<String, Table> map = new HashMap<String, Table>();
+        List<Table> list = new ArrayList<Table>();
         
         while((table = this.parse(stream)) != null)
         {
-            map.put(table.getTableName(), table);
+            list.add(table);
         }
 
-        return map;
+        return list;
     }
 
     /**

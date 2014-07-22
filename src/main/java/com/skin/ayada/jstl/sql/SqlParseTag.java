@@ -90,18 +90,16 @@ public class SqlParseTag extends BodyTagSupport
         {
             Dialect dialect = this.getDialect(this.database);
             SimpleSqlParser parser = new SimpleSqlParser(dialect);
-            Map<String, Table> map = parser.parse(sql);
+            List<Table> list = parser.parse(sql);
 
-            for(Map.Entry<String, Table> entry : map.entrySet())
+            for(Table table : list)
             {
-                String name = entry.getKey();
-                Table table = entry.getValue();
-                this.pageContext.setAttribute(name, table);
+                this.pageContext.setAttribute(table.getTableName(), table);
             }
 
             if(this.name != null)
             {
-                this.pageContext.setAttribute(this.name, map);
+                this.pageContext.setAttribute(this.name, list);
             }
         }
 

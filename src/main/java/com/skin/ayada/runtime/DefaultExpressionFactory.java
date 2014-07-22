@@ -13,6 +13,9 @@ package com.skin.ayada.runtime;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.skin.ayada.resource.PropertyResource;
 import com.skin.ayada.util.ClassUtil;
 
@@ -25,8 +28,9 @@ import com.skin.ayada.util.ClassUtil;
  */
 public class DefaultExpressionFactory implements ExpressionFactory
 {
+    private static final Logger logger = LoggerFactory.getLogger(DefaultExpressionFactory.class);
     private static final Map<String, Object> attributes = getAttributes("UTF-8");
-
+    
     /**
      * @param pageContext
      * @return ExpressionContext
@@ -76,6 +80,14 @@ public class DefaultExpressionFactory implements ExpressionFactory
             {
                 Entry pair = getEntry(entry.getKey(), entry.getValue());
                 attributes.put(pair.getName(), pair.getValue());
+            }
+
+            if(logger.isDebugEnabled())
+            {
+                for(Map.Entry<String, Object> entry : attributes.entrySet())
+                {
+                    logger.debug("set " + entry.getKey() + " = " + entry.getValue());
+                }
             }
         }
 
