@@ -89,13 +89,15 @@ public interface ExpressionContext
     public String getEscapeString(String expression);
 
     /**
+     * @param out
      * @param content
      * @throws IOException
      */
     public void print(Writer out, String content) throws IOException;
 
     /**
-     * @param value
+     * @param out
+     * @param object
      * @throws IOException
      */
     public void print(Writer out, Object object) throws IOException;
