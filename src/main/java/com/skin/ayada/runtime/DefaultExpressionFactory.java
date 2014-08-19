@@ -28,6 +28,7 @@ import com.skin.ayada.util.ClassUtil;
  */
 public class DefaultExpressionFactory implements ExpressionFactory
 {
+    private static boolean ESCAPE_XML = false;
     private static final Logger logger = LoggerFactory.getLogger(DefaultExpressionFactory.class);
     private static final Map<String, Object> attributes = getAttributes("UTF-8");
     
@@ -57,6 +58,7 @@ public class DefaultExpressionFactory implements ExpressionFactory
             }
         }
 
+        expressionContext.setEscapeXml(ESCAPE_XML);
         return expressionContext;
     }
 
@@ -91,6 +93,14 @@ public class DefaultExpressionFactory implements ExpressionFactory
             }
         }
 
+        Object escapeXml = attributes.get("ayada.escape-xml");
+
+        if(escapeXml != null && escapeXml.equals("true"))
+        {
+            ESCAPE_XML = true;
+        }
+
+        attributes.remove("ayada.escape-xml");
         return attributes;
     }
 

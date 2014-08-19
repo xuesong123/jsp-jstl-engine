@@ -110,8 +110,9 @@ public class DefaultExecutor
 
                         if(value != null)
                         {
-                            out.write(value.toString());
+                            expressionContext.print(out, value);
                         }
+
                         index++;
                         continue;
                     }
@@ -122,8 +123,9 @@ public class DefaultExecutor
 
                         if(value != null)
                         {
-                            out.write(value.toString());
+                            expressionContext.print(out, value);
                         }
+
                         index++;
                         continue;
                     }

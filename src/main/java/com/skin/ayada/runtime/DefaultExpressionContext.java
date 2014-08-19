@@ -10,10 +10,14 @@
  */
 package com.skin.ayada.runtime;
 
+import java.io.IOException;
+import java.io.Writer;
+
 import ognl.OgnlContext;
 
 import com.skin.ayada.ognl.util.Empty;
 import com.skin.ayada.ognl.util.OgnlUtil;
+import com.skin.ayada.util.HtmlUtil;
 
 /**
  * <p>Title: DefaultExpressionContext</p>
@@ -24,6 +28,7 @@ import com.skin.ayada.ognl.util.OgnlUtil;
  */
 public class DefaultExpressionContext extends OgnlContext implements ExpressionContext
 {
+    private boolean escapeXml;
     private PageContext pageContext;
     private static final Object EMPTY = new Empty<String, Object>();
 
@@ -221,6 +226,79 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
             return "";
         }
         return value.toString();
+    }
+
+    /**
+     * @param expression
+     * @return Object
+     */
+    @Override
+    public String getEscapeString(String expression)
+    {
+        Object value = OgnlUtil.getValue(expression, this, this);
+
+        if(value == null || value instanceof Empty<?, ?>)
+        {
+            return "";
+        }
+
+        return HtmlUtil.encode(value.toString());
+    }
+
+    /**
+     * @param content
+     * @throws IOException
+     */
+    @Override
+    public void print(Writer out, String content) throws IOException
+    {
+        if(content != null)
+        {
+            if(this.escapeXml)
+            {
+                out.write(HtmlUtil.encode(content));
+            }
+            else
+            {
+                out.write(content);
+            }
+        }
+    }
+
+    /**
+     * @param value
+     * @throws IOException
+     */
+    @Override
+    public void print(Writer out, Object content) throws IOException
+    {
+        if(content != null)
+        {
+            if(this.escapeXml)
+            {
+                out.write(HtmlUtil.encode(content.toString()));
+            }
+            else
+            {
+                out.write(content.toString());
+            }
+        }
+    }
+
+    /**
+     * @return the escapeXml
+     */
+    public boolean getEscapeXml()
+    {
+        return this.escapeXml;
+    }
+
+    /**
+     * @param escapeXml the escapeXml to set
+     */
+    public void setEscapeXml(boolean escapeXml)
+    {
+        this.escapeXml = escapeXml;
     }
 
     /**

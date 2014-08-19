@@ -337,12 +337,12 @@ public class TemplateCompiler extends PageCompiler
                 if(nodeName.equals(TPL_DIRECTIVE_TAGLIB))
                 {
                     Map<String, String> attributes = this.getAttributes();
-    
+
                     if(this.stream.peek(-2) != '/')
                     {
                         throw new Exception("The 't:taglib' direction must be self-closed!");
                     }
-    
+
                     this.skipCRLF();
                     String prefix = attributes.get("prefix");
                     String uri = attributes.get("uri");

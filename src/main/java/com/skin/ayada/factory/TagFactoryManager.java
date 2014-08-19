@@ -48,7 +48,7 @@ public class TagFactoryManager
         TagFactoryManager tagFactoryManager = TagFactoryManager.getInstance();
         System.out.println("tag: " + getTag("c:set", "com.skin.ayada.jstl.core.SetTag"));
         System.out.println("tag: " + getTag("app:test", "com.skin.ayada.jstl.core.TestTag"));
-        
+
         TagFactory f1 = tagFactoryManager.getTagFactory("c:set", "com.skin.ayada.jstl.core.SetTag");
         TagFactory f2 = tagFactoryManager.getTagFactory("app:test", "com.skin.ayada.jstl.core.TestTag");
         System.out.println(f1.getClass().getName());

@@ -218,6 +218,12 @@
         <description></description>
     </tag>
     <tag>
+        <name>c:escape</name>
+        <tag-class>com.skin.ayada.jstl.core.EscapeTag</tag-class>
+        <body-content>jsp</body-content>
+        <description></description>
+    </tag>
+    <tag>
         <name>f:substring</name>
         <tag-class>com.skin.ayada.jstl.fmt.SubstringTag</tag-class>
         <body-content>empty</body-content>

@@ -282,7 +282,7 @@ public class JspCompiler
             {
                 String textContent = node.getTextContent();
                 writer.println(indent + "// VARIABLE: lineNumber: " + node.getLineNumber());
-                writer.println(indent + "out.print(pageContext.getAttribute(\"" + textContent + "\"), false);");
+                writer.println(indent + "expressionContext.print(out, pageContext.getAttribute(\"" + textContent + "\"));");
 
                 if(this.isTagNode(list, index + 1))
                 {
@@ -295,7 +295,7 @@ public class JspCompiler
             {
                 String textContent = node.getTextContent();
                 writer.println(indent + "// EXPRESSION: lineNumber: " + node.getLineNumber());
-                writer.println(indent + "out.write(expressionContext.getString(\"" + StringUtil.escape(textContent) + "\"));");
+                writer.println(indent + "expressionContext.print(out, expressionContext.getString(\"" + StringUtil.escape(textContent) + "\"));");
 
                 if(this.isTagNode(list, index + 1))
                 {

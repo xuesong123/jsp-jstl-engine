@@ -10,6 +10,9 @@
  */
 package com.skin.ayada.runtime;
 
+import java.io.IOException;
+import java.io.Writer;
+
 /**
  * <p>Title: ExpressionContext</p>
  * <p>Description: </p>
@@ -79,6 +82,34 @@ public interface ExpressionContext
      */
     public String getString(String expression);
 
+    /**
+     * @param expression
+     * @return Object
+     */
+    public String getEscapeString(String expression);
+
+    /**
+     * @param content
+     * @throws IOException
+     */
+    public void print(Writer out, String content) throws IOException;
+
+    /**
+     * @param value
+     * @throws IOException
+     */
+    public void print(Writer out, Object object) throws IOException;
+
+    /**
+     * @return the escapeXml
+     */
+    public boolean getEscapeXml();
+
+    /**
+     * @param escapeXml the escapeXml to set
+     */
+    public void setEscapeXml(boolean escapeXml);
+    
     /**
      * @param pageContext the pageContext to set
      */
