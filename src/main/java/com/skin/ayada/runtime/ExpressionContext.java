@@ -103,16 +103,6 @@ public interface ExpressionContext
     public void print(Writer out, Object object) throws IOException;
 
     /**
-     * @return the escapeXml
-     */
-    public boolean getEscapeXml();
-
-    /**
-     * @param escapeXml the escapeXml to set
-     */
-    public void setEscapeXml(boolean escapeXml);
-    
-    /**
      * @param pageContext the pageContext to set
      */
     public void setPageContext(PageContext pageContext);
@@ -121,6 +111,16 @@ public interface ExpressionContext
      * @return the pageContext
      */
     public PageContext getPageContext();
+
+    /**
+     * @return ELEncoder
+     */
+    public ELEncoder getEncoder();
+
+    /**
+     * @param encoder
+     */
+    public void setEncoder(ELEncoder encoder);
 
     /**
      * release the current ExpressionContext

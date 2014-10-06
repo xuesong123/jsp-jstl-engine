@@ -159,7 +159,7 @@ public class JspCompiler
 
             if(node.getNodeType() == NodeType.TEXT)
             {
-                writer.print("    private static final char[] " + this.getVariableName(node, "_jsp_string_"));
+                writer.print("    public static final char[] " + this.getVariableName(node, "_jsp_string_"));
                 writer.print(" = \"");
                 writer.print(StringUtil.escape(node.getTextContent()));
                 writer.println("\".toCharArray();");

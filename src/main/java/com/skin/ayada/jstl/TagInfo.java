@@ -116,6 +116,33 @@ public class TagInfo
         return JSP;
     }
 
+    /**
+     * @param bodyContent
+     * @return int
+     */
+    public static String getBodyContent(int bodyContent)
+    {
+        switch(bodyContent)
+        {
+            case JSP:
+            {
+                return "jsp";
+            }
+            case TAGDEPENDENT:
+            {
+                return "tagdependent";
+            }
+            case EMPTY:
+            {
+                return "empty";
+            }
+            default:
+            {
+                return "jsp";
+            }
+        }
+    }
+
     @Override
     public String toString()
     {

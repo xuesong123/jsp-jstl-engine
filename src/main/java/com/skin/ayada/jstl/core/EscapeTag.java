@@ -10,6 +10,9 @@
  */
 package com.skin.ayada.jstl.core;
 
+import com.skin.ayada.runtime.ELEncoder;
+import com.skin.ayada.runtime.ELEncoderFactory;
+import com.skin.ayada.runtime.ExpressionContext;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.tagext.TagSupport;
 
@@ -22,28 +25,43 @@ import com.skin.ayada.tagext.TagSupport;
  */
 public class EscapeTag extends TagSupport
 {
-    private boolean escapeXml = false;
+    private Object encoder;
 
     @Override
     public int doStartTag() throws Exception
     {
-        this.pageContext.getExpressionContext().setEscapeXml(this.escapeXml);
+        ELEncoder elEncoder = null;
+        ExpressionContext expressionContext = this.pageContext.getExpressionContext();
+
+        if(this.encoder != null)
+        {
+            if(this.encoder instanceof ELEncoder)
+            {
+                elEncoder = (ELEncoder)(this.encoder);
+            }
+            else
+            {
+                elEncoder = ELEncoderFactory.getELEncoder(this.encoder.toString());
+            }
+        }
+
+        expressionContext.setEncoder(elEncoder);
         return Tag.EVAL_PAGE;
     }
 
     /**
-     * @return the escapeXml
+     * @return the encoder
      */
-    public boolean getEscapeXml()
+    public Object getEncoder()
     {
-        return this.escapeXml;
+        return this.encoder;
     }
 
     /**
-     * @param escapeXml the escapeXml to set
+     * @param encoder the encoder to set
      */
-    public void setEscapeXml(boolean escapeXml)
+    public void setEncoder(Object encoder)
     {
-        this.escapeXml = escapeXml;
+        this.encoder = encoder;
     }
 }

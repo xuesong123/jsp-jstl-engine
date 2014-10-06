@@ -10,7 +10,7 @@
  */
 package com.skin.ayada.jstl;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -29,7 +29,7 @@ public class TagLibrary
      */
     protected TagLibrary()
     {
-        this.library = new HashMap<String, TagInfo>();
+        this.library = new LinkedHashMap<String, TagInfo>();
     }
 
     /**

@@ -314,6 +314,7 @@ public class PageCompiler
                             }
                             catch(NumberFormatException e)
                             {
+                                buffer.append(new String(c, i + 2, j - i - 2));
                             }
 
                             i = j;

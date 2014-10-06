@@ -28,8 +28,8 @@ import com.skin.ayada.util.HtmlUtil;
  */
 public class DefaultExpressionContext extends OgnlContext implements ExpressionContext
 {
-    private boolean escapeXml;
     private PageContext pageContext;
+    private ELEncoder encoder;
     private static final Object EMPTY = new Empty<String, Object>();
 
     /**
@@ -254,9 +254,9 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
     {
         if(content != null)
         {
-            if(this.escapeXml)
+            if(this.encoder != null)
             {
-                out.write(HtmlUtil.encode(content));
+                out.write(this.encoder.encode(content));
             }
             else
             {
@@ -275,31 +275,15 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
     {
         if(content != null)
         {
-            if(this.escapeXml)
+            if(this.encoder != null)
             {
-                out.write(HtmlUtil.encode(content.toString()));
+                out.write(this.encoder.encode(content.toString()));
             }
             else
             {
                 out.write(content.toString());
             }
         }
-    }
-
-    /**
-     * @return the escapeXml
-     */
-    public boolean getEscapeXml()
-    {
-        return this.escapeXml;
-    }
-
-    /**
-     * @param escapeXml the escapeXml to set
-     */
-    public void setEscapeXml(boolean escapeXml)
-    {
-        this.escapeXml = escapeXml;
     }
 
     /**
@@ -316,6 +300,22 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
     public void setPageContext(PageContext pageContext)
     {
         this.pageContext = pageContext;
+    }
+
+    /**
+     * @return ELEncoder
+     */
+    public ELEncoder getEncoder()
+    {
+        return this.encoder;
+    }
+
+    /**
+     * @param encoder
+     */
+    public void setEncoder(ELEncoder encoder)
+    {
+        this.encoder = encoder;
     }
 
     public void release()

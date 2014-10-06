@@ -75,7 +75,7 @@ public class TagLibraryFactory
     {
         ClassLoader classLoader = TagLibraryFactory.class.getClassLoader();
         Map<String, TagInfo> map = parse(classLoader.getResourceAsStream(resource));
-        Map<String, TagInfo> result = new HashMap<String, TagInfo>(map.size());
+        Map<String, TagInfo> result = new LinkedHashMap<String, TagInfo>(map.size());
 
         for(Map.Entry<String, TagInfo> entry : map.entrySet())
         {
