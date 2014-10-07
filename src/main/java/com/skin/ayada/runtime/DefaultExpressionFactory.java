@@ -82,7 +82,16 @@ public class DefaultExpressionFactory implements ExpressionFactory
             for(Map.Entry<String, String> entry : map.entrySet())
             {
                 Entry pair = getEntry(entry.getKey(), entry.getValue());
-                attributes.put(pair.getName(), pair.getValue());
+                Object object = pair.getValue();
+
+                if(object != null)
+                {
+                    attributes.put(pair.getName(), pair.getValue());
+                }
+                else
+                {
+                    attributes.remove(pair.getName());
+                }
             }
 
             if(logger.isDebugEnabled())
@@ -107,28 +116,31 @@ public class DefaultExpressionFactory implements ExpressionFactory
         String key = null;
         Object result = null;
 
-        if(name.startsWith("set "))
+        if(value.equalsIgnoreCase("null") == false)
         {
-            key = name.substring(4);
-
-            try
+            if(name.startsWith("set "))
             {
-                result = ClassUtil.getInstance(value);
+                key = name.substring(4);
+                
+                try
+                {
+                    result = ClassUtil.getInstance(value);
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
             }
-            catch(Exception e)
+            else if(name.startsWith("var "))
             {
-                e.printStackTrace();
+                key = name.substring(4);
+                result = value;
             }
-        }
-        else if(name.startsWith("var "))
-        {
-            key = name.substring(4);
-            result = value;
-        }
-        else
-        {
-            key = name;
-            result = value;
+            else
+            {
+                key = name;
+                result = value;
+            }
         }
 
         return new Entry(key, result);
