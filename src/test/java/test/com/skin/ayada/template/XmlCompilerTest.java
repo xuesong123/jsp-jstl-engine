@@ -52,7 +52,7 @@ public class XmlCompilerTest
 
         try
         {
-            IO.write(result.getBytes("UTF-8"), new File("webapp\\allTagTest.xml"));
+            IO.write(new File("webapp\\allTagTest.xml"), result.getBytes("UTF-8"));
         }
         catch(IOException e)
         {

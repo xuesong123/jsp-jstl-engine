@@ -94,7 +94,7 @@ public class IO
      * @param file
      * @throws IOException
      */
-    public static void write(byte[] bytes, File file) throws IOException
+    public static void write(File file, byte[] bytes) throws IOException
     {
         OutputStream outputStream = null;
 

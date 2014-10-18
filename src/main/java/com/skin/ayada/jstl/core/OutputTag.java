@@ -64,7 +64,7 @@ public class OutputTag extends BodyTagSupport
 
             if(this.file != null)
             {
-                IO.write(content.getBytes(this.encoding), new File(this.file));
+                IO.write(new File(this.file), content.getBytes(this.encoding));
             }
 
             if(this.out)

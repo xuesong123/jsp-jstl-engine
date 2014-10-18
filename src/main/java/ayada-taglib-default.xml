@@ -308,6 +308,12 @@
         <description></description>
     </tag>
     <tag>
+        <name>c:scrollpage</name>
+        <tag-class>com.skin.ayada.taglib.ScrollPage</tag-class>
+        <body-content>empty</body-content>
+        <description></description>
+    </tag>
+    <tag>
         <name>sql:connect</name>
         <tag-class>com.skin.ayada.jstl.sql.ConnectTag</tag-class>
         <body-content>jsp</body-content>

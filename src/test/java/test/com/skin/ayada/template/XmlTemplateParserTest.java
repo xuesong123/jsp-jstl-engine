@@ -51,7 +51,7 @@ public class XmlTemplateParserTest
 
             try
             {
-                IO.write(result.getBytes("UTF-8"), new File("webapp\\allTagTest2.xml"));
+                IO.write(new File("webapp\\allTagTest2.xml"), result.getBytes("UTF-8"));
             }
             catch(IOException e)
             {

@@ -365,7 +365,7 @@ public class JspTemplateFactory extends TemplateFactory
             parent.mkdirs();
         }
 
-        IO.write(source.getBytes("UTF-8"), file);
+        IO.write(file, source.getBytes("UTF-8"));
     }
 
     /**
