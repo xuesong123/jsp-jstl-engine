@@ -11,10 +11,7 @@
 package com.skin.ayada.io;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.io.Writer;
-
-import com.skin.ayada.util.StringUtil;
 
 /**
  * <p>Title: CompactWriter</p>
@@ -85,34 +82,5 @@ public class CompactWriter extends Writer
     public void flush() throws IOException
     {
         this.out.flush();
-    }
-
-    public static void main(String[] args)
-    {
-        String source = "\r\n\r\n\r\n\r\n123\r\nabc\r\n\r\nedf\r\n\r\n\r\n";
-        StringWriter stringWriter = new StringWriter();
-        CompactWriter compactWriter = new CompactWriter(stringWriter);
-
-        try
-        {
-            compactWriter.write(source);
-            compactWriter.write(source);
-            compactWriter.flush();
-            System.out.println(StringUtil.escape(stringWriter.toString()));
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
-        }
-        finally
-        {
-            try
-            {
-                compactWriter.close();
-            }
-            catch (IOException e)
-            {
-            }
-        }
     }
 }

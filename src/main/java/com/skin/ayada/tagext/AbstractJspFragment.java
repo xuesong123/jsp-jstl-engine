@@ -66,7 +66,6 @@ public abstract class AbstractJspFragment implements JspFragment
      * @throws Exception
      */
     @Override
-    @SuppressWarnings("resource")
     public void invoke(Writer writer) throws Exception
     {
         JspWriter out = null;
@@ -100,7 +99,27 @@ public abstract class AbstractJspFragment implements JspFragment
             catch(IOException e)
             {
             }
+
+            // never close
+            if(this.getFalse())
+            {
+                try
+                {
+                    out.close();
+                }
+                catch(IOException e)
+                {
+                }
+            }
         }
+    }
+
+    /**
+     * @return
+     */
+    private boolean getFalse()
+    {
+        return false;
     }
 
     /**

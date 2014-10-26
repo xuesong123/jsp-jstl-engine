@@ -11,10 +11,7 @@
 package com.skin.ayada.io;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.io.Writer;
-
-import com.skin.ayada.util.StringUtil;
 
 /**
  * <p>Title: CompressWriter</p>
@@ -86,34 +83,5 @@ public class CompressWriter extends Writer
     public void flush() throws IOException
     {
         this.out.flush();
-    }
-
-    public static void main(String[] args)
-    {
-        String source = "\r\n\r\n\r\n\r\n    123\r\nabc\r\n\r\nedf\r\n\r\n\r\n        xyz";
-        StringWriter stringWriter = new StringWriter();
-        CompressWriter compressWriter = new CompressWriter(stringWriter);
-
-        try
-        {
-            compressWriter.write(source);
-            compressWriter.write(source);
-            compressWriter.flush();
-            System.out.println(StringUtil.escape(stringWriter.toString()));
-        }
-        catch(IOException e)
-        {
-            e.printStackTrace();
-        }
-        finally
-        {
-            try
-            {
-                compressWriter.close();
-            }
-            catch (IOException e)
-            {
-            }
-        }
     }
 }

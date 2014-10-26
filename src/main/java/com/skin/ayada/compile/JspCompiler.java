@@ -20,6 +20,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.skin.ayada.Version;
 import com.skin.ayada.io.CharBuffer;
 import com.skin.ayada.io.ChunkWriter;
@@ -51,6 +54,7 @@ public class JspCompiler
 {
     private boolean fastJstl = true;
     private static final String JAVA_TEMPLATE = JspCompiler.getJavaTemplate("class.jsp");
+    private static final Logger logger = LoggerFactory.getLogger(JspCompiler.class);
 
     public String compile(Template template, String className, String packageName)
     {
@@ -1888,7 +1892,7 @@ public class JspCompiler
         }
         catch(IOException e)
         {
-            e.printStackTrace();
+            logger.warn(e.getMessage(), e);
         }
         finally
         {

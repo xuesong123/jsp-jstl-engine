@@ -13,6 +13,9 @@ package com.skin.ayada.factory;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * <p>Title: FactoryClassLoader</p>
  * <p>Description: </p>
@@ -21,6 +24,8 @@ import java.security.PrivilegedAction;
  */
 public class FactoryClassLoader extends ClassLoader
 {
+    private static final Logger logger = LoggerFactory.getLogger(FactoryClassLoader.class);
+
     /**
      * @param classLoader
      */
@@ -41,7 +46,7 @@ public class FactoryClassLoader extends ClassLoader
         }
         catch(ClassNotFoundException e)
         {
-            e.printStackTrace();
+            logger.warn(e.getMessage(), e);
         }
 
         return null;

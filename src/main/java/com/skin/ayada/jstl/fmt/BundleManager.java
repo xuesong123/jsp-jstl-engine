@@ -19,6 +19,9 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.FutureTask;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * <p>Title: BundleManager</p>
  * <p>Description: </p>
@@ -30,6 +33,7 @@ public class BundleManager
 {
     private static BundleManager instance = new BundleManager();
     private ConcurrentHashMap<String, FutureTask<LocalizationContext>> cache;
+    private static final Logger logger = LoggerFactory.getLogger(BundleManager.class);
 
     private BundleManager()
     {
@@ -147,7 +151,7 @@ public class BundleManager
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+            logger.warn(e.getMessage(), e);
         }
 
         return localizationContext;

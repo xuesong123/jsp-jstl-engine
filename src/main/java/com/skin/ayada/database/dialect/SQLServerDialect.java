@@ -1,27 +1,25 @@
 /*
- * $RCSfile: OracleDialect.java,v $
+ * $RCSfile: AccessDialect.java,v $
  * $Revision: 1.1  $
- * $Date: 2009-3-1  $
+ * $Date: 2009-3-22  $
  *
  * Copyright (C) 2005 Skin, Inc. All rights reserved.
  *
  * This software is the proprietary information of Skin, Inc.
  * Use is subject to license terms.
  */
+package com.skin.ayada.database.dialect;
 
-package com.skin.database.dialect;
-
-import com.skin.database.sql.Column;
-
+import com.skin.ayada.database.Column;
 
 /**
- * <p>Title: OracleDialect</p>
+ * <p>Title: AccessDialect</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2006</p>
  * @author xuesong.net
  * @version 1.0
  */
-public class OracleDialect implements Dialect
+public class SQLServerDialect implements Dialect
 {
     public String convert(Column column)
     {
@@ -37,15 +35,25 @@ public class OracleDialect implements Dialect
 
         if("CHAR".equals(typeName))
         {
+
         }
         else if("CHARACTER".equals(typeName))
         {
+
         }
         else if("VARCHAR".equals(typeName))
         {
+
         }
         else if("VARCHAR2".equals(typeName))
         {
+
+        }
+        else if("LONGCHAR".equals(typeName))
+        {
+            column.setTypeName("MEMO");
+
+            // column.setColumnSize(0);
         }
         else if("INT".equals(typeName))
         {
@@ -60,6 +68,13 @@ public class OracleDialect implements Dialect
                 result = "Integer";
             }
         }
+        else if("SMALLINT".equals(typeName))
+        {
+            result = "Integer";
+
+            // column.setTypeName("INTEGER");
+            // column.setColumnSize(0);
+        }
         else if("INTEGER".equals(typeName))
         {
             // Integer.MAX_VALUE: -2147483648
@@ -72,18 +87,42 @@ public class OracleDialect implements Dialect
             {
                 result = "Integer";
             }
+
+            result = "Integer";
+
+            // column.setColumnSize(0);
+        }
+        else if("COUNTER".equals(typeName))
+        {
+            result = "Integer";
+
+            // column.setTypeName("INTEGER");
+
+            // column.setColumnSize(0);
         }
         else if("FLOAT".equals(typeName))
         {
             result = "Float";
+
+            // column.setColumnSize(0);
+        }
+        else if("CURRENCY".equals(typeName))
+        {
+            result = "Float";
+
+            // column.setColumnSize(0);
         }
         else if("DOUBLE".equals(typeName))
         {
             result = "Double";
+
+            // column.setColumnSize(0);
         }
         else if("LONG".equals(typeName))
         {
             result = "Long";
+
+            // column.setColumnSize(0);
         }
         else if("NUMBER".equals(typeName))
         {
@@ -103,19 +142,39 @@ public class OracleDialect implements Dialect
                 {
                     result = "Integer";
                 }
+
+                result = "Integer";
             }
+
+            // column.setColumnSize(0);
+        }
+        else if("TEXT".equals(typeName))
+        {
+            result = "String";
         }
         else if("DATE".equals(typeName) || typeName.startsWith("DATE("))
         {
             result = "java.util.Date";
+
+            // column.setColumnSize(0);
         }
         else if("TIME".equals(typeName) || typeName.startsWith("TIME("))
         {
             result = "java.sql.Timestamp";
+
+            // column.setColumnSize(0);
+        }
+        else if("DATETIME".equals(typeName) || typeName.startsWith("TIME("))
+        {
+            result = "java.sql.Timestamp";
+
+            // column.setColumnSize(0);
         }
         else if("TIMESTAMP".equals(typeName) || typeName.startsWith("TIMESTAMP("))
         {
             result = "java.sql.Timestamp";
+
+            // column.setColumnSize(0);
         }
         else if("BLOB".equals(typeName))
         {
@@ -124,20 +183,7 @@ public class OracleDialect implements Dialect
         }
         else if("Clob".equals(typeName))
         {
-            // result = "java.io.Reader";
             result = "String";
-        }
-        else if("RAW".equals(typeName) || typeName.startsWith("RAW("))
-        {
-            /*
-            RAW，类似于CHAR，声明方式RAW(L)，L为长度，以字节为单位，作为数据库列最大2000，作为变量最大32767字节。
-            LONG RAW，类似于LONG，作为数据库列最大存储2G字节的数据，作为变量最大32760字节
-                                建表操作: create table raw_test (id number, raw_date raw(10));
-                                插入raw数据操作: insert into raw_test values (1, hextoraw('ff')); insert into raw_test values (utl_raw.cast_to_raw('051'));
-                                删除表操作: drop table raw_test;
-                                当使用HEXTORAW时，会把字符串中数据当作16进制数。而使用UTL_RAW.CAST_TO_RAW时，直接把字符串中每个字符的ASCII码存放到RAW类型的字段中
-            */
-            return "java.math.BigDecimal";
         }
         else
         {
@@ -150,12 +196,12 @@ public class OracleDialect implements Dialect
     @Override
     public String getTableName(String tableName)
     {
-        return tableName;
+        return "[" + tableName + "]";
     }
 
     @Override
     public String getColumnName(String columnName)
     {
-        return columnName;
+        return "[" + columnName + "]";
     }
 }

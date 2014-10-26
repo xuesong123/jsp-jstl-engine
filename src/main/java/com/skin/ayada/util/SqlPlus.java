@@ -23,7 +23,8 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import com.skin.ayada.jstl.sql.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>Title: SqlPlus</p>
@@ -36,7 +37,8 @@ public class SqlPlus
 {
     private String home;
     private Connection connection;
-    private Logger logger;
+    private LogListener logListener;
+    private static final Logger logger = LoggerFactory.getLogger(SqlPlus.class);
 
     /**
      */
@@ -55,10 +57,10 @@ public class SqlPlus
     /**
      * @param connection
      */
-    public SqlPlus(Connection connection, Logger logger)
+    public SqlPlus(Connection connection, LogListener logListener)
     {
         this.connection = connection;
-        this.logger = logger;
+        this.logListener = logListener;
     }
 
     /**
@@ -75,7 +77,7 @@ public class SqlPlus
         }
         catch(IOException e)
         {
-            e.printStackTrace();
+            logger.warn(e.getMessage(), e);
         }
     }
 
@@ -257,7 +259,7 @@ public class SqlPlus
                             if("drop|create|insert|update|delete|alter".indexOf(prefix) > -1)
                             {
                                 statement.executeUpdate(sql);
-                                this.log("SQLJ0000I  SQL complete。");
+                                this.log("SQLJ0000I  SQL complete.");
                             }
                             else
                             {
@@ -372,7 +374,7 @@ public class SqlPlus
         }
         catch(SQLException e)
         {
-            e.printStackTrace();
+            logger.warn(e.getMessage(), e);
         }
     }
 
@@ -389,7 +391,7 @@ public class SqlPlus
         }
         catch(SQLException e)
         {
-            e.printStackTrace();
+            logger.warn(e.getMessage(), e);
         }
     }
 
@@ -406,7 +408,7 @@ public class SqlPlus
         }
         catch(SQLException e)
         {
-            e.printStackTrace();
+            logger.warn(e.getMessage(), e);
         }
     }
 
@@ -511,9 +513,9 @@ public class SqlPlus
      */
     public void log(String info)
     {
-        if(this.logger != null)
+        if(this.logListener != null)
         {
-            this.logger.log(info);
+            this.logListener.log(info);
         }
     }
 
@@ -534,19 +536,19 @@ public class SqlPlus
     }
 
     /**
-     * @return the logger
+     * @return the logListener
      */
-    public Logger getLogger()
+    public LogListener getLogListener()
     {
-        return this.logger;
+        return this.logListener;
     }
 
     /**
-     * @param logger the logger to set
+     * @param logListener the logListener to set
      */
-    public void setLogger(Logger logger)
+    public void setLogListener(LogListener logListener)
     {
-        this.logger = logger;
+        this.logListener = logListener;
     }
 
     /**

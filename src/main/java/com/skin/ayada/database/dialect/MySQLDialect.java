@@ -8,9 +8,9 @@
  * This software is the proprietary information of Skin, Inc.
  * Use is subject to license terms.
  */
-package com.skin.database.dialect;
+package com.skin.ayada.database.dialect;
 
-import com.skin.database.sql.Column;
+import com.skin.ayada.database.Column;
 
 /**
  * <p>Title: MySQLDialect</p>

@@ -14,6 +14,9 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.skin.ayada.runtime.JspFactory;
 import com.skin.ayada.runtime.PageContext;
 
@@ -27,6 +30,7 @@ import com.skin.ayada.runtime.PageContext;
 public class SimpleTemplate
 {
     private static final TemplateFactory templateFactory = new TemplateFactory();
+    private static final Logger logger = LoggerFactory.getLogger(SimpleTemplate.class);
 
     /**
      * @param args
@@ -41,7 +45,7 @@ public class SimpleTemplate
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+            logger.warn(e.getMessage(), e);
         }
     }
 
@@ -72,7 +76,7 @@ public class SimpleTemplate
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+            logger.warn(e.getMessage(), e);
         }
     }
 }

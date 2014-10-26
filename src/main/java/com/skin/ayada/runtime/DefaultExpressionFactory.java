@@ -128,7 +128,7 @@ public class DefaultExpressionFactory implements ExpressionFactory
                 }
                 catch(Exception e)
                 {
-                    e.printStackTrace();
+                    logger.warn(e.getMessage(), e);
                 }
             }
             else if(name.startsWith("var "))

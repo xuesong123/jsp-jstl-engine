@@ -20,6 +20,7 @@ import com.skin.ayada.tagext.BodyTag;
 import com.skin.ayada.tagext.BodyTagSupport;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.tagext.TagSupport;
+import com.skin.ayada.util.LogListener;
 import com.skin.ayada.util.SqlPlus;
 
 /**
@@ -59,8 +60,8 @@ public class SqlTag extends BodyTagSupport
             throw new NullPointerException("connection must be not null");
         }
 
-        Logger logger = SqlTag.getLogger(this.out);
-        SqlPlus sqlPlus = new SqlPlus(this.connection, logger);
+        LogListener logListener = SqlTag.getLogListener(this.out);
+        SqlPlus sqlPlus = new SqlPlus(this.connection, logListener);
         sqlPlus.setHome(this.home);
 
         if(this.encoding == null)
@@ -117,18 +118,18 @@ public class SqlTag extends BodyTagSupport
      * @param out
      * @return Logger
      */
-    public static Logger getLogger(Object out)
+    public static LogListener getLogListener(Object out)
     {
-        if(out instanceof Logger)
+        if(out instanceof LogListener)
         {
-            return (Logger)(out);
+            return (LogListener)(out);
         }
 
         PrintWriter printWriter = TagSupport.getPrintWriter(out);
 
         if(printWriter != null)
         {
-            return new Logger(printWriter);
+            return new LogListenerImpl(printWriter);
         }
 
         return null;

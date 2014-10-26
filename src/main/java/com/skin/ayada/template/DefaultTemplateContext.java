@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
 import org.slf4j.Logger;
@@ -263,13 +262,9 @@ public class DefaultTemplateContext implements TemplateContext
                     this.cache.remove(key, f);
                 }
             }
-            catch(InterruptedException e)
+            catch(Exception e)
             {
-                e.printStackTrace();
-            }
-            catch(ExecutionException e)
-            {
-                e.printStackTrace();
+                logger.warn(e.getMessage(), e);
             }
         }
     }

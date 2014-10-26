@@ -8,11 +8,9 @@
  * This software is the proprietary information of Skin, Inc.
  * Use is subject to license terms.
  */
-package com.skin.database.dialect;
+package com.skin.ayada.database.dialect;
 
-import com.skin.database.sql.Column;
-
-
+import com.skin.ayada.database.Column;
 
 /**
  * <p>Title: AccessDialect</p>
@@ -21,7 +19,7 @@ import com.skin.database.sql.Column;
  * @author xuesong.net
  * @version 1.0
  */
-public class SQLServerDialect implements Dialect
+public class AccessDialect implements Dialect
 {
     public String convert(Column column)
     {
@@ -37,25 +35,20 @@ public class SQLServerDialect implements Dialect
 
         if("CHAR".equals(typeName))
         {
-
         }
         else if("CHARACTER".equals(typeName))
         {
-
         }
         else if("VARCHAR".equals(typeName))
         {
-
         }
         else if("VARCHAR2".equals(typeName))
         {
-
         }
         else if("LONGCHAR".equals(typeName))
         {
-            column.setTypeName("MEMO");
-
             // column.setColumnSize(0);
+            column.setTypeName("MEMO");
         }
         else if("INT".equals(typeName))
         {
@@ -72,10 +65,9 @@ public class SQLServerDialect implements Dialect
         }
         else if("SMALLINT".equals(typeName))
         {
-            result = "Integer";
-
             // column.setTypeName("INTEGER");
             // column.setColumnSize(0);
+            result = "Integer";
         }
         else if("INTEGER".equals(typeName))
         {
@@ -90,44 +82,38 @@ public class SQLServerDialect implements Dialect
                 result = "Integer";
             }
 
-            result = "Integer";
-
             // column.setColumnSize(0);
+            result = "Integer";
         }
         else if("COUNTER".equals(typeName))
         {
-            result = "Integer";
-
             // column.setTypeName("INTEGER");
-
             // column.setColumnSize(0);
+            result = "Integer";
         }
         else if("FLOAT".equals(typeName))
         {
-            result = "Float";
-
             // column.setColumnSize(0);
+            result = "Float";
         }
         else if("CURRENCY".equals(typeName))
         {
-            result = "Float";
-
             // column.setColumnSize(0);
+            result = "Float";
         }
         else if("DOUBLE".equals(typeName))
         {
-            result = "Double";
-
             // column.setColumnSize(0);
+            result = "Double";
         }
         else if("LONG".equals(typeName))
         {
-            result = "Long";
-
             // column.setColumnSize(0);
+            result = "Long";
         }
         else if("NUMBER".equals(typeName))
         {
+            // column.setColumnSize(0);
             if(column.getDecimalDigits() > 0)
             {
                 result = "Double";
@@ -147,8 +133,6 @@ public class SQLServerDialect implements Dialect
 
                 result = "Integer";
             }
-
-            // column.setColumnSize(0);
         }
         else if("TEXT".equals(typeName))
         {
@@ -156,27 +140,23 @@ public class SQLServerDialect implements Dialect
         }
         else if("DATE".equals(typeName) || typeName.startsWith("DATE("))
         {
-            result = "java.util.Date";
-
             // column.setColumnSize(0);
+            result = "java.util.Date";
         }
         else if("TIME".equals(typeName) || typeName.startsWith("TIME("))
         {
-            result = "java.sql.Timestamp";
-
             // column.setColumnSize(0);
+            result = "java.sql.Timestamp";
         }
         else if("DATETIME".equals(typeName) || typeName.startsWith("TIME("))
         {
-            result = "java.sql.Timestamp";
-
             // column.setColumnSize(0);
+            result = "java.sql.Timestamp";
         }
         else if("TIMESTAMP".equals(typeName) || typeName.startsWith("TIMESTAMP("))
         {
-            result = "java.sql.Timestamp";
-
             // column.setColumnSize(0);
+            result = "java.sql.Timestamp";
         }
         else if("BLOB".equals(typeName))
         {
@@ -198,12 +178,12 @@ public class SQLServerDialect implements Dialect
     @Override
     public String getTableName(String tableName)
     {
-        return "[" + tableName + "]";
+        return "[" + tableName.toUpperCase() + "]";
     }
 
     @Override
     public String getColumnName(String columnName)
     {
-        return "[" + columnName + "]";
+        return "[" + columnName.toUpperCase() + "]";
     }
 }

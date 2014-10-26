@@ -1,5 +1,5 @@
 /*
- * $RCSfile: DomainConfigFactory.java,v $$
+ * $RCSfile: ConfigFactory.java,v $$
  * $Revision: 1.1 $
  * $Date: 2009-7-14 $
  *
@@ -18,11 +18,14 @@ import java.io.Writer;
 import java.net.URL;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.skin.ayada.resource.ClassPathResource;
 import com.skin.ayada.resource.PropertyResource;
 
 /**
- * <p>Title: DomainConfigFactory</p>
+ * <p>Title: ConfigFactory</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2006</p>
  * @author xuesong.net
@@ -30,6 +33,8 @@ import com.skin.ayada.resource.PropertyResource;
  */
 public class ConfigFactory
 {
+    private static final Logger logger = LoggerFactory.getLogger(ConfigFactory.class);
+
     /**
      * @param <T>
      * @param resource
@@ -45,13 +50,9 @@ public class ConfigFactory
             config.setValues(map);
             return config;
         }
-        catch(InstantiationException e)
+        catch(Exception e)
         {
-            e.printStackTrace();
-        }
-        catch(IllegalAccessException e)
-        {
-            e.printStackTrace();
+            logger.warn(e.getMessage(), e);
         }
 
         return null;
@@ -80,7 +81,7 @@ public class ConfigFactory
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+            logger.warn(e.getMessage(), e);
         }
         finally
         {
@@ -92,7 +93,7 @@ public class ConfigFactory
                 }
                 catch(IOException e)
                 {
-                    e.printStackTrace();
+                    logger.warn(e.getMessage(), e);
                 }
             }
         }
@@ -114,7 +115,7 @@ public class ConfigFactory
         }
         catch(IOException e)
         {
-            e.printStackTrace();
+            logger.warn(e.getMessage(), e);
         }
         finally
         {
@@ -126,7 +127,6 @@ public class ConfigFactory
                 }
                 catch(IOException e)
                 {
-                    e.printStackTrace();
                 }
             }
         }
@@ -145,7 +145,7 @@ public class ConfigFactory
         }
         catch(IOException e)
         {
-            e.printStackTrace();
+            logger.warn(e.getMessage(), e);
         }
         finally
         {
@@ -157,7 +157,6 @@ public class ConfigFactory
                 }
                 catch(IOException e)
                 {
-                    e.printStackTrace();
                 }
             }
         }

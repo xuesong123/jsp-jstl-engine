@@ -48,19 +48,4 @@ public class DeleteTag extends FileTag
     {
         file.delete();
     }
-
-    public static void main(String[] args)
-    {
-        DeleteTag deleteTag = new DeleteTag();
-        deleteTag.setFile("E:/WorkSpace/ayada/test2");
-
-        try
-        {
-            deleteTag.doEndTag();
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
 }

@@ -343,7 +343,6 @@ public class ExpressionUtil
                 }
                 catch(NumberFormatException e)
                 {
-                    e.printStackTrace();
                 }
 
                 break;
@@ -363,7 +362,6 @@ public class ExpressionUtil
                 }
                 catch(NumberFormatException e)
                 {
-                    e.printStackTrace();
                 }
 
                 break;

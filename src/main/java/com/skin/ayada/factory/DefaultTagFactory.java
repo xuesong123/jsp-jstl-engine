@@ -10,6 +10,9 @@
  */
 package com.skin.ayada.factory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.skin.ayada.runtime.TagFactory;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.util.ClassUtil;
@@ -24,6 +27,7 @@ public class DefaultTagFactory implements TagFactory
 {
     private String tagName;
     private String className;
+    private static final Logger logger = LoggerFactory.getLogger(DefaultTagFactory.class);
 
     /**
      * @return Tag
@@ -37,7 +41,7 @@ public class DefaultTagFactory implements TagFactory
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+            logger.warn(e.getMessage(), e);
         }
 
         return null;

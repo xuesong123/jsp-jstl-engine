@@ -1,5 +1,5 @@
 /*
- * $RCSfile: ConnectTag.java,v $$
+ * $RCSfile: SimpleSqlParser.java,v $$
  * $Revision: 1.1 $
  * $Date: 2014-03-25 $
  *
@@ -10,18 +10,16 @@
  */
 package com.skin.ayada.jstl.sql;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.skin.ayada.database.Column;
+import com.skin.ayada.database.Table;
+import com.skin.ayada.database.dialect.Dialect;
 import com.skin.ayada.io.StringStream;
-import com.skin.ayada.util.IO;
-import com.skin.database.dialect.Dialect;
-import com.skin.database.sql.Column;
-import com.skin.database.sql.Table;
 
 /**
- * <p>Title: SqlParser</p>
+ * <p>Title: SimpleSqlParser</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2014</p>
  * @author xuesong.net
@@ -30,35 +28,6 @@ import com.skin.database.sql.Table;
 public class SimpleSqlParser
 {
     private Dialect dialect;
-
-    public static void main(String[] args)
-    {
-        SimpleSqlParser parser = new SimpleSqlParser();
-
-        try
-        {
-            String source = IO.read(new File("webapp/test.sql"), "UTF-8", 1024);
-            System.out.println(source);
-            List<Table> list = parser.parse(source);
-
-            for(Table table : list)
-            {
-                System.out.println(table.getCreateString("`%s`"));
-                System.out.println(table.getQueryString());
-                System.out.println(table.getInsertString());
-                System.out.println(table.getUpdateString());
-    
-                for(Column column : table.listColumns())
-                {
-                    System.out.println(column.toString());
-                }
-            }
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
 
     public SimpleSqlParser()
     {

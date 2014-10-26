@@ -8,7 +8,7 @@
  * This software is the proprietary information of Skin, Inc.
  * Use is subject to license terms.
  */
-package com.skin.database.dialect;
+package com.skin.ayada.database.dialect;
 
 /**
  * <p>Title: Oracle10gDialect</p>

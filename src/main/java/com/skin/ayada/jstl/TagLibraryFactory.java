@@ -18,6 +18,8 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -34,6 +36,7 @@ import org.xml.sax.InputSource;
 public class TagLibraryFactory
 {
     private static final Map<String, TagInfo> map = load();
+    private static final Logger logger = LoggerFactory.getLogger(TagLibraryFactory.class);
 
     /**
      * @return TagLibrary
@@ -60,7 +63,7 @@ public class TagLibraryFactory
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+            logger.warn(e.getMessage(), e);
         }
 
         return new HashMap<String, TagInfo>();

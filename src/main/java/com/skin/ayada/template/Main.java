@@ -14,6 +14,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.skin.ayada.config.Config;
 import com.skin.ayada.config.TemplateConfig;
 import com.skin.ayada.factory.ClassFactory;
@@ -28,6 +31,8 @@ import com.skin.ayada.util.TemplateUtil;
  */
 public class Main
 {
+    private static final Logger logger = LoggerFactory.getLogger(Main.class);
+
     public static void main(String[] args)
     {
         String path = null;
@@ -62,7 +67,7 @@ public class Main
             }
             catch(Exception e)
             {
-                e.printStackTrace();
+                logger.warn(e.getMessage(), e);
             }
         }
     }
@@ -162,7 +167,7 @@ public class Main
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+            logger.warn(e.getMessage(), e);
         }
 
         return templateFactory;

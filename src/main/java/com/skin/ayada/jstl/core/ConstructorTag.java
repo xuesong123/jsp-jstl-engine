@@ -92,16 +92,4 @@ public class ConstructorTag extends TagSupport
     {
         this.value = value;
     }
-
-    public static void main(String[] args)
-    {
-        try
-        {
-            System.out.println(ClassUtil.getClass("java.lang.String"));
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
 }

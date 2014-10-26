@@ -23,14 +23,14 @@ public class Test2
 {
     public static void main(String[] args) throws Exception
     {
-        // test
+        /*
         int num = 3;
         int[][] rects = new int[][]{
             {1, 3, 2},
             {2, 4, 4},
             {6, 7, 5}
-        };        
-        
+        };
+        */        
         test1();
     }
 

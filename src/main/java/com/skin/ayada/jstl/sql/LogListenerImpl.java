@@ -1,5 +1,5 @@
 /*
- * $RCSfile: Logger.java,v $$
+ * $RCSfile: LogListenerImpl.java,v $$
  * $Revision: 1.1 $
  * $Date: 2014-03-24 $
  *
@@ -12,17 +12,19 @@ package com.skin.ayada.jstl.sql;
 
 import java.io.PrintWriter;
 
+import com.skin.ayada.util.LogListener;
+
 /**
- * <p>Title: Logger</p>
+ * <p>Title: LogListenerImpl</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class Logger
+public class LogListenerImpl implements LogListener
 {
     private PrintWriter out;
 
-    public Logger(PrintWriter out)
+    public LogListenerImpl(PrintWriter out)
     {
         this.out = out;
     }

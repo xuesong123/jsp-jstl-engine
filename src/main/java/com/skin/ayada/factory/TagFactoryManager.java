@@ -138,7 +138,7 @@ public class TagFactoryManager
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+            logger.warn(e.getMessage(), e);
         }
 
         return null;
@@ -176,13 +176,9 @@ public class TagFactoryManager
         {
             return clazz.newInstance();
         }
-        catch(InstantiationException e)
+        catch(Exception e)
         {
-            e.printStackTrace();
-        }
-        catch(IllegalAccessException e)
-        {
-            e.printStackTrace();
+            logger.warn(e.getMessage(), e);
         }
 
         return null;

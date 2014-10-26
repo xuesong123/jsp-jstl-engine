@@ -86,20 +86,4 @@ public class CopyTag extends FileTag
     {
         this.todir = todir;
     }
-
-    public static void main(String[] args)
-    {
-        CopyTag copyTag = new CopyTag();
-        copyTag.setFile("E:/WorkSpace/ayada/webapp/test1");
-        copyTag.setTodir("E:\\WorkSpace\\ayada\\webapp\\test2");
-
-        try
-        {
-            copyTag.doEndTag();
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
 }

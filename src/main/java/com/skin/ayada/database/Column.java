@@ -8,7 +8,7 @@
  * This software is the proprietary information of Skin, Inc.
  * Use is subject to license terms.
  */
-package com.skin.database.sql;
+package com.skin.ayada.database;
 
 /**
  * <p>Title: Column</p>

@@ -16,16 +16,19 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.skin.ayada.database.Column;
+import com.skin.ayada.database.Table;
+import com.skin.ayada.database.dialect.Dialect;
+import com.skin.ayada.database.dialect.MySQLDialect;
 import com.skin.ayada.tagext.BodyTag;
 import com.skin.ayada.tagext.BodyTagSupport;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.util.ClassUtil;
 import com.skin.ayada.util.IO;
 import com.skin.ayada.util.StringUtil;
-import com.skin.database.dialect.Dialect;
-import com.skin.database.dialect.MySQLDialect;
-import com.skin.database.sql.Column;
-import com.skin.database.sql.Table;
 
 /**
  * <p>Title: SqlParseTag</p>
@@ -40,6 +43,7 @@ public class SqlParseTag extends BodyTagSupport
     private String file;
     private String charset;
     private String database;
+    private static final Logger logger = LoggerFactory.getLogger(SqlParseTag.class);
 
     /**
      * @return int
@@ -164,7 +168,7 @@ public class SqlParseTag extends BodyTagSupport
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+            logger.warn(e.getMessage(), e);
         }
 
         return dialect;

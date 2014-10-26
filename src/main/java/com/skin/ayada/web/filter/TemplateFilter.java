@@ -104,7 +104,6 @@ public class TemplateFilter implements Filter
             }
             catch(Exception e)
             {
-                e.printStackTrace();
                 throw new ServletException(e);
             }
         }
