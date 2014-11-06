@@ -11,6 +11,7 @@
 package com.skin.ayada.template;
 
 import java.io.Writer;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
@@ -25,6 +26,7 @@ import com.skin.ayada.runtime.ExpressionContext;
 import com.skin.ayada.runtime.ExpressionFactory;
 import com.skin.ayada.runtime.JspWriter;
 import com.skin.ayada.runtime.PageContext;
+import com.skin.ayada.source.Source;
 import com.skin.ayada.source.SourceFactory;
 import com.skin.ayada.util.StringUtil;
 
@@ -175,16 +177,14 @@ public class DefaultTemplateContext implements TemplateContext
 
             if(template != null)
             {
-                long timeMillis = System.currentTimeMillis();
-
-                if(template.getLastModified() != sourceFactory.getLastModified(template.getPath()))
+                if(this.modified(template))
                 {
                     this.cache.remove(realPath, f);
                     template = null;
                 }
                 else
                 {
-                    template.setUpdateTime(timeMillis);
+                    template.setUpdateTime(System.currentTimeMillis());
                     return template;
                 }
             }
@@ -194,6 +194,28 @@ public class DefaultTemplateContext implements TemplateContext
                 throw new Exception("get template time out...");
             }
         }
+    }
+
+    /**
+     * @param template
+     * @return boolean
+     */
+    public boolean modified(Template template)
+    {
+        List<Source> dependencies = template.getDependencies();
+
+        if(dependencies != null)
+        {
+            for(Source source : dependencies)
+            {
+                if(source.getLastModified() != this.sourceFactory.getLastModified(source.getPath()))
+                {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
     }
 
     /**

@@ -70,24 +70,24 @@ public abstract class AbstractJspFragment implements JspFragment
     {
         JspWriter out = null;
 
-        if(writer == null || writer == this.pageContext.getOut())
+        try
         {
-            out = this.pageContext.getOut();
-        }
-        else
-        {
-            if(writer instanceof JspWriter)
+            if(writer == null || writer == this.pageContext.getOut())
             {
-                out = (JspWriter)writer;
+                out = this.pageContext.getOut();
             }
             else
             {
-               out = new JspWriter(writer);
+                if(writer instanceof JspWriter)
+                {
+                    out = (JspWriter)writer;
+                }
+                else
+                {
+                   out = new JspWriter(writer);
+                }
             }
-        }
 
-        try
-        {
             this.execute(out);
         }
         finally
@@ -103,21 +103,21 @@ public abstract class AbstractJspFragment implements JspFragment
             // never close
             if(this.getFalse())
             {
-                try
-                {
-                    out.close();
-                }
-                catch(IOException e)
-                {
-                }
+	            try
+	            {
+	                out.close();
+	            }
+	            catch(IOException e)
+	            {
+	            }
             }
         }
     }
 
     /**
-     * @return
+     * @return false
      */
-    private boolean getFalse()
+    protected boolean getFalse()
     {
         return false;
     }

@@ -98,7 +98,20 @@ public class DefaultExpressionFactory implements ExpressionFactory
             {
                 for(Map.Entry<String, Object> entry : attributes.entrySet())
                 {
+                    if(entry.getValue() instanceof String)
+                    {
+                        continue;
+                    }
+
                     logger.debug("set " + entry.getKey() + " = " + entry.getValue());
+                }
+
+                for(Map.Entry<String, Object> entry : attributes.entrySet())
+                {
+                    if(entry.getValue() instanceof String)
+                    {
+                        logger.debug("set " + entry.getKey() + " = " + entry.getValue());
+                    }
                 }
             }
         }

@@ -38,6 +38,7 @@ import com.skin.ayada.statement.NodeType;
 import com.skin.ayada.statement.TextNode;
 import com.skin.ayada.statement.Variable;
 import com.skin.ayada.template.Template;
+import com.skin.ayada.util.HtmlUtil;
 import com.skin.ayada.util.NodeUtil;
 import com.skin.ayada.util.Stack;
 
@@ -53,6 +54,7 @@ public class TemplateCompiler extends PageCompiler
     private SourceFactory sourceFactory;
     private TagLibrary tagLibrary = null;
     private boolean ignoreJspTag = true;
+    private List<Source> dependencies;
     public static final String TPL_DIRECTIVE_TAGLIB  = "t:taglib";
     public static final String TPL_DIRECTIVE_IMPORT  = "t:import";
     public static final String TPL_DIRECTIVE_INCLUDE = "t:include";
@@ -100,6 +102,8 @@ public class TemplateCompiler extends PageCompiler
      */
     public Template compile(Source source) throws Exception
     {
+        this.addDependency(source);
+
         if(source.getType() == Source.STATIC)
         {
             TextNode textNode = new TextNode();
@@ -375,18 +379,25 @@ public class TemplateCompiler extends PageCompiler
                         throw new Exception("The 't:include' direction must be self-closed!");
                     }
     
-                    String type = attributes.get("type");
                     String file = attributes.get("file");
+                    String type = attributes.get("type");
                     String encoding = attributes.get("encoding");
-                    this.include(stack, list, type, file, encoding);
+                    this.include(stack, list, file, type, encoding);
                     return;
                 }
                 else if(nodeName.equals(TPL_DIRECTIVE_TEXT))
                 {
                     int line = this.lineNumber;
-                    this.getAttributes();
+                    Map<String, String> attributes = this.getAttributes();
                     this.skipCRLF();
+                    String escape = attributes.get("escape");
                     String content = this.readNodeContent(nodeName);
+
+                    if(escape != null && escape.equals("xml"))
+                    {
+                        content = HtmlUtil.encode(content);
+                    }
+
                     this.pushTextNode(stack, list, content, line);
                     this.skipCRLF();
                     return;
@@ -985,7 +996,7 @@ public class TemplateCompiler extends PageCompiler
      * @param charset
      * @throws Exception
      */
-    public void include(Stack<Node> stack, List<Node> list, String type, String path, String charset) throws Exception
+    public void include(Stack<Node> stack, List<Node> list, String path, String type, String charset) throws Exception
     {
         if(path == null)
         {
@@ -1012,6 +1023,7 @@ public class TemplateCompiler extends PageCompiler
             textNode.setParent(parent);
             textNode.append(source.getSource());
             list.add(textNode);
+            this.addDependency(source);
             return;
         }
 
@@ -1019,7 +1031,6 @@ public class TemplateCompiler extends PageCompiler
         TemplateCompiler compiler = new TemplateCompiler(this.sourceFactory);
         compiler.setTagLibrary(this.getTagLibrary());
         compiler.setIgnoreJspTag(this.getIgnoreJspTag());
-
         Template template = compiler.compile(source);
         List<Node> nodes = template.getNodes();
 
@@ -1043,6 +1054,8 @@ public class TemplateCompiler extends PageCompiler
             list.add(node);
             index++;
         }
+
+        this.getDependencies().addAll(compiler.getDependencies());
     }
 
     /**
@@ -1132,6 +1145,7 @@ public class TemplateCompiler extends PageCompiler
         Template template = new Template(source.getHome(), source.getPath(), nodes);
         template.setLastModified(source.getLastModified());
         template.setUpdateTime(System.currentTimeMillis());
+        template.setDependencies(this.getDependencies());
         return template;
     }
 
@@ -1257,5 +1271,37 @@ public class TemplateCompiler extends PageCompiler
     public boolean getIgnoreJspTag()
     {
         return this.ignoreJspTag;
+    }
+
+    /**
+     * @return the dependencies
+     */
+    public List<Source> getDependencies()
+    {
+        return this.dependencies;
+    }
+
+    /**
+     * @param dependencies the dependencies to set
+     */
+    public void setDependencies(List<Source> dependencies)
+    {
+        this.dependencies = dependencies;
+    }
+
+    /**
+     * @param dependency
+     */
+    public void addDependency(Source dependency)
+    {
+        if(dependency != null)
+        {
+            if(this.dependencies == null)
+            {
+                this.dependencies = new ArrayList<Source>();
+            }
+
+            this.dependencies.add(dependency);
+        }
     }
 }

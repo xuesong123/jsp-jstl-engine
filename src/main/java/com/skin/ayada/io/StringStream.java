@@ -176,6 +176,32 @@ public class StringStream
     /**
      * @return String
      */
+    public String readLine()
+    {
+    	if(this.position >= this.length)
+    	{
+    		return null;
+    	}
+
+    	int index = this.position;
+    	int offset = this.position;
+    	int length = this.length;
+
+    	while(index < length)
+    	{
+    		if(this.buffer[index++] == '\n')
+    		{
+    			break;
+    		}
+    	}
+
+    	this.position = index;
+    	return new String(this.buffer, offset, index - offset);
+    }
+
+    /**
+     * @return String
+     */
     public String getRemain()
     {
         return new String(this.buffer, this.position, this.length - this.position);

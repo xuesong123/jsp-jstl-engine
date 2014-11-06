@@ -10,6 +10,7 @@
  */
 package com.skin.ayada.template;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.skin.ayada.runtime.PageContext;
+import com.skin.ayada.source.Source;
 import com.skin.ayada.statement.Node;
 
 /**
@@ -34,6 +36,7 @@ public class Template
     private long updateTime;
     private long lastModified;
     private List<Node> nodes;
+    private List<Source> dependencies;
     private static final Logger logger = LoggerFactory.getLogger(Template.class);
 
     public Template()
@@ -156,5 +159,37 @@ public class Template
     public List<Node> getNodes()
     {
         return this.nodes;
+    }
+
+    /**
+     * @return the dependencies
+     */
+    public List<Source> getDependencies()
+    {
+        return this.dependencies;
+    }
+
+    /**
+     * @param dependencies the dependencies to set
+     */
+    public void setDependencies(List<Source> dependencies)
+    {
+        this.dependencies = dependencies;
+    }
+
+    /**
+     * @param dependency
+     */
+    public void addDependency(Source dependency)
+    {
+        if(dependency != null)
+        {
+            if(this.dependencies == null)
+            {
+                this.dependencies = new ArrayList<Source>();
+            }
+
+            this.dependencies.add(dependency);
+        }
     }
 }

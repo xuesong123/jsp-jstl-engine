@@ -49,6 +49,7 @@ public class TemplateFilter implements Filter
     private String templateFactoryClassName;
     private ServletContext servletContext;
     private TemplateContext templateContext;
+    private String contentType;
     private static final Logger logger = LoggerFactory.getLogger(TemplateFilter.class);
 
     public TemplateFilter()
@@ -61,10 +62,16 @@ public class TemplateFilter implements Filter
         this.home = filterConfig.getInitParameter("home");
         this.templateFactoryClassName = filterConfig.getInitParameter("template-factory");
         this.servletContext = filterConfig.getServletContext();
+        this.contentType = filterConfig.getInitParameter("contentType");
 
         if(this.home == null)
         {
             this.home = "/";
+        }
+
+        if(this.contentType == null)
+        {
+            this.contentType = "text/html; charset=UTF-8";
         }
 
         if(logger.isInfoEnabled())
@@ -150,6 +157,12 @@ public class TemplateFilter implements Filter
         }
 
         request.setAttribute("TemplateFilter$servletContext", this.servletContext);
+
+        if(response.getContentType() == null)
+        {
+            response.setContentType(this.contentType);
+        }
+        
         TemplateDispatcher.dispatch(this.templateContext, request, response, requestURI);
     }
 

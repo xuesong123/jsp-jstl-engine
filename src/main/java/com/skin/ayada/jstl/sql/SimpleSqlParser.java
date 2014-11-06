@@ -75,7 +75,18 @@ public class SimpleSqlParser
 
         if(token.equalsIgnoreCase("CREATE") == false)
         {
-            throw new RuntimeException("except keyword 'CREATE'!");
+        	String line = null;
+
+        	while((line = stream.readLine()) != null)
+        	{
+        		line = line.trim();
+
+        		if(line.endsWith(";"))
+        		{
+        			break;
+        		}
+        	}
+        	return null;
         }
 
         token = this.getToken(stream);

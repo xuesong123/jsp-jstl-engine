@@ -11,7 +11,7 @@
 </div>
 <c:if test="${1 == 1}">1 == 1</c:if>
 <t:include file="/include/static.jsp" encoding="UTF-8"/>
-<t:include file="/include/static.jsp" type="static" encoding="UTF-8"/>
+<t:include file="/include/static.jsp" type="static" escape="xml" encoding="UTF-8"/>
 <t:include file="/include/static.jsp" type="script" encoding="UTF-8"/>
 <t:include file="/include/script.html" encoding="UTF-8"/>
 <t:include file="/include/script.html" type="script" encoding="UTF-8"/>
