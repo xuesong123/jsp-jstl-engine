@@ -120,27 +120,27 @@ include a page
 配置说明:
 ayada-default.properties
 
-ayada.compile.source-factory=com.skin.ayada.template.DefaultSourceFactory  # 脚本加载factory, 从文件系统加载
-ayada.compile.source-pattern=jsp,jspf,jspx,tpl                             # 脚本扩展名, 其他类型的文件会被认为是静态文件
-ayada.compile.ignore-jsptag=true                                           # 忽略jsp标签
-ayada.compile.fast-jstl=true                                               # 是否使用fast-jstl
+    ayada.compile.source-factory=com.skin.ayada.template.DefaultSourceFactory  # 脚本加载factory, 从文件系统加载
+    ayada.compile.source-pattern=jsp,jspf,jspx,tpl                             # 脚本扩展名, 其他类型的文件会被认为是静态文件
+    ayada.compile.ignore-jsptag=true                                           # 忽略jsp标签
+    ayada.compile.fast-jstl=true                                               # 是否使用fast-jstl
 
 ayada-default.properties
 
-set util=com.skin.ayada.jstl.util.BeanUtil                                 # 定义一个全局工具类
+    set util=com.skin.ayada.jstl.util.BeanUtil                                 # 定义一个全局工具类
 
 el表达式转义
 
-在ayada-default.properties文件中添加一行
-set ELEncoder=com.skin.ayada.jstl.util.HtmlEncoder                         # 对所有的el表达式的输出使用html编码之后再输出
+    在ayada-default.properties文件中添加一行
+    set ELEncoder=com.skin.ayada.jstl.util.HtmlEncoder                         # 对所有的el表达式的输出使用html编码之后再输出
 
 在脚本中输出脚本
 
 有时候我们会希望在脚本中输出脚本, 例如页面中输出一段模板, 这段模板在js中再使用js模板引擎进行渲染, 这中情况下可以使用t:text指令
 
-<t:text escape="xml">
-    <c:if test="${1 == 1}"></c:if>
-</t:text>
+    <t:text escape="xml">
+        <c:if test="${1 == 1}"></c:if>
+    </t:text>
 
 t:text标签中的任何内容都会作为静态内容原样输出, 如果escape="xml", 那么其中的内容还会被做html编码
 t:text是编译指令，因此转码是在编译期进行的, 以后每次执行都直接输出
