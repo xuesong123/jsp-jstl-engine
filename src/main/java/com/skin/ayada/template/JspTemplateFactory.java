@@ -215,6 +215,7 @@ public class JspTemplateFactory extends TemplateFactory
         jspTemplate.setHome(template.getHome());
         jspTemplate.setPath(template.getPath());
         jspTemplate.setNodes(template.getNodes());
+        jspTemplate.setDependencies(template.getDependencies());
         jspTemplate.setLastModified(template.getLastModified());
         jspTemplate.setUpdateTime(template.getUpdateTime());
         return jspTemplate;

@@ -208,6 +208,11 @@ public class DefaultTemplateContext implements TemplateContext
         {
             for(Source source : dependencies)
             {
+                if(logger.isDebugEnabled())
+                {
+                    logger.debug(template.getPath() + " - dependency: " + source.getPath());
+                }
+
                 if(source.getLastModified() != this.sourceFactory.getLastModified(source.getPath()))
                 {
                     return true;
