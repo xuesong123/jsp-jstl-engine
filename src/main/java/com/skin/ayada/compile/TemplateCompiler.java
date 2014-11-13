@@ -10,7 +10,6 @@
  */
 package com.skin.ayada.compile;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -227,7 +226,6 @@ public class TemplateCompiler extends PageCompiler
         if(stack.peek() != null)
         {
             Node node = stack.peek();
-            stack.print(new PrintWriter(System.err));
             throw new Exception("Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node) + " not match !");
         }
 
@@ -518,11 +516,11 @@ public class TemplateCompiler extends PageCompiler
 
                     if(tagClassName.equals("com.skin.ayada.jstl.core.SetTag"))
                     {
-                        this.skipCRLF();
+                        // this.skipCRLF();
                     }
                     else if(tagClassName.equals("com.skin.ayada.jstl.core.ExecuteTag"))
                     {
-                        this.skipCRLF();
+                        // this.skipCRLF();
                     }
                 }
             }
@@ -941,7 +939,6 @@ public class TemplateCompiler extends PageCompiler
         }
         else
         {
-            stack.print();
             throw new Exception("Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node) + " not match !");
         }
     }

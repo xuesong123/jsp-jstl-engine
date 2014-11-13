@@ -119,18 +119,4 @@ public class Version
         int year = Calendar.getInstance().get(Calendar.YEAR);
         return "(C) Copyright 1998-" + year + " " + developer;
     }
-
-    public static void main(String[] args)
-    {
-        int majorVersion = 1;
-
-        for(int i = 0; i < 1000; i++)
-        {
-            String v0 = Version.getVersion(majorVersion, i, 4);
-            System.out.println(i + " - " + v0);
-        }
-
-        System.out.println(Version.getName() + " V" + Version.getVersion());
-        System.out.println(Version.getCopyright());
-    }
 }

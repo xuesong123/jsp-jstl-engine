@@ -13,9 +13,6 @@ package com.skin.ayada.jstl;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * <p>Title: TagLibraryManager</p>
  * <p>Description: </p>
@@ -26,7 +23,6 @@ import org.slf4j.LoggerFactory;
 public class TagLibraryManager
 {
     public static final Map<String, Map<String, TagInfo>> cache = new HashMap<String, Map<String, TagInfo>>();
-    private static final Logger logger = LoggerFactory.getLogger(TagLibraryManager.class);
 
     /**
      * @param prefix
@@ -67,23 +63,5 @@ public class TagLibraryManager
         }
 
         return library;
-    }
-
-    public static void main(String[] args)
-    {
-        try
-        {
-            Map<String, TagInfo> library = TagLibraryManager.getTagLibrary("test", "http://www.skin-ayada.com/ayada-taglib-test");
-            library = TagLibraryManager.getTagLibrary("test", "/ayada-taglib-test");
-            library = TagLibraryManager.getTagLibrary("test", "\\ayada-taglib-test");
-            for(Map.Entry<String, TagInfo> entry : library.entrySet())
-            {
-                System.out.println(entry.getKey() + " - " + entry.getValue());
-            }
-        }
-        catch(Exception e)
-        {
-            logger.warn(e.getMessage(), e);
-        }
     }
 }

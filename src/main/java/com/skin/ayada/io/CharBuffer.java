@@ -303,18 +303,4 @@ public class CharBuffer
 
         return buffer.toString();
     }
-
-    public static void main(String[] args)
-    {
-        char[] cbuf = "1234567890".toCharArray();
-        CharBuffer writer = new CharBuffer(2);
-
-        for(int i = 0; i < 3; i++)
-        {
-            writer.append(cbuf);
-        }
-
-        System.out.println("012345678901234567890123456789012345678901234567890123456789");
-        System.out.println(writer.toString());
-    }
 }

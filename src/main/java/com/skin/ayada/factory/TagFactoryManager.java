@@ -43,25 +43,6 @@ public class TagFactoryManager
         classPool.appendClassPath(new ClassClassPath(DefaultTagFactory.class));
     }
 
-    public static void main(String[] args)
-    {
-        TagFactoryManager tagFactoryManager = TagFactoryManager.getInstance();
-        System.out.println("tag: " + getTag("c:set", "com.skin.ayada.jstl.core.SetTag"));
-        System.out.println("tag: " + getTag("app:test", "com.skin.ayada.jstl.core.TestTag"));
-
-        TagFactory f1 = tagFactoryManager.getTagFactory("c:set", "com.skin.ayada.jstl.core.SetTag");
-        TagFactory f2 = tagFactoryManager.getTagFactory("app:test", "com.skin.ayada.jstl.core.TestTag");
-        System.out.println(f1.getClass().getName());
-        System.out.println(f2.getClass().getName());
-
-        String c1 = tagFactoryManager.getFactoryClassName("com.skin.ayada.jstl.core.TestTag");
-        String c2 = tagFactoryManager.getFactoryClassName("com.skin.ayada.jstl.test.TestTag");
-
-        System.out.println(c1);
-        System.out.println(c2);
-        System.out.println(c1.equals(c2));
-    }
-
     public static Tag getTag(String tagName, String tagClassName)
     {
         TagFactoryManager tagFactoryManager = TagFactoryManager.getInstance();

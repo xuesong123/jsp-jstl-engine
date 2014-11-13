@@ -172,6 +172,7 @@ public class DefaultTemplateContext implements TemplateContext
             }
             catch(Exception e)
             {
+                this.cache.remove(realPath, f);
                 throw e;
             }
 

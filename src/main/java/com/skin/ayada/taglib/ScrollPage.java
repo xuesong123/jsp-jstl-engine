@@ -30,7 +30,6 @@ public class ScrollPage extends TagSupport
     private String className;
     private String href;
     private String pattern;
-
     private static final int DEFAULT_SIZE = 7;
 
     @Override

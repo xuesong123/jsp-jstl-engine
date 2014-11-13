@@ -58,11 +58,11 @@ public class JspCompiler
 
     public String compile(Template template, String className, String packageName)
     {
-        Date date = new Date(System.currentTimeMillis());
+        Date date = new Date();
         String jspDirective = this.getJspDirective(template);
         String jspDeclaration = this.getJspDeclaration(template);
         String methodBody = this.getMethodBody(template);
-        String subClassBOdy = this.getSubClassBody(template);
+        String subClassBody = this.getSubClassBody(template);
         String staticDeclaration = this.getStaticDeclaration(template);
 
         Map<String, String> context = new HashMap<String, String>();
@@ -78,7 +78,7 @@ public class JspCompiler
         context.put("jsp.directive.import", jspDirective);
         context.put("jsp.declaration", jspDeclaration);
         context.put("jsp.method.body", methodBody);
-        context.put("jsp.subclass.body", subClassBOdy);
+        context.put("jsp.subclass.body", subClassBody);
         context.put("jsp.static.declaration", staticDeclaration);
         return this.replace(JAVA_TEMPLATE, context);
     }

@@ -299,6 +299,8 @@ public class JspTemplateFactory extends TemplateFactory
             simpleName = className + "Template";
         }
 
+        simpleName = this.getJavaClassName(simpleName);
+
         String[] temp = StringUtil.split(packageName, ".");
         StringBuilder buffer = new StringBuilder(this.getPrefix());
 
@@ -310,6 +312,35 @@ public class JspTemplateFactory extends TemplateFactory
 
         packageName = buffer.toString();
         return packageName + "." + Character.toUpperCase(simpleName.charAt(0)) + simpleName.substring(1);
+    }
+    
+    /**
+     * @param simpleName
+     * @return String
+     */
+    public String getJavaClassName(String simpleName)
+    {
+    	char c;
+    	StringBuilder buffer = new StringBuilder();
+
+    	if(Character.isJavaIdentifierStart(simpleName.charAt(0)) == false)
+        {
+            buffer.append("_");
+        }
+
+    	for(int i = 0; i < simpleName.length(); i++)
+    	{
+    		c = simpleName.charAt(i);
+
+	    	
+	
+            if(Character.isJavaIdentifierPart(c))
+            {
+                buffer.append(c);
+            }
+    	}
+
+    	return buffer.toString();
     }
 
     /**
@@ -420,28 +451,5 @@ public class JspTemplateFactory extends TemplateFactory
     public String getClassPath()
     {
         return this.classPath;
-    }
-
-    public static void test1(String home, String path)
-    {
-        JspTemplateFactory jspTemplateFactory = new JspTemplateFactory();
-        String className = jspTemplateFactory.getClassName(path);
-        String simpleName = jspTemplateFactory.getSimpleName(className);
-        String packageName = jspTemplateFactory.getPackageName(className);
-        System.out.println("path: " + path);
-        System.out.println("className: " + className);
-        System.out.println("simpleName: " + simpleName);
-        System.out.println("packageName: " + packageName);
-        System.out.println();
-    }
-
-    public static void main(String[] args)
-    {
-        test1("/finder.com/template", "workspace.jsp");
-        test1("/finder.com/template", "/workspace.jsp");
-        test1("/finder.com/template", "finder/workspace.jsp");
-        test1("/finder.com/template", "/finder/workspace.jsp");
-        test1("/finder.com/template", "default/workspace.jsp");
-        test1("/finder.com/template", "/default/workspace.jsp");
     }
 }

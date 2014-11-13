@@ -256,16 +256,4 @@ public class DefaultExpressionFactory implements ExpressionFactory
             }
         }
     }
-
-    public static void main(String[] args)
-    {
-        Map<String, String> attributes = PropertyResource.load("1.properties", "UTF-8");
-
-        for(Map.Entry<String, String> entry : attributes.entrySet())
-        {
-            String key = entry.getKey();
-            Object value = entry.getValue();
-            System.out.println(key + ": " + value);
-        }
-    }
 }
