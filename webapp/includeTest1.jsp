@@ -16,5 +16,8 @@
 <t:include file="/include/script.html" encoding="UTF-8"/>
 <t:include file="/include/script.html" type="script" encoding="UTF-8"/>
 <t:include file="/include/footer.jsp"/>
+
+<h2>jsp include</h2>
+<%@ include file="/include/footer.jsp"%>
 </body>
 </html>

@@ -13,6 +13,7 @@ package com.skin.ayada.web;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -21,12 +22,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.template.Template;
 import com.skin.ayada.template.TemplateContext;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * <p>Title: TemplateDispatcher</p>
@@ -112,6 +113,7 @@ public class TemplateDispatcher
 
         context.put("request", request);
         context.put("response", response);
+        context.put("param", TemplateDispatcher.getParameterMap(request));
         TemplateDispatcher.setAttributes(request, context);
         Writer writer = (Writer)(request.getAttribute("template_writer"));
 
@@ -209,5 +211,64 @@ public class TemplateDispatcher
         }
 
         return servletContext;
+    }
+
+    /**
+     * @param request
+     * @return Map<String, Object>
+     */
+    public static Map<String, Object> getParameterMap(HttpServletRequest request)
+    {
+        Map<?, ?> map = request.getParameterMap();
+        Map<String, Object> param = new HashMap<String, Object>();
+
+        if(map != null && map.size() > 0)
+        {
+            for(Map.Entry<?, ?> entry : map.entrySet())
+            {
+                String key = (String)(entry.getKey());
+                Object value = entry.getValue();
+
+                if(value instanceof String[])
+                {
+                    String[] values = (String[])value;
+
+                    if(values.length > 0)
+                    {
+                        if(values.length > 1)
+                        {
+                            param.put(key, values);
+                        }
+                        else
+                        {
+                            param.put(key, values[0]);
+                        }
+                    }
+
+                    continue;
+                }
+
+                if(value instanceof List<?>)
+                {
+                    List<?> values = (List<?>)value;
+
+                    if(values.size() > 0)
+                    {
+                        if(values.size() > 1)
+                        {
+                            param.put(key, values);
+                        }
+                        else
+                        {
+                            param.put(key, values.get(0));
+                        }
+                    }
+
+                    continue;
+                }
+            }
+        }
+
+        return param;
     }
 }

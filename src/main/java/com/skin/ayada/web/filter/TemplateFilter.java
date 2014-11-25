@@ -162,7 +162,7 @@ public class TemplateFilter implements Filter
         {
             response.setContentType(this.contentType);
         }
-        
+
         TemplateDispatcher.dispatch(this.templateContext, request, response, requestURI);
     }
 

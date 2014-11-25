@@ -305,30 +305,7 @@ public class TemplateCompiler extends PageCompiler
         }
         else if(n == '%')
         {
-            if(this.ignoreJspTag)
-            {
-                this.stream.read();
-
-                while((i = this.stream.read()) != -1)
-                {
-                    if(i == '%' && this.stream.peek() == '>')
-                    {
-                        this.stream.read();
-                        break;
-                    }
-
-                    if(i == '\n')
-                    {
-                        this.lineNumber++;
-                    }
-                }
-
-                this.skipCRLF();
-            }
-            else
-            {
-                this.jspCompile(stack, list);
-            }
+            this.jspCompile(stack, list);
         }
         else if(n != '!')
         {
@@ -513,15 +490,6 @@ public class TemplateCompiler extends PageCompiler
                     node.setLength(2);
                     node.setClosed(NodeType.SELF_CLOSED);
                     this.popNode(stack, list, nodeName);
-
-                    if(tagClassName.equals("com.skin.ayada.jstl.core.SetTag"))
-                    {
-                        // this.skipCRLF();
-                    }
-                    else if(tagClassName.equals("com.skin.ayada.jstl.core.ExecuteTag"))
-                    {
-                        // this.skipCRLF();
-                    }
                 }
             }
             else
@@ -804,20 +772,25 @@ public class TemplateCompiler extends PageCompiler
             else if(attributes.get("include") != null)
             {
                 nodeName = NodeType.JSP_DIRECTIVE_INCLUDE_NAME;
+                String path = attributes.get("file");
+                this.include(stack, list, path, null, null);
             }
             else
             {
                 throw new Exception("Unknown jsp directive at line #" + this.lineNumber + " - <%@ " + NodeUtil.toString(attributes));
             }
 
-            JspDirective node = JspDirective.getInstance(nodeName);
-            node.setTagClassName((String)null);
-            node.setOffset(list.size());
-            node.setLineNumber(lineNumber);
-            node.setAttributes(attributes);
-            node.setClosed(NodeType.SELF_CLOSED);
-            this.pushNode(stack, list, node);
-            this.popNode(stack, list, nodeName);
+            if(this.ignoreJspTag == false)
+            {
+                JspDirective node = JspDirective.getInstance(nodeName);
+                node.setTagClassName((String)null);
+                node.setOffset(list.size());
+                node.setLineNumber(lineNumber);
+                node.setAttributes(attributes);
+                node.setClosed(NodeType.SELF_CLOSED);
+                this.pushNode(stack, list, node);
+                this.popNode(stack, list, nodeName);
+            }
             this.skipCRLF();
         }
         else
@@ -853,6 +826,12 @@ public class TemplateCompiler extends PageCompiler
                 buffer.append((char)i);
             }
 
+            if(this.ignoreJspTag)
+            {
+                this.skipCRLF();
+                return;
+            }
+
             if(t == '!')
             {
                 JspDeclaration node = new JspDeclaration();
@@ -873,6 +852,7 @@ public class TemplateCompiler extends PageCompiler
                 node.setClosed(NodeType.PAIR_CLOSED);
                 this.pushNode(stack, list, node);
                 this.popNode(stack, list, node.getNodeName());
+                this.skipCRLF();
             }
             else
             {

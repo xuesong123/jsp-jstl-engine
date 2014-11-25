@@ -109,6 +109,11 @@ public interface TemplateContext
     public ExpressionFactory getExpressionFactory();
 
     /**
+     * clear the current TemplateContext
+     */
+    public void clear();
+
+    /**
      * destory the current TemplateContext
      */
     public abstract void destory();

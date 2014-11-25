@@ -92,24 +92,27 @@ public abstract class AbstractJspFragment implements JspFragment
         }
         finally
         {
-            try
+            if(out != null)
             {
-                out.flush();
-            }
-            catch(IOException e)
-            {
-            }
+                try
+                {
+                    out.flush();
+                }
+                catch(IOException e)
+                {
+                }
 
-            // never close
-            if(this.getFalse())
-            {
-	            try
-	            {
-	                out.close();
-	            }
-	            catch(IOException e)
-	            {
-	            }
+                // never close
+                if(this.getFalse())
+                {
+                    try
+                    {
+                        out.close();
+                    }
+                    catch(IOException e)
+                    {
+                    }
+                }
             }
         }
     }

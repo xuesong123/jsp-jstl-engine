@@ -16,7 +16,9 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -268,7 +270,20 @@ public class DefaultTemplateContext implements TemplateContext
         return this.getExpressionFactory().getExpressionContext(pageContext);
     }
 
-    protected synchronized void clear()
+    /**
+     * clear the current templateContext
+     */
+    public void schedule()
+    {
+        Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(new Runnable(){
+            @Override
+            public void run(){
+                clear();
+            }
+        }, 60L, 300L, TimeUnit.SECONDS);
+    }
+
+    public synchronized void clear()
     {
         for(Map.Entry<String, FutureTask<Template>> entry : this.cache.entrySet())
         {
@@ -278,7 +293,7 @@ public class DefaultTemplateContext implements TemplateContext
             {
                 Template template = f.get();
 
-                if(template.getUpdateTime() != this.sourceFactory.getLastModified(template.getPath()))
+                if(this.modified(template))
                 {
                     String key = entry.getKey();
 

@@ -10,6 +10,7 @@
  */
 package com.skin.ayada.template;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -149,7 +150,6 @@ public class JspTemplateFactory extends TemplateFactory
         String source = jspCompiler.compile(template, simpleName, packageName);
         this.write(source, srcFile);
         this.write(this.getTemplateDescription(template), tplFile);
-
         File[] files = classFile.getParentFile().listFiles();
 
         if(files != null && files.length > 0)
@@ -190,7 +190,14 @@ public class JspTemplateFactory extends TemplateFactory
             throw new NullPointerException("'javax.tools.JavaCompiler' not found!, please add 'tools.jar' to class_path!");
         }
 
-        int status = javaCompiler.run(System.in, System.out, System.out, args);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        int status = javaCompiler.run(System.in, outputStream, outputStream, args);
+        byte[] data = outputStream.toByteArray();
+
+        if(data != null && data.length > 0)
+        {
+            logger.error(new String(data, "UTF-8"));
+        }
 
         if(status == 0)
         {
@@ -331,8 +338,6 @@ public class JspTemplateFactory extends TemplateFactory
     	for(int i = 0; i < simpleName.length(); i++)
     	{
     		c = simpleName.charAt(i);
-
-	    	
 	
             if(Character.isJavaIdentifierPart(c))
             {
