@@ -50,7 +50,7 @@ public class SimpleSqlParser
         Table table = null;
         StringStream stream = new StringStream(source);
         List<Table> list = new ArrayList<Table>();
-        
+
         while((table = this.parse(stream)) != null)
         {
             list.add(table);
@@ -66,27 +66,33 @@ public class SimpleSqlParser
      */
     public Table parse(StringStream stream)
     {
-        String token = this.getToken(stream);
+        String token = null;
 
-        if(token.length() < 1)
+        while(true)
         {
-            return null;
-        }
+            token = this.getToken(stream);
 
-        if(token.equalsIgnoreCase("CREATE") == false)
-        {
-        	String line = null;
+            if(token.length() < 1)
+            {
+                return null;
+            }
 
-        	while((line = stream.readLine()) != null)
-        	{
-        		line = line.trim();
+            if(token.equalsIgnoreCase("create"))
+            {
+                break;
+            }
 
-        		if(line.endsWith(";"))
-        		{
-        			break;
-        		}
-        	}
-        	return null;
+            String line = null;
+
+            while((line = stream.readLine()) != null)
+            {
+                line = line.trim();
+
+                if(line.endsWith(";"))
+                {
+                    break;
+                }
+            }
         }
 
         token = this.getToken(stream);
