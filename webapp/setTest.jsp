@@ -11,3 +11,9 @@
 <c:execute value="${testTag1.print()}"/>
 <c:set target="${testTag1}" property="myString">00 - Hello World !</c:set>
 <c:execute value="${testTag1.print()}"/>
+
+
+<c:set var="a2" value="&quot;hell&quot;"/>
+${a2}
+<c:out value="${a2}"/>
+

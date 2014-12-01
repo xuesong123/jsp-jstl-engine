@@ -238,7 +238,7 @@ public class TemplateUtil
                     buffer.append(" ");
                     buffer.append(entrySet.getKey());
                     buffer.append("=\"");
-                    buffer.append(entrySet.getValue());
+                    buffer.append(HtmlUtil.encode(entrySet.getValue()));
                     buffer.append("\"");
                 }
             }
