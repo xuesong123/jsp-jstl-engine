@@ -23,6 +23,10 @@ import com.skin.ayada.util.IO;
  */
 public class DefaultSourceFactory extends SourceFactory
 {
+    public DefaultSourceFactory()
+    {
+    }
+
     /**
      * @param home
      */

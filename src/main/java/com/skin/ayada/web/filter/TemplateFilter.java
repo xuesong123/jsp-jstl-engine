@@ -69,27 +69,38 @@ public class TemplateFilter implements Filter
             this.home = filterConfig.getInitParameter("home");
             this.servletContext = filterConfig.getServletContext();
             this.contentType = filterConfig.getInitParameter("contentType");
-    
+            String realPath = null;
+
             if(this.home == null)
             {
                 this.home = "/";
             }
-    
+
+            if(this.home.startsWith("contextPath:"))
+            {
+                this.home = this.home.substring(12);
+                realPath = this.servletContext.getRealPath(this.home);
+            }
+            else
+            {
+                realPath = this.home;
+            }
+
             if(this.contentType == null)
             {
                 this.contentType = "text/html; charset=UTF-8";
             }
-    
+
             if(logger.isInfoEnabled())
             {
-                logger.info("jsp.home: " + this.home);
+                logger.info("jsp.home: " + realPath);
             }
-    
+
             String sourcePattern = filterConfig.getInitParameter("source-pattern");
             SourceFactory sourceFactory = this.getSourceFactory(filterConfig);
             TemplateFactory templateFactory = this.getTemplateFactory(filterConfig);
             ExpressionFactory expressionFactory = this.getExpressionFactory(filterConfig);
-            sourceFactory.setHome(this.home);
+            sourceFactory.setHome(realPath);
             sourceFactory.setSourcePattern(sourcePattern);
 
             if(logger.isInfoEnabled())
@@ -99,7 +110,7 @@ public class TemplateFilter implements Filter
                 logger.info("expressionFactory: " + expressionFactory.getClass().getName());
             }
 
-            this.templateContext = new DefaultTemplateContext(this.home, "UTF-8");
+            this.templateContext = new DefaultTemplateContext(realPath, "UTF-8");
             this.templateContext.setSourceFactory(sourceFactory);
             this.templateContext.setTemplateFactory(templateFactory);
             this.templateContext.setExpressionFactory(expressionFactory);
@@ -183,7 +194,7 @@ public class TemplateFilter implements Filter
             }
         }
 
-        return new DefaultSourceFactory(this.home);
+        return new DefaultSourceFactory();
     }
 
     /**
