@@ -149,6 +149,25 @@ API Example
 ===================
 
     // demo1
+    String sourcePattern = "jsp,jspx";
+    String home = "E:\\WorkSpace\\test\\webapp\\template";
+    SourceFactory sourceFactory = new DefaultSourceFactory();
+    TemplateFactory templateFactory = new TemplateFactory();
+    ExpressionFactory expressionFactory = new DefaultExpressionFactory();
+    sourceFactory.setHome(home);
+    sourceFactory.setSourcePattern(sourcePattern);
+
+    TemplateContext templateContext = new DefaultTemplateContext(home, "UTF-8");
+    templateContext.setSourceFactory(sourceFactory);
+    templateContext.setTemplateFactory(templateFactory);
+    templateContext.setExpressionFactory(expressionFactory);
+
+    StringWriter writer = new StringWriter();
+    Template template = templateContext.getTemplate("/test.jsp");
+    templateContext.execute(template, new HashMap<String, Object>(), writer);
+    System.out.println(writer.toString());
+
+
     Source source = new Source("", "<c:out value=\"123\"/>", 0);
     SourceFactory sourceFactory = new MemorySourceFactory(source);
     TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();
@@ -214,9 +233,42 @@ API Example
     <filter>
         <filter-name>TemplateFilter</filter-name>
         <filter-class>com.skin.ayada.filter.TemplateFilter</filter-class>
+        <!--
+            不同的SourceFactory需要的home路径不同
+            DefaultSourceFactory需要home路径必须是绝对路径
+            ClassPathSourceFactory需要的home路径必须是包路径
+            因此DefaultSourceFactory的home路径需要添加contextPath, TemplateFilter会自动取当前应用的的绝对路径
+            ClassPathSourceFactory必须是包路径, TemplateFilter会把此处配置的路径传给ClassPathSourceFactory
         <init-param>
             <param-name>home</param-name>
+            <param-value>contextPath:/template</param-value>
+        </init-param>
+        -->
+        <init-param>
+            <!--
+                模板文件的根路径
+                针对不同的SourceFactory这个参数的意义不一样
+            -->
+            <param-name>home</param-name>
             <param-value>/template</param-value>
+        </init-param>
+        <init-param>
+            <param-name>source-factory</param-name>
+            <param-value>com.skin.ayada.source.ClassPathSourceFactory</param-value>
+        </init-param>
+
+        <init-param>
+            <!--
+                默认的TemplateFactory是解释执行
+                此处配置不使用默认的TemplateFactory, 而是再次编译为class文件执行
+            -->
+            <param-name>template-factory</param-name>
+            <param-value>com.skin.ayada.template.JspTemplateFactory</param-value>
+        </init-param>
+        <init-param>
+            <!-- 该参数只对JspTemplateFactory生效, 编译之后的class文件的保存目录 -->
+            <param-name>jsp-work</param-name>
+            <param-value>context: /WEB-INF/ayada</param-value>
         </init-param>
     </filter>
 
