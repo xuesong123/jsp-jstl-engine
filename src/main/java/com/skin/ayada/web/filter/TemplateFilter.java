@@ -28,10 +28,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.skin.ayada.config.TemplateConfig;
+import com.skin.ayada.runtime.DefaultExpressionFactory;
+import com.skin.ayada.runtime.ExpressionFactory;
+import com.skin.ayada.source.DefaultSourceFactory;
+import com.skin.ayada.source.SourceFactory;
+import com.skin.ayada.template.DefaultTemplateContext;
 import com.skin.ayada.template.JspTemplateFactory;
 import com.skin.ayada.template.TemplateContext;
 import com.skin.ayada.template.TemplateFactory;
 import com.skin.ayada.template.TemplateManager;
+import com.skin.ayada.util.ClassUtil;
 import com.skin.ayada.util.DateUtil;
 import com.skin.ayada.util.StringUtil;
 import com.skin.ayada.web.TemplateDispatcher;
@@ -46,10 +52,9 @@ import com.skin.ayada.web.TemplateDispatcher;
 public class TemplateFilter implements Filter
 {
     private String home;
-    private String templateFactoryClassName;
+    private String contentType;
     private ServletContext servletContext;
     private TemplateContext templateContext;
-    private String contentType;
     private static final Logger logger = LoggerFactory.getLogger(TemplateFilter.class);
 
     public TemplateFilter()
@@ -59,78 +64,50 @@ public class TemplateFilter implements Filter
     @Override
     public void init(FilterConfig filterConfig) throws ServletException
     {
-        this.home = filterConfig.getInitParameter("home");
-        this.templateFactoryClassName = filterConfig.getInitParameter("template-factory");
-        this.servletContext = filterConfig.getServletContext();
-        this.contentType = filterConfig.getInitParameter("contentType");
-
-        if(this.home == null)
+        try
         {
-            this.home = "/";
-        }
-
-        if(this.contentType == null)
-        {
-            this.contentType = "text/html; charset=UTF-8";
-        }
-
-        if(logger.isInfoEnabled())
-        {
-            logger.info("jsp.home: " + this.home);
-        }
-
-        TemplateFactory templateFactory = null;
-
-        if(this.templateFactoryClassName != null)
-        {
-            try
+            this.home = filterConfig.getInitParameter("home");
+            this.servletContext = filterConfig.getServletContext();
+            this.contentType = filterConfig.getInitParameter("contentType");
+    
+            if(this.home == null)
             {
-                templateFactory = TemplateFactory.getTemplateFactory(this.templateFactoryClassName);
-
-                if(templateFactory instanceof JspTemplateFactory)
-                {
-                    String jspWork = this.getJspWork(filterConfig);
-                    String ignoreJspTag = filterConfig.getInitParameter("ignore-jsptag");
-
-                    if(ignoreJspTag == null)
-                    {
-                        ignoreJspTag = TemplateConfig.getInstance().getString("ayada.compile.ignore-jsptag", "true");
-                    }
-
-                    if(logger.isInfoEnabled())
-                    {
-                        logger.info("jsp.work: " + jspWork);
-                    }
-
-                    File work = new File(jspWork);
-                    JspTemplateFactory jspTemplateFactory = (JspTemplateFactory)templateFactory;
-                    jspTemplateFactory.setWork(work.getAbsolutePath());
-                    jspTemplateFactory.setClassPath(this.getClassPath(this.servletContext));
-                    jspTemplateFactory.setIgnoreJspTag(ignoreJspTag.equals("true"));
-                }
+                this.home = "/";
             }
-            catch(Exception e)
+    
+            if(this.contentType == null)
             {
-                throw new ServletException(e);
+                this.contentType = "text/html; charset=UTF-8";
             }
-        }
-        else
-        {
-            templateFactory = new TemplateFactory();
-        }
+    
+            if(logger.isInfoEnabled())
+            {
+                logger.info("jsp.home: " + this.home);
+            }
+    
+            String sourcePattern = filterConfig.getInitParameter("source-pattern");
+            SourceFactory sourceFactory = this.getSourceFactory(filterConfig);
+            TemplateFactory templateFactory = this.getTemplateFactory(filterConfig);
+            ExpressionFactory expressionFactory = this.getExpressionFactory(filterConfig);
+            sourceFactory.setHome(this.home);
+            sourceFactory.setSourcePattern(sourcePattern);
 
-        if(templateFactory == null)
-        {
-            throw new ServletException("templateFactory is null!");
+            if(logger.isInfoEnabled())
+            {
+                logger.info("sourceFactory: " + sourceFactory.getClass().getName());
+                logger.info("templateFactory: " + templateFactory.getClass().getName());
+                logger.info("expressionFactory: " + expressionFactory.getClass().getName());
+            }
+
+            this.templateContext = new DefaultTemplateContext(this.home, "UTF-8");
+            this.templateContext.setSourceFactory(sourceFactory);
+            this.templateContext.setTemplateFactory(templateFactory);
+            this.templateContext.setExpressionFactory(expressionFactory);
+            TemplateManager.add(this.templateContext);
         }
-
-        String sourcePattern = filterConfig.getInitParameter("source-pattern");
-        this.templateContext = TemplateManager.getTemplateContext(this.servletContext.getRealPath(this.home), true);
-        this.templateContext.setTemplateFactory(templateFactory);
-
-        if(sourcePattern != null)
+        catch(Exception e)
         {
-            this.templateContext.getSourceFactory().setSourcePattern(sourcePattern);
+            logger.warn(e.getMessage(), e);
         }
     }
 
@@ -163,7 +140,119 @@ public class TemplateFilter implements Filter
             response.setContentType(this.contentType);
         }
 
-        TemplateDispatcher.dispatch(this.templateContext, request, response, requestURI);
+        try
+        {
+            TemplateDispatcher.dispatch(this.templateContext, request, response, requestURI);
+        }
+        catch(Exception e)
+        {
+            logger.warn(e.getMessage(), e);
+
+            if(e instanceof ServletException)
+            {
+                throw (ServletException)e;
+            }
+
+            if(e instanceof IOException)
+            {
+                throw (IOException)e;
+            }
+
+            throw new ServletException(e);
+        }
+    }
+
+    /**
+     * @param filterConfig
+     * @return SourceFactory
+     * @throws ServletException
+     */
+    private SourceFactory getSourceFactory(FilterConfig filterConfig) throws ServletException
+    {
+        String sourceFactoryClassName = filterConfig.getInitParameter("source-factory");
+
+        if(sourceFactoryClassName != null)
+        {
+            try
+            {
+                return (SourceFactory)(ClassUtil.getInstance(sourceFactoryClassName));
+            }
+            catch(Exception e)
+            {
+                throw new ServletException(e);
+            }
+        }
+
+        return new DefaultSourceFactory(this.home);
+    }
+
+    /**
+     * @param filterConfig
+     * @return TemplateFactory
+     */
+    private TemplateFactory getTemplateFactory(FilterConfig filterConfig) throws ServletException
+    {
+        String templateFactoryClassName = filterConfig.getInitParameter("template-factory");
+
+        if(templateFactoryClassName == null)
+        {
+            return new TemplateFactory();
+        }
+
+        try
+        {
+            TemplateFactory templateFactory = TemplateFactory.getTemplateFactory(templateFactoryClassName);
+
+            if(templateFactory instanceof JspTemplateFactory)
+            {
+                String jspWork = this.getJspWork(filterConfig);
+                String ignoreJspTag = filterConfig.getInitParameter("ignore-jsptag");
+
+                if(ignoreJspTag == null)
+                {
+                    ignoreJspTag = TemplateConfig.getInstance().getString("ayada.compile.ignore-jsptag", "true");
+                }
+
+                if(logger.isInfoEnabled())
+                {
+                    logger.info("jsp.work: " + jspWork);
+                }
+
+                File work = new File(jspWork);
+                JspTemplateFactory jspTemplateFactory = (JspTemplateFactory)templateFactory;
+                jspTemplateFactory.setWork(work.getAbsolutePath());
+                jspTemplateFactory.setClassPath(this.getClassPath(this.servletContext));
+                jspTemplateFactory.setIgnoreJspTag(ignoreJspTag.equals("true"));
+            }
+            return templateFactory;
+        }
+        catch(Exception e)
+        {
+            throw new ServletException(e);
+        }
+    }
+
+    /**
+     * @param filterConfig
+     * @return TemplateFactory
+     */
+    private ExpressionFactory getExpressionFactory(FilterConfig filterConfig) throws ServletException
+    {
+        String expressionFactoryClassName = filterConfig.getInitParameter("expression-factory");
+
+        if(expressionFactoryClassName != null)
+        {
+            try
+            {
+                return (ExpressionFactory)(ClassUtil.getInstance(expressionFactoryClassName));
+            }
+            catch(Exception e)
+            {
+                throw new ServletException(e);
+            }
+        }
+
+        return new DefaultExpressionFactory();
     }
 
     /**

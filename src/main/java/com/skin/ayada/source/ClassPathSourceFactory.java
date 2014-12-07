@@ -24,8 +24,11 @@ import com.skin.ayada.util.IO;
  */
 public class ClassPathSourceFactory extends SourceFactory
 {
-    private String home;
     private ClassLoader classLoader;
+
+    public ClassPathSourceFactory()
+    {
+    }
 
     /**
      * @param home
@@ -41,36 +44,8 @@ public class ClassPathSourceFactory extends SourceFactory
      */
     public ClassPathSourceFactory(ClassLoader classLoader, String home)
     {
-        if(home == null)
-        {
-            this.home = ".";
-        }
-        else
-        {
-            this.home = home.trim();
-        }
-
-        this.home = this.home.replace('\\', '/');
-
-        if(this.home.endsWith("/"))
-        {
-            this.home = this.home.substring(0, this.home.length() - 1);
-        }
-
-        if(classLoader != null)
-        {
-            this.classLoader = classLoader;
-        }
-        else
-        {
-            this.classLoader = ClassPathSourceFactory.class.getClassLoader();
-        }
-        URL url = this.classLoader.getResource(this.home);
-
-        if(url == null)
-        {
-            throw new RuntimeException(this.home + " not found !");
-        }
+        this.setClassLoader(classLoader);
+        this.setHome(home);
     }
 
     /**
@@ -90,7 +65,7 @@ public class ClassPathSourceFactory extends SourceFactory
             inputStream = url.openStream();
             long lastModified = this.getLastModified(url);
             String content = IO.read(inputStream, encoding, 4096);
-            String realHome = this.classLoader.getResource(this.home).getPath();
+            String realHome = this.getClassLoader().getResource(this.getHome()).getPath();
             return new Source(realHome, path, content, this.getSourceType(realPath), lastModified);
         }
         catch(IOException e)
@@ -145,23 +120,29 @@ public class ClassPathSourceFactory extends SourceFactory
             throw new RuntimeException("path must be not null !");
         }
 
-        String temp = path.trim();
+        String temp = path.trim().replace('\\', '/');
 
         if(temp.charAt(0) == '/')
         {
-            temp = this.home + temp;
+            temp = this.getHome() + temp;
         }
         else
         {
-            temp = this.home + "/" + temp;
+            temp = this.getHome() + "/" + temp;
         }
 
-        URL homeUrl = this.classLoader.getResource(this.home);
-        URL realUrl = this.classLoader.getResource(temp);
+        while(temp.startsWith("/"))
+        {
+            temp = temp.substring(1);
+        }
+
+        ClassLoader classLoader = this.getClassLoader();
+        URL homeUrl = classLoader.getResource(this.getHome());
+        URL realUrl = classLoader.getResource(temp);
 
         if(homeUrl == null)
         {
-            throw new RuntimeException(this.home + " not exists !");
+            throw new RuntimeException(this.getHome() + " not exists !");
         }
 
         if(realUrl == null)
@@ -185,7 +166,14 @@ public class ClassPathSourceFactory extends SourceFactory
      */
     public void setClassLoader(ClassLoader classLoader)
     {
-        this.classLoader = classLoader;
+        if(classLoader != null)
+        {
+            this.classLoader = classLoader;
+        }
+        else
+        {
+            this.classLoader = ClassPathSourceFactory.class.getClassLoader();
+        }
     }
 
     /**
@@ -193,22 +181,50 @@ public class ClassPathSourceFactory extends SourceFactory
      */
     public ClassLoader getClassLoader()
     {
-        return this.classLoader;
-    }
+        if(this.classLoader != null)
+        {
+            return this.classLoader;
+        }
 
-    /**
-     * @return the home
-     */
-    public String getHome()
-    {
-        return this.home;
+        return ClassPathSourceFactory.class.getClassLoader();
     }
 
     /**
      * @param home the home to set
      */
+    @Override
     public void setHome(String home)
     {
-        this.home = home;
+        String path = home;
+
+        if(path == null)
+        {
+            path = ".";
+        }
+        else
+        {
+            path = path.trim();
+        }
+
+        path = path.replace('\\', '/');
+
+        while(path.startsWith("/"))
+        {
+            path = path.substring(1);
+        }
+
+        if(path.endsWith("/"))
+        {
+            path = path.substring(0, path.length() - 1);
+        }
+
+        ClassLoader classLoader = this.getClassLoader();
+        URL url = classLoader.getResource(path);
+
+        if(url == null)
+        {
+            throw new RuntimeException(path + " not found !");
+        }
+        super.setHome(path);
     }
 }

@@ -23,29 +23,29 @@ import com.skin.ayada.util.IO;
  */
 public class DefaultSourceFactory extends SourceFactory
 {
-    private String home;
-
     /**
      * @param home
      */
     public DefaultSourceFactory(String home)
     {
         super();
+        String path = null;
 
         if(home == null)
         {
-            this.home = ".";
+            path = ".";
         }
         else
         {
-            this.home = home;
+            path = home;
         }
 
-        File root = new File(this.home);
+        File root = new File(path);
 
         try
         {
-            this.home = root.getCanonicalPath();
+            path = root.getCanonicalPath();
+            this.setHome(path);
         }
         catch(IOException e)
         {
@@ -66,7 +66,7 @@ public class DefaultSourceFactory extends SourceFactory
         try
         {
             String content = IO.read(file, encoding, 4096);
-            Source source = new Source(this.home, path, content, this.getSourceType(file.getName()));
+            Source source = new Source(this.getHome(), path, content, this.getSourceType(file.getName()));
             source.setLastModified(file.lastModified());
             return source;
         }
@@ -117,11 +117,11 @@ public class DefaultSourceFactory extends SourceFactory
             throw new NullPointerException("path must be not null !");
         }
 
-        File file = new File(this.home, path);
+        File file = new File(this.getHome(), path);
 
         try
         {
-            if(file.getCanonicalPath().startsWith(this.home) == false)
+            if(file.getCanonicalPath().startsWith(this.getHome()) == false)
             {
                 throw new RuntimeException(file.getAbsolutePath() + " not exists !");
             }
@@ -142,21 +142,5 @@ public class DefaultSourceFactory extends SourceFactory
         }
 
         return file;
-    }
-
-    /**
-     * @param home the home to set
-     */
-    public void setHome(String home)
-    {
-        this.home = home;
-    }
-
-    /**
-     * @return the home
-     */
-    public String getHome()
-    {
-        return this.home;
     }
 }

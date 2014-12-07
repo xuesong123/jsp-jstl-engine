@@ -24,6 +24,7 @@ import com.skin.ayada.util.StringUtil;
  */
 public abstract class SourceFactory
 {
+    private String home;
     private String sourcePattern = "jsp,jspf,jspx,tpl";
 
     /**
@@ -122,6 +123,22 @@ public abstract class SourceFactory
         }
 
         return "";
+    }
+
+    /**
+     * @param home the home to set
+     */
+    public void setHome(String home)
+    {
+        this.home = home;
+    }
+
+    /**
+     * @return the home
+     */
+    public String getHome()
+    {
+        return this.home;
     }
 
     /**
