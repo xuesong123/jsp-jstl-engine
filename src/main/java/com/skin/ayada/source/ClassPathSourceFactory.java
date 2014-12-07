@@ -57,8 +57,15 @@ public class ClassPathSourceFactory extends SourceFactory
             this.home = this.home.substring(0, this.home.length() - 1);
         }
 
-        this.classLoader = classLoader;
-        URL url = classLoader.getResource(this.home);
+        if(classLoader != null)
+        {
+            this.classLoader = classLoader;
+        }
+        else
+        {
+            this.classLoader = ClassPathSourceFactory.class.getClassLoader();
+        }
+        URL url = this.classLoader.getResource(this.home);
 
         if(url == null)
         {
@@ -81,7 +88,10 @@ public class ClassPathSourceFactory extends SourceFactory
         try
         {
             inputStream = url.openStream();
-            return new Source(this.home, realPath, IO.read(inputStream, encoding, 4096), this.getSourceType(realPath));
+            long lastModified = this.getLastModified(url);
+            String content = IO.read(inputStream, encoding, 4096);
+            String realHome = this.classLoader.getResource(this.home).getPath();
+            return new Source(realHome, path, content, this.getSourceType(realPath), lastModified);
         }
         catch(IOException e)
         {
@@ -100,7 +110,8 @@ public class ClassPathSourceFactory extends SourceFactory
     @Override
     public long getLastModified(String path)
     {
-        return 1;
+        URL url = this.getResource(path);
+        return this.getLastModified(url);
     }
 
     /**
@@ -145,9 +156,8 @@ public class ClassPathSourceFactory extends SourceFactory
             temp = this.home + "/" + temp;
         }
 
-        ClassLoader classLoader = ClassPathSourceFactory.class.getClassLoader();
-        URL homeUrl = classLoader.getResource(this.home);
-        URL realUrl = classLoader.getResource(temp);
+        URL homeUrl = this.classLoader.getResource(this.home);
+        URL realUrl = this.classLoader.getResource(temp);
 
         if(homeUrl == null)
         {

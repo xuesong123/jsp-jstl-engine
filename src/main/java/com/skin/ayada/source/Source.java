@@ -21,8 +21,8 @@ public class Source
     private String home;
     private String path;
     private String source;
-    private long lastModified;
     private int type;
+    private long lastModified;
     public static final int STATIC = 0;
     public static final int SCRIPT = 1;
 
@@ -32,16 +32,29 @@ public class Source
 
     /**
      * @param home
+     * @param path
      * @param source
      * @param type
      */
     public Source(String home, String path, String source, int type)
     {
+        this(home, path, source, type, 0L);
+    }
+
+    /**
+     * @param home
+     * @param path
+     * @param source
+     * @param type
+     * @param lastModified
+     */
+    public Source(String home, String path, String source, int type, long lastModified)
+    {
         this.home = home;
         this.path = path;
-        this.source = source;
-        this.lastModified = 0L;
         this.type = type;
+        this.source = source;
+        this.lastModified = lastModified;
     }
 
     /**

@@ -204,7 +204,8 @@ public class SimpleSqlParser
                     throw new RuntimeException(column.getColumnName() + ", except number!");
                 }
 
-                column.setPrecision(precision.intValue());
+                column.setColumnSize(precision.intValue());
+                column.setPrecision(0);
                 this.skipWhitespace(stream);
 
                 if(stream.read() != ')')

@@ -54,8 +54,16 @@ public class DefaultTemplateContext implements TemplateContext
      */
     public DefaultTemplateContext(String home)
     {
+        this(home, "UTF-8");
+    }
+
+    /**
+     * @param home
+     */
+    public DefaultTemplateContext(String home, String encoding)
+    {
         this.home = home;
-        this.encoding = "UTF-8";
+        this.encoding = encoding;
         this.cache = new ConcurrentHashMap<String, FutureTask<Template>>();
     }
 
@@ -83,6 +91,7 @@ public class DefaultTemplateContext implements TemplateContext
      * @param context
      * @param writer
      */
+    @Override
     public void execute(Template template, Map<String, Object> context, Writer writer) throws Exception
     {
         PageContext pageContext = this.getPageContext(writer);
@@ -114,7 +123,7 @@ public class DefaultTemplateContext implements TemplateContext
      * @throws Exception
      */
     @Override
-    public Template getTemplate(String path) throws Exception
+    public Template getTemplate(final String path) throws Exception
     {
         return this.getTemplate(path, this.encoding);
     }
@@ -124,6 +133,7 @@ public class DefaultTemplateContext implements TemplateContext
      * @return Template
      * @throws Exception
      */
+    @Override
     public Template getTemplate(final String path, final String encoding) throws Exception
     {
         final String realPath = this.repair(path);
@@ -132,10 +142,12 @@ public class DefaultTemplateContext implements TemplateContext
 
         int count = 0;
         int tryCount = 10;
+        boolean create = false;
         Template template = null;
 
         while(true)
         {
+            create = false;
             FutureTask<Template> f = this.cache.get(realPath);
 
             if(f == null)
@@ -161,6 +173,7 @@ public class DefaultTemplateContext implements TemplateContext
                 {
                     f = futureTask;
                     futureTask.run();
+                    create = true;
                 }
             }
 
@@ -180,7 +193,7 @@ public class DefaultTemplateContext implements TemplateContext
 
             if(template != null)
             {
-                if(this.modified(template))
+                if(!create && this.modified(template))
                 {
                     this.cache.remove(realPath, f);
                     template = null;

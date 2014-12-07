@@ -10,6 +10,9 @@
  */
 package com.skin.ayada.source;
 
+import java.io.File;
+import java.net.URL;
+
 import com.skin.ayada.config.TemplateConfig;
 import com.skin.ayada.util.StringUtil;
 
@@ -61,6 +64,28 @@ public abstract class SourceFactory
         }
 
         return Source.STATIC;
+    }
+
+    /**
+     * @param url
+     * @return long
+     */
+    public long getLastModified(URL url)
+    {
+        String path = url.getPath();
+
+        if(path.startsWith("file:"))
+        {
+            path = path.substring(5);
+        }
+
+        int k = path.indexOf('!');
+
+        if(k > 0)
+        {
+            path = path.substring(0, k);
+        }
+        return new File(path).lastModified();
     }
 
     /**
