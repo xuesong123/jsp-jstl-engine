@@ -32,6 +32,7 @@ import com.skin.ayada.runtime.DefaultExpressionFactory;
 import com.skin.ayada.runtime.ExpressionFactory;
 import com.skin.ayada.source.DefaultSourceFactory;
 import com.skin.ayada.source.SourceFactory;
+import com.skin.ayada.source.ZipSourceFactory;
 import com.skin.ayada.template.DefaultTemplateContext;
 import com.skin.ayada.template.JspTemplateFactory;
 import com.skin.ayada.template.TemplateContext;
@@ -184,14 +185,31 @@ public class TemplateFilter implements Filter
 
         if(sourceFactoryClassName != null)
         {
+            SourceFactory sourceFactory = null;
+
             try
             {
-                return (SourceFactory)(ClassUtil.getInstance(sourceFactoryClassName));
+                sourceFactory = (SourceFactory)(ClassUtil.getInstance(sourceFactoryClassName));
             }
             catch(Exception e)
             {
                 throw new ServletException(e);
             }
+
+            if(sourceFactory instanceof ZipSourceFactory)
+            {
+                String zipFile = filterConfig.getInitParameter("zip-file");
+
+                if(zipFile == null)
+                {
+                    throw new ServletException("parameter 'zip-file' must be not null");
+                }
+
+                ServletContext servletContext = filterConfig.getServletContext();
+                String path = servletContext.getRealPath(zipFile);
+                ((ZipSourceFactory)sourceFactory).setFile(path);
+            }
+            return sourceFactory;
         }
 
         return new DefaultSourceFactory();

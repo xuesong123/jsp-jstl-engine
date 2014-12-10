@@ -89,12 +89,12 @@ public class ScrollPage extends TagSupport
         if(this.pageNum > 1)
         {
             String prev = this.replace(this.href, "%s", this.pageNum - 1);
-            buffer.append(String.format("<a class=\"scrollpage\" href=\"%s\" page=\"%d\" title=\"上一页\">上一页</a>", prev, this.pageNum - 1));
+            buffer.append(String.format("<a class=\"scrollpage\" href=\"%s\" page=\"%d\" title=\"\u4e0a\u4e00\u9875\">\u4e0a\u4e00\u9875</a>", prev, this.pageNum - 1));
         }
         else
         {
             String prev = "javascript:void(0)";
-            buffer.append(String.format("<a class=\"disabled\" href=\"%s\" page=\"%d\" title=\"上一页\">上一页</a>", prev, this.pageNum - 1));
+            buffer.append(String.format("<a class=\"disabled\" href=\"%s\" page=\"%d\" title=\"\u4e0a\u4e00\u9875\">\u4e0a\u4e00\u9875</a>", prev, this.pageNum - 1));
         }
 
         for(int i = 0; i < pages.length; i++)
@@ -119,18 +119,18 @@ public class ScrollPage extends TagSupport
         }
 
         buffer.append("<span class=\"pagenum\">");
-        buffer.append(String.format("<input type=\"text\" class=\"pagenum\" value=\"%d\"/>/%d页", this.pageNum, total));
+        buffer.append(String.format("<input type=\"text\" class=\"pagenum\" value=\"%d\"/>/%d\u9875", this.pageNum, total));
         buffer.append("</span>");
 
         if(this.pageNum < total)
         {
             String next = this.replace(this.href, "%s", this.pageNum + 1);
-            buffer.append(String.format("<a href=\"%s\" class=\"scrollpage\" page=\"%d\" title=\"下一页\">下一页</a>", next, this.pageNum + 1));
+            buffer.append(String.format("<a href=\"%s\" class=\"scrollpage\" page=\"%d\" title=\"\u4e0b\u4e00\u9875\">\u4e0b\u4e00\u9875</a>", next, this.pageNum + 1));
         }
         else
         {
             String next = "javascript: void(0)";
-            buffer.append(String.format("<a href=\"%s\" class=\"disabled\" page=\"%d\" title=\"下一页\">下一页</a>", next, this.pageNum + 1));
+            buffer.append(String.format("<a href=\"%s\" class=\"disabled\" page=\"%d\" title=\"\u4e0b\u4e00\u9875\">\u4e0b\u4e00\u9875</a>", next, this.pageNum + 1));
         }
 
         if(this.pattern != null)

@@ -139,15 +139,15 @@ public class DateUtil
 
         if(timeMillis < 60L * 1000L)
         {
-            result = "刚刚";
+            result = "\u521a\u521a";
         }
         else if(timeMillis < hour)
         {
-            result = (timeMillis / (60L * 1000L)) + " 分钟以前";
+            result = (timeMillis / (60L * 1000L)) + " \u5206\u949f\u4ee5\u524d";
         }
         else if(timeMillis < 24 * hour)
         {
-            result = (timeMillis / (60L * 60L * 1000L)) + " 小时以前";
+            result = (timeMillis / (60L * 60L * 1000L)) + " \u5c0f\u65f6\u4ee5\u524d";
         }
         else if(timeMillis < 30 * 24 * hour)
         {
@@ -155,15 +155,15 @@ public class DateUtil
 
             if(days < 2)
             {
-                result = "昨天  " + dateFormat.format(date);
+                result = "\u6628\u5929  " + dateFormat.format(date);
             }
             else if(days < 3)
             {
-                result = "前天  " + dateFormat.format(date);
+                result = "\u524d\u5929  " + dateFormat.format(date);
             }
             else
             {
-                result = days + " 天以前";
+                result = days + " \u5929\u4ee5\u524d";
             }
         }
         else
@@ -182,11 +182,11 @@ public class DateUtil
 
             if((d1 - d2) < 12)
             {
-                result = (d1 - d2) + " 月以前";
+                result = (d1 - d2) + " \u6708\u4ee5\u524d";
             }
             else
             {
-                result = (y1 - y2) + " 年以前";
+                result = (y1 - y2) + " \u5e74\u4ee5\u524d";
             }
         }
 

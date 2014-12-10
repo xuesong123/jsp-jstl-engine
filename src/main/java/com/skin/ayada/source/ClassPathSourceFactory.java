@@ -35,17 +35,17 @@ public class ClassPathSourceFactory extends SourceFactory
      */
     public ClassPathSourceFactory(String home)
     {
-        this(ClassPathSourceFactory.class.getClassLoader(), home);
+        this(home, ClassPathSourceFactory.class.getClassLoader());
     }
 
     /**
      * @param classLoader
      * @param home
      */
-    public ClassPathSourceFactory(ClassLoader classLoader, String home)
+    public ClassPathSourceFactory(String home, ClassLoader classLoader)
     {
-        this.setClassLoader(classLoader);
         this.setHome(home);
+        this.setClassLoader(classLoader);
     }
 
     /**
