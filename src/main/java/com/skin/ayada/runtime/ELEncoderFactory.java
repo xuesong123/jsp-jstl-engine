@@ -28,7 +28,7 @@ public class ELEncoderFactory {
      */
     public static ELEncoder getELEncoder(String name) {
         if(name != null && (name.equals("xml") || name.equals("html"))) {
-        	return htmlEncoder;
+            return htmlEncoder;
         }
         return null;
     }

@@ -37,41 +37,41 @@ public class TemplateConfig {
      * @param value
      */
     public static void setValue(String name, String value) {
-    	instance.setValue(name, value);
+        instance.setValue(name, value);
     }
 
     /**
      * @return String
      */
     public static String getSourceFactory() {
-    	return instance.getString("ayada.compile.source-factory");
+        return instance.getString("ayada.compile.source-factory");
     }
 
     /**
      * @return String
      */
     public static String getSourcePattern() {
-    	return instance.getString("ayada.compile.source-pattern");
+        return instance.getString("ayada.compile.source-pattern");
     }
 
     /**
      * @return boolean
      */
     public static boolean getStandardLibrary() {
-    	return instance.getBoolean("ayada.compile.standard-library");
+        return instance.getBoolean("ayada.compile.standard-library");
     }
 
     /**
      * @return boolean
      */
     public static boolean getIgnoreJspTag() {
-    	return instance.getBoolean("ayada.compile.ignore-jsptag");
+        return instance.getBoolean("ayada.compile.ignore-jsptag");
     }
 
     /**
      * @return boolean
      */
     public static boolean getFashJstl() {
-    	return instance.getBoolean("ayada.compile.fast-jstl");
+        return instance.getBoolean("ayada.compile.fast-jstl");
     }
 }

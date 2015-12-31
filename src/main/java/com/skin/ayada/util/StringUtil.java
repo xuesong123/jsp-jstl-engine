@@ -154,15 +154,15 @@ public class StringUtil {
 
         while((j = source.indexOf(limit, i)) > -1) {
             if(j > i) {
-            	s = source.substring(i, j);
+                s = source.substring(i, j);
 
-            	if(trim) {
-            		s = s.trim();
-            	}
+                if(trim) {
+                    s = s.trim();
+                }
 
-            	if(!ignoreWhitespace || s.length() > 0) {
-            		list.add(s);
-            	}
+                if(!ignoreWhitespace || s.length() > 0) {
+                    list.add(s);
+                }
             }
             i = j + limit.length();
         }
@@ -171,12 +171,12 @@ public class StringUtil {
             s = source.substring(i);
 
             if(trim) {
-        		s = s.trim();
-        	}
+                s = s.trim();
+            }
 
-        	if(!ignoreWhitespace || s.length() > 0) {
-        		list.add(s);
-        	}
+            if(!ignoreWhitespace || s.length() > 0) {
+                list.add(s);
+            }
         }
         String[] result = new String[list.size()];
         return list.toArray(result);

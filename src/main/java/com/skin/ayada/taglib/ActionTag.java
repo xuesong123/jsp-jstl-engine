@@ -45,7 +45,7 @@ public class ActionTag extends TagSupport implements ParameterTagSupport, Attrib
             return Tag.SKIP_BODY;
         }
         else {
-        	return Tag.EVAL_BODY_INCLUDE;
+            return Tag.EVAL_BODY_INCLUDE;
         }
     }
 
@@ -55,11 +55,11 @@ public class ActionTag extends TagSupport implements ParameterTagSupport, Attrib
         context.putAll(this.parameters.getParameters());
 
         if(this.className != null) {
-        	Map<String, Object> data = ActionDispatcher.dispatch(this.pageContext, this.parameters, this.className, this.method);
+            Map<String, Object> data = ActionDispatcher.dispatch(this.pageContext, this.parameters, this.className, this.method);
 
-        	if(data != null) {
-        		context.putAll(data);
-        	}
+            if(data != null) {
+                context.putAll(data);
+            }
         }
 
         if(this.getPage() != null) {

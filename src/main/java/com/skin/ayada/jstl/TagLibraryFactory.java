@@ -143,29 +143,29 @@ public class TagLibraryFactory {
         NodeList childNodes = node.getChildNodes();
 
         if(childNodes.getLength() > 0) {
-	        for(int i = 0, length = childNodes.getLength(); i < length; i++) {
-	            Node n = childNodes.item(i);
-	
-	            if(n.getNodeType() == Node.ELEMENT_NODE) {
-	                String nodeName = n.getNodeName();
-	
-	                if(nodeName.equals("name")) {
-	                    tagInfo.setName(n.getTextContent().trim());
-	                }
-	                else if(nodeName.equals("tag-class")) {
-	                    tagInfo.setTagClass(n.getTextContent().trim());
-	                }
-	                else if(nodeName.equals("body-content")) {
-	                    tagInfo.setBodyContent(TagInfo.getBodyContent(n.getTextContent()));
-	                }
-	                else if(nodeName.equals("description")) {
-	                    tagInfo.setDescription(n.getTextContent().trim());
-	                }
-	            }
-	        }
+            for(int i = 0, length = childNodes.getLength(); i < length; i++) {
+                Node n = childNodes.item(i);
+
+                if(n.getNodeType() == Node.ELEMENT_NODE) {
+                    String nodeName = n.getNodeName();
+
+                    if(nodeName.equals("name")) {
+                        tagInfo.setName(n.getTextContent().trim());
+                    }
+                    else if(nodeName.equals("tag-class")) {
+                        tagInfo.setTagClass(n.getTextContent().trim());
+                    }
+                    else if(nodeName.equals("body-content")) {
+                        tagInfo.setBodyContent(TagInfo.getBodyContent(n.getTextContent()));
+                    }
+                    else if(nodeName.equals("description")) {
+                        tagInfo.setDescription(n.getTextContent().trim());
+                    }
+                }
+            }
         }
         else {
-        	NamedNodeMap map = node.getAttributes();
+            NamedNodeMap map = node.getAttributes();
 
             for(int i = 0, len = map.getLength(); i < len; i++) {
                 Node n = map.item(i);

@@ -1,9 +1,12 @@
 /*
- * Copyright 2014 Aliyun.com All right reserved. This software is the
- * confidential and proprietary information of Aliyun.com ("Confidential
- * Information"). You shall not disclose such Confidential Information and shall
- * use it only in accordance with the terms of the license agreement you entered
- * into with Aliyun.com .
+ * $RCSfile: ClassCompiler.java,v $$
+ * $Revision: 1.1 $
+ * $Date: 2013-11-08 $
+ *
+ * Copyright (C) 2008 Skin, Inc. All rights reserved.
+ *
+ * This software is the proprietary information of Skin, Inc.
+ * Use is subject to license terms.
  */
 package com.skin.ayada.jstl.core;
 
@@ -14,8 +17,8 @@ import com.skin.ayada.tagext.TagSupport;
 /**
  * <p>Title: NVLTag</p>
  * <p>Description: </p>
- * <p>Copyright: Copyright (c) 2014</p>
- * @author weixian
+ * <p>Copyright: Copyright (c) 2006</p>
+ * @author xuesong.net
  * @version 1.0
  */
 public class NVLTag extends TagSupport {

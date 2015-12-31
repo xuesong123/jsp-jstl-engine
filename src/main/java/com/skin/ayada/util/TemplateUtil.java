@@ -187,7 +187,7 @@ public class TemplateUtil {
             buffer.append("\"");
 
             if(node instanceof TagNode) {
-            	if(((TagNode)node).getTagClassName() != null) {
+                if(((TagNode)node).getTagClassName() != null) {
                     buffer.append(" tagClass=\"");
                     buffer.append(((TagNode)node).getTagClassName());
                     buffer.append("\"");

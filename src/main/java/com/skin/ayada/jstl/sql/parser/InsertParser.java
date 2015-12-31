@@ -1,3 +1,13 @@
+/*
+ * $RCSfile: ClassCompiler.java,v $$
+ * $Revision: 1.1 $
+ * $Date: 2013-11-08 $
+ *
+ * Copyright (C) 2008 Skin, Inc. All rights reserved.
+ *
+ * This software is the proprietary information of Skin, Inc.
+ * Use is subject to license terms.
+ */
 package com.skin.ayada.jstl.sql.parser;
 
 import java.io.File;
@@ -15,192 +25,195 @@ import com.skin.ayada.io.StringStream;
 import com.skin.ayada.jstl.sql.Record;
 
 /**
- * @author weixian
+ * <p>Title: InsertParser</p>
+ * <p>Description: </p>
+ * <p>Copyright: Copyright (c) 2006</p>
+ * @author xuesong.net
  * @version 1.0
  */
 public class InsertParser {
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		try {
-			String sql = read(new File("D:\\workspace\\jartest\\test1.sql"), "UTF-8");
-			InsertParser parser = new InsertParser();
-			List<Record> resultSet = parser.parse(sql.toString());
+    /**
+     * @param args
+     */
+    public static void main(String[] args) {
+        try {
+            String sql = read(new File("D:\\workspace\\jartest\\test1.sql"), "UTF-8");
+            InsertParser parser = new InsertParser();
+            List<Record> resultSet = parser.parse(sql.toString());
 
-			for(Record record : resultSet) {
-				System.out.println(record.toString());
-			}
-			// write(new File("test2.sql"), resultSet);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+            for(Record record : resultSet) {
+                System.out.println(record.toString());
+            }
+            // write(new File("test2.sql"), resultSet);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	public static void test() {
-		StringBuilder sql = new StringBuilder();
-		sql.append("insert into a(`a1`, [a2], 'a3') values ('a', 1, 1)\r\n");
-		sql.append("insert into a(`a1`, a2, a3) values ('b', 2, 2);\r\n");
-		sql.append("insert into a(`a1`, a2, a3) values ('c', null, 3)");
+    public static void test() {
+        StringBuilder sql = new StringBuilder();
+        sql.append("insert into a(`a1`, [a2], 'a3') values ('a', 1, 1)\r\n");
+        sql.append("insert into a(`a1`, a2, a3) values ('b', 2, 2);\r\n");
+        sql.append("insert into a(`a1`, a2, a3) values ('c', null, 3)");
 
-		try {
-			InsertParser parser = new InsertParser();
-			List<Record> resultSet = parser.parse(sql.toString());
+        try {
+            InsertParser parser = new InsertParser();
+            List<Record> resultSet = parser.parse(sql.toString());
 
-			for(Record record : resultSet) {
-				System.out.println(record.toString());
-			}
-			parser.print(resultSet, "insert into mytable(`b1`, `b2`, `b3`) values (${a1}, ${a2}, ${a3});");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+            for(Record record : resultSet) {
+                System.out.println(record.toString());
+            }
+            parser.print(resultSet, "insert into mytable(`b1`, `b2`, `b3`) values (${a1}, ${a2}, ${a3});");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-	/**
-	 * @param sql
-	 * @return List<Record>
-	 * @throws IOException
-	 */
-	public List<Record> parse(String sql) throws IOException {
-		StringStream stream = new StringStream(sql);
-		List<Record> resultSet = new ArrayList<Record>();
+    /**
+     * @param sql
+     * @return List<Record>
+     * @throws IOException
+     */
+    public List<Record> parse(String sql) throws IOException {
+        StringStream stream = new StringStream(sql);
+        List<Record> resultSet = new ArrayList<Record>();
 
-		while(true) {
-			Record record = this.read(stream);
-			
-			if(record == null) {
-				break;
-			}
-			resultSet.add(record);
-		}
-		return resultSet;
-	}
+        while(true) {
+            Record record = this.read(stream);
 
-	/**
-	 * @param stream
-	 * @return Record
-	 */
-	public Record read(StringStream stream) {
-		String token = null;
+            if(record == null) {
+                break;
+            }
+            resultSet.add(record);
+        }
+        return resultSet;
+    }
 
-		/**
-		 * read insert
-		 */
-		stream.skipWhitespace();
+    /**
+     * @param stream
+     * @return Record
+     */
+    public Record read(StringStream stream) {
+        String token = null;
 
-		if(stream.eof()) {
-			return null;
-		}
+        /**
+         * read insert
+         */
+        stream.skipWhitespace();
 
-		token = this.getToken(stream);
+        if(stream.eof()) {
+            return null;
+        }
 
-		if(!token.equalsIgnoreCase("insert")) {
-			return null;
-		}
+        token = this.getToken(stream);
 
-		/**
-		 * read into
-		 */
-		stream.skipWhitespace();
-		token = this.getToken(stream);
+        if(!token.equalsIgnoreCase("insert")) {
+            return null;
+        }
 
-		if(!token.equalsIgnoreCase("into")) {
-			return null;
-		}
+        /**
+         * read into
+         */
+        stream.skipWhitespace();
+        token = this.getToken(stream);
 
-		stream.skipWhitespace();
-		String tableName = this.getToken(stream);
-		stream.skipWhitespace();
+        if(!token.equalsIgnoreCase("into")) {
+            return null;
+        }
 
-		if(stream.read() != '(') {
-			throw new RuntimeException("expect '('!");
-		}
+        stream.skipWhitespace();
+        String tableName = this.getToken(stream);
+        stream.skipWhitespace();
 
-		String columnName = null;
-		Record record = new Record();
-		record.setTableName(tableName);
-		List<String> columns = new ArrayList<String>();
-		List<Object> values = new ArrayList<Object>();
+        if(stream.read() != '(') {
+            throw new RuntimeException("expect '('!");
+        }
 
-		/**
-		 * read columns
-		 */
-		while(true) {
-			stream.skipWhitespace();
+        String columnName = null;
+        Record record = new Record();
+        record.setTableName(tableName);
+        List<String> columns = new ArrayList<String>();
+        List<Object> values = new ArrayList<Object>();
 
-			if(stream.peek() == ',') {
-				stream.read();
-				stream.skipWhitespace();
-			}
+        /**
+         * read columns
+         */
+        while(true) {
+            stream.skipWhitespace();
 
-			if(stream.peek() == ')') {
-				break;
-			}
+            if(stream.peek() == ',') {
+                stream.read();
+                stream.skipWhitespace();
+            }
 
-			columnName = this.getWord(stream);
-			columns.add(columnName);
+            if(stream.peek() == ')') {
+                break;
+            }
 
-			if(columnName.length() < 1) {
-				break;
-			}
-		}
+            columnName = this.getWord(stream);
+            columns.add(columnName);
 
-		stream.skipWhitespace();
-		
-		if(stream.read() != ')') {
-			throw new RuntimeException("expect ')'!");
-		}
+            if(columnName.length() < 1) {
+                break;
+            }
+        }
 
-		stream.skipWhitespace();
-		token = this.getToken(stream);
+        stream.skipWhitespace();
 
-		if(!token.equalsIgnoreCase("values")) {
-			throw new RuntimeException("expect keyword 'values'!");
-		}
+        if(stream.read() != ')') {
+            throw new RuntimeException("expect ')'!");
+        }
 
-		stream.skipWhitespace();
-		if(stream.read() != '(') {
-			throw new RuntimeException("expect '('!");
-		}
+        stream.skipWhitespace();
+        token = this.getToken(stream);
 
-		Object columnValue = null;
+        if(!token.equalsIgnoreCase("values")) {
+            throw new RuntimeException("expect keyword 'values'!");
+        }
 
-		while(true) {
-			stream.skipWhitespace();
+        stream.skipWhitespace();
+        if(stream.read() != '(') {
+            throw new RuntimeException("expect '('!");
+        }
 
-			if(stream.peek() == ',') {
-				stream.read();
-				stream.skipWhitespace();
-			}
+        Object columnValue = null;
 
-			if(stream.peek() == ')') {
-				break;
-			}
-			columnValue = this.getColumnValue(stream);
-			values.add(columnValue);
-		}
+        while(true) {
+            stream.skipWhitespace();
 
-		stream.skipWhitespace();
-		if(stream.read() != ')') {
-			throw new RuntimeException("expect ')' !");
-		}
+            if(stream.peek() == ',') {
+                stream.read();
+                stream.skipWhitespace();
+            }
 
-		stream.skipWhitespace();
+            if(stream.peek() == ')') {
+                break;
+            }
+            columnValue = this.getColumnValue(stream);
+            values.add(columnValue);
+        }
 
-		if(stream.peek() == ';') {
-			stream.read();
-		}
+        stream.skipWhitespace();
+        if(stream.read() != ')') {
+            throw new RuntimeException("expect ')' !");
+        }
 
-		if(columns.size() == values.size()) {
-			for(int i = 0; i < columns.size(); i++) {
-				record.addColumn(columns.get(i), values.get(i));
-			}
-		}
-		else {
-			throw new RuntimeException("column not match: columns.size: " + columns.size() + ", values.size: " + values.size());
-		}
-		return record;
-	}
+        stream.skipWhitespace();
+
+        if(stream.peek() == ';') {
+            stream.read();
+        }
+
+        if(columns.size() == values.size()) {
+            for(int i = 0; i < columns.size(); i++) {
+                record.addColumn(columns.get(i), values.get(i));
+            }
+        }
+        else {
+            throw new RuntimeException("column not match: columns.size: " + columns.size() + ", values.size: " + values.size());
+        }
+        return record;
+    }
 
     /**
      * @param stream
@@ -274,7 +287,7 @@ public class InsertParser {
     public String getToken(StringStream stream) {
         int c = 0;
         StringBuilder buffer = new StringBuilder();
-		stream.skipWhitespace();
+        stream.skipWhitespace();
 
         while((c = stream.read()) != -1) {
             if(c <= ' ' || c == '(' || c == ')' || c == ',') {
@@ -335,7 +348,7 @@ public class InsertParser {
             c = stream.read();
 
             if(quoto != c && !(quoto == '[' && c == ']')) {
-            	throw new RuntimeException("column '" + word + "', except '" + quoto + "': found '" + (char)c + "'");
+                throw new RuntimeException("column '" + word + "', except '" + quoto + "': found '" + (char)c + "'");
             }
         }
         return word;
@@ -345,8 +358,8 @@ public class InsertParser {
      * @param stream
      * @return Object
      */
-	public Object getColumnValue(StringStream stream) {
-		stream.skipWhitespace();
+    public Object getColumnValue(StringStream stream) {
+        stream.skipWhitespace();
 
         char token;
         StringBuilder buffer = new StringBuilder();
@@ -362,7 +375,7 @@ public class InsertParser {
 
         while((c = stream.read()) != -1) {
             if(c == '\\') {
-            	this.unescape(stream, buffer);
+                this.unescape(stream, buffer);
             }
             else {
                 if(token == ' ') {
@@ -391,11 +404,11 @@ public class InsertParser {
             return buffer.toString();
         }
         else {
-        	String value = buffer.toString();
+            String value = buffer.toString();
 
-        	if(value.equalsIgnoreCase("null")) {
-        		return null;
-        	}
+            if(value.equalsIgnoreCase("null")) {
+                return null;
+            }
             return this.getValue(value);
         }
     }
@@ -531,8 +544,8 @@ public class InsertParser {
                     String hex = new String(cbuf);
 
                     try {
-                    	int value = Integer.parseInt(hex, 16);
-                    	buffer.append((char)value);
+                        int value = Integer.parseInt(hex, 16);
+                        buffer.append((char)value);
                     }
                     catch(NumberFormatException e) {
                     }
@@ -548,8 +561,8 @@ public class InsertParser {
                     String hex = new String(cbuf);
 
                     try {
-                    	int value = Integer.parseInt(hex, 8);
-                    	buffer.append((char)value);
+                        int value = Integer.parseInt(hex, 8);
+                        buffer.append((char)value);
                     }
                     catch(NumberFormatException e) {
                     }
@@ -710,14 +723,14 @@ public class InsertParser {
         return (i >= 48 && i <= 57) || (i >= 97 && i <= 122) || (i >= 65 && i <= 90);
     }
 
-	/**
-	 * @param resultSet
-	 */
-	public void print(List<Record> resultSet, String pattern) {
-		for(Record record : resultSet) {
-			System.out.println(this.replace(pattern, record));
-		}
-	}
+    /**
+     * @param resultSet
+     */
+    public void print(List<Record> resultSet, String pattern) {
+        for(Record record : resultSet) {
+            System.out.println(this.replace(pattern, record));
+        }
+    }
 
     /**
      * @param source
@@ -738,16 +751,16 @@ public class InsertParser {
                     c = source.charAt(j);
 
                     if(c == '}') {
-                    	Object value = record.getColumnValue(name.toString());
+                        Object value = record.getColumnValue(name.toString());
 
-                    	if(value instanceof String) {
-                    		result.append("'");
-                    		result.append(record.escape((String)value));
-                    		result.append("'");
-            			}
-            			else {
-            				result.append(value);
-            			}
+                        if(value instanceof String) {
+                            result.append("'");
+                            result.append(record.escape((String)value));
+                            result.append("'");
+                        }
+                        else {
+                            result.append(value);
+                        }
                         break;
                     }
                     else {
@@ -770,27 +783,27 @@ public class InsertParser {
      * @throws IOException
      */
     public static String read(File file, String encoding) throws IOException {
-    	InputStream inputStream = null;
+        InputStream inputStream = null;
 
-    	try {
-    		inputStream = new FileInputStream(file);
+        try {
+            inputStream = new FileInputStream(file);
 
-	    	if(encoding != null){
-	        	return read(new InputStreamReader(inputStream, encoding));
-	    	}
-	    	else{
-	        	return read(new InputStreamReader(inputStream));
-	    	}
-    	}
-    	finally {
-    		if(inputStream != null) {
-    			try {
-    				inputStream.close();
-    			}
-    			catch(IOException e) {
-    			}
-    		}
-    	}
+            if(encoding != null){
+                return read(new InputStreamReader(inputStream, encoding));
+            }
+            else{
+                return read(new InputStreamReader(inputStream));
+            }
+        }
+        finally {
+            if(inputStream != null) {
+                try {
+                    inputStream.close();
+                }
+                catch(IOException e) {
+                }
+            }
+        }
     }
 
     /**
@@ -800,12 +813,12 @@ public class InsertParser {
      * @throws IOException
      */
     public static String read(InputStream inputStream, String encoding) throws IOException {
-    	if(encoding != null){
-        	return read(new InputStreamReader(inputStream, encoding));
-    	}
-    	else{
-        	return read(new InputStreamReader(inputStream));
-    	}
+        if(encoding != null){
+            return read(new InputStreamReader(inputStream, encoding));
+        }
+        else{
+            return read(new InputStreamReader(inputStream));
+        }
     }
 
     /**
@@ -814,43 +827,43 @@ public class InsertParser {
      * @throws IOException
      */
     public static String read(Reader reader) throws IOException {
-    	int length = 0;
-    	char[] cbuf = new char[4096];
-    	StringBuilder buffer = new StringBuilder();
+        int length = 0;
+        char[] cbuf = new char[4096];
+        StringBuilder buffer = new StringBuilder();
 
-    	while((length = reader.read(cbuf)) > 0) {
-    		buffer.append(cbuf, 0, length);
-    	}
-    	return buffer.toString();
+        while((length = reader.read(cbuf)) > 0) {
+            buffer.append(cbuf, 0, length);
+        }
+        return buffer.toString();
     }
 
-	/**
-	 * @param file
-	 * @param resultSet
-	 */
-	public static void write(File file, List<Record> resultSet) {
-		OutputStream outputStream = null;
+    /**
+     * @param file
+     * @param resultSet
+     */
+    public static void write(File file, List<Record> resultSet) {
+        OutputStream outputStream = null;
 
-		try {
-			byte[] CRLF = "\r\n".getBytes();
-			outputStream = new FileOutputStream(file);
+        try {
+            byte[] CRLF = "\r\n".getBytes();
+            outputStream = new FileOutputStream(file);
 
-			for(Record record : resultSet) {
-				outputStream.write(record.toString().getBytes());
-				outputStream.write(CRLF);
-			}
-			outputStream.flush();
-		}
-		catch(IOException e) {
-			e.printStackTrace();
-		}
-		finally {
-			if(outputStream != null) {
-				try {
-					outputStream.close();
-				} catch (IOException e) {
-				}
-			}
-		}
-	}
+            for(Record record : resultSet) {
+                outputStream.write(record.toString().getBytes());
+                outputStream.write(CRLF);
+            }
+            outputStream.flush();
+        }
+        catch(IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            if(outputStream != null) {
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                }
+            }
+        }
+    }
 }

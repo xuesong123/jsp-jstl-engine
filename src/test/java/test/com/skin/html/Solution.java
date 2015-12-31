@@ -38,7 +38,7 @@ public class Solution {
     }
 
     @SuppressWarnings("resource")
-	public static void main1(String[] args) {
+    public static void main1(String[] args) {
         Scanner in = new Scanner(System.in);
 
         int[] res;

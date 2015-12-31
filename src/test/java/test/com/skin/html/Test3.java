@@ -13,8 +13,8 @@ package test.com.skin.html;
 /**
  * <p>Title: Test3</p>
  * <p>Description: </p>
- * <p>Copyright: Copyright (c) 2014</p>
- * @author weixian
+ * <p>Copyright: Copyright (c) 2006</p>
+ * @author xuesong.net
  * @version 1.0
  */
 public class Test3 {

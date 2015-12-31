@@ -44,13 +44,13 @@ public class JspFactory {
      * @return PageContext
      */
     public static PageContext getPageContext(Map<String, Object> context, Writer writer, int buffserSize, boolean autoFlush) {
-    	JspWriter out = null;
+        JspWriter out = null;
 
         if(writer instanceof JspWriter) {
-        	out = (JspWriter)writer;
+            out = (JspWriter)writer;
         }
         else {
-        	out = new JspWriter(writer, buffserSize, autoFlush);
+            out = new JspWriter(writer, buffserSize, autoFlush);
         }
 
         DefaultPageContext pageContext = new DefaultPageContext(out);

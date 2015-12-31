@@ -219,31 +219,31 @@ public class SqlPlus {
                             }
 
                             if(prefix.equals("create") || prefix.equals("alter") || prefix.equals("drop")) {
-                            	if(batch > 0) {
-                            		statement.executeBatch();
-                            	}
-                            	statement.executeUpdate(sql);
+                                if(batch > 0) {
+                                    statement.executeBatch();
+                                }
+                                statement.executeUpdate(sql);
                                 this.connection.commit();
                                 batch = 0;
                             }
                             else if(prefix.equals("insert") || prefix.equals("update") || prefix.equals("delete")) {
-                            	batch++;
-                            	statement.addBatch(sql);
-                            	if(batch >= batchSize) {
-                            		statement.executeBatch();
+                                batch++;
+                                statement.addBatch(sql);
+                                if(batch >= batchSize) {
+                                    statement.executeBatch();
                                     this.connection.commit();
                                     batch = 0;
-                            	}
+                                }
                             }
                             else {
-                             	ResultSet resultSet = null;
-                             	try {
-                             		resultSet = statement.executeQuery(sql);
-                                 	this.print(resultSet, 0);
-                             	}
-                             	finally {
-                             		Jdbc.close(resultSet);
-                             	}
+                                 ResultSet resultSet = null;
+                                 try {
+                                     resultSet = statement.executeQuery(sql);
+                                     this.print(resultSet, 0);
+                                 }
+                                 finally {
+                                     Jdbc.close(resultSet);
+                                 }
                             }
                         }
                         catch(SQLException e) {
@@ -257,10 +257,10 @@ public class SqlPlus {
                     buffer.append("\r\n");
                 }
             }
-        	if(batch > 0 && statement != null) {
-        		statement.executeBatch();
+            if(batch > 0 && statement != null) {
+                statement.executeBatch();
                 this.connection.commit();
-        	}
+            }
         }
         finally {
             if(reader != null) {

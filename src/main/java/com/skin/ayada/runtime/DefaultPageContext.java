@@ -54,7 +54,7 @@ public class DefaultPageContext implements PageContext {
      * @return PageContext
      */
     public PageContext create() {
-    	return this.templateContext.getPageContext(null, this.getOut());
+        return this.templateContext.getPageContext(null, this.getOut());
     }
 
     /**
@@ -82,7 +82,7 @@ public class DefaultPageContext implements PageContext {
      * @param context
      */
     public void setContext(Map<String, Object> context) {
-    	if(context != null) {
+        if(context != null) {
             for(Map.Entry<String, Object> entry : context.entrySet()) {
                 if(entry.getValue() != null) {
                     this.attributes.put(entry.getKey(), entry.getValue());
@@ -95,9 +95,9 @@ public class DefaultPageContext implements PageContext {
      * @return Map<String, Object>
      */
     public Map<String, Object> getContext() {
-    	Map<String, Object> context = new HashMap<String, Object>();
-    	context.putAll(this.attributes);
-    	return context;
+        Map<String, Object> context = new HashMap<String, Object>();
+        context.putAll(this.attributes);
+        return context;
     }
 
     /**
@@ -105,10 +105,10 @@ public class DefaultPageContext implements PageContext {
      * @return Map<String, Object>
      */
     public Map<String, Object> getContext(String[] names) {
-    	Map<String, Object> context = new HashMap<String, Object>();
+        Map<String, Object> context = new HashMap<String, Object>();
 
-    	if(names != null) {
-    		Object value = null;
+        if(names != null) {
+            Object value = null;
 
             for(String name : names) {
                 value = this.getAttribute(name);
@@ -117,8 +117,8 @@ public class DefaultPageContext implements PageContext {
                     context.put(name, value);
                 }
             }
-    	}
-    	return context;
+        }
+        return context;
     }
 
     /**

@@ -17,11 +17,11 @@ package test.com.skin.ayada.taglib;
  * @version 1.0
  */
 public class TestUtil {
-	/**
-	 * @param name
-	 * @return String
-	 */
-	public String camel(String name) {
+    /**
+     * @param name
+     * @return String
+     */
+    public String camel(String name) {
         if(name == null || name.trim().length() < 1) {
             return "";
         }
@@ -69,9 +69,9 @@ public class TestUtil {
         }
         buffer.setCharAt(0, Character.toLowerCase(buffer.charAt(0)));
         return buffer.toString();
-	}
+    }
 
-	public String uncamel(String name) {
+    public String uncamel(String name) {
         if(name.equalsIgnoreCase("id")) {
             return "id";
         }
@@ -94,5 +94,5 @@ public class TestUtil {
             }
         }
         return buffer.toString();
-	}
+    }
 }

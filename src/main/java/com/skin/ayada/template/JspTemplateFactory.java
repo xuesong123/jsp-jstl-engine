@@ -40,10 +40,10 @@ public class JspTemplateFactory extends TemplateFactory {
     private static final Logger logger = LoggerFactory.getLogger(JspTemplateFactory.class);
 
     public static void main(String[] args) {
-    	JspTemplateFactory jtf = new JspTemplateFactory();
+        JspTemplateFactory jtf = new JspTemplateFactory();
         String path = "/default/a.b.jsp";
-    	path = "/test.jsp";
-    	path = "/!.jsp";
+        path = "/test.jsp";
+        path = "/!.jsp";
 
         String className = jtf.getClassName(path);
         String simpleName = jtf.getSimpleName(className);
@@ -148,10 +148,10 @@ public class JspTemplateFactory extends TemplateFactory {
         }
 
         if(logger.isDebugEnabled()) {
-        	logger.debug("tpl: {}, src: {}, class: {}",
-        			tplFile.getAbsoluteFile(),
-        			srcFile.getAbsoluteFile(),
-        			classFile.getAbsoluteFile());
+            logger.debug("tpl: {}, src: {}, class: {}",
+                    tplFile.getAbsoluteFile(),
+                    srcFile.getAbsoluteFile(),
+                    classFile.getAbsoluteFile());
         }
 
         boolean fastJstl = TemplateConfig.getFashJstl();
@@ -163,7 +163,7 @@ public class JspTemplateFactory extends TemplateFactory {
         File[] files = classFile.getParentFile().listFiles();
 
         if(classFile.exists()) {
-        	classFile.delete();
+            classFile.delete();
         }
 
         if(files != null && files.length > 0) {
@@ -287,7 +287,7 @@ public class JspTemplateFactory extends TemplateFactory {
         String simpleName = this.getJavaIdentifier(array[array.length - 1]);
 
         if(simpleName.length() < 1) {
-        	throw new RuntimeException("UnsupportFileNameException: file \"" + path + "\"");
+            throw new RuntimeException("UnsupportFileNameException: file \"" + path + "\"");
         }
 
         StringBuilder buffer = new StringBuilder(this.getPrefix());
@@ -309,17 +309,17 @@ public class JspTemplateFactory extends TemplateFactory {
      * @return String
      */
     protected String getJavaIdentifier(String name) {
-    	char c;
-    	StringBuilder buffer = new StringBuilder();
+        char c;
+        StringBuilder buffer = new StringBuilder();
 
-    	for(int i = 0; i < name.length(); i++) {
-    		c = name.charAt(i);
+        for(int i = 0; i < name.length(); i++) {
+            c = name.charAt(i);
 
             if(Character.isJavaIdentifierPart(c)) {
                 buffer.append(c);
             }
-    	}
-    	return buffer.toString();
+        }
+        return buffer.toString();
     }
 
     /**

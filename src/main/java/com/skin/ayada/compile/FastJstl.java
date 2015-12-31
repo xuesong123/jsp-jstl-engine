@@ -1,3 +1,13 @@
+/*
+ * $RCSfile: FastJstl.java,v $$
+ * $Revision: 1.1 $
+ * $Date: 2013-11-08 $
+ *
+ * Copyright (C) 2008 Skin, Inc. All rights reserved.
+ *
+ * This software is the proprietary information of Skin, Inc.
+ * Use is subject to license terms.
+ */
 package com.skin.ayada.compile;
 
 import java.util.HashMap;
@@ -21,32 +31,35 @@ import com.skin.ayada.jstl.core.WhenTag;
 import com.skin.ayada.jstl.fmt.DateFormatTag;
 
 /**
- * @author weixian
+ * <p>Title: NVLTag</p>
+ * <p>Description: </p>
+ * <p>Copyright: Copyright (c) 2006</p>
+ * @author xuesong.net
  * @version 1.0
  */
 public class FastJstl {
-	private static final Map<String, String> map = new HashMap<String, String>();
+    private static final Map<String, String> map = new HashMap<String, String>();
 
-	static {
-		map.put(IfTag.class.getName(), "1");
-		map.put(SetTag.class.getName(), "1");
-		map.put(ForEachTag.class.getName(), "1");
-		map.put(ChooseTag.class.getName(), "1");
-		map.put(WhenTag.class.getName(), "1");
-		map.put(OtherwiseTag.class.getName(), "1");
-		map.put(CommentTag.class.getName(), "1");
-		map.put(PrintTag.class.getName(), "1");
-		map.put(PropertyTag.class.getName(), "1");
-		map.put(ParameterTag.class.getName(), "1");
-		map.put(AttributeTag.class.getName(), "1");
-		map.put(ElementTag.class.getName(), "1");
-		map.put(ConstructorTag.class.getName(), "1");
-		map.put(ExecuteTag.class.getName(), "1");
-		map.put(ExitTag.class.getName(), "1");
-		map.put(DateFormatTag.class.getName(), "1");
-	}
+    static {
+        map.put(IfTag.class.getName(), "1");
+        map.put(SetTag.class.getName(), "1");
+        map.put(ForEachTag.class.getName(), "1");
+        map.put(ChooseTag.class.getName(), "1");
+        map.put(WhenTag.class.getName(), "1");
+        map.put(OtherwiseTag.class.getName(), "1");
+        map.put(CommentTag.class.getName(), "1");
+        map.put(PrintTag.class.getName(), "1");
+        map.put(PropertyTag.class.getName(), "1");
+        map.put(ParameterTag.class.getName(), "1");
+        map.put(AttributeTag.class.getName(), "1");
+        map.put(ElementTag.class.getName(), "1");
+        map.put(ConstructorTag.class.getName(), "1");
+        map.put(ExecuteTag.class.getName(), "1");
+        map.put(ExitTag.class.getName(), "1");
+        map.put(DateFormatTag.class.getName(), "1");
+    }
 
-	public static boolean has(String className) {
-		return (map.get(className) != null);
-	}
+    public static boolean has(String className) {
+        return (map.get(className) != null);
+    }
 }

@@ -119,12 +119,12 @@ public class TagLibrary {
      * @param name
      */
     public void rename(String from, String name) {
-    	TagInfo tagInfo = this.library.remove(from);
+        TagInfo tagInfo = this.library.remove(from);
 
-    	if(tagInfo != null) {
-    		tagInfo.setName(name);
-    		this.library.put(name, tagInfo);
-    	}
+        if(tagInfo != null) {
+            tagInfo.setName(name);
+            this.library.put(name, tagInfo);
+        }
     }
 
     /**

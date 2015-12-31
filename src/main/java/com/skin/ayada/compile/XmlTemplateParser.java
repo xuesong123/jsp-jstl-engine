@@ -165,7 +165,7 @@ public class XmlTemplateParser {
                 continue;
             }
             else if(name.equals("tagClass")) {
-            	((TagNode)jspNode).setTagClassName(value);
+                ((TagNode)jspNode).setTagClassName(value);
             }
             else {
                 jspNode.setAttribute(name, value);

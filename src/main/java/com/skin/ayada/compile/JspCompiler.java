@@ -49,6 +49,7 @@ import com.skin.ayada.util.TagUtil;
  * <p>Title: ClassCompiler</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2006</p>
+ * @author xuesong.net
  * @version 1.0
  */
 public class JspCompiler {
@@ -542,7 +543,7 @@ public class JspCompiler {
         if(node.getOffset() == index) {
             if(value != null) {
                 writer.println(indent + "com.skin.ayada.jstl.core.OutTag.write(out, " + this.getValueExpression(value) + ", " + escapeXml + ");");
-             	writer.println(indent + "// out.print(" + this.getStringExpression(value, escapeXml) + ");");
+                 writer.println(indent + "// out.print(" + this.getStringExpression(value, escapeXml) + ");");
                 return Tag.SKIP_BODY;
             }
             else if(node.getLength() > 2) {
@@ -1142,9 +1143,9 @@ public class JspCompiler {
                 writer.println(prefix + "catch(Throwable throwable) {");
                 writer.println(prefix + "    try {");
                 writer.println(prefix + "        " + tagInstanceName + ".doCatch(throwable);");
-				writer.println(prefix + "    } catch (Throwable t) {");
-				writer.println(prefix + "    	throw new Exception(t);");
-				writer.println(prefix + "    }");
+                writer.println(prefix + "    } catch (Throwable t) {");
+                writer.println(prefix + "        throw new Exception(t);");
+                writer.println(prefix + "    }");
                 writer.println(prefix + "}");
                 writer.println(prefix + "finally {");
                 writer.println(prefix + "    " + tagInstanceName + ".doFinally();");

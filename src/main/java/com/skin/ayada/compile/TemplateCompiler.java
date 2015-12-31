@@ -428,8 +428,8 @@ public class TemplateCompiler extends PageCompiler {
                 boolean isEnd = (this.stream.peek(-2) == '/');
 
                 if(isEnd) {
-                	tagNode.setLength(2);
-                	tagNode.setClosed(NodeType.SELF_CLOSED);
+                    tagNode.setLength(2);
+                    tagNode.setClosed(NodeType.SELF_CLOSED);
                     this.popNode(stack, list, nodeName);
                 }
             }
@@ -927,7 +927,7 @@ public class TemplateCompiler extends PageCompiler {
             String tagClassName = className;
 
             if(tagClassName == null || tagClassName.trim().length() < 1) {
-            	tagClassName = tagLibrary.getTagClassName(tagName);
+                tagClassName = tagLibrary.getTagClassName(tagName);
             }
 
             if(tagClassName == null) {
@@ -942,7 +942,7 @@ public class TemplateCompiler extends PageCompiler {
      * @param from
      */
     protected void rename(String from, String name) {
-    	TagLibrary tagLibrary = this.getTagLibrary();
+        TagLibrary tagLibrary = this.getTagLibrary();
 
         if(tagLibrary != null) {
             tagLibrary.rename(from, name);

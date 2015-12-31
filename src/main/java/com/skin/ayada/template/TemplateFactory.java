@@ -52,10 +52,10 @@ public class TemplateFactory {
         TagLibrary tagLibrary = null;
 
         if(TemplateConfig.getStandardLibrary()) {
-        	tagLibrary = TagLibraryFactory.getStandardTagLibrary();
+            tagLibrary = TagLibraryFactory.getStandardTagLibrary();
         }
         else {
-        	tagLibrary = TagLibraryFactory.getTagLibrary();
+            tagLibrary = TagLibraryFactory.getTagLibrary();
         }
 
         long t1 = System.currentTimeMillis();
@@ -77,13 +77,13 @@ public class TemplateFactory {
      * @throws Exception
      */
     public Template compile(String source) throws Exception {
-    	TagLibrary tagLibrary = null;
+        TagLibrary tagLibrary = null;
 
         if(TemplateConfig.getStandardLibrary()) {
-        	tagLibrary = TagLibraryFactory.getStandardTagLibrary();
+            tagLibrary = TagLibraryFactory.getStandardTagLibrary();
         }
         else {
-        	tagLibrary = TagLibraryFactory.getTagLibrary();
+            tagLibrary = TagLibraryFactory.getTagLibrary();
         }
 
         long t1 = System.currentTimeMillis();

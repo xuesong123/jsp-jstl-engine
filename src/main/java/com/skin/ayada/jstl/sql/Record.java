@@ -1,3 +1,13 @@
+/*
+ * $RCSfile: ClassCompiler.java,v $$
+ * $Revision: 1.1 $
+ * $Date: 2013-11-08 $
+ *
+ * Copyright (C) 2008 Skin, Inc. All rights reserved.
+ *
+ * This software is the proprietary information of Skin, Inc.
+ * Use is subject to license terms.
+ */
 package com.skin.ayada.jstl.sql;
 
 import java.text.DateFormat;
@@ -8,7 +18,10 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @author weixian
+ * <p>Title: Record</p>
+ * <p>Description: </p>
+ * <p>Copyright: Copyright (c) 2006</p>
+ * @author xuesong.net
  * @version 1.0
  */
 public class Record {
@@ -385,11 +398,11 @@ public class Record {
             buffer.append(String.format(pattern, columnName));
 
             if(prepared) {
-            	buffer.append("=?");
+                buffer.append("=?");
             }
             else {
-            	buffer.append("=");
-            	Object columnValue = this.columns.get(i).getValue();
+                buffer.append("=");
+                Object columnValue = this.columns.get(i).getValue();
 
                 if(columnValue instanceof String) {
                     buffer.append("'");
@@ -415,10 +428,10 @@ public class Record {
     }
 
     public void print() {
-    	System.out.println("===================== record =====================");
-    	for(Entry entry : this.columns) {
-    		System.out.println(entry.getName() + ": " + entry.getValue());
-    	}
+        System.out.println("===================== record =====================");
+        for(Entry entry : this.columns) {
+            System.out.println(entry.getName() + ": " + entry.getValue());
+        }
     }
 
     /**
@@ -434,6 +447,6 @@ public class Record {
      * @return String
      */
     public String toString(String pattern, boolean prepared) {
-    	return this.getInsertSql(pattern, prepared);
+        return this.getInsertSql(pattern, prepared);
     }
 }

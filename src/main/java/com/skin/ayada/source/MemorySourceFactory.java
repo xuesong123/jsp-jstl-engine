@@ -35,7 +35,7 @@ public class MemorySourceFactory extends SourceFactory {
      * @param source
      */
     public void setSource(String path, Source source) {
-    	this.cache.put(path, source);
+        this.cache.put(path, source);
     }
 
     /**

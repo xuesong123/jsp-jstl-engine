@@ -228,10 +228,10 @@ public class DefaultTemplateContext implements TemplateContext {
         JspWriter out = null;
 
         if(writer instanceof JspWriter) {
-        	out = (JspWriter)writer;
+            out = (JspWriter)writer;
         }
         else {
-        	out = new JspWriter(writer, buffserSize, autoFlush);
+            out = new JspWriter(writer, buffserSize, autoFlush);
         }
 
         DefaultPageContext pageContext = new DefaultPageContext(out);
