@@ -257,7 +257,7 @@ public class SqlPlus {
                     buffer.append("\r\n");
                 }
             }
-        	if(batch > 0) {
+        	if(batch > 0 && statement != null) {
         		statement.executeBatch();
                 this.connection.commit();
         	}

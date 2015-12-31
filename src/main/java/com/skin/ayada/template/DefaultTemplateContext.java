@@ -199,7 +199,6 @@ public class DefaultTemplateContext implements TemplateContext {
     }
 
     /**
-     * @param context
      * @param out
      * @return PageContext
      */
@@ -220,7 +219,7 @@ public class DefaultTemplateContext implements TemplateContext {
 
     /**
      * @param context
-     * @param out
+     * @param writer
      * @param buffserSize
      * @param autoFlush
      * @return PageContext

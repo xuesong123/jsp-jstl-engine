@@ -77,7 +77,7 @@ public class InsertParser {
 	}
 
 	/**
-	 * @param sql
+	 * @param stream
 	 * @return Record
 	 */
 	public Record read(StringStream stream) {
@@ -721,7 +721,7 @@ public class InsertParser {
 
     /**
      * @param source
-     * @param context
+     * @param record
      * @return String
      */
     public String replace(String source, Record record) {

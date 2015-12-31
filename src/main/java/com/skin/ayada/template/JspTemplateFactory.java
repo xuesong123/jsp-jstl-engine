@@ -272,7 +272,7 @@ public class JspTemplateFactory extends TemplateFactory {
     }
 
     /**
-     * @param className
+     * @param path
      * @return String
      */
     protected String getClassName(String path) {

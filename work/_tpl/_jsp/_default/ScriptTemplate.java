@@ -37,7 +37,7 @@ public class ScriptTemplate extends JspTemplate
     public static void main(String[] args)
     {
         java.io.StringWriter writer = new java.io.StringWriter();
-        PageContext pageContext = com.skin.ayada.runtime.JspFactory.getDefaultPageContext(writer);
+        PageContext pageContext = com.skin.ayada.runtime.JspFactory.getPageContext(writer);
         ScriptTemplate template = new ScriptTemplate();
 
         try{

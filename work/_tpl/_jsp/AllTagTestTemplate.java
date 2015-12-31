@@ -41,7 +41,7 @@ import java.io.IOException; // jsp:directive.import: lineNumber: 4
 public class AllTagTestTemplate extends JspTemplate{
     public static void main(String[] args){
         java.io.StringWriter writer = new java.io.StringWriter();
-        PageContext pageContext = com.skin.ayada.runtime.JspFactory.getDefaultPageContext(writer);
+        PageContext pageContext = com.skin.ayada.runtime.JspFactory.getPageContext(writer);
         AllTagTestTemplate template = new AllTagTestTemplate();
 
         try{
