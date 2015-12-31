@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<title>${title}</title>
+<title><c:out value="${title}"/></title>
 <meta name="keywords" content="ayada"/>
 <meta name="description" content="ayada"/>
 <meta name="robots" content="all"/>
@@ -13,17 +13,17 @@
 <body>
 <div class="wrap">
     <div class="header">
-        ${header}
+        <c:out value="${header}"/>
     </div>
 </div>
 <div class="wrap">
     <div class="body">
-        ${body}
+        <c:out value="${body}"/>
     </div>
 </div>
 <div class="wrap">
     <div class="footer">
-        ${footer}
+        <c:out value="${footer}"/>
     </div>
 </div>
 </body>

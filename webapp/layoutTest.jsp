@@ -15,14 +15,4 @@
         <div>copy right</div>
     </c:attribute>
 </c:layout>
-
-<c:choose>
-adsfdaff
-    ${1 + 2}<c:when test="${1 == 1}">
-        <p>1==1</p>
-    </c:when>
-    asdfdsafdaf${1 + 3}<c:when test="${1 == 1}">
-        <p>2==2</p>
-    </c:when>
-    <c:otherwise></c:otherwise>
-</c:choose>
+dsafasf133
