@@ -27,8 +27,7 @@ import com.skin.ayada.tagext.TagSupport;
  * @author xuesong.net
  * @version 1.0
  */
-public class DateFormatTag extends TagSupport
-{
+public class DateFormatTag extends TagSupport {
     private String var;
     private Date value;
     private TimeZone timeZone;
@@ -38,12 +37,9 @@ public class DateFormatTag extends TagSupport
     private String type;
 
     @Override
-    public int doEndTag()
-    {
-        if(this.value == null)
-        {
-            if(this.var != null)
-            {
+    public int doEndTag() {
+        if(this.value == null) {
+            if(this.var != null) {
                 this.pageContext.setAttribute(this.var, null);
             }
 
@@ -58,98 +54,76 @@ public class DateFormatTag extends TagSupport
         int dateStyle = 2;
         int timeStyle = 2;
 
-        if(this.dateStyle != null)
-        {
+        if(this.dateStyle != null) {
             dateStyle = this.getDateStyle(this.dateStyle);
         }
 
-        if(this.timeStyle != null)
-        {
+        if(this.timeStyle != null) {
             timeStyle = getDateStyle(this.timeStyle);
         }
 
-        if(locale != null)
-        {
-            if((this.type == null) || (this.type.equals("date")))
-            {
+        if(locale != null) {
+            if((this.type == null) || (this.type.equals("date"))) {
                 format = DateFormat.getDateInstance(dateStyle, locale);
             }
-            else if(this.type.equals("both"))
-            {
+            else if(this.type.equals("both")) {
                 format = DateFormat.getDateTimeInstance(dateStyle, timeStyle, locale);
             }
-            else if(this.type.equals("time"))
-            {
+            else if(this.type.equals("time")) {
                 format = DateFormat.getTimeInstance(timeStyle, locale);
             }
-            else
-            {
+            else {
                 throw new RuntimeException("illegal type " + this.type);
             }
         }
-        else if (this.type == null || this.type.equals("date"))
-        {
+        else if (this.type == null || this.type.equals("date")) {
             format = DateFormat.getDateInstance(dateStyle);
         }
-        else if (this.type.equals("both"))
-        {
+        else if (this.type.equals("both")) {
             format = DateFormat.getDateTimeInstance(dateStyle, timeStyle);
         }
-        else if (this.type.equals("time"))
-        {
+        else if (this.type.equals("time")) {
             format = DateFormat.getTimeInstance(timeStyle);
         }
-        else
-        {
+        else {
             throw new RuntimeException("illegal type " + this.type);
         }
 
-        if((format != null) && (this.pattern != null))
-        {
-            try
-            {
+        if((format != null) && (this.pattern != null)) {
+            try {
                 ((SimpleDateFormat)format).applyPattern(this.pattern);
             }
-            catch(ClassCastException e)
-            {
+            catch(ClassCastException e) {
                 format = new SimpleDateFormat(this.pattern, locale);
             }
         }
 
-        if(format != null)
-        {
+        if(format != null) {
             TimeZone timeZone = this.getTimeZone(this.timeZone);
 
-            if(timeZone == null)
-            {
+            if(timeZone == null) {
                 timeZone = this.pageContext.getTimeZone();
             }
 
-            if(timeZone != null)
-            {
+            if(timeZone != null) {
                 format.setTimeZone(timeZone);
             }
         }
 
         Object value = this.value;
 
-        if(format != null)
-        {
+        if(format != null) {
             value = format.format(new Date(time));
         }
 
-        if(this.var == null)
-        {
-            try
-            {
+        if(this.var == null) {
+            try {
                 this.pageContext.getOut().print(value);
             }
-            catch(IOException e)
-            {
+            catch(IOException e) {
             }
         }
-        else
-        {
+        else {
             this.pageContext.setAttribute(this.var, value);
         }
 
@@ -159,8 +133,7 @@ public class DateFormatTag extends TagSupport
     /**
      * @return Locale
      */
-    private Locale getLocale()
-    {
+    private Locale getLocale() {
         return Locale.getDefault();
     }
 
@@ -168,15 +141,12 @@ public class DateFormatTag extends TagSupport
      * @param value
      * @return TimeZone
      */
-    private TimeZone getTimeZone(Object value)
-    {
-        if ((value instanceof TimeZone))
-        {
+    private TimeZone getTimeZone(Object value) {
+        if ((value instanceof TimeZone)) {
             return (TimeZone)value;
         }
 
-        if((value instanceof String))
-        {
+        if((value instanceof String)) {
             return TimeZone.getTimeZone((String)value);
         }
 
@@ -187,26 +157,20 @@ public class DateFormatTag extends TagSupport
      * @param style
      * @return int
      */
-    private int getDateStyle(String style)
-    {
-        if((style == null) || (style.equals("default")))
-        {
+    private int getDateStyle(String style) {
+        if((style == null) || (style.equals("default"))) {
             return 2;
         }
-        if(style.equals("short"))
-        {
+        if(style.equals("short")) {
             return 3;
         }
-        if(style.equals("medium"))
-        {
+        if(style.equals("medium")) {
             return 2;
         }
-        if(style.equals("long"))
-        {
+        if(style.equals("long")) {
             return 1;
         }
-        if(style.equals("full"))
-        {
+        if(style.equals("full")) {
             return 0;
         }
 
@@ -216,38 +180,32 @@ public class DateFormatTag extends TagSupport
     /**
      * @return the var
      */
-    public String getVar()
-    {
+    public String getVar() {
         return this.var;
     }
 
     /**
      * @param var the var to set
      */
-    public void setVar(String var)
-    {
+    public void setVar(String var) {
         this.var = var;
     }
 
     /**
      * @return the value
      */
-    public Date getValue()
-    {
+    public Date getValue() {
         return this.value;
     }
 
     /**
      * @param value the value to set
      */
-    public void setValue(Object value)
-    {
-        if((value instanceof Number))
-        {
+    public void setValue(Object value) {
+        if((value instanceof Number)) {
           this.value = new Date(((Number)value).longValue());
         }
-        else
-        {
+        else {
             this.value = ((Date)value);
         }
     }
@@ -255,80 +213,70 @@ public class DateFormatTag extends TagSupport
     /**
      * @return the timeZone
      */
-    public TimeZone getTimeZone()
-    {
+    public TimeZone getTimeZone() {
         return this.timeZone;
     }
 
     /**
      * @param timeZone the timeZone to set
      */
-    public void setTimeZone(TimeZone timeZone)
-    {
+    public void setTimeZone(TimeZone timeZone) {
         this.timeZone = timeZone;
     }
 
     /**
      * @return the pattern
      */
-    public String getPattern()
-    {
+    public String getPattern() {
         return this.pattern;
     }
 
     /**
      * @param pattern the pattern to set
      */
-    public void setPattern(String pattern)
-    {
+    public void setPattern(String pattern) {
         this.pattern = pattern;
     }
 
     /**
      * @return the dateStyle
      */
-    public String getDateStyle()
-    {
+    public String getDateStyle() {
         return this.dateStyle;
     }
 
     /**
      * @param dateStyle the dateStyle to set
      */
-    public void setDateStyle(String dateStyle)
-    {
+    public void setDateStyle(String dateStyle) {
         this.dateStyle = dateStyle;
     }
 
     /**
      * @return the timeStyle
      */
-    public String getTimeStyle()
-    {
+    public String getTimeStyle() {
         return this.timeStyle;
     }
 
     /**
      * @param timeStyle the timeStyle to set
      */
-    public void setTimeStyle(String timeStyle)
-    {
+    public void setTimeStyle(String timeStyle) {
         this.timeStyle = timeStyle;
     }
 
     /**
      * @return the type
      */
-    public String getType()
-    {
+    public String getType() {
         return this.type;
     }
 
     /**
      * @param type the type to set
      */
-    public void setType(String type)
-    {
+    public void setType(String type) {
         this.type = type;
     }
 }

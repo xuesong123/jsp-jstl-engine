@@ -22,8 +22,7 @@ import com.skin.ayada.tagext.TagSupport;
  * @author xuesong.net
  * @version 1.0
  */
-public class ScrollPage extends TagSupport
-{
+public class ScrollPage extends TagSupport {
     private int pageNum;
     private int pageSize;
     private int count;
@@ -33,42 +32,33 @@ public class ScrollPage extends TagSupport
     private static final int DEFAULT_SIZE = 7;
 
     @Override
-    public int doEndTag()
-    {
-        try
-        {
+    public int doEndTag() {
+        try {
             String html = this.render();
             this.pageContext.getOut().print(html);
         }
-        catch(java.io.IOException e)
-        {
+        catch(java.io.IOException e) {
         }
-
         return Tag.EVAL_PAGE;
     }
 
     /**
      * @return String
      */
-    protected String render()
-    {
-        if(this.pageNum < 1)
-        {
+    protected String render() {
+        if(this.pageNum < 1) {
             this.pageNum = 1;
         }
 
-        if(this.pageSize < 1)
-        {
+        if(this.pageSize < 1) {
             this.pageSize = 1;
         }
 
-        if(this.className == null)
-        {
+        if(this.className == null) {
             this.className = "";
         }
 
-        if(this.href == null || this.href.trim().length() < 1)
-        {
+        if(this.href == null || this.href.trim().length() < 1) {
             this.href = "javascript:void(0)";
         }
 
@@ -79,41 +69,33 @@ public class ScrollPage extends TagSupport
         StringBuilder buffer = new StringBuilder();
         buffer.append("<div");
 
-        if(this.className != null && this.className.trim().length() > 0)
-        {
+        if(this.className != null && this.className.trim().length() > 0) {
             buffer.append(" class=\"").append(this.className).append("\"");
         }
 
         buffer.append(String.format(" page=\"%d\" count=\"%d\" total=\"%d\">", this.pageNum, count, total));
 
-        if(this.pageNum > 1)
-        {
+        if(this.pageNum > 1) {
             String prev = this.replace(this.href, "%s", this.pageNum - 1);
             buffer.append(String.format("<a class=\"scrollpage\" href=\"%s\" page=\"%d\" title=\"\u4e0a\u4e00\u9875\">\u4e0a\u4e00\u9875</a>", prev, this.pageNum - 1));
         }
-        else
-        {
+        else {
             String prev = "javascript:void(0)";
             buffer.append(String.format("<a class=\"disabled\" href=\"%s\" page=\"%d\" title=\"\u4e0a\u4e00\u9875\">\u4e0a\u4e00\u9875</a>", prev, this.pageNum - 1));
         }
 
-        for(int i = 0; i < pages.length; i++)
-        {
+        for(int i = 0; i < pages.length; i++) {
             int n = pages[i];
 
-            if(n != 0)
-            {
-                if(n == this.pageNum)
-                {
+            if(n != 0) {
+                if(n == this.pageNum) {
                     buffer.append(String.format("<a class=\"active\" href=\"%s\" page=\"%d\">%d</a>", this.replace(this.href, "%s", n), n, n));
                 }
-                else
-                {
+                else {
                     buffer.append(String.format("<a class=\"scrollpage\" href=\"%s\" page=\"%d\">%d</a>", this.replace(this.href, "%s", n), n, n));
                 }
             }
-            else
-            {
+            else {
                 buffer.append("<span class=\"ellipsis\">...</span>");
             }
         }
@@ -122,19 +104,16 @@ public class ScrollPage extends TagSupport
         buffer.append(String.format("<input type=\"text\" class=\"pagenum\" value=\"%d\"/>/%d\u9875", this.pageNum, total));
         buffer.append("</span>");
 
-        if(this.pageNum < total)
-        {
+        if(this.pageNum < total) {
             String next = this.replace(this.href, "%s", this.pageNum + 1);
             buffer.append(String.format("<a href=\"%s\" class=\"scrollpage\" page=\"%d\" title=\"\u4e0b\u4e00\u9875\">\u4e0b\u4e00\u9875</a>", next, this.pageNum + 1));
         }
-        else
-        {
+        else {
             String next = "javascript: void(0)";
             buffer.append(String.format("<a href=\"%s\" class=\"disabled\" page=\"%d\" title=\"\u4e0b\u4e00\u9875\">\u4e0b\u4e00\u9875</a>", next, this.pageNum + 1));
         }
 
-        if(this.pattern != null)
-        {
+        if(this.pattern != null) {
             String info = this.pattern;
             info = this.replace(info, "!{pageNum}", this.pageNum);
             info = this.replace(info, "!{pageSize}", this.pageSize);
@@ -142,7 +121,6 @@ public class ScrollPage extends TagSupport
             info = this.replace(info, "!{total}", total);
             buffer.append(info);
         }
-
         buffer.append("</div>");
         return buffer.toString();
     }
@@ -153,17 +131,14 @@ public class ScrollPage extends TagSupport
      * @param size
      * @return int[]
      */
-    public static int[] getPages(int num, int pages, int size)
-    {
+    public static int[] getPages(int num, int pages, int size) {
         int[] result = null;
 
-        if(pages <= (size + 4))
-        {
+        if(pages <= (size + 4)) {
             int length = (pages > 0 ? pages : 1);
             result = new int[length];
 
-            for(int i = 0; i < length; i++)
-            {
+            for(int i = 0; i < length; i++) {
                 result[i] = i + 1;
             }
 
@@ -173,20 +148,17 @@ public class ScrollPage extends TagSupport
         int start = num - size / 2;
         int end = start + size;
 
-        if(start < 3)
-        {
+        if(start < 3) {
             start = 1;
             end = start + size + 1;
             result = new int[size + 3];
         }
-        else if((start + size) >= pages)
-        {
+        else if((start + size) >= pages) {
             start = pages - size;
             end = start + size;
             result = new int[size + 3];
         }
-        else
-        {
+        else {
             end = start + size;
             result = new int[size + 4];
         }
@@ -194,29 +166,23 @@ public class ScrollPage extends TagSupport
         result[0] = 1;
         result[result.length - 1] = pages;
 
-        if(start >= 3)
-        {
-            if(start == 3)
-            {
+        if(start >= 3) {
+            if(start == 3) {
                 result[1] = 2;
             }
 
-            for(int i = start; i < end; i++)
-            {
+            for(int i = start; i < end; i++) {
                 result[i - start + 2] = i;
             }
         }
-        else
-        {
+        else {
             start = 1;
             end = size + 2;
 
-            for(int i = start; i < end; i++)
-            {
+            for(int i = start; i < end; i++) {
                 result[i - start] = i;
             }
         }
-
         return result;
     }
 
@@ -226,15 +192,12 @@ public class ScrollPage extends TagSupport
      * @param page
      * @return String
      */
-    protected String replace(String source, String search, int page)
-    {
-        if(source == null)
-        {
+    protected String replace(String source, String search, int page) {
+        if(source == null) {
             return "";
         }
 
-        if(search == null)
-        {
+        if(search == null) {
             return source;
         }
 
@@ -243,12 +206,10 @@ public class ScrollPage extends TagSupport
         int d = search.length();
         StringBuilder buffer = new StringBuilder();
 
-        do
-        {
+        do {
             e = source.indexOf(search, s);
 
-            if(e == -1)
-            {
+            if(e == -1) {
                 buffer.append(source.substring(s));
                 break;
             }
@@ -262,32 +223,25 @@ public class ScrollPage extends TagSupport
     /**
      * @param out
      */
-    public void print(PrintWriter out)
-    {
+    public void print(PrintWriter out) {
         int total = this.getTotal();
         int[] pages = ScrollPage.getPages(this.pageNum, total, DEFAULT_SIZE);
 
-        for(int i = 0; i < pages.length; i++)
-        {
+        for(int i = 0; i < pages.length; i++) {
             int n = pages[i];
 
-            if(n != 0)
-            {
-                if(n == this.pageNum)
-                {
+            if(n != 0) {
+                if(n == this.pageNum) {
                     out.print("<" + n + ">");
                 }
-                else
-                {
+                else {
                     out.print("[" + n + "]");
                 }
             }
-            else
-            {
+            else {
                 out.print("...");
             }
         }
-
         out.println();
         out.flush();
     }
@@ -295,104 +249,91 @@ public class ScrollPage extends TagSupport
     /**
      * @return the pageNum
      */
-    public int getPageNum()
-    {
+    public int getPageNum() {
         return this.pageNum;
     }
 
     /**
      * @param pageNum the pageNum to set
      */
-    public void setPageNum(int pageNum)
-    {
+    public void setPageNum(int pageNum) {
         this.pageNum = pageNum;
     }
 
     /**
      * @return the pageSize
      */
-    public int getPageSize()
-    {
+    public int getPageSize() {
         return this.pageSize;
     }
 
     /**
      * @param pageSize the pageSize to set
      */
-    public void setPageSize(int pageSize)
-    {
+    public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
     }
 
     /**
      * @param count the count to set
      */
-    public void setCount(int count)
-    {
+    public void setCount(int count) {
         this.count = count;
     }
 
     /**
      * @return int
      */
-    public int getCount()
-    {
+    public int getCount() {
         return this.count;
     }
 
     /**
      * @return int
      */
-    public int getTotal()
-    {
+    public int getTotal() {
         return (this.count + (this.pageSize - 1)) / this.pageSize;
     }
 
     /**
      * @return the className
      */
-    public String getClassName()
-    {
+    public String getClassName() {
         return this.className;
     }
 
     /**
      * @param className the className to set
      */
-    public void setClassName(String className)
-    {
+    public void setClassName(String className) {
         this.className = className;
     }
 
     /**
      * @return the href
      */
-    public String getHref()
-    {
+    public String getHref() {
         return this.href;
     }
 
     /**
      * @param href the href to set
      */
-    public void setHref(String href)
-    {
+    public void setHref(String href) {
         this.href = href;
     }
 
     /**
      * @return the pattern
      */
-    public String getPattern()
-    {
+    public String getPattern() {
         return this.pattern;
     }
 
     /**
      * @param pattern the pattern to set
      */
-    public void setPattern(String pattern)
-    {
+    public void setPattern(String pattern) {
         this.pattern = pattern;
     }
 }

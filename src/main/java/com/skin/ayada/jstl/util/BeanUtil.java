@@ -28,31 +28,25 @@ import com.skin.ayada.ognl.util.Empty;
  * @author xuesong.net
  * @version 1.0
  */
-public class BeanUtil
-{
+public class BeanUtil {
     /**
      * @param value
      * @return boolean
      */
-    public int size(Object value)
-    {
-        if(value == null)
-        {
+    public int size(Object value) {
+        if(value == null) {
             return 0;
         }
 
-        if(value.getClass().isArray())
-        {
+        if(value.getClass().isArray()) {
             return ((Object[])value).length;
         }
 
-        if(value instanceof Collection<?>)
-        {
+        if(value instanceof Collection<?>) {
             return ((Collection<?>)value).size();
         }
 
-        if(value instanceof Map<?, ?>)
-        {
+        if(value instanceof Map<?, ?>) {
             return ((Map<?, ?>)value).size();
         }
 
@@ -63,8 +57,7 @@ public class BeanUtil
      * @param value
      * @return boolean
      */
-    public boolean isNull(Object value)
-    {
+    public boolean isNull(Object value) {
         return (value == null || value instanceof Empty<?, ?>);
     }
 
@@ -72,8 +65,7 @@ public class BeanUtil
      * @param value
      * @return boolean
      */
-    public boolean notNull(Object value)
-    {
+    public boolean notNull(Object value) {
         return (this.isNull(value) == false);
     }
 
@@ -81,31 +73,24 @@ public class BeanUtil
      * @param value
      * @return boolean
      */
-    public boolean isEmpty(Object value)
-    {
-        if(value == null)
-        {
+    public boolean isEmpty(Object value) {
+        if(value == null) {
             return true;
         }
 
-        if(value instanceof String)
-        {
+        if(value instanceof String) {
             return (((String)value).trim().length() < 1);
         }
-        else if(value instanceof Collection<?>)
-        {
+        else if(value instanceof Collection<?>) {
             return ((Collection<?>)value).isEmpty();
         }
-        else if(value.getClass().isArray())
-        {
+        else if(value.getClass().isArray()) {
             return (Array.getLength(value) == 0);
         }
-        else if(value instanceof Map<?, ?>)
-        {
+        else if(value instanceof Map<?, ?>) {
             return ((Map<?, ?>)value).isEmpty();
         }
-        else
-        {
+        else {
             return false;
         }
     }
@@ -114,8 +99,7 @@ public class BeanUtil
      * @param value
      * @return boolean
      */
-    public boolean notEmpty(Object value)
-    {
+    public boolean notEmpty(Object value) {
         return (this.isEmpty(value) == false);
     }
 
@@ -124,10 +108,8 @@ public class BeanUtil
      * @param target
      * @return boolean
      */
-    public boolean equals(Object source, Object target)
-    {
-        if(source != null && target != null)
-        {
+    public boolean equals(Object source, Object target) {
+        if(source != null && target != null) {
             return source.equals(target);
         }
 
@@ -137,74 +119,64 @@ public class BeanUtil
     /**
      * @param c
      */
-    public String toString(Character c)
-    {
+    public String toString(Character c) {
         return c.toString();
     }
 
     /**
      * @param b
      */
-    public String toString(Boolean b)
-    {
+    public String toString(Boolean b) {
         return (b.toString());
     }
 
     /**
      * @param b
      */
-    public String toString(Byte b)
-    {
+    public String toString(Byte b) {
         return (b.toString());
     }
 
     /**
      * @param s
      */
-    public String toString(Short s)
-    {
+    public String toString(Short s) {
         return (s.toString());
     }
 
     /**
      * @param i
      */
-    public String toString(Integer i)
-    {
+    public String toString(Integer i) {
         return (i.toString());
     }
 
     /**
      * @param f
      */
-    public String toString(Float f)
-    {
+    public String toString(Float f) {
         return (f.toString());
     }
 
     /**
      * @param d
      */
-    public String toString(Double d)
-    {
+    public String toString(Double d) {
         return (d.toString());
     }
 
     /**
      * @param l
      */
-    public String toString(Long l)
-    {
+    public String toString(Long l) {
         return (l.toString());
     }
 
     /**
      * @param date
      */
-    public String toString(Date date)
-    {
-        if(date != null)
-        {
+    public String toString(Date date) {
+        if(date != null) {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss SSS".toString());
             return (dateFormat.format(date).toString());
         }
@@ -214,18 +186,15 @@ public class BeanUtil
     /**
      * @param object
      */
-    public String toString(Object object)
-    {
-        if(object == null)
-        {
+    public String toString(Object object) {
+        if(object == null) {
             return "null";
         }
 
         Class<?> clazz = object.getClass();
         String className = clazz.getName();
 
-        if(className.startsWith("java."))
-        {
+        if(className.startsWith("java.")) {
             return object.toString();
         }
 
@@ -234,20 +203,16 @@ public class BeanUtil
         buffer.append("--------------- " + className + " info ---------------").append(line);
         Method[] methods = clazz.getMethods();
 
-        for(int i = 0; i < methods.length; i++)
-        {
+        for(int i = 0; i < methods.length; i++) {
             String name = methods[i].getName();
             Class<?>[] parameterTypes = methods[i].getParameterTypes();
 
-            if(Modifier.isPublic(methods[i].getModifiers()) && name.startsWith("get") && parameterTypes.length == 0 && name.equals("getClass") == false)
-            {
-                try
-                {
+            if(Modifier.isPublic(methods[i].getModifiers()) && name.startsWith("get") && parameterTypes.length == 0 && name.equals("getClass") == false) {
+                try {
                     Object value = methods[i].invoke(object, new Object[0]);
                     buffer.append(name.substring(3) + ": " + value.toString()).append(line);
                 }
-                catch(Exception e)
-                {
+                catch(Exception e) {
                     buffer.append(name.substring(3) + ": " + e.getMessage()).append(line);
                 }
             }
@@ -261,41 +226,33 @@ public class BeanUtil
     /**
      * @param c
      */
-    public String toString(Collection<?> c)
-    {
+    public String toString(Collection<?> c) {
         return toString(c, 0);
     }
 
     /**
      * @param c
      */
-    public String toString(Collection<?> c, int size)
-    {
-        if(c == null)
-        {
+    public String toString(Collection<?> c, int size) {
+        if(c == null) {
             return "collection.size: null";
         }
-        else if(c.size() < 1)
-        {
+        else if(c.size() < 1) {
             return ("collection.size: 0");
         }
-        else
-        {
+        else {
             int i = 0;
             String line = "\r\n";
             StringBuilder buffer = new StringBuilder();
             buffer.append("collection.size: " + c.size()).append(line);
 
-            for(Object o : c)
-            {
+            for(Object o : c) {
                 buffer.append(toString(o));
 
-                if(size > 0)
-                {
+                if(size > 0) {
                     i++;
 
-                    if(i >= size)
-                    {
+                    if(i >= size) {
                         buffer.append("还有[" + (c.size() - i) + "]项未显示 ......").append(line);
                         break;
                     }
@@ -309,33 +266,27 @@ public class BeanUtil
     /**
      * @param map
      */
-    public String toString(Map<?, ?> map)
-    {
+    public String toString(Map<?, ?> map) {
         return toString(map, 0);
     }
 
     /**
      * @param map
      */
-    public String toString(Map<?, ?> map, int size)
-    {
-        if(map == null)
-        {
+    public String toString(Map<?, ?> map, int size) {
+        if(map == null) {
             return ("map.size: null");
         }
-        else if(map.size() < 1)
-        {
+        else if(map.size() < 1) {
             return ("map.size: 0");
         }
-        else
-        {
+        else {
             int i = 0;
             String line = "\r\n";
             StringBuilder buffer = new StringBuilder();
             buffer.append("map.size: " + map.size()).append(line);
 
-            for(Map.Entry<?, ?> entry : map.entrySet())
-            {
+            for(Map.Entry<?, ?> entry : map.entrySet()) {
                 Object key = entry.getKey();
                 Object value = entry.getValue();
 
@@ -344,11 +295,9 @@ public class BeanUtil
                 buffer.append("value.detail: ").append(line);
                 buffer.append(toString(value));
 
-                if(size > 0)
-                {
+                if(size > 0) {
                     i++;
-                    if(i >= size)
-                    {
+                    if(i >= size) {
                         buffer.append("还有[" + (map.size() - i) + "]项未显示 ......").append(line);
                         break;
                     }
@@ -362,8 +311,7 @@ public class BeanUtil
     /**
      * @param value
      */
-    public void print(Object value)
-    {
+    public void print(Object value) {
         System.out.println(toString(value));
     }
 }

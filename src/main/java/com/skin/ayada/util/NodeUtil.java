@@ -22,22 +22,18 @@ import com.skin.ayada.statement.NodeType;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class NodeUtil
-{
+public class NodeUtil {
     /**
      * @param nodes
      * @return String
      */
-    public static String getDescription(List<Node> nodes)
-    {
+    public static String getDescription(List<Node> nodes) {
         StringBuilder buffer = new StringBuilder();
 
-        for(Node node : nodes)
-        {
+        for(Node node : nodes) {
             buffer.append(getDescription(node));
             buffer.append("\r\n");
         }
-
         return buffer.toString();
     }
 
@@ -45,27 +41,23 @@ public class NodeUtil
      * @param node
      * @return String
      */
-    public static String getDescription(Node node)
-    {
+    public static String getDescription(Node node) {
         int nodeType = node.getNodeType();
         StringBuilder buffer = new StringBuilder();
 
-        if(nodeType == NodeType.TEXT)
-        {
+        if(nodeType == NodeType.TEXT) {
             buffer.append("<text>");
             buffer.append(node.getTextContent());
             buffer.append("</text>");
             return buffer.toString();
         }
 
-        if(nodeType == NodeType.COMMENT)
-        {
+        if(nodeType == NodeType.COMMENT) {
             buffer.append(node.getTextContent());
             return buffer.toString();
         }
 
-        if(nodeType == NodeType.VARIABLE || nodeType == NodeType.EXPRESSION)
-        {
+        if(nodeType == NodeType.VARIABLE || nodeType == NodeType.EXPRESSION) {
             buffer.append("${");
             buffer.append(node.getTextContent());
             buffer.append("}");
@@ -76,10 +68,8 @@ public class NodeUtil
         buffer.append(node.getNodeName());
         Map<String, String> attributes = node.getAttributes();
 
-        if(attributes != null && attributes.size() > 0)
-        {
-            for(Map.Entry<String, String> entrySet : attributes.entrySet())
-            {
+        if(attributes != null && attributes.size() > 0) {
+            for(Map.Entry<String, String> entrySet : attributes.entrySet()) {
                 buffer.append(" ");
                 buffer.append(entrySet.getKey());
                 buffer.append("=\"");
@@ -88,18 +78,15 @@ public class NodeUtil
             }
         }
 
-        if(node.getClosed() == NodeType.PAIR_CLOSED)
-        {
+        if(node.getClosed() == NodeType.PAIR_CLOSED) {
             buffer.append(">...");
             buffer.append("</");
             buffer.append(node.getNodeName());
             buffer.append(">");
         }
-        else
-        {
+        else {
             buffer.append("/>");
         }
-
         return buffer.toString();
     }
 
@@ -107,14 +94,11 @@ public class NodeUtil
      * @param attributes
      * @return String
      */
-    public static String toString(Map<String, String> attributes)
-    {
+    public static String toString(Map<String, String> attributes) {
         StringBuilder buffer = new StringBuilder();
 
-        if(attributes != null && attributes.size() > 0)
-        {
-            for(Map.Entry<String, String> entrySet : attributes.entrySet())
-            {
+        if(attributes != null && attributes.size() > 0) {
+            for(Map.Entry<String, String> entrySet : attributes.entrySet()) {
                 buffer.append(entrySet.getKey());
                 buffer.append("=\"");
                 buffer.append(entrySet.getValue());
@@ -122,12 +106,10 @@ public class NodeUtil
                 buffer.append(" ");
             }
 
-            if(buffer.length() > 0)
-            {
+            if(buffer.length() > 0) {
                 buffer.deleteCharAt(buffer.length() - 1);
             }
         }
-
         return buffer.toString();
     }
 }

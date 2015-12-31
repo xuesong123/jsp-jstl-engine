@@ -26,18 +26,16 @@ import com.skin.ayada.util.ClassUtil;
  * @author xuesong.net
  * @version 1.0
  */
-public class DefaultExpressionFactory implements ExpressionFactory
-{
+public class DefaultExpressionFactory implements ExpressionFactory {
     private static final Logger logger = LoggerFactory.getLogger(DefaultExpressionFactory.class);
     private static final Map<String, Object> attributes = getAttributes("UTF-8");
-    
+
     /**
      * @param pageContext
      * @return ExpressionContext
      */
     @Override
-    public ExpressionContext getExpressionContext(PageContext pageContext)
-    {
+    public ExpressionContext getExpressionContext(PageContext pageContext) {
         return DefaultExpressionFactory.getDefaultExpressionContext(pageContext);
     }
 
@@ -45,21 +43,17 @@ public class DefaultExpressionFactory implements ExpressionFactory
      * @param pageContext
      * @return ExpressionContext
      */
-    public static ExpressionContext getDefaultExpressionContext(PageContext pageContext)
-    {
+    public static ExpressionContext getDefaultExpressionContext(PageContext pageContext) {
         ExpressionContext expressionContext = new DefaultExpressionContext(pageContext);
 
-        if(attributes != null && attributes.size() > 0)
-        {
-            for(Map.Entry<String, Object> entry : attributes.entrySet())
-            {
+        if(attributes != null && attributes.size() > 0) {
+            for(Map.Entry<String, Object> entry : attributes.entrySet()) {
                 pageContext.setAttribute(entry.getKey(), entry.getValue());
             }
 
             ELEncoder encoder = (ELEncoder)(attributes.get("ELEncoder"));
             expressionContext.setEncoder(encoder);
         }
-
         return expressionContext;
     }
 
@@ -67,55 +61,42 @@ public class DefaultExpressionFactory implements ExpressionFactory
      * @param charset
      * @return Map<String, Object>
      */
-    private static Map<String, Object> getAttributes(String charset)
-    {
+    private static Map<String, Object> getAttributes(String charset) {
         Map<String, Object> attributes = new HashMap<String, Object>();
         Map<String, String> map = PropertyResource.load("ayada-tools.properties", charset);
 
-        if(map.size() < 1)
-        {
+        if(map.size() < 1) {
             map = PropertyResource.load("ayada-tools-default.properties", charset);
         }
 
-        if(map.size() > 0)
-        {
-            for(Map.Entry<String, String> entry : map.entrySet())
-            {
+        if(map.size() > 0) {
+            for(Map.Entry<String, String> entry : map.entrySet()) {
                 Entry pair = getEntry(entry.getKey(), entry.getValue());
                 Object object = pair.getValue();
 
-                if(object != null)
-                {
+                if(object != null) {
                     attributes.put(pair.getName(), pair.getValue());
                 }
-                else
-                {
+                else {
                     attributes.remove(pair.getName());
                 }
             }
 
-            if(logger.isDebugEnabled())
-            {
-                for(Map.Entry<String, Object> entry : attributes.entrySet())
-                {
-                    if(entry.getValue() instanceof String)
-                    {
+            if(logger.isDebugEnabled()) {
+                for(Map.Entry<String, Object> entry : attributes.entrySet()) {
+                    if(entry.getValue() instanceof String) {
                         continue;
                     }
-
                     logger.debug("set " + entry.getKey() + " = " + entry.getValue());
                 }
 
-                for(Map.Entry<String, Object> entry : attributes.entrySet())
-                {
-                    if(entry.getValue() instanceof String)
-                    {
+                for(Map.Entry<String, Object> entry : attributes.entrySet()) {
+                    if(entry.getValue() instanceof String) {
                         logger.debug("set " + entry.getKey() + " = " + entry.getValue());
                     }
                 }
             }
         }
-
         return attributes;
     }
 
@@ -124,38 +105,30 @@ public class DefaultExpressionFactory implements ExpressionFactory
      * @param value
      * @return Object
      */
-    public static Entry getEntry(String name, String value)
-    {
+    public static Entry getEntry(String name, String value) {
         String key = null;
         Object result = null;
 
-        if(value.equalsIgnoreCase("null") == false)
-        {
-            if(name.startsWith("set "))
-            {
+        if(value.equalsIgnoreCase("null") == false) {
+            if(name.startsWith("set ")) {
                 key = name.substring(4);
-                
-                try
-                {
+
+                try {
                     result = ClassUtil.getInstance(value);
                 }
-                catch(Exception e)
-                {
+                catch(Exception e) {
                     logger.warn(e.getMessage(), e);
                 }
             }
-            else if(name.startsWith("var "))
-            {
+            else if(name.startsWith("var ")) {
                 key = name.substring(4);
                 result = value;
             }
-            else
-            {
+            else {
                 key = name;
                 result = value;
             }
         }
-
         return new Entry(key, result);
     }
 
@@ -163,8 +136,7 @@ public class DefaultExpressionFactory implements ExpressionFactory
      * @param name
      * @param value
      */
-    public static void setAttribute(String name, Object value)
-    {
+    public static void setAttribute(String name, Object value) {
         attributes.put(name, value);
     }
 
@@ -172,8 +144,7 @@ public class DefaultExpressionFactory implements ExpressionFactory
      * @param name
      * @return Object
      */
-    public static Object getAttribute(String name)
-    {
+    public static Object getAttribute(String name) {
         return attributes.get(name);
     }
 
@@ -184,13 +155,11 @@ public class DefaultExpressionFactory implements ExpressionFactory
      * @author xuesong.net
      * @version 1.0
      */
-    public static class Entry
-    {
+    public static class Entry {
         private String name;
         private Object value;
 
-        public Entry(String name, Object value)
-        {
+        public Entry(String name, Object value) {
             this.name = name;
             this.value = value;
         }
@@ -198,60 +167,51 @@ public class DefaultExpressionFactory implements ExpressionFactory
         /**
          * @return the name
          */
-        public String getName()
-        {
+        public String getName() {
             return this.name;
         }
 
         /**
          * @param name the name to set
          */
-        public void setName(String name)
-        {
+        public void setName(String name) {
             this.name = name;
         }
 
         /**
          * @return the value
          */
-        public Object getValue()
-        {
+        public Object getValue() {
             return this.value;
         }
 
         /**
          * @param value the value to set
          */
-        public void setValue(Object value)
-        {
+        public void setValue(Object value) {
             this.value = value;
         }
     }
-    
-    public static void print(Map<String, Object> attributes)
-    {
+
+    public static void print(Map<String, Object> attributes) {
         System.out.println("---------- objects ----------");
 
-        for(Map.Entry<String, Object> entry : attributes.entrySet())
-        {
+        for(Map.Entry<String, Object> entry : attributes.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
 
-            if(value != null && (value instanceof String) == false)
-            {
+            if(value != null && (value instanceof String) == false) {
                 System.out.println(key + ": " + value);
             }
         }
 
         System.out.println("---------- variables ----------");
 
-        for(Map.Entry<String, Object> entry : attributes.entrySet())
-        {
+        for(Map.Entry<String, Object> entry : attributes.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
 
-            if(value == null || value instanceof String)
-            {
+            if(value == null || value instanceof String) {
                 System.out.println(key + ": " + value);
             }
         }

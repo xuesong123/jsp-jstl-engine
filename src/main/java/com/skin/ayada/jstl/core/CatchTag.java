@@ -19,37 +19,31 @@ import com.skin.ayada.tagext.TryCatchFinally;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class CatchTag extends TagSupport implements TryCatchFinally
-{
+public class CatchTag extends TagSupport implements TryCatchFinally {
     private String var;
 
     @Override
-    public void doCatch(Throwable throwable) throws Throwable
-    {
-        if(this.var != null)
-        {
+    public void doCatch(Throwable throwable) throws Throwable {
+        if(this.var != null) {
             this.pageContext.setAttribute(this.var, throwable);
         }
     }
 
     @Override
-    public void doFinally()
-    {
+    public void doFinally() {
     }
 
     /**
      * @param var the var to set
      */
-    public void setVar(String var)
-    {
+    public void setVar(String var) {
         this.var = var;
     }
 
     /**
      * @return the var
      */
-    public String getVar()
-    {
+    public String getVar() {
         return this.var;
     }
 }

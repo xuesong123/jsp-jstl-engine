@@ -23,59 +23,48 @@ import com.skin.ayada.tagext.TryCatchFinally;
  * @author xuesong.net
  * @version 1.0
  */
-public class TimeZoneTag extends TagSupport implements TryCatchFinally
-{
+public class TimeZoneTag extends TagSupport implements TryCatchFinally {
     private String var;
     private TimeZone oldTimeZone;
     private Object value;
 
     @Override
-    public int doStartTag() throws Exception
-    {
+    public int doStartTag() throws Exception {
         TimeZone timeZone = null;
         this.oldTimeZone = this.pageContext.getTimeZone();
 
-        if((this.value instanceof TimeZone))
-        {
+        if((this.value instanceof TimeZone)) {
             timeZone = (TimeZone)(this.value);
         }
-        else if((this.value instanceof String))
-        {
+        else if((this.value instanceof String)) {
             String string = ((String)(this.value)).trim();
 
-            if (string.length() < 1)
-            {
+            if (string.length() < 1) {
                 timeZone = TimeZone.getTimeZone("GMT");
             }
-            else
-            {
+            else {
                 timeZone = TimeZone.getTimeZone(string);
             }
         }
-        else
-        {
+        else {
             timeZone = TimeZone.getTimeZone("GMT");
         }
 
         this.pageContext.setTimeZone(timeZone);
-        return Tag.EVAL_BODY_INCLUDE; 
+        return Tag.EVAL_BODY_INCLUDE;
     }
 
     @Override
-    public void doCatch(Throwable throwable) throws java.lang.Throwable
-    {
+    public void doCatch(Throwable throwable) throws java.lang.Throwable {
         throw throwable;
     }
 
     @Override
-    public void doFinally()
-    {
-        if(this.oldTimeZone == null)
-        {
+    public void doFinally() {
+        if(this.oldTimeZone == null) {
             this.pageContext.setTimeZone(null);
         }
-        else
-        {
+        else {
             this.pageContext.setTimeZone(this.oldTimeZone);
         }
     }
@@ -83,32 +72,28 @@ public class TimeZoneTag extends TagSupport implements TryCatchFinally
     /**
      * @param var the var to set
      */
-    public void setVar(String var)
-    {
+    public void setVar(String var) {
         this.var = var;
     }
 
     /**
      * @return the var
      */
-    public String getVar()
-    {
+    public String getVar() {
         return this.var;
     }
 
     /**
      * @param value the value to set
      */
-    public void setValue(Object value)
-    {
+    public void setValue(Object value) {
         this.value = value;
     }
 
     /**
      * @return the value
      */
-    public Object getValue()
-    {
+    public Object getValue() {
         return this.value;
     }
 }

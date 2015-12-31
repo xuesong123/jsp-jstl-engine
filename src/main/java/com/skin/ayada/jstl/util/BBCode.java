@@ -17,14 +17,12 @@ package com.skin.ayada.jstl.util;
  * @author xuesong.net
  * @version 1.0
  */
-public class BBCode
-{
+public class BBCode {
     /**
      * @param source
      * @return String
      */
-    public String decode(String source)
-    {
+    public String decode(String source) {
         return com.skin.ayada.util.BBCode.decode(source);
     }
 
@@ -33,8 +31,7 @@ public class BBCode
      * @param value
      * @return String
      */
-    public String getHtml(String name, String attributes, String value)
-    {
+    public String getHtml(String name, String attributes, String value) {
         return com.skin.ayada.util.BBCode.getHtml(name, attributes, value);
     }
 
@@ -44,8 +41,7 @@ public class BBCode
      * @param replacement
      * @return String
      */
-    public String replace(String source, String search, String replacement)
-    {
+    public String replace(String source, String search, String replacement) {
         return com.skin.ayada.util.BBCode.replace(source, search, replacement);
     }
 
@@ -53,8 +49,7 @@ public class BBCode
      * @param source
      * @return String
      */
-    public String remove(String source)
-    {
+    public String remove(String source) {
         return com.skin.ayada.util.BBCode.remove(source);
     }
 }

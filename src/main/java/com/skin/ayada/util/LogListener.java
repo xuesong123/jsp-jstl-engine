@@ -16,8 +16,7 @@ package com.skin.ayada.util;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public interface LogListener
-{
+public interface LogListener {
     /**
      * @param content
      */

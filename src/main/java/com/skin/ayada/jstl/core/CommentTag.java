@@ -20,11 +20,9 @@ import com.skin.ayada.tagext.TagSupport;
  * @author xuesong.net
  * @version 1.0
  */
-public class CommentTag extends TagSupport
-{
+public class CommentTag extends TagSupport {
     @Override
-    public int doStartTag()
-    {
+    public int doStartTag() {
         return Tag.SKIP_BODY;
     }
 }

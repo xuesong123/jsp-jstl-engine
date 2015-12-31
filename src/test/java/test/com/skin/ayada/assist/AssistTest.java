@@ -39,17 +39,14 @@ import com.skin.ayada.util.IO;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class AssistTest
-{
+public class AssistTest {
     /**
      * @param args
      */
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         ClassPool classPool = ClassPool.getDefault();
 
-        try
-        {
+        try {
             String className = "test.com.skin.ayada.template.Test2";
             CtClass ctClass = classPool.makeClass(className);
             Javac javac = new Javac(ctClass);
@@ -63,45 +60,38 @@ public class AssistTest
 
             Method[] methods = object.getClass().getMethods();
 
-            for(Method method : methods)
-            {
+            for(Method method : methods) {
                 System.out.println(method.toGenericString());
             }
 
             TemplateContext templateContext = TemplateManager.getTemplateContext("webapp");
 
             StringWriter writer = new StringWriter();
-            PageContext pageContext = templateContext.getPageContext(writer);
+            PageContext pageContext = templateContext.getPageContext(null, writer);
             invoke(object, "execute", new Class<?>[]{PageContext.class}, new Object[]{pageContext});
             System.out.println(writer.toString());
         }
-        catch(Throwable t)
-        {
+        catch(Throwable t) {
             t.printStackTrace();
         }
     }
 
-    public static void test3()
-    {
+    public static void test3() {
         ClassPool classPool = ClassPool.getDefault();
 
-        try
-        {
+        try {
             classPool.appendClassPath(new ClassClassPath(com.skin.ayada.factory.DefaultTagFactory.class));
             classPool.get("ognl.OgnlContext");
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void test2()
-    {
+    public static void test2() {
         ClassPool pool = ClassPool.getDefault();
 
-        try
-        {
+        try {
             String factoryClassName = "com.skin.ayada.factory.MyTagFactory";
             CtClass ctClass = pool.makeClass(factoryClassName);
             // CtClass ctClass = pool.get("com.skin.ayada.factory.DefaultTagFactory");
@@ -124,21 +114,17 @@ public class AssistTest
             System.out.println(tagFactory);
             System.out.println(tagFactory.create());
         }
-        catch(Throwable e)
-        {
+        catch(Throwable e) {
             e.printStackTrace();
         }
     }
 
 
-    public static void test1()
-    {
+    public static void test1() {
         ClassPool pool = ClassPool.getDefault();
 
-        try
-        {
-            for(int i = 0; i < 2; i++)
-            {
+        try {
+            for(int i = 0; i < 2; i++) {
                 CtClass ctClass = pool.get("com.skin.ayada.factory.DefaultTagFactory");
                 // System.out.println(pt.getSuperclass().getName());
                 // System.out.println(ctClass.getDeclaredMethod("create"));
@@ -157,43 +143,35 @@ public class AssistTest
                 System.out.println(tagFactory.create());
             }
         }
-        catch(NotFoundException e)
-        {
+        catch(NotFoundException e) {
             e.printStackTrace();
         }
-        catch(CannotCompileException e)
-        {
+        catch(CannotCompileException e) {
             e.printStackTrace();
         }
-        catch(IOException e)
-        {
+        catch(IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static Object getInstance(String className, byte[] bytes)
-    {
+    public static Object getInstance(String className, byte[] bytes) {
         FactoryClassLoader factoryClassLoader = FactoryClassLoader.getInstance();
         Class<?> clazz = factoryClassLoader.create(className, bytes);
 
-        try
-        {
+        try {
             return clazz.newInstance();
         }
-        catch(InstantiationException e)
-        {
+        catch(InstantiationException e) {
             e.printStackTrace();
         }
-        catch(IllegalAccessException e)
-        {
+        catch(IllegalAccessException e) {
             e.printStackTrace();
         }
 
         return null;
     }
 
-    public static void invoke(Object object, String methodName, Class<?>[] types, Object[] parameters) throws Throwable
-    {
+    public static void invoke(Object object, String methodName, Class<?>[] types, Object[] parameters) throws Throwable {
         Method method = object.getClass().getMethod(methodName, types);
         method.invoke(object, parameters);
     }

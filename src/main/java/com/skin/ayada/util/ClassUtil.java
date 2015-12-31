@@ -24,15 +24,13 @@ import java.util.Map;
  * @author xuesong.net
  * @version 1.0
  */
-public class ClassUtil
-{
+public class ClassUtil {
     /**
      * @param className
      * @return Object
      * @throws Exception
      */
-    public static Object getInstance(String className) throws Exception
-    {
+    public static Object getInstance(String className) throws Exception {
         return getClass(className).newInstance();
     }
 
@@ -43,8 +41,7 @@ public class ClassUtil
      * @return Object
      * @throws Exception
      */
-    public static Object getInstance(String className, Class<?>[] parameterTypes, Object[] parameters) throws Exception
-    {
+    public static Object getInstance(String className, Class<?>[] parameterTypes, Object[] parameters) throws Exception {
         Class<?> clazz = getClass(className);
         Constructor<?> constructor = clazz.getConstructor(parameterTypes);
         return constructor.newInstance(parameters);
@@ -55,62 +52,44 @@ public class ClassUtil
      * @return Class<?>
      * @throws ClassNotFoundException
      */
-    public static Class<?> getClass(String className) throws ClassNotFoundException
-    {
-        if(className.equals("boolean"))
-        {
+    public static Class<?> getClass(String className) throws ClassNotFoundException {
+
+        if(className.equals("boolean")) {
             return boolean.class;
         }
-        else if(className.equals("byte"))
-        {
+        else if(className.equals("byte")) {
             return byte.class;
         }
-        else if(className.equals("short"))
-        {
+        else if(className.equals("short")) {
             return short.class;
         }
-        else if(className.equals("char"))
-        {
+        else if(className.equals("char")) {
             return char.class;
         }
-        else if(className.equals("int"))
-        {
+        else if(className.equals("int")) {
             return int.class;
         }
-        else if(className.equals("float"))
-        {
+        else if(className.equals("float")) {
             return float.class;
         }
-        else if(className.equals("double"))
-        {
+        else if(className.equals("double")) {
             return double.class;
         }
-        else if(className.equals("long"))
-        {
+        else if(className.equals("long")) {
             return long.class;
         }
 
-        Class<?> clazz = null;
-
-        try
-        {
-            clazz = Thread.currentThread().getContextClassLoader().loadClass(className);
+        try {
+            return Thread.currentThread().getContextClassLoader().loadClass(className);
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
         }
 
-        if(clazz == null)
-        {
-            try
-            {
-                clazz = ClassUtil.class.getClassLoader().loadClass(className);
-            }
-            catch(Exception e)
-            {
-            }
+        try {
+            return ClassUtil.class.getClassLoader().loadClass(className);
         }
-
+        catch(Exception e) {
+        }
         return Class.forName(className);
     }
 
@@ -118,12 +97,10 @@ public class ClassUtil
      * @param values
      * @return Class<?>[]
      */
-    public static Class<?>[] getTypes(Object[] values)
-    {
+    public static Class<?>[] getTypes(Object[] values) {
         Class<?>[] types = new Class<?>[values.length];
 
-        for(int i = 0; i < values.length; i++)
-        {
+        for(int i = 0; i < values.length; i++) {
             types[i] = values[i].getClass();
         }
 
@@ -134,15 +111,12 @@ public class ClassUtil
      * @param bean
      * @param properties
      */
-    public static void setProperties(Object bean, Map<String, Object> properties) throws Exception
-    {
-        if(properties == null || properties.size() < 1)
-        {
+    public static void setProperties(Object bean, Map<String, Object> properties) throws Exception {
+        if(properties == null || properties.size() < 1) {
             return;
         }
 
-        for(Map.Entry<String, Object> entry : properties.entrySet())
-        {
+        for(Map.Entry<String, Object> entry : properties.entrySet()) {
             ClassUtil.setProperty(bean, entry.getKey(), entry.getValue());
         }
     }
@@ -152,10 +126,8 @@ public class ClassUtil
      * @param name
      * @param value
      */
-    public static void setProperty(Object bean, String name, Object value) throws Exception
-    {
-        if(bean == null)
-        {
+    public static void setProperty(Object bean, String name, Object value) throws Exception {
+        if(bean == null) {
             return;
         }
 
@@ -163,21 +135,18 @@ public class ClassUtil
         String methodName = "set" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
         Method method = getSetMethod(type, methodName);
 
-        if(method != null)
-        {
+        if(method != null) {
             Class<?>[] parameterTypes = method.getParameterTypes();
             Class<?> parameterType = parameterTypes[0];
             Object arg = ClassUtil.cast(value, parameterType);
 
-            if(arg == null && parameterType.isPrimitive())
-            {
+            if(arg == null && parameterType.isPrimitive()) {
                 return;
             }
 
             method.invoke(bean, new Object[]{arg});
         }
-        else
-        {
+        else {
             throw new Exception("NoSuchMethodException: " + type.getName() + "." + methodName);
         }
     }
@@ -187,21 +156,16 @@ public class ClassUtil
      * @param methodName
      * @return Method
      */
-    public static Method getSetMethod(Class<?> type, String methodName)
-    {
+    public static Method getSetMethod(Class<?> type, String methodName) {
         Method[] methods = type.getMethods();
 
-        for(Method method : methods)
-        {
-            if(method.getModifiers() != Modifier.PUBLIC)
-            {
+        for(Method method : methods) {
+            if(method.getModifiers() != Modifier.PUBLIC) {
                 continue;
             }
 
-            if(method.getName().equals(methodName))
-            {
-                if(method.getParameterTypes().length == 1)
-                {
+            if(method.getName().equals(methodName)) {
+                if(method.getParameterTypes().length == 1) {
                     return method;
                 }
             }
@@ -215,94 +179,73 @@ public class ClassUtil
      * @param value
      * @return Object
      */
-    public static Object cast(Object value, Class<?> type)
-    {
-        if(value == null || type == null)
-        {
+    public static Object cast(Object value, Class<?> type) {
+        if(value == null || type == null) {
             return null;
         }
 
         Class<?> clazz = value.getClass();
 
-        if(type.isAssignableFrom(clazz))
-        {
+        if(type.isAssignableFrom(clazz)) {
             return value;
         }
 
         Object result = null;
 
-        if(type == char.class || type == Character.class)
-        {
+        if(type == char.class || type == Character.class) {
             return ClassUtil.getCharacter(value);
         }
-        else if(type == boolean.class || type == Boolean.class)
-        {
+        else if(type == boolean.class || type == Boolean.class) {
             return ClassUtil.getBoolean(value);
         }
-        else if(type == byte.class || type == Byte.class)
-        {
+        else if(type == byte.class || type == Byte.class) {
             return ClassUtil.getByte(value);
         }
-        else if(type == short.class || type == Short.class)
-        {
+        else if(type == short.class || type == Short.class) {
             return ClassUtil.getShort(value);
         }
-        else if(type == int.class || type == Integer.class)
-        {
+        else if(type == int.class || type == Integer.class) {
             return ClassUtil.getInteger(value);
         }
-        else if(type == float.class || type == Float.class)
-        {
+        else if(type == float.class || type == Float.class) {
             return ClassUtil.getFloat(value);
         }
-        else if(type == double.class || type == Double.class)
-        {
+        else if(type == double.class || type == Double.class) {
             return ClassUtil.getDouble(value);
         }
-        else if(type == long.class || type == Long.class)
-        {
+        else if(type == long.class || type == Long.class) {
             return ClassUtil.getLong(value);
         }
-        else if(type == String.class)
-        {
+        else if(type == String.class) {
             result = ClassUtil.getString(value);
         }
-        else if(type == java.sql.Date.class)
-        {
+        else if(type == java.sql.Date.class) {
             Date date = ClassUtil.getDate(value);
 
-            if(date != null)
-            {
+            if(date != null) {
                 result = new java.sql.Date(date.getTime());
             }
         }
-        else if(type == java.sql.Time.class)
-        {
+        else if(type == java.sql.Time.class) {
             Date date = ClassUtil.getDate(value);
 
-            if(date != null)
-            {
+            if(date != null) {
                 result = new java.sql.Time(date.getTime());
             }
         }
-        else if(type == java.sql.Timestamp.class)
-        {
+        else if(type == java.sql.Timestamp.class) {
             Date date = ClassUtil.getDate(value);
 
-            if(date != null)
-            {
+            if(date != null) {
                 result = new java.sql.Timestamp(date.getTime());
             }
         }
-        else if(type == java.util.Date.class)
-        {
+        else if(type == java.util.Date.class) {
             result = ClassUtil.getDate(value);
         }
-        else if(type == Object.class)
-        {
+        else if(type == Object.class) {
             result = value;
         }
-
         return result;
     }
 
@@ -310,15 +253,12 @@ public class ClassUtil
      * @param value
      * @return Boolean
      */
-    public static Boolean getBoolean(Object value)
-    {
-        if(value instanceof Boolean)
-        {
+    public static Boolean getBoolean(Object value) {
+        if(value instanceof Boolean) {
             return (Boolean)value;
         }
 
-        if(value != null)
-        {
+        if(value != null) {
             return value.toString().equals("true");
         }
 
@@ -329,12 +269,10 @@ public class ClassUtil
      * @param value
      * @return Byte
      */
-    public static Byte getByte(Object value)
-    {
+    public static Byte getByte(Object value) {
         Integer i = getInteger(value);
 
-        if(i != null)
-        {
+        if(i != null) {
             return i.byteValue();
         }
 
@@ -345,12 +283,10 @@ public class ClassUtil
      * @param value
      * @return Boolean
      */
-    public static Short getShort(Object value)
-    {
+    public static Short getShort(Object value) {
         Integer i = getInteger(value);
 
-        if(i != null)
-        {
+        if(i != null) {
             return i.shortValue();
         }
 
@@ -361,19 +297,15 @@ public class ClassUtil
      * @param value
      * @return Character
      */
-    public static Character getCharacter(Object value)
-    {
-        if(value instanceof Character)
-        {
+    public static Character getCharacter(Object value) {
+        if(value instanceof Character) {
             return (Character)value;
         }
 
-        if(value != null)
-        {
+        if(value != null) {
             String content = value.toString();
 
-            if(content.length() > 0)
-            {
+            if(content.length() > 0) {
                 return content.charAt(0);
             }
         }
@@ -385,19 +317,15 @@ public class ClassUtil
      * @param value
      * @return Integer
      */
-    public static Integer getInteger(Object value)
-    {
-        if(value instanceof Number)
-        {
+    public static Integer getInteger(Object value) {
+        if(value instanceof Number) {
             return ((Number)value).intValue();
         }
 
-        if(value != null)
-        {
+        if(value != null) {
             Double d = getDouble(value);
 
-            if(d != null)
-            {
+            if(d != null) {
                 return d.intValue();
             }
         }
@@ -409,19 +337,15 @@ public class ClassUtil
      * @param value
      * @return Float
      */
-    public static Float getFloat(Object value)
-    {
-        if(value instanceof Number)
-        {
+    public static Float getFloat(Object value) {
+        if(value instanceof Number) {
             return ((Number)value).floatValue();
         }
 
-        if(value != null)
-        {
+        if(value != null) {
             Double d = getDouble(value);
 
-            if(d != null)
-            {
+            if(d != null) {
                 return d.floatValue();
             }
         }
@@ -433,21 +357,16 @@ public class ClassUtil
      * @param value
      * @return Double
      */
-    public static Double getDouble(Object value)
-    {
-        if(value instanceof Number)
-        {
+    public static Double getDouble(Object value) {
+        if(value instanceof Number) {
             return ((Number)value).doubleValue();
         }
 
-        if(value != null)
-        {
-            try
-            {
+        if(value != null) {
+            try {
                 return Double.parseDouble(value.toString());
             }
-            catch(NumberFormatException e)
-            {
+            catch(NumberFormatException e) {
             }
         }
 
@@ -458,31 +377,24 @@ public class ClassUtil
      * @param value
      * @return Long
      */
-    public static Long getLong(Object value)
-    {
-        if(value instanceof Number)
-        {
+    public static Long getLong(Object value) {
+        if(value instanceof Number) {
             return ((Number)value).longValue();
         }
 
-        if(value != null)
-        {
+        if(value != null) {
             Long l = null;
             String s = value.toString().trim();
 
-            try
-            {
-                if(s.endsWith("l") || s.endsWith("L"))
-                {
+            try {
+                if(s.endsWith("l") || s.endsWith("L")) {
                     l = Long.parseLong(s.substring(0, s.length() - 1));
                 }
-                else
-                {
+                else {
                     l = Long.parseLong(s);
                 }
             }
-            catch(NumberFormatException e)
-            {
+            catch(NumberFormatException e) {
             }
 
             return l;
@@ -495,15 +407,12 @@ public class ClassUtil
      * @param value
      * @return String
      */
-    public static String getString(Object value)
-    {
-        if(value instanceof String)
-        {
+    public static String getString(Object value) {
+        if(value instanceof String) {
             return ((String)value);
         }
 
-        if(value != null)
-        {
+        if(value != null) {
             return value.toString();
         }
 
@@ -514,24 +423,19 @@ public class ClassUtil
      * @param value
      * @return Date
      */
-    public static Date getDate(Object value)
-    {
-        if(value instanceof Date)
-        {
+    public static Date getDate(Object value) {
+        if(value instanceof Date) {
             return (Date)value;
         }
 
-        if(value != null)
-        {
-            try
-            {
+        if(value != null) {
+            try {
                 String content = value.toString();
                 String pattern = getFormat(content);
                 SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
                 return dateFormat.parse(content);
             }
-            catch(java.text.ParseException e)
-            {
+            catch(java.text.ParseException e) {
             }
         }
 
@@ -542,8 +446,7 @@ public class ClassUtil
      * @param date
      * @return String
      */
-    protected static String getFormat(String date)
-    {
+    protected static String getFormat(String date) {
         int length = date.length();
 
         String f1 = "HH:mm:ss";
@@ -552,24 +455,19 @@ public class ClassUtil
         String f4 = "yyyy-MM-dd HH:mm:ss";
         String f5 = "yyyy-MM-dd HH:mm:ss SSS";
 
-        if(length <= f1.length())
-        {
+        if(length <= f1.length()) {
             return f1;
         }
-        else if(length <= f2.length())
-        {
+        else if(length <= f2.length()) {
             return f2;
         }
-        else if(length <= f3.length())
-        {
+        else if(length <= f3.length()) {
             return f3;
         }
-        else if(length <= f4.length())
-        {
+        else if(length <= f4.length()) {
             return f4;
         }
-        else if(length <= f5.length())
-        {
+        else if(length <= f5.length()) {
             return f5;
         }
 

@@ -21,38 +21,31 @@ import com.skin.ayada.util.IO;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class DefaultSourceFactory extends SourceFactory
-{
-    public DefaultSourceFactory()
-    {
+public class DefaultSourceFactory extends SourceFactory {
+    public DefaultSourceFactory() {
     }
 
     /**
      * @param home
      */
-    public DefaultSourceFactory(String home)
-    {
+    public DefaultSourceFactory(String home) {
         super();
         String path = null;
 
-        if(home == null)
-        {
+        if(home == null) {
             path = ".";
         }
-        else
-        {
+        else {
             path = home;
         }
 
         File root = new File(path);
 
-        try
-        {
+        try {
             path = root.getCanonicalPath();
             this.setHome(path);
         }
-        catch(IOException e)
-        {
+        catch(IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -63,19 +56,16 @@ public class DefaultSourceFactory extends SourceFactory
      * @return Source
      */
     @Override
-    public Source getSource(String path, String encoding)
-    {
+    public Source getSource(String path, String encoding) {
         File file = this.getFile(path);
 
-        try
-        {
+        try {
             String content = IO.read(file, encoding, 4096);
             Source source = new Source(this.getHome(), path, content, this.getSourceType(file.getName()));
             source.setLastModified(file.lastModified());
             return source;
         }
-        catch(IOException e)
-        {
+        catch(IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -85,8 +75,7 @@ public class DefaultSourceFactory extends SourceFactory
      * @return long
      */
     @Override
-    public long getLastModified(String path)
-    {
+    public long getLastModified(String path) {
         return this.getFile(path).lastModified();
     }
 
@@ -95,18 +84,14 @@ public class DefaultSourceFactory extends SourceFactory
      * @return boolean
      */
     @Override
-    public boolean exists(String path)
-    {
+    public boolean exists(String path) {
         File file = null;
 
-        try
-        {
+        try {
             file = this.getFile(path);
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
         }
-
         return (file != null);
     }
 
@@ -114,37 +99,29 @@ public class DefaultSourceFactory extends SourceFactory
      * @param path
      * @return File
      */
-    public File getFile(String path)
-    {
-        if(path == null)
-        {
+    public File getFile(String path) {
+        if(path == null) {
             throw new NullPointerException("path must be not null !");
         }
 
         File file = new File(this.getHome(), path);
 
-        try
-        {
-            if(file.getCanonicalPath().startsWith(this.getHome()) == false)
-            {
+        try {
+            if(file.getCanonicalPath().startsWith(this.getHome()) == false) {
                 throw new RuntimeException(file.getAbsolutePath() + " not exists !");
             }
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             throw new RuntimeException(file.getAbsolutePath() + " not exists !");
         }
 
-        if(file.exists() == false)
-        {
+        if(file.exists() == false) {
             throw new RuntimeException(file.getAbsolutePath() + " not exists !");
         }
 
-        if(file.isFile() == false)
-        {
+        if(file.isFile() == false) {
             throw new RuntimeException(file.getAbsolutePath() + " not exists !");
         }
-
         return file;
     }
 }

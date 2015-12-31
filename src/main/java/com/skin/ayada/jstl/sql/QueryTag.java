@@ -25,8 +25,7 @@ import com.skin.ayada.util.Jdbc;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class QueryTag extends TagSupport implements IterationTag, TryCatchFinally
-{
+public class QueryTag extends TagSupport implements IterationTag, TryCatchFinally {
     private String var = null;
     private String sql = null;
     private int count  = 0;
@@ -37,32 +36,26 @@ public class QueryTag extends TagSupport implements IterationTag, TryCatchFinall
     private ResultSet resultSet;
 
     @Override
-    public int doStartTag() throws Exception
-    {
-        if(this.connection == null)
-        {
+    public int doStartTag() throws Exception {
+        if(this.connection == null) {
             this.connection = SqlTag.getConnection(this);
         }
 
-        if(this.connection == null)
-        {
+        if(this.connection == null) {
             throw new NullPointerException("connection must be not null");
         }
 
-        if(this.offset > 1)
-        {
+        if(this.offset > 1) {
             this.statement = this.connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             this.resultSet = this.statement.executeQuery(this.sql);
             this.resultSet.absolute(this.offset - 1);
         }
-        else
-        {
+        else {
             this.statement = this.connection.createStatement();
             this.resultSet = this.statement.executeQuery(this.sql);
         }
 
-        if(this.resultSet.next())
-        {
+        if(this.resultSet.next()) {
             this.count++;
             this.pageContext.setAttribute(this.var, this.resultSet);
             return EVAL_BODY_INCLUDE;
@@ -75,15 +68,12 @@ public class QueryTag extends TagSupport implements IterationTag, TryCatchFinall
      * @return int
      */
     @Override
-    public int doAfterBody() throws Exception
-    {
-        if(this.length > 0 && this.count >= this.length)
-        {
+    public int doAfterBody() throws Exception {
+        if(this.length > 0 && this.count >= this.length) {
             return SKIP_BODY;
         }
 
-        if(this.resultSet.next())
-        {
+        if(this.resultSet.next()) {
             this.count++;
             return EVAL_BODY_AGAIN;
         }
@@ -92,17 +82,14 @@ public class QueryTag extends TagSupport implements IterationTag, TryCatchFinall
     }
 
     @Override
-    public void doCatch(Throwable throwable) throws Throwable
-    {
-        if(throwable != null)
-        {
+    public void doCatch(Throwable throwable) throws Throwable {
+        if(throwable != null) {
             throwable.printStackTrace(System.out);
         }
     }
 
     @Override
-    public void doFinally()
-    {
+    public void doFinally() {
         Jdbc.close(this.resultSet);
         Jdbc.close(this.statement);
     }
@@ -110,128 +97,112 @@ public class QueryTag extends TagSupport implements IterationTag, TryCatchFinall
     /**
      * @return the var
      */
-    public String getVar()
-    {
+    public String getVar() {
         return this.var;
     }
 
     /**
      * @param var the var to set
      */
-    public void setVar(String var)
-    {
+    public void setVar(String var) {
         this.var = var;
     }
 
     /**
      * @return the sql
      */
-    public String getSql()
-    {
+    public String getSql() {
         return this.sql;
     }
 
     /**
      * @param sql the sql to set
      */
-    public void setSql(String sql)
-    {
+    public void setSql(String sql) {
         this.sql = sql;
     }
 
     /**
      * @return the count
      */
-    public int getCount()
-    {
+    public int getCount() {
         return this.count;
     }
 
     /**
      * @param count the count to set
      */
-    public void setCount(int count)
-    {
+    public void setCount(int count) {
         this.count = count;
     }
 
     /**
      * @return the offset
      */
-    public int getOffset()
-    {
+    public int getOffset() {
         return this.offset;
     }
 
     /**
      * @param offset the offset to set
      */
-    public void setOffset(int offset)
-    {
+    public void setOffset(int offset) {
         this.offset = offset;
     }
 
     /**
      * @return the length
      */
-    public int getLength()
-    {
+    public int getLength() {
         return this.length;
     }
 
     /**
      * @param length the length to set
      */
-    public void setLength(int length)
-    {
+    public void setLength(int length) {
         this.length = length;
     }
 
     /**
      * @return the statement
      */
-    public Statement getStatement()
-    {
+    public Statement getStatement() {
         return this.statement;
     }
 
     /**
      * @param statement the statement to set
      */
-    public void setStatement(Statement statement)
-    {
+    public void setStatement(Statement statement) {
         this.statement = statement;
     }
 
     /**
      * @return the resultSet
      */
-    public ResultSet getResultSet()
-    {
+    public ResultSet getResultSet() {
         return this.resultSet;
     }
 
     /**
      * @param resultSet the resultSet to set
      */
-    public void setResultSet(ResultSet resultSet)
-    {
+    public void setResultSet(ResultSet resultSet) {
         this.resultSet = resultSet;
     }
 
     /**
      * @return the connection
      */
-    public Connection getConnection()
-    {
+    public Connection getConnection() {
         return this.connection;
     }
 
     /**
      * @param connection the connection to set
      */
-    public void setConnection(Connection connection)
-    {
+    public void setConnection(Connection connection) {
         this.connection = connection;
     }
 }

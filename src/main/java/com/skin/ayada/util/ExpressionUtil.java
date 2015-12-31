@@ -26,15 +26,13 @@ import com.skin.ayada.statement.TextNode;
  * @author xuesong.net
  * @version 1.0
  */
-public class ExpressionUtil
-{
+public class ExpressionUtil {
     /**
      * @param expressionContext
      * @param source
      * @return Object
      */
-    public static String getHtml(ExpressionContext expressionContext, String source)
-    {
+    public static String getHtml(ExpressionContext expressionContext, String source) {
         return HtmlUtil.encode(getString(expressionContext, source));
     }
 
@@ -43,12 +41,10 @@ public class ExpressionUtil
      * @param source
      * @return Object
      */
-    public static String getString(ExpressionContext expressionContext, String source)
-    {
+    public static String getString(ExpressionContext expressionContext, String source) {
         Object value = ExpressionUtil.evaluate(expressionContext, source);
 
-        if(value == null || value instanceof Empty<?, ?>)
-        {
+        if(value == null || value instanceof Empty<?, ?>) {
             return "";
         }
         return value.toString();
@@ -59,17 +55,14 @@ public class ExpressionUtil
      * @param source
      * @return Object
      */
-    public static boolean getBoolean(ExpressionContext expressionContext, String source)
-    {
+    public static boolean getBoolean(ExpressionContext expressionContext, String source) {
         Object value = ExpressionUtil.evaluate(expressionContext, source);
 
-        if(value == null)
-        {
+        if(value == null) {
             return false;
         }
 
-        if(value instanceof Boolean)
-        {
+        if(value instanceof Boolean) {
             return Boolean.TRUE.equals(value);
         }
         return false;
@@ -80,12 +73,10 @@ public class ExpressionUtil
      * @param source
      * @return Byte
      */
-    public static Byte getByte(ExpressionContext expressionContext, String source)
-    {
+    public static Byte getByte(ExpressionContext expressionContext, String source) {
         Object value = ExpressionUtil.evaluate(expressionContext, source);
 
-        if(value != null && value instanceof Number)
-        {
+        if(value != null && value instanceof Number) {
             return ((Number)value).byteValue();
         }
         return null;
@@ -96,12 +87,10 @@ public class ExpressionUtil
      * @param source
      * @return Short
      */
-    public static Short getShort(ExpressionContext expressionContext, String source)
-    {
+    public static Short getShort(ExpressionContext expressionContext, String source) {
         Object value = ExpressionUtil.evaluate(expressionContext, source);
 
-        if(value != null && value instanceof Number)
-        {
+        if(value != null && value instanceof Number) {
             return ((Number)value).shortValue();
         }
         return null;
@@ -112,12 +101,10 @@ public class ExpressionUtil
      * @param source
      * @return Integer
      */
-    public static Integer getInteger(ExpressionContext expressionContext, String source)
-    {
+    public static Integer getInteger(ExpressionContext expressionContext, String source) {
         Object value = ExpressionUtil.evaluate(expressionContext, source);
 
-        if(value != null && value instanceof Number)
-        {
+        if(value != null && value instanceof Number) {
             return ((Number)value).intValue();
         }
         return null;
@@ -128,12 +115,10 @@ public class ExpressionUtil
      * @param source
      * @return Float
      */
-    public static Float getFloat(ExpressionContext expressionContext, String source)
-    {
+    public static Float getFloat(ExpressionContext expressionContext, String source) {
         Object value = ExpressionUtil.evaluate(expressionContext, source);
 
-        if(value != null && value instanceof Number)
-        {
+        if(value != null && value instanceof Number) {
             return ((Number)value).floatValue();
         }
         return null;
@@ -144,12 +129,10 @@ public class ExpressionUtil
      * @param source
      * @return Double
      */
-    public static Double getDouble(ExpressionContext expressionContext, String source)
-    {
+    public static Double getDouble(ExpressionContext expressionContext, String source) {
         Object value = ExpressionUtil.evaluate(expressionContext, source);
 
-        if(value != null && value instanceof Number)
-        {
+        if(value != null && value instanceof Number) {
             return ((Number)value).doubleValue();
         }
         return null;
@@ -160,12 +143,10 @@ public class ExpressionUtil
      * @param source
      * @return Long
      */
-    public static Long getLong(ExpressionContext expressionContext, String source)
-    {
+    public static Long getLong(ExpressionContext expressionContext, String source) {
         Object value = ExpressionUtil.evaluate(expressionContext, source);
 
-        if(value != null && value instanceof Number)
-        {
+        if(value != null && value instanceof Number) {
             return ((Number)value).longValue();
         }
         return null;
@@ -177,20 +158,16 @@ public class ExpressionUtil
      * @param resultType
      * @return Object
      */
-    public static Object evaluate(ExpressionContext expressionContext, String expresion, Class<?> resultType)
-    {
+    public static Object evaluate(ExpressionContext expressionContext, String expresion, Class<?> resultType) {
         Object value = evaluate(expressionContext, expresion);
 
-        if(resultType != String.class && value instanceof String)
-        {
+        if(resultType != String.class && value instanceof String) {
             value = getValue((String)value);
         }
 
-        if(resultType != null)
-        {
+        if(resultType != null) {
             return ClassUtil.cast(value, resultType);
         }
-
         return value;
     }
 
@@ -199,23 +176,18 @@ public class ExpressionUtil
      * @param expresion
      * @return Object
      */
-    private static Object evaluate(ExpressionContext expressionContext, String expresion)
-    {
-        if(expresion == null)
-        {
+    private static Object evaluate(ExpressionContext expressionContext, String expresion) {
+        if(expresion == null) {
             return null;
         }
 
         List<Node> list = parse(expresion);
 
-        if(list.size() > 0)
-        {
-            if(list.size() == 1)
-            {
+        if(list.size() > 0) {
+            if(list.size() == 1) {
                 Node node = list.get(0);
 
-                if(node instanceof Expression)
-                {
+                if(node instanceof Expression) {
                     return expressionContext.getValue(node.getTextContent());
                 }
 
@@ -224,26 +196,20 @@ public class ExpressionUtil
             Object value = null;
             StringBuilder buffer = new StringBuilder();
 
-            for(Node node : list)
-            {
-                if(node instanceof Expression)
-                {
+            for(Node node : list) {
+                if(node instanceof Expression) {
                     value = expressionContext.getValue(node.getTextContent());
 
-                    if(value != null)
-                    {
+                    if(value != null) {
                         buffer.append(value.toString());
                     }
                 }
-                else
-                {
+                else {
                     buffer.append(node.getTextContent());
                 }
             }
-
             return buffer.toString();
         }
-
         return null;
     }
 
@@ -251,25 +217,20 @@ public class ExpressionUtil
      * @param source
      * @return List<Node>
      */
-    public static List<Node> parse(String source)
-    {
+    public static List<Node> parse(String source) {
         char c;
         char[] cbuf = source.toCharArray();
         TextNode textNode = null;
         List<Node> list = new ArrayList<Node>();
 
-        for(int i = 0, length = cbuf.length; i < length; i++)
-        {
+        for(int i = 0, length = cbuf.length; i < length; i++) {
             c = cbuf[i];
 
-            if(c == '$' && (i + 1) < length && cbuf[i + 1] == '{')
-            {
+            if(c == '$' && (i + 1) < length && cbuf[i + 1] == '{') {
                 Expression expression = new Expression();
 
-                for(i = i + 2; i < length; i++)
-                {
-                    if(cbuf[i] == '}')
-                    {
+                for(i = i + 2; i < length; i++) {
+                    if(cbuf[i] == '}') {
                         break;
                     }
                     expression.append(cbuf[i]);
@@ -277,12 +238,9 @@ public class ExpressionUtil
 
                 String content = expression.trim();
 
-                if(content.length() > 0)
-                {
-                    if(content.startsWith("?"))
-                    {
-                        if(textNode == null)
-                        {
+                if(content.length() > 0) {
+                    if(content.startsWith("?")) {
+                        if(textNode == null) {
                             textNode = new TextNode();
                             list.add(textNode);
                         }
@@ -291,17 +249,14 @@ public class ExpressionUtil
                         textNode.append(content.substring(1));
                         textNode.append("}");
                     }
-                    else
-                    {
+                    else {
                         list.add(expression);
                         textNode = null;
                     }
                 }
             }
-            else
-            {
-                if(textNode == null)
-                {
+            else {
+                if(textNode == null) {
                     textNode = new TextNode();
                     list.add(textNode);
                 }
@@ -309,7 +264,6 @@ public class ExpressionUtil
                 textNode.append(c);
             }
         }
-
         return list;
     }
 
@@ -317,101 +271,74 @@ public class ExpressionUtil
      * @param source
      * @return Object
      */
-    public static Object getValue(String source)
-    {
+    public static Object getValue(String source) {
         String temp = source.trim();
         Object value = source;
 
-        if(temp.length() < 1)
-        {
+        if(temp.length() < 1) {
             return value;
         }
 
         int type = getDataType(source);
 
-        switch(type)
-        {
-            case 0:
-            {
+        switch(type) {
+            case 0: {
                 break;
             }
-            case 1:
-            {
-                try
-                {
+            case 1: {
+                try {
                     value = Boolean.parseBoolean(temp);
                 }
-                catch(NumberFormatException e)
-                {
+                catch(NumberFormatException e) {
                 }
-
                 break;
             }
-            case 2:
-            {
-                try
-                {
-                    if(temp.charAt(0) == '+')
-                    {
+            case 2: {
+                try {
+                    if(temp.charAt(0) == '+') {
                         value = Integer.parseInt(temp.substring(1));
                     }
-                    else
-                    {
+                    else {
                         value = Integer.parseInt(temp);
                     }
                 }
-                catch(NumberFormatException e)
-                {
+                catch(NumberFormatException e) {
                 }
-
                 break;
             }
-            case 3:
-            {
-                try
-                {
+            case 3: {
+                try {
                     value = Float.parseFloat(temp);
                 }
-                catch(NumberFormatException e)
-                {
+                catch(NumberFormatException e) {
                 }
                 break;
             }
-            case 4:
-            {
-                try
-                {
+            case 4: {
+                try {
                     value = Double.parseDouble(temp);
                 }
-                catch(NumberFormatException e)
-                {
+                catch(NumberFormatException e) {
                 }
                 break;
             }
-            case 5:
-            {
-                try
-                {
-                    if(temp.endsWith("l") || temp.endsWith("L"))
-                    {
+            case 5: {
+                try {
+                    if(temp.endsWith("l") || temp.endsWith("L")) {
                         value = Long.parseLong(temp.substring(0, temp.length() - 1));
                     }
-                    else
-                    {
+                    else {
                         value = Long.parseLong(temp);
                     }
                 }
-                catch(NumberFormatException e)
-                {
+                catch(NumberFormatException e) {
                 }
                 break;
             }
-            default:
-            {
+            default: {
                 break;
             }
         }
-
         return value;
     }
 
@@ -425,17 +352,14 @@ public class ExpressionUtil
      * @param content
      * @return int
      */
-    public static int getDataType(String content)
-    {
+    public static int getDataType(String content) {
         String source = content.trim();
 
-        if(source.length() < 1)
-        {
+        if(source.length() < 1) {
             return 0;
         }
 
-        if(source.equals("true") || source.equals("false"))
-        {
+        if(source.equals("true") || source.equals("false")) {
             return 1;
         }
 
@@ -444,56 +368,44 @@ public class ExpressionUtil
         int type = 2;
         int length = source.length();
 
-        for(int i = 0; i < length; i++)
-        {
+        for(int i = 0; i < length; i++) {
             c = source.charAt(i);
 
-            if(i == 0 && (c == '+' || c == '-'))
-            {
+            if(i == 0 && (c == '+' || c == '-')) {
                 continue;
             }
 
-            if(c == '.')
-            {
-                if(d == 0)
-                {
+            if(c == '.') {
+                if(d == 0) {
                     d = 4;
                     continue;
                 }
                 return 0;
             }
 
-            if(c < 48 || c > 57)
-            {
-                if(i == length - 1)
-                {
-                    if(c == 'f' || c == 'F')
-                    {
+            if(c < 48 || c > 57) {
+                if(i == length - 1) {
+                    if(c == 'f' || c == 'F') {
                         return 3;
                     }
-                    else if(c == 'd' || c == 'D')
-                    {
+                    else if(c == 'd' || c == 'D') {
                         return 4;
                     }
-                    else if(c == 'l' || c == 'L')
-                    {
+                    else if(c == 'l' || c == 'L') {
                         return (d == 0 ? 5 : 0);
                     }
-                    else
-                    {
+                    else {
                         return 0;
                     }
                 }
 
-                if(i == length - 2 && (c == 'e' || c == 'E') && Character.isDigit(source.charAt(length - 1)))
-                {
+                if(i == length - 2 && (c == 'e' || c == 'E') && Character.isDigit(source.charAt(length - 1))) {
                     return 4;
                 }
 
                 return 0;
             }
         }
-
         return (d == 0 ? type : d);
     }
 }

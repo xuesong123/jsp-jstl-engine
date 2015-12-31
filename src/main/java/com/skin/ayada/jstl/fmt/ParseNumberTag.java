@@ -25,8 +25,7 @@ import com.skin.ayada.tagext.Tag;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class ParseNumberTag extends BodyTagSupport
-{
+public class ParseNumberTag extends BodyTagSupport {
     private String var;
     private String value;
     private String type;
@@ -35,41 +34,33 @@ public class ParseNumberTag extends BodyTagSupport
     private String scope;
 
     @Override
-    public int doEndTag() throws Exception
-    {
+    public int doEndTag() throws Exception {
         String string = null;
         NumberFormat format = this.getFormat();
 
-        if(this.value != null)
-        {
+        if(this.value != null) {
             string = this.value;
         }
-        else
-        {
-            if(this.bodyContent != null)
-            {
+        else {
+            if(this.bodyContent != null) {
                 string = this.bodyContent.getString().trim();
             }
         }
 
         Number value = null;
 
-        if((string != null) && string.length() > 0)
-        {
+        if((string != null) && string.length() > 0) {
             value = format.parse(string);
         }
 
-        if(this.var == null)
-        {
-            if(this.scope != null)
-            {
+        if(this.var == null) {
+            if(this.scope != null) {
                 throw new Exception("fmt:parseNumber var must not be null when scope '" + this.scope + "' is set.");
             }
 
             OutTag.print(this.pageContext, this.value, false);
         }
-        else
-        {
+        else {
             SetTag.setValue(this.pageContext, this.var, this.scope, value);
         }
 
@@ -80,51 +71,39 @@ public class ParseNumberTag extends BodyTagSupport
      * @return NumberFormat
      * @throws JspException
      */
-    protected NumberFormat getFormat() throws Exception
-    {
+    protected NumberFormat getFormat() throws Exception {
         NumberFormat format = null;
         Locale locale = this.pageContext.getLocale();
 
-        if((this.type == null) || (this.type.equals("")) || (this.type.equals("number")))
-        {
-            if(locale != null)
-            {
+        if((this.type == null) || (this.type.equals("")) || (this.type.equals("number"))) {
+            if(locale != null) {
                 format = NumberFormat.getInstance(locale);
             }
-            else
-            {
+            else {
                 format = NumberFormat.getInstance();
             }
         }
-        else if(this.type.equals("percent"))
-        {
-            if(locale != null)
-            {
+        else if(this.type.equals("percent")) {
+            if(locale != null) {
                 format = NumberFormat.getPercentInstance(locale);
             }
-            else
-            {
+            else {
                 format = NumberFormat.getPercentInstance();
             }
         }
-        else if(this.type.equals("currency"))
-        {
-            if(locale != null)
-            {
+        else if(this.type.equals("currency")) {
+            if(locale != null) {
                 format = NumberFormat.getCurrencyInstance(locale);
             }
-            else
-            {
+            else {
                 format = NumberFormat.getCurrencyInstance(locale);
             }
         }
-        else
-        {
+        else {
             throw new Exception("unknown formatNumber type: " + this.type);
         }
 
-        if(this.pattern != null)
-        {
+        if(this.pattern != null) {
             DecimalFormat decimalFormat = (DecimalFormat)format;
             decimalFormat.applyPattern(this.pattern);
         }
@@ -136,96 +115,84 @@ public class ParseNumberTag extends BodyTagSupport
     /**
     * @return the value
     */
-    public String getValue()
-    {
+    public String getValue() {
         return this.value;
     }
 
     /**
     * @param value the value to set
     */
-    public void setValue(String value)
-    {
+    public void setValue(String value) {
         this.value = value;
     }
 
     /**
     * @return the type
     */
-    public String getType()
-    {
+    public String getType() {
         return this.type;
     }
 
     /**
     * @param type the type to set
     */
-    public void setType(String type)
-    {
+    public void setType(String type) {
         this.type = type;
     }
 
     /**
     * @return the pattern
     */
-    public String getPattern()
-    {
+    public String getPattern() {
         return this.pattern;
     }
 
     /**
     * @param pattern the pattern to set
     */
-    public void setPattern(String pattern)
-    {
+    public void setPattern(String pattern) {
         this.pattern = pattern;
     }
 
     /**
     * @return the var
     */
-    public String getVar()
-    {
+    public String getVar() {
         return this.var;
     }
 
     /**
     * @param var the var to set
     */
-    public void setVar(String var)
-    {
+    public void setVar(String var) {
         this.var = var;
     }
 
     /**
     * @param integerOnly the integerOnly to set
     */
-    public void setIntegerOnly(boolean integerOnly)
-    {
+    public void setIntegerOnly(boolean integerOnly) {
         this.integerOnly = integerOnly;
     }
 
     /**
     * @return the integerOnly
     */
-    public boolean getIntegerOnly()
-    {
+    public boolean getIntegerOnly() {
         return this.integerOnly;
     }
 
     /**
     * @return the scope
     */
-    public String getScope()
-    {
+    public String getScope() {
         return this.scope;
     }
 
     /**
     * @param scope the scope to set
     */
-    public void setScope(String scope)
-    {
+    public void setScope(String scope) {
         this.scope = scope;
     }
 }

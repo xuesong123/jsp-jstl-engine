@@ -28,37 +28,31 @@ import com.skin.ayada.util.NodeUtil;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class ExpressionTest
-{
-    public static void main(String[] args)
-    {
+public class ExpressionTest {
+    public static void main(String[] args) {
         test1();
     }
 
-    public static void test1()
-    {
+    public static void test1() {
         TemplateContext templateContext = TemplateManager.getTemplateContext("webapp");
 
         StringWriter stringWriter = new StringWriter();
-        PageContext pageContext = templateContext.getPageContext(stringWriter);
+        PageContext pageContext = templateContext.getPageContext(null, stringWriter);
         ExpressionContext expressionContext = pageContext.getExpressionContext();
         Object arg = ExpressionUtil.evaluate(expressionContext, "-1.0", null);
         Object value = ClassUtil.cast(arg, int.class);
 
-        if(value != null)
-        {
+        if(value != null) {
             System.out.println("class: " + value.getClass().getName());
         }
-        else
-        {
+        else {
             System.out.println("class: null");
         }
 
         System.out.println(value);
     }
 
-    public static void test2()
-    {
+    public static void test2() {
         /*
         float floatValue = 2.0f;
         double doubleValue = 2.0d;
@@ -67,45 +61,36 @@ public class ExpressionTest
         */
         String[] source = {"true", "false", "ae2", "+1", "-1", "1", "1.0", "1.0f", "1.0F", "1.0d", "1.0D", "1.0L", "1L", "-1e3", "-1.2e3"};
 
-        for(int i = 0; i < source.length; i++)
-        {
+        for(int i = 0; i < source.length; i++) {
             int type = ExpressionUtil.getDataType(source[i]);
             Object value = ExpressionUtil.getValue(source[i]);
 
-            switch(type)
-            {
-                case 0:
-                {
+            switch(type) {
+                case 0: {
                     System.out.println("String: " + source[i] + " - " + value.getClass().getName() + " - " + value);
                     break;
                 }
-                case 1:
-                {
+                case 1: {
                     System.out.println("Boolean: " + source[i] + " - " + value.getClass().getName() + " - " + value);
                     break;
                 }
-                case 2:
-                {
+                case 2: {
                     System.out.println("Integer: " + source[i] + " - " + value.getClass().getName() + " - " + value);
                     break;
                 }
-                case 3:
-                {
+                case 3: {
                     System.out.println("Float: " + source[i] + " - " + value.getClass().getName() + " - " + value);
                     break;
                 }
-                case 4:
-                {
+                case 4: {
                     System.out.println("Double: " + source[i] + " - " + value.getClass().getName() + " - " + value);
                     break;
                 }
-                case 5:
-                {
+                case 5: {
                     System.out.println("Long: " + source[i] + " - " + value.getClass().getName() + " - " + value);
                     break;
                 }
-                default:
-                {
+                default: {
                     System.out.println("String: " + source[i] + " - " + value.getClass().getName() + " - " + value);
                     break;
                 }
@@ -113,8 +98,7 @@ public class ExpressionTest
         }
     }
 
-    public static void test3()
-    {
+    public static void test3() {
         List<Node> list = ExpressionUtil.parse("123${abc}xyz");
         System.out.println(NodeUtil.getDescription(list));
     }

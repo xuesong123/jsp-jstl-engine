@@ -33,32 +33,27 @@ import example.model.User;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class UserListServlet2 extends HttpServlet
-{
+public class UserListServlet2 extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private TemplateContext templateContext = null;
 
     @Override
-    public void init(ServletConfig servletConfig) throws ServletException
-    {
+    public void init(ServletConfig servletConfig) throws ServletException {
         String home = servletConfig.getServletContext().getRealPath("/WEB-INF/template");
         this.templateContext = TemplateManager.getTemplateContext(home, true);
     }
 
     @Override
-    public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-    {
+    public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html; charset=UTF-8");
         Map<String, Object> context = new HashMap<String, Object>();
         List<User> userList = UserHandler.getUserList(5);
         context.put("userList", userList);
 
-        try
-        {
+        try {
             this.templateContext.execute("/userList.jsp", context, response.getWriter());
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             e.printStackTrace();
         }
     }

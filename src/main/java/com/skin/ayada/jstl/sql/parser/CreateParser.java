@@ -8,7 +8,7 @@
  * This software is the proprietary information of Skin, Inc.
  * Use is subject to license terms.
  */
-package com.skin.ayada.jstl.sql;
+package com.skin.ayada.jstl.sql.parser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,19 +25,16 @@ import com.skin.ayada.io.StringStream;
  * @author xuesong.net
  * @version 1.0
  */
-public class SimpleSqlParser
-{
+public class CreateParser {
     private Dialect dialect;
 
-    public SimpleSqlParser()
-    {
+    public CreateParser() {
     }
 
     /**
      * @param dialect
      */
-    public SimpleSqlParser(Dialect dialect)
-    {
+    public CreateParser(Dialect dialect) {
         this.dialect = dialect;
     }
 
@@ -45,14 +42,12 @@ public class SimpleSqlParser
      * @param source
      * @return List<Table>
      */
-    public List<Table> parse(String source)
-    {
+    public List<Table> parse(String source) {
         Table table = null;
         StringStream stream = new StringStream(source);
         List<Table> list = new ArrayList<Table>();
 
-        while((table = this.parse(stream)) != null)
-        {
+        while((table = this.parse(stream)) != null) {
             list.add(table);
         }
 
@@ -64,32 +59,26 @@ public class SimpleSqlParser
      * @param stream
      * @return Table
      */
-    public Table parse(StringStream stream)
-    {
+    public Table parse(StringStream stream) {
         String token = null;
 
-        while(true)
-        {
+        while(true) {
             token = this.getToken(stream);
 
-            if(token.length() < 1)
-            {
+            if(token.length() < 1) {
                 return null;
             }
 
-            if(token.equalsIgnoreCase("create"))
-            {
+            if(token.equalsIgnoreCase("create")) {
                 break;
             }
 
             String line = null;
 
-            while((line = stream.readLine()) != null)
-            {
+            while((line = stream.readLine()) != null) {
                 line = line.trim();
 
-                if(line.endsWith(";"))
-                {
+                if(line.endsWith(";")) {
                     break;
                 }
             }
@@ -97,31 +86,26 @@ public class SimpleSqlParser
 
         token = this.getToken(stream);
 
-        if(token.equalsIgnoreCase("TEMPORARY"))
-        {
+        if(token.equalsIgnoreCase("TEMPORARY")) {
             token = this.getToken(stream);
         }
 
-        if(token.equalsIgnoreCase("TABLE") == false)
-        {
+        if(token.equalsIgnoreCase("TABLE") == false) {
             throw new RuntimeException("except keyword 'TABLE'!");
         }
 
         String tableName = this.getTableName(stream);
 
-        if(tableName.equalsIgnoreCase("IF"))
-        {
+        if(tableName.equalsIgnoreCase("IF")) {
             token = this.getToken(stream);
 
-            if(token.equalsIgnoreCase("NOT") == false)
-            {
+            if(token.equalsIgnoreCase("NOT") == false) {
                 throw new RuntimeException("except keyword 'NOT'!");
             }
 
             token = this.getToken(stream);
 
-            if(token.equalsIgnoreCase("EXISTS") == false)
-            {
+            if(token.equalsIgnoreCase("EXISTS") == false) {
                 throw new RuntimeException("except keyword 'EXISTS'!");
             }
 
@@ -142,18 +126,15 @@ public class SimpleSqlParser
         this.skipWhitespace(stream);
         int i = stream.read();
 
-        if(i != '(')
-        {
+        if(i != '(') {
             throw new RuntimeException("tableName: " + tableName + ", except '('");
         }
 
-        while(true)
-        {
+        while(true) {
             this.skipWhitespace(stream);
             i = stream.peek();
 
-            if(i == -1 || i == ')')
-            {
+            if(i == -1 || i == ')') {
                 break;
             }
 
@@ -162,12 +143,9 @@ public class SimpleSqlParser
             /**
              * @TODO: keyword check
              */
-            if(columnName.equalsIgnoreCase("PRIMARY") || columnName.equalsIgnoreCase("UNIQUE") || columnName.equalsIgnoreCase("KEY"))
-            {
-                while((i = stream.read()) != -1)
-                {
-                    if(i == '\n')
-                    {
+            if(columnName.equalsIgnoreCase("PRIMARY") || columnName.equalsIgnoreCase("UNIQUE") || columnName.equalsIgnoreCase("KEY")) {
+                while((i = stream.read()) != -1) {
+                    if(i == '\n') {
                         break;
                     }
                 }
@@ -178,8 +156,7 @@ public class SimpleSqlParser
             column.setColumnCode(columnName);
             String variable = java.beans.Introspector.decapitalize(this.toCamel(columnName));
 
-            if("ID".equals(variable) == false)
-            {
+            if("ID".equals(variable) == false) {
                 variable = Character.toLowerCase(variable.charAt(0)) + variable.substring(1);
             }
 
@@ -195,12 +172,10 @@ public class SimpleSqlParser
             this.skipWhitespace(stream);
             i = stream.read();
 
-            if(i == '(')
-            {
+            if(i == '(') {
                 Integer precision = this.getInteger(stream);
 
-                if(precision == null)
-                {
+                if(precision == null) {
                     throw new RuntimeException(column.getColumnName() + ", except number!");
                 }
 
@@ -208,88 +183,72 @@ public class SimpleSqlParser
                 column.setPrecision(0);
                 this.skipWhitespace(stream);
 
-                if(stream.read() != ')')
-                {
+                if(stream.read() != ')') {
                     throw new RuntimeException("except ')'!");
                 }
             }
-            else
-            {
+            else {
                 stream.back();
             }
 
-            while(true)
-            {
+            while(true) {
                 this.skipWhitespace(stream);
                 i = stream.peek();
 
-                if(i == -1 || i == ',')
-                {
+                if(i == -1 || i == ',') {
                     stream.read();
                     break;
                 }
 
-                if(i == ')')
-                {
+                if(i == ')') {
                     break;
                 }
 
                 token = this.getToken(stream);
 
-                if(token.equalsIgnoreCase("NOT"))
-                {
+                if(token.equalsIgnoreCase("NOT")) {
                     this.skipWhitespace(stream);
                     token = this.getToken(stream);
 
-                    if(token.equalsIgnoreCase("NULL") == false)
-                    {
+                    if(token.equalsIgnoreCase("NULL") == false) {
                         throw new RuntimeException("except keyword 'NULL'!");
                     }
 
                     column.setNullable(0);
                 }
-                else if(token.equalsIgnoreCase("AUTO_INCREMENT"))
-                {
+                else if(token.equalsIgnoreCase("AUTO_INCREMENT")) {
                     column.setAutoIncrement(1);
                 }
-                else if(token.equalsIgnoreCase("DEFAULT"))
-                {
+                else if(token.equalsIgnoreCase("DEFAULT")) {
                     this.skipWhitespace(stream);
                     i = stream.peek();
 
-                    if(i == '\'')
-                    {
+                    if(i == '\'') {
                         this.getString(stream);
                     }
-                    else
-                    {
+                    else {
                         String defaultValue = this.getToken(stream);
 
-                        if(defaultValue.length() < 1)
-                        {
+                        if(defaultValue.length() < 1) {
                             throw new RuntimeException(column.getColumnName() + " - default value except default value!");
                         }
 
                         /*
                         Integer value = this.getInteger(stream);
 
-                        if(value == null)
-                        {
+                        if(value == null) {
                             throw new RuntimeException(column.getColumnName() + " - default value except number!");
                         }
                         */
                     }
                 }
-                else if(token.equalsIgnoreCase("COMMENT"))
-                {
+                else if(token.equalsIgnoreCase("COMMENT")) {
                     String remarks = this.getString(stream);
                     column.setRemarks(remarks);
                 }
-                else if(token.equalsIgnoreCase("unsigned"))
-                {
+                else if(token.equalsIgnoreCase("unsigned")) {
                 }
-                else
-                {
+                else {
                     throw new RuntimeException("unknown keyword '" + token + "'!");
                 }
             }
@@ -297,10 +256,8 @@ public class SimpleSqlParser
             table.addColumn(column);
         }
 
-        while((i = stream.read()) != -1)
-        {
-            if(i == ';')
-            {
+        while((i = stream.read()) != -1) {
+            if(i == ';') {
                 break;
             }
         }
@@ -312,8 +269,7 @@ public class SimpleSqlParser
      * @param stream
      * @return String
      */
-    public String getTableName(StringStream stream)
-    {
+    public String getTableName(StringStream stream) {
         return this.getWord(stream);
     }
 
@@ -321,41 +277,34 @@ public class SimpleSqlParser
      * @param stream
      * @return String
      */
-    public String getColumnName(StringStream stream)
-    {
+    public String getColumnName(StringStream stream) {
         return this.getWord(stream);
     }
-    
+
     /**
      * @param stream
      * @return String
      */
-    public String getWord(StringStream stream)
-    {
+    public String getWord(StringStream stream) {
         int c = 0;
         char quoto = '\0';
         StringBuilder buffer = new StringBuilder();
         this.skipWhitespace(stream);
         c = stream.read();
 
-        if(c == '`' || c == '\'' || c == '"' || c == '[')
-        {
+        if(c == '`' || c == '\'' || c == '"' || c == '[') {
             quoto = (char)c;
             this.skipWhitespace(stream);
         }
-        else
-        {
+        else {
             stream.back();
         }
 
-        while((c = stream.read()) != -1)
-        {
-            if(this.isSqlIdentifierPart(c))
-            {
+        while((c = stream.read()) != -1) {
+            if(this.isSqlIdentifierPart(c)) {
                 buffer.append((char)c);
             }
-            else
-            {
+            else {
                 stream.back();
                 break;
             }
@@ -364,16 +313,13 @@ public class SimpleSqlParser
         String word = buffer.toString();
         this.skipWhitespace(stream);
 
-        if(quoto != '\0')
-        {
+        if(quoto != '\0') {
             c = stream.read();
 
-            if(quoto == '[' && c != ']')
-            {
+            if(quoto == '[' && c != ']') {
                 throw new RuntimeException(word + ": except ']'!");
             }
-            else if(quoto != c)
-            {
+            else if(quoto != c) {
                 throw new RuntimeException("column '" + word + "', except '" + quoto + "': found '" + (char)c);
             }
         }
@@ -385,21 +331,17 @@ public class SimpleSqlParser
      * @param stream
      * @return Integer
      */
-    public Integer getInteger(StringStream stream)
-    {
+    public Integer getInteger(StringStream stream) {
         String token = this.getToken(stream);
 
-        if(token.trim().length() < 1)
-        {
+        if(token.trim().length() < 1) {
             return null;
         }
 
-        try
-        {
+        try {
             return Integer.parseInt(token);
         }
-        catch(NumberFormatException e)
-        {
+        catch(NumberFormatException e) {
         }
 
         return null;
@@ -409,30 +351,24 @@ public class SimpleSqlParser
      * @param stream
      * @return String
      */
-    public String getString(StringStream stream)
-    {
+    public String getString(StringStream stream) {
         this.skipWhitespace(stream);
 
-        if(stream.read() != '\'')
-        {
+        if(stream.read() != '\'') {
             throw new RuntimeException("except keyword '\\''!");
         }
 
         int i = 0;
         StringBuilder buffer = new StringBuilder();
 
-        while((i = stream.read()) != -1)
-        {
-            if(i == '\\')
-            {
+        while((i = stream.read()) != -1) {
+            if(i == '\\') {
                 this.unescape(stream, buffer);
             }
-            else if(i == '\'')
-            {
+            else if(i == '\'') {
                 break;
             }
-            else
-            {
+            else {
                 buffer.append((char)i);
             }
         }
@@ -444,33 +380,26 @@ public class SimpleSqlParser
      * @param stream
      * @return String
      */
-    public String getToken(StringStream stream)
-    {
+    public String getToken(StringStream stream) {
         int c = 0;
         StringBuilder buffer = new StringBuilder();
         this.skipWhitespace(stream);
 
-        while((c = stream.read()) != -1)
-        {
-            if(c <= ' ' || c == '(' || c == ')' || c == ',')
-            {
+        while((c = stream.read()) != -1) {
+            if(c <= ' ' || c == '(' || c == ')' || c == ',') {
                 stream.back();
                 break;
             }
-            else
-            {
+            else {
                 buffer.append((char)c);
             }
         }
-        
+
         String token = buffer.toString();
-        
-        if(token.equals("--"))
-        {
-            while((c = stream.read()) != -1)
-            {
-                if(c == '\n')
-                {
+
+        if(token.equals("--")) {
+            while((c = stream.read()) != -1) {
+                if(c == '\n') {
                     break;
                 }
             }
@@ -484,13 +413,10 @@ public class SimpleSqlParser
     /**
      * skip whitespace
      */
-    public void skipWhitespace(StringStream stream)
-    {
+    public void skipWhitespace(StringStream stream) {
         int i = 0;
-        while((i = stream.read()) != -1)
-        {
-            if(i > ' ')
-            {
+        while((i = stream.read()) != -1) {
+            if(i > ' ') {
                 stream.back();
                 break;
             }
@@ -501,95 +427,77 @@ public class SimpleSqlParser
      * @param stream
      * @param buffer
      */
-    public void unescape(StringStream stream, StringBuilder buffer)
-    {
+    public void unescape(StringStream stream, StringBuilder buffer) {
         int c = stream.read();
 
-        if(c < 0)
-        {
+        if(c < 0) {
             return;
         }
 
-        switch(c)
-        {
+        switch(c) {
             case 'n':{
                 buffer.append("\n");
                 break;
             }
-            case 't':
-            {
+            case 't': {
                 buffer.append("\t");
                 break;
             }
-            case 'b':
-            {
+            case 'b': {
                 buffer.append("\b");
                 break;
             }
-            case 'r':
-            {
+            case 'r': {
                 buffer.append("\r");
                 break;
             }
-            case 'f':
-            {
+            case 'f': {
                 buffer.append("\f");
                 break;
             }
-            case '\'':
-            {
+            case '\'': {
                 buffer.append("\'");
                 break;
             }
-            case '\"':
-            {
+            case '\"': {
                 buffer.append("\"");
                 break;
             }
-            case '\\':
-            {
+            case '\\': {
                 buffer.append("\\");
                 break;
             }
-            case 'u':
-            {
+            case 'u': {
                 char[] cbuf = {'0', '0', '0', '0'};
                 int i = stream.read(cbuf);
 
-                if(i == 4)
-                {
+                if(i == 4) {
                     String hex = new String(cbuf);
 
-                    try
-                    {
+                    try {
                         int value = Integer.parseInt(hex, 16);
                         buffer.append((char)value);
                     }
-                    catch(NumberFormatException e)
-                    {
+                    catch(NumberFormatException e) {
                     }
                 }
 
                 break;
             }
-            default:
-            {
+            default: {
                 stream.back();
 
                 char[] cbuf = {'0', '0', '0'};
                 int i = stream.read(cbuf);
 
-                if(i == 3)
-                {
+                if(i == 3) {
                     String hex = new String(cbuf);
 
-                    try
-                    {
+                    try {
                         int value = Integer.parseInt(hex, 16);
                         buffer.append((char)value);
                     }
-                    catch(NumberFormatException e)
-                    {
+                    catch(NumberFormatException e) {
                     }
                 }
 
@@ -598,20 +506,16 @@ public class SimpleSqlParser
         }
     }
 
-    public boolean isSqlIdentifierStart(int i)
-    {
-        if(i == '_')
-        {
+    public boolean isSqlIdentifierStart(int i) {
+        if(i == '_') {
             return true;
         }
 
         return (i >= 97 && i <= 122) || (i >= 65 && i <= 90);
     }
 
-    public boolean isSqlIdentifierPart(int i)
-    {
-        if(i == '_')
-        {
+    public boolean isSqlIdentifierPart(int i) {
+        if(i == '_') {
             return true;
         }
 
@@ -622,10 +526,8 @@ public class SimpleSqlParser
      * @param name
      * @return String
      */
-    public String toCamel(String name)
-    {
-        if(null == name || name.trim().length() < 1)
-        {
+    public String toCamel(String name) {
+        if(null == name || name.trim().length() < 1) {
             return "";
         }
 
@@ -633,58 +535,46 @@ public class SimpleSqlParser
 
         StringBuilder buf = new StringBuilder();
 
-        if(name.startsWith("_"))
-        {
+        if(name.startsWith("_")) {
             buf.append("_");
         }
 
-        if(1 == subs.length)
-        {
+        if(1 == subs.length) {
             String s = subs[0];
 
-            if("ID".equals(s))
-            {
+            if("ID".equals(s)) {
                 buf.append("Id");
             }
-            else if(s.toUpperCase().equals(s))
-            {
+            else if(s.toUpperCase().equals(s)) {
                 // 如果全部都是大写
                 buf.append(Character.toUpperCase(s.charAt(0)));
                 buf.append(s.substring(1).toLowerCase());
             }
-            else
-            {
+            else {
                 buf.append(Character.toUpperCase(s.charAt(0))).append(s.substring(1));
             }
         }
-        else
-        {
-            for(String s : subs)
-            {
-                if(s.length() > 0)
-                {
+        else {
+            for(String s : subs) {
+                if(s.length() > 0) {
                     // buf.append(Character.toUpperCase(s.charAt(0))).append(s.substring(1).toLowerCase());
 
-                    if("ID".equals(s))
-                    {
+                    if("ID".equals(s)) {
                         buf.append(s);
                     }
-                    else if(s.toUpperCase().equals(s))
-                    {
+                    else if(s.toUpperCase().equals(s)) {
                         // 如果全部都是大写
                         buf.append(Character.toUpperCase(s.charAt(0)));
                         buf.append(s.substring(1).toLowerCase());
                     }
-                    else
-                    {
+                    else {
                         buf.append(Character.toUpperCase(s.charAt(0))).append(s.substring(1));
                     }
                 }
             }
         }
 
-        if(name.endsWith("_"))
-        {
+        if(name.endsWith("_")) {
             buf.append("_");
         }
 
@@ -694,16 +584,14 @@ public class SimpleSqlParser
     /**
      * @return the dialect
      */
-    public Dialect getDialect()
-    {
+    public Dialect getDialect() {
         return this.dialect;
     }
 
     /**
      * @param dialect the dialect to set
      */
-    public void setDialect(Dialect dialect)
-    {
+    public void setDialect(Dialect dialect) {
         this.dialect = dialect;
     }
 
@@ -711,8 +599,7 @@ public class SimpleSqlParser
      * @param table
      * @return String
      */
-    public static String toString(Table table)
-    {
+    public static String toString(Table table) {
         return toString(table, "%s");
     }
 
@@ -721,16 +608,14 @@ public class SimpleSqlParser
      * @param pattern
      * @return String
      */
-    public static String toString(Table table, String pattern)
-    {
+    public static String toString(Table table, String pattern) {
         StringBuilder buffer = new StringBuilder();
         List<Column> columns = table.listColumns();
         buffer.append("CREATE TABLE ");
         buffer.append(String.format(pattern, table.getTableName()));
         buffer.append("(\r\n");
 
-        for(int i = 0, size = columns.size(); i < size; i++)
-        {
+        for(int i = 0, size = columns.size(); i < size; i++) {
             Column column = columns.get(i);
             buffer.append("    ");
             buffer.append(String.format(pattern, column.getColumnName()));
@@ -738,34 +623,29 @@ public class SimpleSqlParser
             buffer.append(" ");
             buffer.append(column.getTypeName());
 
-            if(column.getPrecision() > 0)
-            {
+            if(column.getPrecision() > 0) {
                 buffer.append("(");
                 buffer.append(column.getPrecision());
                 buffer.append(")");
             }
 
-            if(column.getAutoIncrement() == 1)
-            {
+            if(column.getAutoIncrement() == 1) {
                 buffer.append(" AUTO_INCREMENT");
             }
 
-            if(column.getNullable() == 1)
-            {
+            if(column.getNullable() == 1) {
                 buffer.append(" not null");
             }
 
             String remarks = column.getRemarks();
 
-            if(remarks != null && remarks.length() > 0)
-            {
+            if(remarks != null && remarks.length() > 0) {
                 buffer.append(" comment '");
                 buffer.append(remarks);
                 buffer.append("'");
             }
 
-            if(i < size - 1)
-            {
+            if(i < size - 1) {
                 buffer.append(",");
             }
 

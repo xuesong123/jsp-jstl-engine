@@ -20,12 +20,10 @@ import java.util.List;
  * @author xuesong.net
  * @version 1.0
  */
-public class StringUtil
-{
+public class StringUtil {
     private static final String EMPTY = "";
 
-    private StringUtil()
-    {
+    private StringUtil() {
     }
 
     /**
@@ -34,10 +32,8 @@ public class StringUtil
      * @param padding
      * @return String
      */
-    public static String substring(String source, int length, String padding)
-    {
-        if(source == null)
-        {
+    public static String substring(String source, int length, String padding) {
+        if(source == null) {
             return "";
         }
 
@@ -48,28 +44,22 @@ public class StringUtil
         int count = s.length();
         StringBuilder buffer = new StringBuilder();
 
-        for(int i = 0; i < s.length(); i++)
-        {
+        for(int i = 0; i < s.length(); i++) {
             c = s.charAt(i);
 
-            if(c >= 0x0080)
-            {
+            if(c >= 0x0080) {
                 size += 2;
                 count++;
             }
-            else
-            {
+            else {
                 size++;
             }
 
-            if(size > length)
-            {
-                if(c >= 0x4e00)
-                {
+            if(size > length) {
+                if(c >= 0x4e00) {
                     size -= 2;
                 }
-                else
-                {
+                else {
                     size--;
                 }
 
@@ -79,11 +69,9 @@ public class StringUtil
             buffer.append(c);
         }
 
-        if(size < count && padding != null)
-        {
+        if(size < count && padding != null) {
             buffer.append(padding);
         }
-
         return buffer.toString();
     }
 
@@ -93,20 +81,16 @@ public class StringUtil
      * @param pad
      * @return String
      */
-    public static String padding(String source, int length, String pad)
-    {
+    public static String padding(String source, int length, String pad) {
         StringBuilder buffer = new StringBuilder(source);
 
-        while(buffer.length() < length)
-        {
+        while(buffer.length() < length) {
             buffer.append(pad);
         }
 
-        if(buffer.length() > length)
-        {
+        if(buffer.length() > length) {
             return buffer.substring(0, length);
         }
-
         return buffer.toString();
     }
 
@@ -116,15 +100,12 @@ public class StringUtil
      * @param replacement
      * @return String
      */
-    public static String replace(String source, String search, String replacement)
-    {
-        if(source == null)
-        {
+    public static String replace(String source, String search, String replacement) {
+        if(source == null) {
             return EMPTY;
         }
 
-        if(search == null)
-        {
+        if(search == null) {
             return source;
         }
 
@@ -134,14 +115,11 @@ public class StringUtil
         String content = source;
         StringBuilder buffer = new StringBuilder();
 
-        while(true)
-        {
-            while(true)
-            {
+        while(true) {
+            while(true) {
                 e = content.indexOf(search, s);
 
-                if(e == -1)
-                {
+                if(e == -1) {
                     buffer.append(content.substring(s));
                     break;
                 }
@@ -152,17 +130,14 @@ public class StringUtil
             content = buffer.toString();
             e = content.indexOf(search, 0);
 
-            if(e > -1)
-            {
+            if(e > -1) {
                 s = 0;
                 buffer.setLength(0);
             }
-            else
-            {
+            else {
                 break;
             }
         }
-
         return content;
     }
 
@@ -171,27 +146,38 @@ public class StringUtil
      * @param limit
      * @return String[]
      */
-    public static String[] split(String source, String limit)
-    {
-        int s = 0;
-        int p = 0;
+    public static String[] split(String source, String limit, boolean trim, boolean ignoreWhitespace) {
+        int i = 0;
+        int j = 0;
+        String s = null;
         List<String> list = new ArrayList<String>();
 
-        while((p = source.indexOf(limit, s)) > -1)
-        {
-            if(p > s)
-            {
-                list.add(source.substring(s, p));
+        while((j = source.indexOf(limit, i)) > -1) {
+            if(j > i) {
+            	s = source.substring(i, j);
+
+            	if(trim) {
+            		s = s.trim();
+            	}
+
+            	if(!ignoreWhitespace || s.length() > 0) {
+            		list.add(s);
+            	}
             }
-
-            s = p + limit.length();
+            i = j + limit.length();
         }
 
-        if(s < source.length())
-        {
-            list.add(source.substring(s));
-        }
+        if(i < source.length()) {
+            s = source.substring(i);
 
+            if(trim) {
+        		s = s.trim();
+        	}
+
+        	if(!ignoreWhitespace || s.length() > 0) {
+        		list.add(s);
+        	}
+        }
         String[] result = new String[list.size()];
         return list.toArray(result);
     }
@@ -200,61 +186,47 @@ public class StringUtil
      * @param source
      * @return String
      */
-    public static String escape(String source)
-    {
-        if(source == null)
-        {
+    public static String escape(String source) {
+        if(source == null) {
             return "";
         }
 
         char c;
         StringBuilder buffer = new StringBuilder();
 
-        for(int i = 0, length = source.length(); i < length; i++)
-        {
+        for(int i = 0, length = source.length(); i < length; i++) {
             c = source.charAt(i);
 
-            switch (c)
-            {
-                case '\'':
-                {
+            switch (c) {
+                case '\'': {
                     buffer.append("\\\'");break;
                 }
-                case '"':
-                {
+                case '"': {
                     buffer.append("\\\"");break;
                 }
-                case '\r':
-                {
+                case '\r': {
                     buffer.append("\\r");break;
                 }
-                case '\n':
-                {
+                case '\n': {
                     buffer.append("\\n");break;
                 }
-                case '\t':
-                {
+                case '\t': {
                     buffer.append("\\t");break;
                 }
-                case '\b':
-                {
+                case '\b': {
                     buffer.append("\\b");break;
                 }
-                case '\f':
-                {
+                case '\f': {
                     buffer.append("\\f");break;
                 }
-                case '\\':
-                {
+                case '\\': {
                     buffer.append("\\\\");break;
                 }
-                default :
-                {
+                default : {
                     buffer.append(c);break;
                 }
             }
         }
-
         return buffer.toString();
     }
 
@@ -262,58 +234,44 @@ public class StringUtil
      * @param source
      * @return String
      */
-    public static String unescape(String source)
-    {
-        if(source == null)
-        {
+    public static String unescape(String source) {
+        if(source == null) {
             return "";
         }
 
         char c;
         StringBuilder buffer = new StringBuilder();
 
-        for(int i = 0, length = source.length(); i < length; i++)
-        {
+        for(int i = 0, length = source.length(); i < length; i++) {
             c = source.charAt(i);
 
-            if(c == '\\' && (i + 1 < length))
-            {
-                switch (source.charAt(i + 1))
-                {
-                    case '\'':
-                    {
+            if(c == '\\' && (i + 1 < length)) {
+                switch (source.charAt(i + 1)) {
+                    case '\'': {
                         buffer.append("\'");break;
                     }
-                    case '"':
-                    {
+                    case '"': {
                         buffer.append("\"");break;
                     }
-                    case 'r':
-                    {
+                    case 'r': {
                         buffer.append("\r");break;
                     }
-                    case 'n':
-                    {
+                    case 'n': {
                         buffer.append("\n");break;
                     }
-                    case 't':
-                    {
+                    case 't': {
                         buffer.append("\t");break;
                     }
-                    case 'b':
-                    {
+                    case 'b': {
                         buffer.append("\b");break;
                     }
-                    case 'f':
-                    {
+                    case 'f': {
                         buffer.append("\f");break;
                     }
-                    case '\\':
-                    {
+                    case '\\': {
                         buffer.append("\\");break;
                     }
-                    default :
-                    {
+                    default : {
                         buffer.append('\\');
                         buffer.append(source.charAt(i + 1));
                         break;
@@ -321,12 +279,10 @@ public class StringUtil
                 }
                 i++;
             }
-            else
-            {
+            else {
                 buffer.append(c);
             }
         }
-
         return buffer.toString();
     }
 
@@ -334,8 +290,7 @@ public class StringUtil
      * @param source
      * @return String
      */
-    public static String compact(String source)
-    {
+    public static String compact(String source) {
         return compact(source, "\r\n");
     }
 
@@ -344,36 +299,29 @@ public class StringUtil
      * @param crlf
      * @return String
      */
-    public static String compact(String source, String crlf)
-    {
+    public static String compact(String source, String crlf) {
         char c;
         boolean b = true;
         int length = source.length();
         StringBuilder buffer = new StringBuilder();
 
-        for(int i = 0; i < length; i++)
-        {
+        for(int i = 0; i < length; i++) {
             c = source.charAt(i);
 
-            if(c == '\n')
-            {
-                if(b)
-                {
+            if(c == '\n') {
+                if(b) {
                     buffer.append(crlf);
                     b = false;
                 }
             }
-            else if(c == '\r')
-            {
+            else if(c == '\r') {
                 continue;
             }
-            else
-            {
+            else {
                 buffer.append(c);
                 b = true;
             }
         }
-
         return buffer.toString();
     }
 
@@ -382,28 +330,22 @@ public class StringUtil
      * @param value
      * @return boolean
      */
-    public static boolean contains(String content, String value)
-    {
-        if(content != null)
-        {
-            if(content.trim().equals("*"))
-            {
+    public static boolean contains(String content, String value) {
+        if(content != null) {
+            if(content.trim().equals("*")) {
                 return true;
             }
 
             String[] array = content.split(",");
 
-            for(int i = 0; i < array.length; i++)
-            {
+            for(int i = 0; i < array.length; i++) {
                 array[i] = array[i].trim();
 
-                if(array[i].equals(value))
-                {
+                if(array[i].equals(value)) {
                     return true;
                 }
             }
         }
-
         return false;
     }
 }

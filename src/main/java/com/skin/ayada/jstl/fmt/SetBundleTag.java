@@ -22,23 +22,19 @@ import com.skin.ayada.tagext.TagSupport;
  * @author xuesong.net
  * @version 1.0
  */
-public class SetBundleTag extends TagSupport
-{
+public class SetBundleTag extends TagSupport {
     private String basename;
     private String var;
     private String scope;
 
     @Override
-    public int doStartTag()
-    {
+    public int doStartTag() {
         LocalizationContext bundle = BundleTag.getBundle(this.pageContext, this.basename);
 
-        if(this.var == null)
-        {
+        if(this.var == null) {
             this.pageContext.setBundle(bundle);
         }
-        else
-        {
+        else {
             SetTag.setValue(this.pageContext, this.var, this.scope, bundle);
         }
 
@@ -48,48 +44,42 @@ public class SetBundleTag extends TagSupport
     /**
      * @return the basename
      */
-    public String getBasename()
-    {
+    public String getBasename() {
         return this.basename;
     }
 
     /**
      * @param basename the basename to set
      */
-    public void setBasename(String basename)
-    {
+    public void setBasename(String basename) {
         this.basename = basename;
     }
 
     /**
      * @return the var
      */
-    public String getVar()
-    {
+    public String getVar() {
         return this.var;
     }
 
     /**
      * @param var the var to set
      */
-    public void setVar(String var)
-    {
+    public void setVar(String var) {
         this.var = var;
     }
 
     /**
      * @return the scope
      */
-    public String getScope()
-    {
+    public String getScope() {
         return this.scope;
     }
 
     /**
      * @param scope the scope to set
      */
-    public void setScope(String scope)
-    {
+    public void setScope(String scope) {
         this.scope = scope;
     }
 }

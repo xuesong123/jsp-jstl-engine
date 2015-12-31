@@ -21,22 +21,18 @@ import com.skin.ayada.tagext.Tag;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class DeleteTag extends FileTag
-{
+public class DeleteTag extends FileTag {
     /**
      * @return int
      */
     @Override
-    public int doEndTag() throws Exception
-    {
+    public int doEndTag() throws Exception {
         File source = new File(this.getFile());
 
-        if(source.isFile())
-        {
+        if(source.isFile()) {
             source.delete();
         }
-        else
-        {
+        else {
             this.execute(new File(this.file));
         }
 
@@ -44,8 +40,7 @@ public class DeleteTag extends FileTag
     }
 
     @Override
-    public void process(File file) throws IOException
-    {
+    public void process(File file) throws IOException {
         file.delete();
     }
 }

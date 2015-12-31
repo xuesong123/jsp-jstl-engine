@@ -16,6 +16,5 @@ package com.skin.ayada.tagext;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public interface BreakTagSupport
-{
+public interface BreakTagSupport {
 }

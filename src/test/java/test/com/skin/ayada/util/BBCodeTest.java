@@ -21,34 +21,29 @@ import com.skin.ayada.util.BBCode;
  * @author xuesong.net
  * @version 1.0
  */
-public class BBCodeTest
-{
+public class BBCodeTest {
     /**
      * @param args
      */
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         test1();
     }
 
-    public static void evaluateTest()
-    {
+    public static void evaluateTest() {
         String source = "<embd ${width=\"#1\"} ${height=\"#2\"}/>";
         String[] replacement = new String[]{"1", "2"};
         String result = BBCode.evaluate(source, replacement);
         System.out.println(result);
     }
 
-    public static void replaceTest()
-    {
+    public static void replaceTest() {
         String source = "width=\"#1\"";
         String[] replacement = new String[]{"1", "2"};
         String result = BBCode.replace(source, replacement);
         System.out.println(result);
     }
 
-    public static void test1()
-    {
+    public static void test1() {
         StringBuilder source = new StringBuilder();
         source.append("[b]12[/b]\r\n");
         source.append("[img]http://www.test.com[/img]\r\n");
@@ -83,58 +78,45 @@ public class BBCodeTest
      * @param source
      * @return String
      */
-    public static String quote(String source)
-    {
+    public static String quote(String source) {
         StringBuilder buffer = new StringBuilder();
         buffer.append("\"");
 
-        if(source != null)
-        {
+        if(source != null) {
             char c;
 
-            for(int i = 0, size = source.length(); i < size; i++)
-            {
+            for(int i = 0, size = source.length(); i < size; i++) {
                 c = source.charAt(i);
 
-                switch (c)
-                {
-                    case '\\':
-                    {
+                switch (c) {
+                    case '\\': {
                         buffer.append("\\\\"); break;
                     }
-                    case '\'':
-                    {
+                    case '\'': {
                         buffer.append("\\\'"); break;
                     }
-                    case '"':
-                    {
+                    case '"': {
                         buffer.append("\\\""); break;
                     }
-                    case '\r':
-                    {
+                    case '\r': {
                         buffer.append("\\r"); break;
                     }
-                    case '\n':
-                    {
+                    case '\n': {
                         buffer.append("\\n"); break;
                     }
-                    case '\t':
-                    {
+                    case '\t': {
                         buffer.append("\\t"); break;
                     }
-                    case '\b':
-                    {
+                    case '\b': {
                         buffer.append("\\b"); break;
                     }
-                    case '\f':
-                    {
+                    case '\f': {
                         buffer.append("\\f"); break;
                     }
-                    default :
-                    {
+                    default : {
                         buffer.append(c); break;
                     }
-                }   
+                }
             }
         }
 
@@ -142,12 +124,10 @@ public class BBCodeTest
         return buffer.toString();
     }
 
-    public static void printMap()
-    {
+    public static void printMap() {
         Map<String, String> map = BBCode.map;
 
-        for(Map.Entry<String, String> entry : map.entrySet())
-        {
+        for(Map.Entry<String, String> entry : map.entrySet()) {
             System.out.println("map[\"" + entry.getKey() + "\"] = " + quote(entry.getValue()) + ";");
         }
     }

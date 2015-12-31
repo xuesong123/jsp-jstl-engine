@@ -27,13 +27,11 @@ import com.skin.ayada.util.TemplateUtil;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class SqlTagTest
-{
+public class SqlTagTest {
     /**
      * @param args
      */
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         String home = "E:\\WorkSpace\\ayada\\webapp";
         TemplateFactory templateFactory = new TemplateFactory();
         TemplateContext templateContext = TemplateManager.getTemplateContext(home, true);
@@ -41,8 +39,7 @@ public class SqlTagTest
         Template template = null;
         Connection connection = null;
 
-        try
-        {
+        try {
             template = templateContext.getTemplate("sqlTagTest.jsp");
             StringWriter writer = new StringWriter();
             PageContext pageContext = templateContext.getPageContext(writer);
@@ -55,18 +52,15 @@ public class SqlTagTest
             System.out.println("-------------- run result --------------");
             System.out.println(writer.toString());
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             e.printStackTrace();
         }
-        finally
-        {
+        finally {
             MySql.close(connection);
         }
     }
 
-    public static Connection getConnection() throws SQLException
-    {
+    public static Connection getConnection() throws SQLException {
         return MySql.connect("localhost", "3306", "mytest", "root", "1234");
     }
 }

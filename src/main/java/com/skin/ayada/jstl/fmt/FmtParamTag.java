@@ -21,35 +21,29 @@ import com.skin.ayada.tagext.Tag;
  * @author xuesong.net
  * @version 1.0
  */
-public class FmtParamTag extends BodyTagSupport
-{
+public class FmtParamTag extends BodyTagSupport {
     private Object value;
     private boolean hasValue;
 
     @Override
-    public int doEndTag() throws Exception
-    {
+    public int doEndTag() throws Exception {
         Object value = null;
 
-        if(this.hasValue)
-        {
+        if(this.hasValue) {
             value = this.value;
         }
-        else
-        {
+        else {
             value = this.bodyContent.getString().trim();
         }
 
         Tag parent = this.getParent();
 
-        if(parent instanceof ParamContainerTag)
-        {
+        if(parent instanceof ParamContainerTag) {
             ParamContainerTag paramContainerTag = (ParamContainerTag)parent;
             paramContainerTag.addParam(value);
             return Tag.EVAL_PAGE;
         }
-        else
-        {
+        else {
             throw new Exception("fmt:param requires fmt:message parent.");
         }
     }
@@ -57,8 +51,7 @@ public class FmtParamTag extends BodyTagSupport
     /**
      * @param value the value to set
      */
-    public void setValue(Object value)
-    {
+    public void setValue(Object value) {
         this.value = value;
         this.hasValue = true;
     }
@@ -66,8 +59,7 @@ public class FmtParamTag extends BodyTagSupport
     /**
      * @return the value
      */
-    public Object getValue()
-    {
+    public Object getValue() {
         return this.value;
     }
 }

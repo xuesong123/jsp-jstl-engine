@@ -16,8 +16,7 @@ package com.skin.ayada.tagext;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public interface TryCatchFinally
-{
+public interface TryCatchFinally {
     /**
      * Invoked if a Throwable occurs while evaluating the BODY inside a tag or in any of the following methods: Tag.doStartTag(), Tag.doEndTag(), IterationTag.doAfterBody() and BodyTag.doInitBody().
      * This method is not invoked if the Throwable occurs during one of the setter methods.
@@ -33,5 +32,5 @@ public interface TryCatchFinally
      * This method should not throw an Exception.
      * This method is intended to maintain per-invocation data integrity and resource management actions.
      */
-    public void doFinally(); 
+    public void doFinally();
 }

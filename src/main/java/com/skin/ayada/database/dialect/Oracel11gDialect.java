@@ -17,6 +17,5 @@ package com.skin.ayada.database.dialect;
  * @author xuesong.net
  * @version 1.0
  */
-public class Oracel11gDialect extends Oracle9iDialect
-{
+public class Oracel11gDialect extends Oracle9iDialect {
 }

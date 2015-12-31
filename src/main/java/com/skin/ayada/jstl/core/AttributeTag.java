@@ -23,16 +23,13 @@ import com.skin.ayada.tagext.Tag;
  * @author xuesong.net
  * @version 1.0
  */
-public class AttributeTag extends BodyTagSupport
-{
+public class AttributeTag extends BodyTagSupport {
     private String name;
     private Object value;
 
     @Override
-    public int doStartTag()
-    {
-        if(this.value != null)
-        {
+    public int doStartTag() {
+        if(this.value != null) {
             this.setAttribute(this.name, this.value);
             return Tag.SKIP_BODY;
         }
@@ -41,10 +38,8 @@ public class AttributeTag extends BodyTagSupport
     }
 
     @Override
-    public int doEndTag()
-    {
-        if(this.value == null)
-        {
+    public int doEndTag() {
+        if(this.value == null) {
             BodyContent body = this.getBodyContent();
             this.setAttribute(this.name, (body != null ? body.getString() : null));
         }
@@ -56,17 +51,14 @@ public class AttributeTag extends BodyTagSupport
      * @param name
      * @param value
      */
-    protected void setAttribute(String name, Object value)
-    {
+    protected void setAttribute(String name, Object value) {
         Tag parent = this.getParent();
 
-        if(parent instanceof AttributeTagSupport)
-        {
+        if(parent instanceof AttributeTagSupport) {
             AttributeTagSupport tag = (AttributeTagSupport)(parent);
             tag.setAttribute(name, value);
         }
-        else
-        {
+        else {
             throw new RuntimeException("Illegal use of parameter-style tag without servlet as its direct parent");
         }
     }
@@ -74,32 +66,28 @@ public class AttributeTag extends BodyTagSupport
     /**
      * @return the name
      */
-    public String getName()
-    {
+    public String getName() {
         return this.name;
     }
 
     /**
      * @param name the name to set
      */
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
     /**
      * @return the value
      */
-    public Object getValue()
-    {
+    public Object getValue() {
         return this.value;
     }
 
     /**
      * @param value the value to set
      */
-    public void setValue(Object value)
-    {
+    public void setValue(Object value) {
         this.value = value;
     }
 }

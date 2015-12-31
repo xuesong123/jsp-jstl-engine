@@ -21,45 +21,40 @@ import java.util.Scanner;
  * @author xuesong.net
  * @version 1.0
  */
-public class Solution
-{
-    public static void main(String[] args)
-    {
+public class Solution {
+    public static void main(String[] args) {
         int[] a = new int[]{
             1,  2,  3,  4,  5,
             6,  7,  8,  9,  10,
             11, 12, 13, 14, 15
         };
-        
+
         int[] result = convertMatrix(5, 3, a);
 
-        for(int i = 0; i < result.length; i++)
-        {
+        for(int i = 0; i < result.length; i++) {
             System.out.print(result[i] + ", ");
         }
         System.out.println();
     }
-    
-    public static void main1(String[] args)
-    {
+
+    @SuppressWarnings("resource")
+	public static void main1(String[] args) {
         Scanner in = new Scanner(System.in);
-        
+
         int[] res;
         int _width = in.nextInt();
         int _height = in.nextInt();
 
         int[] _matrix = new int[_width * _height];
         int _matrix_item;
-        for(int _matrix_i = 0; _matrix_i < _width * _height; _matrix_i++)
-        {
+        for(int _matrix_i = 0; _matrix_i < _width * _height; _matrix_i++) {
             _matrix_item = in.nextInt();
             _matrix[_matrix_i] = _matrix_item;
         }
 
         res = convertMatrix(_width, _height, _matrix);
-        
-        for(int res_i = 0; res_i < res.length; res_i++)
-        {
+
+        for(int res_i = 0; res_i < res.length; res_i++) {
             System.out.print(res[res_i] + ", ");
         }
         System.out.println();
@@ -69,17 +64,16 @@ public class Solution
      *  1  2  3  4  5
      *  6  7  8  9  10
      *  11 12 13 14 15
-     *  1  2  3  4  5 9 13 12 11 6 7 8 
-     * 
+     *  1  2  3  4  5 9 13 12 11 6 7 8
+     *
      * while(){ right -> left down - left -> up}
-     * 
+     *
      * @param width
      * @param height
      * @param matrix
      * @return int[]
      */
-    public static int[] convertMatrix(int width, int height, int[] matrix)
-    {
+    public static int[] convertMatrix(int width, int height, int[] matrix) {
         boolean flag = true;
         int[] temp = new int[width * height];
         List<Integer> result = new ArrayList<Integer>();
@@ -88,22 +82,18 @@ public class Solution
         int y = 0;
         int index = 0;
 
-        while(flag)
-        {
+        while(flag) {
             // right
-            while(true)
-            {
+            while(true) {
                 x++;
-                if(x >= width)
-                {
+                if(x >= width) {
                     x--;
                     break;
                 }
-    
+
                 index = y * width + x;
 
-                if(temp[index] == 1)
-                {
+                if(temp[index] == 1) {
                     x--;
                     flag = false;
                     break;
@@ -114,68 +104,59 @@ public class Solution
             }
 
             // left down
-            while(true)
-            {
+            while(true) {
                 x--;
                 y++;
-                if(x < 0 || y >= height)
-                {
+                if(x < 0 || y >= height) {
                     x++;
                     y--;
                     break;
                 }
-    
+
                 index = y * width + x;
-    
-                if(temp[index] == 1)
-                {
+
+                if(temp[index] == 1) {
                     x++;
                     y--;
                     flag = false;
                     break;
                 }
-    
+
                 result.add(matrix[index]);
                 temp[index] = 1;
             }
-            
+
             // left
-            while(true)
-            {
+            while(true) {
                 x--;
-                if(x < 0)
-                {
+                if(x < 0) {
                     x++;
                     break;
                 }
-    
+
                 index = y * width + x;
-    
-                if(temp[index] == 1)
-                {
+
+                if(temp[index] == 1) {
                     x++;
                     flag = false;
                     break;
                 }
-    
+
                 result.add(matrix[index]);
                 temp[index] = 1;
             }
-            
+
             // up
-            while(true)
-            {
+            while(true) {
                 y--;
-                if(y < 0)
-                {
+                if(y < 0) {
                     y++;
                     break;
                 }
 
                 index = y * width + x;
 
-                if(temp[index] == 1)
-                {
+                if(temp[index] == 1) {
                     y++;
                     break;
                 }
@@ -186,9 +167,8 @@ public class Solution
         }
 
         int[] a = new int[result.size()];
-        
-        for(int i = 0; i < a.length; i++)
-        {
+
+        for(int i = 0; i < a.length; i++) {
             a[i] = result.get(i).intValue();
         }
         return a;

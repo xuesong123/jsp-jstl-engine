@@ -22,8 +22,7 @@ import java.util.Formatter;
  * @author xuesong.net
  * @version 1.0
  */
-public class MemMonitor
-{
+public class MemMonitor {
     private long temp = 0L;
     private long start = 0L;
     private long end = 0L;
@@ -33,24 +32,21 @@ public class MemMonitor
     private long total = 0L;
     private Object lock = new Object();
 
-    public MemMonitor()
-    {
+    public MemMonitor() {
         this.start = System.currentTimeMillis();
         this.test();
     }
 
     /**
      */
-    public void test()
-    {
+    public void test() {
         this.test(null, false, false);
     }
 
     /**
      * @param out
      */
-    public void test(PrintWriter out)
-    {
+    public void test(PrintWriter out) {
         this.test(out, true, true);
     }
 
@@ -59,10 +55,8 @@ public class MemMonitor
      * @param head
      * @param detail
      */
-    public void test(PrintWriter out, boolean head, boolean detail)
-    {
-        synchronized(this.lock)
-        {
+    public void test(PrintWriter out, boolean head, boolean detail) {
+        synchronized(this.lock) {
             Runtime runtime = Runtime.getRuntime();
             this.max = runtime.maxMemory();
             this.free = runtime.freeMemory();
@@ -72,8 +66,7 @@ public class MemMonitor
             this.start = System.currentTimeMillis();
             this.end = this.start;
 
-            if(out != null)
-            {
+            if(out != null) {
                 this.print(out, head, detail);
             }
         }
@@ -82,8 +75,7 @@ public class MemMonitor
     /**
      * @param out
      */
-    public void print(PrintStream out)
-    {
+    public void print(PrintStream out) {
         this.print(new PrintWriter(out), true, true);
     }
 
@@ -92,8 +84,7 @@ public class MemMonitor
      * @param head
      * @param detail
      */
-    public void print(PrintStream out, boolean head, boolean detail)
-    {
+    public void print(PrintStream out, boolean head, boolean detail) {
         this.print(new PrintWriter(out), head, detail);
     }
 
@@ -102,15 +93,12 @@ public class MemMonitor
      * @param head
      * @param detail
      */
-    public void print(PrintWriter out, boolean head, boolean detail)
-    {
-        if(head || detail)
-        {
+    public void print(PrintWriter out, boolean head, boolean detail) {
+        if(head || detail) {
             StringBuilder buffer = new StringBuilder();
             Formatter formatter = new Formatter(buffer);
 
-            if(head)
-            {
+            if(head) {
                 formatter.format("%-16s", "Max");
                 formatter.format("%-10s", "");
                 formatter.format("%-16s", "Free");
@@ -125,10 +113,8 @@ public class MemMonitor
                 out.println(buffer.toString());
             }
 
-            if(detail)
-            {
-                synchronized(this.lock)
-                {
+            if(detail) {
+                synchronized(this.lock) {
                     buffer.setLength(0);
                     long unit = 1024L * 1024L;
                     formatter.format("%-16s", this.max);
@@ -162,8 +148,7 @@ public class MemMonitor
      * @param millis
      * @return String
      */
-    protected static String format(long millis)
-    {
+    protected static String format(long millis) {
         long t1 = millis % (24L * 60L * 60L * 1000);
         long t2 = t1 % (60L * 60L * 1000);
         long t3 = t2 % (60L * 1000);
@@ -175,49 +160,42 @@ public class MemMonitor
 
         StringBuilder buffer = new StringBuilder();
 
-        if(d < 10)
-        {
+        if(d < 10) {
             buffer.append("00");
         }
-        else if(d < 100)
-        {
+        else if(d < 100) {
             buffer.append("0");
         }
 
         buffer.append(d);
         buffer.append(" ");
 
-        if(h < 10)
-        {
+        if(h < 10) {
             buffer.append("0");
         }
 
         buffer.append(h);
         buffer.append(":");
 
-        if(M < 10)
-        {
+        if(M < 10) {
             buffer.append("0");
         }
 
         buffer.append(M);
         buffer.append(":");
 
-        if(s < 10)
-        {
+        if(s < 10) {
             buffer.append("0");
         }
 
         buffer.append(s);
         buffer.append(":");
 
-        if(S < 10)
-        {
+        if(S < 10) {
             buffer.append("0");
         }
 
-        if(S < 100)
-        {
+        if(S < 100) {
             buffer.append("0");
         }
 

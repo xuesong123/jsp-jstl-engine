@@ -23,8 +23,7 @@ import com.skin.ayada.tagext.TagSupport;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class BookTag extends TagSupport
-{
+public class BookTag extends TagSupport {
     private long bookId;
     private String bookName;
     private String bookCover;
@@ -34,8 +33,7 @@ public class BookTag extends TagSupport
      * @return int
      */
     @Override
-    public int doStartTag() throws Exception
-    {
+    public int doStartTag() throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("bookId", this.bookId);
         map.put("bookName", this.bookName);
@@ -49,17 +47,14 @@ public class BookTag extends TagSupport
      * @param name
      * @param value
      */
-    protected void setAttribute(String name, Object value)
-    {
+    protected void setAttribute(String name, Object value) {
         Tag parent = this.getParent();
 
-        if(parent instanceof AttributeTagSupport)
-        {
+        if(parent instanceof AttributeTagSupport) {
             AttributeTagSupport tag = (AttributeTagSupport)(parent);
             tag.setAttribute(name, value);
         }
-        else
-        {
+        else {
             throw new RuntimeException("Illegal use of parameter-style tag without servlet as its direct parent");
         }
     }
@@ -67,64 +62,56 @@ public class BookTag extends TagSupport
     /**
      * @return the bookId
      */
-    public long getBookId()
-    {
+    public long getBookId() {
         return this.bookId;
     }
 
     /**
      * @param bookId the bookId to set
      */
-    public void setBookId(long bookId)
-    {
+    public void setBookId(long bookId) {
         this.bookId = bookId;
     }
 
     /**
      * @return the bookName
      */
-    public String getBookName()
-    {
+    public String getBookName() {
         return this.bookName;
     }
 
     /**
      * @param bookName the bookName to set
      */
-    public void setBookName(String bookName)
-    {
+    public void setBookName(String bookName) {
         this.bookName = bookName;
     }
 
     /**
      * @return the bookCover
      */
-    public String getBookCover()
-    {
+    public String getBookCover() {
         return this.bookCover;
     }
 
     /**
      * @param bookCover the bookCover to set
      */
-    public void setBookCover(String bookCover)
-    {
+    public void setBookCover(String bookCover) {
         this.bookCover = bookCover;
     }
 
     /**
      * @return the bookType
      */
-    public int getBookType()
-    {
+    public int getBookType() {
         return this.bookType;
     }
 
     /**
      * @param bookType the bookType to set
      */
-    public void setBookType(int bookType)
-    {
+    public void setBookType(int bookType) {
         this.bookType = bookType;
     }
 }

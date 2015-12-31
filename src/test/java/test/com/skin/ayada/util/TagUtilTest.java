@@ -18,13 +18,11 @@ import com.skin.ayada.util.ExpressionUtil;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class TagUtilTest
-{
+public class TagUtilTest {
     /**
      * @param args
      */
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         int type = ExpressionUtil.getDataType("user");
         System.out.println("type: " + type + ((int)('.')));
     }

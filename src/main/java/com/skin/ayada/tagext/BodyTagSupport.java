@@ -19,54 +19,45 @@ import com.skin.ayada.runtime.JspWriter;
  * @author xuesong.net
  * @version 1.0
  */
-public class BodyTagSupport extends TagSupport implements BodyTag
-{
+public class BodyTagSupport extends TagSupport implements BodyTag {
     protected BodyContent bodyContent;
 
     @Override
-    public int doStartTag() throws Exception
-    {
+    public int doStartTag() throws Exception {
         return EVAL_BODY_BUFFERED;
     }
 
     @Override
-    public int doEndTag() throws Exception
-    {
+    public int doEndTag() throws Exception {
         return super.doEndTag();
     }
 
-    public void setBodyContent(BodyContent bodyContent)
-    {
+    public void setBodyContent(BodyContent bodyContent) {
         this.bodyContent = bodyContent;
     }
 
     /**
      *
      */
-    public void doInitBody() throws Exception
-    {
+    public void doInitBody() throws Exception {
     }
 
     @Override
-    public int doAfterBody() throws Exception
-    {
+    public int doAfterBody() throws Exception {
         return SKIP_BODY;
     }
 
     @Override
-    public void release()
-    {
+    public void release() {
         this.bodyContent = null;
         super.release();
     }
 
-    public BodyContent getBodyContent()
-    {
+    public BodyContent getBodyContent() {
         return this.bodyContent;
     }
 
-    public JspWriter getPreviousOut()
-    {
+    public JspWriter getPreviousOut() {
         return this.bodyContent.getEnclosingWriter();
     }
 }

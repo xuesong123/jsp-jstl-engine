@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.skin.ayada.compile.TemplateCompiler;
+import com.skin.ayada.config.TemplateConfig;
 import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.jstl.TagLibraryFactory;
 import com.skin.ayada.source.Source;
@@ -27,18 +28,16 @@ import com.skin.ayada.util.ClassUtil;
  * @author xuesong.net
  * @version 1.0
  */
-public class TemplateFactory
-{
+public class TemplateFactory {
     private boolean ignoreJspTag = true;
     private static final Logger logger = LoggerFactory.getLogger(TemplateFactory.class);
 
     /**
      * @param className
      * @return TemplateFactory
-     * @throws Exception 
+     * @throws Exception
      */
-    public static TemplateFactory getTemplateFactory(String className) throws Exception
-    {
+    public static TemplateFactory getTemplateFactory(String className) throws Exception {
         return (TemplateFactory)(ClassUtil.getInstance(className));
     }
 
@@ -49,21 +48,26 @@ public class TemplateFactory
      * @return Template
      * @throws Exception
      */
-    public Template create(SourceFactory sourceFactory, String file, String encoding) throws Exception
-    {
+    public Template create(SourceFactory sourceFactory, String file, String encoding) throws Exception {
+        TagLibrary tagLibrary = null;
+
+        if(TemplateConfig.getStandardLibrary()) {
+        	tagLibrary = TagLibraryFactory.getStandardTagLibrary();
+        }
+        else {
+        	tagLibrary = TagLibraryFactory.getTagLibrary();
+        }
+
         long t1 = System.currentTimeMillis();
-        TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();
         TemplateCompiler compiler = new TemplateCompiler(sourceFactory);
         compiler.setIgnoreJspTag(this.getIgnoreJspTag());
         compiler.setTagLibrary(tagLibrary);
         Template template = compiler.compile(file, encoding);
         long t2 = System.currentTimeMillis();
 
-        if(logger.isDebugEnabled())
-        {
+        if(logger.isDebugEnabled()) {
             logger.debug("compile time: " + (t2 - t1));
         }
-
         return template;
     }
 
@@ -72,37 +76,40 @@ public class TemplateFactory
      * @return Template
      * @throws Exception
      */
-    public Template compile(String source) throws Exception
-    {
+    public Template compile(String source) throws Exception {
+    	TagLibrary tagLibrary = null;
+
+        if(TemplateConfig.getStandardLibrary()) {
+        	tagLibrary = TagLibraryFactory.getStandardTagLibrary();
+        }
+        else {
+        	tagLibrary = TagLibraryFactory.getTagLibrary();
+        }
+
         long t1 = System.currentTimeMillis();
-        TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();
         TemplateCompiler compiler = new TemplateCompiler(null);
         compiler.setIgnoreJspTag(this.getIgnoreJspTag());
         compiler.setTagLibrary(tagLibrary);
         Template template = compiler.compile(new Source("/", "", source, Source.SCRIPT));
         long t2 = System.currentTimeMillis();
 
-        if(logger.isDebugEnabled())
-        {
+        if(logger.isDebugEnabled()) {
             logger.debug("compile time: " + (t2 - t1));
         }
-
         return template;
     }
 
     /**
      * @param ignoreJspTag the ignoreJspTag to set
      */
-    public void setIgnoreJspTag(boolean ignoreJspTag)
-    {
+    public void setIgnoreJspTag(boolean ignoreJspTag) {
         this.ignoreJspTag = ignoreJspTag;
     }
 
     /**
      * @return the ignoreJspTag
      */
-    public boolean getIgnoreJspTag()
-    {
+    public boolean getIgnoreJspTag() {
         return this.ignoreJspTag;
     }
 }

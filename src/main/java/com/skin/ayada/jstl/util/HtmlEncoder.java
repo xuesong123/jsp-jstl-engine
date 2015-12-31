@@ -20,19 +20,16 @@ import com.skin.ayada.util.HtmlUtil;
  * @author xuesong.net
  * @version 1.0
  */
-public class HtmlEncoder implements ELEncoder
-{
-    public HtmlEncoder()
-    {
+public class HtmlEncoder implements ELEncoder {
+    public HtmlEncoder() {
     }
-    
+
     /**
      * @param content
      * @return String
      */
     @Override
-    public String encode(String content)
-    {
+    public String encode(String content) {
         return HtmlUtil.encode(content);
     }
 }

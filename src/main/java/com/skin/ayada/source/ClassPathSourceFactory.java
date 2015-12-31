@@ -22,19 +22,16 @@ import com.skin.ayada.util.IO;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class ClassPathSourceFactory extends SourceFactory
-{
+public class ClassPathSourceFactory extends SourceFactory {
     private ClassLoader classLoader;
 
-    public ClassPathSourceFactory()
-    {
+    public ClassPathSourceFactory() {
     }
 
     /**
      * @param home
      */
-    public ClassPathSourceFactory(String home)
-    {
+    public ClassPathSourceFactory(String home) {
         this(home, ClassPathSourceFactory.class.getClassLoader());
     }
 
@@ -42,8 +39,7 @@ public class ClassPathSourceFactory extends SourceFactory
      * @param classLoader
      * @param home
      */
-    public ClassPathSourceFactory(String home, ClassLoader classLoader)
-    {
+    public ClassPathSourceFactory(String home, ClassLoader classLoader) {
         this.setHome(home);
         this.setClassLoader(classLoader);
     }
@@ -54,26 +50,22 @@ public class ClassPathSourceFactory extends SourceFactory
      * @return Source
      */
     @Override
-    public Source getSource(String path, String encoding)
-    {
+    public Source getSource(String path, String encoding) {
         URL url = this.getResource(path);
         String realPath = url.getPath();
         InputStream inputStream = null;
 
-        try
-        {
+        try {
             inputStream = url.openStream();
             long lastModified = this.getLastModified(url);
             String content = IO.read(inputStream, encoding, 4096);
             String realHome = this.getClassLoader().getResource(this.getHome()).getPath();
             return new Source(realHome, path, content, this.getSourceType(realPath), lastModified);
         }
-        catch(IOException e)
-        {
+        catch(IOException e) {
             throw new RuntimeException(e);
         }
-        finally
-        {
+        finally {
             IO.close(inputStream);
         }
     }
@@ -83,8 +75,7 @@ public class ClassPathSourceFactory extends SourceFactory
      * @return long
      */
     @Override
-    public long getLastModified(String path)
-    {
+    public long getLastModified(String path) {
         URL url = this.getResource(path);
         return this.getLastModified(url);
     }
@@ -94,16 +85,13 @@ public class ClassPathSourceFactory extends SourceFactory
      * @return boolean
      */
     @Override
-    public boolean exists(String path)
-    {
+    public boolean exists(String path) {
         URL url = null;
 
-        try
-        {
+        try {
             url = this.getResource(path);
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
         }
 
         return (url != null);
@@ -113,26 +101,21 @@ public class ClassPathSourceFactory extends SourceFactory
      * @param path
      * @return URL
      */
-    public URL getResource(String path)
-    {
-        if(path == null)
-        {
+    public URL getResource(String path) {
+        if(path == null) {
             throw new RuntimeException("path must be not null !");
         }
 
         String temp = path.trim().replace('\\', '/');
 
-        if(temp.charAt(0) == '/')
-        {
+        if(temp.charAt(0) == '/') {
             temp = this.getHome() + temp;
         }
-        else
-        {
+        else {
             temp = this.getHome() + "/" + temp;
         }
 
-        while(temp.startsWith("/"))
-        {
+        while(temp.startsWith("/")) {
             temp = temp.substring(1);
         }
 
@@ -140,38 +123,31 @@ public class ClassPathSourceFactory extends SourceFactory
         URL homeUrl = classLoader.getResource(this.getHome());
         URL realUrl = classLoader.getResource(temp);
 
-        if(homeUrl == null)
-        {
+        if(homeUrl == null) {
             throw new RuntimeException(this.getHome() + " not exists !");
         }
 
-        if(realUrl == null)
-        {
+        if(realUrl == null) {
             throw new RuntimeException(temp + " not exists !");
         }
 
         String homePath = homeUrl.getPath();
         String realPath = realUrl.getPath();
 
-        if(realPath.startsWith(homePath) == false)
-        {
+        if(realPath.startsWith(homePath) == false) {
             throw new RuntimeException(realPath + " can't access !");
         }
-
         return realUrl;
     }
 
     /**
      * @param classLoader the classLoader to set
      */
-    public void setClassLoader(ClassLoader classLoader)
-    {
-        if(classLoader != null)
-        {
+    public void setClassLoader(ClassLoader classLoader) {
+        if(classLoader != null) {
             this.classLoader = classLoader;
         }
-        else
-        {
+        else {
             this.classLoader = ClassPathSourceFactory.class.getClassLoader();
         }
     }
@@ -179,13 +155,10 @@ public class ClassPathSourceFactory extends SourceFactory
     /**
      * @return the classLoader
      */
-    public ClassLoader getClassLoader()
-    {
-        if(this.classLoader != null)
-        {
+    public ClassLoader getClassLoader() {
+        if(this.classLoader != null) {
             return this.classLoader;
         }
-
         return ClassPathSourceFactory.class.getClassLoader();
     }
 
@@ -193,36 +166,30 @@ public class ClassPathSourceFactory extends SourceFactory
      * @param home the home to set
      */
     @Override
-    public void setHome(String home)
-    {
+    public void setHome(String home) {
         String path = home;
 
-        if(path == null)
-        {
+        if(path == null) {
             path = ".";
         }
-        else
-        {
+        else {
             path = path.trim();
         }
 
         path = path.replace('\\', '/');
 
-        while(path.startsWith("/"))
-        {
+        while(path.startsWith("/")) {
             path = path.substring(1);
         }
 
-        if(path.endsWith("/"))
-        {
+        if(path.endsWith("/")) {
             path = path.substring(0, path.length() - 1);
         }
 
         ClassLoader classLoader = this.getClassLoader();
         URL url = classLoader.getResource(path);
 
-        if(url == null)
-        {
+        if(url == null) {
             throw new RuntimeException(path + " not found !");
         }
         super.setHome(path);

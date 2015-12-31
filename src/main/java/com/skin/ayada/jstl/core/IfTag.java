@@ -19,23 +19,19 @@ import com.skin.ayada.tagext.ConditionalTagSupport;
  * @author xuesong.net
  * @version 1.0
  */
-public class IfTag extends ConditionalTagSupport
-{
+public class IfTag extends ConditionalTagSupport {
     /**
      * @return int
      */
     @Override
-    public int doStartTag()
-    {
-        if(this.condition() == true)
-        {
+    public int doStartTag() {
+        if(this.condition() == true) {
             return EVAL_BODY_INCLUDE;
         }
         return SKIP_BODY;
     }
 
-    public void setTest(boolean b)
-    {
+    public void setTest(boolean b) {
         this.setCondition(b);
     }
 }

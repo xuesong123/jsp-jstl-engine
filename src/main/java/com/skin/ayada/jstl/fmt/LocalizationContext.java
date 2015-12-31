@@ -21,20 +21,17 @@ import java.util.ResourceBundle;
  * @author xuesong.net
  * @version 1.0
  */
-public class LocalizationContext
-{
+public class LocalizationContext {
     private Locale locale;
     private ResourceBundle resourceBundle;
 
-    public LocalizationContext()
-    {
+    public LocalizationContext() {
     }
 
     /**
      * @param bundle
      */
-    public LocalizationContext(ResourceBundle bundle)
-    {
+    public LocalizationContext(ResourceBundle bundle) {
         this.resourceBundle = bundle;
     }
 
@@ -42,8 +39,7 @@ public class LocalizationContext
      * @param resourceBundle
      * @param locale
      */
-    public LocalizationContext(ResourceBundle resourceBundle, Locale locale)
-    {
+    public LocalizationContext(ResourceBundle resourceBundle, Locale locale) {
         this.resourceBundle = resourceBundle;
         this.locale = locale;
     }
@@ -52,8 +48,7 @@ public class LocalizationContext
      * @param key
      * @return String
      */
-    public String message(String key)
-    {
+    public String message(String key) {
         return this.getLocalizedMessage(key);
     }
 
@@ -62,8 +57,7 @@ public class LocalizationContext
      * @param args
      * @return String
      */
-    public String format(String key, Object ... args)
-    {
+    public String format(String key, Object ... args) {
         return this.getLocalizedMessage(key, args);
     }
 
@@ -72,33 +66,26 @@ public class LocalizationContext
      * @param args
      * @return String
      */
-    public String getLocalizedMessage(String key, Object ... args)
-    {
+    public String getLocalizedMessage(String key, Object ... args) {
         String result = null;
 
-        if(this.resourceBundle != null)
-        {
-            try
-            {
+        if(this.resourceBundle != null) {
+            try {
                 result = this.resourceBundle.getString(key);
             }
-            catch(Exception e)
-            {
+            catch(Exception e) {
             }
         }
 
-        if(result == null)
-        {
+        if(result == null) {
             return "???" + key + "???";
         }
 
-        if((args == null) || (args.length == 0))
-        {
+        if((args == null) || (args.length == 0)) {
             return result;
         }
 
-        if(this.locale != null)
-        {
+        if(this.locale != null) {
             return new MessageFormat(result, this.locale).format(args);
         }
 
@@ -108,32 +95,28 @@ public class LocalizationContext
     /**
      * @return the bundle
      */
-    public ResourceBundle getResourceBundle()
-    {
+    public ResourceBundle getResourceBundle() {
         return this.resourceBundle;
     }
 
     /**
      * @param resourceBundle the resourceBundle to set
      */
-    public void setResourceBundle(ResourceBundle resourceBundle)
-    {
+    public void setResourceBundle(ResourceBundle resourceBundle) {
         this.resourceBundle = resourceBundle;
     }
 
     /**
      * @return the locale
      */
-    public Locale getLocale()
-    {
+    public Locale getLocale() {
         return this.locale;
     }
 
     /**
      * @param locale the locale to set
      */
-    public void setLocale(Locale locale)
-    {
+    public void setLocale(Locale locale) {
         this.locale = locale;
     }
 }

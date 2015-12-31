@@ -20,16 +20,14 @@ import com.skin.ayada.tagext.TagSupport;
  * @author xuesong.net
  * @version 1.0
  */
-public class ImportTag extends TagSupport
-{
+public class ImportTag extends TagSupport {
     private String name;
     private String className;
     private String bodyContent;
     private String description;
 
     @Override
-    public int doStartTag()
-    {
+    public int doStartTag() {
         /* this.pageContext.getTagLibrary().setup(this.name, this.className, this.bodyContent, this.description); */
         return Tag.SKIP_BODY;
     }
@@ -37,64 +35,56 @@ public class ImportTag extends TagSupport
     /**
      * @param name the name to set
      */
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
     /**
      * @return the name
      */
-    public String getName()
-    {
+    public String getName() {
         return this.name;
     }
 
     /**
      * @param className the className to set
      */
-    public void setClassName(String className)
-    {
+    public void setClassName(String className) {
         this.className = className;
     }
 
     /**
      * @return the className
      */
-    public String getClassName()
-    {
+    public String getClassName() {
         return this.className;
     }
 
     /**
      * @return the bodyContent
      */
-    public String getBodyContent()
-    {
+    public String getBodyContent() {
         return this.bodyContent;
     }
 
     /**
      * @param bodyContent the bodyContent to set
      */
-    public void setBodyContent(String bodyContent)
-    {
+    public void setBodyContent(String bodyContent) {
         this.bodyContent = bodyContent;
     }
 
     /**
      * @return the description
      */
-    public String getDescription()
-    {
+    public String getDescription() {
         return this.description;
     }
 
     /**
      * @param description the description to set
      */
-    public void setDescription(String description)
-    {
+    public void setDescription(String description) {
         this.description = description;
     }
 }

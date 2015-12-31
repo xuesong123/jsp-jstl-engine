@@ -20,37 +20,32 @@ import java.io.Writer;
  * @author xuesong.net
  * @version 1.0
  */
-public class ChunkWriter extends Writer
-{
+public class ChunkWriter extends Writer {
     private CharBuffer buffer;
 
     /**
      * @param bufferSize
      */
-    public ChunkWriter(int bufferSize)
-    {
+    public ChunkWriter(int bufferSize) {
         this.buffer = new CharBuffer(bufferSize);
     }
 
     @Override
-    public void write(char[] cbuf, int offset, int length) throws IOException
-    {
+    public void write(char[] cbuf, int offset, int length) throws IOException {
         this.buffer.append(cbuf, offset, length);
     }
 
     /**
      * @return int
      */
-    public int getChunkSize()
-    {
+    public int getChunkSize() {
         return this.buffer.getChunkSize();
     }
 
     /**
      * @return int
      */
-    public int length()
-    {
+    public int length() {
         return this.buffer.length();
     }
 
@@ -58,26 +53,22 @@ public class ChunkWriter extends Writer
      * @throws IOException
      */
     @Override
-    public void close() throws IOException
-    {
+    public void close() throws IOException {
     }
 
     /**
      * @throws IOException
      */
     @Override
-    public void flush() throws IOException
-    {
+    public void flush() throws IOException {
     }
 
-    public void free()
-    {
+    public void free() {
         this.buffer.free();
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return this.buffer.toString();
     }
 }

@@ -21,33 +21,28 @@ import com.skin.ayada.tagext.Tag;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class MakeDirTag extends FileTag
-{
+public class MakeDirTag extends FileTag {
     /**
      * @return int
      */
     @Override
-    public int doEndTag() throws Exception
-    {
+    public int doEndTag() throws Exception {
         MakeDirTag.mkdirs(this.file);
         return Tag.EVAL_PAGE;
     }
 
     @Override
-    public void process(File file) throws IOException
-    {
+    public void process(File file) throws IOException {
     }
 
     /**
      * @param path
      */
-    public static void mkdirs(String path)
-    {
+    public static void mkdirs(String path) {
         File file = new File(path);
 
-        if(file.exists() == false)
-        {
+        if(file.exists() == false) {
             file.mkdirs();
-        }   
+        }
     }
 }

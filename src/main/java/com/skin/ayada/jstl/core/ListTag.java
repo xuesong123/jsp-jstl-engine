@@ -24,42 +24,35 @@ import com.skin.ayada.tagext.TagSupport;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class ListTag extends TagSupport implements ElementTagSupport
-{
+public class ListTag extends TagSupport implements ElementTagSupport {
     private String name;
     private List<Object> list;
 
     @Override
-    public int doStartTag() throws Exception
-    {
+    public int doStartTag() throws Exception {
         super.doStartTag();
 
-        if(this.list == null)
-        {
+        if(this.list == null) {
             this.list = new ArrayList<Object>();
         }
 
         Tag parent = this.getParent();
 
-        if(parent instanceof AttributeTagSupport)
-        {
-            if(this.name != null)
-            {
+        if(parent instanceof AttributeTagSupport) {
+            if(this.name != null) {
                 AttributeTagSupport tag = (AttributeTagSupport)(parent);
                 tag.setAttribute(this.name, this.list);
                 return Tag.EVAL_BODY_INCLUDE;
             }
             return Tag.SKIP_BODY;
         }
-        else if(parent instanceof ElementTagSupport)
-        {
+        else if(parent instanceof ElementTagSupport) {
             ElementTagSupport tag = (ElementTagSupport)(parent);
             tag.addElement(this.list);
             return Tag.EVAL_BODY_INCLUDE;
         }
 
-        if(this.name != null)
-        {
+        if(this.name != null) {
             this.pageContext.setAttribute(this.name, this.list);
             return Tag.EVAL_BODY_INCLUDE;
         }
@@ -71,8 +64,7 @@ public class ListTag extends TagSupport implements ElementTagSupport
      * @param value
      */
     @Override
-    public void addElement(Object value)
-    {
+    public void addElement(Object value) {
         this.list.add(value);
     }
 
@@ -81,14 +73,11 @@ public class ListTag extends TagSupport implements ElementTagSupport
      * @param value
      */
     @Override
-    public void setElement(int index, Object value)
-    {
-        if(index >= 0 && index < this.list.size())
-        {
+    public void setElement(int index, Object value) {
+        if(index >= 0 && index < this.list.size()) {
             this.list.set(index, value);
         }
-        else
-        {
+        else {
             this.list.add(value);
         }
     }
@@ -96,16 +85,14 @@ public class ListTag extends TagSupport implements ElementTagSupport
     /**
      * @return the name
      */
-    public String getName()
-    {
+    public String getName() {
         return this.name;
     }
 
     /**
      * @param name the name to set
      */
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 }

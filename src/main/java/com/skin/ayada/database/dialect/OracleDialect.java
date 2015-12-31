@@ -20,114 +20,87 @@ import com.skin.ayada.database.Column;
  * @author xuesong.net
  * @version 1.0
  */
-public class OracleDialect implements Dialect
-{
-    public String convert(Column column)
-    {
+public class OracleDialect implements Dialect {
+    public String convert(Column column) {
         String result = "String";
         String typeName = column.getTypeName();
-        
-        if(typeName == null)
-        {
+
+        if(typeName == null) {
             return result;
         }
 
         typeName = typeName.toUpperCase();
 
-        if("CHAR".equals(typeName))
-        {
+        if("CHAR".equals(typeName)) {
         }
-        else if("CHARACTER".equals(typeName))
-        {
+        else if("CHARACTER".equals(typeName)) {
         }
-        else if("VARCHAR".equals(typeName))
-        {
+        else if("VARCHAR".equals(typeName)) {
         }
-        else if("VARCHAR2".equals(typeName))
-        {
+        else if("VARCHAR2".equals(typeName)) {
         }
-        else if("INT".equals(typeName))
-        {
+        else if("INT".equals(typeName)) {
             // Integer.MAX_VALUE: -2147483648
             // Integer.MAX_VALUE: +2147483647
-            if(column.getColumnSize() >= 10)
-            {
+            if(column.getColumnSize() >= 10) {
                 result = "Long";
             }
-            else
-            {
+            else {
                 result = "Integer";
             }
         }
-        else if("INTEGER".equals(typeName))
-        {
+        else if("INTEGER".equals(typeName)) {
             // Integer.MAX_VALUE: -2147483648
             // Integer.MAX_VALUE: +2147483647
-            if(column.getColumnSize() >= 10)
-            {
+            if(column.getColumnSize() >= 10) {
                 result = "Long";
             }
-            else
-            {
+            else {
                 result = "Integer";
             }
         }
-        else if("FLOAT".equals(typeName))
-        {
+        else if("FLOAT".equals(typeName)) {
             result = "Float";
         }
-        else if("DOUBLE".equals(typeName))
-        {
+        else if("DOUBLE".equals(typeName)) {
             result = "Double";
         }
-        else if("LONG".equals(typeName))
-        {
+        else if("LONG".equals(typeName)) {
             result = "Long";
         }
-        else if("NUMBER".equals(typeName))
-        {
-            if(column.getDecimalDigits() > 0)
-            {
+        else if("NUMBER".equals(typeName)) {
+            if(column.getDecimalDigits() > 0) {
                 result = "Double";
             }
-            else
-            {
+            else {
                 // Integer.MAX_VALUE: -2147483648
                 // Integer.MAX_VALUE: +2147483647
-                if(column.getColumnSize() >= 10)
-                {
+                if(column.getColumnSize() >= 10) {
                     result = "Long";
                 }
-                else
-                {
+                else {
                     result = "Integer";
                 }
             }
         }
-        else if("DATE".equals(typeName) || typeName.startsWith("DATE("))
-        {
+        else if("DATE".equals(typeName) || typeName.startsWith("DATE(")) {
             result = "java.util.Date";
         }
-        else if("TIME".equals(typeName) || typeName.startsWith("TIME("))
-        {
+        else if("TIME".equals(typeName) || typeName.startsWith("TIME(")) {
             result = "java.sql.Timestamp";
         }
-        else if("TIMESTAMP".equals(typeName) || typeName.startsWith("TIMESTAMP("))
-        {
+        else if("TIMESTAMP".equals(typeName) || typeName.startsWith("TIMESTAMP(")) {
             result = "java.sql.Timestamp";
         }
-        else if("BLOB".equals(typeName))
-        {
+        else if("BLOB".equals(typeName)) {
             result = "byte[]";
             result = "java.io.InputStream";
         }
-        else if("Clob".equals(typeName))
-        {
+        else if("Clob".equals(typeName)) {
             // result = "java.io.Reader";
             result = "String";
         }
-        else if("RAW".equals(typeName) || typeName.startsWith("RAW("))
-        {
+        else if("RAW".equals(typeName) || typeName.startsWith("RAW(")) {
             /*
             RAW，类似于CHAR，声明方式RAW(L)，L为长度，以字节为单位，作为数据库列最大2000，作为变量最大32767字节。
             LONG RAW，类似于LONG，作为数据库列最大存储2G字节的数据，作为变量最大32760字节
@@ -138,8 +111,7 @@ public class OracleDialect implements Dialect
             */
             return "java.math.BigDecimal";
         }
-        else
-        {
+        else {
             System.out.println("Warnning: Unknown DataType: " + column.getTableName() + "." + column.getColumnName() + ": " + typeName);
         }
 
@@ -147,14 +119,12 @@ public class OracleDialect implements Dialect
     }
 
     @Override
-    public String getTableName(String tableName)
-    {
+    public String getTableName(String tableName) {
         return tableName;
     }
 
     @Override
-    public String getColumnName(String columnName)
-    {
+    public String getColumnName(String columnName) {
         return columnName;
     }
 }

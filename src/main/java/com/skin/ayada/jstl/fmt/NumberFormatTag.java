@@ -27,8 +27,7 @@ import com.skin.ayada.tagext.TagSupport;
  * @author xuesong.net
  * @version 1.0
  */
-public class NumberFormatTag extends TagSupport
-{
+public class NumberFormatTag extends TagSupport {
     private Double value;
     private String type;
     private String pattern;
@@ -43,131 +42,102 @@ public class NumberFormatTag extends TagSupport
     private String scope;
 
     @Override
-    public int doEndTag()
-    {
+    public int doEndTag() {
         NumberFormat format = getFormat();
 
-        if((this.value != null) && (Double.isNaN(this.value.doubleValue())))
-        {
+        if((this.value != null) && (Double.isNaN(this.value.doubleValue()))) {
             this.value = Double.valueOf(0.0D);
         }
 
         String result = null;
 
-        if(this.value != null)
-        {
-            if(format != null)
-            {
+        if(this.value != null) {
+            if(format != null) {
                 result = format.format(this.value);
             }
-            else
-            {
+            else {
                 result = String.valueOf(this.value);
             }
         }
 
-        if(this.var == null)
-        {
-            if(result != null)
-            {
-                try
-                {
+        if(this.var == null) {
+            if(result != null) {
+                try {
                     this.pageContext.getOut().print(result);
                 }
-                catch(IOException e)
-                {
+                catch(IOException e) {
                 }
             }
         }
-        else
-        {
+        else {
             SetTag.setValue(this.pageContext, this.var, this.scope, result);
         }
 
         return Tag.EVAL_PAGE;
     }
 
-    protected NumberFormat getFormat()
-    {
+    protected NumberFormat getFormat() {
         NumberFormat format = null;
         Locale locale = (Locale)(this.pageContext.getAttribute("Locale"));
 
-        if((this.type == null) || (this.type.equals("")) || (this.type.equals("number")) || ((this.pattern != null) && (!"".equals(this.pattern))))
-        {
-            if(locale != null)
-            {
+        if((this.type == null) || (this.type.equals("")) || (this.type.equals("number")) || ((this.pattern != null) && (!"".equals(this.pattern)))) {
+            if(locale != null) {
                 format = NumberFormat.getInstance(locale);
             }
-            else
-            {
+            else {
                 format = NumberFormat.getInstance();
             }
 
             DecimalFormat decimalFormat = (DecimalFormat)format;
-            if(this.pattern != null)
-            {
+            if(this.pattern != null) {
                 decimalFormat.applyPattern(this.pattern);
             }
         }
-        else if(this.type.equals("percent"))
-        {
-            if(locale != null)
-            {
+        else if(this.type.equals("percent")) {
+            if(locale != null) {
                 format = NumberFormat.getPercentInstance(locale);
             }
-            else
-            {
+            else {
                 format = NumberFormat.getPercentInstance();
             }
         }
-        else if(this.type.equals("currency"))
-        {
-            if(locale != null)
-            {
+        else if(this.type.equals("currency")) {
+            if(locale != null) {
                 format = NumberFormat.getCurrencyInstance(locale);
             }
-            else
-            {
+            else {
                 format = NumberFormat.getCurrencyInstance();
             }
 
-            if(((this.currencyCode != null) || (this.currencySymbol != null)) && ((format instanceof DecimalFormat)))
-            {
+            if(((this.currencyCode != null) || (this.currencySymbol != null)) && ((format instanceof DecimalFormat))) {
                 DecimalFormat decimalFormat = (DecimalFormat)format;
                 DecimalFormatSymbols decimalFormatSymbols = decimalFormat.getDecimalFormatSymbols();
-                if((this.currencyCode != null) && (decimalFormatSymbols != null))
-                {
+                if((this.currencyCode != null) && (decimalFormatSymbols != null)) {
                     decimalFormatSymbols.setInternationalCurrencySymbol(this.currencyCode);
                 }
-                else if((this.currencySymbol != null) && (decimalFormatSymbols != null))
-                {
+                else if((this.currencySymbol != null) && (decimalFormatSymbols != null)) {
                     decimalFormatSymbols.setCurrencySymbol(this.currencySymbol);
                 }
 
                 decimalFormat.setDecimalFormatSymbols(decimalFormatSymbols);
             }
         }
-        else
-        {
+        else {
             throw new RuntimeException("unknown formatNumber type " + this.type);
         }
 
         format.setGroupingUsed(this.groupingUsed);
 
-        if(this.minIntegerDigits > 0)
-        {
+        if(this.minIntegerDigits > 0) {
             format.setMinimumIntegerDigits(this.minIntegerDigits);
         }
-        if(this.maxIntegerDigits > 0)
-        {
+        if(this.maxIntegerDigits > 0) {
             format.setMaximumIntegerDigits(this.maxIntegerDigits);
         }
-        if(this.minFractionDigits > 0)
-        {
+        if(this.minFractionDigits > 0) {
             format.setMinimumFractionDigits(this.minFractionDigits);
         }
-        if(this.maxFractionDigits > 0)
-        {
+        if(this.maxFractionDigits > 0) {
             format.setMaximumFractionDigits(this.maxFractionDigits);
         }
 
@@ -177,192 +147,168 @@ public class NumberFormatTag extends TagSupport
     /**
      * @return the value
      */
-    public Double getValue()
-    {
+    public Double getValue() {
         return this.value;
     }
 
     /**
      * @param value the value to set
      */
-    public void setValue(Double value)
-    {
+    public void setValue(Double value) {
         this.value = value;
     }
 
     /**
      * @return the type
      */
-    public String getType()
-    {
+    public String getType() {
         return this.type;
     }
 
     /**
      * @param type the type to set
      */
-    public void setType(String type)
-    {
+    public void setType(String type) {
         this.type = type;
     }
 
     /**
      * @return the pattern
      */
-    public String getPattern()
-    {
+    public String getPattern() {
         return this.pattern;
     }
 
     /**
      * @param pattern the pattern to set
      */
-    public void setPattern(String pattern)
-    {
+    public void setPattern(String pattern) {
         this.pattern = pattern;
     }
 
     /**
      * @return the currencyCode
      */
-    public String getCurrencyCode()
-    {
+    public String getCurrencyCode() {
         return this.currencyCode;
     }
 
     /**
      * @param currencyCode the currencyCode to set
      */
-    public void setCurrencyCode(String currencyCode)
-    {
+    public void setCurrencyCode(String currencyCode) {
         this.currencyCode = currencyCode;
     }
 
     /**
      * @return the currencySymbol
      */
-    public String getCurrencySymbol()
-    {
+    public String getCurrencySymbol() {
         return this.currencySymbol;
     }
 
     /**
      * @param currencySymbol the currencySymbol to set
      */
-    public void setCurrencySymbol(String currencySymbol)
-    {
+    public void setCurrencySymbol(String currencySymbol) {
         this.currencySymbol = currencySymbol;
     }
 
     /**
      * @return the groupingUsed
      */
-    public boolean isGroupingUsed()
-    {
+    public boolean isGroupingUsed() {
         return this.groupingUsed;
     }
 
     /**
      * @param groupingUsed the groupingUsed to set
      */
-    public void setGroupingUsed(boolean groupingUsed)
-    {
+    public void setGroupingUsed(boolean groupingUsed) {
         this.groupingUsed = groupingUsed;
     }
 
     /**
      * @return the maxIntegerDigits
      */
-    public int getMaxIntegerDigits()
-    {
+    public int getMaxIntegerDigits() {
         return this.maxIntegerDigits;
     }
 
     /**
      * @param maxIntegerDigits the maxIntegerDigits to set
      */
-    public void setMaxIntegerDigits(int maxIntegerDigits)
-    {
+    public void setMaxIntegerDigits(int maxIntegerDigits) {
         this.maxIntegerDigits = maxIntegerDigits;
     }
 
     /**
      * @return the minIntegerDigits
      */
-    public int getMinIntegerDigits()
-    {
+    public int getMinIntegerDigits() {
         return this.minIntegerDigits;
     }
 
     /**
      * @param minIntegerDigits the minIntegerDigits to set
      */
-    public void setMinIntegerDigits(int minIntegerDigits)
-    {
+    public void setMinIntegerDigits(int minIntegerDigits) {
         this.minIntegerDigits = minIntegerDigits;
     }
 
     /**
      * @return the maxFractionDigits
      */
-    public int getMaxFractionDigits()
-    {
+    public int getMaxFractionDigits() {
         return this.maxFractionDigits;
     }
 
     /**
      * @param maxFractionDigits the maxFractionDigits to set
      */
-    public void setMaxFractionDigits(int maxFractionDigits)
-    {
+    public void setMaxFractionDigits(int maxFractionDigits) {
         this.maxFractionDigits = maxFractionDigits;
     }
 
     /**
      * @return the minFractionDigits
      */
-    public int getMinFractionDigits()
-    {
+    public int getMinFractionDigits() {
         return this.minFractionDigits;
     }
 
     /**
      * @param minFractionDigits the minFractionDigits to set
      */
-    public void setMinFractionDigits(int minFractionDigits)
-    {
+    public void setMinFractionDigits(int minFractionDigits) {
         this.minFractionDigits = minFractionDigits;
     }
 
     /**
      * @return the var
      */
-    public String getVar()
-    {
+    public String getVar() {
         return this.var;
     }
 
     /**
      * @param var the var to set
      */
-    public void setVar(String var)
-    {
+    public void setVar(String var) {
         this.var = var;
     }
 
     /**
      * @return the scope
      */
-    public String getScope()
-    {
+    public String getScope() {
         return this.scope;
     }
 
     /**
      * @param scope the scope to set
      */
-    public void setScope(String scope)
-    {
+    public void setScope(String scope) {
         this.scope = scope;
     }
 }

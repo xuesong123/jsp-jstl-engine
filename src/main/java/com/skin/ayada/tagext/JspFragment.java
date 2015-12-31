@@ -21,8 +21,7 @@ import com.skin.ayada.runtime.PageContext;
  * @author xuesong.net
  * @version 1.0
  */
-public interface JspFragment
-{
+public interface JspFragment {
     /**
      * @return PageContext
      */

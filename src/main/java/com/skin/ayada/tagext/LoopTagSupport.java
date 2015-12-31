@@ -53,8 +53,7 @@ package com.skin.ayada.tagext;
  * @author Shawn Bayern
  */
 @SuppressWarnings("synthetic-access")
-public abstract class LoopTagSupport extends TagSupport implements LoopTag, IterationTag, TryCatchFinally
-{
+public abstract class LoopTagSupport extends TagSupport implements LoopTag, IterationTag, TryCatchFinally {
     /**
      * JavaBean-style properties and other state slaved to them.  These
      * properties can be set directly by accessors; they will not be
@@ -125,8 +124,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * constructors implemented by subclasses must call the superclass
      * constructor.
      */
-    public LoopTagSupport()
-    {
+    public LoopTagSupport() {
         super();
         init();
     }
@@ -159,7 +157,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * over which to iterate.  This method must be provided by concrete
      * subclasses of LoopTagSupport to assist the iterative logic
      * provided by the supporting base class.</p>
-     * 
+     *
      * <p>See <a href="#next()">next</a> for more information about the
      * purpose and expectations behind this tag.</p>
      *
@@ -186,8 +184,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * Releases any resources this LoopTagSupport may have (or inherit).
      */
     @Override
-    public void release()
-    {
+    public void release() {
         super.release();
         init();
     }
@@ -196,10 +193,8 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * Begins iterating by processing the first item.
      */
     @Override
-    public int doStartTag() throws Exception
-    {
-        if(this.end != -1 && this.begin > this.end)
-        {
+    public int doStartTag() throws Exception {
+        if(this.end != -1 && this.begin > this.end) {
             // JSTL 1.1. We simply do not execute the loop.
             return SKIP_BODY;
         }
@@ -216,13 +211,11 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
         discardIgnoreSubset(this.begin);
 
         // get the item we're interested in
-        if(hasNext())
-        {
+        if(hasNext()) {
             // index is 0-based, so we don't update it for the first item
             this.item = next();
         }
-        else
-        {
+        else {
             return SKIP_BODY;
         }
 
@@ -242,8 +235,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * more items and (b) don't run over our 'end' (given our 'step').
      */
     @Override
-    public int doAfterBody() throws Exception
-    {
+    public int doAfterBody() throws Exception {
         // re-sync the index, given our prior behind-the-scenes 'step'
         this.index += this.step - 1;
 
@@ -251,13 +243,11 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
         this.count++;
 
         // everything's been prepared for us, so just get the next item
-        if(hasNext() && !atEnd())
-        {
+        if(hasNext() && !atEnd()) {
             this.index++;
             this.item = next();
         }
-        else
-        {
+        else {
             return SKIP_BODY;
         }
 
@@ -281,8 +271,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * them lying around.
      */
     @Override
-    public void doFinally()
-    {
+    public void doFinally() {
         /**
          * Make sure to un-expose variables, restoring them to their
          * prior values, if applicable.
@@ -294,8 +283,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * Rethrows the given Throwable.
      */
     @Override
-    public void doCatch(Throwable throwable) throws Throwable
-    {
+    public void doCatch(Throwable throwable) throws Throwable {
         throw throwable;
     }
 
@@ -313,8 +301,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * Subclasses can override this if necessary, but such a need is
      * expected to be rare.)
      */
-    public Object getCurrent()
-    {
+    public Object getCurrent() {
         return this.item;
     }
 
@@ -325,18 +312,15 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * implementation of subclasses that are happy with reasonable default
      * behavior.)
      */
-    public LoopTagStatus getLoopStatus()
-    {
+    public LoopTagStatus getLoopStatus() {
         // local implementation with reasonable default behavior
-        class Status implements LoopTagStatus
-        {
+        class Status implements LoopTagStatus {
             /**
              * All our methods are straightforward.  We inherit
              * our JavaDoc from LoopTagSupport; see that class
              * for more information.
              */
-            public Object getCurrent()
-            {
+            public Object getCurrent() {
                 /**
                  * Access the item through getCurrent() instead of just
                  * returning the item our containing class stores.  This
@@ -346,58 +330,45 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
                 return (LoopTagSupport.this.getCurrent());
             }
 
-            public int getIndex()
-            {
+            public int getIndex() {
                 return (LoopTagSupport.this.index + LoopTagSupport.this.begin); // our 'index' isn't getIndex()
             }
 
-            public int getCount()
-            {
+            public int getCount() {
                 return (LoopTagSupport.this.count);
             }
 
-            public boolean isFirst()
-            {
+            public boolean isFirst() {
                 return (LoopTagSupport.this.index == 0); // our 'index' isn't getIndex()
             }
 
-            public boolean isLast()
-            {
+            public boolean isLast() {
                 return LoopTagSupport.this.last; // use cached value
             }
 
-            public Integer getBegin()
-            {
-                if(LoopTagSupport.this.beginSpecified)
-                {
+            public Integer getBegin() {
+                if(LoopTagSupport.this.beginSpecified) {
                     return Integer.valueOf(LoopTagSupport.this.begin);
                 }
-                else
-                {
+                else {
                     return null;
                 }
             }
 
-            public Integer getEnd()
-            {
-                if(LoopTagSupport.this.endSpecified)
-                {
+            public Integer getEnd() {
+                if(LoopTagSupport.this.endSpecified) {
                     return Integer.valueOf(LoopTagSupport.this.end);
                 }
-                else
-                {
+                else {
                     return null;
                 }
             }
 
-            public Integer getStep()
-            {
-                if(LoopTagSupport.this.stepSpecified)
-                {
+            public Integer getStep() {
+                if(LoopTagSupport.this.stepSpecified) {
                     return Integer.valueOf(LoopTagSupport.this.step);
                 }
-                else
-                {
+                else {
                     return null;
                 }
             }
@@ -407,8 +378,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
          * implementation, we just need one per instance, but I'd rather
          * not keep the reference around once release() has been called.
          */
-        if(this.loopStatus == null)
-        {
+        if(this.loopStatus == null) {
             this.loopStatus = new Status();
         }
 
@@ -429,8 +399,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * Sets the 'var' attribute.
      * @param var Name of the exported scoped variable storing the current item of the iteration.
      */
-    public void setVar(String var)
-    {
+    public void setVar(String var) {
         this.var = var;
     }
 
@@ -438,8 +407,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * Sets the 'varStatus' attribute.
      * @param varStatus Name of the exported scoped variable storing the status of the iteration.
      */
-    public void setVarStatus(String varStatus)
-    {
+    public void setVarStatus(String varStatus) {
         this.varStatus = varStatus;
     }
 
@@ -454,10 +422,8 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * Ensures the "begin" property is sensible, throwing an exception
      * expected to propagate up if it isn't
      */
-    protected void validateBegin() throws Exception
-    {
-        if(this.begin < 0)
-        {
+    protected void validateBegin() throws Exception {
+        if(this.begin < 0) {
             throw new Exception("'begin' < 0");
         }
     }
@@ -466,10 +432,8 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * Ensures the "end" property is sensible, throwing an exception
      * expected to propagate up if it isn't
      */
-    protected void validateEnd() throws Exception
-    {
-        if(this.end < 0)
-        {
+    protected void validateEnd() throws Exception {
+        if(this.end < 0) {
             throw new Exception("'end' < 0");
         }
     }
@@ -478,10 +442,8 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * Ensures the "step" property is sensible, throwing an exception
      * expected to propagate up if it isn't
      */
-    protected void validateStep() throws Exception
-    {
-        if(this.step < 1)
-        {
+    protected void validateStep() throws Exception {
+        if(this.step < 1) {
             throw new Exception("'step' <= 0");
         }
     }
@@ -489,8 +451,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
     //**********************************************************************
     // Private utility methods
     /*** (Re)initializes state (during release() or construction) */
-    private void init()
-    {
+    private void init() {
         // defaults for internal bookkeeping
         this.index = 0; // internal index always starts at 0
         this.count = 1; // internal count always starts at 1
@@ -509,8 +470,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
     }
 
     /*** Sets 'last' appropriately. */
-    private void calibrateLast() throws Exception
-    {
+    private void calibrateLast() throws Exception {
         /**
          * the current round is the last one if (a) there are no remaining
          * elements, or (b) the next one is beyond the 'end'.
@@ -523,8 +483,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * if appropriate.  Note that we don't really care, here, whether they're
      * scripting variables or not.
      */
-    private void exposeVariables() throws Exception
-    {
+    private void exposeVariables() throws Exception {
         /**
          * We need to support null items returned from next(); we
          * do this simply by passing such non-items through to the
@@ -541,12 +500,10 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
          * method (exposeVariables()), to expose 'item' and 'status'
          * correctly.
          */
-        if(this.var != null)
-        {
+        if(this.var != null) {
             this.pageContext.setAttribute(this.var, this.getCurrent());
         }
-        if(this.varStatus != null)
-        {
+        if(this.varStatus != null) {
             this.pageContext.setAttribute(this.varStatus, this.getLoopStatus());
         }
     }
@@ -555,14 +512,11 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * Removes page attributes that we have exposed and, if applicable,
      * restores them to their prior values (and scopes).
      */
-    private void unExposeVariables()
-    {
-        if(this.var != null)
-        {
+    private void unExposeVariables() {
+        if(this.var != null) {
             this.pageContext.setAttribute(this.var, null);
         }
-        if(this.varStatus != null)
-        {
+        if(this.varStatus != null) {
             this.pageContext.setAttribute(this.varStatus, null);
         }
     }
@@ -580,16 +534,14 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * item associated with the *current* round, not the next one.
      * C'est la vie.)
      */
-    private void discard(int n) throws Exception
-    {
+    private void discard(int n) throws Exception {
         /**
          * copy index so we can restore it, but we need to update it
          * as we work so that atEnd() works
          */
         int i = n;
         int oldIndex = this.index;
-        while(i-- > 0 && !atEnd() && hasNext())
-        {
+        while(i-- > 0 && !atEnd() && hasNext()) {
             this.index++;
             next();
         }
@@ -601,11 +553,9 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * items from the beginning (i.e., to implement 'begin') where we
      * don't want factor in the 'begin' value already.
      */
-    private void discardIgnoreSubset(int n) throws Exception
-    {
+    private void discardIgnoreSubset(int n) throws Exception {
         int i = n;
-        while(i-- > 0 && hasNext())
-        {
+        while(i-- > 0 && hasNext()) {
             this.next();
         }
     }
@@ -616,8 +566,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * for atEnd() to return true; if 'end' is not set, atEnd()
      * always returns false.)
      */
-    private boolean atEnd()
-    {
+    private boolean atEnd() {
         return ((this.end != -1) && (this.begin + this.index >= this.end));
     }
 }

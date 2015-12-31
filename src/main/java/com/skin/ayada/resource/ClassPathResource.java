@@ -15,7 +15,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Enumeration;
 
-
 /**
  * <p>Title: ClassPathResource</p>
  * <p>Description: </p>
@@ -23,16 +22,14 @@ import java.util.Enumeration;
  * @author xuesong.net
  * @version 1.0
  */
-public class ClassPathResource
-{
+public class ClassPathResource {
     public static final Class<ClassPathResource> model = ClassPathResource.class;
 
     /**
      * @param name
      * @return URL
      */
-    public static URL getResource(String name)
-    {
+    public static URL getResource(String name) {
         return model.getClassLoader().getResource(name);
     }
 
@@ -40,21 +37,16 @@ public class ClassPathResource
      * @param name
      * @return URL
      */
-    public static Enumeration<URL> getResources(String name)
-    {
-        try
-        {
+    public static Enumeration<URL> getResources(String name) {
+        try {
             return model.getClassLoader().getResources(name);
         }
-        catch(IOException e)
-        {
+        catch(IOException e) {
         }
-
         return null;
     }
 
-    public static InputStream getResourceAsStream(String name)
-    {
+    public static InputStream getResourceAsStream(String name) {
         return model.getClassLoader().getResourceAsStream(name);
     }
 }

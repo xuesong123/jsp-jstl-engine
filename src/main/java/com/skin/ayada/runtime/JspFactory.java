@@ -11,6 +11,7 @@
 package com.skin.ayada.runtime;
 
 import java.io.Writer;
+import java.util.Map;
 
 /**
  * <p>Title: JspFactory</p>
@@ -19,15 +20,21 @@ import java.io.Writer;
  * @author xuesong.net
  * @version 1.0
  */
-public class JspFactory
-{
+public class JspFactory {
     /**
      * @param writer
      * @return PageContext
      */
-    public static PageContext getDefaultPageContext(Writer writer)
-    {
-        return getDefaultPageContext(writer, 8192, false);
+    public static PageContext getPageContext(Writer writer) {
+        return getPageContext((Map<String, Object>)null, writer, 8192, false);
+    }
+
+    /**
+     * @param writer
+     * @return PageContext
+     */
+    public static PageContext getPageContext(Map<String, Object> context, Writer writer) {
+        return getPageContext(context, writer, 8192, false);
     }
 
     /**
@@ -36,13 +43,21 @@ public class JspFactory
      * @param autoFlush
      * @return PageContext
      */
-    public static PageContext getDefaultPageContext(Writer writer, int buffserSize, boolean autoFlush)
-    {
-        JspWriter out = new JspWriter(writer, buffserSize, autoFlush);
+    public static PageContext getPageContext(Map<String, Object> context, Writer writer, int buffserSize, boolean autoFlush) {
+    	JspWriter out = null;
+
+        if(writer instanceof JspWriter) {
+        	out = (JspWriter)writer;
+        }
+        else {
+        	out = new JspWriter(writer, buffserSize, autoFlush);
+        }
+
         DefaultPageContext pageContext = new DefaultPageContext(out);
         ExpressionContext expressionContext = DefaultExpressionFactory.getDefaultExpressionContext(pageContext);
         pageContext.setTemplateContext(null);
         pageContext.setExpressionContext(expressionContext);
+        pageContext.setContext(context);
         return pageContext;
     }
 }

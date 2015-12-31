@@ -20,25 +20,21 @@ import com.skin.ayada.tagext.TagSupport;
  * @author xuesong.net
  * @version 1.0
  */
-public class OtherwiseTag extends TagSupport
-{
+public class OtherwiseTag extends TagSupport {
     /**
      * @return int
      */
     @Override
-    public int doStartTag()
-    {
+    public int doStartTag() {
         Tag parent = this.getParent();
 
-        if(parent == null)
-        {
+        if(parent == null) {
             throw new RuntimeException("when tag must be in choose tag !");
         }
 
         ChooseTag chooseTag = (ChooseTag)parent;
 
-        if(chooseTag.complete())
-        {
+        if(chooseTag.complete()) {
             return SKIP_BODY;
         }
 

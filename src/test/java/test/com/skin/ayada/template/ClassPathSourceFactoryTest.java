@@ -29,14 +29,12 @@ import com.skin.ayada.util.TemplateUtil;
  * @author xuesong.net
  * @version 1.0
  */
-public class ClassPathSourceFactoryTest
-{
+public class ClassPathSourceFactoryTest {
     /**
      * @param args
-     * @throws Exception 
+     * @throws Exception
      */
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         ClassPathSourceFactory sourceFactory = new ClassPathSourceFactory("/");
         System.out.println("-------------------------------------------");
 

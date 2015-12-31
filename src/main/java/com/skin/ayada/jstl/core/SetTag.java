@@ -24,8 +24,7 @@ import com.skin.ayada.util.ClassUtil;
  * @author xuesong.net
  * @version 1.0
  */
-public class SetTag extends BodyTagSupport
-{
+public class SetTag extends BodyTagSupport {
     private String var;
     private String property;
     private Object target;
@@ -35,25 +34,19 @@ public class SetTag extends BodyTagSupport
      * @return int
      */
     @Override
-    public int doStartTag() throws Exception
-    {
-        if(this.value == null)
-        {
+    public int doStartTag() throws Exception {
+        if(this.value == null) {
             return BodyTag.EVAL_BODY_BUFFERED;
         }
 
-        if(this.var != null)
-        {
+        if(this.var != null) {
             this.setValue(this.var, this.value);
         }
-        else
-        {
-            if(this.target != null && this.property != null)
-            {
+        else {
+            if(this.target != null && this.property != null) {
                 this.setProperty(this.target, this.property, this.value);
             }
         }
-
         return Tag.SKIP_BODY;
     }
 
@@ -61,27 +54,21 @@ public class SetTag extends BodyTagSupport
      * @return int
      */
     @Override
-    public int doEndTag() throws Exception
-    {
+    public int doEndTag() throws Exception {
         BodyContent bodyContent = this.getBodyContent();
 
-        if(bodyContent != null)
-        {
+        if(bodyContent != null) {
             String value = bodyContent.getString().trim();
 
-            if(this.var != null)
-            {
+            if(this.var != null) {
                 this.setValue(this.var, value);
             }
-            else
-            {
-                if(this.target != null && this.property != null)
-                {
+            else {
+                if(this.target != null && this.property != null) {
                     this.setProperty(this.target, this.property, value);
                 }
             }
         }
-
         return Tag.EVAL_PAGE;
     }
 
@@ -89,18 +76,16 @@ public class SetTag extends BodyTagSupport
      * @param name
      * @param value
      */
-    public void setValue(String name, Object value)
-    {
+    public void setValue(String name, Object value) {
         this.pageContext.setAttribute(name, value);
     }
 
     /**
      * @param name
      * @param value
-     * @throws Exception 
+     * @throws Exception
      */
-    public void setProperty(Object object, String name, Object value) throws Exception
-    {
+    public void setProperty(Object object, String name, Object value) throws Exception {
         ClassUtil.setProperty(object, name, value);
     }
 
@@ -110,72 +95,63 @@ public class SetTag extends BodyTagSupport
      * @param scope
      * @param value
      */
-    public static void setValue(PageContext pageContext, String name, String scope, Object value)
-    {
+    public static void setValue(PageContext pageContext, String name, String scope, Object value) {
         pageContext.setAttribute(name, value);
     }
 
     /**
      * @param var the var to set
      */
-    public void setVar(String var)
-    {
+    public void setVar(String var) {
         this.var = var;
     }
 
     /**
      * @return the var
      */
-    public String getVar()
-    {
+    public String getVar() {
         return this.var;
     }
 
     /**
      * @param property the property to set
      */
-    public void setProperty(String property)
-    {
+    public void setProperty(String property) {
         this.property = property;
     }
 
     /**
      * @return the property
      */
-    public String getProperty()
-    {
+    public String getProperty() {
         return this.property;
     }
 
     /**
      * @param target the target to set
      */
-    public void setTarget(Object target)
-    {
+    public void setTarget(Object target) {
         this.target = target;
     }
 
     /**
      * @return the target
      */
-    public Object getTarget()
-    {
+    public Object getTarget() {
         return this.target;
     }
 
     /**
      * @param value the value to set
      */
-    public void setValue(Object value)
-    {
+    public void setValue(Object value) {
         this.value = value;
     }
 
     /**
      * @return the value
      */
-    public Object getValue()
-    {
+    public Object getValue() {
         return this.value;
     }
 }

@@ -16,8 +16,7 @@ package com.skin.ayada.jstl;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class TagInfo
-{
+public class TagInfo {
     private String name;
     private String tagClass;
     private int bodyContent;
@@ -30,64 +29,56 @@ public class TagInfo
     /**
      * @return the name
      */
-    public String getName()
-    {
+    public String getName() {
         return this.name;
     }
 
     /**
      * @param name the name to set
      */
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
     /**
      * @return the tagClass
      */
-    public String getTagClass()
-    {
+    public String getTagClass() {
         return this.tagClass;
     }
 
     /**
      * @param tagClass the tagClass to set
      */
-    public void setTagClass(String tagClass)
-    {
+    public void setTagClass(String tagClass) {
         this.tagClass = tagClass;
     }
 
     /**
      * @return the bodyContent
      */
-    public int getBodyContent()
-    {
+    public int getBodyContent() {
         return this.bodyContent;
     }
 
     /**
      * @param bodyContent the bodyContent to set
      */
-    public void setBodyContent(int bodyContent)
-    {
+    public void setBodyContent(int bodyContent) {
         this.bodyContent = bodyContent;
     }
 
     /**
      * @return the description
      */
-    public String getDescription()
-    {
+    public String getDescription() {
         return this.description;
     }
 
     /**
      * @param description the description to set
      */
-    public void setDescription(String description)
-    {
+    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -95,21 +86,17 @@ public class TagInfo
      * @param bodyContent
      * @return int
      */
-    public static int getBodyContent(String bodyContent)
-    {
-        if(bodyContent == null)
-        {
+    public static int getBodyContent(String bodyContent) {
+        if(bodyContent == null) {
             return JSP;
         }
 
         String type = bodyContent.trim().toLowerCase();
 
-        if(type.equals("tagdependent"))
-        {
+        if(type.equals("tagdependent")) {
             return TAGDEPENDENT;
         }
-        else if(type.equals("empty"))
-        {
+        else if(type.equals("empty")) {
             return EMPTY;
         }
 
@@ -120,32 +107,25 @@ public class TagInfo
      * @param bodyContent
      * @return int
      */
-    public static String getBodyContent(int bodyContent)
-    {
-        switch(bodyContent)
-        {
-            case JSP:
-            {
+    public static String getBodyContent(int bodyContent) {
+        switch(bodyContent) {
+            case JSP: {
                 return "jsp";
             }
-            case TAGDEPENDENT:
-            {
+            case TAGDEPENDENT: {
                 return "tagdependent";
             }
-            case EMPTY:
-            {
+            case EMPTY: {
                 return "empty";
             }
-            default:
-            {
+            default: {
                 return "jsp";
             }
         }
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         StringBuilder buffer = new StringBuilder();
         buffer.append("{\"");
         buffer.append(this.getName());
@@ -155,8 +135,7 @@ public class TagInfo
         buffer.append("\"bodyContent\": \"");
         buffer.append(this.getBodyContent());
         buffer.append("\", \"description\": \"");
-        if(this.getDescription() != null)
-        {
+        if(this.getDescription() != null) {
             buffer.append(this.getDescription());
         }
         buffer.append("\"}");

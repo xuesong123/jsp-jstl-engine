@@ -24,8 +24,7 @@ import com.skin.ayada.util.ClassUtil;
  * @author xuesong.net
  * @version 1.0
  */
-public class ActionDispatcher
-{
+public class ActionDispatcher {
     private static final Class<?>[] PARAMETERTYPES = new Class[]{PageContext.class, Parameters.class};
 
     /**
@@ -37,28 +36,23 @@ public class ActionDispatcher
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    public static Map<String, Object> dispatch(PageContext pageContext, Parameters parameters, String className, String methodName) throws Exception
-    {
+    public static Map<String, Object> dispatch(PageContext pageContext, Parameters parameters, String className, String methodName) throws Exception {
         Object instance = ClassUtil.getInstance(className);
         Class<?> type = instance.getClass();
         Method method = null;
 
-        if(methodName != null)
-        {
+        if(methodName != null) {
             method = type.getMethod(methodName, PARAMETERTYPES);
         }
-        else
-        {
+        else {
             method = type.getMethod("execute", PARAMETERTYPES);
         }
 
         Object context = method.invoke(instance, new Object[]{pageContext, parameters});
 
-        if(context instanceof Map)
-        {
+        if(context instanceof Map) {
             return (Map<String, Object>)context;
         }
-
         return null;
     }
 }

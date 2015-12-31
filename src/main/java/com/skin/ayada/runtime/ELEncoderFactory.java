@@ -19,32 +19,24 @@ import com.skin.ayada.jstl.util.HtmlEncoder;
  * @author xuesong.net
  * @version 1.0
  */
-public class ELEncoderFactory
-{
+public class ELEncoderFactory {
     private static final HtmlEncoder htmlEncoder = new HtmlEncoder();
 
     /**
      * @param name
      * @return ELEncoder
      */
-    public static ELEncoder getELEncoder(String name)
-    {
-        if(name != null)
-        {
-            if(name.equals("xml") || name.equals("html"))
-            {
-                return htmlEncoder;
-            }
+    public static ELEncoder getELEncoder(String name) {
+        if(name != null && (name.equals("xml") || name.equals("html"))) {
+        	return htmlEncoder;
         }
-
         return null;
     }
 
     /**
      * @return ELEncoder
      */
-    public static ELEncoder getHtmlEncoder()
-    {
+    public static ELEncoder getHtmlEncoder() {
         return htmlEncoder;
     }
 }

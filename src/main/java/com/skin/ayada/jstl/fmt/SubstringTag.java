@@ -23,8 +23,7 @@ import com.skin.ayada.tagext.Tag;
  * @author xuesong.net
  * @version 1.0
  */
-public class SubstringTag extends BodyTagSupport
-{
+public class SubstringTag extends BodyTagSupport {
     private int length;
     private String value;
     private String padding;
@@ -33,26 +32,21 @@ public class SubstringTag extends BodyTagSupport
      * @return int
      */
     @Override
-    public int doEndTag()
-    {
+    public int doEndTag() {
         String result = null;
 
-        if(this.value != null)
-        {
+        if(this.value != null) {
             result = this.substring(this.value, this.length, this.padding);
         }
-        else
-        {
+        else {
             BodyContent bodyContent = this.getBodyContent();
             result = this.substring(bodyContent.getString(), this.length, this.padding);
         }
 
-        try
-        {
+        try {
             this.pageContext.getOut().write(result);
         }
-        catch(IOException e)
-        {
+        catch(IOException e) {
         }
 
         return Tag.EVAL_PAGE;
@@ -64,10 +58,8 @@ public class SubstringTag extends BodyTagSupport
      * @param padding
      * @return String
      */
-    private String substring(String source, int length, String padding)
-    {
-        if(source == null)
-        {
+    private String substring(String source, int length, String padding) {
+        if(source == null) {
             return "";
         }
 
@@ -78,28 +70,22 @@ public class SubstringTag extends BodyTagSupport
         int count = s.length();
         StringBuilder buffer = new StringBuilder();
 
-        for(int i = 0; i < s.length(); i++)
-        {
+        for(int i = 0; i < s.length(); i++) {
             c = s.charAt(i);
 
-            if(c >= 0x0080)
-            {
+            if(c >= 0x0080) {
                 size += 2;
                 count++;
             }
-            else
-            {
+            else {
                 size++;
             }
 
-            if(size > length)
-            {
-                if(c >= 0x4e00)
-                {
+            if(size > length) {
+                if(c >= 0x4e00) {
                     size -= 2;
                 }
-                else
-                {
+                else {
                     size--;
                 }
 
@@ -109,8 +95,7 @@ public class SubstringTag extends BodyTagSupport
             buffer.append(c);
         }
 
-        if(size < count && padding != null)
-        {
+        if(size < count && padding != null) {
             buffer.append(padding);
         }
 
@@ -120,48 +105,42 @@ public class SubstringTag extends BodyTagSupport
     /**
      * @return the length
      */
-    public int getLength()
-    {
+    public int getLength() {
         return this.length;
     }
 
     /**
      * @param length the length to set
      */
-    public void setLength(int length)
-    {
+    public void setLength(int length) {
         this.length = length;
     }
 
     /**
      * @return the value
      */
-    public String getValue()
-    {
+    public String getValue() {
         return this.value;
     }
 
     /**
      * @param value the value to set
      */
-    public void setValue(String value)
-    {
+    public void setValue(String value) {
         this.value = value;
     }
 
     /**
      * @return the padding
      */
-    public String getPadding()
-    {
+    public String getPadding() {
         return this.padding;
     }
 
     /**
      * @param padding the padding to set
      */
-    public void setPadding(String padding)
-    {
+    public void setPadding(String padding) {
         this.padding = padding;
     }
 }

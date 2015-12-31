@@ -17,16 +17,14 @@ package com.skin.ayada.jstl.util;
  * @author xuesong.net
  * @version 1.0
  */
-public class StringUtil
-{
+public class StringUtil {
     /**
      * @param source
      * @param length
      * @param padding
      * @return String
      */
-    public String substring(String source, int length, String padding)
-    {
+    public String substring(String source, int length, String padding) {
         return com.skin.ayada.util.StringUtil.substring(source, length, padding);
     }
 
@@ -36,8 +34,7 @@ public class StringUtil
      * @param replacement
      * @return String
      */
-    public String replace(String source, String search, String replacement)
-    {
+    public String replace(String source, String search, String replacement) {
         return com.skin.ayada.util.StringUtil.replace(source, search, replacement);
     }
 
@@ -46,17 +43,15 @@ public class StringUtil
      * @param limit
      * @return String[]
      */
-    public String[] split(String source, String limit)
-    {
-        return com.skin.ayada.util.StringUtil.split(source, limit);
+    public String[] split(String source, String limit) {
+        return com.skin.ayada.util.StringUtil.split(source, limit, true, true);
     }
 
     /**
      * @param source
      * @return String
      */
-    public String escape(String source)
-    {
+    public String escape(String source) {
         return com.skin.ayada.util.StringUtil.escape(source);
     }
 }

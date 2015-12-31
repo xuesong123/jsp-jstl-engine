@@ -19,8 +19,7 @@ import com.skin.ayada.runtime.PageContext;
  * @author xuesong.net
  * @version 1.0
  */
-public interface Tag
-{
+public interface Tag {
     public static final int SKIP_BODY = 0;
     public static final int EVAL_BODY_INCLUDE = 1;
     public static final int SKIP_PAGE = 5;

@@ -23,16 +23,14 @@ import com.skin.ayada.runtime.JspWriter;
  * @author xuesong.net
  * @version 1.0
  */
-public class BodyContent extends JspWriter
-{
+public class BodyContent extends JspWriter {
     private Writer writer;
     private StringWriter buffer;
 
     /**
      * @param out
      */
-    public BodyContent(JspWriter out)
-    {
+    public BodyContent(JspWriter out) {
         super(out);
         this.buffer = new StringWriter();
     }
@@ -40,28 +38,23 @@ public class BodyContent extends JspWriter
     /**
      * @return the writer
      */
-    public Writer getWriter()
-    {
+    public Writer getWriter() {
         return this.writer;
     }
 
     /**
      * @param writer the writer to set
      */
-    public void setWriter(Writer writer)
-    {
+    public void setWriter(Writer writer) {
         this.writer = writer;
     }
 
     @Override
-    public void write(char[] cbuf, int offset, int length) throws IOException
-    {
-        if(this.writer != null)
-        {
+    public void write(char[] cbuf, int offset, int length) throws IOException {
+        if(this.writer != null) {
             this.writer.write(cbuf, offset, length);
         }
-        else
-        {
+        else {
             this.buffer.write(cbuf, offset, length);
         }
     }
@@ -70,8 +63,7 @@ public class BodyContent extends JspWriter
      * @param out
      * @throws IOException
      */
-    public void writeOut(Writer out)  throws IOException
-    {
+    public void writeOut(Writer out)  throws IOException {
         out.write(this.buffer.toString());
     }
 
@@ -79,8 +71,7 @@ public class BodyContent extends JspWriter
      * @param bufferSize the bufferSize to set
      */
     @Override
-    public void setBufferSize(int bufferSize)
-    {
+    public void setBufferSize(int bufferSize) {
         throw new UnsupportedOperationException();
     }
 
@@ -88,14 +79,11 @@ public class BodyContent extends JspWriter
      * @return int
      */
     @Override
-    public int getBufferSize()
-    {
-        if(this.writer != null)
-        {
+    public int getBufferSize() {
+        if(this.writer != null) {
             return 0;
         }
-        else
-        {
+        else {
             return super.getBufferSize();
         }
     }
@@ -104,45 +92,35 @@ public class BodyContent extends JspWriter
      * @return int
      */
     @Override
-    public int getRemaining()
-    {
-        if(this.writer != null)
-        {
+    public int getRemaining() {
+        if(this.writer != null) {
             return 0;
         }
-        else
-        {
+        else {
             return super.getRemaining();
         }
     }
 
     @Override
-    public void clear() throws IOException
-    {
-        if(this.writer == null)
-        {
+    public void clear() throws IOException {
+        if(this.writer == null) {
             this.buffer.getBuffer().setLength(0);
         }
-        else
-        {
+        else {
             throw new IOException("Unsupported operation: clear !");
         }
     }
 
     @Override
-    public void flush() throws IOException
-    {
-        if(this.writer != null)
-        {
+    public void flush() throws IOException {
+        if(this.writer != null) {
             this.writer.flush();
         }
     }
 
     @Override
-    public void close() throws IOException
-    {
-        if(this.writer != null)
-        {
+    public void close() throws IOException {
+        if(this.writer != null) {
             this.writer.close();
         }
     }
@@ -150,16 +128,14 @@ public class BodyContent extends JspWriter
     /**
      * @return JspWriter
      */
-    public JspWriter getEnclosingWriter()
-    {
+    public JspWriter getEnclosingWriter() {
         return (JspWriter)(this.getOut());
     }
 
     /**
      * @return String
      */
-    public String getString()
-    {
+    public String getString() {
         return this.buffer.toString();
     }
 }

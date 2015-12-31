@@ -31,65 +31,106 @@ import com.skin.ayada.template.TemplateContext;
  * @author xuesong.net
  * @version 1.0
  */
-public class DefaultPageContext implements PageContext
-{
+public class DefaultPageContext implements PageContext {
     private JspWriter out;
     private Map<String, Object> attributes;
     private TemplateContext templateContext;
     private ExpressionContext expressionContext;
 
-    public DefaultPageContext()
-    {
+    public DefaultPageContext() {
         this(null);
     }
 
     /**
      * @param out
      */
-    public DefaultPageContext(JspWriter out)
-    {
+    public DefaultPageContext(JspWriter out) {
         this.out = out;
         this.attributes = new HashMap<String, Object>();
         this.setAttribute("pageContext", this);
     }
 
     /**
+     * @return PageContext
+     */
+    public PageContext create() {
+    	return this.templateContext.getPageContext(null, this.getOut());
+    }
+
+    /**
      * @param out the out to set
      */
-    public void setOut(JspWriter out)
-    {
+    public void setOut(JspWriter out) {
         this.out = out;
     }
 
     /**
      * @return the out
      */
-    public JspWriter getOut()
-    {
+    public JspWriter getOut() {
         return this.out;
     }
 
     /**
      * @return Iterator<String>
      */
-    public Iterator<String> getAttributeNames()
-    {
+    public Iterator<String> getAttributeNames() {
         return this.attributes.keySet().iterator();
+    }
+
+    /**
+     * @param context
+     */
+    public void setContext(Map<String, Object> context) {
+    	if(context != null) {
+            for(Map.Entry<String, Object> entry : context.entrySet()) {
+                if(entry.getValue() != null) {
+                    this.attributes.put(entry.getKey(), entry.getValue());
+                }
+            }
+        }
+    }
+
+    /**
+     * @return Map<String, Object>
+     */
+    public Map<String, Object> getContext() {
+    	Map<String, Object> context = new HashMap<String, Object>();
+    	context.putAll(this.attributes);
+    	return context;
+    }
+
+    /**
+     * @param names
+     * @return Map<String, Object>
+     */
+    public Map<String, Object> getContext(String[] names) {
+    	Map<String, Object> context = new HashMap<String, Object>();
+
+    	if(names != null) {
+    		Object value = null;
+
+            for(String name : names) {
+                value = this.getAttribute(name);
+
+                if(value != null) {
+                    context.put(name, value);
+                }
+            }
+    	}
+    	return context;
     }
 
     /**
      * @param key
      * @param value
      */
-    public Object setAttribute(String key, Object value)
-    {
-        if(key == null)
-        {
+    public Object setAttribute(String key, Object value) {
+        if(key == null) {
             return null;
         }
 
-        if(value != null)
-        {
+        if(value != null) {
             return this.attributes.put(key, value);
         }
         return this.attributes.remove(key);
@@ -99,82 +140,68 @@ public class DefaultPageContext implements PageContext
      * @param key
      * @return Object
      */
-    public Object getAttribute(String key)
-    {
+    public Object getAttribute(String key) {
         return this.attributes.get(key);
     }
 
     /**
      * @param key
      */
-    public Object removeAttribute(String key)
-    {
+    public Object removeAttribute(String key) {
         return this.attributes.remove(key);
     }
 
     /**
      * @param timeZone
      */
-    public void setTimeZone(TimeZone timeZone)
-    {
+    public void setTimeZone(TimeZone timeZone) {
         this.setAttribute(PageContext.LOCALE_KEY, timeZone);
     }
 
     /**
      * @return TimeZone
      */
-    public TimeZone getTimeZone()
-    {
+    public TimeZone getTimeZone() {
         TimeZone timeZone = null;
         Object value = this.getAttribute(PageContext.TIMEZONE_KEY);
 
-        if((value instanceof TimeZone))
-        {
+        if((value instanceof TimeZone)) {
             timeZone = (TimeZone)value;
         }
-        else if((value instanceof String))
-        {
+        else if((value instanceof String)) {
             timeZone = TimeZone.getTimeZone((String)value);
         }
 
-        if(timeZone == null)
-        {
+        if(timeZone == null) {
             timeZone = TimeZone.getDefault();
         }
-
         return timeZone;
     }
 
     /**
      * @param locale
      */
-    public void setLocale(Locale locale)
-    {
+    public void setLocale(Locale locale) {
         this.setAttribute(PageContext.LOCALE_KEY, locale);
     }
 
     /**
      * @return Locale
      */
-    public Locale getLocale()
-    {
+    public Locale getLocale() {
         Locale locale = null;
         Object value = this.getAttribute(PageContext.LOCALE_KEY);
 
-        if((value instanceof Locale))
-        {
+        if((value instanceof Locale)) {
             locale = (Locale)value;
         }
-        else if((value instanceof String))
-        {
+        else if((value instanceof String)) {
             locale = this.getLocale((String)value, null);
         }
 
-        if(locale == null)
-        {
+        if(locale == null) {
             locale = Locale.getDefault();
         }
-
         return locale;
     }
 
@@ -183,23 +210,19 @@ public class DefaultPageContext implements PageContext
      * @param variant
      * @return Local
      */
-    public Locale getLocale(String value, String variant)
-    {
+    public Locale getLocale(String value, String variant) {
         int i = 0;
         char ch = '\000';
         int length = value.length();
         StringBuilder buffer = new StringBuilder();
 
-        for(; i < length; i++)
-        {
+        for(; i < length; i++) {
             ch = value.charAt(i);
 
-            if(ch != '_' && ch != '-')
-            {
+            if(ch != '_' && ch != '-') {
                 buffer.append(ch);
             }
-            else
-            {
+            else {
                 break;
             }
         }
@@ -207,48 +230,39 @@ public class DefaultPageContext implements PageContext
         String language = buffer.toString();
         String country = "";
 
-        if((ch == '_') || (ch == '-'))
-        {
+        if((ch == '_') || (ch == '-')) {
             buffer.setLength(0);
 
-            for(i++; i < length; i++)
-            {
+            for(i++; i < length; i++) {
                 ch = value.charAt(i);
 
-                if(ch != '_' && ch != '-')
-                {
+                if(ch != '_' && ch != '-') {
                     buffer.append(ch);
                 }
-                else
-                {
+                else {
                     break;
                 }
             }
-
             country = buffer.toString();
         }
 
-        if(variant != null && variant.length() > 0)
-        {
+        if(variant != null && variant.length() > 0) {
             return new Locale(language, country, variant);
         }
-
         return new Locale(language, country);
     }
 
     /**
      * @param bundle
      */
-    public void setBundle(LocalizationContext bundle)
-    {
+    public void setBundle(LocalizationContext bundle) {
         this.setAttribute(PageContext.BUNDLE_KEY, bundle);
     }
 
     /**
      * @return LocalizationContext
      */
-    public LocalizationContext getBundle()
-    {
+    public LocalizationContext getBundle() {
         return (LocalizationContext)(this.getAttribute(PageContext.BUNDLE_KEY));
     }
 
@@ -257,8 +271,7 @@ public class DefaultPageContext implements PageContext
      * @param args
      * @return String
      */
-    public String getLocalizedMessage(String key, Object[] args)
-    {
+    public String getLocalizedMessage(String key, Object[] args) {
         LocalizationContext localizationContext = this.getBundle();
         return this.getLocalizedMessage(localizationContext, key, args);
     }
@@ -269,75 +282,62 @@ public class DefaultPageContext implements PageContext
      * @param args
      * @return String
      */
-    public String getLocalizedMessage(LocalizationContext localizationContext, String key, Object[] args)
-    {
+    public String getLocalizedMessage(LocalizationContext localizationContext, String key, Object[] args) {
         String result = null;
         ResourceBundle bundle = localizationContext.getResourceBundle();
         Locale locale = localizationContext.getLocale();
 
-        if(bundle != null)
-        {
-            try
-            {
+        if(bundle != null) {
+            try {
                 result = bundle.getString(key);
             }
-            catch(Exception e)
-            {
+            catch(Exception e) {
             }
         }
 
-        if(result == null)
-        {
+        if(result == null) {
             return "???" + key + "???";
         }
 
-        if((args == null) || (args.length == 0))
-        {
+        if((args == null) || (args.length == 0)) {
             return result;
         }
 
-        if(locale == null)
-        {
+        if(locale == null) {
             locale = this.getLocale();
         }
 
-        if(locale != null)
-        {
+        if(locale != null) {
             return new MessageFormat(result, locale).format(args);
         }
-
         return new MessageFormat(result).format(args);
     }
 
     /**
      * @return the templateContext
      */
-    public TemplateContext getTemplateContext()
-    {
+    public TemplateContext getTemplateContext() {
         return this.templateContext;
     }
 
     /**
      * @param templateContext the templateContext to set
      */
-    public void setTemplateContext(TemplateContext templateContext)
-    {
+    public void setTemplateContext(TemplateContext templateContext) {
         this.templateContext = templateContext;
     }
 
     /**
      * @param expressionContext
      */
-    public void setExpressionContext(ExpressionContext expressionContext)
-    {
+    public void setExpressionContext(ExpressionContext expressionContext) {
         this.expressionContext = expressionContext;
     }
 
     /**
      * @return ExpressionContext
      */
-    public ExpressionContext getExpressionContext()
-    {
+    public ExpressionContext getExpressionContext() {
         return this.expressionContext;
     }
 
@@ -345,8 +345,7 @@ public class DefaultPageContext implements PageContext
      * @throws IOException
      */
     @Override
-    public void clear() throws IOException
-    {
+    public void clear() throws IOException {
         this.out.clear();
     }
 
@@ -354,8 +353,7 @@ public class DefaultPageContext implements PageContext
      * @throws IOException
      */
     @Override
-    public void flush() throws IOException
-    {
+    public void flush() throws IOException {
         this.out.flush();
     }
 
@@ -363,16 +361,14 @@ public class DefaultPageContext implements PageContext
      * @throws IOException
      */
     @Override
-    public void close() throws IOException
-    {
+    public void close() throws IOException {
         this.out.close();
     }
 
     /**
      * @return JspWriter
      */
-    public BodyContent pushBody()
-    {
+    public BodyContent pushBody() {
         BodyContent bodyContent = new BodyContent(this.out);
         this.out = bodyContent;
         return bodyContent;
@@ -382,8 +378,7 @@ public class DefaultPageContext implements PageContext
      * @param writer
      * @return JspWriter
      */
-    public JspWriter pushBody(Writer writer)
-    {
+    public JspWriter pushBody(Writer writer) {
         BodyContent bodyContent = new BodyContent(this.out);
         bodyContent.setWriter(writer);
         this.out = bodyContent;
@@ -393,15 +388,12 @@ public class DefaultPageContext implements PageContext
     /**
      * @return JspWriter
      */
-    public JspWriter popBody()
-    {
-        if(this.out instanceof BodyContent)
-        {
+    public JspWriter popBody() {
+        if(this.out instanceof BodyContent) {
             BodyContent bodyContent = (BodyContent)(this.out);
             return (this.out = bodyContent.getEnclosingWriter());
         }
-        else
-        {
+        else {
             return null;
         }
     }
@@ -409,17 +401,14 @@ public class DefaultPageContext implements PageContext
     /**
      * @param bodyContent
      * @param escapeXml
-     * @throws IOException 
+     * @throws IOException
      */
-    public void print(BodyContent bodyContent, boolean escapeXml) throws IOException
-    {
+    public void print(BodyContent bodyContent, boolean escapeXml) throws IOException {
         String content = bodyContent.getString();
 
-        if(escapeXml)
-        {
+        if(escapeXml) {
             content = this.escape(content);
         }
-
         bodyContent.getEnclosingWriter().write(content);
     }
 
@@ -427,55 +416,44 @@ public class DefaultPageContext implements PageContext
      * @param source
      * @return String
      */
-    private String escape(String source)
-    {
-        if(source == null)
-        {
+    private String escape(String source) {
+        if(source == null) {
             return "";
         }
 
         char c;
         StringBuilder buffer = new StringBuilder();
 
-        for(int i = 0, size = source.length(); i < size; i++)
-        {
+        for(int i = 0, size = source.length(); i < size; i++) {
             c = source.charAt(i);
 
-            switch (c)
-            {
-                case '&':
-                {
+            switch (c) {
+                case '&': {
                     buffer.append("&amp;");
                     break;
                 }
-                case '"':
-                {
+                case '"': {
                     buffer.append("&quot;");
                     break;
                 }
-                case '<':
-                {
+                case '<': {
                     buffer.append("&lt;");
                     break;
                 }
-                case '>':
-                {
+                case '>': {
                     buffer.append("&gt;");
                     break;
                 }
-                case '\'':
-                {
+                case '\'': {
                     buffer.append("&#39;");
                     break;
                 }
-                default :
-                {
+                default : {
                     buffer.append(c);
                     break;
                 }
             }
         }
-
         return buffer.toString();
     }
 
@@ -483,8 +461,7 @@ public class DefaultPageContext implements PageContext
      * @param page
      */
     @Override
-    public void include(String page) throws Exception
-    {
+    public void include(String page) throws Exception {
         this.include(page, null);
     }
 
@@ -493,8 +470,7 @@ public class DefaultPageContext implements PageContext
      * @throws Exception
      */
     @Override
-    public void include(String page, Map<String, Object> context) throws Exception
-    {
+    public void include(String page, Map<String, Object> context) throws Exception {
         this.include(page, context, this.getOut());
     }
 
@@ -503,19 +479,16 @@ public class DefaultPageContext implements PageContext
      * @throws Exception
      */
     @Override
-    public void include(String page, Map<String, Object> context, Writer out) throws Exception
-    {
-        if(this.templateContext == null)
-        {
+    public void include(String page, Map<String, Object> context, Writer out) throws Exception {
+        if(this.templateContext == null) {
             throw new NullPointerException("NullPointerException: templateContext");
         }
 
-        if(out == null)
-        {
+        if(out != null) {
             this.templateContext.execute(page, context, out);
+            out.flush();
         }
-        else
-        {
+        else {
             this.templateContext.execute(page, context, this.getOut());
         }
     }
@@ -523,8 +496,7 @@ public class DefaultPageContext implements PageContext
     /**
      * release
      */
-    public void release()
-    {
+    public void release() {
         this.attributes.clear();
         this.expressionContext.release();
         this.attributes = null;

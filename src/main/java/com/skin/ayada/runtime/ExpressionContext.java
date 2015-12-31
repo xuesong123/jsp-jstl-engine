@@ -20,8 +20,7 @@ import java.io.Writer;
  * @author xuesong.net
  * @version 1.0
  */
-public interface ExpressionContext
-{
+public interface ExpressionContext {
     /**
      * @param expression
      * @return Object

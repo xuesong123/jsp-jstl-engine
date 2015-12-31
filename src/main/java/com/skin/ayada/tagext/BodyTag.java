@@ -18,8 +18,7 @@ package com.skin.ayada.tagext;
  * @author xuesong.net
  * @version 1.0
  */
-public interface BodyTag extends IterationTag
-{
+public interface BodyTag extends IterationTag {
     /**
      * Request the creation of new buffer, a BodyContent on which to evaluate the body of this tag.
      * Returned from doStartTag when it implements BodyTag.

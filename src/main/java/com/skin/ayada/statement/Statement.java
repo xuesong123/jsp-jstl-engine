@@ -19,8 +19,7 @@ import com.skin.ayada.tagext.Tag;
  * @author xuesong.net
  * @version 1.0
  */
-public class Statement
-{
+public class Statement {
     private Tag tag;
     private Node node;
     private Statement parent;
@@ -29,72 +28,63 @@ public class Statement
     /**
      * @param node
      */
-    public Statement(Node node)
-    {
+    public Statement(Node node) {
         this.node = node;
     }
 
     /**
      * @return the tag
      */
-    public Tag getTag()
-    {
+    public Tag getTag() {
         return this.tag;
     }
 
     /**
      * @param tag the tag to set
      */
-    public void setTag(Tag tag)
-    {
+    public void setTag(Tag tag) {
         this.tag = tag;
     }
 
     /**
      * @return the node
      */
-    public Node getNode()
-    {
+    public Node getNode() {
         return this.node;
     }
 
     /**
      * @param node the node to set
      */
-    public void setNode(Node node)
-    {
+    public void setNode(Node node) {
         this.node = node;
     }
 
     /**
      * @return the parent
      */
-    public Statement getParent()
-    {
+    public Statement getParent() {
         return this.parent;
     }
 
     /**
      * @param parent the parent to set
      */
-    public void setParent(Statement parent)
-    {
+    public void setParent(Statement parent) {
         this.parent = parent;
     }
 
     /**
      * @return the startTagFlag
      */
-    public int getStartTagFlag()
-    {
+    public int getStartTagFlag() {
         return this.startTagFlag;
     }
 
     /**
      * @param startTagFlag the startTagFlag to set
      */
-    public void setStartTagFlag(int startTagFlag)
-    {
+    public void setStartTagFlag(int startTagFlag) {
         this.startTagFlag = startTagFlag;
     }
 }

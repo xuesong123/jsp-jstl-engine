@@ -23,24 +23,21 @@ import com.skin.ayada.tagext.JspFragment;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class DefaultJspFragment implements JspFragment
-{
+public class DefaultJspFragment implements JspFragment {
     private Template template;
     private Statement[] statements;
     private PageContext pageContext;
     private int offset;
     private int length;
 
-    public DefaultJspFragment()
-    {
+    public DefaultJspFragment() {
     }
 
     /**
      * @param template
      * @param pageContext
      */
-    public DefaultJspFragment(Template template, Statement[] statements, PageContext pageContext)
-    {
+    public DefaultJspFragment(Template template, Statement[] statements, PageContext pageContext) {
         this.template = template;
         this.statements = statements;
         this.pageContext = pageContext;
@@ -50,34 +47,26 @@ public class DefaultJspFragment implements JspFragment
      * @param out
      */
     @Override
-    public void invoke(Writer out)
-    {
-        if(out != null)
-        {
+    public void invoke(Writer out) {
+        if(out != null) {
             BodyContent bodyContent = this.pageContext.pushBody();
 
-            try
-            {
+            try {
                 DefaultExecutor.execute(this.template, this.statements, this.pageContext, this.offset, this.length);
                 bodyContent.writeOut(out);
             }
-            catch(Throwable t)
-            {
+            catch(Throwable t) {
                 t.printStackTrace();
             }
-            finally
-            {
+            finally {
                 this.pageContext.popBody();
             }
         }
-        else
-        {
-            try
-            {
+        else {
+            try {
                 DefaultExecutor.execute(this.template, this.pageContext, this.offset, this.length);
             }
-            catch(Throwable t)
-            {
+            catch(Throwable t) {
                 t.printStackTrace();
             }
         }
@@ -86,40 +75,35 @@ public class DefaultJspFragment implements JspFragment
     /**
      * @return the template
      */
-    public Template getTemplate()
-    {
+    public Template getTemplate() {
         return this.template;
     }
 
     /**
      * @param template the template to set
      */
-    public void setTemplate(Template template)
-    {
+    public void setTemplate(Template template) {
         this.template = template;
     }
 
     /**
      * @param statements the statements to set
      */
-    public void setStatements(Statement[] statements)
-    {
+    public void setStatements(Statement[] statements) {
         this.statements = statements;
     }
 
     /**
      * @return the statements
      */
-    public Statement[] getStatements()
-    {
+    public Statement[] getStatements() {
         return this.statements;
     }
 
     /**
      * @param pageContext
      */
-    public void setPageContext(PageContext pageContext)
-    {
+    public void setPageContext(PageContext pageContext) {
         this.pageContext = pageContext;
     }
 
@@ -127,40 +111,35 @@ public class DefaultJspFragment implements JspFragment
      * @return PageContext
      */
     @Override
-    public PageContext getPageContext()
-    {
+    public PageContext getPageContext() {
         return this.pageContext;
     }
 
     /**
      * @return the offset
      */
-    public int getOffset()
-    {
+    public int getOffset() {
         return this.offset;
     }
 
     /**
      * @param offset the offset to set
      */
-    public void setOffset(int offset)
-    {
+    public void setOffset(int offset) {
         this.offset = offset;
     }
 
     /**
      * @return the length
      */
-    public int getLength()
-    {
+    public int getLength() {
         return this.length;
     }
 
     /**
      * @param length the length to set
      */
-    public void setLength(int length)
-    {
+    public void setLength(int length) {
         this.length = length;
     }
 }

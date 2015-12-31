@@ -17,18 +17,17 @@ package com.skin.ayada.io;
  * @author xuesong.net
  * @version 1.0
  */
-public class StringStream
-{
+public class StringStream {
     private int length;
     private int position;
     private char[] buffer;
     private boolean closed;
+    public static final int EOF = -1;
 
     /**
      * @param length
      */
-    public StringStream(int length)
-    {
+    public StringStream(int length) {
         this.length = 0;
         this.position = 0;
         this.buffer = new char[length];
@@ -38,16 +37,14 @@ public class StringStream
     /**
      * @param source
      */
-    public StringStream(String source)
-    {
+    public StringStream(String source) {
         this(source.toCharArray());
     }
 
     /**
      * @param cbuf
      */
-    public StringStream(char[] cbuf)
-    {
+    public StringStream(char[] cbuf) {
         this.buffer = cbuf;
         this.position = 0;
         this.length = cbuf.length;
@@ -57,8 +54,7 @@ public class StringStream
     /**
      * @return int
      */
-    public int back()
-    {
+    public int back() {
         return this.back(1);
     }
 
@@ -66,10 +62,8 @@ public class StringStream
      * @param length
      * @return int
      */
-    public int back(int length)
-    {
-        if(length < 1)
-        {
+    public int back(int length) {
+        if(length < 1) {
             return 0;
         }
 
@@ -81,13 +75,10 @@ public class StringStream
     /**
      * @return int
      */
-    public int peek()
-    {
-        if(this.position < this.length)
-        {
+    public int peek() {
+        if(this.position < this.length) {
             return this.buffer[this.position];
         }
-
         return -1;
     }
 
@@ -95,28 +86,22 @@ public class StringStream
      * @param offset
      * @return int
      */
-    public int peek(int offset)
-    {
+    public int peek(int offset) {
         int index = this.position + offset;
 
-        if(index < this.length)
-        {
+        if(index < this.length) {
             return this.buffer[index];
         }
-
         return -1;
     }
 
     /**
      * @return int
      */
-    public int read()
-    {
-        if(this.position < this.length)
-        {
+    public int read() {
+        if(this.position < this.length) {
             return this.buffer[this.position++];
         }
-
         return -1;
     }
 
@@ -124,10 +109,8 @@ public class StringStream
      * @param length
      * @return int
      */
-    public int skip(int length)
-    {
-        if(this.position + length <= this.length)
-        {
+    public int skip(int length) {
+        if(this.position + length <= this.length) {
             this.position = this.position + length;
             return length;
         }
@@ -140,8 +123,7 @@ public class StringStream
      * @param cbuf
      * @return int
      */
-    public int read(char[] cbuf)
-    {
+    public int read(char[] cbuf) {
         return this.read(cbuf, 0, cbuf.length);
     }
 
@@ -151,74 +133,80 @@ public class StringStream
      * @param length
      * @return int
      */
-    public int read(char[] cbuf, int offset, int length)
-    {
-        if(this.closed)
-        {
+    public int read(char[] cbuf, int offset, int length) {
+        if(this.closed) {
             throw new RuntimeException("stream is closed !");
         }
 
         int size = Math.min(this.length - this.position, length);
 
-        if(size > 0)
-        {
+        if(size > 0) {
             System.arraycopy(this.buffer, this.position, cbuf, offset, size);
             this.position += size;
         }
-        else
-        {
+        else {
             size = -1;
         }
-
         return size;
     }
 
     /**
      * @return String
      */
-    public String readLine()
-    {
-    	if(this.position >= this.length)
-    	{
-    		return null;
-    	}
+    public String readLine() {
+        if(this.position >= this.length) {
+            return null;
+        }
 
-    	int index = this.position;
-    	int offset = this.position;
-    	int length = this.length;
+        int index = this.position;
+        int offset = this.position;
+        int length = this.length;
 
-    	while(index < length)
-    	{
-    		if(this.buffer[index++] == '\n')
-    		{
-    			break;
-    		}
-    	}
+        while(index < length) {
+            if(this.buffer[index++] == '\n') {
+                break;
+            }
+        }
 
-    	this.position = index;
-    	return new String(this.buffer, offset, index - offset);
+        this.position = index;
+        return new String(this.buffer, offset, index - offset);
+    }
+
+    /**
+     * skip whitespace
+     */
+    public void skipWhitespace() {
+        while(this.position < this.length) {
+            if(this.buffer[this.position] > ' ') {
+                break;
+            }
+            this.position++;
+        }
+    }
+
+    /**
+     * @return boolean
+     */
+    public boolean eof() {
+        return (this.position >= this.length);
     }
 
     /**
      * @return String
      */
-    public String getRemain()
-    {
+    public String getRemain() {
         return new String(this.buffer, this.position, this.length - this.position);
     }
 
     /**
      * @param search
      */
-    public boolean match(String search)
-    {
+    public boolean match(String search) {
         int j = this.position;
         int length = search.length();
 
-        for(int i = 0; i < length; i++, j++)
-        {
-            if(j >= this.buffer.length || search.charAt(i) != this.buffer[j])
-            {
+        for(int i = 0; i < length; i++, j++) {
+            if(j >= this.buffer.length || search.charAt(i) != this.buffer[j]) {
                 return false;
             }
         }
@@ -231,39 +219,34 @@ public class StringStream
      * @param length
      * @return String
      */
-    public String getString(int offset, int length)
-    {
+    public String getString(int offset, int length) {
         return new String(this.buffer, offset, length);
     }
 
     /**
      * @param position
      */
-    public void setPosition(int position)
-    {
+    public void setPosition(int position) {
         this.position = position;
     }
 
     /**
      * @return position
      */
-    public int getPosition()
-    {
+    public int getPosition() {
         return this.position;
     }
 
     /**
      * @return int
      */
-    public int length()
-    {
+    public int length() {
         return this.length;
     }
 
     /**
      */
-    public void close()
-    {
+    public void close() {
         this.closed = true;
     }
 }

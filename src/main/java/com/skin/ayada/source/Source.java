@@ -16,8 +16,7 @@ package com.skin.ayada.source;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class Source
-{
+public class Source {
     private String home;
     private String path;
     private String source;
@@ -26,8 +25,7 @@ public class Source
     public static final int STATIC = 0;
     public static final int SCRIPT = 1;
 
-    public Source()
-    {
+    public Source() {
     }
 
     /**
@@ -36,8 +34,7 @@ public class Source
      * @param source
      * @param type
      */
-    public Source(String home, String path, String source, int type)
-    {
+    public Source(String home, String path, String source, int type) {
         this(home, path, source, type, 0L);
     }
 
@@ -48,8 +45,7 @@ public class Source
      * @param type
      * @param lastModified
      */
-    public Source(String home, String path, String source, int type, long lastModified)
-    {
+    public Source(String home, String path, String source, int type, long lastModified) {
         this.home = home;
         this.path = path;
         this.type = type;
@@ -61,22 +57,17 @@ public class Source
      * @param type
      * @return int
      */
-    public static int valueOf(String type, int defaultValue)
-    {
-        if(type == null)
-        {
+    public static int valueOf(String type, int defaultValue) {
+        if(type == null) {
             return defaultValue;
         }
-        else if(type.equalsIgnoreCase("static"))
-        {
+        else if(type.equalsIgnoreCase("static")) {
             return Source.STATIC;
         }
-        else if(type.equalsIgnoreCase("script"))
-        {
+        else if(type.equalsIgnoreCase("script")) {
             return Source.SCRIPT;
         }
-        else
-        {
+        else {
             return defaultValue;
         }
     }
@@ -84,80 +75,70 @@ public class Source
     /**
      * @param home the home to set
      */
-    public void setHome(String home)
-    {
+    public void setHome(String home) {
         this.home = home;
     }
 
     /**
      * @return the home
      */
-    public String getHome()
-    {
+    public String getHome() {
         return this.home;
     }
 
     /**
      * @param path the path to set
      */
-    public void setPath(String path)
-    {
+    public void setPath(String path) {
         this.path = path;
     }
 
     /**
      * @return the path
      */
-    public String getPath()
-    {
+    public String getPath() {
         return this.path;
     }
 
     /**
      * @param source the source to set
      */
-    public void setSource(String source)
-    {
+    public void setSource(String source) {
         this.source = source;
     }
 
     /**
      * @return the source
      */
-    public String getSource()
-    {
+    public String getSource() {
         return this.source;
     }
 
     /**
      * @return the lastModified
      */
-    public long getLastModified()
-    {
+    public long getLastModified() {
         return this.lastModified;
     }
 
     /**
      * @param lastModified the lastModified to set
      */
-    public void setLastModified(long lastModified)
-    {
+    public void setLastModified(long lastModified) {
         this.lastModified = lastModified;
     }
 
     /**
      * @param type the type to set
      */
-    public void setType(int type)
-    {
+    public void setType(int type) {
         this.type = type;
     }
 
     /**
      * @return the type
      */
-    public int getType()
-    {
+    public int getType() {
         return this.type;
     }
 }

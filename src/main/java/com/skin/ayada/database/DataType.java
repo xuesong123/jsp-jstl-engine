@@ -17,8 +17,7 @@ package com.skin.ayada.database;
  * @author xuesong.net
  * @version 1.0
  */
-public class DataType
-{
+public class DataType {
     public static final int UNKNOWN      = 0;
     public static final int CHAR         = 1;
     public static final int BOOLEAN      = 2;

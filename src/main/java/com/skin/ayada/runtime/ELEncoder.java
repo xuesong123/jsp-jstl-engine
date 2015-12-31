@@ -17,8 +17,7 @@ package com.skin.ayada.runtime;
  * @author xuesong.net
  * @version 1.0
  */
-public interface ELEncoder
-{
+public interface ELEncoder {
     /**
      * @param content
      * @return String

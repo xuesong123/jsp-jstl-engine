@@ -24,45 +24,37 @@ import com.skin.ayada.tagext.Tag;
  * @author xuesong.net
  * @version 1.0
  */
-public class MessageTag extends BodyTagSupport implements ParamContainerTag
-{
+public class MessageTag extends BodyTagSupport implements ParamContainerTag {
     private String key;
     private Object bundle;
     private List<Object> parameters;
     private String var;
 
-    public void setKey(String key)
-    {
+    public void setKey(String key) {
         this.key = key;
     }
 
-    public void setBundle(Object bundle)
-    {
+    public void setBundle(Object bundle) {
         this.bundle = bundle;
     }
 
-    public void setVar(String var)
-    {
+    public void setVar(String var) {
         this.var = var;
     }
 
     @Override
-    public void addParam(Object value)
-    {
-        if(this.parameters == null)
-        {
+    public void addParam(Object value) {
+        if(this.parameters == null) {
             this.parameters = new ArrayList<Object>();
         }
         this.parameters.add(value);
     }
 
     @Override
-    public int doEndTag() throws Exception
-    {
+    public int doEndTag() throws Exception {
         Object[] args = null;
 
-        if(this.parameters != null)
-        {
+        if(this.parameters != null) {
             args = this.parameters.toArray(new Object[this.parameters.size()]);
             this.parameters = null;
         }
@@ -70,35 +62,28 @@ public class MessageTag extends BodyTagSupport implements ParamContainerTag
         String message = null;
         LocalizationContext localizationContext = null;
 
-        if(this.bundle != null)
-        {
-            if(this.bundle instanceof LocalizationContext)
-            {
+        if(this.bundle != null) {
+            if(this.bundle instanceof LocalizationContext) {
                 localizationContext = (LocalizationContext)(this.bundle);
             }
-            else if(this.bundle instanceof String)
-            {
+            else if(this.bundle instanceof String) {
                 localizationContext = BundleTag.getBundle(this.pageContext, (String)(this.bundle));
             }
         }
-        else
-        {
+        else {
             localizationContext = this.pageContext.getBundle();
         }
 
-        if(localizationContext == null)
-        {
+        if(localizationContext == null) {
             throw new Exception("[key: " + this.key + "]localizationContext not found !");
         }
 
         message = this.pageContext.getLocalizedMessage(localizationContext, this.key, args);
 
-        if(this.var != null)
-        {
+        if(this.var != null) {
             this.pageContext.setAttribute(this.var, message);
         }
-        else
-        {
+        else {
             this.pageContext.getOut().print(message);
         }
 
@@ -106,14 +91,12 @@ public class MessageTag extends BodyTagSupport implements ParamContainerTag
     }
 
     @Override
-    public void release()
-    {
+    public void release() {
         this.key = null;
         this.var = null;
         this.bundle = null;
 
-        if(this.parameters != null)
-        {
+        if(this.parameters != null) {
             this.parameters.clear();
         }
     }

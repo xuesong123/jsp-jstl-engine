@@ -20,39 +20,32 @@ import com.skin.ayada.util.Stack;
  * @author xuesong.net
  * @version 1.0
  */
-public class HtmlStreamTest
-{
+public class HtmlStreamTest {
     /**
      * @param args
      */
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         test1();
     }
 
-    public static void test1()
-    {
+    public static void test1() {
         Stack<String> stack = new Stack<String>();
 
-        for(int i = 0; i < 10; i++)
-        {
+        for(int i = 0; i < 10; i++) {
             stack.push(String.valueOf(i));
         }
 
-        for(int i = 0; i < 5; i++)
-        {
+        for(int i = 0; i < 5; i++) {
             stack.pop();
         }
 
-        for(int i = 'A'; i < 'F'; i++)
-        {
+        for(int i = 'A'; i < 'F'; i++) {
             stack.push(String.valueOf((char)i));
         }
 
         int i = 0;
 
-        while(stack.peek(i) != null)
-        {
+        while(stack.peek(i) != null) {
             System.out.println(stack.peek(i));
             i--;
         }

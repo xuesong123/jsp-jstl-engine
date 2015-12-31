@@ -29,19 +29,17 @@ import example.model.User;
  * @author xuesong.net
  * @version 1.0
  */
-public class UserListServlet extends HttpServlet
-{
+public class UserListServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @Override
-    public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-    {
+    public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html; charset=UTF-8");
         List<User> userList = UserHandler.getUserList(5);
         request.setAttribute("userList", userList);
 
         /**
-         * forward to TemplateFilter.doFilter 
+         * forward to TemplateFilter.doFilter
          */
         request.getRequestDispatcher("/WEB-INF/template/userList.jsp").forward(request, response);
     }

@@ -17,8 +17,7 @@ package com.skin.ayada.tagext;
  * @author xuesong.net
  * @version 1.0
  */
-public interface LoopTagStatus
-{
+public interface LoopTagStatus {
     /**
      * @return int
      */
@@ -32,7 +31,7 @@ public interface LoopTagStatus
     /**
      * @return Object
      */
-    public Object getCurrent(); 
+    public Object getCurrent();
 
     /**
      * @return int

@@ -23,8 +23,7 @@ import com.skin.ayada.tagext.TagSupport;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class RecommendTag extends TagSupport
-{
+public class RecommendTag extends TagSupport {
     private String recommendName;
     private int entrySize;
     private String createTime;
@@ -34,8 +33,7 @@ public class RecommendTag extends TagSupport
      * @return int
      */
     @Override
-    public int doStartTag() throws Exception
-    {
+    public int doStartTag() throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("recommendName", this.recommendName);
         map.put("entrySize", this.entrySize);
@@ -49,17 +47,14 @@ public class RecommendTag extends TagSupport
      * @param name
      * @param value
      */
-    protected void setAttribute(String name, Object value)
-    {
+    protected void setAttribute(String name, Object value) {
         Tag parent = this.getParent();
 
-        if(parent instanceof AttributeTagSupport)
-        {
+        if(parent instanceof AttributeTagSupport) {
             AttributeTagSupport tag = (AttributeTagSupport)(parent);
             tag.setAttribute(name, value);
         }
-        else
-        {
+        else {
             throw new RuntimeException("Illegal use of parameter-style tag without servlet as its direct parent");
         }
     }
@@ -67,64 +62,56 @@ public class RecommendTag extends TagSupport
     /**
      * @return the recommendName
      */
-    public String getRecommendName()
-    {
+    public String getRecommendName() {
         return this.recommendName;
     }
 
     /**
      * @param recommendName the recommendName to set
      */
-    public void setRecommendName(String recommendName)
-    {
+    public void setRecommendName(String recommendName) {
         this.recommendName = recommendName;
     }
 
     /**
      * @return the entrySize
      */
-    public int getEntrySize()
-    {
+    public int getEntrySize() {
         return this.entrySize;
     }
 
     /**
      * @param entrySize the entrySize to set
      */
-    public void setEntrySize(int entrySize)
-    {
+    public void setEntrySize(int entrySize) {
         this.entrySize = entrySize;
     }
 
     /**
      * @return the createTime
      */
-    public String getCreateTime()
-    {
+    public String getCreateTime() {
         return this.createTime;
     }
 
     /**
      * @param createTime the createTime to set
      */
-    public void setCreateTime(String createTime)
-    {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
     /**
      * @return the updateTime
      */
-    public String getUpdateTime()
-    {
+    public String getUpdateTime() {
         return this.updateTime;
     }
 
     /**
      * @param updateTime the updateTime to set
      */
-    public void setUpdateTime(String updateTime)
-    {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 }

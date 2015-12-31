@@ -19,16 +19,13 @@ import com.skin.ayada.tagext.TagSupport;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class ContinueTag extends TagSupport
-{
+public class ContinueTag extends TagSupport {
     @Override
-    public int doStartTag()
-    {
+    public int doStartTag() {
         return Tag.CONTINUE;
     }
 
-    public static boolean getTrue()
-    {
+    public static boolean getTrue() {
         return true;
     }
 }

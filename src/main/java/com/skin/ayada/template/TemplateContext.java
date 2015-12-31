@@ -24,8 +24,7 @@ import com.skin.ayada.source.SourceFactory;
  * @author xuesong.net
  * @version 1.0
  */
-public interface TemplateContext
-{
+public interface TemplateContext {
     /**
      * @param path
      * @param context
@@ -61,12 +60,20 @@ public interface TemplateContext
     public PageContext getPageContext(Writer out);
 
     /**
+     * @param context
+     * @param out
+     * @return PageContext
+     */
+    public PageContext getPageContext(Map<String, Object> context, Writer out);
+
+    /**
+     * @param context
      * @param out
      * @param buffserSize
      * @param autoFlush
      * @return PageContext
      */
-    public PageContext getPageContext(Writer out, int buffserSize, boolean autoFlush);
+    public PageContext getPageContext(Map<String, Object> context, Writer out, int buffserSize, boolean autoFlush);
 
     /**
      * @param home

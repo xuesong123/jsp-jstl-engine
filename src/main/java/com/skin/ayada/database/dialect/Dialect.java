@@ -19,8 +19,7 @@ import com.skin.ayada.database.Column;
  * @author xuesong.net
  * @version 1.0
  */
-public interface Dialect
-{
+public interface Dialect {
     /**
      * @param column
      * @return String

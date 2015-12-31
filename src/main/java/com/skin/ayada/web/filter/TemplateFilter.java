@@ -50,50 +50,41 @@ import com.skin.ayada.web.TemplateDispatcher;
  * @author xuesong.net
  * @version 1.0
  */
-public class TemplateFilter implements Filter
-{
+public class TemplateFilter implements Filter {
     private String home;
     private String contentType;
     private ServletContext servletContext;
     private TemplateContext templateContext;
     private static final Logger logger = LoggerFactory.getLogger(TemplateFilter.class);
 
-    public TemplateFilter()
-    {
+    public TemplateFilter() {
     }
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException
-    {
-        try
-        {
+    public void init(FilterConfig filterConfig) throws ServletException {
+        try {
             this.home = filterConfig.getInitParameter("home");
             this.servletContext = filterConfig.getServletContext();
             this.contentType = filterConfig.getInitParameter("contentType");
             String realPath = null;
 
-            if(this.home == null)
-            {
+            if(this.home == null) {
                 this.home = "/";
             }
 
-            if(this.home.startsWith("contextPath:"))
-            {
+            if(this.home.startsWith("contextPath:")) {
                 this.home = this.home.substring(12);
                 realPath = this.servletContext.getRealPath(this.home);
             }
-            else
-            {
+            else {
                 realPath = this.home;
             }
 
-            if(this.contentType == null)
-            {
+            if(this.contentType == null) {
                 this.contentType = "text/html; charset=UTF-8";
             }
 
-            if(logger.isInfoEnabled())
-            {
+            if(logger.isInfoEnabled()) {
                 logger.info("jsp.home: " + realPath);
             }
 
@@ -104,8 +95,7 @@ public class TemplateFilter implements Filter
             sourceFactory.setHome(realPath);
             sourceFactory.setSourcePattern(sourcePattern);
 
-            if(logger.isInfoEnabled())
-            {
+            if(logger.isInfoEnabled()) {
                 logger.info("sourceFactory: " + sourceFactory.getClass().getName());
                 logger.info("templateFactory: " + templateFactory.getClass().getName());
                 logger.info("expressionFactory: " + expressionFactory.getClass().getName());
@@ -117,17 +107,14 @@ public class TemplateFilter implements Filter
             this.templateContext.setExpressionFactory(expressionFactory);
             TemplateManager.add(this.templateContext);
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             logger.warn(e.getMessage(), e);
         }
     }
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws ServletException, IOException
-    {
-        if(!(servletRequest instanceof HttpServletRequest) || !(servletResponse instanceof HttpServletResponse))
-        {
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws ServletException, IOException {
+        if(!(servletRequest instanceof HttpServletRequest) || !(servletResponse instanceof HttpServletResponse)) {
             throw new ServletException("TemplateFilter just supports HTTP requests");
         }
 
@@ -137,40 +124,35 @@ public class TemplateFilter implements Filter
         String requestURI = request.getRequestURI();
         requestURI = StringUtil.replace(requestURI, "//", "/");
 
-        if(this.home != null && this.home.length() > 1)
-        {
-            if(requestURI.startsWith(this.home))
-            {
+        if(this.home != null && this.home.length() > 1) {
+            if(requestURI.startsWith(this.home)) {
                 requestURI = requestURI.substring(this.home.length());
             }
         }
 
         request.setAttribute("TemplateFilter$servletContext", this.servletContext);
 
-        if(response.getContentType() == null)
-        {
+        if(response.getContentType() == null) {
             response.setContentType(this.contentType);
         }
 
-        try
-        {
+        try {
             TemplateDispatcher.dispatch(this.templateContext, request, response, requestURI);
         }
-        catch(Exception e)
-        {
-            logger.warn(e.getMessage(), e);
-
-            if(e instanceof ServletException)
-            {
-                throw (ServletException)e;
+        catch(Exception e) {
+            if(response.isCommitted()) {
+                logger.error(e.getMessage(), e);
             }
+            else {
+                if(e instanceof ServletException) {
+                    throw (ServletException)e;
+                }
 
-            if(e instanceof IOException)
-            {
-                throw (IOException)e;
+                if(e instanceof IOException) {
+                    throw (IOException)e;
+                }
+                throw new ServletException(e);
             }
-
-            throw new ServletException(e);
         }
     }
 
@@ -179,29 +161,23 @@ public class TemplateFilter implements Filter
      * @return SourceFactory
      * @throws ServletException
      */
-    private SourceFactory getSourceFactory(FilterConfig filterConfig) throws ServletException
-    {
+    private SourceFactory getSourceFactory(FilterConfig filterConfig) throws ServletException {
         String sourceFactoryClassName = filterConfig.getInitParameter("source-factory");
 
-        if(sourceFactoryClassName != null)
-        {
+        if(sourceFactoryClassName != null) {
             SourceFactory sourceFactory = null;
 
-            try
-            {
+            try {
                 sourceFactory = (SourceFactory)(ClassUtil.getInstance(sourceFactoryClassName));
             }
-            catch(Exception e)
-            {
+            catch(Exception e) {
                 throw new ServletException(e);
             }
 
-            if(sourceFactory instanceof ZipSourceFactory)
-            {
+            if(sourceFactory instanceof ZipSourceFactory) {
                 String zipFile = filterConfig.getInitParameter("zip-file");
 
-                if(zipFile == null)
-                {
+                if(zipFile == null) {
                     throw new ServletException("parameter 'zip-file' must be not null");
                 }
 
@@ -211,7 +187,6 @@ public class TemplateFilter implements Filter
             }
             return sourceFactory;
         }
-
         return new DefaultSourceFactory();
     }
 
@@ -219,31 +194,25 @@ public class TemplateFilter implements Filter
      * @param filterConfig
      * @return TemplateFactory
      */
-    private TemplateFactory getTemplateFactory(FilterConfig filterConfig) throws ServletException
-    {
+    private TemplateFactory getTemplateFactory(FilterConfig filterConfig) throws ServletException {
         String templateFactoryClassName = filterConfig.getInitParameter("template-factory");
 
-        if(templateFactoryClassName == null)
-        {
+        if(templateFactoryClassName == null) {
             return new TemplateFactory();
         }
 
-        try
-        {
+        try {
             TemplateFactory templateFactory = TemplateFactory.getTemplateFactory(templateFactoryClassName);
 
-            if(templateFactory instanceof JspTemplateFactory)
-            {
+            if(templateFactory instanceof JspTemplateFactory) {
                 String jspWork = this.getJspWork(filterConfig);
                 String ignoreJspTag = filterConfig.getInitParameter("ignore-jsptag");
 
-                if(ignoreJspTag == null)
-                {
-                    ignoreJspTag = TemplateConfig.getInstance().getString("ayada.compile.ignore-jsptag", "true");
+                if(ignoreJspTag == null) {
+                    ignoreJspTag = String.valueOf(TemplateConfig.getIgnoreJspTag());
                 }
 
-                if(logger.isInfoEnabled())
-                {
+                if(logger.isInfoEnabled()) {
                     logger.info("jsp.work: " + jspWork);
                 }
 
@@ -255,8 +224,7 @@ public class TemplateFilter implements Filter
             }
             return templateFactory;
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             throw new ServletException(e);
         }
     }
@@ -265,22 +233,17 @@ public class TemplateFilter implements Filter
      * @param filterConfig
      * @return TemplateFactory
      */
-    private ExpressionFactory getExpressionFactory(FilterConfig filterConfig) throws ServletException
-    {
+    private ExpressionFactory getExpressionFactory(FilterConfig filterConfig) throws ServletException {
         String expressionFactoryClassName = filterConfig.getInitParameter("expression-factory");
 
-        if(expressionFactoryClassName != null)
-        {
-            try
-            {
+        if(expressionFactoryClassName != null) {
+            try {
                 return (ExpressionFactory)(ClassUtil.getInstance(expressionFactoryClassName));
             }
-            catch(Exception e)
-            {
+            catch(Exception e) {
                 throw new ServletException(e);
             }
         }
-
         return new DefaultExpressionFactory();
     }
 
@@ -288,25 +251,20 @@ public class TemplateFilter implements Filter
      * @param servletContext
      * @return String
      */
-    public String getClassPath(ServletContext servletContext)
-    {
+    public String getClassPath(ServletContext servletContext) {
         String seperator = ";";
         StringBuilder buffer = new StringBuilder();
         File lib = new File(servletContext.getRealPath("/WEB-INF/lib"));
 
-        if(System.getProperty("os.name").indexOf("Windows") < 0)
-        {
+        if(System.getProperty("os.name").indexOf("Windows") < 0) {
             seperator = ":";
         }
 
-        if(lib.exists())
-        {
+        if(lib.exists()) {
             File[] files = lib.listFiles();
 
-            if(files != null && files.length > 0)
-            {
-                for(File file : files)
-                {
+            if(files != null && files.length > 0) {
+                for(File file : files) {
                     buffer.append(file.getAbsolutePath());
                     buffer.append(seperator);
                 }
@@ -315,17 +273,14 @@ public class TemplateFilter implements Filter
 
         File clazz = new File(servletContext.getRealPath("/WEB-INF/classes"));
 
-        if(clazz.exists() && clazz.isDirectory())
-        {
+        if(clazz.exists() && clazz.isDirectory()) {
             buffer.append(clazz.getAbsolutePath());
             buffer.append(seperator);
         }
 
-        if(buffer.length() > 0)
-        {
+        if(buffer.length() > 0) {
             buffer.delete(buffer.length() - seperator.length(), buffer.length());
         }
-
         return buffer.toString();
     }
 
@@ -333,17 +288,13 @@ public class TemplateFilter implements Filter
      * @param servletContext
      * @return String
      */
-    private String getContextPath(ServletContext servletContext)
-    {
-        try
-        {
+    private String getContextPath(ServletContext servletContext) {
+        try {
             Method method = ServletContext.class.getMethod("getContextPath", new Class[0]);
             return (String)(method.invoke(servletContext, new Object[0]));
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
         }
-
         return null;
     }
 
@@ -351,40 +302,32 @@ public class TemplateFilter implements Filter
      * @param filterConfig
      * @return String
      */
-    private String getJspWork(FilterConfig filterConfig)
-    {
+    private String getJspWork(FilterConfig filterConfig) {
         String jspWork = filterConfig.getInitParameter("jsp-work");
         ServletContext servletContext = filterConfig.getServletContext();
 
-        if(jspWork == null)
-        {
+        if(jspWork == null) {
             jspWork = this.getTempWork(this.getContextPath(servletContext));
 
-            if(jspWork == null)
-            {
+            if(jspWork == null) {
                 jspWork = servletContext.getRealPath("/WEB-INF/ayada");
             }
         }
-        else
-        {
-            if(jspWork.startsWith("context:"))
-            {
+        else {
+            if(jspWork.startsWith("context:")) {
                 jspWork = servletContext.getRealPath(jspWork.substring(8).trim());
             }
         }
-
         return jspWork;
     }
 
     /**
      * @return String
      */
-    private String getTempWork(String prefix)
-    {
+    private String getTempWork(String prefix) {
         String work = System.getProperty("java.io.tmpdir");
 
-        if(work == null)
-        {
+        if(work == null) {
             return null;
         }
 
@@ -392,39 +335,32 @@ public class TemplateFilter implements Filter
         String pattern = "yyyyMMddHHmmss";
         String name = prefix;
 
-        if(name == null || name.length() < 1 || name.equals("/"))
-        {
+        if(name == null || name.length() < 1 || name.equals("/")) {
             name = "";
         }
-        else
-        {
+        else {
             name = name.replace('\\', '.');
             name = name.replace('/', '.');
         }
 
-        if(name.length() > 0)
-        {
+        if(name.length() > 0) {
             name = "ayada_" + name + "_";
         }
-        else
-        {
+        else {
             name = "ayada_";
         }
 
         File file = new File(work, name + DateUtil.format(timeMillis, pattern));
 
-        while(file.exists())
-        {
+        while(file.exists()) {
             timeMillis += 1000;
             file = new File(work, name + DateUtil.format(timeMillis, pattern));
         }
-
         return file.getAbsolutePath();
     }
 
     @Override
-    public void destroy()
-    {
+    public void destroy() {
         this.templateContext.destory();
         this.templateContext = null;
     }

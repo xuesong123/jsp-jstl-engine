@@ -27,10 +27,8 @@ import com.skin.ayada.tagext.Tag;
  * @author xuesong.net
  * @version 1.0
  */
-public class TagUtil
-{
-    private TagUtil()
-    {
+public class TagUtil {
+    private TagUtil() {
     }
 
     /**
@@ -38,17 +36,14 @@ public class TagUtil
      * @return Tag
      * @throws Exception
      */
-    public static Tag create(String tagName)
-    {
+    public static Tag create(String tagName) {
         TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();
         String className = tagLibrary.getTagClassName(tagName);
 
-        try
-        {
+        try {
             return (Tag)(ClassUtil.getInstance(className));
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -58,19 +53,15 @@ public class TagUtil
      * @param attributes
      * @param expressionContext
      */
-    public static void setAttributes(Tag tag, Map<String, String> attributes, ExpressionContext expressionContext) throws Exception
-    {
-        if(attributes == null || attributes.size() < 1)
-        {
+    public static void setAttributes(Tag tag, Map<String, String> attributes, ExpressionContext expressionContext) throws Exception {
+        if(attributes == null || attributes.size() < 1) {
             return;
         }
 
-        if(tag instanceof DynamicAttributes)
-        {
+        if(tag instanceof DynamicAttributes) {
             DynamicAttributes dynamicAttributes = (DynamicAttributes)tag;
 
-            for(Map.Entry<String, String> entry : attributes.entrySet())
-            {
+            for(Map.Entry<String, String> entry : attributes.entrySet()) {
                 String name = entry.getKey();
                 String value = entry.getValue();
                 Object argument = ExpressionUtil.evaluate(expressionContext, value, Object.class);
@@ -82,29 +73,25 @@ public class TagUtil
 
         Class<?> type = tag.getClass();
 
-        for(Map.Entry<String, String> entry : attributes.entrySet())
-        {
+        for(Map.Entry<String, String> entry : attributes.entrySet()) {
             String name = entry.getKey();
             String value = entry.getValue();
 
             name = "set" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
             Method method = getSetMethod(type, name);
 
-            if(method != null)
-            {
+            if(method != null) {
                 Class<?>[] parameterTypes = method.getParameterTypes();
                 Class<?> parameterType = parameterTypes[0];
                 Object arg = ExpressionUtil.evaluate(expressionContext, value, parameterType);
 
-                if(arg == null && parameterType.isPrimitive())
-                {
+                if(arg == null && parameterType.isPrimitive()) {
                     continue;
                 }
 
                 method.invoke(tag, new Object[]{arg});
             }
-            else
-            {
+            else {
                 throw new Exception("NoSuchMethodException: " + tag.getClass().getName() + "." + name);
             }
         }
@@ -115,21 +102,16 @@ public class TagUtil
      * @param methodName
      * @return Method
      */
-    public static Method getSetMethod(Class<?> type, String methodName)
-    {
+    public static Method getSetMethod(Class<?> type, String methodName) {
         Method[] methods = type.getMethods();
 
-        for(Method method : methods)
-        {
-            if(method.getModifiers() != Modifier.PUBLIC)
-            {
+        for(Method method : methods) {
+            if(method.getModifiers() != Modifier.PUBLIC) {
                 continue;
             }
 
-            if(method.getName().equals(methodName))
-            {
-                if(method.getParameterTypes().length == 1)
-                {
+            if(method.getName().equals(methodName)) {
+                if(method.getParameterTypes().length == 1) {
                     return method;
                 }
             }

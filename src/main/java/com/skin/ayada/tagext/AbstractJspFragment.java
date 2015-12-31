@@ -23,32 +23,28 @@ import com.skin.ayada.runtime.PageContext;
  * @author xuesong.net
  * @version 1.0
  */
-public abstract class AbstractJspFragment implements JspFragment
-{
+public abstract class AbstractJspFragment implements JspFragment {
     private Tag parent;
     private PageContext pageContext;
 
     /**
      * @param parent the parent to set
      */
-    public void setParent(Tag parent)
-    {
+    public void setParent(Tag parent) {
         this.parent = parent;
     }
 
     /**
      * @return the parent
      */
-    public Tag getParent()
-    {
+    public Tag getParent() {
         return this.parent;
     }
 
     /**
      * @param pageContext the pageContext to set
      */
-    public void setPageContext(PageContext pageContext)
-    {
+    public void setPageContext(PageContext pageContext) {
         this.pageContext = pageContext;
     }
 
@@ -56,8 +52,7 @@ public abstract class AbstractJspFragment implements JspFragment
      * @return PageContext
      */
     @Override
-    public PageContext getPageContext()
-    {
+    public PageContext getPageContext() {
         return this.pageContext;
     }
 
@@ -66,51 +61,38 @@ public abstract class AbstractJspFragment implements JspFragment
      * @throws Exception
      */
     @Override
-    public void invoke(Writer writer) throws Exception
-    {
+    public void invoke(Writer writer) throws Exception {
         JspWriter out = null;
 
-        try
-        {
-            if(writer == null || writer == this.pageContext.getOut())
-            {
+        try {
+            if(writer == null || writer == this.pageContext.getOut()) {
                 out = this.pageContext.getOut();
             }
-            else
-            {
-                if(writer instanceof JspWriter)
-                {
+            else {
+                if(writer instanceof JspWriter) {
                     out = (JspWriter)writer;
                 }
-                else
-                {
+                else {
                    out = new JspWriter(writer);
                 }
             }
 
             this.execute(out);
         }
-        finally
-        {
-            if(out != null)
-            {
-                try
-                {
+        finally {
+            if(out != null) {
+                try {
                     out.flush();
                 }
-                catch(IOException e)
-                {
+                catch(IOException e) {
                 }
 
                 // never close
-                if(this.getFalse())
-                {
-                    try
-                    {
+                if(this.getFalse()) {
+                    try {
                         out.close();
                     }
-                    catch(IOException e)
-                    {
+                    catch(IOException e) {
                     }
                 }
             }
@@ -120,8 +102,7 @@ public abstract class AbstractJspFragment implements JspFragment
     /**
      * @return false
      */
-    protected boolean getFalse()
-    {
+    protected boolean getFalse() {
         return false;
     }
 

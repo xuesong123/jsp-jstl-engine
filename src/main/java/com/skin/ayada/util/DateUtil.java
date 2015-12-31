@@ -23,28 +23,23 @@ import java.util.Date;
  * @author xuesong.net
  * @version 1.0
  */
-public class DateUtil
-{
+public class DateUtil {
     /**
      * @param date
      * @param pattern
      * @return Date
      */
-    public static Date parse(String date, String pattern)
-    {
-        if(date == null)
-        {
+    public static Date parse(String date, String pattern) {
+        if(date == null) {
             return null;
         }
 
         DateFormat dateFormat = new SimpleDateFormat(pattern);
 
-        try
-        {
+        try {
             return dateFormat.parse(date);
         }
-        catch(ParseException e)
-        {
+        catch(ParseException e) {
         }
 
         return null;
@@ -55,10 +50,12 @@ public class DateUtil
      * @param pattern
      * @return String
      */
-    public static String format(long timeMillis, String pattern)
-    {
-        DateFormat dateFormat = new SimpleDateFormat(pattern);
-        return dateFormat.format(new Date(timeMillis));
+    public static String format(long timeMillis, String pattern) {
+        if(timeMillis > 0L) {
+            DateFormat dateFormat = new SimpleDateFormat(pattern);
+            return dateFormat.format(new Date(timeMillis));
+        }
+        return "";
     }
 
     /**
@@ -66,10 +63,8 @@ public class DateUtil
      * @param pattern
      * @return String
      */
-    public static String format(Date date, String pattern)
-    {
-        if(date == null)
-        {
+    public static String format(Date date, String pattern) {
+        if(date == null) {
             return "";
         }
 
@@ -81,8 +76,7 @@ public class DateUtil
      * @param date
      * @return int
      */
-    public static int year(Date date)
-    {
+    public static int year(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         return calendar.get(Calendar.YEAR);
@@ -92,8 +86,7 @@ public class DateUtil
      * @param date
      * @return int
      */
-    public static int month(Date date)
-    {
+    public static int month(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         return calendar.get(Calendar.MONTH);
@@ -103,8 +96,7 @@ public class DateUtil
      * @param date
      * @return int
      */
-    public static int day(Date date)
-    {
+    public static int day(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         return calendar.get(Calendar.DAY_OF_MONTH);
@@ -114,8 +106,7 @@ public class DateUtil
      * @param date
      * @return String
      */
-    public static String smart(Date date)
-    {
+    public static String smart(Date date) {
         return DateUtil.smart(new Date(System.currentTimeMillis()), date);
     }
 
@@ -124,10 +115,8 @@ public class DateUtil
      * @param date
      * @return String
      */
-    public static String smart(Date offsetDate, Date date)
-    {
-        if(date == null)
-        {
+    public static String smart(Date offsetDate, Date date) {
+        if(date == null) {
             return "";
         }
 
@@ -137,37 +126,29 @@ public class DateUtil
         DateFormat dateFormat = new SimpleDateFormat("HH:mm");
         String result = null;
 
-        if(timeMillis < 60L * 1000L)
-        {
+        if(timeMillis < 60L * 1000L) {
             result = "\u521a\u521a";
         }
-        else if(timeMillis < hour)
-        {
+        else if(timeMillis < hour) {
             result = (timeMillis / (60L * 1000L)) + " \u5206\u949f\u4ee5\u524d";
         }
-        else if(timeMillis < 24 * hour)
-        {
+        else if(timeMillis < 24 * hour) {
             result = (timeMillis / (60L * 60L * 1000L)) + " \u5c0f\u65f6\u4ee5\u524d";
         }
-        else if(timeMillis < 30 * 24 * hour)
-        {
+        else if(timeMillis < 30 * 24 * hour) {
             long days = Math.abs(offsetTimeMillis / 86400000L - date.getTime() / 86400000L);
 
-            if(days < 2)
-            {
+            if(days < 2) {
                 result = "\u6628\u5929  " + dateFormat.format(date);
             }
-            else if(days < 3)
-            {
+            else if(days < 3) {
                 result = "\u524d\u5929  " + dateFormat.format(date);
             }
-            else
-            {
+            else {
                 result = days + " \u5929\u4ee5\u524d";
             }
         }
-        else
-        {
+        else {
             Calendar c1 = Calendar.getInstance();
             c1.setTimeInMillis(offsetTimeMillis);
             Calendar c2 = Calendar.getInstance();
@@ -180,12 +161,10 @@ public class DateUtil
             int d1 = (y1 * 12 + m1);
             int d2 = (y2 * 12 + m2);
 
-            if((d1 - d2) < 12)
-            {
+            if((d1 - d2) < 12) {
                 result = (d1 - d2) + " \u6708\u4ee5\u524d";
             }
-            else
-            {
+            else {
                 result = (y1 - y2) + " \u5e74\u4ee5\u524d";
             }
         }

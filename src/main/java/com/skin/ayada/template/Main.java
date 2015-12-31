@@ -13,11 +13,12 @@ package com.skin.ayada.template;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.skin.ayada.config.Config;
 import com.skin.ayada.config.TemplateConfig;
 import com.skin.ayada.factory.ClassFactory;
 import com.skin.ayada.runtime.PageContext;
@@ -29,44 +30,37 @@ import com.skin.ayada.util.TemplateUtil;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class Main
-{
+public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         String path = null;
         String encoding = "UTF-8";
         String templateFactoryClassName = null;
         System.out.println("args: " + Main.getArguments(args));
+        logger.info("args: {}", Main.getArguments(args));
 
-        if(args == null || args.length < 1)
-        {
+        if(args == null || args.length < 1) {
             usage();
         }
-        else
-        {
+        else {
             path = args[0];
 
-            if(args.length > 1 && args[1] != null && args[1].trim().length() > 0)
-            {
+            if(args.length > 1 && args[1] != null && args[1].trim().length() > 0) {
                 encoding = args[1].trim();
             }
 
-            if(args.length > 2 && args[2] != null && args[2].trim().length() > 0)
-            {
+            if(args.length > 2 && args[2] != null && args[2].trim().length() > 0) {
                 templateFactoryClassName = args[2].trim();
             }
 
-            try
-            {
+            try {
                 System.out.println("path: " + path);
                 System.out.println("encoding: " + encoding);
                 System.out.println("templateFactoryClassName: " + templateFactoryClassName);
                 execute(path, encoding, templateFactoryClassName);
             }
-            catch(Exception e)
-            {
+            catch(Exception e) {
                 logger.warn(e.getMessage(), e);
             }
         }
@@ -78,37 +72,33 @@ public class Main
      * @param templateFactoryClassName
      * @throws Exception
      */
-    public static void execute(String path, String encoding, String templateFactoryClassName) throws Exception
-    {
+    public static void execute(String path, String encoding, String templateFactoryClassName) throws Exception {
         File file = new File(path);
 
-        if(file.exists() == false)
-        {
+        if(file.exists() == false) {
             throw new IOException(path + " not exists!");
         }
 
-        if(file.isFile() == false)
-        {
+        if(file.isFile() == false) {
             throw new IOException(path + " not exists!");
         }
 
-        Config config = TemplateConfig.getInstance();
-        config.setValue("ayada.compile.source-pattern", "*");
+        TemplateConfig.setValue("ayada.compile.source-pattern", "*");
 
         File parent = file.getParentFile();
         TemplateContext templateContext = TemplateManager.getTemplateContext(parent.getCanonicalPath(), true);
         TemplateFactory templateFactory = Main.getTemplateFactory(templateFactoryClassName, "work");
 
-        if(templateFactory != null)
-        {
+        if(templateFactory != null) {
             templateContext.setTemplateFactory(templateFactory);
         }
 
         templateContext.getTemplateFactory().setIgnoreJspTag(false);
         templateContext.getSourceFactory().setSourcePattern("*");
 
+        Map<String, Object> context = new HashMap<String, Object>();
         PrintWriter printWriter = new PrintWriter(System.out);
-        PageContext pageContext = templateContext.getPageContext(printWriter);
+        PageContext pageContext = templateContext.getPageContext(context, printWriter);
         Template template = templateContext.getTemplate(file.getName(), encoding);
 
         System.out.println("===================== " + template.getClass().getName() + " =====================");
@@ -126,34 +116,27 @@ public class Main
      * @param jspWork
      * @return TemplateFactory
      */
-    public static TemplateFactory getTemplateFactory(String templateFactoryClassName, String jspWork)
-    {
-        if(templateFactoryClassName == null)
-        {
+    public static TemplateFactory getTemplateFactory(String templateFactoryClassName, String jspWork) {
+        if(templateFactoryClassName == null) {
             return null;
         }
 
-        if(templateFactoryClassName.trim().length() < 1)
-        {
+        if(templateFactoryClassName.trim().length() < 1) {
             return null;
         }
 
         TemplateFactory templateFactory = null;
 
-        try
-        {
+        try {
             templateFactory = TemplateFactory.getTemplateFactory(templateFactoryClassName.trim());
 
-            if(templateFactory instanceof JspTemplateFactory)
-            {
+            if(templateFactory instanceof JspTemplateFactory) {
                 File work = null;
 
-                if(jspWork == null)
-                {
+                if(jspWork == null) {
                     work = new File("work");
                 }
-                else
-                {
+                else {
                     work = new File(jspWork);
                 }
 
@@ -165,8 +148,7 @@ public class Main
                 jspTemplateFactory.setIgnoreJspTag(false);
             }
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             logger.warn(e.getMessage(), e);
         }
 
@@ -177,21 +159,17 @@ public class Main
      * @param args
      * @return String
      */
-    public static String getArguments(String[] args)
-    {
+    public static String getArguments(String[] args) {
         StringBuilder buffer = new StringBuilder();
 
-        if(args != null && args.length > 0)
-        {
-            for(int i = 0; i < args.length; i++)
-            {
+        if(args != null && args.length > 0) {
+            for(int i = 0; i < args.length; i++) {
                 buffer.append("\"");
                 buffer.append(args[i]);
                 buffer.append("\" ");
             }
 
-            if(buffer.length() > 0)
-            {
+            if(buffer.length() > 0) {
                 buffer.deleteCharAt(buffer.length() - 1);
             }
         }
@@ -199,8 +177,7 @@ public class Main
         return buffer.toString();
     }
 
-    public static void usage()
-    {
+    public static void usage() {
         System.out.println("Usage:");
         System.out.println("    " + Main.class.getName() + " FILE [ENCODING]");
     }

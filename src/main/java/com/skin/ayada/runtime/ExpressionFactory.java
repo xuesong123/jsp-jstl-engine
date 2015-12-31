@@ -17,8 +17,7 @@ package com.skin.ayada.runtime;
  * @author xuesong.net
  * @version 1.0
  */
-public interface ExpressionFactory
-{
+public interface ExpressionFactory {
     /**
      * @param pageContext
      */

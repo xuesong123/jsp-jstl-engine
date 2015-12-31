@@ -16,10 +16,8 @@ package com.skin.ayada.statement;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class JspExpression extends DataNode
-{
-    public JspExpression()
-    {
+public class JspExpression extends DataNode {
+    public JspExpression() {
         super(NodeType.JSP_EXPRESSION_NAME, NodeType.JSP_EXPRESSION);
         this.setClosed(NodeType.PAIR_CLOSED);
     }
@@ -27,8 +25,7 @@ public class JspExpression extends DataNode
     /**
      * @param nodeName
      */
-    public JspExpression(String nodeName)
-    {
+    public JspExpression(String nodeName) {
         super(NodeType.JSP_EXPRESSION_NAME, NodeType.JSP_EXPRESSION);
         this.setClosed(NodeType.PAIR_CLOSED);
     }
@@ -37,15 +34,13 @@ public class JspExpression extends DataNode
      * @param nodeName
      * @param nodeType
      */
-    protected JspExpression(String nodeName, int nodeType)
-    {
+    protected JspExpression(String nodeName, int nodeType) {
         super(NodeType.JSP_EXPRESSION_NAME, NodeType.JSP_EXPRESSION);
         this.setClosed(NodeType.PAIR_CLOSED);
     }
 
     @Override
-    public JspExpression clone()
-    {
+    public JspExpression clone() {
         JspExpression node = new JspExpression();
         node.setNodeName(this.getNodeName());
         node.setNodeType(this.getNodeType());

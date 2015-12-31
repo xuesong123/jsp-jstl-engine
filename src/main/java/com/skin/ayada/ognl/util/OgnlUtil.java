@@ -22,12 +22,10 @@ import ognl.OgnlException;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class OgnlUtil
-{
+public class OgnlUtil {
     private static HashMap<String, Object> expressions = new HashMap<String, Object>();
 
-    private OgnlUtil()
-    {
+    private OgnlUtil() {
     }
 
     /**
@@ -36,14 +34,11 @@ public class OgnlUtil
      * @param root
      * @return Object
      */
-    public static Object getValue(String expression, OgnlContext context, Object root)
-    {
-        try
-        {
+    public static Object getValue(String expression, OgnlContext context, Object root) {
+        try {
             return Ognl.getValue(compile(expression), context, root);
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -53,18 +48,14 @@ public class OgnlUtil
      * @return Object
      * @throws OgnlException
      */
-    public static Object compile(String expression) throws OgnlException
-    {
-        synchronized(expressions)
-        {
+    public static Object compile(String expression) throws OgnlException {
+        synchronized(expressions) {
             Object tree = expressions.get(expression);
 
-            if(tree == null)
-            {
+            if(tree == null) {
                 tree = Ognl.parseExpression(expression);
                 expressions.put(expression, tree);
             }
-
             return tree;
         }
     }

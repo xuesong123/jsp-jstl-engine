@@ -20,30 +20,25 @@ import com.skin.ayada.tagext.Tag;
  * @author xuesong.net
  * @version 1.0
  */
-public class WhenTag extends ConditionalTagSupport
-{
+public class WhenTag extends ConditionalTagSupport {
     /**
      * @return int
      */
     @Override
-    public int doStartTag()
-    {
+    public int doStartTag() {
         Tag parent = this.getParent();
 
-        if(parent == null)
-        {
+        if(parent == null) {
             throw new RuntimeException("when tag must be in choose tag !");
         }
 
         ChooseTag chooseTag = (ChooseTag)parent;
 
-        if(chooseTag.complete())
-        {
+        if(chooseTag.complete()) {
             return SKIP_BODY;
         }
 
-        if(this.condition())
-        {
+        if(this.condition()) {
             chooseTag.finish();
             return EVAL_BODY_INCLUDE;
         }
@@ -55,13 +50,11 @@ public class WhenTag extends ConditionalTagSupport
      * @return int
      */
     @Override
-    public int doEndTag()
-    {
+    public int doEndTag() {
         return EVAL_PAGE;
     }
 
-    public void setTest(boolean b)
-    {
+    public void setTest(boolean b) {
         this.setCondition(b);
     }
 }

@@ -17,11 +17,10 @@ package com.skin.ayada.tagext;
  * @author xuesong.net
  * @version 1.0
  */
-public interface LoopTag extends Tag
-{
+public interface LoopTag extends Tag {
     /**
      * Retrieves the current item in the iteration. Behaves idempotently;
-     * calling getCurrent() repeatedly should return the same Object until the iteration is advanced. 
+     * calling getCurrent() repeatedly should return the same Object until the iteration is advanced.
      * (Specifically, calling getCurrent() does not advance the iteration.)
      * @return Object
      */
@@ -31,5 +30,5 @@ public interface LoopTag extends Tag
      * Retrieves a 'status' object to provide information about the current round of the iteration.
      * @return LoopTagStatus
      */
-    public LoopTagStatus getLoopStatus(); 
+    public LoopTagStatus getLoopStatus();
 }

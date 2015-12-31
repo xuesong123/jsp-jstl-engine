@@ -29,14 +29,12 @@ import com.skin.ayada.template.TemplateFactory;
  * @author xuesong.net
  * @version 1.0
  */
-public class TemplateContextTest
-{
+public class TemplateContextTest {
     /**
      * @param args
-     * @throws Exception 
+     * @throws Exception
      */
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         String sourcePattern = "jsp,jspx";
         String home = "E:\\WorkSpace\\test\\webapp\\template";
         SourceFactory sourceFactory = new DefaultSourceFactory();

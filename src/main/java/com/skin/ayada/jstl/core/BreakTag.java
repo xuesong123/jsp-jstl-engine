@@ -20,11 +20,9 @@ import com.skin.ayada.tagext.TagSupport;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class BreakTag extends TagSupport implements BreakTagSupport
-{
+public class BreakTag extends TagSupport implements BreakTagSupport {
     @Override
-    public int doStartTag()
-    {
+    public int doStartTag() {
         return Tag.BREAK;
     }
 }

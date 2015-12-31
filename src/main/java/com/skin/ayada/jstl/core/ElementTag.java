@@ -23,16 +23,13 @@ import com.skin.ayada.tagext.Tag;
  * @author xuesong.net
  * @version 1.0
  */
-public class ElementTag extends BodyTagSupport
-{
+public class ElementTag extends BodyTagSupport {
     private int index = -1;
     private Object value;
 
     @Override
-    public int doStartTag()
-    {
-        if(this.value != null)
-        {
+    public int doStartTag() {
+        if(this.value != null) {
             this.setElement(this.index, this.value);
             return Tag.SKIP_BODY;
         }
@@ -41,10 +38,8 @@ public class ElementTag extends BodyTagSupport
     }
 
     @Override
-    public int doEndTag()
-    {
-        if(this.value == null)
-        {
+    public int doEndTag() {
+        if(this.value == null) {
             BodyContent body = this.getBodyContent();
             this.setElement(this.index, (body != null ? body.getString() : null));
         }
@@ -53,8 +48,7 @@ public class ElementTag extends BodyTagSupport
     }
 
     @Override
-    public void release()
-    {
+    public void release() {
         this.index = -1;
         this.value = null;
     }
@@ -63,17 +57,14 @@ public class ElementTag extends BodyTagSupport
      * @param index
      * @param value
      */
-    protected void setElement(int index, Object value)
-    {
+    protected void setElement(int index, Object value) {
         Tag parent = this.getParent();
 
-        if(parent instanceof ElementTagSupport)
-        {
+        if(parent instanceof ElementTagSupport) {
             ElementTagSupport tag = (ElementTagSupport)(parent);
             tag.setElement(index, value);
         }
-        else
-        {
+        else {
             throw new RuntimeException("Illegal use of parameter-style tag without servlet as its direct parent");
         }
     }
@@ -81,32 +72,28 @@ public class ElementTag extends BodyTagSupport
     /**
      * @return the index
      */
-    public int getIndex()
-    {
+    public int getIndex() {
         return this.index;
     }
 
     /**
      * @param index the index to set
      */
-    public void setIndex(int index)
-    {
+    public void setIndex(int index) {
         this.index = index;
     }
 
     /**
      * @return the value
      */
-    public Object getValue()
-    {
+    public Object getValue() {
         return this.value;
     }
 
     /**
      * @param value the value to set
      */
-    public void setValue(Object value)
-    {
+    public void setValue(Object value) {
         this.value = value;
     }
 }

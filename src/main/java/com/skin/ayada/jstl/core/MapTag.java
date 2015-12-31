@@ -25,42 +25,35 @@ import com.skin.ayada.tagext.TagSupport;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class MapTag extends TagSupport implements AttributeTagSupport, DynamicAttributes
-{
+public class MapTag extends TagSupport implements AttributeTagSupport, DynamicAttributes {
     private String name;
     private Map<String, Object> map;
 
     @Override
-    public int doStartTag() throws Exception
-    {
+    public int doStartTag() throws Exception {
         super.doStartTag();
 
-        if(this.map == null)
-        {
+        if(this.map == null) {
             this.map = new LinkedHashMap<String, Object>();
         }
 
         Tag parent = this.getParent();
 
-        if(parent instanceof AttributeTagSupport)
-        {
-            if(this.name != null)
-            {
+        if(parent instanceof AttributeTagSupport) {
+            if(this.name != null) {
                 AttributeTagSupport tag = (AttributeTagSupport)(parent);
                 tag.setAttribute(this.name, this.map);
                 return Tag.EVAL_BODY_INCLUDE;
             }
             return Tag.SKIP_BODY;
         }
-        else if(parent instanceof ElementTagSupport)
-        {
+        else if(parent instanceof ElementTagSupport) {
             ElementTagSupport tag = (ElementTagSupport)(parent);
             tag.addElement(this.map);
             return Tag.EVAL_BODY_INCLUDE;
         }
 
-        if(this.name != null)
-        {
+        if(this.name != null) {
             this.pageContext.setAttribute(this.name, this.map);
             return Tag.EVAL_BODY_INCLUDE;
         }
@@ -69,8 +62,7 @@ public class MapTag extends TagSupport implements AttributeTagSupport, DynamicAt
     }
 
     @Override
-    public void release()
-    {
+    public void release() {
         this.map = null;
     }
 
@@ -79,10 +71,8 @@ public class MapTag extends TagSupport implements AttributeTagSupport, DynamicAt
      * @param value
      */
     @Override
-    public void setAttribute(String name, Object value)
-    {
-        if(this.map == null)
-        {
+    public void setAttribute(String name, Object value) {
+        if(this.map == null) {
             this.map = new LinkedHashMap<String, Object>();
         }
 
@@ -93,24 +83,18 @@ public class MapTag extends TagSupport implements AttributeTagSupport, DynamicAt
      * @param name
      * @param value
      */
-    public void setDynamicAttribute(String name, Object value)
-    {
-        if(name != null)
-        {
-            if(this.map == null)
-            {
+    public void setDynamicAttribute(String name, Object value) {
+        if(name != null) {
+            if(this.map == null) {
                 this.map = new LinkedHashMap<String, Object>();
             }
 
-            if(name.equals("name"))
-            {
-                if(value != null)
-                {
+            if(name.equals("name")) {
+                if(value != null) {
                     this.name = value.toString();
                 }
             }
-            else
-            {
+            else {
                 this.map.put(name, value);
             }
         }
@@ -119,16 +103,14 @@ public class MapTag extends TagSupport implements AttributeTagSupport, DynamicAt
     /**
      * @return the name
      */
-    public String getName()
-    {
+    public String getName() {
         return this.name;
     }
 
     /**
      * @param name the name to set
      */
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 }

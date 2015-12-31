@@ -17,7 +17,7 @@ import com.skin.ayada.factory.DefaultTagFactory;
 import com.skin.ayada.factory.TagFactoryManager;
 import com.skin.ayada.jstl.core.ForEachTag;
 import com.skin.ayada.runtime.TagFactory;
-import com.skin.ayada.statement.Node;
+import com.skin.ayada.statement.TagNode;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.util.TagUtil;
 
@@ -27,15 +27,13 @@ import com.skin.ayada.util.TagUtil;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class ReflectTest
-{
+public class ReflectTest {
     /**
      * @param args
      */
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         /**
-         * newInstanceTest > tagNodeTest > tagFactoryTest > (reflectTest == factoryMethodTest) 
+         * newInstanceTest > tagNodeTest > tagFactoryTest > (reflectTest == factoryMethodTest)
          */
         newInstanceTest();
         // reflectTest();
@@ -44,32 +42,27 @@ public class ReflectTest
         tagNodeTest();
     }
 
-    public static void reflectTest()
-    {
+    public static void reflectTest() {
         int count = 10000000;
         long t1 = System.currentTimeMillis();
-        for(int i = 0; i < count; i++)
-        {
+        for(int i = 0; i < count; i++) {
             testTag(TagUtil.create("c:if"));
         }
         long t2 = System.currentTimeMillis();
         System.out.println("reflectTest - count: " + count + ", times: " + (t2 - t1));
     }
 
-    public static void newInstanceTest()
-    {
+    public static void newInstanceTest() {
         int count = 10000000;
         long t1 = System.currentTimeMillis();
-        for(int i = 0; i < count; i++)
-        {
+        for(int i = 0; i < count; i++) {
             testTag(new ForEachTag());
         }
         long t2 = System.currentTimeMillis();
         System.out.println("newInstanceTest - count: " + count + ", times: " + (t2 - t1));
     }
 
-    public static void factoryMethodTest()
-    {
+    public static void factoryMethodTest() {
         Map<String, TagFactory> map = new HashMap<String, TagFactory>();
         DefaultTagFactory defaultTagFactory = new DefaultTagFactory();
         defaultTagFactory.setTagName("c:if");
@@ -78,16 +71,14 @@ public class ReflectTest
 
         int count = 10000000;
         long t1 = System.currentTimeMillis();
-        for(int i = 0; i < count; i++)
-        {
+        for(int i = 0; i < count; i++) {
             testTag(map.get("c:if").create());
         }
         long t2 = System.currentTimeMillis();
         System.out.println("factoryMethodTest - count: " + count + ", times: " + (t2 - t1));
     }
 
-    public static void tagFactoryTest()
-    {
+    public static void tagFactoryTest() {
         /* warm up */
         TagFactoryManager tagFactoryManager = TagFactoryManager.getInstance();
         TagFactory tagFactory = tagFactoryManager.getTagFactory("c:forEach", "com.skin.ayada.jstl.core.ForEachTag");
@@ -97,8 +88,7 @@ public class ReflectTest
 
         int count = 10000000;
         long t1 = System.currentTimeMillis();
-        for(int i = 0; i < count; i++)
-        {
+        for(int i = 0; i < count; i++) {
             tagFactory = TagFactoryManager.getInstance().getTagFactory("c:forEach", "com.skin.ayada.jstl.core.ForEachTag");
             testTag(tagFactory.create());
         }
@@ -106,33 +96,28 @@ public class ReflectTest
         System.out.println("tagFactoryTest - count: " + count + ", times: " + (t2 - t1));
     }
 
-    public static void tagNodeTest()
-    {
-        Node node = new Node("");
+    public static void tagNodeTest() {
+        TagNode node = new TagNode("");
         TagFactoryManager tagFactoryManager = TagFactoryManager.getInstance();
         TagFactory tagFactory = tagFactoryManager.getTagFactory("c:forEach", "com.skin.ayada.jstl.core.ForEachTag");
         node.setTagFactory(tagFactory);
-
         System.out.println("tagFactory: " + node.getTagFactory() + " - " + node.getTagFactory().getClass().getClassLoader() + " - " + node.getTagFactory().create().getClass().getClassLoader());
 
         int count = 10000000;
         long t1 = System.currentTimeMillis();
-        for(int i = 0; i < count; i++)
-        {
+        for(int i = 0; i < count; i++) {
             testTag(tagFactory.create());
         }
         long t2 = System.currentTimeMillis();
         System.out.println("tagNodeTest2 - count: " + count + ", times: " + (t2 - t1));
     }
 
-    public static void testTag(Tag tag)
-    {
+    public static void testTag(Tag tag) {
     }
 
     private MyTagFactory myTagFactory = new MyTagFactory();
 
-    public MyTagFactory getMyTagFactory()
-    {
+    public MyTagFactory getMyTagFactory() {
         return this.myTagFactory;
     }
 }

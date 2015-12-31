@@ -16,10 +16,8 @@ package com.skin.ayada.statement;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class JspScriptlet extends DataNode
-{
-    public JspScriptlet()
-    {
+public class JspScriptlet extends DataNode {
+    public JspScriptlet() {
         super(NodeType.JSP_SCRIPTLET_NAME, NodeType.JSP_SCRIPTLET);
         this.setClosed(NodeType.PAIR_CLOSED);
     }
@@ -27,8 +25,7 @@ public class JspScriptlet extends DataNode
     /**
      * @param nodeName
      */
-    public JspScriptlet(String nodeName)
-    {
+    public JspScriptlet(String nodeName) {
         super(NodeType.JSP_SCRIPTLET_NAME, NodeType.JSP_SCRIPTLET);
         this.setClosed(NodeType.PAIR_CLOSED);
     }
@@ -37,15 +34,13 @@ public class JspScriptlet extends DataNode
      * @param nodeName
      * @param nodeType
      */
-    protected JspScriptlet(String nodeName, int nodeType)
-    {
+    protected JspScriptlet(String nodeName, int nodeType) {
         super(NodeType.JSP_SCRIPTLET_NAME, NodeType.JSP_SCRIPTLET);
         this.setClosed(NodeType.PAIR_CLOSED);
     }
 
     @Override
-    public JspScriptlet clone()
-    {
+    public JspScriptlet clone() {
         JspScriptlet node = new JspScriptlet();
         node.setNodeName(this.getNodeName());
         node.setNodeType(this.getNodeType());

@@ -19,19 +19,15 @@ import com.skin.ayada.template.Main;
  * @author xuesong.net
  * @version 1.0
  */
-public class MainTest
-{
+public class MainTest {
     /**
      * @param args
      */
-    public static void main(String[] args)
-    {
-        try
-        {
+    public static void main(String[] args) {
+        try {
             Main.execute("D:\\workspace2\\finder\\webapp\\template\\finder\\finder.jsp", "UTF-8", "com.skin.ayada.template.JspTemplateFactory");
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             e.printStackTrace();
         }
     }

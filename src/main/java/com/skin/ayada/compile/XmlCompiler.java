@@ -30,10 +30,8 @@ import com.skin.ayada.util.StringUtil;
  * @author xuesong.net
  * @version 1.0
  */
-public class XmlCompiler
-{
-    public String compile(Template template)
-    {
+public class XmlCompiler {
+    public String compile(Template template) {
         StringWriter stringWriter = new StringWriter();
         PrintWriter writer = new PrintWriter(stringWriter);
         writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
@@ -53,23 +51,19 @@ public class XmlCompiler
         List<Node> list = template.getNodes();
         Map<String, String> namespaces = this.getNamespaces(list);
 
-        if(namespaces.size() > 0)
-        {
+        if(namespaces.size() > 0) {
             int count = namespaces.size();
 
-            for(Map.Entry<String, String> entry : namespaces.entrySet())
-            {
+            for(Map.Entry<String, String> entry : namespaces.entrySet()) {
                 writer.write("xmlns:");
                 writer.write(entry.getKey());
                 writer.write("=\"");
                 writer.write(entry.getValue());
 
-                if(count > 1)
-                {
+                if(count > 1) {
                     writer.write("\"\r\n    ");
                 }
-                else
-                {
+                else {
                     writer.write("\"");
                 }
 
@@ -77,73 +71,59 @@ public class XmlCompiler
             }
             writer.println(">");
         }
-        else
-        {
+        else {
             writer.println(">");
         }
 
-        for(int index = 0, size = list.size(); index < size; index++)
-        {
+        for(int index = 0, size = list.size(); index < size; index++) {
             node = list.get(index);
             indent = this.getIndent(node);
 
-            if(node.getNodeType() == NodeType.TEXT)
-            {
+            if(node.getNodeType() == NodeType.TEXT) {
                 writer.write(indent + "<text lineNumber=\"" + node.getLineNumber() + "\" offset=\"" + node.getOffset() + "\" length=\"" + node.getLength() + "\">");
                 writer.write(StringUtil.escape(HtmlUtil.encode(node.getTextContent())));
                 writer.println("</text>");
                 continue;
             }
 
-            if(node.getNodeType() == NodeType.VARIABLE)
-            {
+            if(node.getNodeType() == NodeType.VARIABLE) {
                 writer.write(indent + "<variable lineNumber=\"" + node.getLineNumber() + "\" offset=\"" + node.getOffset() + "\" length=\"" + node.getLength() + "\">");
                 writer.write(StringUtil.escape(HtmlUtil.encode(node.getTextContent())));
                 writer.println("</variable>");
                 continue;
             }
 
-            if(node.getNodeType() == NodeType.EXPRESSION)
-            {
+            if(node.getNodeType() == NodeType.EXPRESSION) {
                 writer.write(indent + "<expression lineNumber=\"" + node.getLineNumber() + "\" offset=\"" + node.getOffset() + "\" length=\"" + node.getLength() + "\">");
                 writer.write(StringUtil.escape(HtmlUtil.encode(node.getTextContent())));
                 writer.println("</expression>");
                 continue;
             }
 
-            if(node.getLength() == 0)
-            {
+            if(node.getLength() == 0) {
                 throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node) + " not match !");
             }
 
-            if(node.getOffset() == index)
-            {
-                if(node.getNodeType() == NodeType.JSP_DECLARATION || node.getNodeType() == NodeType.JSP_SCRIPTLET || node.getNodeType() == NodeType.JSP_EXPRESSION)
-                {
+            if(node.getOffset() == index) {
+                if(node.getNodeType() == NodeType.JSP_DECLARATION || node.getNodeType() == NodeType.JSP_SCRIPTLET || node.getNodeType() == NodeType.JSP_EXPRESSION) {
                     writer.write(indent + node.toString(index, true));
                     writer.write(StringUtil.escape(HtmlUtil.encode(node.getTextContent())));
                 }
-                else
-                {
+                else {
                     writer.println(indent + node.toString(index, true));
                 }
             }
-            else
-            {
-                if(node.getNodeType() == NodeType.JSP_DECLARATION || node.getNodeType() == NodeType.JSP_SCRIPTLET || node.getNodeType() == NodeType.JSP_EXPRESSION)
-                {
+            else {
+                if(node.getNodeType() == NodeType.JSP_DECLARATION || node.getNodeType() == NodeType.JSP_SCRIPTLET || node.getNodeType() == NodeType.JSP_EXPRESSION) {
                     writer.println(node.toString(index, true));
                 }
-                else
-                {
-                    if(node.getClosed() == NodeType.PAIR_CLOSED)
-                    {
+                else {
+                    if(node.getClosed() == NodeType.PAIR_CLOSED) {
                         writer.println(indent + node.toString(index, true));
                     }
                 }
             }
         }
-
         writer.println("</jsp:servlet>");
         return stringWriter.toString();
     }
@@ -152,34 +132,28 @@ public class XmlCompiler
      * @param list
      * @return
      */
-    private Map<String, String> getNamespaces(List<Node> list)
-    {
+    private Map<String, String> getNamespaces(List<Node> list) {
         Node node = null;
         Map<String, String> map = new TreeMap<String, String>();
 
-        for(int index = 0, size = list.size(); index < size; index++)
-        {
+        for(int index = 0, size = list.size(); index < size; index++) {
             node = list.get(index);
 
-            if(node.getNodeType() == NodeType.TEXT || node.getNodeType() == NodeType.VARIABLE || node.getNodeType() == NodeType.EXPRESSION)
-            {
+            if(node.getNodeType() == NodeType.TEXT || node.getNodeType() == NodeType.VARIABLE || node.getNodeType() == NodeType.EXPRESSION) {
                 continue;
             }
 
             String nodeName = node.getNodeName();
             int k = nodeName.indexOf(":");
 
-            if(k > -1)
-            {
+            if(k > -1) {
                 String prefix = nodeName.substring(0, k);
 
-                if(map.get(prefix) == null)
-                {
+                if(map.get(prefix) == null) {
                     map.put(prefix, "http://www.ayada.org/" + prefix);
                 }
             }
         }
-
         return map;
     }
 
@@ -187,16 +161,13 @@ public class XmlCompiler
      * @param node
      * @return String
      */
-    private String getIndent(Node node)
-    {
+    private String getIndent(Node node) {
         Node parent = node;
         StringBuilder buffer = new StringBuilder("    ");
 
-        while(parent != null && (parent = parent.getParent()) != null)
-        {
+        while(parent != null && (parent = parent.getParent()) != null) {
             buffer.append("    ");
         }
-
         return buffer.toString();
     }
 }

@@ -23,28 +23,22 @@ import com.skin.ayada.tagext.TagSupport;
  * @author xuesong.net
  * @version 1.0
  */
-public class EscapeTag extends TagSupport
-{
+public class EscapeTag extends TagSupport {
     private Object encoder;
 
     @Override
-    public int doStartTag() throws Exception
-    {
+    public int doStartTag() throws Exception {
         ELEncoder elEncoder = null;
         ExpressionContext expressionContext = this.pageContext.getExpressionContext();
 
-        if(this.encoder != null)
-        {
-            if(this.encoder instanceof ELEncoder)
-            {
+        if(this.encoder != null) {
+            if(this.encoder instanceof ELEncoder) {
                 elEncoder = (ELEncoder)(this.encoder);
             }
-            else
-            {
+            else {
                 elEncoder = ELEncoderFactory.getELEncoder(this.encoder.toString());
             }
         }
-
         expressionContext.setEncoder(elEncoder);
         return Tag.EVAL_PAGE;
     }
@@ -52,16 +46,14 @@ public class EscapeTag extends TagSupport
     /**
      * @return the encoder
      */
-    public Object getEncoder()
-    {
+    public Object getEncoder() {
         return this.encoder;
     }
 
     /**
      * @param encoder the encoder to set
      */
-    public void setEncoder(Object encoder)
-    {
+    public void setEncoder(Object encoder) {
         this.encoder = encoder;
     }
 }

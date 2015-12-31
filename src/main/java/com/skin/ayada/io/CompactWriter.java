@@ -19,16 +19,14 @@ import java.io.Writer;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class CompactWriter extends Writer
-{
+public class CompactWriter extends Writer {
     private boolean flag = true;
     private Writer out;
 
     /**
      * @param out
      */
-    public CompactWriter(Writer out)
-    {
+    public CompactWriter(Writer out) {
         this.out = out;
     }
 
@@ -40,29 +38,23 @@ public class CompactWriter extends Writer
      * @throws IOException
      */
     @Override
-    public void write(char[] cbuf, int offset, int length) throws IOException
-    {
+    public void write(char[] cbuf, int offset, int length) throws IOException {
         int j = 0;
         int end = offset + length;
         char[] buffer = new char[length];
 
-        for(int i = offset; i < end; i++)
-        {
-            if(cbuf[i] == '\n')
-            {
-                if(this.flag)
-                {
+        for(int i = offset; i < end; i++) {
+            if(cbuf[i] == '\n') {
+                if(this.flag) {
                     buffer[j] = cbuf[i];
                     this.flag = false;
                     j++;
                 }
             }
-            else if(cbuf[i] == '\r')
-            {
+            else if(cbuf[i] == '\r') {
                 continue;
             }
-            else
-            {
+            else {
                 buffer[j] = cbuf[i];
                 this.flag = true;
                 j++;
@@ -73,14 +65,12 @@ public class CompactWriter extends Writer
     }
 
     @Override
-    public void close() throws IOException
-    {
+    public void close() throws IOException {
         this.out.close();
     }
 
     @Override
-    public void flush() throws IOException
-    {
+    public void flush() throws IOException {
         this.out.flush();
     }
 }

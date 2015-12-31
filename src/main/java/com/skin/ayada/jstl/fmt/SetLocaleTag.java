@@ -23,23 +23,19 @@ import com.skin.ayada.tagext.TagSupport;
  * @author xuesong.net
  * @version 1.0
  */
-public class SetLocaleTag extends TagSupport
-{
+public class SetLocaleTag extends TagSupport {
     private Object value;
     private String variant;
     private String scope;
 
     @Override
-    public int doStartTag() throws Exception
-    {
+    public int doStartTag() throws Exception {
         Locale locale = null;
 
-        if(this.value instanceof Locale)
-        {
+        if(this.value instanceof Locale) {
             locale = (Locale)this.value;
         }
-        else if(this.value instanceof String)
-        {
+        else if(this.value instanceof String) {
             locale = this.pageContext.getLocale((String)(this.value), this.variant);
         }
 
@@ -50,48 +46,42 @@ public class SetLocaleTag extends TagSupport
     /**
      * @return the value
      */
-    public Object getValue()
-    {
+    public Object getValue() {
         return this.value;
     }
 
     /**
      * @param value the value to set
      */
-    public void setValue(Object value)
-    {
+    public void setValue(Object value) {
         this.value = value;
     }
 
     /**
      * @return the variant
      */
-    public String getVariant()
-    {
+    public String getVariant() {
         return this.variant;
     }
 
     /**
      * @param variant the variant to set
      */
-    public void setVariant(String variant)
-    {
+    public void setVariant(String variant) {
         this.variant = variant;
     }
 
     /**
      * @return the scope
      */
-    public String getScope()
-    {
+    public String getScope() {
         return this.scope;
     }
 
     /**
      * @param scope the scope to set
      */
-    public void setScope(String scope)
-    {
+    public void setScope(String scope) {
         this.scope = scope;
     }
 }

@@ -20,24 +20,20 @@ import com.skin.ayada.tagext.TagSupport;
  * @author xuesong.net
  * @version 1.0
  */
-public class ChooseTag extends TagSupport
-{
+public class ChooseTag extends TagSupport {
     private boolean flag = false;
 
     @Override
-    public int doStartTag()
-    {
+    public int doStartTag() {
         this.flag = false;
         return Tag.EVAL_BODY_INCLUDE;
     }
 
-    public boolean complete()
-    {
+    public boolean complete() {
         return this.flag;
     }
 
-    public void finish()
-    {
+    public void finish() {
         this.flag = true;
     }
 }

@@ -17,14 +17,12 @@ package com.skin.ayada.jstl.util;
  * @author xuesong.net
  * @version 1.0
  */
-public class HtmlUtil
-{
+public class HtmlUtil {
     /**
      * @param source
      * @return String
      */
-    public static String encode(String source)
-    {
+    public static String encode(String source) {
         return com.skin.ayada.util.HtmlUtil.encode(source);
     }
 
@@ -32,8 +30,7 @@ public class HtmlUtil
      * @param source
      * @return String
      */
-    public static String decode(String source)
-    {
+    public static String decode(String source) {
         return com.skin.ayada.util.HtmlUtil.decode(source);
     }
 
@@ -41,8 +38,7 @@ public class HtmlUtil
      * @param source
      * @return String
      */
-    public static String remove(String source)
-    {
+    public static String remove(String source) {
         return com.skin.ayada.util.HtmlUtil.remove(source);
     }
 }

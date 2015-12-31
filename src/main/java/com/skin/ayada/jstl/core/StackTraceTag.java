@@ -22,11 +22,9 @@ import com.skin.ayada.tagext.TagSupport;
  * @author xuesong.net
  * @version 1.0
  */
-public class StackTraceTag extends TagSupport
-{
+public class StackTraceTag extends TagSupport {
     @Override
-    public int doStartTag()
-    {
+    public int doStartTag() {
         PrintWriter out = new PrintWriter(this.pageContext.getOut());
         new Exception("StackTrace").printStackTrace(out);
         out.flush();

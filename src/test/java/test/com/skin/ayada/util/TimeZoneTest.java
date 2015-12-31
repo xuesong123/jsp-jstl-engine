@@ -19,17 +19,14 @@ import java.util.TimeZone;
  * @author xuesong.net
  * @version 1.0
  */
-public class TimeZoneTest
-{
+public class TimeZoneTest {
     /**
      * @param args
      */
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         String[] ids = TimeZone.getAvailableIDs();
 
-        for(String id : ids)
-        {
+        for(String id : ids) {
             System.out.println(id);
         }
     }

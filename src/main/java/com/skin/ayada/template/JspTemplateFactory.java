@@ -33,22 +33,37 @@ import com.skin.ayada.util.TemplateUtil;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class JspTemplateFactory extends TemplateFactory
-{
+public class JspTemplateFactory extends TemplateFactory {
     private String work;
     private String prefix;
     private String classPath;
     private static final Logger logger = LoggerFactory.getLogger(JspTemplateFactory.class);
 
-    public JspTemplateFactory()
-    {
+    public static void main(String[] args) {
+    	JspTemplateFactory jtf = new JspTemplateFactory();
+        String path = "/default/a.b.jsp";
+    	path = "/test.jsp";
+    	path = "/!.jsp";
+
+        String className = jtf.getClassName(path);
+        String simpleName = jtf.getSimpleName(className);
+        String packageName = jtf.getPackageName(className);
+        String classPath = StringUtil.replace(packageName, ".", "/") + "/" + simpleName;
+
+        System.out.println("path: " + path);
+        System.out.println("className: " + className);
+        System.out.println("simpleName: " + simpleName);
+        System.out.println("packageName: " + packageName);
+        System.out.println("classPath: " + classPath);
+    }
+
+    public JspTemplateFactory() {
     }
 
     /**
      * @param work
      */
-    public JspTemplateFactory(String work, String classPath)
-    {
+    public JspTemplateFactory(String work, String classPath) {
         this.work = work;
         this.classPath = classPath;
     }
@@ -61,21 +76,18 @@ public class JspTemplateFactory extends TemplateFactory
      * @throws Exception
      */
     @Override
-    public Template create(SourceFactory sourceFactory, String file, String encoding) throws Exception
-    {
+    public Template create(SourceFactory sourceFactory, String file, String encoding) throws Exception {
         Template template = super.create(sourceFactory, file, encoding);
 
-        if(logger.isDebugEnabled())
-        {
+        if(logger.isDebugEnabled()) {
             long t1 = System.currentTimeMillis();
             JspTemplate jspTemplate = compile(template, this.getWork());
             long t2 = System.currentTimeMillis();
             logger.debug("jsp compile time: " + (t2 - t1));
             return jspTemplate;
         }
-        else
-        {
-            return compile(template, this.getWork());   
+        else {
+            return compile(template, this.getWork());
         }
     }
 
@@ -84,20 +96,17 @@ public class JspTemplateFactory extends TemplateFactory
      * @return Template
      */
     @Override
-    public Template compile(String source) throws Exception
-    {
+    public Template compile(String source) throws Exception {
         Template template = super.compile(source);
 
-        if(logger.isDebugEnabled())
-        {
+        if(logger.isDebugEnabled()) {
             long t1 = System.currentTimeMillis();
             JspTemplate jspTemplate = this.compile(template, this.getWork());
             long t2 = System.currentTimeMillis();
             logger.debug("jsp compile time: " + (t2 - t1));
             return jspTemplate;
         }
-        else
-        {
+        else {
             return this.compile(template, this.getWork());
         }
     }
@@ -106,20 +115,16 @@ public class JspTemplateFactory extends TemplateFactory
      * @param template
      * @return TemplateHandler
      */
-    private JspTemplate compile(Template template, String work) throws Exception
-    {
+    protected JspTemplate compile(Template template, String work) throws Exception {
         String home = template.getHome();
-        String root = ""; // this.getRootPath(home);
-        String path = this.join(root, template.getPath().trim());
+        String path = template.getPath().trim();
         String className = this.getClassName(path);
         String simpleName = this.getSimpleName(className);
         String packageName = this.getPackageName(className);
         String classPath = StringUtil.replace(packageName, ".", "/") + "/" + simpleName;
 
-        if(logger.isDebugEnabled())
-        {
-            logger.debug("root: " + root
-                + ", home: " + home
+        if(logger.isDebugEnabled()) {
+            logger.debug("home: " + home
                 + ", path: " + path
                 + ", className: " + className
                 + ", simpleName: " + simpleName
@@ -134,17 +139,22 @@ public class JspTemplateFactory extends TemplateFactory
         File parent = classFile.getParentFile();
         String lib = this.getClassPath();
 
-        if(lib == null)
-        {
+        if(lib == null) {
             lib = ClassFactory.getClassPath();
         }
 
-        if(parent.exists() == false)
-        {
+        if(parent.exists() == false) {
             parent.mkdirs();
         }
 
-        boolean fastJstl = TemplateConfig.getInstance().getBoolean("ayada.compile.fast-jstl");
+        if(logger.isDebugEnabled()) {
+        	logger.debug("tpl: {}, src: {}, class: {}",
+        			tplFile.getAbsoluteFile(),
+        			srcFile.getAbsoluteFile(),
+        			classFile.getAbsoluteFile());
+        }
+
+        boolean fastJstl = TemplateConfig.getFashJstl();
         JspCompiler jspCompiler = new JspCompiler();
         jspCompiler.setFastJstl(fastJstl);
         String source = jspCompiler.compile(template, simpleName, packageName);
@@ -152,17 +162,18 @@ public class JspTemplateFactory extends TemplateFactory
         this.write(this.getTemplateDescription(template), tplFile);
         File[] files = classFile.getParentFile().listFiles();
 
-        if(files != null && files.length > 0)
-        {
+        if(classFile.exists()) {
+        	classFile.delete();
+        }
+
+        if(files != null && files.length > 0) {
             String name = null;
             String prefix = simpleName + "$";
 
-            for(File file : files)
-            {
+            for(File file : files) {
                 name = file.getName();
 
-                if(name.startsWith(prefix) && name.endsWith(".class"))
-                {
+                if(name.startsWith(prefix) && name.endsWith(".class")) {
                     file.delete();
                 }
             }
@@ -178,15 +189,13 @@ public class JspTemplateFactory extends TemplateFactory
             srcFile.getCanonicalPath()
         };
 
-        if(logger.isDebugEnabled())
-        {
+        if(logger.isDebugEnabled()) {
             logger.debug("compile: " + srcFile.getAbsolutePath());
         }
 
         javax.tools.JavaCompiler javaCompiler = javax.tools.ToolProvider.getSystemJavaCompiler();
 
-        if(javaCompiler == null)
-        {
+        if(javaCompiler == null) {
             throw new NullPointerException("'javax.tools.JavaCompiler' not found!, please add 'tools.jar' to class_path!");
         }
 
@@ -194,17 +203,14 @@ public class JspTemplateFactory extends TemplateFactory
         int status = javaCompiler.run(System.in, outputStream, outputStream, args);
         byte[] data = outputStream.toByteArray();
 
-        if(data != null && data.length > 0)
-        {
+        if(data != null && data.length > 0) {
             logger.error(new String(data, "UTF-8"));
         }
 
-        if(status == 0)
-        {
+        if(status == 0) {
             return this.load(template, className, new File[]{new File(work)});
         }
-        else
-        {
+        else {
             throw new Exception("compile error: " + status);
         }
     }
@@ -216,8 +222,7 @@ public class JspTemplateFactory extends TemplateFactory
      * @return JspTemplate
      * @throws IOException
      */
-    protected JspTemplate load(Template template, String className, File[] classPath) throws Exception
-    {
+    protected JspTemplate load(Template template, String className, File[] classPath) throws Exception {
         JspTemplate jspTemplate = (JspTemplate)(ClassFactory.getInstance(className, classPath));
         jspTemplate.setHome(template.getHome());
         jspTemplate.setPath(template.getPath());
@@ -233,21 +238,17 @@ public class JspTemplateFactory extends TemplateFactory
      * @param child
      * @return String
      */
-    private String join(String parent, String child)
-    {
+    protected String join(String parent, String child) {
         StringBuilder buffer = new StringBuilder();
         buffer.append(parent.trim());
 
-        if(child.startsWith("/") || child.startsWith("\\"))
-        {
+        if(child.startsWith("/") || child.startsWith("\\")) {
             buffer.append(child.trim());
         }
-        else
-        {
+        else {
             buffer.append("/");
             buffer.append(child);
         }
-
         return buffer.toString();
     }
 
@@ -255,22 +256,18 @@ public class JspTemplateFactory extends TemplateFactory
      * @param home
      * @return String
      */
-    protected String getRootPath(String home)
-    {
+    protected String getRootPath(String home) {
         String temp = StringUtil.replace(home.trim(), "\\", "/");
 
-        if(temp.endsWith("/"))
-        {
+        if(temp.endsWith("/")) {
             temp = temp.substring(0, temp.length() - 1);
         }
 
         int k = temp.lastIndexOf("/");
 
-        if(k > -1)
-        {
+        if(k > -1) {
             return temp.substring(k + 1);
         }
-
         return temp;
     }
 
@@ -278,73 +275,50 @@ public class JspTemplateFactory extends TemplateFactory
      * @param className
      * @return String
      */
-    private String getClassName(String path)
-    {
-        String className = path;
-        String simpleName = null;
-        String packageName = null;
+    protected String getClassName(String path) {
+        String className = StringUtil.replace(path, "\\", "/");
         int k = className.lastIndexOf(".");
 
-        if(k > -1)
-        {
+        if(k > -1) {
             className = className.substring(0, k);
         }
 
-        className = StringUtil.replace(className, "/", ".");
-        className = StringUtil.replace(className, "\\", ".");
-        className = StringUtil.replace(className, "..", ".");
-        k = className.lastIndexOf(".");
+        String[] array = StringUtil.split(className, "/", true, true);
+        String simpleName = this.getJavaIdentifier(array[array.length - 1]);
 
-        if(k > -1)
-        {
-            simpleName = className.substring(k + 1) + "Template";
-            packageName = className.substring(0, k);
-        }
-        else
-        {
-            packageName = "";
-            simpleName = className + "Template";
+        if(simpleName.length() < 1) {
+        	throw new RuntimeException("UnsupportFileNameException: file \"" + path + "\"");
         }
 
-        simpleName = this.getJavaClassName(simpleName);
-
-        String[] temp = StringUtil.split(packageName, ".");
         StringBuilder buffer = new StringBuilder(this.getPrefix());
 
-        for(int i = 0, length = temp.length; i < length; i++)
-        {
+        for(int i = 0, length = array.length - 1; i < length; i++) {
             buffer.append("._");
-            buffer.append(temp[i]);
+            buffer.append(array[i]);
         }
 
-        packageName = buffer.toString();
-        return packageName + "." + Character.toUpperCase(simpleName.charAt(0)) + simpleName.substring(1);
+        buffer.append(".");
+        buffer.append(Character.toUpperCase(simpleName.charAt(0)));
+        buffer.append(simpleName.substring(1));
+        buffer.append("Template");
+        return buffer.toString();
     }
-    
+
     /**
-     * @param simpleName
+     * @param name
      * @return String
      */
-    public String getJavaClassName(String simpleName)
-    {
+    protected String getJavaIdentifier(String name) {
     	char c;
     	StringBuilder buffer = new StringBuilder();
 
-    	if(Character.isJavaIdentifierStart(simpleName.charAt(0)) == false)
-        {
-            buffer.append("_");
-        }
+    	for(int i = 0; i < name.length(); i++) {
+    		c = name.charAt(i);
 
-    	for(int i = 0; i < simpleName.length(); i++)
-    	{
-    		c = simpleName.charAt(i);
-	
-            if(Character.isJavaIdentifierPart(c))
-            {
+            if(Character.isJavaIdentifierPart(c)) {
                 buffer.append(c);
             }
     	}
-
     	return buffer.toString();
     }
 
@@ -352,12 +326,10 @@ public class JspTemplateFactory extends TemplateFactory
      * @param className
      * @return String
      */
-    private String getSimpleName(String className)
-    {
+    protected String getSimpleName(String className) {
         int k = className.lastIndexOf(".");
 
-        if(k > -1)
-        {
+        if(k > -1) {
             return className.substring(k + 1);
         }
         return className;
@@ -367,12 +339,10 @@ public class JspTemplateFactory extends TemplateFactory
      * @param className
      * @return String
      */
-    private String getPackageName(String className)
-    {
+    protected String getPackageName(String className) {
         int k = className.lastIndexOf(".");
 
-        if(k > -1)
-        {
+        if(k > -1) {
             return className.substring(0, k);
         }
         return this.getPrefix();
@@ -381,8 +351,7 @@ public class JspTemplateFactory extends TemplateFactory
     /**
      * @return String
      */
-    private String getTemplateDescription(Template template)
-    {
+    protected String getTemplateDescription(Template template) {
         StringWriter stringWriter = new StringWriter();
         TemplateUtil.print(template, new PrintWriter(stringWriter));
         return stringWriter.toString();
@@ -393,68 +362,57 @@ public class JspTemplateFactory extends TemplateFactory
      * @param file
      * @throws IOException
      */
-    private void write(String source, File file) throws IOException
-    {
+    protected void write(String source, File file) throws IOException {
         File parent = file.getParentFile();
 
-        if(parent.exists() == false)
-        {
+        if(parent.exists() == false) {
             parent.mkdirs();
         }
-
         IO.write(file, source.getBytes("UTF-8"));
     }
 
     /**
      * @param work the work to set
      */
-    public void setWork(String work)
-    {
+    public void setWork(String work) {
         this.work = work;
     }
 
     /**
      * @return the prefix
      */
-    public String getWork()
-    {
+    public String getWork() {
         return this.work;
     }
 
     /**
      * @param prefix the prefix to set
      */
-    public void setPrefix(String prefix)
-    {
+    public void setPrefix(String prefix) {
         this.prefix = prefix;
     }
 
     /**
      * @return the prefix
      */
-    public String getPrefix()
-    {
-        if(this.prefix == null)
-        {
+    public String getPrefix() {
+        if(this.prefix == null) {
             this.prefix = "_tpl._jsp";
         }
-
         return this.prefix;
     }
 
     /**
      * @param classPath the classPath to set
      */
-    public void setClassPath(String classPath)
-    {
+    public void setClassPath(String classPath) {
         this.classPath = classPath;
     }
 
     /**
      * @return the classPath
      */
-    public String getClassPath()
-    {
+    public String getClassPath() {
         return this.classPath;
     }
 }

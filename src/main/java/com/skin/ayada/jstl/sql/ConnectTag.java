@@ -24,8 +24,7 @@ import com.skin.ayada.util.Jdbc;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class ConnectTag extends TagSupport implements TryCatchFinally
-{
+public class ConnectTag extends TagSupport implements TryCatchFinally {
     private String var;
     private String url;
     private String driverClass;
@@ -36,169 +35,141 @@ public class ConnectTag extends TagSupport implements TryCatchFinally
     protected boolean connectionSpecified;
 
     @Override
-    public int doStartTag() throws Exception
-    {
-        if(this.var != null)
-        {
-            if(this.connectionSpecified == false)
-            {
+    public int doStartTag() throws Exception {
+        if(this.var != null) {
+            if(this.connectionSpecified == false) {
                 this.connection = this.connect();
             }
-
             this.pageContext.setAttribute(this.var, this.connection);
         }
-
         return Tag.EVAL_PAGE;
     }
 
     @Override
-    public void doCatch(Throwable throwable) throws Throwable
-    {
-        if(throwable != null)
-        {
+    public void doCatch(Throwable throwable) throws Throwable {
+        if(throwable != null) {
             throw throwable;
         }
         throw new RuntimeException("RuntimeExceptione: UnknownException - null");
     }
 
     @Override
-    public void doFinally()
-    {
-        if(this.connectionSpecified)
-        {
+    public void doFinally() {
+        if(this.connectionSpecified) {
             return;
         }
-
         Jdbc.close(this.connection);
     }
 
     /**
      * @return Connection
-     * @throws SQLException 
+     * @throws SQLException
      */
-    private Connection connect() throws SQLException
-    {
-        if(this.url != null)
-        {
-            if(this.properties != null)
-            {
+    private Connection connect() throws SQLException {
+        if(this.url != null) {
+            if(this.properties != null) {
                 return Jdbc.connect(this.url, this.driverClass, Jdbc.parse(this.properties));
             }
             return Jdbc.connect(this.url, this.driverClass, this.userName, this.password);
         }
-
         return null;
     }
 
     /**
      * @return the var
      */
-    public String getVar()
-    {
+    public String getVar() {
         return this.var;
     }
 
     /**
      * @param var the var to set
      */
-    public void setVar(String var)
-    {
+    public void setVar(String var) {
         this.var = var;
     }
 
     /**
      * @return the url
      */
-    public String getUrl()
-    {
+    public String getUrl() {
         return this.url;
     }
 
     /**
      * @param url the url to set
      */
-    public void setUrl(String url)
-    {
+    public void setUrl(String url) {
         this.url = url;
     }
 
     /**
      * @return the driverClass
      */
-    public String getDriverClass()
-    {
+    public String getDriverClass() {
         return this.driverClass;
     }
 
     /**
      * @param driverClass the driverClass to set
      */
-    public void setDriverClass(String driverClass)
-    {
+    public void setDriverClass(String driverClass) {
         this.driverClass = driverClass;
     }
 
     /**
      * @return the userName
      */
-    public String getUserName()
-    {
+    public String getUserName() {
         return this.userName;
     }
 
     /**
      * @param userName the userName to set
      */
-    public void setUserName(String userName)
-    {
+    public void setUserName(String userName) {
         this.userName = userName;
     }
 
     /**
      * @return the password
      */
-    public String getPassword()
-    {
+    public String getPassword() {
         return this.password;
     }
 
     /**
      * @param password the password to set
      */
-    public void setPassword(String password)
-    {
+    public void setPassword(String password) {
         this.password = password;
     }
 
     /**
      * @return the properties
      */
-    public String getProperties()
-    {
+    public String getProperties() {
         return this.properties;
     }
 
     /**
      * @param properties the properties to set
      */
-    public void setProperties(String properties)
-    {
+    public void setProperties(String properties) {
         this.properties = properties;
     }
 
     /**
      * @return the connection
      */
-    public Connection getConnection()
-    {
+    public Connection getConnection() {
         return this.connection;
     }
 
     /**
      * @param connection the connection to set
      */
-    public void setConnection(Connection connection)
-    {
+    public void setConnection(Connection connection) {
         this.connection = connection;
         this.connectionSpecified = true;
     }

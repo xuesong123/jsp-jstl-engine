@@ -26,28 +26,24 @@ import example.model.User;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class UserServlet extends HttpServlet
-{
+public class UserServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @Override
-    public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-    {
+    public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         long userId = 1L;
 
-        try
-        {
+        try {
             userId = Long.parseLong(request.getParameter("userId"));
         }
-        catch(NumberFormatException e)
-        {
+        catch(NumberFormatException e) {
         }
 
         User user = UserHandler.getUserById(userId);
         request.setAttribute("user", user);
 
         /**
-         * forward to TemplateFilter.doFilter 
+         * forward to TemplateFilter.doFilter
          */
         request.getRequestDispatcher("/WEB-INF/template/user.jsp").forward(request, response);
     }

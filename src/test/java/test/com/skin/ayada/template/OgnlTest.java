@@ -28,12 +28,9 @@ import com.skin.ayada.jstl.util.BeanUtil;
  * @author xuesong.net
  * @version 1.0
  */
-public class OgnlTest
-{
-    public static void main(String[] args)
-    {
-        try
-        {
+public class OgnlTest {
+    public static void main(String[] args) {
+        try {
             BeanUtil ognlUtil = new BeanUtil();
             Map<Object, Object> map = new HashMap<Object, Object>();
             map.put("util", ognlUtil);
@@ -47,8 +44,7 @@ public class OgnlTest
             System.out.println(result.getClass().getName() + ": " + result);
             System.out.println(Ognl.getValue("@java.lang.System@out.println(\"123\")", map));
         }
-        catch(OgnlException e)
-        {
+        catch(OgnlException e) {
             e.printStackTrace();
         }
     }

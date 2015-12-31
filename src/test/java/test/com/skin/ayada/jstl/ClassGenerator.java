@@ -28,13 +28,11 @@ import com.skin.ayada.util.IO;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class ClassGenerator
-{
+public class ClassGenerator {
     /**
      * @param args
      */
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         String[] list = {
             "ConstantValue",
             "Code",
@@ -58,15 +56,13 @@ public class ClassGenerator
             "BootstrapMethods"
         };
 
-        for(int i = 0; i < list.length; i++)
-        {
+        for(int i = 0; i < list.length; i++) {
             // test("docs", "code.jsp", list[i] + "Attribute");
             // System.out.println("public static final String " + list[i] + " = \"" + list[i] + "\";");
             String className = list[i] + "Attribute";
             String variableName = Character.toLowerCase(className.charAt(0)) + className.substring(1);
-            
-            if(i > 0)
-            {
+
+            if(i > 0) {
                 System.out.print("else ");
             }
 
@@ -80,29 +76,24 @@ public class ClassGenerator
         }
     }
 
-    public static void test(String home, String file, String className)
-    {
+    public static void test(String home, String file, String className) {
         TemplateContext templateContext = new DefaultTemplateContext(home);
         StringWriter writer = new StringWriter();
-        PageContext pageContext = JspFactory.getDefaultPageContext(writer);
+        PageContext pageContext = JspFactory.getPageContext(null, writer);
         pageContext.setAttribute("targetClassName", className);
 
-        try
-        {
+        try {
             Template template = templateContext.getTemplate(file);
             DefaultExecutor.execute(template, pageContext);
         }
-        catch(Exception e1)
-        {
+        catch(Exception e1) {
             e1.printStackTrace();
         }
 
-        try
-        {
+        try {
             IO.write(new File("docs\\" + className + ".java"), writer.toString().getBytes("UTF-8"));
         }
-        catch(IOException e)
-        {
+        catch(IOException e) {
             e.printStackTrace();
         }
     }

@@ -31,8 +31,7 @@ import com.skin.ayada.resource.PropertyResource;
  * @author xuesong.net
  * @version 1.0
  */
-public class ConfigFactory
-{
+public class ConfigFactory {
     private static final Logger logger = LoggerFactory.getLogger(ConfigFactory.class);
 
     /**
@@ -41,20 +40,16 @@ public class ConfigFactory
      * @param type
      * @return T
      */
-    public static <T extends Config> T getConfig(String resource, Class<T> type)
-    {
-        try
-        {
+    public static <T extends Config> T getConfig(String resource, Class<T> type) {
+        try {
             Map<String, String> map = PropertyResource.load(resource, "UTF-8");
             T config = type.newInstance();
             config.setValues(map);
             return config;
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             logger.warn(e.getMessage(), e);
         }
-
         return null;
     }
 
@@ -62,37 +57,29 @@ public class ConfigFactory
      * @param config
      * @param resource
      */
-    public static void save(Config config, String resource)
-    {
+    public static void save(Config config, String resource) {
         URL url = ClassPathResource.getResource(resource);
         OutputStream outputStream = null;
 
-        try
-        {
+        try {
             String file = url.getFile();
 
-            if(file.startsWith("file:"))
-            {
+            if(file.startsWith("file:")) {
                 file = file.substring(5);
             }
 
             outputStream = new FileOutputStream(file);
             ConfigFactory.save(config, outputStream);
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             logger.warn(e.getMessage(), e);
         }
-        finally
-        {
-            if(outputStream != null)
-            {
-                try
-                {
+        finally {
+            if(outputStream != null) {
+                try {
                     outputStream.close();
                 }
-                catch(IOException e)
-                {
+                catch(IOException e) {
                     logger.warn(e.getMessage(), e);
                 }
             }
@@ -103,30 +90,23 @@ public class ConfigFactory
      * @param config
      * @param outputStream
      */
-    public static void save(Config config, OutputStream outputStream)
-    {
+    public static void save(Config config, OutputStream outputStream) {
         Writer writer = null;
 
-        try
-        {
+        try {
             writer = new OutputStreamWriter(outputStream, "UTF-8");
             PropertyResource.save(config.getMap(), writer);
             outputStream.flush();
         }
-        catch(IOException e)
-        {
+        catch(IOException e) {
             logger.warn(e.getMessage(), e);
         }
-        finally
-        {
-            if(writer != null)
-            {
-                try
-                {
+        finally {
+            if(writer != null) {
+                try {
                     writer.close();
                 }
-                catch(IOException e)
-                {
+                catch(IOException e) {
                 }
             }
         }
@@ -136,27 +116,20 @@ public class ConfigFactory
      * @param config
      * @param writer
      */
-    public static void save(Config config, Writer writer)
-    {
-        try
-        {
+    public static void save(Config config, Writer writer) {
+        try {
             PropertyResource.save(config.getMap(), writer);
             writer.flush();
         }
-        catch(IOException e)
-        {
+        catch(IOException e) {
             logger.warn(e.getMessage(), e);
         }
-        finally
-        {
-            if(writer != null)
-            {
-                try
-                {
+        finally {
+            if(writer != null) {
+                try {
                     writer.close();
                 }
-                catch(IOException e)
-                {
+                catch(IOException e) {
                 }
             }
         }

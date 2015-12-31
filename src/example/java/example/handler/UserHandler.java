@@ -22,14 +22,12 @@ import example.model.User;
  * @author xuesong.net
  * @version 1.0
  */
-public class UserHandler
-{
+public class UserHandler {
     /**
      * @param userId
      * @return
      */
-    public static User getUserById(long userId)
-    {
+    public static User getUserById(long userId) {
         User user = new User();
         user.setUserId(userId);
         user.setUserName("test" + userId);
@@ -41,12 +39,10 @@ public class UserHandler
      * @param size
      * @return List<User>
      */
-    public static List<User> getUserList(int size)
-    {
+    public static List<User> getUserList(int size) {
         List<User> userList = new ArrayList<User>();
 
-        for(int i = 0; i < size; i++)
-        {
+        for(int i = 0; i < size; i++) {
             User user = new User();
             user.setUserId(Long.valueOf(i + 1));
             user.setUserName("test" + (i + 1));

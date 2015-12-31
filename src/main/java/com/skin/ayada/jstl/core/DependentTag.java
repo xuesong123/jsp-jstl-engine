@@ -18,6 +18,5 @@ import com.skin.ayada.tagext.TagSupport;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class DependentTag extends TagSupport
-{
+public class DependentTag extends TagSupport {
 }

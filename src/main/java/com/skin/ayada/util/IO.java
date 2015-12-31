@@ -27,26 +27,22 @@ import java.io.Writer;
  * @author xuesong.net
  * @version 1.0
  */
-public class IO
-{
+public class IO {
     /**
      * @param file
      * @param charset
      * @param bufferSize
      * @return String
-     * @throws IOException 
+     * @throws IOException
      */
-    public static String read(File file, String charset, int bufferSize) throws IOException
-    {
+    public static String read(File file, String charset, int bufferSize) throws IOException {
         InputStream inputStream = null;
 
-        try
-        {
+        try {
             inputStream = new FileInputStream(file);
             return read(inputStream, charset, bufferSize);
         }
-        finally
-        {
+        finally {
             close(inputStream);
         }
     }
@@ -55,20 +51,16 @@ public class IO
      * @param inputStream
      * @param charset
      * @return bufferSize
-     * @throws IOException 
+     * @throws IOException
      */
-    public static String read(InputStream inputStream, String charset, int bufferSize) throws IOException
-    {
+    public static String read(InputStream inputStream, String charset, int bufferSize) throws IOException {
         InputStreamReader inputStreamReader = null;
 
-        try
-        {
-            if(charset == null || charset.trim().length() < 1)
-            {
+        try {
+            if(charset == null || charset.trim().length() < 1) {
                 inputStreamReader = new InputStreamReader(inputStream);
             }
-            else
-            {
+            else {
                 inputStreamReader = new InputStreamReader(inputStream, charset);
             }
 
@@ -76,15 +68,13 @@ public class IO
             char[] buffer = new char[bufferSize];
             StringBuilder result = new StringBuilder();
 
-            while((length = inputStreamReader.read(buffer, 0, bufferSize)) > -1)
-            {
+            while((length = inputStreamReader.read(buffer, 0, bufferSize)) > -1) {
                 result.append(buffer, 0, length);
             }
 
             return result.toString();
         }
-        finally
-        {
+        finally {
             close(inputStreamReader);
         }
     }
@@ -94,18 +84,15 @@ public class IO
      * @param file
      * @throws IOException
      */
-    public static void write(File file, byte[] bytes) throws IOException
-    {
+    public static void write(File file, byte[] bytes) throws IOException {
         OutputStream outputStream = null;
 
-        try
-        {
+        try {
             outputStream = new FileOutputStream(file);
             outputStream.write(bytes);
             outputStream.flush();
         }
-        finally
-        {
+        finally {
             close(outputStream);
         }
     }
@@ -115,17 +102,14 @@ public class IO
      * @param file
      * @throws IOException
      */
-    public static void write(InputStream inputStream, File file) throws IOException
-    {
+    public static void write(InputStream inputStream, File file) throws IOException {
         OutputStream outputStream = null;
 
-        try
-        {
+        try {
             outputStream = new FileOutputStream(file);
             copy(inputStream, outputStream);
         }
-        finally
-        {
+        finally {
             close(outputStream);
         }
     }
@@ -133,19 +117,16 @@ public class IO
     /**
      * @param source
      * @param target
-     * @throws IOException 
+     * @throws IOException
      */
-    public static void copy(File source, File target) throws IOException
-    {
+    public static void copy(File source, File target) throws IOException {
         InputStream inputStream = null;
         OutputStream outputStream = null;
 
-        try
-        {
+        try {
             File parent = target.getParentFile();
 
-            if(parent.exists() == false)
-            {
+            if(parent.exists() == false) {
                 parent.mkdirs();
             }
 
@@ -153,21 +134,19 @@ public class IO
             outputStream = new FileOutputStream(target);
             IO.copy(inputStream, outputStream, 8192);
         }
-        finally
-        {
+        finally {
             IO.close(inputStream);
             IO.close(outputStream);
         }
     }
 
     /**
-     * 
+     *
      * @param inputStream
      * @param outputStream
-     * @throws IOException 
+     * @throws IOException
      */
-    public static void copy(InputStream inputStream, OutputStream outputStream) throws IOException
-    {
+    public static void copy(InputStream inputStream, OutputStream outputStream) throws IOException {
         copy(inputStream, outputStream, 4096);
     }
 
@@ -177,13 +156,11 @@ public class IO
      * @param bufferSize
      * @throws IOException
      */
-    public static void copy(InputStream inputStream, OutputStream outputStream, int bufferSize) throws IOException
-    {
+    public static void copy(InputStream inputStream, OutputStream outputStream, int bufferSize) throws IOException {
         int length = 0;
         byte[] buffer = new byte[bufferSize];
 
-        while((length = inputStream.read(buffer, 0, bufferSize)) > -1)
-        {
+        while((length = inputStream.read(buffer, 0, bufferSize)) > -1) {
             outputStream.write(buffer, 0, length);
         }
 
@@ -197,34 +174,27 @@ public class IO
      * @param size
      * @throws IOException
      */
-    public static void copy(InputStream inputStream, OutputStream outputStream, int bufferSize, long size) throws IOException
-    {
-        if(size > 0)
-        {
+    public static void copy(InputStream inputStream, OutputStream outputStream, int bufferSize, long size) throws IOException {
+        if(size > 0) {
             int readBytes = 0;
             long count = size;
             int length = Math.min(bufferSize, (int)(size));
             byte[] buffer = new byte[length];
 
-            while(count > 0)
-            {
-                if(count > length)
-                {
+            while(count > 0) {
+                if(count > length) {
                     readBytes = inputStream.read(buffer, 0, length);
                 }
-                else
-                {
+                else {
                     readBytes = inputStream.read(buffer, 0, (int)count);
                 }
 
-                if(readBytes > 0)
-                {
+                if(readBytes > 0) {
                     outputStream.write(buffer, 0, readBytes);
                     count -= readBytes;
                 }
-                else
-                {
-                    break; 
+                else {
+                    break;
                 }
             }
 
@@ -237,8 +207,7 @@ public class IO
      * @param writer
      * @throws IOException
      */
-    public static void copy(Reader reader, Writer writer) throws IOException
-    {
+    public static void copy(Reader reader, Writer writer) throws IOException {
         copy(reader, writer, 2048);
     }
 
@@ -248,13 +217,11 @@ public class IO
      * @param bufferSize
      * @throws IOException
      */
-    public static void copy(Reader reader, Writer writer, int bufferSize) throws IOException
-    {
+    public static void copy(Reader reader, Writer writer, int bufferSize) throws IOException {
         int length = 0;
         char[] buffer = new char[bufferSize];
 
-        while((length = reader.read(buffer, 0, bufferSize)) > -1)
-        {
+        while((length = reader.read(buffer, 0, bufferSize)) > -1) {
             writer.write(buffer, 0, length);
         }
 
@@ -264,16 +231,12 @@ public class IO
     /**
      * @param resource
      */
-    public static void close(java.io.Closeable resource)
-    {
-        if(resource != null)
-        {
-            try
-            {
+    public static void close(java.io.Closeable resource) {
+        if(resource != null) {
+            try {
                 resource.close();
             }
-            catch(IOException e)
-            {
+            catch(IOException e) {
             }
         }
     }
@@ -281,16 +244,12 @@ public class IO
     /**
      * @param inputStream
      */
-    public static void close(InputStream inputStream)
-    {
-        if(inputStream != null)
-        {
-            try
-            {
+    public static void close(InputStream inputStream) {
+        if(inputStream != null) {
+            try {
                 inputStream.close();
             }
-            catch(IOException e)
-            {
+            catch(IOException e) {
             }
         }
     }
@@ -298,16 +257,12 @@ public class IO
     /**
      * @param outputStream
      */
-    public static void close(OutputStream outputStream)
-    {
-        if(outputStream != null)
-        {
-            try
-            {
+    public static void close(OutputStream outputStream) {
+        if(outputStream != null) {
+            try {
                 outputStream.close();
             }
-            catch(IOException e)
-            {
+            catch(IOException e) {
             }
         }
     }
@@ -315,33 +270,25 @@ public class IO
     /**
      * @param reader
      */
-    public static void close(Reader reader)
-    {
-        if(reader != null)
-        {
-            try
-            {
+    public static void close(Reader reader) {
+        if(reader != null) {
+            try {
                 reader.close();
             }
-            catch(IOException e)
-            {
+            catch(IOException e) {
             }
-        }        
+        }
     }
 
     /**
      * @param writer
      */
-    public static void close(Writer writer)
-    {
-        if(writer != null)
-        {
-            try
-            {
+    public static void close(Writer writer) {
+        if(writer != null) {
+            try {
                 writer.close();
             }
-            catch(IOException e)
-            {
+            catch(IOException e) {
             }
         }
     }

@@ -18,10 +18,8 @@ import com.skin.ayada.tagext.ConditionalTagSupport;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class ExitTag extends ConditionalTagSupport
-{
-    public ExitTag()
-    {
+public class ExitTag extends ConditionalTagSupport {
+    public ExitTag() {
         super(true);
     }
 
@@ -29,17 +27,14 @@ public class ExitTag extends ConditionalTagSupport
      * @return int
      */
     @Override
-    public int doStartTag()
-    {
-        if(this.condition() == true)
-        {
+    public int doStartTag() {
+        if(this.condition() == true) {
             return SKIP_PAGE;
         }
         return EVAL_PAGE;
     }
 
-    public void setTest(boolean b)
-    {
+    public void setTest(boolean b) {
         this.setCondition(b);
     }
 }

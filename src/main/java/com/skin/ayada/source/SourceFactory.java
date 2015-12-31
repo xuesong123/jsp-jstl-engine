@@ -22,8 +22,7 @@ import com.skin.ayada.util.StringUtil;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public abstract class SourceFactory
-{
+public abstract class SourceFactory {
     private String home;
     private String sourcePattern = "jsp,jspf,jspx,tpl";
 
@@ -50,20 +49,16 @@ public abstract class SourceFactory
      * @param path
      * @return int
      */
-    public int getSourceType(String path)
-    {
-        if(this.sourcePattern == null)
-        {
-            this.sourcePattern = TemplateConfig.getInstance().getString("ayada.compile.source-pattern");
+    public int getSourceType(String path) {
+        if(this.sourcePattern == null) {
+            this.sourcePattern = TemplateConfig.getSourcePattern();
         }
 
         String fileType = this.getExtension(path).toLowerCase();
 
-        if(StringUtil.contains(this.sourcePattern, fileType))
-        {
+        if(StringUtil.contains(this.sourcePattern, fileType)) {
             return Source.SCRIPT;
         }
-
         return Source.STATIC;
     }
 
@@ -71,19 +66,16 @@ public abstract class SourceFactory
      * @param url
      * @return long
      */
-    public long getLastModified(URL url)
-    {
+    public long getLastModified(URL url) {
         String path = url.getPath();
 
-        if(path.startsWith("file:"))
-        {
+        if(path.startsWith("file:")) {
             path = path.substring(5);
         }
 
         int k = path.indexOf('!');
 
-        if(k > 0)
-        {
+        if(k > 0) {
             path = path.substring(0, k);
         }
         return new File(path).lastModified();
@@ -93,67 +85,54 @@ public abstract class SourceFactory
      * @param path
      * @return String
      */
-    public String getExtension(String path)
-    {
-        if(path != null && path.length() > 0)
-        {
+    public String getExtension(String path) {
+        if(path != null && path.length() > 0) {
             char c = '0';
             int i = path.length() - 1;
 
-            for(; i > -1; i--)
-            {
+            for(; i > -1; i--) {
                 c = path.charAt(i);
 
-                if(c == '.' )
-                {
+                if(c == '.' ) {
                     break;
                 }
-                else if(c == '/' || c == '\\' || c == ':')
-                {
+                else if(c == '/' || c == '\\' || c == ':') {
                     break;
                 }
             }
 
-            if(c == '.')
-            {
+            if(c == '.') {
                 return path.substring(i + 1);
             }
-
-            return "";
         }
-
         return "";
     }
 
     /**
      * @param home the home to set
      */
-    public void setHome(String home)
-    {
+    public void setHome(String home) {
         this.home = home;
     }
 
     /**
      * @return the home
      */
-    public String getHome()
-    {
+    public String getHome() {
         return this.home;
     }
 
     /**
      * @return the sourcePattern
      */
-    public String getSourcePattern()
-    {
+    public String getSourcePattern() {
         return this.sourcePattern;
     }
 
     /**
      * @param sourcePattern the sourcePattern to set
      */
-    public void setSourcePattern(String sourcePattern)
-    {
+    public void setSourcePattern(String sourcePattern) {
         this.sourcePattern = sourcePattern;
     }
 }

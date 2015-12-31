@@ -17,7 +17,6 @@ package com.skin.ayada.tagext;
  * @author xuesong.net
  * @version 1.0
  */
-public interface ParamContainerTag
-{
+public interface ParamContainerTag {
     public abstract void addParam(Object value);
 }

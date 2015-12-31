@@ -19,11 +19,9 @@ import com.skin.ayada.tagext.Tag;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class MyTagFactory extends DefaultTagFactory
-{
+public class MyTagFactory extends DefaultTagFactory {
     @Override
-    public Tag create()
-    {
+    public Tag create() {
         return new com.skin.ayada.jstl.core.ForEachTag();
     }
 }

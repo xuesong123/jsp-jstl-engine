@@ -10,11 +10,11 @@
  */
 package com.skin.ayada.taglib;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import com.skin.ayada.component.Parameters;
 import com.skin.ayada.runtime.PageContext;
+import com.skin.ayada.tagext.AttributeTagSupport;
 import com.skin.ayada.tagext.ParameterTagSupport;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.tagext.TagSupport;
@@ -26,8 +26,7 @@ import com.skin.ayada.tagext.TagSupport;
  * @author xuesong.net
  * @version 1.0
  */
-public class ActionTag extends TagSupport implements ParameterTagSupport
-{
+public class ActionTag extends TagSupport implements ParameterTagSupport, AttributeTagSupport {
     private String className;
     private String method;
     private String page;
@@ -38,51 +37,39 @@ public class ActionTag extends TagSupport implements ParameterTagSupport
     };
 
     @Override
-    public int doStartTag() throws Exception
-    {
+    public int doStartTag() throws Exception {
         super.doStartTag();
-        this.parameters.clear();
-        return Tag.EVAL_BODY_INCLUDE;
+        this.parameters = new Parameters();
+
+        if(this.page == null && this.className == null) {
+            return Tag.SKIP_BODY;
+        }
+        else {
+        	return Tag.EVAL_BODY_INCLUDE;
+        }
     }
 
     @Override
-    public int doEndTag() throws Exception
-    {
-        Map<String, Object> context = null;
+    public int doEndTag() throws Exception {
+        Map<String, Object> context = this.pageContext.getContext(EXPORTS);
+        context.putAll(this.parameters.getParameters());
 
-        if(this.className != null)
-        {
-            context = ActionDispatcher.dispatch(this.pageContext, this.parameters, this.className, this.method);
+        if(this.className != null) {
+        	Map<String, Object> data = ActionDispatcher.dispatch(this.pageContext, this.parameters, this.className, this.method);
+
+        	if(data != null) {
+        		context.putAll(data);
+        	}
         }
 
-        if(context == null)
-        {
-            context = new HashMap<String, Object>();
-        }
-
-        Object value = null;
-
-        for(String name : EXPORTS)
-        {
-            value = this.pageContext.getAttribute(name);
-
-            if(value != null)
-            {
-                context.put(name, value);
-            }
-        }
-
-        if(this.getPage() != null)
-        {
+        if(this.getPage() != null) {
             this.pageContext.include(this.getPage(), context);
         }
-
         return Tag.EVAL_PAGE;
     }
 
     @Override
-    public void release()
-    {
+    public void release() {
         super.release();
         this.parameters.clear();
     }
@@ -90,48 +77,42 @@ public class ActionTag extends TagSupport implements ParameterTagSupport
     /**
      * @return the className
      */
-    public String getClassName()
-    {
+    public String getClassName() {
         return this.className;
     }
 
     /**
      * @param className the className to set
      */
-    public void setClassName(String className)
-    {
+    public void setClassName(String className) {
         this.className = className;
     }
 
     /**
      * @return the method
      */
-    public String getMethod()
-    {
+    public String getMethod() {
         return this.method;
     }
 
     /**
      * @param method the method to set
      */
-    public void setMethod(String method)
-    {
+    public void setMethod(String method) {
         this.method = method;
     }
 
     /**
      * @return the page
      */
-    public String getPage()
-    {
+    public String getPage() {
         return this.page;
     }
 
     /**
      * @param page the page to set
      */
-    public void setPage(String page)
-    {
+    public void setPage(String page) {
         this.page = page;
     }
 
@@ -139,24 +120,31 @@ public class ActionTag extends TagSupport implements ParameterTagSupport
      * @param name
      * @param value
      */
-    public void setParameter(String name, Object value)
-    {
+    @Override
+    public void setAttribute(String name, Object value) {
+        this.parameters.setValue(name, value);
+    }
+
+    /**
+     * @param name
+     * @param value
+     */
+    @Override
+    public void setParameter(String name, Object value) {
         this.parameters.setValue(name, value);
     }
 
     /**
      * @return the parameters
      */
-    public Parameters getParameters()
-    {
+    public Parameters getParameters() {
         return this.parameters;
     }
 
     /**
      * @param parameters the parameters to set
      */
-    public void setParameters(Parameters parameters)
-    {
+    public void setParameters(Parameters parameters) {
         this.parameters = parameters;
     }
 }

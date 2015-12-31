@@ -21,14 +21,12 @@ import com.skin.ayada.util.ClassUtil;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class ConstructorTag extends TagSupport
-{
+public class ConstructorTag extends TagSupport {
     private String type;
     private Object value;
 
     @Override
-    public int doStartTag() throws Exception
-    {
+    public int doStartTag() throws Exception {
         ConstructorTag.setArgument(this.getParent(), this.type, this.value);
         return Tag.SKIP_BODY;
     }
@@ -38,25 +36,20 @@ public class ConstructorTag extends TagSupport
      * @param type
      * @param value
      */
-    public static void setArgument(Tag tag, String type, Object value) throws Exception
-    {
-        if(tag instanceof ConstructorTagSupport)
-        {
+    public static void setArgument(Tag tag, String type, Object value) throws Exception {
+        if(tag instanceof ConstructorTagSupport) {
             ConstructorTagSupport constructorTagSupport = (ConstructorTagSupport)tag;
 
-            if(type != null)
-            {
+            if(type != null) {
                 Class<?> parameterType = ClassUtil.getClass(type);
                 Object argument = ClassUtil.cast(value, parameterType);
                 constructorTagSupport.setArgument(parameterType, argument);
             }
-            else
-            {
+            else {
                 constructorTagSupport.setArgument(value.getClass(), value);
             }
         }
-        else
-        {
+        else {
             throw new RuntimeException("Illegal use of parameter-style tag without servlet as its direct parent: parent tag is not a ConstructorSupportTag !");
         }
     }
@@ -64,32 +57,28 @@ public class ConstructorTag extends TagSupport
     /**
      * @return the type
      */
-    public String getType()
-    {
+    public String getType() {
         return this.type;
     }
 
     /**
      * @param type the type to set
      */
-    public void setType(String type)
-    {
+    public void setType(String type) {
         this.type = type;
     }
 
     /**
      * @return the value
      */
-    public Object getValue()
-    {
+    public Object getValue() {
         return this.value;
     }
 
     /**
      * @param value the value to set
      */
-    public void setValue(Object value)
-    {
+    public void setValue(Object value) {
         this.value = value;
     }
 }

@@ -17,8 +17,7 @@ package com.skin.ayada.tagext;
  * @author xuesong.net
  * @version 1.0
  */
-public interface ConstructorTagSupport
-{
+public interface ConstructorTagSupport {
     /**
      * @param type
      * @param value

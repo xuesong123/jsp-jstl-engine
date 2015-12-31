@@ -22,16 +22,13 @@ import com.skin.ayada.tagext.Tag;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class JspAttributeTag extends BodyTagSupport
-{
+public class JspAttributeTag extends BodyTagSupport {
     private String name;
     private Object value = null;
 
     @Override
-    public int doStartTag()
-    {
-        if(this.value != null)
-        {
+    public int doStartTag() {
+        if(this.value != null) {
             this.setDynamicAttribute(this.name, this.value);
             return Tag.SKIP_BODY;
         }
@@ -42,15 +39,12 @@ public class JspAttributeTag extends BodyTagSupport
      * @return int
      */
     @Override
-    public int doEndTag()
-    {
+    public int doEndTag() {
         BodyContent bodyContent = this.getBodyContent();
 
-        if(bodyContent != null)
-        {
+        if(bodyContent != null) {
             this.setDynamicAttribute(this.name, bodyContent.getString().trim());
         }
-
         return EVAL_PAGE;
     }
 
@@ -58,16 +52,13 @@ public class JspAttributeTag extends BodyTagSupport
      * @param name
      * @param value
      */
-    public void setDynamicAttribute(String name, Object value)
-    {
+    public void setDynamicAttribute(String name, Object value) {
         Tag parent = this.getParent();
 
-        if(parent instanceof DynamicAttributes)
-        {
+        if(parent instanceof DynamicAttributes) {
             ((DynamicAttributes)parent).setDynamicAttribute(name, value);
         }
-        else
-        {
+        else {
             throw new RuntimeException("Illegal use of parameter-style tag without servlet as its direct parent");
         }
     }
@@ -75,32 +66,28 @@ public class JspAttributeTag extends BodyTagSupport
     /**
      * @return the name
      */
-    public String getName()
-    {
+    public String getName() {
         return this.name;
     }
 
     /**
      * @param name the name to set
      */
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
     /**
      * @return the value
      */
-    public Object getValue()
-    {
+    public Object getValue() {
         return this.value;
     }
 
     /**
      * @param value the value to set
      */
-    public void setValue(Object value)
-    {
+    public void setValue(Object value) {
         this.value = value;
     }
 }

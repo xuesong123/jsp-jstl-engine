@@ -23,33 +23,28 @@ import com.skin.ayada.tagext.TagSupport;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class InvokeTag extends TagSupport implements AttributeTagSupport
-{
+public class InvokeTag extends TagSupport implements AttributeTagSupport {
     private String page;
     private Map<String, Object> attributes;
 
     @Override
-    public int doStartTag() throws Exception
-    {
+    public int doStartTag() throws Exception {
         super.doStartTag();
+        this.attributes = new HashMap<String, Object>();
 
-        if(this.page == null)
-        {
+        if(this.page == null) {
             return Tag.SKIP_BODY;
         }
-
-        this.attributes = new HashMap<String, Object>();
-        return Tag.EVAL_BODY_INCLUDE;
+        else {
+        	return Tag.EVAL_BODY_INCLUDE;
+        }
     }
 
     @Override
-    public int doEndTag() throws Exception
-    {
-        if(this.getPage() != null)
-        {
+    public int doEndTag() throws Exception {
+        if(this.getPage() != null) {
             this.pageContext.include(this.getPage(), this.attributes);
         }
-
         return Tag.EVAL_PAGE;
     }
 
@@ -58,24 +53,21 @@ public class InvokeTag extends TagSupport implements AttributeTagSupport
      * @param value
      */
     @Override
-    public void setAttribute(String name, Object value)
-    {
+    public void setAttribute(String name, Object value) {
         this.attributes.put(name, value);
     }
 
     /**
      * @param page the page to set
      */
-    public void setPage(String page)
-    {
+    public void setPage(String page) {
         this.page = page;
     }
 
     /**
      * @return the page
      */
-    public String getPage()
-    {
+    public String getPage() {
         return this.page;
     }
 }

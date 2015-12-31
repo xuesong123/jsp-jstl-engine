@@ -26,31 +26,26 @@ import com.skin.ayada.util.HtmlUtil;
  * @author xuesong.net
  * @version 1.0
  */
-public class DefaultExpressionContext extends OgnlContext implements ExpressionContext
-{
-    private PageContext pageContext;
+public class DefaultExpressionContext extends OgnlContext implements ExpressionContext {
     private ELEncoder encoder;
+    private PageContext pageContext;
     private static final Object EMPTY = new Empty<String, Object>();
 
     /**
      * @param pageContext
      */
-    protected DefaultExpressionContext(PageContext pageContext)
-    {
+    protected DefaultExpressionContext(PageContext pageContext) {
         this.pageContext = pageContext;
     }
 
     @Override
-    public Object put(Object key, Object value)
-    {
+    public Object put(Object key, Object value) {
         return this.pageContext.setAttribute(key.toString(), value);
     }
 
     @Override
-    public Object get(Object key)
-    {
-        if(key == null)
-        {
+    public Object get(Object key) {
+        if(key == null) {
             return EMPTY;
         }
 
@@ -63,8 +58,7 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
      * @return Object
      */
     @Override
-    public Object getValue(String expression)
-    {
+    public Object getValue(String expression) {
         return OgnlUtil.getValue(expression, this, this);
     }
 
@@ -73,12 +67,10 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
      * @return boolean
      */
     @Override
-    public boolean getBoolean(String expression)
-    {
+    public boolean getBoolean(String expression) {
         Object value = OgnlUtil.getValue(expression, this, this);
 
-        if(value instanceof Boolean)
-        {
+        if(value instanceof Boolean) {
             return Boolean.TRUE.equals(value);
         }
         return false;
@@ -88,15 +80,12 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
      * @param expression
      * @return Byte
      */
-    public Byte getByte(String expression)
-    {
+    public Byte getByte(String expression) {
         Object value = OgnlUtil.getValue(expression, this, this);
 
-        if(value instanceof Number)
-        {
+        if(value instanceof Number) {
             return ((Number)value).byteValue();
         }
-
         return null;
     }
 
@@ -105,15 +94,12 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
      * @return Short
      */
     @Override
-    public Short getShort(String expression)
-    {
+    public Short getShort(String expression) {
         Object value = OgnlUtil.getValue(expression, this, this);
 
-        if(value instanceof Number)
-        {
+        if(value instanceof Number) {
             return ((Number)value).shortValue();
         }
-
         return null;
     }
 
@@ -122,15 +108,12 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
      * @return Integer
      */
     @Override
-    public Integer getInteger(String expression)
-    {
+    public Integer getInteger(String expression) {
         Object value = OgnlUtil.getValue(expression, this, this);
 
-        if(value instanceof Number)
-        {
+        if(value instanceof Number) {
             return ((Number)value).intValue();
         }
-
         return null;
     }
 
@@ -139,15 +122,12 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
      * @return Float
      */
     @Override
-    public Float getFloat(String expression)
-    {
+    public Float getFloat(String expression) {
         Object value = OgnlUtil.getValue(expression, this, this);
 
-        if(value instanceof Number)
-        {
+        if(value instanceof Number) {
             return ((Number)value).floatValue();
         }
-
         return null;
     }
 
@@ -156,15 +136,12 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
      * @return Double
      */
     @Override
-    public Double getDouble(String expression)
-    {
+    public Double getDouble(String expression) {
         Object value = OgnlUtil.getValue(expression, this, this);
 
-        if(value instanceof Number)
-        {
+        if(value instanceof Number) {
             return ((Number)value).doubleValue();
         }
-
         return null;
     }
 
@@ -173,15 +150,12 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
      * @return Long
      */
     @Override
-    public Long getLong(String expression)
-    {
+    public Long getLong(String expression) {
         Object value = OgnlUtil.getValue(expression, this, this);
 
-        if(value instanceof Number)
-        {
+        if(value instanceof Number) {
             return ((Number)value).longValue();
         }
-
         return null;
     }
 
@@ -190,25 +164,20 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
      * @return Character
      */
     @Override
-    public Character getCharacter(String expression)
-    {
+    public Character getCharacter(String expression) {
         Object value = OgnlUtil.getValue(expression, this, this);
 
-        if(value instanceof Character)
-        {
+        if(value instanceof Character) {
             return (Character)value;
         }
 
-        if(value != null)
-        {
+        if(value != null) {
             String content = value.toString();
 
-            if(content.length() > 0)
-            {
+            if(content.length() > 0) {
                 return content.charAt(0);
             }
         }
-
         return null;
     }
 
@@ -217,12 +186,10 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
      * @return Object
      */
     @Override
-    public String getString(String expression)
-    {
+    public String getString(String expression) {
         Object value = OgnlUtil.getValue(expression, this, this);
 
-        if(value == null || value instanceof Empty<?, ?>)
-        {
+        if(value == null || value instanceof Empty<?, ?>) {
             return "";
         }
         return value.toString();
@@ -233,15 +200,12 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
      * @return Object
      */
     @Override
-    public String getEscapeString(String expression)
-    {
+    public String getEscapeString(String expression) {
         Object value = OgnlUtil.getValue(expression, this, this);
 
-        if(value == null || value instanceof Empty<?, ?>)
-        {
+        if(value == null || value instanceof Empty<?, ?>) {
             return "";
         }
-
         return HtmlUtil.encode(value.toString());
     }
 
@@ -250,16 +214,12 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
      * @throws IOException
      */
     @Override
-    public void print(Writer out, String content) throws IOException
-    {
-        if(content != null)
-        {
-            if(this.encoder != null)
-            {
+    public void print(Writer out, String content) throws IOException {
+        if(content != null) {
+            if(this.encoder != null) {
                 out.write(this.encoder.encode(content));
             }
-            else
-            {
+            else {
                 out.write(content);
             }
         }
@@ -271,16 +231,12 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
      * @throws IOException
      */
     @Override
-    public void print(Writer out, Object content) throws IOException
-    {
-        if(content != null)
-        {
-            if(this.encoder != null)
-            {
+    public void print(Writer out, Object content) throws IOException {
+        if(content != null) {
+            if(this.encoder != null) {
                 out.write(this.encoder.encode(content.toString()));
             }
-            else
-            {
+            else {
                 out.write(content.toString());
             }
         }
@@ -289,37 +245,32 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
     /**
      * @return the pageContext
      */
-    public PageContext getPageContext()
-    {
+    public PageContext getPageContext() {
         return this.pageContext;
     }
 
     /**
      * @param pageContext the pageContext to set
      */
-    public void setPageContext(PageContext pageContext)
-    {
+    public void setPageContext(PageContext pageContext) {
         this.pageContext = pageContext;
     }
 
     /**
      * @return ELEncoder
      */
-    public ELEncoder getEncoder()
-    {
+    public ELEncoder getEncoder() {
         return this.encoder;
     }
 
     /**
      * @param encoder
      */
-    public void setEncoder(ELEncoder encoder)
-    {
+    public void setEncoder(ELEncoder encoder) {
         this.encoder = encoder;
     }
 
-    public void release()
-    {
+    public void release() {
         this.pageContext = null;
     }
 }

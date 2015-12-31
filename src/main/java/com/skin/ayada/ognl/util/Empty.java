@@ -22,88 +22,73 @@ import java.util.Set;
  * @author xuesong.net
  * @version 1.0
  */
-public class Empty<K, V> implements Map<K, V>
-{
-    public Empty()
-    {
+public class Empty<K, V> implements Map<K, V> {
+    public Empty() {
     }
 
     @Override
-    public void clear()
-    {
+    public void clear() {
     }
 
     @Override
-    public boolean containsKey(Object key)
-    {
+    public boolean containsKey(Object key) {
         return false;
     }
 
     @Override
-    public boolean containsValue(Object value)
-    {
+    public boolean containsValue(Object value) {
         return false;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public Set<Map.Entry<K, V>> entrySet()
-    {
+    public Set<Map.Entry<K, V>> entrySet() {
         return Collections.EMPTY_SET;
     }
 
     @Override
-    public V get(Object key)
-    {
+    public V get(Object key) {
         return null;
     }
 
     @Override
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return true;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public Set<K> keySet()
-    {
+    public Set<K> keySet() {
         return Collections.EMPTY_SET;
     }
 
     @Override
-    public V put(K key, V value)
-    {
+    public V put(K key, V value) {
         return null;
     }
 
     @Override
-    public void putAll(Map<? extends K, ? extends V> m)
-    {
+    public void putAll(Map<? extends K, ? extends V> m) {
     }
 
     @Override
-    public V remove(Object key)
-    {
+    public V remove(Object key) {
         return null;
     }
 
     @Override
-    public int size()
-    {
+    public int size() {
         return 0;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public Collection<V> values()
-    {
+    public Collection<V> values() {
         return Collections.EMPTY_LIST;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "";
     }
 }

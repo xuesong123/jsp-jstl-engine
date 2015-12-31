@@ -27,13 +27,11 @@ import com.skin.ayada.runtime.PageContext;
  * @author xuesong.net
  * @version 1.0
  */
-public class Scriptlet
-{
+public class Scriptlet {
     /**
      * @param args
      */
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         generate(System.out, PageContext.class);
     }
 
@@ -66,19 +64,16 @@ public class Scriptlet
         out.println(" */");
         out.println("var " + simpleName + " = com.skin.framework.Class.create(null, function(" + getConstructorParameter(type) + "){");
 
-        for(int i = 0; i < fields.length; i++)
-        {
+        for(int i = 0; i < fields.length; i++) {
             Field field = fields[i];
-            if(Modifier.isStatic(field.getModifiers()))
-            {
+            if(Modifier.isStatic(field.getModifiers())) {
                 continue;
             }
 
             fieldMap.put(field.getName(), field.getName());
             out.println("    this." + field.getName() + " = " + field.getName() + ";");
 
-            if(buffer.length() > 0)
-            {
+            if(buffer.length() > 0) {
                 buffer.append(", ");
             }
 
@@ -87,30 +82,25 @@ public class Scriptlet
             buffer.append("\"");
         }
 
-        if(buffer.length() > 0)
-        {
+        if(buffer.length() > 0) {
             out.print("}, [");
             out.print(buffer.toString());
             out.println("]);");
         }
-        else
-        {
+        else {
             out.println("});");
         }
         out.println();
         Method[] methods = type.getDeclaredMethods();
 
-        for(int i = 0; i < methods.length; i++)
-        {
+        for(int i = 0; i < methods.length; i++) {
             Method method = methods[i];
             String methodName = method.getName();
 
-            if(methodName.startsWith("set") || methodName.startsWith("get"))
-            {
+            if(methodName.startsWith("set") || methodName.startsWith("get")) {
                 String fieldName = Character.toLowerCase(methodName.charAt(3)) + methodName.substring(4);
 
-                if(fieldMap.get(fieldName) != null)
-                {
+                if(fieldMap.get(fieldName) != null) {
                     continue;
                 }
             }
@@ -122,12 +112,10 @@ public class Scriptlet
             out.print(" ");
             out.print(returnType.getSimpleName());
             out.print(" */ ");
-            if(Modifier.isStatic(method.getModifiers()))
-            {
+            if(Modifier.isStatic(method.getModifiers())) {
                 out.println(simpleName + "." + method.getName() + " = function(" + getParameterTypes(method) + ")" + getExceptionTypes(method) + "{");
             }
-            else
-            {
+            else {
                 out.println(simpleName + ".prototype." + method.getName() + " = function(" + getParameterTypes(method) + ")" + getExceptionTypes(method) + "{");
             }
             out.println("    // TODO Auto-generated method stub");
@@ -142,25 +130,21 @@ public class Scriptlet
      * @param constructor
      * @return String
      */
-    public static String getConstructorParameter(Class<?> type)
-    {
+    public static String getConstructorParameter(Class<?> type) {
         StringBuilder buffer = new StringBuilder();
         Field[] fields = type.getDeclaredFields();
-        
-        for(int i = 0; i < fields.length; i++)
-        {
+
+        for(int i = 0; i < fields.length; i++) {
             Field field = fields[i];
 
-            if(Modifier.isStatic(field.getModifiers()))
-            {
+            if(Modifier.isStatic(field.getModifiers())) {
                 continue;
             }
 
             String parameterName = field.getName();
             Class<?> parameterType = field.getType();
 
-            if(buffer.length() > 0)
-            {
+            if(buffer.length() > 0) {
                 buffer.append(", ");
             }
 
@@ -177,16 +161,14 @@ public class Scriptlet
      * @param method
      * @return String
      */
-    public static String getMethodComment(Method method)
-    {
+    public static String getMethodComment(Method method) {
         StringBuilder buffer = new StringBuilder();
         Class<?>[] parameterTypes = method.getParameterTypes();
         Class<?>[] exceptionTypes = method.getExceptionTypes();
         Class<?> returnType = method.getReturnType();
         buffer.append("/**\r\n");
 
-        for(int i = 0; i < parameterTypes.length; i++)
-        {
+        for(int i = 0; i < parameterTypes.length; i++) {
             Class<?> parameterType = parameterTypes[i];
             String simpleName = parameterType.getSimpleName();
             String parameterName = Character.toLowerCase(simpleName.charAt(0)) + simpleName.substring(1);
@@ -195,8 +177,7 @@ public class Scriptlet
             buffer.append("\r\n");
         }
 
-        for(int i = 0; i < exceptionTypes.length; i++)
-        {
+        for(int i = 0; i < exceptionTypes.length; i++) {
             Class<?> exceptionType = exceptionTypes[i];
             buffer.append(" * @throws ");
             buffer.append(exceptionType.getSimpleName());
@@ -214,13 +195,11 @@ public class Scriptlet
      * @param method
      * @return String
      */
-    public static String getParameterTypes(Method method)
-    {
+    public static String getParameterTypes(Method method) {
         StringBuilder buffer = new StringBuilder();
         Class<?>[] parameterTypes = method.getParameterTypes();
-        
-        for(int i = 0; i < parameterTypes.length;)
-        {
+
+        for(int i = 0; i < parameterTypes.length;) {
             Class<?> parameterType = parameterTypes[i];
             String simpleName = parameterType.getSimpleName();
             String parameterName = Character.toLowerCase(simpleName.charAt(0)) + simpleName.substring(1);
@@ -230,9 +209,8 @@ public class Scriptlet
             buffer.append(" */ ");
             buffer.append(parameterName);
             i++;
-            
-            if(i < parameterTypes.length)
-            {
+
+            if(i < parameterTypes.length) {
                 buffer.append(", ");
             }
         }
@@ -243,27 +221,23 @@ public class Scriptlet
     /**
      * @param method
      * @return String
-     */    
-    public static String getExceptionTypes(Method method)
-    {
+     */
+    public static String getExceptionTypes(Method method) {
         StringBuilder buffer = new StringBuilder();
         Class<?>[] exceptionTypes = method.getExceptionTypes();
 
-        if(exceptionTypes.length > 0)
-        {
+        if(exceptionTypes.length > 0) {
             buffer.append(" /* throws ");
-            for(int i = 0; i < exceptionTypes.length;)
-            {
+            for(int i = 0; i < exceptionTypes.length;) {
                 Class<?> exceptionType = exceptionTypes[i];
                 buffer.append(exceptionType.getSimpleName());
                 i++;
-                
-                if(i < exceptionTypes.length)
-                {
+
+                if(i < exceptionTypes.length) {
                     buffer.append(", ");
                 }
             }
-            
+
             buffer.append("*/ ");
         }
 

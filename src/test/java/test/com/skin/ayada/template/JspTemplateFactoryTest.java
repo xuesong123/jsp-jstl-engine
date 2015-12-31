@@ -47,16 +47,13 @@ import com.skin.ayada.util.StringUtil;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class JspTemplateFactoryTest
-{
-    public static void main(String[] args) throws Exception
-    {
+public class JspTemplateFactoryTest {
+    public static void main(String[] args) throws Exception {
         // test1("extTest.jsp");
         test1("command.jsp", true);
     }
 
-    public static Template getTemplate() throws Exception
-    {
+    public static Template getTemplate() throws Exception {
         SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
         TemplateCompiler compiler = new TemplateCompiler(sourceFactory);
         TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();
@@ -64,8 +61,7 @@ public class JspTemplateFactoryTest
         return compiler.compile("allTagTest.jsp", "UTF-8");
     }
 
-    public static void test1(String file, boolean execute) throws Exception
-    {
+    public static void test1(String file, boolean execute) throws Exception {
         SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
         TemplateFactory templateFactory = new JspTemplateFactory("work", System.getProperty("java.class.path"));
         templateFactory.setIgnoreJspTag(false);
@@ -81,19 +77,16 @@ public class JspTemplateFactoryTest
         System.out.println("compile time: " + (t2 - t1));
 
         StringWriter writer = new StringWriter();
-        PageContext pageContext = templateContext.getPageContext(writer);
+        PageContext pageContext = templateContext.getPageContext(null, writer);
 
-        if(execute)
-        {
-            try
-            {
+        if(execute) {
+            try {
                 long t3 = System.currentTimeMillis();
                 template.execute(pageContext);
                 long t4 = System.currentTimeMillis();
                 System.out.println("run time: " + (t4 - t3));
             }
-            catch(Exception e)
-            {
+            catch(Exception e) {
                 e.printStackTrace();
             }
 
@@ -102,8 +95,7 @@ public class JspTemplateFactoryTest
         }
     }
 
-    public static void test2() throws Exception
-    {
+    public static void test2() throws Exception {
         String home = "com/skin/ayada/compile";
         SourceFactory sourceFactory = new ClassPathSourceFactory(home);
         TemplateFactory templateFactory = new TemplateFactory();
@@ -119,7 +111,7 @@ public class JspTemplateFactoryTest
         List<Node> nodes = getTemplate().getNodes();
 
         StringWriter writer = new StringWriter();
-        PageContext pageContext = templateContext.getPageContext(writer);
+        PageContext pageContext = templateContext.getPageContext(null, writer);
         pageContext.setAttribute("className", "Test1");
         pageContext.setAttribute("packageName", "test.com.skin.ayada.template");
         pageContext.setAttribute("date", "2013-11-8");
@@ -130,12 +122,10 @@ public class JspTemplateFactoryTest
         pageContext.setAttribute("NodeUtil", new JspTemplateFactoryTest());
 
         long t3 = System.currentTimeMillis();
-        try
-        {
+        try {
             template.execute(pageContext);
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             e.printStackTrace();
         }
         long t4 = System.currentTimeMillis();
@@ -145,66 +135,55 @@ public class JspTemplateFactoryTest
         System.out.println(format(result));
     }
 
-    public static void test4(String[] args)
-    {
-        try
-        {
+    public static void test4(String[] args) {
+        try {
             String source = IO.read(new File("webapp/allTagTest.jsp"), "UTF-8", 4096);
             System.out.println(crlf(source));
             System.out.println(StringUtil.escape(source));
             // IO.write(crlf(source).getBytes("UTF-8"), new File("webapp/allTagTest.jsp"));
         }
-        catch(IOException e)
-        {
+        catch(IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void arrayListTest()
-    {
+    public static void arrayListTest() {
         ArrayList<String> list = new ArrayList<String>(4);
 
-        for(int i = 0; i < 5; i++)
-        {
+        for(int i = 0; i < 5; i++) {
             list.add(String.valueOf(i));
         }
 
-        try
-        {
+        try {
             Field[] fields = list.getClass().getDeclaredFields();
 
-            for(int i = 0; i < fields.length; i++)
-            {
+            for(int i = 0; i < fields.length; i++) {
                 Field field = fields[i];
                 System.out.println("field: " + field.getName());
 
-                if(field.getName().equals("elementData"))
-                {
+                if(field.getName().equals("elementData")) {
                     field.setAccessible(true);
                     Object[] elements = (Object[])(field.get(list));
                     System.out.println(elements.length);
                 }
             }
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static Map<String, Integer> getNodeType()
-    {
+    public static Map<String, Integer> getNodeType() {
         Map<String, Integer> map = new HashMap<String, Integer>();
         map.put("TEXT", NodeType.TEXT);
         map.put("EXPRESSION", NodeType.EXPRESSION);
         return map;
     }
 
-    public static void expressionTest()
-    {
+    public static void expressionTest() {
         StringWriter writer = new StringWriter();
         TemplateContext templateContext = TemplateManager.getTemplateContext("webapp");
-        PageContext pageContext = templateContext.getPageContext(writer);
+        PageContext pageContext = templateContext.getPageContext(null, writer);
         ExpressionContext expressionContext = pageContext.getExpressionContext();
         ExpressionUtil.getBoolean(expressionContext, "${1 == 1}");
     }
@@ -213,8 +192,7 @@ public class JspTemplateFactoryTest
      * @param source
      * @return String
      */
-    public static String format(String source)
-    {
+    public static String format(String source) {
         StringReader stringReader = new StringReader(source);
         StringWriter stringWriter = new StringWriter();
         BufferedReader buffer = new BufferedReader(stringReader);
@@ -222,28 +200,22 @@ public class JspTemplateFactoryTest
         int prev = 0;
         String line = null;
 
-        try
-        {
-            while((line = buffer.readLine()) != null)
-            {
-                if(line.trim().length() > 0)
-                {
+        try {
+            while((line = buffer.readLine()) != null) {
+                if(line.trim().length() > 0) {
                     prev = 1;
                     stringWriter.write(line);
                     stringWriter.write("\r\n");
                 }
-                else
-                {
-                    if(prev == 1)
-                    {
+                else {
+                    if(prev == 1) {
                         stringWriter.write("\r\n");
                         prev = 0;
                     }
                 }
             }
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
         }
 
         return stringWriter.toString();
@@ -253,35 +225,28 @@ public class JspTemplateFactoryTest
      * @param source
      * @return String
      */
-    public static String crlf(String source)
-    {
-        if(source == null)
-        {
+    public static String crlf(String source) {
+        if(source == null) {
             return "";
         }
 
         char c;
         StringBuilder buffer = new StringBuilder();
 
-        for(int i = 0, length = source.length(); i < length; i++)
-        {
+        for(int i = 0, length = source.length(); i < length; i++) {
             c = source.charAt(i);
 
-            switch (c)
-            {
-                case '\r':
-                {
+            switch (c) {
+                case '\r': {
                     break;
                 }
-                case '\n':
-                {
+                case '\n': {
                     buffer.append("\r\n");break;
                 }
-                default :
-                {
+                default : {
                     buffer.append(c);break;
                 }
-            }   
+            }
         }
 
         return buffer.toString();

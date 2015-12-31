@@ -20,15 +20,13 @@ import java.util.Map;
  * @author xuesong.net
  * @version 1.0
  */
-public class TagLibrary
-{
+public class TagLibrary {
     private Map<String, TagInfo> library;
 
     /**
-     * 
+     *
      */
-    protected TagLibrary()
-    {
+    protected TagLibrary() {
         this.library = new LinkedHashMap<String, TagInfo>();
     }
 
@@ -36,8 +34,7 @@ public class TagLibrary
      * @param tagName
      * @return TagInfo
      */
-    public TagInfo getTagInfo(String tagName)
-    {
+    public TagInfo getTagInfo(String tagName) {
         return this.library.get(tagName);
     }
 
@@ -45,12 +42,10 @@ public class TagLibrary
      * @param tagName
      * @return String
      */
-    public String getTagClassName(String tagName)
-    {
+    public String getTagClassName(String tagName) {
         TagInfo tagInfo = this.library.get(tagName);
 
-        if(tagInfo != null)
-        {
+        if(tagInfo != null) {
             return tagInfo.getTagClass();
         }
         return null;
@@ -60,18 +55,15 @@ public class TagLibrary
      * @param tagName
      * @param className
      */
-    public void setup(String tagName, String className)
-    {
+    public void setup(String tagName, String className) {
         TagInfo tagInfo = this.library.get(tagName);
 
-        if(tagInfo != null)
-        {
+        if(tagInfo != null) {
             tagInfo.setTagClass(className);
             tagInfo.setBodyContent(0);
             tagInfo.setDescription(null);
         }
-        else
-        {
+        else {
             tagInfo = new TagInfo();
             tagInfo.setName(tagName);
             tagInfo.setTagClass(className);
@@ -87,18 +79,15 @@ public class TagLibrary
      * @param bodyContent
      * @param description
      */
-    public void setup(String tagName, String className, int bodyContent, String description)
-    {
+    public void setup(String tagName, String className, int bodyContent, String description) {
         TagInfo tagInfo = this.library.get(tagName);
 
-        if(tagInfo != null)
-        {
+        if(tagInfo != null) {
             tagInfo.setTagClass(className);
             tagInfo.setBodyContent(bodyContent);
             tagInfo.setDescription(description);
         }
-        else
-        {
+        else {
             tagInfo = new TagInfo();
             tagInfo.setName(tagName);
             tagInfo.setTagClass(className);
@@ -114,53 +103,57 @@ public class TagLibrary
      * @param bodyContent
      * @param description
      */
-    public void setup(String tagName, String className, String bodyContent, String description)
-    {
+    public void setup(String tagName, String className, String bodyContent, String description) {
         this.setup(tagName, className, TagInfo.getBodyContent(bodyContent), description);
     }
 
     /**
      * @param library
      */
-    public void setup(Map<String, TagInfo> library)
-    {
+    public void setup(Map<String, TagInfo> library) {
         this.library.putAll(library);
+    }
+
+    /**
+     * @param from
+     * @param name
+     */
+    public void rename(String from, String name) {
+    	TagInfo tagInfo = this.library.remove(from);
+
+    	if(tagInfo != null) {
+    		tagInfo.setName(name);
+    		this.library.put(name, tagInfo);
+    	}
     }
 
     /**
      * @return Map<String, String>
      */
-    public Map<String, TagInfo> getLibrary()
-    {
+    public Map<String, TagInfo> getLibrary() {
         return this.library;
     }
 
-    public void println()
-    {
+    public void println() {
         this.println("taglib");
     }
 
-    public void println(String name)
-    {
-        if(name == null)
-        {
+    public void println(String name) {
+        if(name == null) {
             System.out.println("=============== taglib ===============");
         }
-        else
-        {
+        else {
             System.out.println("=============== " + name + " ===============");
         }
 
-        for(Map.Entry<String, TagInfo> entry : this.library.entrySet())
-        {
+        for(Map.Entry<String, TagInfo> entry : this.library.entrySet()) {
             System.out.println(entry.getKey() + " " + entry.getValue().getTagClass());
         }
 
         System.out.println();
     }
 
-    public void release()
-    {
+    public void release() {
         this.library.clear();
         this.library = null;
     }

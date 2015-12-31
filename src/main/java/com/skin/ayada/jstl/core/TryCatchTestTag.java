@@ -20,17 +20,14 @@ import com.skin.ayada.tagext.TryCatchFinally;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class TryCatchTestTag extends TagSupport implements TryCatchFinally
-{
+public class TryCatchTestTag extends TagSupport implements TryCatchFinally {
     private String exception;
 
     @Override
-    public int doStartTag() throws Exception
-    {
+    public int doStartTag() throws Exception {
         System.out.println("doStartTag invoked !");
 
-        if(this.contains(this.exception, "doStartTag"))
-        {
+        if(this.contains(this.exception, "doStartTag")) {
             System.out.println("TryCatchTestTag.doStartTag throws Exception !");
             throw new RuntimeException("TryCatchTestTag.doStartTag throws Exception !");
         }
@@ -42,12 +39,10 @@ public class TryCatchTestTag extends TagSupport implements TryCatchFinally
      * @return int
      */
     @Override
-    public int doEndTag() throws Exception
-    {
+    public int doEndTag() throws Exception {
         System.out.println("doEndTag invoked !");
 
-        if(this.contains(this.exception, "doEndTag"))
-        {
+        if(this.contains(this.exception, "doEndTag")) {
             System.out.println("TryCatchTestTag.doEndTag throws Exception !");
             throw new RuntimeException("TryCatchTestTag.doEndTag throws Exception !");
         }
@@ -56,24 +51,20 @@ public class TryCatchTestTag extends TagSupport implements TryCatchFinally
     }
 
     @Override
-    public void doCatch(Throwable throwable) throws Throwable
-    {
+    public void doCatch(Throwable throwable) throws Throwable {
         System.out.println("doCatch invoked !");
 
-        if(this.contains(this.exception, "doCatch"))
-        {
+        if(this.contains(this.exception, "doCatch")) {
             System.out.println("TryCatchTestTag.doCatch throws Exception !");
             throw new RuntimeException("TryCatchTestTag.doCatch throws Exception !");
         }
     }
 
     @Override
-    public void doFinally()
-    {
+    public void doFinally() {
         System.out.println("doFinally invoked !");
 
-        if(this.contains(this.exception, "doFinally"))
-        {
+        if(this.contains(this.exception, "doFinally")) {
             System.out.println("TryCatchTestTag.doFinally throws Exception !");
             throw new RuntimeException("TryCatchTestTag.doFinally throws Exception !");
         }
@@ -84,23 +75,18 @@ public class TryCatchTestTag extends TagSupport implements TryCatchFinally
      * @param value
      * @return boolean
      */
-    private boolean contains(String content, String value)
-    {
-        if(content != null)
-        {
-            if(content.trim().equals("*"))
-            {
+    private boolean contains(String content, String value) {
+        if(content != null) {
+            if(content.trim().equals("*")) {
                 return true;
             }
 
             String[] array = content.split(",");
 
-            for(int i = 0; i < array.length; i++)
-            {
+            for(int i = 0; i < array.length; i++) {
                 array[i] = array[i].trim();
 
-                if(array[i].equals(value))
-                {
+                if(array[i].equals(value)) {
                     return true;
                 }
             }
@@ -112,16 +98,14 @@ public class TryCatchTestTag extends TagSupport implements TryCatchFinally
     /**
      * @return the exception
      */
-    public String getException()
-    {
+    public String getException() {
         return this.exception;
     }
 
     /**
      * @param exception the exception to set
      */
-    public void setException(String exception)
-    {
+    public void setException(String exception) {
         this.exception = exception;
     }
 }

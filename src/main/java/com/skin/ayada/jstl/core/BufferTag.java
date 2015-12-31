@@ -23,21 +23,17 @@ import com.skin.ayada.util.ClassUtil;
  * @author xuesong.net
  * @version 1.0
  */
-public class BufferTag extends BodyTagSupport
-{
+public class BufferTag extends BodyTagSupport {
     private String var;
 
     /**
      * @return int
      */
     @Override
-    public int doStartTag() throws Exception
-    {
-        if(this.var != null)
-        {
+    public int doStartTag() throws Exception {
+        if(this.var != null) {
             return BodyTag.EVAL_BODY_BUFFERED;
         }
-
         return Tag.SKIP_BODY;
     }
 
@@ -45,22 +41,17 @@ public class BufferTag extends BodyTagSupport
      * @return int
      */
     @Override
-    public int doEndTag() throws Exception
-    {
-        if(this.var != null)
-        {
+    public int doEndTag() throws Exception {
+        if(this.var != null) {
             BodyContent bodyContent = this.getBodyContent();
 
-            if(bodyContent != null)
-            {
+            if(bodyContent != null) {
                 this.pageContext.setAttribute(this.var, bodyContent.getString());
             }
-            else
-            {
+            else {
                 this.pageContext.setAttribute(this.var, "");
             }
         }
-
         return Tag.EVAL_PAGE;
     }
 
@@ -68,34 +59,30 @@ public class BufferTag extends BodyTagSupport
      * @param name
      * @param value
      */
-    public void setValue(String name, Object value)
-    {
+    public void setValue(String name, Object value) {
         this.pageContext.setAttribute(name, value);
     }
 
     /**
      * @param name
      * @param value
-     * @throws Exception 
+     * @throws Exception
      */
-    public void setProperty(Object object, String name, Object value) throws Exception
-    {
+    public void setProperty(Object object, String name, Object value) throws Exception {
         ClassUtil.setProperty(object, name, value);
     }
 
     /**
      * @param var the var to set
      */
-    public void setVar(String var)
-    {
+    public void setVar(String var) {
         this.var = var;
     }
 
     /**
      * @return the var
      */
-    public String getVar()
-    {
+    public String getVar() {
         return this.var;
     }
 }

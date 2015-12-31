@@ -24,44 +24,34 @@ import com.skin.ayada.util.MemMonitor;
  * @author xuesong.net
  * @version 1.0
  */
-public class MemMonitorTest
-{
-    public static void main(String[] args)
-    {
+public class MemMonitorTest {
+    public static void main(String[] args) {
         OutputStream outputStream = null;
 
-        try
-        {
+        try {
             outputStream = new FileOutputStream("D:\\mem.log");
             PrintWriter out = new PrintWriter(outputStream);
             MemMonitor memMonitor = new MemMonitor();
 
-            for(int i = 0; i < 10000; i++)
-            {
+            for(int i = 0; i < 10000; i++) {
                 String[] a = new String[200];
 
-                for(int j = 0; j < a.length; j++)
-                {
+                for(int j = 0; j < a.length; j++) {
                     a[j] = String.valueOf(j);
                 }
 
                 memMonitor.test(out, (i == 0), true);
             }
         }
-        catch(IOException e)
-        {
+        catch(IOException e) {
             e.printStackTrace();
         }
-        finally
-        {
-            if(outputStream != null)
-            {
-                try
-                {
+        finally {
+            if(outputStream != null) {
+                try {
                     outputStream.close();
                 }
-                catch(IOException e)
-                {
+                catch(IOException e) {
                 }
             }
         }

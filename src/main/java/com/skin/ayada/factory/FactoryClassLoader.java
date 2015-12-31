@@ -22,15 +22,13 @@ import org.slf4j.LoggerFactory;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class FactoryClassLoader extends ClassLoader
-{
+public class FactoryClassLoader extends ClassLoader {
     private static final Logger logger = LoggerFactory.getLogger(FactoryClassLoader.class);
 
     /**
      * @param classLoader
      */
-    public FactoryClassLoader(ClassLoader classLoader)
-    {
+    public FactoryClassLoader(ClassLoader classLoader) {
         super(classLoader);
     }
 
@@ -38,14 +36,11 @@ public class FactoryClassLoader extends ClassLoader
      * @param className
      * @return Class<?>
      */
-    public Class<?> getClass(String className)
-    {
-        try
-        {
+    public Class<?> getClass(String className) {
+        try {
             return this.findClass(className);
         }
-        catch(ClassNotFoundException e)
-        {
+        catch(ClassNotFoundException e) {
             logger.warn(e.getMessage(), e);
         }
 
@@ -57,8 +52,7 @@ public class FactoryClassLoader extends ClassLoader
      * @param bytes
      * @return Class<?>
      */
-    public Class<?> create(String className, byte[] bytes)
-    {
+    public Class<?> create(String className, byte[] bytes) {
         return this.defineClass(className, bytes, 0, bytes.length);
     }
 
@@ -66,16 +60,13 @@ public class FactoryClassLoader extends ClassLoader
      * @return FactoryClassLoader
      * @throws ClassNotFoundException
      */
-    public static FactoryClassLoader getInstance()
-    {
-        FactoryClassLoader classLoader = AccessController.doPrivileged(new PrivilegedAction<FactoryClassLoader>()
-        {
-            public FactoryClassLoader run()
-            {
+    public static FactoryClassLoader getInstance() {
+        FactoryClassLoader classLoader = AccessController.doPrivileged(new PrivilegedAction<FactoryClassLoader>() {
+            public FactoryClassLoader run() {
                 return new FactoryClassLoader(FactoryClassLoader.class.getClassLoader());
             }
         });
-        
+
         return classLoader;
     }
 }

@@ -16,18 +16,15 @@ package com.skin.ayada.statement;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class Variable extends DataNode
-{
-    public Variable()
-    {
+public class Variable extends DataNode {
+    public Variable() {
         super(NodeType.VARI_NAME, NodeType.VARIABLE);
     }
 
     /**
      * @param nodeName
      */
-    public Variable(String nodeName)
-    {
+    public Variable(String nodeName) {
         super(NodeType.VARI_NAME, NodeType.VARIABLE);
     }
 
@@ -35,8 +32,7 @@ public class Variable extends DataNode
      * @param nodeName
      * @param nodeType
      */
-    protected Variable(String nodeName, int nodeType)
-    {
+    protected Variable(String nodeName, int nodeType) {
         super(NodeType.VARI_NAME, NodeType.VARIABLE);
     }
 
@@ -44,8 +40,7 @@ public class Variable extends DataNode
      * @return TextNode
      */
     @Override
-    public Variable clone()
-    {
+    public Variable clone() {
         Variable node = new Variable();
         node.setNodeName(this.getNodeName());
         node.setNodeType(this.getNodeType());

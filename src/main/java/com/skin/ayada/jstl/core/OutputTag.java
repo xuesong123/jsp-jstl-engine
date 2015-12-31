@@ -23,8 +23,7 @@ import com.skin.ayada.util.IO;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class OutputTag extends BodyTagSupport
-{
+public class OutputTag extends BodyTagSupport {
     private String file;
     private String encoding;
     private boolean escapeXml = false;
@@ -32,48 +31,39 @@ public class OutputTag extends BodyTagSupport
     private boolean trim = false;
 
     @Override
-    public int doStartTag() throws Exception
-    {
+    public int doStartTag() throws Exception {
         return BodyTag.EVAL_BODY_BUFFERED;
     }
 
     @Override
-    public int doEndTag() throws Exception
-    {
+    public int doEndTag() throws Exception {
         String content = null;
         BodyContent bodyContent = this.getBodyContent();
 
-        if(bodyContent != null)
-        {
+        if(bodyContent != null) {
             content = bodyContent.getString();
 
-            if(this.trim)
-            {
+            if(this.trim) {
                 content = content.trim();
             }
 
-            if(this.escapeXml)
-            {
+            if(this.escapeXml) {
                 content = this.escape(content);
             }
 
-            if(this.encoding == null)
-            {
+            if(this.encoding == null) {
                 this.encoding = "UTF-8";
             }
 
-            if(this.file != null)
-            {
+            if(this.file != null) {
                 IO.write(new File(this.file), content.getBytes(this.encoding));
             }
 
-            if(this.out)
-            {
+            if(this.out) {
                 this.pageContext.getOut().write(content);
                 this.pageContext.getOut().flush();
             }
         }
-
         return EVAL_PAGE;
     }
 
@@ -81,49 +71,39 @@ public class OutputTag extends BodyTagSupport
      * @param source
      * @return String
      */
-    private String escape(String source)
-    {
-        if(source == null)
-        {
+    private String escape(String source) {
+        if(source == null) {
             return "";
         }
 
         char c;
         StringBuilder buffer = new StringBuilder();
 
-        for(int i = 0, size = source.length(); i < size; i++)
-        {
+        for(int i = 0, size = source.length(); i < size; i++) {
             c = source.charAt(i);
 
-            switch (c)
-            {
-                case '&':
-                {
+            switch (c) {
+                case '&': {
                     buffer.append("&amp;");
                     break;
                 }
-                case '"':
-                {
+                case '"': {
                     buffer.append("&quot;");
                     break;
                 }
-                case '<':
-                {
+                case '<': {
                     buffer.append("&lt;");
                     break;
                 }
-                case '>':
-                {
+                case '>': {
                     buffer.append("&gt;");
                     break;
                 }
-                case '\'':
-                {
+                case '\'': {
                     buffer.append("&#39;");
                     break;
                 }
-                default :
-                {
+                default : {
                     buffer.append(c);
                     break;
                 }
@@ -136,80 +116,70 @@ public class OutputTag extends BodyTagSupport
     /**
      * @return the file
      */
-    public String getFile()
-    {
+    public String getFile() {
         return this.file;
     }
 
     /**
      * @param file the file to set
      */
-    public void setFile(String file)
-    {
+    public void setFile(String file) {
         this.file = file;
     }
 
     /**
      * @return the encoding
      */
-    public String getEncoding()
-    {
+    public String getEncoding() {
         return this.encoding;
     }
 
     /**
      * @param encoding the encoding to set
      */
-    public void setEncoding(String encoding)
-    {
+    public void setEncoding(String encoding) {
         this.encoding = encoding;
     }
 
     /**
      * @return boolean
      */
-    public boolean getEscapeXml()
-    {
+    public boolean getEscapeXml() {
         return this.escapeXml;
     }
 
     /**
      * @param escapeXml
      */
-    public void setEscapeXml(boolean escapeXml)
-    {
+    public void setEscapeXml(boolean escapeXml) {
         this.escapeXml = escapeXml;
     }
 
     /**
      * @param out the out to set
      */
-    public void setOut(boolean out)
-    {
+    public void setOut(boolean out) {
         this.out = out;
     }
 
     /**
      * @return the out
      */
-    public boolean getOut()
-    {
+    public boolean getOut() {
         return this.out;
     }
 
     /**
      * @param trim the trim to set
      */
-    public void setTrim(boolean trim)
-    {
+    public void setTrim(boolean trim) {
         this.trim = trim;
     }
 
     /**
      * @return the trim
      */
-    public boolean getTrim()
-    {
+    public boolean getTrim() {
         return this.trim;
     }
 }

@@ -17,8 +17,7 @@ package com.skin.ayada.database;
  * @author xuesong.net
  * @version 1.0
  */
-public class Column
-{
+public class Column {
     private String alias;
     private String columnCode;
     private String columnName;
@@ -39,27 +38,22 @@ public class Column
     private Object value;
     private Table table;
 
-    public Column()
-    {
+    public Column() {
     }
 
-    public Column(String columnName)
-    {
+    public Column(String columnName) {
         this(columnName, null);
     }
 
-    public Column(String columnName, String alias)
-    {
+    public Column(String columnName, String alias) {
         this.alias = alias;
         this.columnName = columnName;
         this.autoIncrement = 0;
         this.nullable = 1;
     }
 
-    public Column(Column c)
-    {
-        if(c != null)
-        {
+    public Column(Column c) {
+        if(c != null) {
             this.alias = c.alias;
             this.columnName = c.columnName;
             this.columnCode = c.columnCode;
@@ -80,225 +74,183 @@ public class Column
         }
     }
 
-    public void setTable(Table table)
-    {
+    public void setTable(Table table) {
         this.table = table;
     }
 
-    public Table getTable()
-    {
+    public Table getTable() {
         return this.table;
     }
 
-    public String getTableName()
-    {
-        if(this.table != null)
-        {
+    public String getTableName() {
+        if(this.table != null) {
             return this.table.getTableName();
         }
 
         return null;
     }
 
-    public String getTableAlias()
-    {
-        if(this.table != null)
-        {
+    public String getTableAlias() {
+        if(this.table != null) {
             return this.table.getAlias();
         }
 
         return null;
     }
 
-    public String getAlias()
-    {
+    public String getAlias() {
         return this.alias;
     }
 
-    public void setAlias(String alias)
-    {
+    public void setAlias(String alias) {
         this.alias = alias;
     }
 
-    public void setColumnCode(String columnCode)
-    {
+    public void setColumnCode(String columnCode) {
         this.columnCode = columnCode;
     }
 
-    public String getColumnCode()
-    {
+    public String getColumnCode() {
         return this.columnCode;
     }
 
-    public void setColumnName(String columnName)
-    {
+    public void setColumnName(String columnName) {
         this.columnName = columnName;
     }
 
-    public String getColumnName()
-    {
+    public String getColumnName() {
         return this.columnName;
     }
 
-    public int getDataType()
-    {
+    public int getDataType() {
         return this.dataType;
     }
 
-    public void setDataType(int dataType)
-    {
+    public void setDataType(int dataType) {
         this.dataType = dataType;
     }
 
-    public String getTypeName()
-    {
+    public String getTypeName() {
         return this.typeName;
     }
 
-    public void setTypeName(String typeName)
-    {
+    public void setTypeName(String typeName) {
         this.typeName = typeName;
     }
 
     /**
      * @return the autoIncrement
      */
-    public int getAutoIncrement()
-    {
+    public int getAutoIncrement() {
         return this.autoIncrement;
     }
 
     /**
      * @param autoIncrement the autoIncrement to set
      */
-    public void setAutoIncrement(int autoIncrement)
-    {
+    public void setAutoIncrement(int autoIncrement) {
         this.autoIncrement = autoIncrement;
     }
 
-    public int getColumnSize()
-    {
+    public int getColumnSize() {
         return this.columnSize;
     }
 
-    public void setColumnSize(int columnSize)
-    {
+    public void setColumnSize(int columnSize) {
         this.columnSize = columnSize;
     }
 
-    public int getDecimalDigits()
-    {
+    public int getDecimalDigits() {
         return this.decimalDigits;
     }
 
-    public void setDecimalDigits(int decimalDigits)
-    {
+    public void setDecimalDigits(int decimalDigits) {
         this.decimalDigits = decimalDigits;
     }
 
-    public String getColumnDef()
-    {
+    public String getColumnDef() {
         return this.columnDef;
     }
 
-    public void setColumnDef(String columnDef)
-    {
+    public void setColumnDef(String columnDef) {
         this.columnDef = columnDef;
     }
 
-    public String getRemarks()
-    {
+    public String getRemarks() {
         return this.remarks;
     }
 
-    public void setRemarks(String remarks)
-    {
+    public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
 
-    public int getNullable()
-    {
+    public int getNullable() {
         return this.nullable;
     }
 
-    public void setNullable(int nullable)
-    {
+    public void setNullable(int nullable) {
         this.nullable = nullable;
     }
 
-    public int getPrecision()
-    {
+    public int getPrecision() {
         return this.precision;
     }
 
-    public void setPrecision(int precision)
-    {
+    public void setPrecision(int precision) {
         this.precision = precision;
     }
 
-    public void setPrimaryKey(boolean primaryKey)
-    {
+    public void setPrimaryKey(boolean primaryKey) {
         this.primaryKey = primaryKey;
     }
 
-    public boolean getPrimaryKey()
-    {
+    public boolean getPrimaryKey() {
         return this.primaryKey;
     }
 
-    public String getVariableName()
-    {
+    public String getVariableName() {
         return this.variableName;
     }
 
-    public void setVariableName(String variableName)
-    {
+    public void setVariableName(String variableName) {
         this.variableName = variableName;
     }
 
-    public String getJavaTypeName()
-    {
+    public String getJavaTypeName() {
         return this.javaTypeName;
     }
 
-    public void setJavaTypeName(String javaTypeName)
-    {
+    public void setJavaTypeName(String javaTypeName) {
         this.javaTypeName = javaTypeName;
     }
 
-    public String getMethodSetter()
-    {
+    public String getMethodSetter() {
         return this.methodSetter;
     }
 
-    public void setMethodSetter(String methodSetter)
-    {
+    public void setMethodSetter(String methodSetter) {
         this.methodSetter = methodSetter;
     }
 
-    public String getMethodGetter()
-    {
+    public String getMethodGetter() {
         return this.methodGetter;
     }
 
-    public void setMethodGetter(String methodGetter)
-    {
+    public void setMethodGetter(String methodGetter) {
         this.methodGetter = methodGetter;
     }
 
     /**
      * @param object
      */
-    public void setValue(Object object)
-    {
+    public void setValue(Object object) {
         this.value = object;
     }
 
     /**
      * @return Object
      */
-    public Object getValue()
-    {
+    public Object getValue() {
         return this.value;
     }
 
@@ -306,8 +258,7 @@ public class Column
      * @return String
      */
     @Override
-    public String toString()
-    {
+    public String toString() {
         StringBuilder buffer = new StringBuilder();
         buffer.append("<column");
         buffer.append(" alias=\"" + this.alias).append("\"");

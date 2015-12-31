@@ -16,15 +16,13 @@ package com.skin.ayada.tagext;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class FinallyException extends Exception
-{
+public class FinallyException extends Exception {
     private static final long serialVersionUID = 1L;
 
     /**
      * @param throwable
      */
-    public FinallyException(Throwable throwable)
-    {
+    public FinallyException(Throwable throwable) {
         super(throwable);
     }
 }

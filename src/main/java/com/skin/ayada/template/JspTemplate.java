@@ -28,20 +28,17 @@ import com.skin.ayada.statement.Node;
  * @author xuesong.net
  * @version 1.0
  */
-public abstract class JspTemplate extends Template
-{
+public abstract class JspTemplate extends Template {
     private static final Logger logger = LoggerFactory.getLogger(JspTemplate.class);
 
-    public JspTemplate()
-    {
+    public JspTemplate() {
     }
 
     /**
      * @param file
      * @param nodes
      */
-    public JspTemplate(String home, String file, List<Node> nodes)
-    {
+    public JspTemplate(String home, String file, List<Node> nodes) {
         super(home, file, nodes);
     }
 
@@ -50,8 +47,7 @@ public abstract class JspTemplate extends Template
      * @throws Throwable
      */
     @Override
-    public void execute(final PageContext pageContext) throws Exception
-    {
+    public void execute(final PageContext pageContext) throws Exception {
         JspWriter out = pageContext.getOut();
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("home", this.getHome());
@@ -59,29 +55,23 @@ public abstract class JspTemplate extends Template
         map.put("lastModified", this.getLastModified());
         pageContext.setAttribute("template", map);
 
-        try
-        {
-            if(logger.isDebugEnabled())
-            {
+        try {
+            if(logger.isDebugEnabled()) {
                 long t1 = System.currentTimeMillis();
                 this._execute(pageContext);
                 long t2 = System.currentTimeMillis();
                 logger.debug(this.getPath() + " - render time: " + (t2 - t1));
             }
-            else
-            {
+            else {
                 this._execute(pageContext);
             }
         }
-        catch(Throwable throwable)
-        {
-            if(throwable instanceof Exception)
-            {
+        catch(Throwable throwable) {
+            if(throwable instanceof Exception) {
                 throw ((Exception)throwable);
             }
             throw new Exception(throwable);
         }
-
         out.flush();
     }
 

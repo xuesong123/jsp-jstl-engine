@@ -30,20 +30,16 @@ import com.skin.ayada.util.TemplateUtil;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class DemoTest
-{
+public class DemoTest {
     /**
      * @param args
      */
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         classPathTest();
     }
 
-    public static void classPathTest()
-    {
-        try
-        {
+    public static void classPathTest() {
+        try {
             String home = "example/demo";
             SourceFactory sourceFactory = new ClassPathSourceFactory(home);
             TemplateFactory templateFactory = new TemplateFactory();
@@ -68,8 +64,7 @@ public class DemoTest
             System.out.println("-------------- result --------------");
             System.out.println(writer.toString());
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             e.printStackTrace();
         }
     }

@@ -25,8 +25,7 @@ import com.skin.ayada.source.SourceFactory;
  * @author xuesong.net
  * @version 1.0
  */
-public class TemplateManager
-{
+public class TemplateManager {
     private static final Map<String, TemplateContext> cache = new HashMap<String, TemplateContext>();
     private TemplateManager(){}
 
@@ -34,8 +33,7 @@ public class TemplateManager
      * @param home
      * @return TemplateContext
      */
-    public static TemplateContext getTemplateContext(String home)
-    {
+    public static TemplateContext getTemplateContext(String home) {
         return getTemplateContext(home, true);
     }
 
@@ -44,16 +42,13 @@ public class TemplateManager
      * @param create
      * @return TemplateContext
      */
-    public static TemplateContext getTemplateContext(String home, boolean create)
-    {
+    public static TemplateContext getTemplateContext(String home, boolean create) {
         TemplateContext templateContext = cache.get(home);
 
-        if(templateContext == null && create == true)
-        {
+        if(templateContext == null && create == true) {
             templateContext = create(home);
             cache.put(home, templateContext);
         }
-
         return templateContext;
     }
 
@@ -61,8 +56,7 @@ public class TemplateManager
      * @param home
      * @return TemplateContext
      */
-    public static TemplateContext create(String home)
-    {
+    public static TemplateContext create(String home) {
         SourceFactory sourceFactory = new DefaultSourceFactory(home);
         TemplateFactory templateFactory = new TemplateFactory();
         TemplateContext templateContext = new DefaultTemplateContext(home);
@@ -76,14 +70,11 @@ public class TemplateManager
     /**
      * @param templateContext
      */
-    public static void add(TemplateContext templateContext)
-    {
-        if(cache.get(templateContext.getHome()) == null)
-        {
+    public static void add(TemplateContext templateContext) {
+        if(cache.get(templateContext.getHome()) == null) {
             cache.put(templateContext.getHome(), templateContext);
         }
-        else
-        {
+        else {
             throw new RuntimeException("context already exists !");
         }
     }

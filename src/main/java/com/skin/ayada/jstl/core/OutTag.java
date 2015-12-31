@@ -11,6 +11,7 @@
 package com.skin.ayada.jstl.core;
 
 import java.io.IOException;
+import java.io.Writer;
 
 import com.skin.ayada.runtime.JspWriter;
 import com.skin.ayada.runtime.PageContext;
@@ -26,27 +27,22 @@ import com.skin.ayada.tagext.Tag;
  * @author xuesong.net
  * @version 1.0
  */
-public class OutTag extends BodyTagSupport
-{
+public class OutTag extends BodyTagSupport {
     private Object value = null;
     private String defaultValue = null;
     private boolean escapeXml = false;
 
     @Override
-    public int doStartTag() throws Exception
-    {
-        if(this.value != null)
-        {
+    public int doStartTag() throws Exception {
+        if(this.value != null) {
             OutTag.print(this.pageContext, this.value, this.escapeXml);
             return Tag.SKIP_BODY;
         }
 
-        if(this.defaultValue != null)
-        {
+        if(this.defaultValue != null) {
             OutTag.print(this.pageContext, this.defaultValue, this.escapeXml);
             return Tag.SKIP_BODY;
         }
-
         return BodyTag.EVAL_BODY_BUFFERED;
     }
 
@@ -54,16 +50,31 @@ public class OutTag extends BodyTagSupport
      * @return int
      */
     @Override
-    public int doEndTag() throws Exception
-    {
+    public int doEndTag() throws Exception {
         BodyContent bodyContent = this.getBodyContent();
 
-        if(bodyContent != null)
-        {
+        if(bodyContent != null) {
             print(this.pageContext, bodyContent.getString().trim(), this.escapeXml);
         }
-
         return EVAL_PAGE;
+    }
+
+    /**
+     * @param out
+     * @param value
+     * @param escapeXml
+     */
+    public static void write(Writer out, Object value, boolean escapeXml) throws IOException {
+        if(value != null) {
+            String content = value.toString();
+
+            if(escapeXml) {
+                out.write(escape(content));
+            }
+            else {
+                out.write(content);
+            }
+        }
     }
 
     /**
@@ -71,19 +82,15 @@ public class OutTag extends BodyTagSupport
      * @param value
      * @param escapeXml
      */
-    public static void print(PageContext pageContext, Object value, boolean escapeXml) throws IOException
-    {
-        if(value != null)
-        {
+    public static void print(PageContext pageContext, Object value, boolean escapeXml) throws IOException {
+        if(value != null) {
             String content = value.toString();
             JspWriter out = pageContext.getOut();
 
-            if(escapeXml)
-            {
+            if(escapeXml) {
                 out.print(escape(content));
             }
-            else
-            {
+            else {
                 out.print(content);
             }
         }
@@ -93,87 +100,72 @@ public class OutTag extends BodyTagSupport
      * @param source
      * @return String
      */
-    private static String escape(String source)
-    {
-        if(source == null)
-        {
+    private static String escape(String source) {
+        if(source == null) {
             return "";
         }
 
         char c;
         StringBuilder buffer = new StringBuilder();
 
-        for(int i = 0, size = source.length(); i < size; i++)
-        {
+        for(int i = 0, size = source.length(); i < size; i++) {
             c = source.charAt(i);
 
-            switch (c)
-            {
-                case '&':
-                {
+            switch (c) {
+                case '&': {
                     buffer.append("&amp;");
                     break;
                 }
-                case '"':
-                {
+                case '"': {
                     buffer.append("&quot;");
                     break;
                 }
-                case '<':
-                {
+                case '<': {
                     buffer.append("&lt;");
                     break;
                 }
-                case '>':
-                {
+                case '>': {
                     buffer.append("&gt;");
                     break;
                 }
-                case '\'':
-                {
+                case '\'': {
                     buffer.append("&#39;");
                     break;
                 }
-                default :
-                {
+                default : {
                     buffer.append(c);
                     break;
                 }
             }
         }
-
         return buffer.toString();
     }
 
     /**
      * @return the value
      */
-    public Object getValue()
-    {
+    public Object getValue() {
         return this.value;
     }
 
     /**
      * @param value the value to set
      */
-    public void setValue(Object value)
-    {
+    public void setValue(Object value) {
         this.value = value;
     }
 
     /**
      * @return boolean
      */
-    public boolean getEscapeXml()
-    {
+    public boolean getEscapeXml() {
         return this.escapeXml;
     }
 
     /**
      * @param escapeXml
      */
-    public void setEscapeXml(boolean escapeXml)
-    {
+    public void setEscapeXml(boolean escapeXml) {
         this.escapeXml = escapeXml;
     }
 }

@@ -26,22 +26,17 @@ import com.skin.ayada.util.IO;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class XmlCompilerTest
-{
-    public static void main(String[] args)
-    {
-        try
-        {
+public class XmlCompilerTest {
+    public static void main(String[] args) {
+        try {
             test1();
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void test1() throws Exception
-    {
+    public static void test1() throws Exception {
         SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
         TemplateFactory templateFactory = new TemplateFactory();
         templateFactory.setIgnoreJspTag(false);
@@ -50,12 +45,10 @@ public class XmlCompilerTest
         XmlCompiler xmlCompiler = new XmlCompiler();
         String result = xmlCompiler.compile(template);
 
-        try
-        {
+        try {
             IO.write(new File("webapp\\allTagTest.xml"), result.getBytes("UTF-8"));
         }
-        catch(IOException e)
-        {
+        catch(IOException e) {
             e.printStackTrace();
         }
         System.out.println(result);

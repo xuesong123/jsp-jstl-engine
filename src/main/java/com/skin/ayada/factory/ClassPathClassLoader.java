@@ -25,12 +25,10 @@ import java.nio.channels.WritableByteChannel;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class ClassPathClassLoader extends ClassLoader
-{
+public class ClassPathClassLoader extends ClassLoader {
     private String classPath;
 
-    public ClassPathClassLoader(ClassLoader parent, String classPath)
-    {
+    public ClassPathClassLoader(ClassLoader parent, String classPath) {
         super(parent);
         this.classPath = classPath;
     }
@@ -39,13 +37,11 @@ public class ClassPathClassLoader extends ClassLoader
      * @param name
      */
     @Override
-    protected Class<?> findClass(String name) throws ClassNotFoundException
-    {
+    protected Class<?> findClass(String name) throws ClassNotFoundException {
         byte[] bytes = loadClassBytes(name);
         Class<?> clazz = defineClass(name, bytes, 0, bytes.length);
 
-        if(clazz == null)
-        {
+        if(clazz == null) {
             throw new ClassNotFoundException();
         }
 
@@ -57,12 +53,10 @@ public class ClassPathClassLoader extends ClassLoader
      * @return byte[]
      * @throws ClassNotFoundException
      */
-    private byte[] loadClassBytes(String className) throws ClassNotFoundException
-    {
+    private byte[] loadClassBytes(String className) throws ClassNotFoundException {
         FileInputStream fileInputStream = null;
 
-        try
-        {
+        try {
             int i = 0;
             String classFile = getClassFile(className);
             fileInputStream = new FileInputStream(classFile);
@@ -71,12 +65,10 @@ public class ClassPathClassLoader extends ClassLoader
             WritableByteChannel writableByteChannel = Channels.newChannel(outputStream);
             ByteBuffer buffer = ByteBuffer.allocateDirect(1024);
 
-            while(true)
-            {
+            while(true) {
                 i = fileChannel.read(buffer);
 
-                if(i == 0 || i == -1)
-                {
+                if(i == 0 || i == -1) {
                     break;
                 }
 
@@ -87,20 +79,15 @@ public class ClassPathClassLoader extends ClassLoader
 
             return outputStream.toByteArray();
         }
-        catch(IOException e)
-        {
+        catch(IOException e) {
             throw new ClassNotFoundException(className);
         }
-        finally
-        {
-            if(fileInputStream != null)
-            {
-                try
-                {
+        finally {
+            if(fileInputStream != null) {
+                try {
                     fileInputStream.close();
                 }
-                catch(IOException e)
-                {
+                catch(IOException e) {
                 }
             }
         }
@@ -110,8 +97,7 @@ public class ClassPathClassLoader extends ClassLoader
      * @param className
      * @return String
      */
-    private String getClassFile(String className)
-    {
+    private String getClassFile(String className) {
         String path = className.replace('.', File.separatorChar) + ".class";
         File file = new File(this.classPath, path);
         return file.getAbsolutePath();

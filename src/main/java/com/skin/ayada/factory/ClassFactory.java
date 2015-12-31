@@ -25,16 +25,14 @@ import java.util.regex.Pattern;
  * @author xuesong.net
  * @version 1.0
  */
-public class ClassFactory
-{
+public class ClassFactory {
     /**
      * @param className
      * @param classPaths
      * @return Object
      * @throws Exception
      */
-    public static Object getInstance(String className, File[] classPaths) throws Exception
-    {
+    public static Object getInstance(String className, File[] classPaths) throws Exception {
         URL[] repositories = ClassFactory.getRepositories(classPaths);
         ClassLoader classLoader = ClassFactory.getClassLoader(ClassFactory.class.getClassLoader(), repositories);
         return ClassFactory.loadClass(className, true, classLoader).newInstance();
@@ -47,20 +45,16 @@ public class ClassFactory
      * @return Object
      * @throws Exception
      */
-    public static Class<?> loadClass(String className, boolean init, ClassLoader classLoader) throws Exception
-    {
+    public static Class<?> loadClass(String className, boolean init, ClassLoader classLoader) throws Exception {
         ClassLoader loader = classLoader;
 
-        if(loader == null)
-        {
+        if(loader == null) {
             loader = Thread.currentThread().getContextClassLoader();
         }
 
-        if((loader == null) || (loader.equals(ClassFactory.class.getClassLoader())))
-        {
+        if((loader == null) || (loader.equals(ClassFactory.class.getClassLoader()))) {
             return Class.forName(className);
         }
-
         return Class.forName(className, init, loader);
     }
 
@@ -69,16 +63,13 @@ public class ClassFactory
      * @param repositories
      * @return ClassLoader
      */
-    public static ClassLoader getClassLoader(final ClassLoader parent, final URL[] repositories)
-    {
+    public static ClassLoader getClassLoader(final ClassLoader parent, final URL[] repositories) {
         return AccessController.doPrivileged(new PrivilegedAction<ClassLoader>(){
             public ClassLoader run(){
-                if(parent == null)
-                {
+                if(parent == null) {
                     return new URLClassLoader(repositories);
                 }
-                else
-                {
+                else {
                     return new URLClassLoader(repositories, parent);
                 }
             }
@@ -90,21 +81,16 @@ public class ClassFactory
      * @return URL[]
      * @throws IOException
      */
-    public static URL[] getRepositories(File[] files) throws IOException
-    {
-        if(files != null)
-        {
+    public static URL[] getRepositories(File[] files) throws IOException {
+        if(files != null) {
             URL[] repositories = new URL[files.length];
 
-            for(int i = 0, length = files.length; i < length; i++)
-            {
+            for(int i = 0, length = files.length; i < length; i++) {
                 repositories[i] = files[i].toURI().toURL();
             }
-
             return repositories;
         }
-        else
-        {
+        else {
             return new URL[0];
         }
     }
@@ -112,13 +98,11 @@ public class ClassFactory
     /**
      * @return String
      */
-    public static String getClassPath()
-    {
+    public static String getClassPath() {
         String boot = System.getProperty("sun.boot.class.path");
         String classPath = System.getProperty("java.class.path");
 
-        if(boot != null && boot.length() > 0)
-        {
+        if(boot != null && boot.length() > 0) {
             classPath = classPath + File.pathSeparatorChar + boot;
         }
 
@@ -126,20 +110,16 @@ public class ClassFactory
         String[] path = pattern.split(classPath);
         StringBuilder buffer = new StringBuilder();
 
-        for(int i = 0; i < path.length; i++)
-        {
+        for(int i = 0; i < path.length; i++) {
             File file = new File(path[i]);
 
-            if(file.exists() || file.isDirectory())
-            {
-                if(buffer.length() > 0)
-                {
+            if(file.exists() || file.isDirectory()) {
+                if(buffer.length() > 0) {
                     buffer.append(File.pathSeparatorChar);
                 }
                 buffer.append(path[i]);
             }
         }
-
         return buffer.toString();
     }
 }

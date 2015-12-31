@@ -20,26 +20,22 @@ import com.skin.ayada.tagext.SimpleTag;
  * @author xuesong.net
  * @version 1.0
  */
-public class MySimpleTag extends SimpleTag
-{
+public class MySimpleTag extends SimpleTag {
     /**
      * @see com.skin.ayada.tagext.Tag#release()
      */
     @Override
-    public void release()
-    {
+    public void release() {
     }
 
     /**
      * @see com.skin.ayada.tagext.SimpleTag#doTag()
      */
     @Override
-    public void doTag() throws Exception
-    {
+    public void doTag() throws Exception {
         JspFragment jspFrgment = this.getJspBody();
 
-        for(int i = 0; i < 3; i++)
-        {
+        for(int i = 0; i < 3; i++) {
             jspFrgment.invoke(this.pageContext.getOut());
         }
     }

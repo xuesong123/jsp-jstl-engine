@@ -21,14 +21,12 @@ import java.net.URLEncoder;
  * @author xuesong.net
  * @version 1.0
  */
-public class URLUtil
-{
+public class URLUtil {
     /**
      * @param source
      * @return String
      */
-    public String encode(String source)
-    {
+    public String encode(String source) {
         return this.encode(source, "UTF-8");
     }
 
@@ -37,14 +35,11 @@ public class URLUtil
      * @param encoding
      * @return String
      */
-    public String encode(String source, String encoding)
-    {
-        try
-        {
+    public String encode(String source, String encoding) {
+        try {
             return URLEncoder.encode(source, encoding);
         }
-        catch(UnsupportedEncodingException e)
-        {
+        catch(UnsupportedEncodingException e) {
         }
 
         return "";
@@ -55,8 +50,7 @@ public class URLUtil
      * @param source
      * @return String
      */
-    public String decode(String source)
-    {
+    public String decode(String source) {
         return this.decode(source, "UTF-8");
     }
 
@@ -65,14 +59,11 @@ public class URLUtil
      * @param encoding
      * @return String
      */
-    public String decode(String source, String encoding)
-    {
-        try
-        {
+    public String decode(String source, String encoding) {
+        try {
             return URLDecoder.decode(source, encoding);
         }
-        catch(UnsupportedEncodingException e)
-        {
+        catch(UnsupportedEncodingException e) {
         }
 
         return "";

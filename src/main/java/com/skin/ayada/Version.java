@@ -19,8 +19,7 @@ import java.util.Calendar;
  * @author xuesong.net
  * @version 1.0
  */
-public class Version
-{
+public class Version {
     public static final int LEVEL = 4;
     public static final int majorVersion = 1;
     public static final int minorVersion = 10;
@@ -31,40 +30,35 @@ public class Version
     /**
      * @return int
      */
-    public static int getMajorVersion()
-    {
+    public static int getMajorVersion() {
         return majorVersion;
     }
 
     /**
      * @return int
      */
-    public static int getMinorVersion()
-    {
+    public static int getMinorVersion() {
         return minorVersion;
     }
 
     /**
      * @return the name
      */
-    public static String getName()
-    {
+    public static String getName() {
         return name;
     }
 
     /**
      * @return the developer
      */
-    public static String getDeveloper()
-    {
+    public static String getDeveloper() {
         return developer;
     }
 
     /**
      * @return String
      */
-    public static String getVersion()
-    {
+    public static String getVersion() {
         return getVersion(majorVersion, minorVersion, LEVEL);
     }
 
@@ -73,8 +67,7 @@ public class Version
      * @param minorVersion
      * @return String
      */
-    public static String getVersion(int majorVersion, int minorVersion)
-    {
+    public static String getVersion(int majorVersion, int minorVersion) {
         return getVersion(majorVersion, minorVersion, LEVEL);
     }
 
@@ -83,39 +76,33 @@ public class Version
      * @param minorVersion
      * @return String
      */
-    public static String getVersion(int majorVersion, int minorVersion, int level)
-    {
+    public static String getVersion(int majorVersion, int minorVersion, int level) {
         int mod = minorVersion;
         int[] temp = new int[level];
         StringBuilder buffer = new StringBuilder();
 
-        for(int i = 0; i < level; i++)
-        {
+        for(int i = 0; i < level; i++) {
             temp[level - 1 - i] = mod % 10;
             mod = mod / 10;
         }
 
         temp[0] = majorVersion + (mod * 10) + temp[0];
 
-        for(int i = 0; i < level; i++)
-        {
+        for(int i = 0; i < level; i++) {
             buffer.append(temp[i]);
             buffer.append(".");
         }
 
-        if(buffer.length() > 0)
-        {
+        if(buffer.length() > 0) {
             buffer.deleteCharAt(buffer.length() - 1);
         }
-
         return buffer.toString();
     }
 
     /**
      * @return String
      */
-    public static String getCopyright()
-    {
+    public static String getCopyright() {
         int year = Calendar.getInstance().get(Calendar.YEAR);
         return "(C) Copyright 1998-" + year + " " + developer;
     }

@@ -20,8 +20,7 @@ import com.skin.ayada.tagext.Tag;
  * @author xuesong.net
  * @version 1.0
  */
-public class RemoveTag extends BodyTagSupport
-{
+public class RemoveTag extends BodyTagSupport {
     private String var;
     private String scope;
 
@@ -29,10 +28,8 @@ public class RemoveTag extends BodyTagSupport
      * @return int
      */
     @Override
-    public int doStartTag() throws Exception
-    {
-        if(this.var != null)
-        {
+    public int doStartTag() throws Exception {
+        if(this.var != null) {
             this.pageContext.removeAttribute(this.var);
         }
 
@@ -42,32 +39,28 @@ public class RemoveTag extends BodyTagSupport
     /**
      * @param var the var to set
      */
-    public void setVar(String var)
-    {
+    public void setVar(String var) {
         this.var = var;
     }
 
     /**
      * @return the var
      */
-    public String getVar()
-    {
+    public String getVar() {
         return this.var;
     }
 
     /**
      * @param scope the scope to set
      */
-    public void setScope(String scope)
-    {
+    public void setScope(String scope) {
         this.scope = scope;
     }
 
     /**
      * @return the var
      */
-    public String getScope()
-    {
+    public String getScope() {
         return this.scope;
     }
 }

@@ -28,15 +28,13 @@ import org.slf4j.LoggerFactory;
  * @author xuesong.net
  * @version 1.0
  */
-public class BBCode
-{
+public class BBCode {
     private static Logger logger = LoggerFactory.getLogger(BBCode.class);
     private static final boolean DEBUG = logger.isDebugEnabled();
     public static final Map<String, String> map = BBCode.load();
     public static final Map<String, String> sig = new HashMap<String, String>();
 
-    static
-    {
+    static {
         sig.put("img",   "1");
         sig.put("audio", "1");
         sig.put("attach", "1");
@@ -48,10 +46,8 @@ public class BBCode
      * @param source
      * @return String
      */
-    public static String decode(String source)
-    {
-        if(source == null)
-        {
+    public static String decode(String source) {
+        if(source == null) {
             return "";
         }
 
@@ -60,67 +56,54 @@ public class BBCode
         int length = source.length();
         StringBuilder buffer = new StringBuilder();
 
-        while(begin < length)
-        {
+        while(begin < length) {
             index = source.indexOf('[', begin);
 
-            if(index > -1)
-            {
-                if(index > begin)
-                {
+            if(index > -1) {
+                if(index > begin) {
                     buffer.append(HtmlUtil.encode(source.substring(begin, index)));
                 }
 
                 int k = source.indexOf(']', index + 1);
 
-                if(k > -1)
-                {
+                if(k > -1) {
                     String name = null;
                     String attributes = null;
                     String content = source.substring(index + 1, k);
                     int m = content.indexOf('=');
 
-                    if(m > -1)
-                    {
+                    if(m > -1) {
                         name = content.substring(0, m);
                         attributes = content.substring(m + 1);
                     }
-                    else
-                    {
+                    else {
                         name = content;
                     }
 
-                    if(sig.get(name) != null)
-                    {
+                    if(sig.get(name) != null) {
                         m = source.indexOf("[/" + name + "]", k + 1);
 
-                        if(m > -1)
-                        {
+                        if(m > -1) {
                             String value = source.substring(k + 1, m);
                             String html = getHtml(name, attributes, value);
 
-                            if(DEBUG)
-                            {
+                            if(DEBUG) {
                                 logger.debug("[name: " + name + ", attributes: " + attributes + ", value: " + value + "]: " + html);
                             }
 
                             buffer.append(html);
                             begin = m + name.length() + 3;
                         }
-                        else
-                        {
-                            if(DEBUG)
-                            {
+                        else {
+                            if(DEBUG) {
                                 logger.debug("[name: " + name + "] --- ERROR ---");
                             }
 
                             begin = k + 1;
                         }
                     }
-                    else
-                    {
-                        if(DEBUG)
-                        {
+                    else {
+                        if(DEBUG) {
                             logger.debug("[name: " + name + ", attributes: " + attributes + ", value: #null#]: " + getHtml(name, attributes, null));
                         }
 
@@ -128,14 +111,12 @@ public class BBCode
                         begin = k + 1;
                     }
                 }
-                else
-                {
+                else {
                     buffer.append(HtmlUtil.encode(source.substring(index)));
                     break;
                 }
             }
-            else
-            {
+            else {
                 buffer.append(HtmlUtil.encode(source.substring(begin, length)));
                 break;
             }
@@ -149,49 +130,39 @@ public class BBCode
      * @param value
      * @return String
      */
-    public static String getHtml(String name, String attributes, String value)
-    {
+    public static String getHtml(String name, String attributes, String value) {
         String html = map.get(name);
 
-        if(html != null)
-        {
-            if(value != null)
-            {
+        if(html != null) {
+            if(value != null) {
                 String temp = value.trim();
 
-                if(temp.length() >= 10 && temp.toLowerCase().startsWith("javascript"))
-                {
+                if(temp.length() >= 10 && temp.toLowerCase().startsWith("javascript")) {
                     temp = "";
                 }
 
                 html = replace(html, "${value}", HtmlUtil.encode(temp));
             }
-            else
-            {
+            else {
                 html = replace(html, "${value}", "");
             }
 
             String[] array = null;
 
-            if(attributes != null)
-            {
+            if(attributes != null) {
                 array = unquote(attributes.trim()).split(",");
             }
-            else
-            {
+            else {
                 array = new String[0];
             }
 
-            for(int i = 0; i < array.length; i++)
-            {
+            for(int i = 0; i < array.length; i++) {
                 String attr = array[i];
 
-                if(attr.length() >= 10 && attr.toLowerCase().startsWith("javascript"))
-                {
+                if(attr.length() >= 10 && attr.toLowerCase().startsWith("javascript")) {
                     array[i] = "";
                 }
-                else
-                {
+                else {
                     array[i] = HtmlUtil.encode(attr);
                 }
             }
@@ -207,26 +178,21 @@ public class BBCode
      * @param replacement
      * @return String
      */
-    public static String evaluate(String source, String[] replacement)
-    {
+    public static String evaluate(String source, String[] replacement) {
         char c;
         StringBuilder name = new StringBuilder();
         StringBuilder buffer = new StringBuilder();
 
-        for(int i = 0, length = source.length(); i < length; i++)
-        {
+        for(int i = 0, length = source.length(); i < length; i++) {
             c = source.charAt(i);
 
-            if(c == '$' && i < length - 1 && source.charAt(i + 1) == '{')
-            {
+            if(c == '$' && i < length - 1 && source.charAt(i + 1) == '{') {
                 int j = i + 2;
 
-                for(; j < length; j++)
-                {
+                for(; j < length; j++) {
                     c = source.charAt(j);
 
-                    if(c == '}')
-                    {
+                    if(c == '}') {
                         String value = replace(name.toString(), replacement);
                         buffer.append(value);
                         name.setLength(0);
@@ -236,8 +202,7 @@ public class BBCode
                 }
                 i = j;
             }
-            else
-            {
+            else {
                 buffer.append(c);
             }
         }
@@ -250,38 +215,30 @@ public class BBCode
      * @param replacement
      * @return String
      */
-    public static String replace(String source, String[] replacement)
-    {
+    public static String replace(String source, String[] replacement) {
         int s = 0;
         int e = source.indexOf("#", s);
         int length = source.length();
 
-        if(e > -1)
-        {
-            for(e = e + 1, s = e; s < length; s++)
-            {
-                if(Character.isDigit(source.charAt(s)) == false)
-                {
+        if(e > -1) {
+            for(e = e + 1, s = e; s < length; s++) {
+                if(Character.isDigit(source.charAt(s)) == false) {
                     break;
                 }
             }
 
-            if(s > e)
-            {
+            if(s > e) {
                 int index = -1;
                 String value = source.substring(e, s);
 
-                try
-                {
+                try {
                     index = Integer.parseInt(value);
 
-                    if(index > 0 && index <= replacement.length)
-                    {
+                    if(index > 0 && index <= replacement.length) {
                         return source.substring(0, e - 1) + replacement[index - 1] + source.substring(s);
                     }
                 }
-                catch(NumberFormatException t)
-                {
+                catch(NumberFormatException t) {
                 }
             }
         }
@@ -295,15 +252,12 @@ public class BBCode
      * @param replacement
      * @return String
      */
-    public static String replace(String source, String search, String replacement)
-    {
-        if(source == null)
-        {
+    public static String replace(String source, String search, String replacement) {
+        if(source == null) {
             return "";
         }
 
-        if(search == null)
-        {
+        if(search == null) {
             return source;
         }
 
@@ -312,12 +266,10 @@ public class BBCode
         int d = search.length();
         StringBuilder buffer = new StringBuilder();
 
-        do
-        {
+        do {
             e = source.indexOf(search, s);
 
-            if(e == -1)
-            {
+            if(e == -1) {
                 buffer.append(source.substring(s));
                 break;
             }
@@ -332,10 +284,8 @@ public class BBCode
      * @param source
      * @return String
      */
-    public static String remove(String source)
-    {
-        if(source == null)
-        {
+    public static String remove(String source) {
+        if(source == null) {
             return "";
         }
 
@@ -344,27 +294,22 @@ public class BBCode
         int length = source.length();
         StringBuilder buffer = new StringBuilder();
 
-        while(begin < length)
-        {
+        while(begin < length) {
             index = source.indexOf('[', begin);
 
-            if(index > -1)
-            {
+            if(index > -1) {
                 int k = source.indexOf(']', index + 1);
                 buffer.append(source.substring(begin, index));
 
-                if(k > -1)
-                {
+                if(k > -1) {
                     begin = k + 1;
                 }
-                else
-                {
+                else {
                     buffer.append(source.substring(index));
                     break;
                 }
             }
-            else
-            {
+            else {
                 buffer.append(source.substring(begin, length));
                 break;
             }
@@ -377,10 +322,8 @@ public class BBCode
      * @param source
      * @return String
      */
-    public static String unquote(String source)
-    {
-        if(source == null)
-        {
+    public static String unquote(String source) {
+        if(source == null) {
             return "";
         }
 
@@ -388,43 +331,34 @@ public class BBCode
         int end = source.length();
 
         char c;
-        for(int i = 0; i < end; i++)
-        {
+        for(int i = 0; i < end; i++) {
             c = source.charAt(i);
 
-            if(c == '\"' || c == '\'')
-            {
+            if(c == '\"' || c == '\'') {
                 start = i + 1;
             }
-            else
-            {
+            else {
                 break;
             }
         }
 
-        for(int i = end - 1; i > -1; i--)
-        {
+        for(int i = end - 1; i > -1; i--) {
             c = source.charAt(i);
 
-            if(c == '\"' || c == '\'')
-            {
+            if(c == '\"' || c == '\'') {
                 end = i;
             }
-            else
-            {
+            else {
                 break;
             }
         }
 
-        if(end < 0)
-        {
+        if(end < 0) {
             end = 0;
         }
 
-        if(start > 0 && end < source.length())
-        {
-            if(start < end)
-            {
+        if(start > 0 && end < source.length()) {
+            if(start < end) {
                 return source.substring(start, end);
             }
             return "";
@@ -435,8 +369,7 @@ public class BBCode
     /**
      * @return Map<String, String>
      */
-    private static Map<String, String> load()
-    {
+    private static Map<String, String> load() {
         ClassLoader classLoader = BBCode.class.getClassLoader();
         Map<String, String> map1 = load(classLoader, "ayada-bbcode-default.properties");
         Map<String, String> map2 = load(classLoader, "ayada-bbcode.properties");
@@ -449,19 +382,16 @@ public class BBCode
      * @param resource
      * @return Map<String, String>
      */
-    private static Map<String, String> load(ClassLoader classLoader, String resource)
-    {
+    private static Map<String, String> load(ClassLoader classLoader, String resource) {
         InputStream inputStream = null;
         InputStreamReader inputStreamReader = null;
         BufferedReader bufferedReader = null;
         Map<String, String> map = new LinkedHashMap<String, String>();
 
-        try
-        {
+        try {
             inputStream = classLoader.getResourceAsStream(resource);
 
-            if(inputStream == null)
-            {
+            if(inputStream == null) {
                 return map;
             }
 
@@ -472,47 +402,37 @@ public class BBCode
             String key = null;
             String line = null;
             String value = null;
-            while((line = bufferedReader.readLine()) != null)
-            {
+            while((line = bufferedReader.readLine()) != null) {
                 line = line.trim();
 
-                if(line.length() < 1)
-                {
+                if(line.length() < 1) {
                     continue;
                 }
 
-                if(line.startsWith("#"))
-                {
+                if(line.startsWith("#")) {
                     continue;
                 }
 
                 k = line.indexOf(" ");
 
-                if(k > -1)
-                {
+                if(k > -1) {
                     key = line.substring(0, k).trim();
                     value = line.substring(k + 1).trim();
 
-                    if(key.length() > 0 && value.length() > 0)
-                    {
+                    if(key.length() > 0 && value.length() > 0) {
                         map.put(key, value);
                     }
                 }
             }
         }
-        catch(IOException e)
-        {
+        catch(IOException e) {
         }
-        finally
-        {
-            if(inputStream != null)
-            {
-                try
-                {
+        finally {
+            if(inputStream != null) {
+                try {
                     inputStream.close();
                 }
-                catch(IOException e)
-                {
+                catch(IOException e) {
                 }
             }
         }

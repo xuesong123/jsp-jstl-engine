@@ -29,8 +29,7 @@ import com.skin.ayada.statement.Node;
  * @author xuesong.net
  * @version 1.0
  */
-public class Template
-{
+public class Template {
     private String home;
     private String path;
     private long updateTime;
@@ -39,8 +38,7 @@ public class Template
     private List<Source> dependencies;
     private static final Logger logger = LoggerFactory.getLogger(Template.class);
 
-    public Template()
-    {
+    public Template() {
     }
 
     /**
@@ -48,8 +46,7 @@ public class Template
      * @param path
      * @param nodes
      */
-    public Template(String home, String path, List<Node> nodes)
-    {
+    public Template(String home, String path, List<Node> nodes) {
         this.home = home;
         this.path = path;
         this.nodes = nodes;
@@ -60,23 +57,20 @@ public class Template
      * @param pageContext
      * @throws Throwable
      */
-    public void execute(final PageContext pageContext) throws Exception
-    {
+    public void execute(final PageContext pageContext) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("home", this.home);
         map.put("path", this.path);
         map.put("lastModified", this.lastModified);
         pageContext.setAttribute("template", map);
 
-        if(logger.isDebugEnabled())
-        {
+        if(logger.isDebugEnabled()) {
             long t1 = System.currentTimeMillis();
             DefaultExecutor.execute(this, pageContext);
             long t2 = System.currentTimeMillis();
             logger.debug(this.getPath() + " - render time: " + (t2 - t1));
         }
-        else
-        {
+        else {
             DefaultExecutor.execute(this, pageContext);
         }
     }
@@ -84,111 +78,95 @@ public class Template
     /**
      * @param home the home to set
      */
-    public void setHome(String home)
-    {
+    public void setHome(String home) {
         this.home = home;
     }
 
     /**
      * @return the home
      */
-    public String getHome()
-    {
+    public String getHome() {
         return this.home;
     }
 
     /**
      * @param path the path to set
      */
-    public void setPath(String path)
-    {
+    public void setPath(String path) {
         this.path = path;
     }
 
     /**
      * @return the path
      */
-    public String getPath()
-    {
+    public String getPath() {
         return this.path;
     }
 
     /**
      * @return the lastModified
      */
-    public long getLastModified()
-    {
+    public long getLastModified() {
         return this.lastModified;
     }
 
     /**
      * @param lastModified the lastModified to set
      */
-    public void setLastModified(long lastModified)
-    {
+    public void setLastModified(long lastModified) {
         this.lastModified = lastModified;
     }
 
     /**
      * @param updateTime the updateTime to set
      */
-    public void setUpdateTime(long updateTime)
-    {
+    public void setUpdateTime(long updateTime) {
         this.updateTime = updateTime;
     }
 
     /**
      * @return the updateTime
      */
-    public long getUpdateTime()
-    {
+    public long getUpdateTime() {
         return this.updateTime;
     }
 
     /**
      * @param nodes the nodes to set
      */
-    public void setNodes(List<Node> nodes)
-    {
+    public void setNodes(List<Node> nodes) {
         this.nodes = nodes;
     }
 
     /**
      * @return the nodes
      */
-    public List<Node> getNodes()
-    {
+    public List<Node> getNodes() {
         return this.nodes;
     }
 
     /**
      * @return the dependencies
      */
-    public List<Source> getDependencies()
-    {
+    public List<Source> getDependencies() {
         return this.dependencies;
     }
 
     /**
      * @param dependencies the dependencies to set
      */
-    public void setDependencies(List<Source> dependencies)
-    {
+    public void setDependencies(List<Source> dependencies) {
         this.dependencies = dependencies;
     }
 
     /**
      * @param dependency
      */
-    public void addDependency(Source dependency)
-    {
-        if(dependency != null)
-        {
-            if(this.dependencies == null)
-            {
+    public void addDependency(Source dependency) {
+        if(dependency != null) {
+            if(this.dependencies == null) {
                 this.dependencies = new ArrayList<Source>();
             }
-
             this.dependencies.add(dependency);
         }
     }

@@ -23,19 +23,15 @@ import com.skin.ayada.tagext.BodyTagSupport;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class TestBodyTag extends BodyTagSupport
-{
+public class TestBodyTag extends BodyTagSupport {
     @Override
-    public int doStartTag()
-    {
+    public int doStartTag() {
         JspWriter out = this.pageContext.getOut();
 
-        try
-        {
+        try {
             out.print(TestBodyTag.class.getName());
         }
-        catch(IOException e)
-        {
+        catch(IOException e) {
             e.printStackTrace();
         }
         return BodyTag.EVAL_BODY_BUFFERED;
@@ -45,20 +41,16 @@ public class TestBodyTag extends BodyTagSupport
      * @return int
      */
     @Override
-    public int doEndTag()
-    {
+    public int doEndTag() {
         BodyContent bodyContent = this.getBodyContent();
 
-        if(bodyContent != null)
-        {
+        if(bodyContent != null) {
             String content = bodyContent.getString().trim();
 
-            try
-            {
+            try {
                 bodyContent.getEnclosingWriter().print(" - " + content);
             }
-            catch(IOException e)
-            {
+            catch(IOException e) {
             }
         }
 

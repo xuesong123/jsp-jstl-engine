@@ -23,8 +23,7 @@ import com.skin.ayada.runtime.PageContext;
  * @author xuesong.net
  * @version 1.0
  */
-public class TagSupport implements IterationTag
-{
+public class TagSupport implements IterationTag {
     private String id;
     protected Tag parent;
     protected PageContext pageContext;
@@ -33,8 +32,7 @@ public class TagSupport implements IterationTag
      * @return int
      */
     @Override
-    public int doStartTag() throws Exception
-    {
+    public int doStartTag() throws Exception {
         return EVAL_BODY_INCLUDE;
     }
 
@@ -42,8 +40,7 @@ public class TagSupport implements IterationTag
      * @return int
      */
     @Override
-    public int doAfterBody() throws Exception
-    {
+    public int doAfterBody() throws Exception {
         return SKIP_BODY;
     }
 
@@ -51,8 +48,7 @@ public class TagSupport implements IterationTag
      * @return int
      */
     @Override
-    public int doEndTag() throws Exception
-    {
+    public int doEndTag() throws Exception {
         return EVAL_PAGE;
     }
 
@@ -60,39 +56,31 @@ public class TagSupport implements IterationTag
      * @param out
      * @return PrintWriter
      */
-    public static PrintWriter getPrintWriter(Object out)
-    {
-        if(out instanceof PrintWriter)
-        {
+    public static PrintWriter getPrintWriter(Object out) {
+        if(out instanceof PrintWriter) {
             return ((PrintWriter)(out));
         }
-        else if(out instanceof OutputStream)
-        {
+        else if(out instanceof OutputStream) {
             return new PrintWriter((OutputStream)(out));
         }
-        else if(out instanceof Writer)
-        {
+        else if(out instanceof Writer) {
             return new PrintWriter((Writer)(out));
         }
-        else if(out instanceof PageContext)
-        {
+        else if(out instanceof PageContext) {
             return new PrintWriter(((PageContext)out).getOut());
         }
-
         return null;
     }
 
     @Override
-    public void release()
-    {
+    public void release() {
     }
 
     /**
      * @return Tag
      */
     @Override
-    public Tag getParent()
-    {
+    public Tag getParent() {
         return this.parent;
     }
 
@@ -100,16 +88,14 @@ public class TagSupport implements IterationTag
      * @param pageContext
      */
     @Override
-    public void setPageContext(PageContext pageContext)
-    {
+    public void setPageContext(PageContext pageContext) {
         this.pageContext = pageContext;
     }
 
     /**
      * @return PageContext
      */
-    public PageContext getPageContext()
-    {
+    public PageContext getPageContext() {
         return this.pageContext;
     }
 
@@ -117,24 +103,21 @@ public class TagSupport implements IterationTag
      * @param tag
      */
     @Override
-    public void setParent(Tag tag)
-    {
+    public void setParent(Tag tag) {
         this.parent = tag;
     }
 
     /**
      * @return String
      */
-    public String getId()
-    {
+    public String getId() {
         return this.id;
     }
 
     /**
      * @param id
      */
-    public void setId(String id)
-    {
+    public void setId(String id) {
         this.id = id;
     }
 }

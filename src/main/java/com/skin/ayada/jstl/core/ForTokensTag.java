@@ -21,8 +21,7 @@ import com.skin.ayada.tagext.LoopTagSupport;
  * @author xuesong.net
  * @version 1.0
  */
-public class ForTokensTag extends LoopTagSupport
-{
+public class ForTokensTag extends LoopTagSupport {
     protected String items;
     protected String delims;
     private Iterator<?> iterator;
@@ -31,14 +30,11 @@ public class ForTokensTag extends LoopTagSupport
      * @throws Exception
      */
     @Override
-    public void prepare() throws Exception
-    {
-        if(this.delims == null)
-        {
+    public void prepare() throws Exception {
+        if(this.delims == null) {
             this.iterator = new ForEachTag.StringIterator(this.items, ",");
         }
-        else
-        {
+        else {
             this.iterator = new ForEachTag.StringIterator(this.items, this.delims);
         }
     }
@@ -47,8 +43,7 @@ public class ForTokensTag extends LoopTagSupport
      * @return boolean
      */
     @Override
-    public boolean hasNext()
-    {
+    public boolean hasNext() {
         return this.iterator.hasNext();
     }
 
@@ -56,32 +51,28 @@ public class ForTokensTag extends LoopTagSupport
      * @return Object
      */
     @Override
-    public Object next()
-    {
+    public Object next() {
         return this.iterator.next();
     }
 
     /**
      * @param items
      */
-    public void setItems(String items)
-    {
+    public void setItems(String items) {
         this.items = items;
     }
 
     /**
      * @param delims
      */
-    public void setDelims(String delims)
-    {
+    public void setDelims(String delims) {
         this.delims = delims;
     }
 
     /**
      * @param begin
      */
-    public void setBegin(int begin)
-    {
+    public void setBegin(int begin) {
         this.begin = begin;
         this.beginSpecified = true;
     }
@@ -89,8 +80,7 @@ public class ForTokensTag extends LoopTagSupport
     /**
      * @param end
      */
-    public void setEnd(int end)
-    {
+    public void setEnd(int end) {
         this.end = end;
         this.endSpecified = true;
     }
@@ -98,8 +88,7 @@ public class ForTokensTag extends LoopTagSupport
     /**
      * @param step
      */
-    public void setStep(int step)
-    {
+    public void setStep(int step) {
         this.step = step;
         this.stepSpecified = true;
     }

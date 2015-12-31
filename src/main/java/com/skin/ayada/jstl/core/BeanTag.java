@@ -27,8 +27,7 @@ import com.skin.ayada.util.ClassUtil;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class BeanTag extends TagSupport implements Tag, ConstructorTagSupport, PropertyTagSupport
-{
+public class BeanTag extends TagSupport implements Tag, ConstructorTagSupport, PropertyTagSupport {
     private String name;
     private String className;
     private List<Class<?>> parameterTypes;
@@ -36,10 +35,8 @@ public class BeanTag extends TagSupport implements Tag, ConstructorTagSupport, P
     private Map<String, Object> properties;
 
     @Override
-    public int doStartTag() throws Exception
-    {
-        if(this.name == null || this.className == null)
-        {
+    public int doStartTag() throws Exception {
+        if(this.name == null || this.className == null) {
             return Tag.SKIP_BODY;
         }
 
@@ -50,18 +47,15 @@ public class BeanTag extends TagSupport implements Tag, ConstructorTagSupport, P
     }
 
     @Override
-    public int doEndTag() throws Exception
-    {
+    public int doEndTag() throws Exception {
         Object bean = null;
 
-        if(this.parameters.size() > 0)
-        {
+        if(this.parameters.size() > 0) {
             Object[] parameters = this.getParameters();
             Class<?>[] parameterTypes = this.getParameterTypes();
             bean = ClassUtil.getInstance(this.className, parameterTypes, parameters);
         }
-        else
-        {
+        else {
             bean = ClassUtil.getInstance(this.className);
         }
 
@@ -73,8 +67,7 @@ public class BeanTag extends TagSupport implements Tag, ConstructorTagSupport, P
     /**
      * @return Class<?>[]
      */
-    public Class<?>[] getParameterTypes()
-    {
+    public Class<?>[] getParameterTypes() {
         Class<?>[] values = new Class<?>[this.parameterTypes.size()];
         this.parameterTypes.toArray(values);
         return values;
@@ -83,8 +76,7 @@ public class BeanTag extends TagSupport implements Tag, ConstructorTagSupport, P
     /**
      * @return Object[]
      */
-    public Object[] getParameters()
-    {
+    public Object[] getParameters() {
         Object[] values = new Object[this.parameters.size()];
         this.parameters.toArray(values);
         return values;
@@ -95,8 +87,7 @@ public class BeanTag extends TagSupport implements Tag, ConstructorTagSupport, P
      * @param value
      */
     @Override
-    public void setProperty(String name, Object value)
-    {
+    public void setProperty(String name, Object value) {
         this.properties.put(name, value);
     }
 
@@ -105,49 +96,41 @@ public class BeanTag extends TagSupport implements Tag, ConstructorTagSupport, P
      * @param value
      */
     @Override
-    public void setArgument(Class<?> type, Object value)
-    {
-        if(type != null)
-        {
+    public void setArgument(Class<?> type, Object value) {
+        if(type != null) {
             this.parameterTypes.add(type);
         }
-        else
-        {
+        else {
             this.parameterTypes.add(value.getClass());
         }
-
         this.parameters.add(value);
     }
 
     /**
      * @return the name
      */
-    public String getName()
-    {
+    public String getName() {
         return this.name;
     }
 
     /**
      * @param name the name to set
      */
-    public void setName(String name)
-    {
+    public void setName(String name) {
         this.name = name;
     }
 
     /**
      * @return the className
      */
-    public String getClassName()
-    {
+    public String getClassName() {
         return this.className;
     }
 
     /**
      * @param className the className to set
      */
-    public void setClassName(String className)
-    {
+    public void setClassName(String className) {
         this.className = className;
     }
 }

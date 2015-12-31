@@ -17,18 +17,15 @@ package com.skin.ayada.statement;
  * @author xuesong.net
  * @version 1.0
  */
-public class TextNode extends DataNode
-{
-    public TextNode()
-    {
+public class TextNode extends DataNode {
+    public TextNode() {
         super(NodeType.TEXT_NAME, NodeType.TEXT);
     }
 
     /**
      * @param nodeName
      */
-    public TextNode(String nodeName)
-    {
+    public TextNode(String nodeName) {
         super(NodeType.TEXT_NAME, NodeType.TEXT);
     }
 
@@ -36,8 +33,7 @@ public class TextNode extends DataNode
      * @param nodeName
      * @param nodeType
      */
-    protected TextNode(String nodeName, int nodeType)
-    {
+    protected TextNode(String nodeName, int nodeType) {
         super(NodeType.TEXT_NAME, NodeType.TEXT);
     }
 
@@ -45,8 +41,7 @@ public class TextNode extends DataNode
      * @return TextNode
      */
     @Override
-    public TextNode clone()
-    {
+    public TextNode clone() {
         TextNode node = new TextNode();
         node.setNodeName(this.getNodeName());
         node.setNodeType(this.getNodeType());

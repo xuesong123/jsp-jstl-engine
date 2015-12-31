@@ -19,8 +19,7 @@ import java.util.Map;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class Keyword
-{
+public class Keyword {
     public static final Map<String, String> map = new HashMap<String, String>();
 
     static{
@@ -35,8 +34,7 @@ public class Keyword
             "transient", "try", "void", "volatile", "while"
         };
 
-        for(int i = 0, length = keywords.length; i < length; i++)
-        {
+        for(int i = 0, length = keywords.length; i < length; i++) {
             map.put(keywords[i], keywords[i]);
         }
     }
@@ -45,8 +43,7 @@ public class Keyword
      * @param keyword
      * @return String
      */
-    public static String get(String keyword)
-    {
+    public static String get(String keyword) {
         return map.get(keyword);
     }
 }

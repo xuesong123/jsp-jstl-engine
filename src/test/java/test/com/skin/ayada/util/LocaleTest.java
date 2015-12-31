@@ -19,17 +19,14 @@ import java.util.Locale;
  * @author xuesong.net
  * @version 1.0
  */
-public class LocaleTest
-{
+public class LocaleTest {
     /**
      * @param args
      */
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         Locale[] list = Locale.getAvailableLocales();
 
-        for(Locale locale : list)
-        {
+        for(Locale locale : list) {
             String language = locale.getLanguage();
             String country = locale.getCountry();
             String variant = locale.getVariant();

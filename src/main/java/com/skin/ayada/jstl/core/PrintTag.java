@@ -25,15 +25,13 @@ import com.skin.ayada.tagext.TagSupport;
  * @author xuesong.net
  * @version 1.0
  */
-public class PrintTag extends TagSupport
-{
-    private static final BeanUtil beanUtil = new BeanUtil();
+public class PrintTag extends TagSupport {
     private Object out;
     private Object value;
+    private static final BeanUtil beanUtil = new BeanUtil();
 
     @Override
-    public int doEndTag() throws Exception
-    {
+    public int doEndTag() throws Exception {
         print(this.pageContext, this.out, this.value);
         return Tag.EVAL_PAGE;
     }
@@ -43,24 +41,20 @@ public class PrintTag extends TagSupport
      * @param out
      * @param value
      */
-    public static void print(PageContext pageContext, Object out, Object value)
-    {
+    public static void print(PageContext pageContext, Object out, Object value) {
         PrintWriter printWriter = TagSupport.getPrintWriter(out);
 
-        if(printWriter == null)
-        {
+        if(printWriter == null) {
             printWriter = new PrintWriter(pageContext.getOut());
         }
 
-        if(value instanceof PageContext)
-        {
+        if(value instanceof PageContext) {
             String name = null;
             Object bean = null;
             PageContext pc = ((PageContext)value);
             Iterator<String> iterator = pc.getAttributeNames();
 
-            while(iterator.hasNext())
-            {
+            while(iterator.hasNext()) {
                 name = iterator.next();
                 bean = pc.getAttribute(name);
 
@@ -70,44 +64,38 @@ public class PrintTag extends TagSupport
                 printWriter.write("\r\n");
             }
         }
-        else
-        {
+        else {
             printWriter.write(beanUtil.toString(value));
             printWriter.write("\r\n");
         }
-
         printWriter.flush();
     }
 
     /**
      * @return the out
      */
-    public Object getOut()
-    {
+    public Object getOut() {
         return this.out;
     }
 
     /**
      * @param out the out to set
      */
-    public void setOut(Object out)
-    {
+    public void setOut(Object out) {
         this.out = out;
     }
 
     /**
      * @return the value
      */
-    public Object getValue()
-    {
+    public Object getValue() {
         return this.value;
     }
 
     /**
      * @param value the value to set
      */
-    public void setValue(Object value)
-    {
+    public void setValue(Object value) {
         this.value = value;
     }
 }

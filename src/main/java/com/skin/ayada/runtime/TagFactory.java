@@ -19,8 +19,7 @@ import com.skin.ayada.tagext.Tag;
  * @author xuesong.net
  * @version 1.0
  */
-public interface TagFactory
-{
+public interface TagFactory {
     /**
      * @return Tag
      */

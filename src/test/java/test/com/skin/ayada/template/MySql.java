@@ -22,8 +22,7 @@ import java.sql.Statement;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class MySql
-{
+public class MySql {
     /**
      * @param host
      * @param port
@@ -33,14 +32,12 @@ public class MySql
      * @return Connection
      * @throws SQLException
      */
-    public static Connection connect(String host, String port, String databaseName, String userName, String password) throws SQLException
-    {
+    public static Connection connect(String host, String port, String databaseName, String userName, String password) throws SQLException {
         StringBuilder url = new StringBuilder();
         url.append("jdbc:mysql://");
         url.append(host);
 
-        if(port != null && port.trim().length() > 0)
-        {
+        if(port != null && port.trim().length() > 0) {
             url.append(":");
             url.append(port);
         }
@@ -63,24 +60,19 @@ public class MySql
      * @return Connection
      * @throws SQLException
      */
-    public static Connection connect(String url, String driverClass, String userName, String password) throws SQLException
-    {
-        if(url == null)
-        {
+    public static Connection connect(String url, String driverClass, String userName, String password) throws SQLException {
+        if(url == null) {
             throw new SQLException("The Url must be not null !");
         }
 
-        if(driverClass == null)
-        {
+        if(driverClass == null) {
             throw new SQLException("The DriverClass must be not null !");
         }
 
-        try
-        {
+        try {
             Class.forName(driverClass);
         }
-        catch(ClassNotFoundException e)
-        {
+        catch(ClassNotFoundException e) {
             throw new SQLException(e.getMessage());
         }
 
@@ -90,16 +82,12 @@ public class MySql
     /**
      * @param statement
      */
-    public static void close(Statement statement)
-    {
-        if(statement != null)
-        {
-            try
-            {
+    public static void close(Statement statement) {
+        if(statement != null) {
+            try {
                 statement.close();
             }
-            catch(SQLException e)
-            {
+            catch(SQLException e) {
             }
         }
     }
@@ -107,16 +95,12 @@ public class MySql
     /**
      * @param resultSet
      */
-    public static void close(ResultSet resultSet)
-    {
-        if(resultSet != null)
-        {
-            try
-            {
+    public static void close(ResultSet resultSet) {
+        if(resultSet != null) {
+            try {
                 resultSet.close();
             }
-            catch(SQLException e)
-            {
+            catch(SQLException e) {
             }
         }
     }
@@ -124,19 +108,14 @@ public class MySql
     /**
      * @param statement
      */
-    public static void close(Connection connection)
-    {
-        if(connection != null)
-        {
-            try
-            {
-                if(connection.isClosed() == false)
-                {
+    public static void close(Connection connection) {
+        if(connection != null) {
+            try {
+                if(connection.isClosed() == false) {
                     connection.close();
                 }
             }
-            catch(SQLException e)
-            {
+            catch(SQLException e) {
             }
         }
     }

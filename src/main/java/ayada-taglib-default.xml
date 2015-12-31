@@ -38,6 +38,18 @@
         <description></description>
     </tag>
     <tag>
+        <name>c:ifout</name>
+        <tag-class>com.skin.ayada.jstl.core.IfOutTag</tag-class>
+        <body-content>empty</body-content>
+        <description></description>
+    </tag>
+    <tag>
+        <name>c:nvl</name>
+        <tag-class>com.skin.ayada.jstl.core.NVLTag</tag-class>
+        <body-content>empty</body-content>
+        <description></description>
+    </tag>
+    <tag>
         <name>c:catch</name>
         <tag-class>com.skin.ayada.jstl.core.CatchTag</tag-class>
         <body-content>jsp</body-content>
@@ -98,8 +110,8 @@
         <description></description>
     </tag>
     <tag>
-        <name>c:param</name>
-        <tag-class>com.skin.ayada.jstl.core.ParameterTag</tag-class>
+        <name>c:escape</name>
+        <tag-class>com.skin.ayada.jstl.core.EscapeTag</tag-class>
         <body-content>jsp</body-content>
         <description></description>
     </tag>
@@ -128,15 +140,27 @@
         <description></description>
     </tag>
     <tag>
-        <name>c:constructor</name>
-        <tag-class>com.skin.ayada.jstl.core.ConstructorTag</tag-class>
-        <body-content>empty</body-content>
+        <name>c:param</name>
+        <tag-class>com.skin.ayada.jstl.core.ParameterTag</tag-class>
+        <body-content>jsp</body-content>
         <description></description>
     </tag>
     <tag>
         <name>c:property</name>
         <tag-class>com.skin.ayada.jstl.core.PropertyTag</tag-class>
         <body-content>jsp</body-content>
+        <description></description>
+    </tag>
+    <tag>
+        <name>c:attribute</name>
+        <tag-class>com.skin.ayada.jstl.core.AttributeTag</tag-class>
+        <body-content>jsp</body-content>
+        <description></description>
+    </tag>
+    <tag>
+        <name>c:constructor</name>
+        <tag-class>com.skin.ayada.jstl.core.ConstructorTag</tag-class>
+        <body-content>empty</body-content>
         <description></description>
     </tag>
     <tag>
@@ -164,36 +188,6 @@
         <description></description>
     </tag>
     <tag>
-        <name>c:attribute</name>
-        <tag-class>com.skin.ayada.jstl.core.AttributeTag</tag-class>
-        <body-content>jsp</body-content>
-        <description></description>
-    </tag>
-    <tag>
-        <name>c:macro</name>
-        <tag-class>com.skin.ayada.jstl.core.MacroTag</tag-class>
-        <body-content>tagdependent</body-content>
-        <description></description>
-    </tag>
-    <tag>
-        <name>c:include</name>
-        <tag-class>com.skin.ayada.jstl.core.IncludeTag</tag-class>
-        <body-content>tagdependent</body-content>
-        <description></description>
-    </tag>
-    <tag>
-        <name>c:invoke</name>
-        <tag-class>com.skin.ayada.jstl.core.InvokeTag</tag-class>
-        <body-content>tagdependent</body-content>
-        <description></description>
-    </tag>
-    <tag>
-        <name>c:layout</name>
-        <tag-class>com.skin.ayada.jstl.core.InvokeTag</tag-class>
-        <body-content>tagdependent</body-content>
-        <description></description>
-    </tag>
-    <tag>
         <name>c:execute</name>
         <tag-class>com.skin.ayada.jstl.core.ExecuteTag</tag-class>
         <body-content>empty</body-content>
@@ -212,15 +206,45 @@
         <description></description>
     </tag>
     <tag>
+        <name>c:include</name>
+        <tag-class>com.skin.ayada.taglib.ActionTag</tag-class>
+        <body-content>tagdependent</body-content>
+        <description></description>
+    </tag>
+    <tag>
+        <name>c:invoke</name>
+        <tag-class>com.skin.ayada.taglib.ActionTag</tag-class>
+        <body-content>tagdependent</body-content>
+        <description></description>
+    </tag>
+    <tag>
+        <name>c:layout</name>
+        <tag-class>com.skin.ayada.taglib.ActionTag</tag-class>
+        <body-content>tagdependent</body-content>
+        <description></description>
+    </tag>
+    <tag>
         <name>c:action</name>
         <tag-class>com.skin.ayada.taglib.ActionTag</tag-class>
         <body-content>tagdependent</body-content>
         <description></description>
     </tag>
     <tag>
-        <name>c:escape</name>
-        <tag-class>com.skin.ayada.jstl.core.EscapeTag</tag-class>
+        <name>c:test</name>
+        <tag-class>com.skin.ayada.jstl.core.TestTag</tag-class>
+        <body-content>empty</body-content>
+        <description></description>
+    </tag>
+    <tag>
+        <name>c:tryCatchTest</name>
+        <tag-class>com.skin.ayada.jstl.core.TryCatchTestTag</tag-class>
         <body-content>jsp</body-content>
+        <description></description>
+    </tag>
+    <tag>
+        <name>c:scrollpage</name>
+        <tag-class>com.skin.ayada.taglib.ScrollPage</tag-class>
+        <body-content>empty</body-content>
         <description></description>
     </tag>
     <tag>
@@ -296,24 +320,6 @@
         <description></description>
     </tag>
     <tag>
-        <name>c:test</name>
-        <tag-class>com.skin.ayada.jstl.core.TestTag</tag-class>
-        <body-content>empty</body-content>
-        <description></description>
-    </tag>
-    <tag>
-        <name>c:tryCatchTest</name>
-        <tag-class>com.skin.ayada.jstl.core.TryCatchTestTag</tag-class>
-        <body-content>jsp</body-content>
-        <description></description>
-    </tag>
-    <tag>
-        <name>c:scrollpage</name>
-        <tag-class>com.skin.ayada.taglib.ScrollPage</tag-class>
-        <body-content>empty</body-content>
-        <description></description>
-    </tag>
-    <tag>
         <name>sql:connect</name>
         <tag-class>com.skin.ayada.jstl.sql.ConnectTag</tag-class>
         <body-content>jsp</body-content>
@@ -333,26 +339,23 @@
     </tag>
     <tag>
         <name>sql:parse</name>
-        <tag-class>com.skin.ayada.jstl.sql.SqlParseTag</tag-class>
+        <tag-class>com.skin.ayada.jstl.sql.CreateParseTag</tag-class>
         <body-content>jsp</body-content>
         <description></description>
     </tag>
     <tag>
-        <name>io:copy</name>
-        <tag-class>com.skin.ayada.jstl.io.CopyTag</tag-class>
-        <body-content>tagdependent</body-content>
+        <name>sql:create</name>
+        <tag-class>com.skin.ayada.jstl.sql.CreateParseTag</tag-class>
+        <body-content>jsp</body-content>
         <description></description>
     </tag>
     <tag>
-        <name>io:delete</name>
-        <tag-class>com.skin.ayada.jstl.io.DeleteTag</tag-class>
-        <body-content>tagdependent</body-content>
+        <name>sql:insert</name>
+        <tag-class>com.skin.ayada.jstl.sql.InsertParseTag</tag-class>
+        <body-content>jsp</body-content>
         <description></description>
     </tag>
-    <tag>
-        <name>io:mkdir</name>
-        <tag-class>com.skin.ayada.jstl.io.MakeDirTag</tag-class>
-        <body-content>empty</body-content>
-        <description></description>
-    </tag>
+    <tag name="io:copy" tag-class="com.skin.ayada.jstl.io.CopyTag" body-content="tagdependent" description=""/>
+    <tag name="io:delete" tag-class="com.skin.ayada.jstl.io.DeleteTag" body-content="tagdependent" description=""/>
+    <tag name="io:mkdir" tag-class="com.skin.ayada.jstl.io.MakeDirTag" body-content="empty" description=""/>
 </taglib>

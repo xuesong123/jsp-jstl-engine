@@ -21,8 +21,7 @@ import com.skin.ayada.tagext.TagSupport;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class TestTag extends TagSupport
-{
+public class TestTag extends TagSupport {
     private boolean myBoolean;
     private char myChar;
     private byte myByte;
@@ -33,16 +32,14 @@ public class TestTag extends TagSupport
     private long myLong;
     private String myString;
 
-    public TestTag()
-    {
+    public TestTag() {
     }
 
     /**
      * @param myChar
      * @param myByte
      */
-    public TestTag(char myChar, byte myByte)
-    {
+    public TestTag(char myChar, byte myByte) {
         this.myChar = myChar;
         this.myByte = myByte;
     }
@@ -51,49 +48,42 @@ public class TestTag extends TagSupport
      * @param myLong
      * @param myString
      */
-    public TestTag(long myLong, String myString)
-    {
+    public TestTag(long myLong, String myString) {
         this.myLong = myLong;
         this.myString = myString;
     }
 
     @Override
-    public int doStartTag()
-    {
+    public int doStartTag() {
         this.print();
         return SKIP_BODY;
     }
 
     /**
-     * 
+     *
      */
-    public void print()
-    {
+    public void print() {
         this.print(new PrintWriter(this.pageContext.getOut()));
     }
 
     /**
      * @param out
      */
-    public void print(PrintStream out)
-    {
+    public void print(PrintStream out) {
         this.print(new PrintWriter(out));
     }
 
     /**
      * @param out
      */
-    public void print(PrintWriter out)
-    {
+    public void print(PrintWriter out) {
         out.println("<p>---------------- " + this.getClass().getName() + " ----------------</p>");
         out.println("<p>myBoolean: " + this.myBoolean + "</p>");
 
-        if(this.myChar == '\0')
-        {
+        if(this.myChar == '\0') {
             out.println("<p>myChar: \\0</p>");
         }
-        else
-        {
+        else {
             out.println("<p>myChar: " + this.myChar + "</p>");
         }
 
@@ -110,135 +100,117 @@ public class TestTag extends TagSupport
     /**
      * @return the myBoolean
      */
-    public boolean isMyBoolean()
-    {
+    public boolean isMyBoolean() {
         return this.myBoolean;
     }
 
     /**
      * @param myBoolean the myBoolean to set
      */
-    public void setMyBoolean(boolean myBoolean)
-    {
+    public void setMyBoolean(boolean myBoolean) {
         this.myBoolean = myBoolean;
     }
 
     /**
      * @return the myChar
      */
-    public char getMyChar()
-    {
+    public char getMyChar() {
         return this.myChar;
     }
 
     /**
      * @param myChar the myChar to set
      */
-    public void setMyChar(char myChar)
-    {
+    public void setMyChar(char myChar) {
         this.myChar = myChar;
     }
 
     /**
      * @return the myByte
      */
-    public byte getMyByte()
-    {
+    public byte getMyByte() {
         return this.myByte;
     }
 
     /**
      * @param myByte the myByte to set
      */
-    public void setMyByte(byte myByte)
-    {
+    public void setMyByte(byte myByte) {
         this.myByte = myByte;
     }
 
     /**
      * @return the myShort
      */
-    public byte getMyShort()
-    {
+    public byte getMyShort() {
         return this.myShort;
     }
 
     /**
      * @param myShort the myShort to set
      */
-    public void setMyShort(byte myShort)
-    {
+    public void setMyShort(byte myShort) {
         this.myShort = myShort;
     }
 
     /**
      * @return the myInt
      */
-    public int getMyInt()
-    {
+    public int getMyInt() {
         return this.myInt;
     }
     /**
      * @param myInt the myInt to set
      */
-    public void setMyInt(int myInt)
-    {
+    public void setMyInt(int myInt) {
         this.myInt = myInt;
     }
     /**
      * @return the myFloat
      */
-    public float getMyFloat()
-    {
+    public float getMyFloat() {
         return this.myFloat;
     }
     /**
      * @param myFloat the myFloat to set
      */
-    public void setMyFloat(float myFloat)
-    {
+    public void setMyFloat(float myFloat) {
         this.myFloat = myFloat;
     }
     /**
      * @return the myDouble
      */
-    public double getMyDouble()
-    {
+    public double getMyDouble() {
         return this.myDouble;
     }
     /**
      * @param myDouble the myDouble to set
      */
-    public void setMyDouble(double myDouble)
-    {
+    public void setMyDouble(double myDouble) {
         this.myDouble = myDouble;
     }
     /**
      * @return the myLong
      */
-    public long getMyLong()
-    {
+    public long getMyLong() {
         return this.myLong;
     }
     /**
      * @param myLong the myLong to set
      */
-    public void setMyLong(long myLong)
-    {
+    public void setMyLong(long myLong) {
         this.myLong = myLong;
     }
     /**
      * @return the myString
      */
-    public String getMyString()
-    {
+    public String getMyString() {
         return this.myString;
     }
     /**
      * @param myString the myString to set
      */
-    public void setMyString(String myString)
-    {
+    public void setMyString(String myString) {
         this.myString = myString;
     }
 }

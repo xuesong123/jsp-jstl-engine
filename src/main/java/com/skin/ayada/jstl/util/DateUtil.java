@@ -19,15 +19,13 @@ import java.util.Date;
  * @author xuesong.net
  * @version 1.0
  */
-public class DateUtil
-{
+public class DateUtil {
     /**
      * @param date
      * @param pattern
      * @return Date
      */
-    public Date parse(String date, String pattern)
-    {
+    public Date parse(String date, String pattern) {
         return com.skin.ayada.util.DateUtil.parse(date, pattern);
     }
 
@@ -36,9 +34,8 @@ public class DateUtil
      * @param pattern
      * @return String
      */
-    public String format(long timeMillis, String pattern)
-    {
-        return com.skin.ayada.util.DateUtil.format(new Date(timeMillis), pattern);
+    public String format(long timeMillis, String pattern) {
+        return com.skin.ayada.util.DateUtil.format(timeMillis, pattern);
     }
 
     /**
@@ -46,8 +43,7 @@ public class DateUtil
      * @param pattern
      * @return String
      */
-    public String format(Date date, String pattern)
-    {
+    public String format(Date date, String pattern) {
         return com.skin.ayada.util.DateUtil.format(date, pattern);
     }
 
@@ -55,8 +51,7 @@ public class DateUtil
      * @param date
      * @return int
      */
-    public int year(Date date)
-    {
+    public int year(Date date) {
         return com.skin.ayada.util.DateUtil.year(date);
     }
 
@@ -64,8 +59,7 @@ public class DateUtil
      * @param date
      * @return int
      */
-    public int month(Date date)
-    {
+    public int month(Date date) {
         return com.skin.ayada.util.DateUtil.month(date);
     }
 
@@ -73,8 +67,7 @@ public class DateUtil
      * @param date
      * @return int
      */
-    public int day(Date date)
-    {
+    public int day(Date date) {
         return com.skin.ayada.util.DateUtil.day(date);
     }
 
@@ -82,8 +75,7 @@ public class DateUtil
      * @param date
      * @return String
      */
-    public String smart(Date date)
-    {
+    public String smart(Date date) {
         return com.skin.ayada.util.DateUtil.smart(date);
     }
 }

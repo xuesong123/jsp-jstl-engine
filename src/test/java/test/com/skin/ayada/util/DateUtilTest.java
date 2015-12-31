@@ -21,10 +21,8 @@ import com.skin.ayada.util.DateUtil;
  * @author xuesong.net
  * @version 1.0
  */
-public class DateUtilTest
-{
-    public static void main(String[] args)
-    {
+public class DateUtilTest {
+    public static void main(String[] args) {
         Date offsetDate = DateUtil.parse("2013-06-25 18:24:11", "yyyy-MM-dd HH:mm:ss");
         Date date = DateUtil.parse("2013-06-24 18:04:11", "yyyy-MM-dd HH:mm:ss");
         String result = DateUtil.smart(offsetDate, date);
@@ -32,8 +30,7 @@ public class DateUtilTest
         test2();
     }
 
-    public static void test2()
-    {
+    public static void test2() {
         Date offsetDate = DateUtil.parse("2013-06-26 11:50:11", "yyyy-MM-dd HH:mm:ss");
         Date date = DateUtil.parse("2013-06-24 17:16:16", "yyyy-MM-dd HH:mm:ss");
         String result = DateUtil.smart(offsetDate, date);

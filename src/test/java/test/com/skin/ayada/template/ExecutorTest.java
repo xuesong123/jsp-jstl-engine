@@ -34,10 +34,8 @@ import com.skin.ayada.template.TemplateFactory;
  * @author xuesong.net
  * @version 1.0
  */
-public class ExecutorTest
-{
-    public static void main(String[] args) throws Exception
-    {
+public class ExecutorTest {
+    public static void main(String[] args) throws Exception {
         SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
         TemplateFactory templateFactory = new TemplateFactory();
         TemplateContext templateContext = new DefaultTemplateContext("webapp");
@@ -54,7 +52,7 @@ public class ExecutorTest
         System.out.println("compile time: " + (t2 - t1));
 
         StringWriter writer = new StringWriter();
-        PageContext pageContext = templateContext.getPageContext(writer);
+        PageContext pageContext = templateContext.getPageContext(null, writer);
 
         User user = new User();
         user.setUserId(1L);
@@ -66,12 +64,10 @@ public class ExecutorTest
         pageContext.setAttribute("userList", userList);
 
         long t3 = System.currentTimeMillis();
-        try
-        {
+        try {
             template.execute(pageContext);
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             e.printStackTrace();
         }
         long t4 = System.currentTimeMillis();

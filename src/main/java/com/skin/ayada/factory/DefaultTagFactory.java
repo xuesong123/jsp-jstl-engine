@@ -23,8 +23,7 @@ import com.skin.ayada.util.ClassUtil;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class DefaultTagFactory implements TagFactory
-{
+public class DefaultTagFactory implements TagFactory {
     private String tagName;
     private String className;
     private static final Logger logger = LoggerFactory.getLogger(DefaultTagFactory.class);
@@ -33,17 +32,13 @@ public class DefaultTagFactory implements TagFactory
      * @return Tag
      */
     @Override
-    public Tag create()
-    {
-        try
-        {
+    public Tag create() {
+        try {
             return (Tag)(ClassUtil.getInstance(this.className));
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             logger.warn(e.getMessage(), e);
         }
-
         return null;
     }
 
@@ -51,8 +46,7 @@ public class DefaultTagFactory implements TagFactory
      * @param tagName the tagName to set
      */
     @Override
-    public void setTagName(String tagName)
-    {
+    public void setTagName(String tagName) {
         this.tagName = tagName;
     }
 
@@ -60,8 +54,7 @@ public class DefaultTagFactory implements TagFactory
      * @return the tagName
      */
     @Override
-    public String getTagName()
-    {
+    public String getTagName() {
         return this.tagName;
     }
 
@@ -69,8 +62,7 @@ public class DefaultTagFactory implements TagFactory
      * @param className the className to set
      */
     @Override
-    public void setClassName(String className)
-    {
+    public void setClassName(String className) {
         this.className = className;
     }
 
@@ -78,8 +70,7 @@ public class DefaultTagFactory implements TagFactory
      * @return the className
      */
     @Override
-    public String getClassName()
-    {
+    public String getClassName() {
         return this.className;
     }
 }

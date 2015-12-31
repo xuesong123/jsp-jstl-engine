@@ -18,8 +18,7 @@ import com.skin.ayada.runtime.PageContext;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public abstract class SimpleTag implements Tag
-{
+public abstract class SimpleTag implements Tag {
     private Tag parent;
     protected PageContext pageContext;
     private JspFragment jspBody;
@@ -28,8 +27,7 @@ public abstract class SimpleTag implements Tag
      * @return int
      */
     @Override
-    public int doStartTag() throws Exception
-    {
+    public int doStartTag() throws Exception {
         throw new UnsupportedOperationException("doStartTag unsupported !");
     }
 
@@ -37,8 +35,7 @@ public abstract class SimpleTag implements Tag
      * @return int
      */
     @Override
-    public int doEndTag() throws Exception
-    {
+    public int doEndTag() throws Exception {
         throw new UnsupportedOperationException("doStartTag unsupported !");
     }
 
@@ -50,53 +47,46 @@ public abstract class SimpleTag implements Tag
     /**
      * @return the parent
      */
-    public Tag getParent()
-    {
+    public Tag getParent() {
         return this.parent;
     }
 
     /**
      * @param parent the parent to set
      */
-    public void setParent(Tag parent)
-    {
+    public void setParent(Tag parent) {
         this.parent = parent;
     }
 
     /**
      * @return the pageContext
      */
-    public PageContext getPageContext()
-    {
+    public PageContext getPageContext() {
         return this.pageContext;
     }
 
     /**
      * @param pageContext the pageContext to set
      */
-    public void setPageContext(PageContext pageContext)
-    {
+    public void setPageContext(PageContext pageContext) {
         this.pageContext = pageContext;
     }
 
     /**
      * @return the jspBody
      */
-    public JspFragment getJspBody()
-    {
+    public JspFragment getJspBody() {
         return this.jspBody;
     }
 
     /**
      * @param jspBody the jspBody to set
      */
-    public void setJspBody(JspFragment jspBody)
-    {
+    public void setJspBody(JspFragment jspBody) {
         this.jspBody = jspBody;
     }
 
     @Override
-    public void release()
-    {
+    public void release() {
     }
 }

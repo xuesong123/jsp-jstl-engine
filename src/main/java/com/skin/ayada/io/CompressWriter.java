@@ -20,16 +20,14 @@ import java.io.Writer;
  * @author xuesong.net
  * @version 1.0
  */
-public class CompressWriter extends Writer
-{
+public class CompressWriter extends Writer {
     private boolean flag = true;
     private Writer out;
 
     /**
      * @param out
      */
-    public CompressWriter(Writer out)
-    {
+    public CompressWriter(Writer out) {
         this.out = out;
     }
 
@@ -41,29 +39,23 @@ public class CompressWriter extends Writer
      * @throws IOException
      */
     @Override
-    public void write(char[] cbuf, int offset, int length) throws IOException
-    {
+    public void write(char[] cbuf, int offset, int length) throws IOException {
         int j = 0;
         int end = offset + length;
         char[] buffer = new char[length];
 
-        for(int i = offset; i < end; i++)
-        {
-            if(cbuf[i] == '\t' || cbuf[i] == '\n' || cbuf[i] == ' ')
-            {
-                if(this.flag)
-                {
+        for(int i = offset; i < end; i++) {
+            if(cbuf[i] == '\t' || cbuf[i] == '\n' || cbuf[i] == ' ') {
+                if(this.flag) {
                     buffer[j] = ' ';
                     this.flag = false;
                     j++;
                 }
             }
-            else if(cbuf[i] == '\r')
-            {
+            else if(cbuf[i] == '\r') {
                 continue;
             }
-            else
-            {
+            else {
                 buffer[j] = cbuf[i];
                 this.flag = true;
                 j++;
@@ -74,14 +66,12 @@ public class CompressWriter extends Writer
     }
 
     @Override
-    public void close() throws IOException
-    {
+    public void close() throws IOException {
         this.out.close();
     }
 
     @Override
-    public void flush() throws IOException
-    {
+    public void flush() throws IOException {
         this.out.flush();
     }
 }

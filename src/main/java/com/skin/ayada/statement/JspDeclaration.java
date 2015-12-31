@@ -16,10 +16,8 @@ package com.skin.ayada.statement;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class JspDeclaration extends DataNode
-{
-    public JspDeclaration()
-    {
+public class JspDeclaration extends DataNode {
+    public JspDeclaration() {
         super(NodeType.JSP_DECLARATION_NAME, NodeType.JSP_DECLARATION);
         this.setClosed(NodeType.PAIR_CLOSED);
     }
@@ -27,8 +25,7 @@ public class JspDeclaration extends DataNode
     /**
      * @param nodeName
      */
-    public JspDeclaration(String nodeName)
-    {
+    public JspDeclaration(String nodeName) {
         super(NodeType.JSP_DECLARATION_NAME, NodeType.JSP_DECLARATION);
         this.setClosed(NodeType.PAIR_CLOSED);
     }
@@ -37,15 +34,13 @@ public class JspDeclaration extends DataNode
      * @param nodeName
      * @param nodeType
      */
-    protected JspDeclaration(String nodeName, int nodeType)
-    {
+    protected JspDeclaration(String nodeName, int nodeType) {
         super(NodeType.JSP_DECLARATION_NAME, NodeType.JSP_DECLARATION);
         this.setClosed(NodeType.PAIR_CLOSED);
     }
 
     @Override
-    public JspDeclaration clone()
-    {
+    public JspDeclaration clone() {
         JspDeclaration node = new JspDeclaration();
         node.setNodeName(this.getNodeName());
         node.setNodeType(this.getNodeType());

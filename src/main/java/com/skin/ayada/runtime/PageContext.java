@@ -27,11 +27,15 @@ import com.skin.ayada.tagext.BodyContent;
  * @author xuesong.net
  * @version 1.0
  */
-public interface PageContext
-{
+public interface PageContext {
     public static final String LOCALE_KEY = "com.skin.ayada.locale";
     public static final String TIMEZONE_KEY = "com.skin.ayada.time-zone";
     public static final String BUNDLE_KEY = "com.skin.ayada.bundle";
+
+    /**
+     * @return PageContext
+     */
+    public PageContext create();
 
     /**
      * @param out the out to set
@@ -64,6 +68,22 @@ public interface PageContext
      * @return Iterator<String>
      */
     public Iterator<String> getAttributeNames();
+
+    /**
+     * @param context
+     */
+    public void setContext(Map<String, Object> context);
+
+    /**
+     * @return Map<String, Object>
+     */
+    public Map<String, Object> getContext();
+
+    /**
+     * @param names
+     * @return Map<String, Object>
+     */
+    public Map<String, Object> getContext(String[] names);
 
     /**
      * @param timeZone

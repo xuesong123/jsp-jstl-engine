@@ -19,15 +19,12 @@ import com.skin.ayada.runtime.TagFactory;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class TagFactoryCreatorTest
-{
+public class TagFactoryCreatorTest {
     /**
      * @param args
      */
-    public static void main(String[] args)
-    {
-        try
-        {
+    public static void main(String[] args) {
+        try {
             TagFactory tagFactory = TagFactoryManager.getInstance().getTagFactory("c:forEach", "com.skin.ayada.jstl.core.ForEachTag");
             System.out.println(tagFactory);
             System.out.println(tagFactory.create());
@@ -36,8 +33,7 @@ public class TagFactoryCreatorTest
             System.out.println(tagFactory);
             System.out.println(tagFactory.create());
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             e.printStackTrace();
         }
     }

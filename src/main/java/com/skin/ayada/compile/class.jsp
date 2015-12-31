@@ -37,18 +37,17 @@ ${jsp.directive.import}
  * @version 1.0
  */
 @SuppressWarnings("unused")
-public class ${java.className} extends JspTemplate{
+public class ${java.className} extends JspTemplate {
     public static void main(String[] args){
         java.io.StringWriter writer = new java.io.StringWriter();
-        PageContext pageContext = com.skin.ayada.runtime.JspFactory.getDefaultPageContext(writer);
+        PageContext pageContext = com.skin.ayada.runtime.JspFactory.getPageContext(writer);
         ${java.className} template = new ${java.className}();
 
-        try{
+        try {
             template.execute(pageContext);
             System.out.println(writer.toString());
         }
-        catch(Throwable throwable)
-        {
+        catch(Throwable throwable) {
             throwable.printStackTrace();
         }
     }
@@ -58,7 +57,7 @@ ${jsp.declaration}
      * @throws Throwable
      */
     @Override
-    public void _execute(final PageContext pageContext) throws Throwable{
+    public void _execute(final PageContext pageContext) throws Throwable {
         JspWriter out = pageContext.getOut();
         JspWriter jspWriter = pageContext.getOut();
         ExpressionContext expressionContext = pageContext.getExpressionContext();

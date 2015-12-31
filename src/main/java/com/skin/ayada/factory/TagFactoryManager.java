@@ -31,8 +31,7 @@ import com.skin.ayada.tagext.Tag;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class TagFactoryManager
-{
+public class TagFactoryManager {
     private FactoryClassLoader factoryClassLoader;
     private Map<String, TagFactory> context;
     private static TagFactoryManager instance = new TagFactoryManager();
@@ -43,15 +42,13 @@ public class TagFactoryManager
         classPool.appendClassPath(new ClassClassPath(DefaultTagFactory.class));
     }
 
-    public static Tag getTag(String tagName, String tagClassName)
-    {
+    public static Tag getTag(String tagName, String tagClassName) {
         TagFactoryManager tagFactoryManager = TagFactoryManager.getInstance();
         TagFactory tagFactory = tagFactoryManager.getTagFactory(tagName, tagClassName);
         return tagFactory.create();
     }
 
-    private TagFactoryManager()
-    {
+    private TagFactoryManager() {
         this.context = new HashMap<String, TagFactory>();
         this.factoryClassLoader = FactoryClassLoader.getInstance();
     }
@@ -59,8 +56,7 @@ public class TagFactoryManager
     /**
      * @return TagFactoryManager
      */
-    public static TagFactoryManager getInstance()
-    {
+    public static TagFactoryManager getInstance() {
         return instance;
     }
 
@@ -68,29 +64,23 @@ public class TagFactoryManager
      * @param className
      * @return TagFactory
      */
-    public synchronized TagFactory getTagFactory(String tagName, String className)
-    {
+    public synchronized TagFactory getTagFactory(String tagName, String className) {
         TagFactory tagFactory = this.context.get(className);
 
-        if(tagFactory == null)
-        {
+        if(tagFactory == null) {
             tagFactory = this.create(tagName, className);
 
-            if(tagFactory == null)
-            {
+            if(tagFactory == null) {
                 tagFactory = new DefaultTagFactory();
                 tagFactory.setTagName(tagName);
                 tagFactory.setClassName(className);
             }
 
-            if(logger.isDebugEnabled())
-            {
+            if(logger.isDebugEnabled()) {
                 logger.debug("tagName: " + tagName + ", className: " + className + ", tagFactory: " + tagFactory.getClass().getName());
             }
-
             this.context.put(className, tagFactory);
         }
-
         return tagFactory;
     }
 
@@ -98,12 +88,10 @@ public class TagFactoryManager
      * @param className
      * @return TagFactory
      */
-    public TagFactory create(String tagName, String className)
-    {
+    public TagFactory create(String tagName, String className) {
         ClassPool classPool = ClassPool.getDefault();
 
-        try
-        {
+        try {
             String returnClassName = Tag.class.getName();
             String surperClassName = DefaultTagFactory.class.getName();
             String factoryClassName = this.getFactoryClassName(className);
@@ -117,11 +105,9 @@ public class TagFactoryManager
             tagFactory.setClassName(className);
             return tagFactory;
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             logger.warn(e.getMessage(), e);
         }
-
         return null;
     }
 
@@ -129,18 +115,15 @@ public class TagFactoryManager
      * @param className
      * @return String
      */
-    private String getFactoryClassName(String className)
-    {
+    private String getFactoryClassName(String className) {
         String packageName = "";
         String simpleClassName = className;
         int k = simpleClassName.lastIndexOf(".");
 
-        if(k > -1)
-        {
+        if(k > -1) {
             packageName = simpleClassName.substring(0, k);
             simpleClassName = simpleClassName.substring(k + 1);
         }
-
         return "_tpl." + packageName + ".factory." + simpleClassName + "Factory";
     }
 
@@ -149,19 +132,15 @@ public class TagFactoryManager
      * @param bytes
      * @return Object
      */
-    public Object getInstance(String className, byte[] bytes)
-    {
+    public Object getInstance(String className, byte[] bytes) {
         Class<?> clazz = this.factoryClassLoader.create(className, bytes);
 
-        try
-        {
+        try {
             return clazz.newInstance();
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             logger.warn(e.getMessage(), e);
         }
-
         return null;
     }
 }

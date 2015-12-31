@@ -24,10 +24,8 @@ import com.skin.ayada.util.ClassUtil;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class ClassUtilTest
-{
-    public static void main(String[] args)
-    {
+public class ClassUtilTest {
+    public static void main(String[] args) {
         TestTag tag = new TestTag();
         Map<String, Object> properties = new HashMap<String, Object>();
 
@@ -40,16 +38,14 @@ public class ClassUtilTest
         properties.put("myLong", "1.00L");
         properties.put("myString", "Hello");
 
-        try
-        {
+        try {
             ClassUtil.setProperties(tag, properties);
             tag.print(new PrintWriter(System.out));
 
             BeanUtil beanUtil = new BeanUtil();
             System.out.println(beanUtil.toString(tag));
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             e.printStackTrace();
         }
     }

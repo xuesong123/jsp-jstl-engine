@@ -17,18 +17,15 @@ package com.skin.ayada.statement;
  * @author xuesong.net
  * @version 1.0
  */
-public class Expression extends DataNode
-{
-    public Expression()
-    {
+public class Expression extends DataNode {
+    public Expression() {
         super(NodeType.EXPR_NAME, NodeType.EXPRESSION);
     }
 
     /**
      * @param nodeName
      */
-    public Expression(String nodeName)
-    {
+    public Expression(String nodeName) {
         super(NodeType.EXPR_NAME, NodeType.EXPRESSION);
     }
 
@@ -36,8 +33,7 @@ public class Expression extends DataNode
      * @param nodeName
      * @param nodeType
      */
-    protected Expression(String nodeName, int nodeType)
-    {
+    protected Expression(String nodeName, int nodeType) {
         super(NodeType.EXPR_NAME, NodeType.EXPRESSION);
     }
 
@@ -45,8 +41,7 @@ public class Expression extends DataNode
      * @return TextNode
      */
     @Override
-    public Expression clone()
-    {
+    public Expression clone() {
         Expression node = new Expression();
         node.setNodeName(this.getNodeName());
         node.setNodeType(this.getNodeType());

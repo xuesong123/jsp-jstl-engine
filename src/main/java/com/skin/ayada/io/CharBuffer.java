@@ -17,8 +17,7 @@ package com.skin.ayada.io;
  * @author xuesong.net
  * @version 1.0
  */
-public class CharBuffer
-{
+public class CharBuffer {
     private int position;
     private char[] buffer;
     private int bufferSize = 8192;
@@ -32,8 +31,7 @@ public class CharBuffer
     /**
      * @param bufferSize
      */
-    public CharBuffer(int bufferSize)
-    {
+    public CharBuffer(int bufferSize) {
         this.bufferSize = bufferSize;
         this.buffer = new char[bufferSize];
         this.position = 0;
@@ -42,8 +40,7 @@ public class CharBuffer
     /**
      * @param cbuf
      */
-    public CharBuffer append(char[] cbuf)
-    {
+    public CharBuffer append(char[] cbuf) {
         return this.append(cbuf, 0, cbuf.length);
     }
 
@@ -52,44 +49,37 @@ public class CharBuffer
      * @param off
      * @param len
      */
-    public CharBuffer append(char[] cbuf, int off, int len)
-    {
+    public CharBuffer append(char[] cbuf, int off, int len) {
         int count = 0;
         int offset = off;
         int remain = len;
         CharBuffer tail = this.tail;
 
-        if(tail == null)
-        {
+        if(tail == null) {
             tail = this;
         }
 
-        while(remain > 0)
-        {
+        while(remain > 0) {
             count = Math.min(tail.bufferSize - tail.position, remain);
 
-            if(count > 0)
-            {
+            if(count > 0) {
                 System.arraycopy(cbuf, offset, tail.buffer, tail.position, count);
                 tail.position += count;
                 remain -= count;
                 offset += count;
             }
 
-            if(remain > 0)
-            {
+            if(remain > 0) {
                 tail.tail = new CharBuffer(this.bufferSize);
                 tail.next = tail.tail;
                 this.tail = tail.tail;
                 tail = tail.tail;
 
-                if(this.next == null)
-                {
+                if(this.next == null) {
                     this.next = this.tail;
                 }
             }
         }
-
         return this;
     }
 
@@ -97,15 +87,12 @@ public class CharBuffer
      * @param str
      * @return CharBuffer
      */
-    public CharBuffer append(String str)
-    {
-        if(str != null)
-        {
+    public CharBuffer append(String str) {
+        if(str != null) {
             char[] cbuf = str.toCharArray();
             return this.append(cbuf, 0, cbuf.length);
         }
-        else
-        {
+        else {
             return this.append(NULL);
         }
     }
@@ -114,8 +101,7 @@ public class CharBuffer
      * @param c
      * @return CharBuffer
      */
-    public CharBuffer append(char c)
-    {
+    public CharBuffer append(char c) {
         this.temp[0] = c;
         return this.append(this.temp, 0, 1);
     }
@@ -124,14 +110,11 @@ public class CharBuffer
      * @param b
      * @return CharBuffer
      */
-    public CharBuffer append(boolean b)
-    {
-        if(b)
-        {
+    public CharBuffer append(boolean b) {
+        if(b) {
             return this.append(TRUE, 0, 4);
         }
-        else
-        {
+        else {
             return this.append(FALSE, 0, 5);
         }
     }
@@ -140,8 +123,7 @@ public class CharBuffer
      * @param b
      * @return CharBuffer
      */
-    public CharBuffer append(byte b)
-    {
+    public CharBuffer append(byte b) {
         return this.append(Byte.toString(b));
     }
 
@@ -149,8 +131,7 @@ public class CharBuffer
      * @param s
      * @return CharBuffer
      */
-    public CharBuffer append(short s)
-    {
+    public CharBuffer append(short s) {
         return this.append(Short.toString(s));
     }
 
@@ -158,8 +139,7 @@ public class CharBuffer
      * @param i
      * @return CharBuffer
      */
-    public CharBuffer append(int i)
-    {
+    public CharBuffer append(int i) {
         return this.append(Integer.toString(i));
     }
 
@@ -167,8 +147,7 @@ public class CharBuffer
      * @param f
      * @return CharBuffer
      */
-    public CharBuffer append(float f)
-    {
+    public CharBuffer append(float f) {
         return this.append(Float.toString(f));
     }
 
@@ -176,8 +155,7 @@ public class CharBuffer
      * @param d
      * @return CharBuffer
      */
-    public CharBuffer append(double d)
-    {
+    public CharBuffer append(double d) {
         return this.append(Double.toString(d));
     }
 
@@ -185,8 +163,7 @@ public class CharBuffer
      * @param l
      * @return CharBuffer
      */
-    public CharBuffer append(long l)
-    {
+    public CharBuffer append(long l) {
         return this.append(Long.toString(l));
     }
 
@@ -194,15 +171,12 @@ public class CharBuffer
      * @param object
      * @return CharBuffer
      */
-    public CharBuffer append(Object object)
-    {
-        if(object != null)
-        {
+    public CharBuffer append(Object object) {
+        if(object != null) {
             char[] cbuf = object.toString().toCharArray();
             return this.append(cbuf, 0, cbuf.length);
         }
-        else
-        {
+        else {
             return this.append(NULL);
         }
     }
@@ -210,76 +184,64 @@ public class CharBuffer
     /**
      * @return int
      */
-    public int getChunkSize()
-    {
+    public int getChunkSize() {
         int size = 0;
         CharBuffer writer = this;
 
-        while(writer != null)
-        {
+        while(writer != null) {
             size++;
             writer = writer.next;
         }
-
         return size;
     }
 
     /**
      * @return int
      */
-    public int length()
-    {
+    public int length() {
         int length = 0;
         CharBuffer writer = this;
 
-        while(writer != null)
-        {
+        while(writer != null) {
             length += writer.position;
             writer = writer.next;
         }
-
         return length;
     }
 
     /**
      * @return the next
      */
-    public CharBuffer getNext()
-    {
+    public CharBuffer getNext() {
         return this.next;
     }
 
     /**
      * @param next the next to set
      */
-    public void setNext(CharBuffer next)
-    {
+    public void setNext(CharBuffer next) {
         this.next = next;
     }
 
     /**
      * @return the tail
      */
-    public CharBuffer getTail()
-    {
+    public CharBuffer getTail() {
         return this.tail;
     }
 
     /**
      * @param tail the tail to set
      */
-    public void setTail(CharBuffer tail)
-    {
+    public void setTail(CharBuffer tail) {
         this.tail = tail;
     }
 
-    public void free()
-    {
+    public void free() {
         CharBuffer next = this;
         CharBuffer temp = this;
 
-        while(next != null)
-        {
+        while(next != null) {
             temp = next.next;
             next.next = null;
             next.tail = null;
@@ -289,18 +251,15 @@ public class CharBuffer
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         int length = this.length();
         CharBuffer writer = this;
         StringBuilder buffer = new StringBuilder(length);
 
-        while(writer != null)
-        {
+        while(writer != null) {
             buffer.append(writer.buffer, 0, writer.position);
             writer = writer.next;
         }
-
         return buffer.toString();
     }
 }

@@ -23,8 +23,7 @@ import com.skin.ayada.tagext.TagSupport;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class RankTag extends TagSupport
-{
+public class RankTag extends TagSupport {
     private int rankId;
     private long cateId;
     private String description;
@@ -33,8 +32,7 @@ public class RankTag extends TagSupport
      * @return int
      */
     @Override
-    public int doStartTag() throws Exception
-    {
+    public int doStartTag() throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("rankId", this.rankId);
         map.put("cateId", this.cateId);
@@ -47,17 +45,14 @@ public class RankTag extends TagSupport
      * @param name
      * @param value
      */
-    protected void setAttribute(String name, Object value)
-    {
+    protected void setAttribute(String name, Object value) {
         Tag parent = this.getParent();
 
-        if(parent instanceof AttributeTagSupport)
-        {
+        if(parent instanceof AttributeTagSupport) {
             AttributeTagSupport tag = (AttributeTagSupport)(parent);
             tag.setAttribute(name, value);
         }
-        else
-        {
+        else {
             throw new RuntimeException("Illegal use of parameter-style tag without servlet as its direct parent");
         }
     }
@@ -65,48 +60,42 @@ public class RankTag extends TagSupport
     /**
      * @return the rankId
      */
-    public int getRankId()
-    {
+    public int getRankId() {
         return this.rankId;
     }
 
     /**
      * @param rankId the rankId to set
      */
-    public void setRankId(int rankId)
-    {
+    public void setRankId(int rankId) {
         this.rankId = rankId;
     }
 
     /**
      * @return the cateId
      */
-    public long getCateId()
-    {
+    public long getCateId() {
         return this.cateId;
     }
 
     /**
      * @param cateId the cateId to set
      */
-    public void setCateId(long cateId)
-    {
+    public void setCateId(long cateId) {
         this.cateId = cateId;
     }
 
     /**
      * @return the description
      */
-    public String getDescription()
-    {
+    public String getDescription() {
         return this.description;
     }
 
     /**
      * @param description the description to set
      */
-    public void setDescription(String description)
-    {
+    public void setDescription(String description) {
         this.description = description;
     }
 }

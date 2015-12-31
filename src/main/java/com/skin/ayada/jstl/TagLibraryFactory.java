@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -33,16 +34,21 @@ import org.xml.sax.InputSource;
  * @author xuesong.net
  * @version 1.0
  */
-public class TagLibraryFactory
-{
+public class TagLibraryFactory {
     private static final Map<String, TagInfo> map = load();
     private static final Logger logger = LoggerFactory.getLogger(TagLibraryFactory.class);
 
     /**
      * @return TagLibrary
      */
-    public static TagLibrary getStandardTagLibrary()
-    {
+    public static TagLibrary getTagLibrary() {
+        return new TagLibrary();
+    }
+
+    /**
+     * @return TagLibrary
+     */
+    public static TagLibrary getStandardTagLibrary() {
         TagLibrary tagLibrary = new TagLibrary();
         tagLibrary.setup(map);
         return tagLibrary;
@@ -51,21 +57,17 @@ public class TagLibraryFactory
     /**
      * @return Map<String, TagInfo>
      */
-    private static Map<String, TagInfo> load()
-    {
-        try
-        {
+    private static Map<String, TagInfo> load() {
+        try {
             ClassLoader classLoader = TagLibraryFactory.class.getClassLoader();
             Map<String, TagInfo> map1 = parse(classLoader.getResourceAsStream("ayada-taglib-default.xml"));
             Map<String, TagInfo> map2 = parse(classLoader.getResourceAsStream("ayada-taglib.xml"));
             map1.putAll(map2);
             return map1;
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             logger.warn(e.getMessage(), e);
         }
-
         return new HashMap<String, TagInfo>();
     }
 
@@ -74,20 +76,17 @@ public class TagLibraryFactory
      * @param resource
      * @return Map<String, TagInfo>
      */
-    public static Map<String, TagInfo> load(String prefix, String resource) throws Exception
-    {
+    public static Map<String, TagInfo> load(String prefix, String resource) throws Exception {
         ClassLoader classLoader = TagLibraryFactory.class.getClassLoader();
         Map<String, TagInfo> map = parse(classLoader.getResourceAsStream(resource));
         Map<String, TagInfo> result = new LinkedHashMap<String, TagInfo>(map.size());
 
-        for(Map.Entry<String, TagInfo> entry : map.entrySet())
-        {
+        for(Map.Entry<String, TagInfo> entry : map.entrySet()) {
             TagInfo tagInfo = entry.getValue();
             String name = tagInfo.getName();
             int k = name.indexOf(":");
 
-            if(k > -1)
-            {
+            if(k > -1) {
                 name = name.substring(k + 1);
             }
 
@@ -95,7 +94,6 @@ public class TagLibraryFactory
             tagInfo.setName(name);
             result.put(name, tagInfo);
         }
-
         return result;
     }
 
@@ -103,12 +101,10 @@ public class TagLibraryFactory
      * @param inputStream
      * @throws Exception
      */
-    public static Map<String, TagInfo> parse(InputStream inputStream) throws Exception
-    {
+    public static Map<String, TagInfo> parse(InputStream inputStream) throws Exception {
         Map<String, TagInfo> map = new LinkedHashMap<String, TagInfo>();
 
-        if(inputStream == null)
-        {
+        if(inputStream == null) {
             return map;
         }
 
@@ -119,27 +115,22 @@ public class TagLibraryFactory
         Element element = document.getDocumentElement();
         NodeList childNodes = element.getChildNodes();
 
-        for(int i = 0, length = childNodes.getLength(); i < length; i++)
-        {
+        for(int i = 0, length = childNodes.getLength(); i < length; i++) {
             Node node = childNodes.item(i);
             int nodeType = node.getNodeType();
 
-            if(nodeType == Node.ELEMENT_NODE)
-            {
+            if(nodeType == Node.ELEMENT_NODE) {
                 String nodeName = node.getNodeName();
 
-                if(nodeName.equals("tag"))
-                {
+                if(nodeName.equals("tag")) {
                     TagInfo tagInfo = getTagInfo(node);
 
-                    if(tagInfo != null)
-                    {
+                    if(tagInfo != null) {
                         map.put(tagInfo.getName(), tagInfo);
                     }
                 }
             }
         }
-
         return map;
     }
 
@@ -147,34 +138,50 @@ public class TagLibraryFactory
      * @param node
      * @return TagInfo
      */
-    private static TagInfo getTagInfo(Node node)
-    {
+    private static TagInfo getTagInfo(Node node) {
         TagInfo tagInfo = new TagInfo();
         NodeList childNodes = node.getChildNodes();
 
-        for(int i = 0, length = childNodes.getLength(); i < length; i++)
-        {
-            Node n = childNodes.item(i);
+        if(childNodes.getLength() > 0) {
+	        for(int i = 0, length = childNodes.getLength(); i < length; i++) {
+	            Node n = childNodes.item(i);
+	
+	            if(n.getNodeType() == Node.ELEMENT_NODE) {
+	                String nodeName = n.getNodeName();
+	
+	                if(nodeName.equals("name")) {
+	                    tagInfo.setName(n.getTextContent().trim());
+	                }
+	                else if(nodeName.equals("tag-class")) {
+	                    tagInfo.setTagClass(n.getTextContent().trim());
+	                }
+	                else if(nodeName.equals("body-content")) {
+	                    tagInfo.setBodyContent(TagInfo.getBodyContent(n.getTextContent()));
+	                }
+	                else if(nodeName.equals("description")) {
+	                    tagInfo.setDescription(n.getTextContent().trim());
+	                }
+	            }
+	        }
+        }
+        else {
+        	NamedNodeMap map = node.getAttributes();
 
-            if(n.getNodeType() == Node.ELEMENT_NODE)
-            {
+            for(int i = 0, len = map.getLength(); i < len; i++) {
+                Node n = map.item(i);
                 String nodeName = n.getNodeName();
 
-                if(nodeName.equals("name"))
-                {
-                    tagInfo.setName(n.getTextContent().trim());
+                if(nodeName.equals("name")) {
+                    tagInfo.setName(n.getNodeValue().trim());
                 }
-                else if(nodeName.equals("tag-class"))
-                {
-                    tagInfo.setTagClass(n.getTextContent().trim());
+                else if(nodeName.equals("tag-class")) {
+                    tagInfo.setTagClass(n.getNodeValue().trim());
                 }
-                else if(nodeName.equals("body-content"))
-                {
-                    tagInfo.setBodyContent(TagInfo.getBodyContent(n.getTextContent()));
+                else if(nodeName.equals("body-content")) {
+                    tagInfo.setBodyContent(TagInfo.getBodyContent(n.getNodeValue().trim()));
                 }
-                else if(nodeName.equals("description"))
-                {
-                    tagInfo.setDescription(n.getTextContent().trim());
+                else if(nodeName.equals("description")) {
+                    tagInfo.setDescription(n.getNodeValue().trim());
                 }
             }
         }
@@ -182,16 +189,13 @@ public class TagLibraryFactory
         String name = tagInfo.getName();
         String tagClass = tagInfo.getTagClass();
 
-        if(name == null || name.length() < 1)
-        {
+        if(name == null || name.length() < 1) {
             return null;
         }
 
-        if(tagClass == null || tagClass.length() < 1)
-        {
+        if(tagClass == null || tagClass.length() < 1) {
             return null;
         }
-
         return tagInfo;
     }
 }

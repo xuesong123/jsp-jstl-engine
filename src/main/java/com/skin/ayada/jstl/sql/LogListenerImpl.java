@@ -20,17 +20,14 @@ import com.skin.ayada.util.LogListener;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class LogListenerImpl implements LogListener
-{
+public class LogListenerImpl implements LogListener {
     private PrintWriter out;
 
-    public LogListenerImpl(PrintWriter out)
-    {
+    public LogListenerImpl(PrintWriter out) {
         this.out = out;
     }
 
-    public void log(String content)
-    {
+    public void log(String content) {
         this.out.println(content);
         this.out.flush();
     }

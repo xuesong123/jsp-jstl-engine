@@ -18,6 +18,7 @@ import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.statement.Node;
 import com.skin.ayada.statement.NodeType;
 import com.skin.ayada.statement.Statement;
+import com.skin.ayada.statement.TagNode;
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTag;
 import com.skin.ayada.tagext.FinallyException;
@@ -35,15 +36,13 @@ import com.skin.ayada.util.TagUtil;
  * @author xuesong.net
  * @version 1.0
  */
-public class DefaultExecutor
-{
+public class DefaultExecutor {
     /**
      * @param template
      * @param pageContext
      * @throws Exception
      */
-    public static void execute(final Template template, final PageContext pageContext) throws Exception
-    {
+    public static void execute(final Template template, final PageContext pageContext) throws Exception {
         execute(template, pageContext, 0, template.getNodes().size());
     }
 
@@ -54,8 +53,7 @@ public class DefaultExecutor
      * @param length
      * @throws Exception
      */
-    public static void execute(final Template template, final PageContext pageContext, final int offset, final int length) throws Exception
-    {
+    public static void execute(final Template template, final PageContext pageContext, final int offset, final int length) throws Exception {
         Statement[] statements = getStatements(template.getNodes());
         execute(template, statements, pageContext, offset, length);
     }
@@ -68,10 +66,8 @@ public class DefaultExecutor
      * @param length
      * @throws Exception
      */
-    public static void execute(final Template template, final Statement[] statements, final PageContext pageContext, final int offset, final int length) throws Exception
-    {
-        if(length < 1)
-        {
+    public static void execute(final Template template, final Statement[] statements, final PageContext pageContext, final int offset, final int length) throws Exception {
+        if(length < 1) {
             return;
         }
 
@@ -81,35 +77,29 @@ public class DefaultExecutor
         JspWriter jspWriter = pageContext.getOut();
         ExpressionContext expressionContext = pageContext.getExpressionContext();
 
-        try
-        {
+        try {
             int flag = 0;
             int index = offset;
             int end = offset + length;
             int nodeType = NodeType.UNKNOWN;
 
-            while(index < end)
-            {
-                try
-                {
+            while(index < end) {
+                try {
                     out = pageContext.getOut();
                     statement = statements[index];
                     node = statement.getNode();
                     nodeType = node.getNodeType();
 
-                    if(nodeType == NodeType.TEXT)
-                    {
+                    if(nodeType == NodeType.TEXT) {
                         out.write(node.getTextContent());
                         index++;
                         continue;
                     }
 
-                    if(nodeType == NodeType.EXPRESSION)
-                    {
+                    if(nodeType == NodeType.EXPRESSION) {
                         Object value = expressionContext.getValue(node.getTextContent());
 
-                        if(value != null)
-                        {
+                        if(value != null) {
                             expressionContext.print(out, value);
                         }
 
@@ -117,12 +107,10 @@ public class DefaultExecutor
                         continue;
                     }
 
-                    if(nodeType == NodeType.VARIABLE)
-                    {
+                    if(nodeType == NodeType.VARIABLE) {
                         Object value = pageContext.getAttribute(node.getTextContent());
 
-                        if(value != null)
-                        {
+                        if(value != null) {
                             expressionContext.print(out, value);
                         }
 
@@ -130,25 +118,21 @@ public class DefaultExecutor
                         continue;
                     }
 
-                    if(nodeType != NodeType.NODE)
-                    {
+                    if(nodeType != NodeType.TAG_NODE) {
                         index++;
                         continue;
                     }
 
-                    if(node.getOffset() == index)
-                    {
+                    if(node.getOffset() == index) {
                         Tag tag = statement.getTag();
 
-                        if(tag == null)
-                        {
-                            tag = node.getTagFactory().create();
+                        if(tag == null) {
+                            tag = ((TagNode)node).getTagFactory().create();
                             tag.setPageContext(pageContext);
                             statement.setTag(tag);
                             Statement parent = statement.getParent();
 
-                            if(parent != null)
-                            {
+                            if(parent != null) {
                                 tag.setParent(parent.getTag());
                             }
                         }
@@ -156,8 +140,7 @@ public class DefaultExecutor
                         // create - doStartTag
                         TagUtil.setAttributes(tag, node.getAttributes(), expressionContext);
 
-                        if(tag instanceof SimpleTag)
-                        {
+                        if(tag instanceof SimpleTag) {
                             DefaultJspFragment jspFragment = new DefaultJspFragment(template, statements, pageContext);
                             jspFragment.setOffset(node.getOffset() + 1);
                             jspFragment.setLength(node.getLength() - 2);
@@ -171,35 +154,29 @@ public class DefaultExecutor
 
                         flag = doStartTag(statement, pageContext);
 
-                        if(flag == Tag.SKIP_BODY)
-                        {
+                        if(flag == Tag.SKIP_BODY) {
                             // goto end tag, then execute doEndTag();
                             index = node.getOffset() + node.getLength() - 1;
                             continue;
                         }
 
-                        if(flag == Tag.SKIP_PAGE)
-                        {
+                        if(flag == Tag.SKIP_PAGE) {
                             /**
                              * Tag.SKIP_PAGE: Valid return value for doEndTag().
-                             * throw new java.lang.IllegalStateException("SKIP_PAGE: " + flag); 
+                             * throw new java.lang.IllegalStateException("SKIP_PAGE: " + flag);
                              */
                             Statement s = getTryCatchFinallyStatement(statements, index);
 
-                            if(s != null)
-                            {
+                            if(s != null) {
                                 statement = s;
                                 node = statement.getNode();
                                 TryCatchFinally tryCatchFinally = (TryCatchFinally)(statement.getTag());
 
-                                if(tryCatchFinally != null)
-                                {
-                                    try
-                                    {
+                                if(tryCatchFinally != null) {
+                                    try {
                                         tryCatchFinally.doFinally();
                                     }
-                                    catch(Throwable throwable)
-                                    {
+                                    catch(Throwable throwable) {
                                         throw new FinallyException(throwable);
                                     }
                                 }
@@ -207,34 +184,27 @@ public class DefaultExecutor
                             break;
                         }
                     }
-                    else
-                    {
+                    else {
                         flag = doEndTag(statement, pageContext);
 
-                        if(flag == IterationTag.EVAL_BODY_AGAIN)
-                        {
+                        if(flag == IterationTag.EVAL_BODY_AGAIN) {
                             index = node.getOffset() + 1;
                             continue;
                         }
 
-                        if(flag == Tag.SKIP_PAGE)
-                        {
+                        if(flag == Tag.SKIP_PAGE) {
                             Statement s = getTryCatchFinallyStatement(statements, index);
 
-                            if(s != null)
-                            {
+                            if(s != null) {
                                 statement = s;
                                 node = statement.getNode();
                                 TryCatchFinally tryCatchFinally = (TryCatchFinally)(statement.getTag());
 
-                                if(tryCatchFinally != null)
-                                {
-                                    try
-                                    {
+                                if(tryCatchFinally != null) {
+                                    try {
                                         tryCatchFinally.doFinally();
                                     }
-                                    catch(Throwable throwable)
-                                    {
+                                    catch(Throwable throwable) {
                                         throw new FinallyException(throwable);
                                     }
                                 }
@@ -243,17 +213,14 @@ public class DefaultExecutor
                         }
                     }
                 }
-                catch(Throwable throwable)
-                {
-                    if(throwable instanceof FinallyException)
-                    {
+                catch(Throwable throwable) {
+                    if(throwable instanceof FinallyException) {
                         throw throwable.getCause();
                     }
 
                     Statement s = getTryCatchFinallyStatement(statements, index);
 
-                    if(s == null)
-                    {
+                    if(s == null) {
                         throw throwable;
                     }
 
@@ -261,41 +228,34 @@ public class DefaultExecutor
                     Node n = s.getNode();
                     TryCatchFinally tryCatchFinally = (TryCatchFinally)(t);
 
-                    if(tryCatchFinally == null)
-                    {
+                    if(tryCatchFinally == null) {
                         throw throwable;
                     }
 
-                    try
-                    {
+                    try {
                         tryCatchFinally.doCatch(throwable);
                     }
-                    finally
-                    {
+                    finally {
                         tryCatchFinally.doFinally();
                         index = n.getOffset() + n.getLength();
                     }
                 }
                 index++;
             }
-
             jspWriter.flush();
         }
-        catch(Throwable throwable)
-        {
-            if(node != null)
-            {
+        catch(Throwable throwable) {
+            if(node != null) {
                 throw new Exception("\"" + template.getPath() + "\" Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node), throwable);
             }
 
-            if(throwable instanceof Exception)
-            {
+            if(throwable instanceof Exception) {
                 throw ((Exception)throwable);
             }
             throw new Exception(throwable);
         }
-        finally
-        {
+        finally {
+            jspWriter.flush();
             pageContext.setOut(jspWriter);
         }
     }
@@ -304,27 +264,21 @@ public class DefaultExecutor
      * @param statement
      * @return int
      */
-    public static int doStartTag(final Statement statement, final PageContext pageContext) throws Exception
-    {
+    public static int doStartTag(final Statement statement, final PageContext pageContext) throws Exception {
         Tag tag = statement.getTag();
         int flag = tag.doStartTag();
         statement.setStartTagFlag(flag);
 
-        if(flag == Tag.SKIP_PAGE)
-        {
+        if(flag == Tag.SKIP_PAGE) {
             return Tag.SKIP_PAGE;
         }
 
-        if(flag != Tag.SKIP_BODY)
-        {
-            if(flag == BodyTag.EVAL_BODY_BUFFERED)
-            {
+        if(flag != Tag.SKIP_BODY) {
+            if(flag == BodyTag.EVAL_BODY_BUFFERED) {
                 Node node = statement.getNode();
 
-                if(node.getLength() > 2)
-                {
-                    if(tag instanceof BodyTag)
-                    {
+                if(node.getLength() > 2) {
+                    if(tag instanceof BodyTag) {
                         BodyTag bodyTag = (BodyTag)tag;
                         BodyContent bodyContent = pageContext.pushBody();
                         bodyTag.setBodyContent(bodyContent);
@@ -333,7 +287,6 @@ public class DefaultExecutor
                 }
             }
         }
-
         return flag;
     }
 
@@ -342,32 +295,25 @@ public class DefaultExecutor
      * @param pageContext
      * @return int
      */
-    private static int doEndTag(final Statement statement, final PageContext pageContext) throws Exception
-    {
+    private static int doEndTag(final Statement statement, final PageContext pageContext) throws Exception {
         Tag tag = statement.getTag();
 
-        if(tag instanceof IterationTag)
-        {
+        if(tag instanceof IterationTag) {
             IterationTag iterationTag = (IterationTag)tag;
             int flag = iterationTag.doAfterBody();
 
-            if(flag == IterationTag.EVAL_BODY_AGAIN)
-            {
+            if(flag == IterationTag.EVAL_BODY_AGAIN) {
                 return flag;
             }
 
             int startTagFlag = statement.getStartTagFlag();
 
-            if(startTagFlag != Tag.SKIP_BODY)
-            {
-                if(startTagFlag == BodyTag.EVAL_BODY_BUFFERED)
-                {
+            if(startTagFlag != Tag.SKIP_BODY) {
+                if(startTagFlag == BodyTag.EVAL_BODY_BUFFERED) {
                     Node node = statement.getNode();
 
-                    if(node.getLength() > 2)
-                    {
-                        if(tag instanceof BodyTag)
-                        {
+                    if(node.getLength() > 2) {
+                        if(tag instanceof BodyTag) {
                             pageContext.popBody();
                         }
                     }
@@ -377,36 +323,28 @@ public class DefaultExecutor
 
         int flag = tag.doEndTag();
 
-        if(tag instanceof TryCatchFinally)
-        {
-            try
-            {
+        if(tag instanceof TryCatchFinally) {
+            try {
                 ((TryCatchFinally)tag).doFinally();
             }
-            catch(Throwable throwable)
-            {
+            catch(Throwable throwable) {
                 throw new FinallyException(throwable);
             }
         }
-
         tag.release();
         return flag;
     }
 
     /**
      * @param tag
-     * @throws FinallyException 
+     * @throws FinallyException
      */
-    public static void doFinally(Tag tag) throws FinallyException
-    {
-        if(tag instanceof TryCatchFinally)
-        {
-            try
-            {
+    public static void doFinally(Tag tag) throws FinallyException {
+        if(tag instanceof TryCatchFinally) {
+            try {
                 ((TryCatchFinally)tag).doFinally();
             }
-            catch(Throwable throwable)
-            {
+            catch(Throwable throwable) {
                 throw new FinallyException(throwable);
             }
         }
@@ -417,18 +355,14 @@ public class DefaultExecutor
      * @param target
      * @return Tag
      */
-    public static Statement getParent(Statement statement, Class<?> target)
-    {
+    public static Statement getParent(Statement statement, Class<?> target) {
         Statement parent = statement;
 
-        while(parent != null && (parent = parent.getParent()) != null)
-        {
-            if(parent.getTag().getClass() == target)
-            {
+        while(parent != null && (parent = parent.getParent()) != null) {
+            if(parent.getTag().getClass() == target) {
                 return parent;
             }
         }
-
         return null;
     }
 
@@ -437,24 +371,19 @@ public class DefaultExecutor
      * @param index
      * @return Tag
      */
-    public static Statement getTryCatchFinallyStatement(final Statement[] statements, int index)
-    {
+    public static Statement getTryCatchFinallyStatement(final Statement[] statements, int index) {
         Node node = statements[index].getNode();
         Node parent = node;
 
-        while(parent != null)
-        {
+        while(parent != null) {
             Statement statement = statements[parent.getOffset()];
             Tag tag = statement.getTag();
 
-            if(tag instanceof TryCatchFinally)
-            {
+            if(tag instanceof TryCatchFinally) {
                 return statement;
             }
-
             parent = parent.getParent();
         }
-
         return null;
     }
 
@@ -462,38 +391,31 @@ public class DefaultExecutor
      * @param list
      * @return List<Statement>
      */
-    public static Statement[] getStatements(final List<Node> list)
-    {
+    public static Statement[] getStatements(final List<Node> list) {
         Statement[] statements = new Statement[list.size()];
 
-        for(int i = 0, size = list.size(); i < size; i++)
-        {
+        for(int i = 0, size = list.size(); i < size; i++) {
             Node node = list.get(i);
 
-            if(node.getLength() < 1)
-            {
+            if(node.getLength() < 1) {
                 throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node) + " not match !");
             }
 
-            if(node.getOffset() == i)
-            {
+            if(node.getOffset() == i) {
                 Node parent = node.getParent();
                 Statement statement = new Statement(node);
 
-                if(parent != null)
-                {
+                if(parent != null) {
                     statement.setParent(statements[parent.getOffset()]);
                 }
 
                 statements[i] = statement;
             }
-            else
-            {
+            else {
                 Statement statement = statements[node.getOffset()];
                 statements[i] = statement;
             }
         }
-
         return statements;
     }
 }

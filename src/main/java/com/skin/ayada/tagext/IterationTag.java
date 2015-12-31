@@ -17,8 +17,7 @@ package com.skin.ayada.tagext;
  * @author xuesong.net
  * @version 1.0
  */
-public interface IterationTag extends Tag
-{
+public interface IterationTag extends Tag {
     public static final int EVAL_BODY_AGAIN = 2;
 
     /**

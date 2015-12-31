@@ -24,24 +24,19 @@ import com.skin.ayada.tagext.Tag;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class ForEachTagTest
-{
-    public static void main(String[] args)
-    {
-        try
-        {
+public class ForEachTagTest {
+    public static void main(String[] args) {
+        try {
             test2();
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static void test1() throws Exception
-    {
+    public static void test1() throws Exception {
         StringWriter out = new StringWriter();
-        PageContext pageContext = JspFactory.getDefaultPageContext(out);
+        PageContext pageContext = JspFactory.getPageContext(out);
 
         ForEachTag forEachTag = new ForEachTag();
         forEachTag.setParent((Tag)null);
@@ -49,16 +44,14 @@ public class ForEachTagTest
         forEachTag.setItems(new String[]{"1", "2"});
         forEachTag.doStartTag();
 
-        while(forEachTag.hasNext())
-        {
+        while(forEachTag.hasNext()) {
             System.out.println(forEachTag.next());
         }
     }
 
-    public static void test2() throws Exception
-    {
+    public static void test2() throws Exception {
         StringWriter out = new StringWriter();
-        PageContext pageContext = JspFactory.getDefaultPageContext(out);
+        PageContext pageContext = JspFactory.getPageContext(out);
 
         ForEachTag forEachTag = new ForEachTag();
         forEachTag.setPageContext(pageContext);
@@ -69,8 +62,7 @@ public class ForEachTagTest
         System.out.println("index: " + loopTagStatus.getIndex());
         System.out.println("flag: " + flag);
 
-        while(forEachTag.hasNext())
-        {
+        while(forEachTag.hasNext()) {
             System.out.println(forEachTag.next());
         }
     }

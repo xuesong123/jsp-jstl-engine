@@ -23,45 +23,36 @@ import com.skin.ayada.tagext.TagSupport;
  * @author xuesong.net
  * @version 1.0
  */
-public class SetTimeZoneTag extends TagSupport
-{
+public class SetTimeZoneTag extends TagSupport {
     private String var;
     private Object value;
     private String scope;
 
     @Override
-    public int doStartTag() throws Exception
-    {
+    public int doStartTag() throws Exception {
         TimeZone timeZone = null;
 
-        if(this.value instanceof TimeZone)
-        {
+        if(this.value instanceof TimeZone) {
             timeZone = (TimeZone)this.value;
         }
-        else if(this.value instanceof String)
-        {
+        else if(this.value instanceof String) {
             String string = ((String)this.value).trim();
 
-            if(string.length() < 1)
-            {
+            if(string.length() < 1) {
                 timeZone = TimeZone.getTimeZone("GMT");
             }
-            else
-            {
+            else {
                 timeZone = TimeZone.getTimeZone(string);
             }
         }
-        else
-        {
+        else {
             timeZone = TimeZone.getTimeZone("GMT");
         }
 
-        if(this.var != null)
-        {
+        if(this.var != null) {
             SetTag.setValue(this.pageContext, this.var, this.scope, timeZone);
         }
-        else
-        {
+        else {
             this.pageContext.setTimeZone(timeZone);
         }
         return Tag.SKIP_BODY;
@@ -70,48 +61,42 @@ public class SetTimeZoneTag extends TagSupport
     /**
      * @param var the var to set
      */
-    public void setVar(String var)
-    {
+    public void setVar(String var) {
         this.var = var;
     }
 
     /**
      * @return the var
      */
-    public String getVar()
-    {
+    public String getVar() {
         return this.var;
     }
 
     /**
      * @param value the value to set
      */
-    public void setValue(Object value)
-    {
+    public void setValue(Object value) {
         this.value = value;
     }
 
     /**
      * @return the value
      */
-    public Object getValue()
-    {
+    public Object getValue() {
         return this.value;
     }
 
     /**
      * @param scope the scope to set
      */
-    public void setScope(String scope)
-    {
+    public void setScope(String scope) {
         this.scope = scope;
     }
 
     /**
      * @return the scope
      */
-    public String getScope()
-    {
+    public String getScope() {
         return this.scope;
     }
 }

@@ -17,15 +17,15 @@ package com.skin.ayada.statement;
  * @author xuesong.net
  * @version 1.0
  */
-public class NodeType
-{
+public class NodeType {
     public static final String DOCTYPE = "html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"";
     public static final int NODE    = 1;
     public static final int TEXT    = 2;
     public static final int COMMENT = 3;
     public static final int CDATA   = 4;
-    public static final int VARIABLE   = 2012;
-    public static final int EXPRESSION = 2013;
+    public static final int VARIABLE   = 2011;
+    public static final int EXPRESSION = 2012;
+    public static final int TAG_NODE   = 2013;
 
     public static final int JSP_DIRECTIVE_PAGE    = 2014;   // startsWith "<%@" page
     public static final int JSP_DIRECTIVE_TAGLIB  = 2015;   // startsWith "<%@" taglib
@@ -55,8 +55,7 @@ public class NodeType
     /**
      * @return boolean
      */
-    public static boolean isCloseNode(Node node)
-    {
+    public static boolean isCloseNode(Node node) {
         return isCloseNode(node.getNodeName().toLowerCase());
     }
 
@@ -64,8 +63,7 @@ public class NodeType
      * @param nodeName
      * @return boolean
      */
-    public static boolean isCloseNode(String nodeName)
-    {
+    public static boolean isCloseNode(String nodeName) {
         return (nodeName.equalsIgnoreCase("br")
                 || nodeName.equalsIgnoreCase("hr")
                 || nodeName.equalsIgnoreCase("img")

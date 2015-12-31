@@ -17,27 +17,22 @@ package com.skin.ayada.util;
  * @author xuesong.net
  * @version 1.0
  */
-public class HtmlUtil
-{
+public class HtmlUtil {
     /**
      * @param source
      * @return String
      */
-    public static String encode(String source)
-    {
-        if(source == null)
-        {
+    public static String encode(String source) {
+        if(source == null) {
             return "";
         }
 
         StringBuilder buffer = new StringBuilder();
 
-        for(int i = 0, length = source.length(); i < length; i++)
-        {
+        for(int i = 0, length = source.length(); i < length; i++) {
             char c = source.charAt(i);
 
-            switch(c)
-            {
+            switch(c) {
                 case '"':
                     buffer.append("&quot;");
                     break;
@@ -66,10 +61,8 @@ public class HtmlUtil
      * @param source
      * @return String
      */
-    public static String decode(String source)
-    {
-        if(source == null)
-        {
+    public static String decode(String source) {
+        if(source == null) {
             return "";
         }
 
@@ -77,56 +70,43 @@ public class HtmlUtil
         char[] c = source.toCharArray();
         StringBuilder buffer = new StringBuilder(length);
 
-        for(int i = 0; i < length; i++)
-        {
-            if(c[i] == '&')
-            {
-                if(((i + 3) < length) && (c[i + 1] == 'l') && (c[i + 2] == 't') && (c[i + 3] == ';'))
-                {
+        for(int i = 0; i < length; i++) {
+            if(c[i] == '&') {
+                if(((i + 3) < length) && (c[i + 1] == 'l') && (c[i + 2] == 't') && (c[i + 3] == ';')) {
                     // &lt;
                     buffer.append('<');
                     i += 3;
                 }
-                else if(((i + 3) < length) && (c[i + 1] == 'g') && (c[i + 2] == 't') && (c[i + 3] == ';'))
-                {
+                else if(((i + 3) < length) && (c[i + 1] == 'g') && (c[i + 2] == 't') && (c[i + 3] == ';')) {
                     // &gt;
                     buffer.append('>');
                     i += 3;
                 }
-                else if (((i + 4) < length) && (c[i + 1] == 'a') && (c[i + 2] == 'm') && (c[i + 3] == 'p') && (c[i + 4] == ';'))
-                {
+                else if (((i + 4) < length) && (c[i + 1] == 'a') && (c[i + 2] == 'm') && (c[i + 3] == 'p') && (c[i + 4] == ';')) {
                     // &amp;
                     buffer.append('&');
                     i += 4;
                 }
-                else if(((i + 5) < length) && (c[i + 1] == 'q') && (c[i + 2] == 'u') && (c[i + 3] == 'o') && (c[i + 4] == 't') && (c[i + 5] == ';') )
-                {
+                else if(((i + 5) < length) && (c[i + 1] == 'q') && (c[i + 2] == 'u') && (c[i + 3] == 'o') && (c[i + 4] == 't') && (c[i + 5] == ';') ) {
                     // &quot;
                     buffer.append('"');
                     i += 5;
                 }
-                else if(((i + 3) < length && (c[i + 1] == '#') && Character.isDigit(c[i + 2])))
-                {
+                else if(((i + 3) < length && (c[i + 1] == '#') && Character.isDigit(c[i + 2]))) {
                     // &#10;
-                    for(int j = i + 2; j < length; j++)
-                    {
-                        if(Character.isDigit(c[j]))
-                        {
+                    for(int j = i + 2; j < length; j++) {
+                        if(Character.isDigit(c[j])) {
                             continue;
                         }
-                        if(c[j] != ';')
-                        {
+                        if(c[j] != ';') {
                             buffer.append('&');
                         }
-                        else
-                        {
-                            try
-                            {
+                        else {
+                            try {
                                 int charCode = Integer.parseInt(new String(c, i + 2, j - i - 2));
                                 buffer.append((char)charCode);
                             }
-                            catch(NumberFormatException e)
-                            {
+                            catch(NumberFormatException e) {
                             }
 
                             i = j;
@@ -135,13 +115,11 @@ public class HtmlUtil
                         break;
                     }
                 }
-                else
-                {
+                else {
                     buffer.append('&');
                 }
             }
-            else
-            {
+            else {
                 buffer.append(c[i]);
             }
         }
@@ -153,10 +131,8 @@ public class HtmlUtil
      * @param source
      * @return String
      */
-    public static String remove(String source)
-    {
-        if(source == null)
-        {
+    public static String remove(String source) {
+        if(source == null) {
             return "";
         }
 
@@ -165,24 +141,20 @@ public class HtmlUtil
         int k = 0;
         StringBuilder buffer = new StringBuilder();
 
-        do
-        {
+        do {
             e = source.indexOf('<', s);
 
-            if(e < 0)
-            {
+            if(e < 0) {
                 buffer.append(HtmlUtil.encode(source.substring(s)));
                 break;
             }
             k = source.indexOf('>', e + 1);
 
-            if(k > -1)
-            {
+            if(k > -1) {
                 buffer.append(HtmlUtil.encode(source.substring(s, e)));
                 s = k + 1;
             }
-            else
-            {
+            else {
                 buffer.append(HtmlUtil.encode(source.substring(s)));
                 break;
             }

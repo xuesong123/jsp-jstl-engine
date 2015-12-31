@@ -23,33 +23,28 @@ import com.skin.ayada.tagext.TagSupport;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class IncludeTag extends TagSupport implements ParameterTagSupport
-{
+public class IncludeTag extends TagSupport implements ParameterTagSupport {
     private String page;
     private Map<String, Object> parameters;
 
     @Override
-    public int doStartTag() throws Exception
-    {
+    public int doStartTag() throws Exception {
         super.doStartTag();
+        this.parameters = new HashMap<String, Object>();
 
-        if(this.page == null)
-        {
+        if(this.page == null) {
             return Tag.SKIP_BODY;
         }
-
-        this.parameters = new HashMap<String, Object>();
-        return Tag.EVAL_BODY_INCLUDE;
+        else {
+        	return Tag.EVAL_BODY_INCLUDE;
+        }
     }
 
     @Override
-    public int doEndTag() throws Exception
-    {
-        if(this.getPage() != null)
-        {
+    public int doEndTag() throws Exception {
+        if(this.getPage() != null) {
             this.pageContext.include(this.getPage(), this.parameters);
         }
-
         return Tag.EVAL_PAGE;
     }
 
@@ -57,24 +52,22 @@ public class IncludeTag extends TagSupport implements ParameterTagSupport
      * @param name
      * @param value
      */
-    public void setParameter(String name, Object value)
-    {
+    @Override
+    public void setParameter(String name, Object value) {
         this.parameters.put(name, value);
     }
 
     /**
      * @param page the page to set
      */
-    public void setPage(String page)
-    {
+    public void setPage(String page) {
         this.page = page;
     }
 
     /**
      * @return the page
      */
-    public String getPage()
-    {
+    public String getPage() {
         return this.page;
     }
 }

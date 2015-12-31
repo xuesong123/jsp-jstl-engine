@@ -20,8 +20,7 @@ import java.util.Map;
  * @author xuesong.net
  * @version 1.0
  */
-public class TagLibraryManager
-{
+public class TagLibraryManager {
     public static final Map<String, Map<String, TagInfo>> cache = new HashMap<String, Map<String, TagInfo>>();
 
     /**
@@ -30,38 +29,31 @@ public class TagLibraryManager
      * @return TagLibrary
      * @throws Exception
      */
-    public synchronized static Map<String, TagInfo> getTagLibrary(String prefix, String uri) throws Exception
-    {
+    public synchronized static Map<String, TagInfo> getTagLibrary(String prefix, String uri) throws Exception {
         String resource = uri;
 
-        if(resource.startsWith("http://"))
-        {
+        if(resource.startsWith("http://")) {
             int k = resource.indexOf("/", 7);
 
-            if(k > -1)
-            {
+            if(k > -1) {
                 resource = resource.substring(k + 1);
             }
-            else
-            {
+            else {
                 throw new java.lang.IllegalArgumentException(uri);
             }
         }
 
-        if(resource.startsWith("/") || resource.startsWith("\\"))
-        {
+        if(resource.startsWith("/") || resource.startsWith("\\")) {
             resource = resource.substring(1);
         }
 
         String key = prefix + ":" + resource;
         Map<String, TagInfo> library = cache.get(key);
 
-        if(library == null)
-        {
+        if(library == null) {
             library = TagLibraryFactory.load(prefix, resource + ".xml");
             cache.put(key, library);
         }
-
         return library;
     }
 }

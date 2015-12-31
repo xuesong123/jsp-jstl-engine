@@ -22,10 +22,8 @@ import com.skin.ayada.jstl.fmt.LocalizationContext;
  * @author xuesong.net
  * @version 1.0
  */
-public class I18n
-{
-    public I18n()
-    {
+public class I18n {
+    public I18n() {
     }
 
     /**
@@ -33,8 +31,7 @@ public class I18n
      * @param value
      * @return Object
      */
-    public LocalizationContext getBundle(String basename, String value)
-    {
+    public LocalizationContext getBundle(String basename, String value) {
         return this.getBundle(basename, value, null);
     }
 
@@ -44,8 +41,7 @@ public class I18n
      * @param variant
      * @return Object
      */
-    public LocalizationContext getBundle(String basename, String value, String variant)
-    {
+    public LocalizationContext getBundle(String basename, String value, String variant) {
         Locale locale = I18n.getLocale(value, variant);
         return BundleManager.getInstance().getBundle(basename, locale);
     }
@@ -55,23 +51,19 @@ public class I18n
      * @param variant
      * @return Local
      */
-    public static Locale getLocale(String value, String variant)
-    {
+    public static Locale getLocale(String value, String variant) {
         int i = 0;
         char ch = '\000';
         int length = value.length();
         StringBuilder buffer = new StringBuilder();
 
-        for(; i < length; i++)
-        {
+        for(; i < length; i++) {
             ch = value.charAt(i);
 
-            if(ch != '_' && ch != '-')
-            {
+            if(ch != '_' && ch != '-') {
                 buffer.append(ch);
             }
-            else
-            {
+            else {
                 break;
             }
         }
@@ -79,20 +71,16 @@ public class I18n
         String language = buffer.toString();
         String country = "";
 
-        if((ch == '_') || (ch == '-'))
-        {
+        if((ch == '_') || (ch == '-')) {
             buffer.setLength(0);
 
-            for(i++; i < length; i++)
-            {
+            for(i++; i < length; i++) {
                 ch = value.charAt(i);
 
-                if(ch != '_' && ch != '-')
-                {
+                if(ch != '_' && ch != '-') {
                     buffer.append(ch);
                 }
-                else
-                {
+                else {
                     break;
                 }
             }
@@ -100,8 +88,7 @@ public class I18n
             country = buffer.toString();
         }
 
-        if(variant != null && variant.length() > 0)
-        {
+        if(variant != null && variant.length() > 0) {
             return new Locale(language, country, variant);
         }
 

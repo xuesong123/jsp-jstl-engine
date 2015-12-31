@@ -19,8 +19,7 @@ import com.skin.ayada.tagext.TagSupport;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class ExecuteTag extends TagSupport
-{
+public class ExecuteTag extends TagSupport {
     private String var;
     private Object value;
 
@@ -28,45 +27,38 @@ public class ExecuteTag extends TagSupport
      * @return int
      */
     @Override
-    public int doStartTag() throws Exception
-    {
-        if(this.var != null)
-        {
+    public int doStartTag() throws Exception {
+        if(this.var != null) {
             this.pageContext.setAttribute(this.var, this.value);
         }
-
         return Tag.SKIP_BODY;
     }
 
     /**
      * @param var the var to set
      */
-    public void setVar(String var)
-    {
+    public void setVar(String var) {
         this.var = var;
     }
 
     /**
      * @return the var
      */
-    public String getVar()
-    {
+    public String getVar() {
         return this.var;
     }
 
     /**
      * @param value the value to set
      */
-    public void setValue(Object value)
-    {
+    public void setValue(Object value) {
         this.value = value;
     }
 
     /**
      * @return the value
      */
-    public Object getValue()
-    {
+    public Object getValue() {
         return this.value;
     }
 }
