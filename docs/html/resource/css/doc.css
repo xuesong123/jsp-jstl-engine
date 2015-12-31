@@ -1,0 +1,56 @@
+html, body, div, dl, dt, dd, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, p, blockquote, table, th, td, embed, object, button{margin: 0px; padding: 0px; word-wrap: break-word; color: #444444;}
+html, body, img{border: 0px; font-size: 12px;}
+body, input, button, select, textarea{
+    color: #444444;
+    font: 14px/1.5 "ËÎÌו", Arial, Helvetica;
+}
+
+body{margin: 0px; padding: 0px; background-color: #ffffff;}
+div.wrap{margin: 0px auto; width: 1120px;}
+
+h1.sk-h1{
+    line-height: 2.5em;
+    font-weight: bold;
+    text-align: left;
+    color: #000000;
+}
+
+h1.sk-h1 span.lemma{float: left; width: auto; height: 40px; line-height: 40px; font-size: 30px; line-height: 40px;}
+
+h2.sk-h2{
+    line-height: 2.0em;
+    text-align: left;
+    color: #000000;
+}
+
+h2.sk-h2 a{color: #888888;}
+h2.sk-h2 a:hover{color: #376ec2;}
+
+h3.sk-h3{line-height: 2.0em; text-align: left;}
+h4.sk-h4{line-height: 2.0em; text-align: left;}
+h5.sk-h5{line-height: 2.0em; text-align: left;}
+
+div.sk-content{}
+div.sk-content p{line-height: 2.0em;}
+
+div.sk-code{
+    margin: 8px 0px 8px 0px;
+    padding: 4px;
+    border: 1px solid #efefef;
+}
+
+ul.sk-list{list-style-type: disc;}
+ul.sk-list li{display: list-item;}
+
+div.scrolltop{
+    width: 20px;
+    height: 50px;
+    right: 50px;
+    bottom: 100px;
+    background: transparent url(../images/scrolltop.gif) no-repeat scroll 0px 0px;
+    line-height: 999px;
+    cursor: pointer;
+    overflow: hidden;
+    position: fixed;
+    display: block;
+}

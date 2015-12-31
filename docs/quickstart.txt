@@ -1,0 +1,64 @@
+# 用模版生成模版
+用模版生成模版有三种方法, 三种方法都是只针对当前页面生效, 不会影响其他页面.
+
+方法一: 重新定义全部标签
+    1). 通过t:taglib指令覆盖全部指令, 将前缀从默认的c改成d
+    <t:taglib prefix="d" uri="http://localhost/ayada-taglib-mytest"/>
+    其中ayada-taglib-mytest.xml文件必须存在, 编译期将从classpath加载ayada-taglib-mytest.xml文件.
+    也可以直接引入ayada-taglib-default.xml覆盖系统默认的全部标签。
+    ayada-taglib-default.xml是系统自带的标签库定义文件.
+
+    2). 模板代码如下
+    <t:taglib prefix="d" uri="http://localhost/ayada-taglib-mytest"/>
+    <c:comment>这是一个用模版生成模版的示例</c:comment>
+    <d:if test="${1 == 1}">
+        <c:if test="${?a > 1}">
+            <h1>${?user.name}</h1>
+        </c:if>
+    </d:if>
+    输出:
+    <c:if test="${a > 1}">
+        <h1>${user.name}</h1>
+    </c:if>
+
+方法二: 重新定义部分标签
+    1). 通过t:rename指令重命名指定指令.
+
+    2). 模板代码如下
+    <t:rename name="d:if" from="c:if"/>
+    <c:comment>这是一个用模版生成模版的示例</c:comment>
+
+    <d:if test="${1 == 1}">
+        <c:if test="${?a > 1}">
+            <h1>${?user.name}</h1>
+        </c:if>
+    </d:if>
+    输出:
+    <c:if test="${a > 1}">
+        <h1>${user.name}</h1>
+    </c:if>
+
+方法三: 使用t:text指令
+    注：该方法只适合静态内容, 不适合动态内容.
+    示例：
+    <t:text>
+        <c:if test="${a > 1}">
+            <h1>${user.name}</h1>
+        </c:if>
+    </t:text>
+
+    输出: 
+        <c:if test="${a > 1}">
+            <h1>${user.name}</h1>
+        </c:if>
+    t:text指令是在编译期执行的, 并且不允许嵌套. 编译期遇到t:text指令, 就会把其中的内容全部作为文本加载, 其中的el表达式也不需要使用特殊写法.
+    因此中间任何内容都不会动态执行, 所以它只适合静态内容.
+
+# 生成EL表达式.
+以上两种方法都是针对标签的重定义, 对于el表达式只需要在el表达式的前面加上?即可. 这样el表达式将会原样输出.
+例如: 
+    <h1>${?user.name}</h1>
+    输出:
+    <h1>${user.name}</h1>
+
+

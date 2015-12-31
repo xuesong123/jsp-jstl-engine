@@ -1,0 +1,37 @@
+TemplateContext
+    SourceFactory
+    TemplateFactory create
+        SourceFactory
+    ExpressionFactory
+
+# 初始化
+1. TagLibraryFactory读配置文件加载定义的标签.
+2. DefaultExpressionFactory读配置文件加载定义的工具类或者变量.
+
+# 运行模板
+1. TemplateFactory创建template, 需要SourceFactory支持. TemplateFactory调用TemplateCompiler编译模板. 
+    JspTemplateFactory是TemplateFactory的一个子类, 先调用父类创建模板, 再把Template对象编译为JspTemplate.
+
+2. 创建PageContext, 使用ExpressionFactory创建ExpressionContext.
+    PageContext和ExpressionContext是互相引用的关系.
+
+3. 执行template, template.execute(pageContext);
+
+# 重写
+TemplateContext是一个接口, DefaultTemplateContext是TemplateContext的一个实现.
+TemplateContext允许你重置SourceFactory, TemplateFactory, ExpressionFactory, 可以方便的替换掉默认的实现。
+
+SourceFactory的默认实现目前有4个: 
+    1. DefaultSourceFactory       默认的实现, 从文件系统加载模板
+    2. ClassPathSourceFactory     从classpath加载模板
+    3. MemorySourceFactory        从内存中加载模板
+    4. ZipSourceFactory           从zip文件中加载模板
+
+# 配置
+1. 配置文件列表(第三方应用需要提供的配置文件)
+    ayada.properties            可选            如果没有使用默认的配置文件
+    ayada-taglib.xml            可选            如果没有使用默认的配置文件
+    ayada-tools.properties      可选            如果没有使用默认的配置文件
+
+# 其他可选的配置
+    如果使用了国际化, 那么需要国际化的配置文件, 文件名自定义, 格式同java默认的国际化配置文件.

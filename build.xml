@@ -7,7 +7,7 @@
         <tstamp/>
         <property name="AppName" value="ayada"/>
         <property name="PkgName" value="ayada"/>
-        <property name="Version" value="1.0.1.0"/>
+        <property name="Version" value="1.0.1.2"/>
 
         <!-- src directories -->
         <property name="src.java" value="${basedir}/src/main/java"/>

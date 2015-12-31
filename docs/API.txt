@@ -8,8 +8,7 @@ page      ¿ÉÑ¡
 </c:action>
 
 public class MyAction{
-    public Map<String, Object> execute(PageContext pageContext, Parameters parameters)
-    {
+    public Map<String, Object> execute(PageContext pageContext, Parameters parameters) {
         String title = parameters.getString("title");
         // do something
         return Map<String, Object>;

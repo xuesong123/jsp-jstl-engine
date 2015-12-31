@@ -23,9 +23,8 @@ public class JspTemplateFactory{
     public Template create();
 }
 
-public JspFactory{
-    public static PageContext getPageContext(TemplateContext templateContext, Writer out, int buffserSize, boolean autoFlush);
-    {
+public JspFactory {
+    public static PageContext getPageContext(TemplateContext templateContext, Writer out, int buffserSize, boolean autoFlush) {
         JspWriter jspWriter = new JspWriter(out, buffserSize, autoFlush);
         DefaultPageContext pageContext = new DefaultPageContext(jspWriter);
         ExpressionContext expressionContext = ExpressionFactory.getExpressionContext(pageContext);
