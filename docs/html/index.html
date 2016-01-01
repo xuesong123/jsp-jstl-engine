@@ -29,13 +29,13 @@
     <div class="dir"></div>
     <h2 class="sk-h2">1 Ayada简介</h2>
     <div class="sk-content">
-        <p>Ayada是一个Java版的采用jstl语法的模板引擎。所有的实现均于jsp中的jstl一样。对于习惯使用jstl的人来说几乎没有任何学习成本。</p>
+        <p>Ayada是一个Java版的采用jstl语法的模板引擎。所有的实现均与jsp中的jstl一样。对于习惯使用jstl的人来说几乎没有任何学习成本。</p>
         <ul class="sk-list">
             <li><p>简单，学习成本低，对于使用jstl的人来说没有任何学习成本。</p></li>
             <li><p>零配置，不需要任何配置文件，也可以指定配置文件，配置文件简单明了。</p></li>
             <li><p>可插拔的模块设计，模板加载方式，el引擎，运行模式均可通过不同的实现替换。</p></li>
             <li><p>多种方式自定义标签，原生的java代码自定义标签或者直接通过页面自定义标签。</p></li>
-            <li><p>引擎层支持自定义el转码，不需要对el表达式的输出做html转码，防止xss注入。</p></li>
+            <li><p>支持自定义el转码，不需要对el表达式的输出做html转码，防止xss注入。</p></li>
             <li><p>简单快速的标签重写功能，专门针对用模板生成模板。</p></li>
             <li><p>支持解释模式和编译模式，解释模式适合只需要在内存中运行的模板。编译模式性能更好。</p></li>
         </ul>
@@ -147,7 +147,7 @@
             <t:taglib prefix="c" uri="http://localhost/ayada-default"/>
             </pre>
         </div>
-        <p>t:taglib 指令是编译指令，只在编译器生效，用来导入标签库。编译器根据uri指定的路径到classpath下加载指定的标签库。</p>
+        <p>t:taglib 指令是编译指令，只在编译期生效，用来导入标签库。编译器根据uri指定的路径到classpath下加载指定的标签库。</p>
     </div>
     <div class="sk-content">
         <p class="bb">t:import</p>
