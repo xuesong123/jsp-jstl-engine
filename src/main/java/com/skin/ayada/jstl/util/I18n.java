@@ -91,7 +91,6 @@ public class I18n {
         if(variant != null && variant.length() > 0) {
             return new Locale(language, country, variant);
         }
-
         return new Locale(language, country);
     }
 }

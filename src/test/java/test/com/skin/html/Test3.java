@@ -1,5 +1,5 @@
 /*
- * $RCSfile: Test3.java.java,v $$
+ * $RCSfile: Test3.java,v $$
  * $Revision: 1.1 $
  * $Date: 2013-02-23 $
  *

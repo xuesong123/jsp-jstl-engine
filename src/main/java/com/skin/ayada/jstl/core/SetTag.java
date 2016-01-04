@@ -10,6 +10,8 @@
  */
 package com.skin.ayada.jstl.core;
 
+import java.util.Map;
+
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTag;
@@ -85,8 +87,15 @@ public class SetTag extends BodyTagSupport {
      * @param value
      * @throws Exception
      */
-    public void setProperty(Object object, String name, Object value) throws Exception {
-        ClassUtil.setProperty(object, name, value);
+    @SuppressWarnings("unchecked")
+	public void setProperty(Object object, String name, Object value) throws Exception {
+    	if(object instanceof Map<?, ?>) {
+    		Map<Object, Object> map = (Map<Object, Object>)(object);
+    		map.put(value, value);
+    	}
+    	else {
+    		ClassUtil.setProperty(object, name, value);
+    	}
     }
 
     /**

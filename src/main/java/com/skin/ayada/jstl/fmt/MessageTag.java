@@ -86,7 +86,6 @@ public class MessageTag extends BodyTagSupport implements ParamContainerTag {
         else {
             this.pageContext.getOut().print(message);
         }
-
         return Tag.EVAL_PAGE;
     }
 

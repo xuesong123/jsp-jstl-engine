@@ -37,6 +37,7 @@
             <li><p>多种方式自定义标签，原生的java代码自定义标签或者直接通过页面自定义标签。</p></li>
             <li><p>支持自定义el转码，不需要对el表达式的输出做html转码，防止xss注入。</p></li>
             <li><p>简单快速的标签重写功能，专门针对用模板生成模板。</p></li>
+            <li><p>支持java脚本和标签混合模式，这点与jsp一致，如果你追求极致性能那么可以完全使用java脚本编写模版。</p></li>
             <li><p>支持解释模式和编译模式，解释模式适合只需要在内存中运行的模板。编译模式性能更好。</p></li>
         </ul>
     </div>
@@ -104,8 +105,15 @@
         <div class="sk-code">
             <pre class="brush: java;">
             public void main(String[] args) {
+                // 定义一个模板文件加载类, 对应的其他实现：ClassPathSourceFactory, ZipSourceFactory, MemorySourceFactory
                 SourceFactory sourceFactory = new DefaultSourceFactory();
+
+                // 定义一个模板文件加载类, 相关实现：
+                // TemplateFactory - 创建一个模板对象，该对象的execute通过解释方式执行。
+                // JspTemplateFactory - 将模版编译为class之后返回。
                 TemplateFactory templateFactory = new TemplateFactory();
+
+                // 表达式上下文工厂，返回的表达式上下文使用ognl执行。
                 ExpressionFactory expressionFactory = new DefaultExpressionFactory();
                 sourceFactory.setHome("D:\\myapp\template");
                 sourceFactory.setSourcePattern("jsp,jspx");
@@ -116,6 +124,7 @@
                     logger.info("expressionFactory: " + expressionFactory.getClass().getName());
                 }
 
+                // 模版上下文对象
                 TemplateContext templateContext = new DefaultTemplateContext(realPath, "UTF-8");
                 templateContext.setSourceFactory(sourceFactory);
                 templateContext.setTemplateFactory(templateFactory);
@@ -125,7 +134,7 @@
                 context.put("user", "xuesong.net");
                 StringWriter writer = new StringWriter();
 
-                templateContext.execute("/hello.jsp", context, Writer writer);
+                templateContext.execute("/hello.jsp", context, writer);
                 System.out.println(writer.toString());
             }
             </pre>
@@ -716,12 +725,14 @@
 
     <h4 class="sk-h4">c:action</h4>
     <div class="sk-content">
-        <div class="sk-code"><pre class="brush: xml;">
+        <div class="sk-code">
+            <pre class="brush: xml;">
             <c:action className="test.UserAction" method="execute" page="/user/userList.jsp">
                 <c:param name="user1" value="${myUser}"></c:param>
                 <c:param name="user2" value="${myUser}"></c:param>
             </c:action>
-        </pre></div>
+            </pre>
+        </div>
         <p>className：java.lang.String - 可选 要执行的类。</p>
         <p>execute：java.lang.String - 可选 要执行的方法。</p>
         <p>page：java.lang.String - 可选 要渲染的页面。</p>
@@ -730,17 +741,36 @@
         <p>c:action用来实现类似struts的s:action标签功能。它可以在调用完一个指定的类之后再渲染指定的页面。类相当于controller，页面相当于view。</p>
         <p>最重要的是被包含的页面与当前页面在运行环境上是完全隔离的，互相之间变量不会相互污染。</p>
         <p>由于变量之间互相隔离，<b>因此可以很方便的用它来自定义标签。</b></p>
+        <p>c:action是一个很有用的标签，对于一些页面可以很方便的开发出来重用模块，并且他们之间是完全隔离的，互不影响。提高代码重用性很有用。例如：</p>
+
+        <div class="sk-code">
+            <pre class="brush: xml;">
+            <!--
+                这是一个首页的分类列表页面，可能很多页面都会有这样的逻辑。
+                c:action标签会调用ListAction执行查询动作，并把数据放到context中，然后调用testList.jsp进行渲染。
+                外层的缓存标签会先检查缓存，如果有了直接输出，否则执行全部子节点，并把结果缓存。
+                c:cache标签非Ayada提供，需要自己定义，因为每个应用使用的缓存系统可能都不一样。
+            -->
+            <c:cache key="cache:index:${categoryId}" expires="180">
+                <c:action className="test.ListAction" method="execute" page="/test/testList.jsp">
+                    <c:param name="categoryId" value="${categoryId}"></c:param>
+                </c:action>
+            </c:cache>
+            </pre>
+        </div>
     </div>
 
     <h2 class="sk-h2">4 用模版生成模版</h2>
     <div class="sk-content">
         <p>用模版生成模版有三种方法, 三种方法都是只针对当前页面生效, 不会影响其他页面.</p>
-        <p># 方法一: 重新定义全部标签</p>
-        <p>1). 通过t:taglib指令覆盖全部指令, 将前缀从默认的c改成d</p>
-        <div class="sk-code"><pre class="brush: xml;"><t:taglib prefix="d" uri="http://localhost/ayada-taglib-mytest"/></pre></div>
+        <p class="bb"># 方法一: 重新定义全部标签</p>
+        <p>1). 通过t:taglib指令覆盖全部指令, 将前缀从默认的c改成d。</p>
+        <p>此方法需要将配置文件中的ayada.compile.standard-library=true改为ayada.compile.standard-library=false，系统将不自动加载默认的标签库。</p>
+        <p>配置项的修改影响全局，这个时候需要所有的页面都使用t:taglib引入默认的标签库。</p>
+        <div class="sk-code"><pre class="brush: xml;"><t:taglib prefix="d" uri="http://localhost/ayada-taglib-standard"/></pre></div>
         <p>其中ayada-taglib-mytest.xml文件必须存在, 编译期将从classpath加载ayada-taglib-mytest.xml文件.</p>
         <p>也可以直接引入ayada-taglib-default.xml覆盖系统默认的全部标签。无需担心库文件中定义的标签名称包含的前缀，导入时会使用新的前缀替换。</p>
-        <p>ayada-taglib-default.xml是系统自带的标签库定义文件.</p>
+        <p>ayada-taglib-default.xml是系统自带的标签库定义文件，http://localhost/ayada-taglib-standard与http://localhost/ayada-taglib-default完全等效。</p>
         <p>2). 模板代码如下</p>
         <div class="sk-code">
             <pre class="brush: xml;">
@@ -760,7 +790,7 @@
             </c:if>
         </pre></div>
 
-        <p># 方法二: 重新定义部分标签</p>
+        <p class="bb"># 方法二: 重新定义部分标签</p>
         <p>1). 通过t:rename指令重命名指定指令.</p>
         <p>2). 模板代码如下</p>
         <div class="sk-code"><pre class="brush: xml;">
@@ -780,7 +810,7 @@
             </c:if>
         </pre></div>
 
-        <p># 方法三: 使用t:text指令</p>
+        <p class="bb"># 方法三: 使用t:text指令</p>
         <p>注：该方法只适合静态内容, 不适合动态内容.</p>
         <p>示例：</p>
         <div class="sk-code"><pre class="brush: xml;">
@@ -809,15 +839,11 @@
         <div class="sk-code"><pre class="brush: xml;"><h1>${user.name}</h1></pre></div>
     </div>
 
-    <h2 class="sk-h2">5. 自定义工具类</h2>
+    <h2 class="sk-h2">5. 自定义标签</h2>
     <div class="sk-content">
-        <p>创建ayada.properties文件</p>
-        <p>set util=com.skin.ayada.jstl.util.BeanUtil                                 # 定义一个全局工具类</p>
-    </div>
-
-    <h2 class="sk-h2">6. 自定义标签</h2>
-    <div class="sk-content">
-        <p>Ayada的API与jsp的jstl的API基本保持一致，除了包名不一样其他的类名都完全一致，类结构也一模一样。所以无需了解Ayada的自定义标签是怎么实现的，只需参考jstl的自定义标签即可。webapp目录下包含了绝大部分的代码示例和测试用例，这些文件基本上都以某个具体的标签名命名，从文件名就可以很容易看出来是关于那个标签的用法的。唯一需要做的是把引入的jstl的类的包名替换成Ayada的包名即可。</p>
+        <p>Ayada的API与jstl的API基本保持一致，除了包名不一样其他的类名都完全一致，类结构也一模一样。所以只需参考jstl的自定义标签即可。webapp目录下包含了绝大部分的代码示例和测试用例，这些文件基本上都以某个具体的标签名命名，从文件名就可以很容易看出来是关于那个标签的用法的。唯一需要做的是把引入的jstl的类的包名替换成Ayada的包名即可。</p>
+        <p>在Jsp2.0中，自定义标签可以使用tag文件直接定义，不需要写java代码。Ayada不支持这种方式，Ayada建议使用另外的一种方式定义。直接使用Ayada的c:action引入一个模板即可，并且支持参数传递。这样实现的好处是不需要对这种标签专门编译，引擎实现简单。而且c:action功能更加强大。具体请参考c:action标签。</p>
+        <p>还有一种方案是采用java代码编写标签，这种方式要求对jstl标签的API比较熟悉，对标签的生命周期很了解。好处是功能实现都封装在java类里面。</p>
         <p>下面是c:out标签的默认实现，示例代码：</p>
         <div class="sk-code">
             <pre class="brush: java;">
@@ -986,10 +1012,162 @@
         </div>
     </div>
 
-    <h2 class="sk-h2">7 代码示例和测试用例</h2>
+    <h2 class="sk-h2">6 配置项</h2>
+    <div class="sk-content">
+        <p>Ayada的配置项只有5个：</p>
+        <div class="sk-code">
+            <pre class="brush: bash;">
+                # 默认的模板文件加载器。
+                ayada.compile.source-factory=com.skin.ayada.template.DefaultSourceFactory
+
+                # 模板文件扩展名，其他扩展名将被认为是静态文本。
+                ayada.compile.source-pattern=jsp,jspf,jspx,tpl
+
+                # 是否允许使用java脚本，该选项只在编译模式下有效。
+                ayada.compile.ignore-jsptag=true
+
+                # 是否默认加载系统自带的jstl库，如果为false，需要在模板文件中使用t:taglib手动引入。
+                ayada.compile.standard-library=true
+
+                # 是否使用fast-jstl模式，只在编译模式下有效，该选项生成的java代码更精炼效率更高。默认为true。
+                ayada.compile.fast-jstl=true
+            </pre>
+        </div>
+    </div>
+
+    <h2 class="sk-h2">7 全局变量和工具类</h2>
+    <div class="sk-content">
+        <p class="bb">全局变量定义和工具类定义都在classpath下的ayada-tools.properties文件中定义，会合并Ayada自带的默认配置。该配置文件支持@import指令，并且可以直接书写中文不需要做unicode编码。</p>
+        <p>默认配置ayada-tools-default.properties在ayada-1.0.0.x.jar包中定义。</p>
+        <p>ayada-tools.properties文件支持两种语法：var定义一个字符串变量，set定义一个类实例。</p>
+        <p class="bb">常用工具类</p>
+        <p>默认的配置定义了一些常用的工具类：</p>
+        <div class="sk-code">
+            <pre class="brush: bash;">
+                @import META-INF/mytools.properties
+                # bean工具类，常用方法：isEmpty， notEmpty，size，均支持任意类型，自动适配。
+                set util=com.skin.ayada.jstl.util.BeanUtil
+
+                # URL编码工具类，encode，decode等
+                set URLUtil=com.skin.ayada.jstl.util.URLUtil
+
+                # HTML编码工具类，encode，decode，remove等
+                set HtmlUtil=com.skin.ayada.jstl.util.HtmlUtil
+
+                # 时间日期工具类，parse，format，支持long型format，自动适配。smart方法输出友好的时间值。
+                set DateUtil=com.skin.ayada.jstl.util.DateUtil
+
+                # String工具类，length，substring，replace，split，escape，trim等。
+                set StringUtil=com.skin.ayada.jstl.util.StringUtil
+
+                # BBCode工具类，decode，getHtml，replace，remove等
+                set bbcode=com.skin.ayada.jstl.util.BBCode
+
+                # 国际化工具类，getBundle，getLocal，返回具体的国际化上下文对象
+                set I18n=com.skin.ayada.jstl.util.I18n
+
+                # 系统变量，默认的el表达式编码器，对所有的el表达式的输出结果进行html编码。
+                set ELEncoder=com.skin.ayada.jstl.util.HtmlEncoder
+
+                # 系统变量，默认的时区
+                var ayada.time-zone=Asia/Chongqing
+
+                # 系统变量，默认的地区
+                var ayada.locale=zh_cn
+            </pre>
+        </div>
+        <p class="bb">示例代码：</p>
+        <div class="sk-code">
+            <pre class="brush: xml;">
+                <c:set var="myHtml" value="<>"/>
+                <c:set var="myHtml" value="&amp;lt;&amp;gt;"/>
+                上面的两个c:set标签等价，建议模板文件中对标签的属性进行html编码。
+                el表达式会做html编码，例如下面的el输出&amp;lt;&amp;gt;
+                ${myHtml}
+
+                <!-- 获取bundle并放到pageContext中，bundle是一个LocalizationContext对象 -->
+                <c:set var="myBoundle" value="${I18n.getBundle(myBaseName, myValue)}"></c:set>
+
+                <!-- 使用fmt:message标签输出，如果boundle是字符串，将会把boundle作为basename获取一个bundle。 -->
+                <fmt:message key="" bundle="${myBoundle}">
+                    <fmt:param value="${param1}"></fmt:param>
+                    <fmt:param value="hello"></fmt:param>
+                </fmt:message>
+
+                <!-- 也可以使用el表达式直接输出 -->
+                ${myBoundle.message("userEdit.saveBtn")}
+                ${DateUtil.format(1410000000, "yyyy-MM-dd HH:mm:ss")}
+            </pre>
+        </div>
+    </div>
+
+    <h2 class="sk-h2">8 缺省的timeZone和loacl</h2>
+    <div class="sk-content">
+        <p>Ayada支持设置默认的timeZone和loacl，pageContext中都包含对应的get/set方法，这两个参数在国际化中使用。</p>
+        <p>当然你也可以通过fmt:setTimeZone和fmt:setLocale标签重置这些值。fmt:setTimeZone和fmt:setLocale标签只针对当前页面生效。</p>
+        <p>对应的配置文件是：ayada-tools.properties，需要放在应用的classpath下。</p>
+        <div class="sk-code">
+            <pre class="brush: bash;">
+                # 默认的时区
+                var ayada.time-zone=Asia/Chongqing
+
+                # 默认的地区
+                var ayada.locale=zh_cn
+            </pre>
+        </div>
+        <p>注：ayada-tools.properties中，凡是var定义的变量都是字符串，凡是set定义的变量系统会认为是一个类名，通过反射创建一个，全局唯一，所有pageContext共用同一个对象。</p>
+    </div>
+
+    <h2 class="sk-h2">9 线程模型</h2>
+    <div class="sk-content">
+        <p>首先标签不存在线程安全的问题，所有的标签都在安全的线程模型中执行。<b>除非自己实现的标签里面存在不安全的代码。</b></p>
+        <p>在解释模式中不存在线程安全的问题。在编译模式下如果开启了java脚本选项，请小心使用类变量。编译模式下所有被编译好的模版对象都是单例的，不是线程安全的，这一点与jsp的运行模式是一致的。</p>
+    </div>
+
+    <h2 class="sk-h2">10 代码示例和测试用例</h2>
     <div class="sk-content">
         <p>在源代码的/webapp目录下包含了绝大部分的代码示例和测试用例，这些文件基本上都以某个具体的标签名命名，从文件名就可以很容易看出来是关于那个标签的用法的。</p>
         <p>com.skin.ayada.template.Main是java调用模板引擎的示例，也可以在命令行下调用。</p>
+    </div>
+
+    <h2 class="sk-h2">11 其他</h2>
+    <div class="sk-content">
+        <p>很多模版引擎为了提升性能，采用了很多性能优化的手段，例如：动态编译，使用强制类型来避免反射等。
+        Ayada也使用了动态编译，由于Ayada是与jsp和jstl完全一致的，所以一些jsp的技术在Ayada里面是完全有效的。
+        Ayada支持两种模式执行模版：解释模式和编译模式。解释模式直接在内存中通过解释执行来渲染结果。编译模式会先编译为java文件，再把java文件编译为class文件加载到jvm执行。
+        </p>
+        </p>另一方面，Ayada不可能采用某些优化技术。例如使用强制类型避免反射等。
+        Ayada建议使用标签编写模版而不是使用java脚本。标签和el表达式都是不强制类型的。所以反射调用在ayada里面不可避免。
+        如果追求极致性能，那么可以全部使用java将脚本编写模版，这样可以完全避免反射，但是那样的话使用模版引擎又有什么意义呢？
+        为了性能而牺牲功能或者为了功能大大的降低性能都不可取。</p>
+        <p class="bb">jstl语法的优点：</p>
+        <ul>
+            <li><p>jstl天然就是xml，与html无缝融合，不影响一些可视化编辑器；</p></li>
+            <li><p>jstl编写出的模板代码简洁可读性好，对用户友好；</p></li>
+            <li><p>强大的扩展功能，标签很容易扩展；</p></li>
+            <li><p>jstl从jsp1.0至今已经10多年了，技术很成熟，功能很完善。</p></li>
+        </ul>
+        <p class="bb">jstl相对于其他模版语言：</p>
+        <p>一些模板语言重新定义了一套语法，然后再编译成java代码，甚至还使用了强类型，这样的结果与使用java代码有什么区别呢？而且不但要再学一套新的语法，而且表达式的支持又不如java代码强大。一个简单的jsp编译过程甚至一个正则表达式就能搞定，不需要对java脚本做任何处理即可直接编译为class。重新定义一套语法除了让引擎的实现更麻烦，编译过程更慢，还有什么好处呢？
+        Ayada不定义新的语法，不要求你在模版中使用强类型，虽然你也可以使用。Ayada尽可能在易用性，用户友好和性能之间寻找一个平衡点。</p>
+        <p>模板语言的用户友好，我认为应该包括：</p>
+        <ul>
+            <li><p>易用，必须易上手，最好不需要看文档。</p></li>
+            <li><p>代码简介，写出来的模版不能混乱不堪很难阅读。</p></li>
+        </ul>
+        <p>其实任何模板语言的核心语句只有三个：变量赋值，条件控制，循环语句，对应Ayada分别是：c:set，c:if，c:forEach，c:each是c:forEach的简写。
+        这三个语句也符合任何一门编程语言的基本语句。只要知道jstl的这三个语句怎么用的对付基本的开发就够了。</p>
+        <p class="bb">为什么不直接使用jsp，而是要再造一个轮子呢？</p>
+        <ul>
+            <li><p>统一实现，不同的jsp/servlet容器对jstl并不完全兼容。某些容器对标签属性和el的支持很不友好。这对于那些需要在不同的jsp/servlet容器中运行的应用程序来说很坑。</p></li>
+            <li><p>某些功能的实现很麻烦，例如pageContext.include方法是在不同的pageContext中执行，父页面和被include的页面的pageContext是互相隔离的，传递参数只能通过其他方式。Ayada对pageContext.include做了扩展，可以直接传递参数。</p></li>
+            <li><p>在非web环境中使用jstl。jstl本身专为web设计，API中直接跟web绑定死了，很难在其他环境中使用。Ayada中移除了web相关的对象，通过约定支持一些web中定义的对象。</p></li>
+            <li><p>jsp中的jstl定义很繁琐，Ayada简化了标签定义。</p></li>
+            <li><p>Ayada基本兼容jstl全部功能，原来使用jsp编写的代码基本上不需要修改就可以直接使用Ayada运行。</p></li>
+            <li><p>Ayada自带的默认标签库扩展了大量常用标签，可以很方便的对代码隔离，避免大量的代码堆砌到一个页面，并且提高了代码可重用性。</p></li>
+            <li><p>Ayada可以禁用java脚本，只使用标签编写，一定程度上可以使web程序避免被人上传jsp木马。</p></li>
+            <li><p>Ayada的el引擎可以任意替换。</p></li>
+        </ul>
     </div>
 </div>
 <div class="h20" style="height: 200px;"></div>

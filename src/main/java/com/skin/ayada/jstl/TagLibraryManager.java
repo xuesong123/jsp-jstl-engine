@@ -47,6 +47,10 @@ public class TagLibraryManager {
             resource = resource.substring(1);
         }
 
+        if(resource.equals("ayada-taglib-standard")) {
+        	resource = "ayada-taglib-default.xml";
+        }
+
         String key = prefix + ":" + resource;
         Map<String, TagInfo> library = cache.get(key);
 

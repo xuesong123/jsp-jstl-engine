@@ -149,8 +149,14 @@ public class TagLibrary {
         for(Map.Entry<String, TagInfo> entry : this.library.entrySet()) {
             System.out.println(entry.getKey() + " " + entry.getValue().getTagClass());
         }
-
         System.out.println();
+    }
+
+    /**
+     * 
+     */
+    public void clear() {
+    	this.library.clear();
     }
 
     public void release() {

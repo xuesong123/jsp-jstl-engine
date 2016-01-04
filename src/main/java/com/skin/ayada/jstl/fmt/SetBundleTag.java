@@ -37,7 +37,6 @@ public class SetBundleTag extends TagSupport {
         else {
             SetTag.setValue(this.pageContext, this.var, this.scope, bundle);
         }
-
         return Tag.SKIP_BODY;
     }
 

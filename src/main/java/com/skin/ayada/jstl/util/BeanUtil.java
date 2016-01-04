@@ -49,7 +49,6 @@ public class BeanUtil {
         if(value instanceof Map<?, ?>) {
             return ((Map<?, ?>)value).size();
         }
-
         return 0;
     }
 
@@ -303,7 +302,6 @@ public class BeanUtil {
                     }
                 }
             }
-
             return buffer.toString();
         }
     }

@@ -80,7 +80,6 @@ public class BundleManager {
                 buffer.append("_");
                 buffer.append(country);
             }
-
             localizationContext = this.getCachedBundle(buffer.toString(), locale);
         }
 
@@ -88,7 +87,6 @@ public class BundleManager {
             buffer.setLength(length);
             localizationContext = this.getCachedBundle(buffer.toString(), locale);
         }
-
         return localizationContext;
     }
 

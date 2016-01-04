@@ -20,6 +20,28 @@ package com.skin.ayada.jstl.util;
 public class StringUtil {
     /**
      * @param source
+     * @return int
+     */
+    public int length(String source) {
+        return (source != null ? source.length() : 0);
+    }
+
+    /**
+     * @param source
+     * @param trim
+     * @return int
+     */
+    public int length(String source, boolean trim) {
+    	if(trim) {
+            return (source != null ? source.trim().length() : 0);
+    	}
+    	else {
+            return (source != null ? source.length() : 0);
+    	}
+    }
+
+    /**
+     * @param source
      * @param length
      * @param padding
      * @return String
@@ -53,5 +75,13 @@ public class StringUtil {
      */
     public String escape(String source) {
         return com.skin.ayada.util.StringUtil.escape(source);
+    }
+
+    /**
+     * @param source
+     * @return String
+     */
+    public String trim(String source) {
+        return (source != null ? source.trim() : "");
     }
 }

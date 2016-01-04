@@ -355,6 +355,7 @@
         <body-content>jsp</body-content>
         <description></description>
     </tag>
+    <tag name="jsp:include" tag-class="com.skin.ayada.taglib.ActionTag" body-content="" description=""/>
     <tag name="io:copy" tag-class="com.skin.ayada.jstl.io.CopyTag" body-content="tagdependent" description=""/>
     <tag name="io:delete" tag-class="com.skin.ayada.jstl.io.DeleteTag" body-content="tagdependent" description=""/>
     <tag name="io:mkdir" tag-class="com.skin.ayada.jstl.io.MakeDirTag" body-content="empty" description=""/>

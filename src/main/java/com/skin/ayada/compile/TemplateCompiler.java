@@ -229,13 +229,13 @@ public class TemplateCompiler extends PageCompiler {
                     throw new Exception("at line " + this.lineNumber + ": " + nodeName + " not match !");
                 }
 
-                String tagClassName = null;
+                TagInfo tagInfo = null;
 
                 if(this.tagLibrary != null) {
-                    tagClassName = this.tagLibrary.getTagClassName(nodeName);
+                    tagInfo = this.tagLibrary.getTagInfo(nodeName);
                 }
 
-                if(tagClassName != null) {
+                if(tagInfo != null) {
                     while((i = this.stream.read()) != -1) {
                         if(i == '>') {
                             break;
@@ -246,7 +246,6 @@ public class TemplateCompiler extends PageCompiler {
                     }
 
                     this.popNode(stack, list, nodeName);
-                    TagInfo tagInfo = this.tagLibrary.getTagInfo(nodeName);
 
                     if(tagInfo.getBodyContent() == TagInfo.EMPTY) {
                         this.skipCRLF();
@@ -824,7 +823,6 @@ public class TemplateCompiler extends PageCompiler {
             textNode.setLength(1);
             list.add(textNode);
         }
-
         textNode.setParent(parent);
         textNode.append(text);
     }
@@ -887,7 +885,6 @@ public class TemplateCompiler extends PageCompiler {
             list.add(node);
             index++;
         }
-
         this.getDependencies().addAll(compiler.getDependencies());
     }
 

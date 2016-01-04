@@ -143,7 +143,6 @@ public class ClassUtil {
             if(arg == null && parameterType.isPrimitive()) {
                 return;
             }
-
             method.invoke(bean, new Object[]{arg});
         }
         else {

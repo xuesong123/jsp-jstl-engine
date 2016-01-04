@@ -1,5 +1,5 @@
 /*
- * $RCSfile: ClassCompiler.java,v $$
+ * $RCSfile: JspCompiler.java,v $$
  * $Revision: 1.1 $
  * $Date: 2013-11-08 $
  *
@@ -46,7 +46,7 @@ import com.skin.ayada.util.StringUtil;
 import com.skin.ayada.util.TagUtil;
 
 /**
- * <p>Title: ClassCompiler</p>
+ * <p>Title: JspCompiler</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2006</p>
  * @author xuesong.net

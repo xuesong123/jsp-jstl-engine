@@ -41,7 +41,6 @@ public class URLUtil {
         }
         catch(UnsupportedEncodingException e) {
         }
-
         return "";
     }
 
@@ -65,7 +64,6 @@ public class URLUtil {
         }
         catch(UnsupportedEncodingException e) {
         }
-
         return "";
     }
 }

@@ -19,6 +19,15 @@ package com.skin.ayada.jstl.util;
  */
 public class BBCode {
     /**
+     * @param name
+     * @param value
+     * @return String
+     */
+    public String encode(String name, String attributes, String value) {
+        return com.skin.ayada.util.BBCode.getHtml(name, attributes, value);
+    }
+
+    /**
      * @param source
      * @return String
      */

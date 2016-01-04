@@ -7,6 +7,7 @@ body, input, button, select, textarea{
 
 body{margin: 0px; padding: 0px; background-color: #ffffff;}
 div.wrap{margin: 0px auto; width: 1120px;}
+.bb{font-weight: bold;}
 
 h1.sk-h1{
     line-height: 2.5em;
