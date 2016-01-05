@@ -112,7 +112,7 @@
     <tag>
         <name>c:escape</name>
         <tag-class>com.skin.ayada.jstl.core.EscapeTag</tag-class>
-        <body-content>jsp</body-content>
+        <body-content>empty</body-content>
         <description></description>
     </tag>
     <tag>

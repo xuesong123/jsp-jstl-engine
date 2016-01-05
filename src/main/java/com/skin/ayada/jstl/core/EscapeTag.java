@@ -40,7 +40,7 @@ public class EscapeTag extends TagSupport {
             }
         }
         expressionContext.setEncoder(elEncoder);
-        return Tag.EVAL_PAGE;
+        return Tag.SKIP_BODY;
     }
 
     /**
