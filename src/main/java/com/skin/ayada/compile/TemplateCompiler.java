@@ -129,12 +129,18 @@ public class TemplateCompiler extends PageCompiler {
 
                 while((i = this.stream.read()) != -1) {
                     if(i == '}') {
+                        String flag = null;
                         String temp = this.ltrim(expression.toString());
 
                         if(temp.startsWith("?")) {
                             this.pushTextNode(stack, list, "${" + temp.substring(1) + "}", this.lineNumber);
                             break;
                         }
+                        if(temp.startsWith("#") || temp.startsWith("&")) {
+                            flag = temp.substring(0, 1);
+                            temp = temp.substring(1);
+                        }
+
                         temp = temp.trim();
 
                         if(temp.length() > 0) {
@@ -143,6 +149,7 @@ public class TemplateCompiler extends PageCompiler {
                                 variable.setOffset(list.size());
                                 variable.setLength(1);
                                 variable.setLineNumber(this.lineNumber);
+                                variable.setFlag(flag);
                                 variable.append(temp);
 
                                 if(stack.peek() != null) {
@@ -155,6 +162,7 @@ public class TemplateCompiler extends PageCompiler {
                                 expr.setOffset(list.size());
                                 expr.setLength(1);
                                 expr.setLineNumber(this.lineNumber);
+                                expr.setFlag(flag);
                                 expr.append(temp);
 
                                 if(stack.peek() != null) {

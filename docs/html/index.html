@@ -44,12 +44,13 @@
     <h2 class="sk-h2">2 快速开始</h2>
     <h3 class="sk-h3">2.1 在控制台应用中使用</h3>
     <div class="sk-content">
+        <p>只是一个最简单的使用方式，该方式采用解释模式执行。更多定制应用请参考下文相关章节。</p>
         <div class="sk-code">
             <pre class="brush: java;">
             public static void main(String[] args) {
                 try {
                     StringWriter out = new StringWriter();
-                    Ayada.execute("123<c:if test=\"${1 == 1}\">abc</c:if>xyz", null, out);
+                    Ayada.execute("123&lt;c:if test=\"${1 == 1}\"&gt;abc&lt;/c:if&gt;xyz", null, out);
                     System.out.println(out.toString());
                 }
                 catch(Exception e) {
@@ -62,31 +63,33 @@
 
     <h3 class="sk-h3">2.2 在web应用中使用</h3>
     <div class="sk-content">
+        <p>Ayada是一个jsp/jstl引擎，所以当应用中注册filter接管jsp执行的时候，就会使用Ayada执行jsp，不注册该filter的时候，jsp仍然由容器执行。</p>
+        <p>com.skin.ayada.web.filter.TemplateFilter只是一个默认实现，你也可以定制自己的filter，通过更加灵活的方式使用Ayada模板引擎。</p>
         <p>首先配置web.xml</p>
         <div class="sk-code">
             <pre class="brush: xml;">
-                <filter>
-                    <filter-name>TemplateFilter</filter-name>
-                    <filter-class>com.skin.ayada.web.filter.TemplateFilter</filter-class>
-                    <init-param>
-                        <param-name>home</param-name>
-                        <param-value>/template</param-value>
-                    </init-param>
-                    <init-param>
-                        <param-name>template-factory</param-name>
-                        <param-value>com.skin.ayada.template.JspTemplateFactory</param-value>
-                    </init-param>
-                    <init-param>
-                        <param-name>jsp-work</param-name>
-                        <param-value>context: /WEB-INF/ayada</param-value>
-                    </init-param>
-                </filter>
-                <filter-mapping>
-                    <filter-name>TemplateFilter</filter-name>
-                    <url-pattern>/template/*</url-pattern>
-                    <dispatcher>FORWARD</dispatcher>
-                    <dispatcher>ERROR</dispatcher>
-                </filter-mapping>
+                &lt;filter&gt;
+                    &lt;filter-name&gt;TemplateFilter&lt;/filter-name&gt;
+                    &lt;filter-class&gt;com.skin.ayada.web.filter.TemplateFilter&lt;/filter-class&gt;
+                    &lt;init-param&gt;
+                        &lt;param-name&gt;home&lt;/param-name&gt;
+                        &lt;param-value&gt;/template&lt;/param-value&gt;
+                    &lt;/init-param&gt;
+                    &lt;init-param&gt;
+                        &lt;param-name&gt;template-factory&lt;/param-name&gt;
+                        &lt;param-value&gt;com.skin.ayada.template.JspTemplateFactory&lt;/param-value&gt;
+                    &lt;/init-param&gt;
+                    &lt;init-param&gt;
+                        &lt;param-name&gt;jsp-work&lt;/param-name&gt;
+                        &lt;param-value&gt;context: /WEB-INF/ayada&lt;/param-value&gt;
+                    &lt;/init-param&gt;
+                &lt;/filter&gt;
+                &lt;filter-mapping&gt;
+                    &lt;filter-name&gt;TemplateFilter&lt;/filter-name&gt;
+                    &lt;url-pattern&gt;/template/*&lt;/url-pattern&gt;
+                    &lt;dispatcher&gt;FORWARD&lt;/dispatcher&gt;
+                    &lt;dispatcher&gt;ERROR&lt;/dispatcher&gt;
+                &lt;/filter-mapping&gt;
             </pre>
         </div>
         <p>对应的servlet</p>
@@ -94,6 +97,7 @@
         <div class="sk-code">
             <pre class="brush: java;">
             public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+                // TemplateFilter会拦截所有/template开头的请求作为模板处理。
                 this.forward(request, response, "/template/hello.jsp");
             }
             </pre>
@@ -130,7 +134,7 @@
                 templateContext.setTemplateFactory(templateFactory);
                 templateContext.setExpressionFactory(expressionFactory);
 
-                Map<String, Object> context = new HashMap<String, Object>();
+                Map&lt;String, Object&gt; context = new HashMap&lt;String, Object&gt;();
                 context.put("user", "xuesong.net");
                 StringWriter writer = new StringWriter();
 
@@ -153,50 +157,54 @@
         <p class="bb">t:taglib</p>
         <div class="sk-code">
             <pre class="brush: xml;">
-            <t:taglib prefix="c" uri="http://localhost/ayada-default"/>
+            &lt;t:taglib prefix="c" uri="http://localhost/tags/ayada-mytag"/&gt;
             </pre>
         </div>
         <p>t:taglib 指令是编译指令，只在编译期生效，用来导入标签库。编译器根据uri指定的路径到classpath下加载指定的标签库。</p>
+        <p>例如上面的代码将会在classpath路径下加载/tags/ayada-mytag.xml文件。</p>
     </div>
     <div class="sk-content">
         <p class="bb">t:import</p>
         <div class="sk-code">
             <pre class="brush: xml;">
-            <t:import name="c:if" className="com.skin.ayada.jstl.core.IfTag" bodyContent="tagdependent" description="if标签"/>
+            &lt;t:import name="c:if" className="com.skin.ayada.jstl.core.IfTag" bodyContent="tagdependent" description="if标签"/&gt;
             </pre>
         </div>
         <p>bodyContent - 取值只能是：tagdependent|jsp|empty</p>
         <p>jsp - 子节点可以是任何内容。这个也是默认值。</p>
-        <p>tagdependent - 子节点只能是标签，任何文本内容都会在编译器被忽略掉。</p>
-        <p>empty - 不允许存在任何子节点。</p>
-        <p>t:import 指令是编译指令，只在编译期生效，用来导入标签一个标签。</p>
+        <p>tagdependent - 子节点只能是标签，任何文本内容都会在编译期被忽略掉。</p>
+        <p>empty - 不允许存在任何子节点。节点内的任何内容都会在编译期被忽略掉。</p>
+        <p>t:import 指令是编译指令，只在编译期生效，用来导入一个标签。</p>
     </div>
     <div class="sk-content">
         <p class="bb">t:rename</p>
         <div class="sk-code">
             <pre class="brush: xml;">
-            <t:rename name="d:if" from="c:if"/>
+            &lt;t:rename name="d:if" from="c:if"/&gt;
             </pre>
         </div>
-        <p>t:import 指令是编译指令，将已经导入的标签重命名为新的名字。只针对重命名之后的内容生效。</p>
+        <p>t:import 指令是编译指令，将已经导入的标签重命名为新的名字。只针对重命名之后的内容生效。该指令之前的内容仍将使用之前的标签名。</p>
     </div>
     <div class="sk-content">
         <p class="bb">t:include</p>
         <div class="sk-code">
             <pre class="brush: xml;">
-            <t:include file="/include/script.html" type="script" encoding="UTF-8"/>
+            &lt;t:include file="/include/script.html" type="script" encoding="UTF-8"/&gt;
             </pre>
         </div>
         <p>file - 必选 文件路径。</p>
         <p>type - 可选 取值: script|static，script: 被包含的文件是将会作为模板文件编译，static: 被包含文件作为普通的文本内容，无论它是什么内容。</p>
         <p>encoding - 可选 文件编码，默认是utf-8。</p>
-        <p>t:include 指令是编译指令，包含一个文件。</p>
+        <p>t:include 指令是编译指令， 在编译器包含一个文件，先包含进来再一起编译。注意与系统提供的c:include，c:invoke，c:action区别。</p>
+        <p>t:include 相当于jsp中的include，c:include相当于jsp中的jsp:include。</p>
+        <p>Ayada同时支持jsp中的include指令和jsp:include标签。建议采用jsp语法编写，这样即使不采用Ayada，你的代码仍然可以通过容器执行。</p>
+        <p>但是Ayada的t:include指令和c:include都做了扩展，功能增强，支持静态包含和传递参数，如果你希望使用Ayada的扩展功能，就必须使用Ayada的标签。</p>
     </div>
     <div class="sk-content">
         <p class="bb">t:text</p>
         <div class="sk-code">
             <pre class="brush: xml;">
-            <t:text escape="xml"><c:if test="${1==1}">hello</c:if></t:text>
+            &lt;t:text escape="xml"&gt;&lt;c:if test="${1==1}"&gt;hello&lt;/c:if&gt;&lt;/t:text&gt;
             </pre>
         </div>
         <p>escape - 可选 是否做xml编码。</p>
@@ -206,7 +214,7 @@
         <p class="bb">t:comment</p>
         <div class="sk-code">
             <pre class="brush: xml;">
-            <t:comment><c:if test="${1==1}">hello</c:if></t:comment>
+            &lt;t:comment&gt;&lt;c:if test="${1==1}"&gt;hello&lt;/c:if&gt;&lt;/t:comment&gt;
             </pre>
         </div>
         <p>t:comment 指令是编译指令，其中的任何内容都作为注释被忽略，不允许嵌套。</p>
@@ -215,8 +223,9 @@
     <h3 class="sk-h3">3.2 内置的标签列表</h3>
     <div class="sk-content">
         <p>内置标签是Ayada内置的常用标签，你也可以重新定义一套自己的标签库并使用。关于自定义标签请参考<a href="#6.1.1">6.1.1 自定义标签</a>章节。</p>
+        <p>凡是实现了BodyContentSupport接口的都意味者你可以在子节点里面写任意内容。</p>
         <div class="sk-code">
-            <table>
+            <table class="grid">
                 <tr>
                     <td style="width: 200px">标签</td>
                     <td style="width: 200px">实现</td>
@@ -227,373 +236,395 @@
                     <td>c:dependent</td>
                     <td>com.skin.ayada.jstl.core.DependentTag</td>
                     <td>tagdependent</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:command</td>
                     <td>com.skin.ayada.jstl.core.DependentTag</td>
                     <td>tagdependent</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:if</td>
                     <td>com.skin.ayada.jstl.core.IfTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:set</td>
                     <td>com.skin.ayada.jstl.core.SetTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:remove</td>
                     <td>com.skin.ayada.jstl.core.RemoveTag</td>
                     <td>empty</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:out</td>
                     <td>com.skin.ayada.jstl.core.OutTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>
+                        <p>实现了BodyTagSupport接口</p>
+                        <p>&lt;c:param name="myVar" value="${user.name}"&gt;</p>
+                        <p>&lt;c:param name="myVar"&gt;&lt;h1&gt;Hello World&lt;/h1&gt;&lt;/c:param&gt;</p>
+                    </td>
                 </tr>
                 <tr>
                     <td>c:ifout</td>
                     <td>com.skin.ayada.jstl.core.IfOutTag</td>
                     <td>empty</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:nvl</td>
                     <td>com.skin.ayada.jstl.core.NVLTag</td>
                     <td>empty</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:catch</td>
                     <td>com.skin.ayada.jstl.core.CatchTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:each</td>
                     <td>com.skin.ayada.jstl.core.ForEachTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:forEach</td>
                     <td>com.skin.ayada.jstl.core.ForEachTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:forTokens</td>
                     <td>com.skin.ayada.jstl.core.ForTokensTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:choose</td>
                     <td>com.skin.ayada.jstl.core.ChooseTag</td>
                     <td>tagdependent</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:when</td>
                     <td>com.skin.ayada.jstl.core.WhenTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:otherwise</td>
                     <td>com.skin.ayada.jstl.core.OtherwiseTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:continue</td>
                     <td>com.skin.ayada.jstl.core.ContinueTag</td>
                     <td>empty</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:break</td>
                     <td>com.skin.ayada.jstl.core.BreakTag</td>
                     <td>empty</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:comment</td>
                     <td>com.skin.ayada.jstl.core.CommentTag</td>
                     <td>empty</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:escape</td>
                     <td>com.skin.ayada.jstl.core.EscapeTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:print</td>
                     <td>com.skin.ayada.jstl.core.PrintTag</td>
                     <td>empty</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:exit</td>
                     <td>com.skin.ayada.jstl.core.ExitTag</td>
                     <td>empty</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:buffer</td>
                     <td>com.skin.ayada.jstl.core.BufferTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>
+                        <p>实现了BodyTagSupport接口</p>
+                    </td>
                 </tr>
                 <tr>
                     <td>c:bean</td>
                     <td>com.skin.ayada.jstl.core.BeanTag</td>
                     <td>tagdependent</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:param</td>
                     <td>com.skin.ayada.jstl.core.ParameterTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>
+                        <p>实现了BodyTagSupport接口</p>
+                        <p>&lt;c:param name="myVar" value="${user.name}"&gt;</p>
+                        <p>&lt;c:param name="myVar"&gt;&lt;h1&gt;Hello World&lt;/h1&gt;&lt;/c:param&gt;</p>
+                    </td>
                 </tr>
                 <tr>
                     <td>c:property</td>
                     <td>com.skin.ayada.jstl.core.PropertyTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>
+                        <p>实现了BodyTagSupport接口</p>
+                        <p>&lt;c:property name="myVar" value="${user.name}"&gt;</p>
+                        <p>&lt;c:property name="myVar"&gt;&lt;h1&gt;Hello World&lt;/h1&gt;&lt;/c:property&gt;</p>
+                    </td>
                 </tr>
                 <tr>
                     <td>c:attribute</td>
                     <td>com.skin.ayada.jstl.core.AttributeTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>
+                        <p>实现了BodyTagSupport接口</p>
+                        <p>&lt;c:attribute name="myVar" value="${user.name}"&gt;</p>
+                        <p>&lt;c:attribute name="myVar"&gt;&lt;h1&gt;Hello World&lt;/h1&gt;&lt;/c:attribute&gt;</p>
+                    </td>
                 </tr>
                 <tr>
                     <td>c:constructor</td>
                     <td>com.skin.ayada.jstl.core.ConstructorTag</td>
                     <td>empty</td>
-                    <td>xxx</td>
+                    <td>&lt;c:constructor type="int" value/&gt;</td>
                 </tr>
                 <tr>
                     <td>c:map</td>
                     <td>com.skin.ayada.jstl.core.MapTag</td>
                     <td>tagdependent</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:list</td>
                     <td>com.skin.ayada.jstl.core.ListTag</td>
                     <td>tagdependent</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:entry</td>
                     <td>com.skin.ayada.jstl.core.AttributeTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:element</td>
                     <td>com.skin.ayada.jstl.core.ElementTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>
+                        <p>实现了BodyTagSupport接口</p>
+                        <p>&lt;c:element index="0" value="${user.name}"&gt;</p>
+                        <p>&lt;c:element index="1"&gt;&lt;h1&gt;Hello World&lt;/h1&gt;&lt;/c:element&gt;</p>
+                    </td>
                 </tr>
                 <tr>
                     <td>c:execute</td>
                     <td>com.skin.ayada.jstl.core.ExecuteTag</td>
                     <td>empty</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:xml</td>
                     <td>com.skin.ayada.jstl.core.OutputTag</td>
                     <td>tagdependent</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:output</td>
                     <td>com.skin.ayada.jstl.core.OutputTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:include</td>
                     <td>com.skin.ayada.taglib.ActionTag</td>
                     <td>tagdependent</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:invoke</td>
                     <td>com.skin.ayada.taglib.ActionTag</td>
                     <td>tagdependent</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:layout</td>
                     <td>com.skin.ayada.taglib.ActionTag</td>
                     <td>tagdependent</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:action</td>
                     <td>com.skin.ayada.taglib.ActionTag</td>
                     <td>tagdependent</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:test</td>
                     <td>com.skin.ayada.jstl.core.TestTag</td>
                     <td>empty</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:tryCatchTest</td>
                     <td>com.skin.ayada.jstl.core.TryCatchTestTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>c:scrollpage</td>
                     <td>com.skin.ayada.taglib.ScrollPage</td>
                     <td>empty</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>f:substring</td>
                     <td>com.skin.ayada.jstl.fmt.SubstringTag</td>
                     <td>empty</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>fmt:formatDate</td>
                     <td>com.skin.ayada.jstl.fmt.DateFormatTag</td>
                     <td>empty</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>fmt:formatNumber</td>
                     <td>com.skin.ayada.jstl.fmt.NumberFormatTag</td>
                     <td>empty</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>fmt:parseDate</td>
                     <td>com.skin.ayada.jstl.fmt.ParseDateTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>fmt:parseNumber</td>
                     <td>com.skin.ayada.jstl.fmt.ParseNumberTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>fmt:setTimeZone</td>
                     <td>com.skin.ayada.jstl.fmt.SetTimeZoneTag</td>
                     <td>empty</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>fmt:timeZone</td>
                     <td>com.skin.ayada.jstl.fmt.TimeZoneTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>fmt:setLocale</td>
                     <td>com.skin.ayada.jstl.fmt.SetLocaleTag</td>
                     <td>empty</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>fmt:bundle</td>
                     <td>com.skin.ayada.jstl.fmt.BundleTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>fmt:setBundle</td>
                     <td>com.skin.ayada.jstl.fmt.SetBundleTag</td>
                     <td>empty</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>fmt:message</td>
                     <td>com.skin.ayada.jstl.fmt.MessageTag</td>
                     <td>tagdependent</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>fmt:param</td>
                     <td>com.skin.ayada.jstl.fmt.FmtParamTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>sql:connect</td>
                     <td>com.skin.ayada.jstl.sql.ConnectTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>sql:execute</td>
                     <td>com.skin.ayada.jstl.sql.SqlTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>sql:query</td>
                     <td>com.skin.ayada.jstl.sql.QueryTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>sql:parse</td>
                     <td>com.skin.ayada.jstl.sql.CreateParseTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>sql:create</td>
                     <td>com.skin.ayada.jstl.sql.CreateParseTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>sql:insert</td>
                     <td>com.skin.ayada.jstl.sql.InsertParseTag</td>
                     <td>jsp</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>io:copy</td>
                     <td>com.skin.ayada.jstl.io.CopyTag</td>
                     <td>tagdependent</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>io:delete</td>
                     <td>com.skin.ayada.jstl.io.DeleteTag</td>
                     <td>tagdependent</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
                     <td>io:mkdir</td>
                     <td>com.skin.ayada.jstl.io.MakeDirTag</td>
                     <td>empty</td>
-                    <td>xxx</td>
+                    <td>&nbsp;</td>
                 </tr>
             </table>
         </div>
@@ -605,7 +636,7 @@
     </div>
     <h4 class="sk-h4">c:escape</h4>
     <div class="sk-content">
-        <div class="sk-code"><pre class="brush: xml;"><c:escape encoder="${myHtmlEncoder}"/></div>
+        <div class="sk-code"><pre class="brush: xml;">&lt;c:escape encoder="${myHtmlEncoder}"/&gt;</div>
         <p>参数encoder接受两种参数：</p>
         <p>对象: 必须实现com.skin.ayada.runtime.ELEncoder。</p>
         <p>字符串: 目前默认支持只xml或者html。</p>
@@ -614,7 +645,7 @@
 
     <h4 class="sk-h4">c:print</h4>
     <div class="sk-content">
-        <div class="sk-code"><pre class="brush: xml;"><c:print out="${pageContext}" value="${user}"/></div>
+        <div class="sk-code"><pre class="brush: xml;">&lt;c:print out="${pageContext}" value="${user}"/&gt;</div>
         <p>out：java.io.Writer - 可选 默认是页面的writer对象，也可以是pageContext对象。</p>
         <p>value: java.lang.Object</p>
         <p>打印对象，通常用来调试。</p>
@@ -622,25 +653,28 @@
 
     <h4 class="sk-h4">c:exit</h4>
     <div class="sk-content">
-        <div class="sk-code"><pre class="brush: xml;"><c:exit/></div>
+        <div class="sk-code"><pre class="brush: xml;">&lt;c:exit/&gt;</div>
         <p>立即终止当前页面渲染。</p>
     </div>
 
     <h3 class="sk-h3">c:buffer</h3>
     <div class="sk-content">
-        <div class="sk-code"><pre class="brush: xml;"><c:buffer var="jspPart">Hello World !</c:buffer></div>
+        <div class="sk-code"><pre class="brush: xml;">&lt;c:buffer var="jspPart"&gt;Hello World !&lt;/c:buffer&gt;</div>
         <p>var：java.lang.String - 必选 缓存的变量名称，支持el表达式。</p>
         <p>将该标签的内容执行之后放到pageContext中。</p>
     </div>
 
     <h4 class="sk-h4">c:bean</h4>
     <div class="sk-content">
-        <div class="sk-code"><pre class="brush: xml;">
-            <c:bean name="myBean" className="test.MyBean">
-                <c:constructor type="java.lang.Integer" value="1"></c:constructor>
-                <c:constructor type="java.lang.Integer" value="1"></c:constructor>
-                <c:constructor type="java.lang.Integer" value="1"></c:constructor>
-            </c:bean></div>
+        <div class="sk-code">
+            <pre class="brush: xml;">
+                &lt;c:bean name="myBean" className="test.MyBean"&gt;
+                    &lt;c:constructor type="java.lang.Integer" value="1"/&gt;
+                    &lt;c:constructor type="java.lang.Integer" value="1"/&gt;
+                    &lt;c:constructor type="java.lang.Integer" value="1"/&gt;
+                &lt;/c:bean&gt;
+            </pre>
+        </div>
         <p>name：java.lang.String - 必选 bean名称。</p>
         <p>className：java.lang.String - 必选 class名称。</p>
         <p>根据指定的className创建一个bean对象。</p>
@@ -648,33 +682,42 @@
 
     <h4 class="sk-h4">c:map</h4>
     <div class="sk-content">
-        <div class="sk-code"><pre class="brush: xml;">
-            <c:map name="myMap">
-                <c:entry name="a" value="${myVar1}"></c:entry>
-                <c:entry name="b" value="${myVar2}"></c:entry>
-                <c:entry name="c" value="${myVar3}"></c:entry>
-            </c:bean></div>
+        <div class="sk-code">
+            <pre class="brush: xml;">
+                &lt;c:map name="myMap"&gt;
+                    &lt;c:entry name="a" value="${myVar1}"/&gt;
+                    &lt;c:entry name="b" value="${myVar2}"/&gt;
+                    &lt;c:entry name="c" value="${myVar3}"/&gt;
+                &lt;/c:bean&gt;
+            </pre>
+        </div>
         <p>name：java.lang.String - 必选 map名称。</p>
         <p>构建一个map对象放到pageContext中。</p>
     </div>
 
     <h4 class="sk-h4">c:list</h4>
     <div class="sk-content">
-        <div class="sk-code"><pre class="brush: xml;">
-            <c:list name="myList">
-                <c:element value="${myVar1}"></c:element>
-                <c:element value="${myVar2}"></c:element>
-                <c:element value="${myVar3}"></c:element>
-            </c:list></div>
+        <div class="sk-code">
+            <pre class="brush: xml;">
+                &lt;c:list name="myList"&gt;
+                    &lt;c:element value="${myVar1}"/&gt;
+                    &lt;c:element value="${myVar2}"/&gt;
+                    &lt;c:element value="${myVar3}"/&gt;
+                &lt;/c:list&gt;
+            </pre>
+        </div>
         <p>name：java.lang.String - 必选 map名称。</p>
         <p>构建一个list对象放到pageContext中。</p>
     </div>
     <h4 class="sk-h4">c:xml</h4>
     <div class="sk-content">
-        <div class="sk-code"><pre class="brush: xml;">
-            <c:xml file="${savePath}/1.txt" escapeXml="false" encoding="utf-8" out="true" trim="true">
-                <h1>Hello World !</h1>
-            </c:xml></pre></div>
+        <div class="sk-code">
+            <pre class="brush: xml;">
+                &lt;c:xml file="${savePath}/1.txt" escapeXml="false" encoding="utf-8" out="true" trim="true"&gt;
+                    &lt;h1&gt;Hello World !&lt;/h1&gt;
+                &lt;/c:xml&gt;
+            </pre>
+        </div>
         <p>file：java.lang.String - 可选 输出内容到指定文件。</p>
         <p>escapeXml：java.lang.String - 可选 是否做xml编码。</p>
         <p>encoding：java.lang.String - 可选 文件编码。</p>
@@ -690,12 +733,14 @@
 
     <h4 class="sk-h4">c:include</h4>
     <div class="sk-content">
-        <div class="sk-code"><pre class="brush: xml;">
-            <c:include page="/user/userList.jsp">
-                <c:param name="user1" value="${myUser}"></c:param>
-                <c:param name="user2" value="${myUser}"></c:param>
-            </c:include>
-        </pre></div>
+        <div class="sk-code">
+            <pre class="brush: xml;">
+                &lt;c:include page="/user/userList.jsp"&gt;
+                    &lt;c:param name="user1" value="${myUser}"/&gt;
+                    &lt;c:param name="user2" value="${myUser}"/&gt;
+                &lt;/c:include&gt;
+            </pre>
+        </div>
         <p>包含一个页面。</p>
         <p>此处的包含不同于t:include，t:include是编译指令，在编译期间先加载进来再一起编译，是静态包含，c:include是动态包含，被包含的页面将会单独编译，单独运行，然后把执行结果输出到当前页面。</p>
         <p>因此被包含的页面与当前页面在运行环境上是完全隔离的，互相之间变量不会相互污染。</p>
@@ -703,23 +748,27 @@
 
     <h4 class="sk-h4">c:invoke</h4>
     <div class="sk-content">
-        <div class="sk-code"><pre class="brush: xml;">
-            <c:invoke page="/user/userList.jsp">
-                <c:param name="user1" value="${myUser}"></c:param>
-                <c:param name="user2" value="${myUser}"></c:param>
-            </c:invoke>
-        </pre></div>
+        <div class="sk-code">
+            <pre class="brush: xml;">
+                &lt;c:invoke page="/user/userList.jsp"&gt;
+                    &lt;c:param name="user1" value="${myUser}"/&gt;
+                    &lt;c:param name="user2" value="${myUser}"/&gt;
+                &lt;/c:invoke&gt;
+            </pre>
+        </div>
         <p>完全同c:include，只是标签名称不一样。可以用来调用另外一个模板。</p>
     </div>
 
     <h4 class="sk-h4">c:layout</h4>
     <div class="sk-content">
-        <div class="sk-code"><pre class="brush: xml;">
-            <c:layout page="/user/userList.jsp">
-                <c:param name="user1" value="${myUser}"></c:param>
-                <c:param name="user2" value="${myUser}"></c:param>
-            </c:layout>
-        </pre></div>
+        <div class="sk-code">
+            <pre class="brush: xml;">
+                &lt;c:layout page="/user/userList.jsp"&gt;
+                    &lt;c:param name="user1" value="${myUser}"/&gt;
+                    &lt;c:param name="user2" value="${myUser}"/&gt;
+                &lt;/c:layout&gt;
+            </pre>
+        </div>
         <p>完全同c:include，只是标签名称不一样。可以用来实现layout布局。</p>
     </div>
 
@@ -727,10 +776,10 @@
     <div class="sk-content">
         <div class="sk-code">
             <pre class="brush: xml;">
-            <c:action className="test.UserAction" method="execute" page="/user/userList.jsp">
-                <c:param name="user1" value="${myUser}"></c:param>
-                <c:param name="user2" value="${myUser}"></c:param>
-            </c:action>
+                &lt;c:action className="test.UserAction" method="execute" page="/user/userList.jsp"&gt;
+                    &lt;c:param name="user1" value="${myUser}"/&gt;
+                    &lt;c:param name="user2" value="${myUser}"/&gt;
+                &lt;/c:action&gt;
             </pre>
         </div>
         <p>className：java.lang.String - 可选 要执行的类。</p>
@@ -745,17 +794,17 @@
 
         <div class="sk-code">
             <pre class="brush: xml;">
-            <!--
-                这是一个首页的分类列表页面，可能很多页面都会有这样的逻辑。
-                c:action标签会调用ListAction执行查询动作，并把数据放到context中，然后调用testList.jsp进行渲染。
-                外层的缓存标签会先检查缓存，如果有了直接输出，否则执行全部子节点，并把结果缓存。
-                c:cache标签非Ayada提供，需要自己定义，因为每个应用使用的缓存系统可能都不一样。
-            -->
-            <c:cache key="cache:index:${categoryId}" expires="180">
-                <c:action className="test.ListAction" method="execute" page="/test/testList.jsp">
-                    <c:param name="categoryId" value="${categoryId}"></c:param>
-                </c:action>
-            </c:cache>
+                &lt;!--
+                    这是一个首页的分类列表页面，可能很多页面都会有这样的逻辑。
+                    c:action标签会调用ListAction执行查询动作，并把数据放到context中，然后调用testList.jsp进行渲染。
+                    外层的缓存标签会先检查缓存，如果有了直接输出，否则执行全部子节点，并把结果缓存。
+                    c:cache标签非Ayada提供，需要自己定义，因为每个应用使用的缓存系统可能都不一样。
+                --&gt;
+                &lt;c:cache key="cache:index:${categoryId}" expires="180"&gt;
+                    &lt;c:action className="test.ListAction" method="execute" page="/test/testList.jsp"&gt;
+                        &lt;c:param name="categoryId" value="${categoryId}"/&gt;
+                    &lt;/c:action&gt;
+                &lt;/c:cache&gt;
             </pre>
         </div>
     </div>
@@ -767,76 +816,81 @@
         <p>1). 通过t:taglib指令覆盖全部指令, 将前缀从默认的c改成d。</p>
         <p>此方法需要将配置文件中的ayada.compile.standard-library=true改为ayada.compile.standard-library=false，系统将不自动加载默认的标签库。</p>
         <p>配置项的修改影响全局，这个时候需要所有的页面都使用t:taglib引入默认的标签库。</p>
-        <div class="sk-code"><pre class="brush: xml;"><t:taglib prefix="d" uri="http://localhost/ayada-taglib-standard"/></pre></div>
-        <p>其中ayada-taglib-mytest.xml文件必须存在, 编译期将从classpath加载ayada-taglib-mytest.xml文件.</p>
-        <p>也可以直接引入ayada-taglib-default.xml覆盖系统默认的全部标签。无需担心库文件中定义的标签名称包含的前缀，导入时会使用新的前缀替换。</p>
+        <div class="sk-code"><pre class="brush: xml;">&lt;t:taglib prefix="d" uri="http://localhost/ayada-taglib-standard"/&gt;</pre></div>
+        <p>无需担心库文件中定义的标签名称包含的前缀，导入时会使用新的前缀替换。</p>
         <p>ayada-taglib-default.xml是系统自带的标签库定义文件，http://localhost/ayada-taglib-standard与http://localhost/ayada-taglib-default完全等效。</p>
         <p>2). 模板代码如下</p>
         <div class="sk-code">
             <pre class="brush: xml;">
-            <t:taglib prefix="d" uri="http://localhost/ayada-taglib-mytest"/>
-            <c:comment>这是一个用模版生成模版的示例</c:comment>
-            <d:if test="${1 == 1}">
-                <c:if test="${?a > 1}">
-                    <h1>${?user.name}</h1>
-                </c:if>
-            </d:if>
+            &lt;t:taglib prefix="d" uri="http://localhost/ayada-taglib-mytest"/&gt;
+            &lt;c:comment>这是一个用模版生成模版的示例&lt;/c:comment&gt;
+            &lt;d:if test="${1 == 1}"&gt;
+                &lt;c:if test="${?a > 1}"&gt;
+                    &lt;h1>${?user.name}&lt;/h1&gt;
+                &lt;/c:if&gt;
+            &lt;/d:if&gt;
             </pre>
         </div>
         <p>输出:</p>
-        <div class="sk-code"><pre class="brush: xml;">
-            <c:if test="${a > 1}">
-                <h1>${user.name}</h1>
-            </c:if>
-        </pre></div>
-
-        <p class="bb"># 方法二: 重新定义部分标签</p>
-        <p>1). 通过t:rename指令重命名指定指令.</p>
-        <p>2). 模板代码如下</p>
-        <div class="sk-code"><pre class="brush: xml;">
-            <t:rename name="d:if" from="c:if"/>
-            <c:comment>这是一个用模版生成模版的示例</c:comment>
-
-            <d:if test="${1 == 1}">
-                <c:if test="${?a > 1}">
-                    <h1>${?user.name}</h1>
-                </c:if>
-            </d:if>
-        </pre></div>
-        <p>输出:</p>
-        <div class="sk-code"><pre class="brush: xml;">
-            <c:if test="${a > 1}">
-                <h1>${user.name}</h1>
-            </c:if>
-        </pre></div>
-
-        <p class="bb"># 方法三: 使用t:text指令</p>
-        <p>注：该方法只适合静态内容, 不适合动态内容.</p>
-        <p>示例：</p>
-        <div class="sk-code"><pre class="brush: xml;">
-            <t:text>
+        <div class="sk-code">
+            <pre class="brush: xml;">
                 <c:if test="${a > 1}">
                     <h1>${user.name}</h1>
                 </c:if>
-            </t:text>
-        </pre></div>
+            </pre>
+        </div>
+        <p class="bb"># 方法二: 重新定义部分标签</p>
+        <p>1). 通过t:rename指令重命名指定指令.</p>
+        <p>2). 模板代码如下</p>
+        <div class="sk-code">
+            <pre class="brush: xml;">
+                &lt;t:rename name="d:if" from="c:if"/&gt;
+                &lt;c:comment&gt;这是一个用模版生成模版的示例&lt;/c:comment&gt;
 
+                &lt;d:if test="${1 == 1}"&gt;
+                    &lt;c:if test="${?a &gt; 1}"&gt;
+                        &lt;h1&gt;${?user.name}&lt;/h1&gt;
+                    &lt;/c:if&gt;
+                &lt;/d:if&gt;
+            </pre>
+        </div>
+        <p>输出:</p>
+        <div class="sk-code">
+            <pre class="brush: xml;">
+                &lt;c:if test="${a &gt; 1}"&gt;
+                    &lt;h1&gt;${user.name}&lt;/h1&gt;
+                &lt;/c:if&gt;
+            </pre>
+        </div>
+        <p class="bb"># 方法三: 使用t:text指令</p>
+        <p>注：该方法只适合静态内容, 不适合动态内容.</p>
+        <p>示例：</p>
+        <div class="sk-code">
+            <pre class="brush: xml;">
+                &lt;t:text&gt;
+                    &lt;c:if test="${a &gt; 1}"&gt;
+                        &lt;h1&gt;${user.name}&lt;/h1&gt;
+                    &lt;/c:if&gt;
+                &lt;/t:text&gt;
+            </pre>
+        </div>
         <p>输出: </p>
-        <div class="sk-code"><pre class="brush: xml;">
-            <c:if test="${a > 1}">
-                <h1>${user.name}</h1>
-            </c:if>
-        </pre></div>
+        <div class="sk-code">
+            <pre class="brush: xml;">
+                &lt;c:if test="${a &gt; 1}"&gt;
+                    &lt;h1&gt;${user.name}&lt;/h1&gt;
+                &lt;/c:if&gt;
+            </pre>
+        </div>
         <p>t:text指令是在编译期执行的, 并且不允许嵌套. 编译期遇到t:text指令, 就会把其中的内容全部作为文本加载, 其中的el表达式也不需要使用特殊写法.</p>
         <p>因此中间任何内容都不会动态执行, 所以它只适合静态内容.</p>
 
         <p># 生成EL表达式.</p>
         <p>以上两种方法都是针对标签的重定义, 对于el表达式只需要在el表达式的前面加上?即可. 这样el表达式将会原样输出.</p>
         <p>例如: </p>
-        <div class="sk-code"><pre class="brush: xml;"><h1>${?user.name}</h1></pre></div>
-            
-        <p>输出:
-        <div class="sk-code"><pre class="brush: xml;"><h1>${user.name}</h1></pre></div>
+        <div class="sk-code"><pre class="brush: xml;">&lt;h1&gt;${?user.name}&lt;/h1&gt;</pre></div>
+        <p>输出:</p>
+        <div class="sk-code"><pre class="brush: xml;">&lt;h1&gt;${user.name}&lt;/h1&gt;</pre></div>
     </div>
 
     <h2 class="sk-h2">5. 自定义标签</h2>
@@ -860,9 +914,9 @@
             import com.skin.ayada.tagext.Tag;
 
             /**
-             * <p>Title: OutTag</p>
-             * <p>Description: </p>
-             * <p>Copyright: Copyright (c) 2006</p>
+             * &lt;p&gt;Title: OutTag&lt;/p&gt;
+             * &lt;p&gt;Description: &lt;/p&gt;
+             * &lt;p&gt;Copyright: Copyright (c) 2006&lt;/p&gt;
              * @author xuesong.net
              * @version 1.0
              */
@@ -947,7 +1001,7 @@
                     char c;
                     StringBuilder buffer = new StringBuilder();
 
-                    for(int i = 0, size = source.length(); i < size; i++) {
+                    for(int i = 0, size = source.length(); i &lt; size; i++) {
                         c = source.charAt(i);
 
                         switch (c) {
@@ -959,11 +1013,11 @@
                                 buffer.append("&quot;");
                                 break;
                             }
-                            case '<': {
+                            case '&lt;': {
                                 buffer.append("&lt;");
                                 break;
                             }
-                            case '>': {
+                            case '&gt;': {
                                 buffer.append("&gt;");
                                 break;
                             }
@@ -1034,7 +1088,6 @@
             </pre>
         </div>
     </div>
-
     <h2 class="sk-h2">7 全局变量和工具类</h2>
     <div class="sk-content">
         <p class="bb">全局变量定义和工具类定义都在classpath下的ayada-tools.properties文件中定义，会合并Ayada自带的默认配置。该配置文件支持@import指令，并且可以直接书写中文不需要做unicode编码。</p>
@@ -1079,20 +1132,20 @@
         <p class="bb">示例代码：</p>
         <div class="sk-code">
             <pre class="brush: xml;">
-                <c:set var="myHtml" value="<>"/>
-                <c:set var="myHtml" value="&amp;lt;&amp;gt;"/>
+                &lt;c:set var="myHtml" value="<>"/&gt;
+                &lt;c:set var="myHtml" value="&amp;lt;&amp;gt;"/&gt;
                 上面的两个c:set标签等价，建议模板文件中对标签的属性进行html编码。
                 el表达式会做html编码，例如下面的el输出&amp;lt;&amp;gt;
                 ${myHtml}
 
-                <!-- 获取bundle并放到pageContext中，bundle是一个LocalizationContext对象 -->
-                <c:set var="myBoundle" value="${I18n.getBundle(myBaseName, myValue)}"></c:set>
+                &lt;!-- 获取bundle并放到pageContext中，bundle是一个LocalizationContext对象 --&gt;
+                &lt;c:set var="myBoundle" value="${I18n.getBundle(myBaseName, myValue)}"/&gt;
 
-                <!-- 使用fmt:message标签输出，如果boundle是字符串，将会把boundle作为basename获取一个bundle。 -->
-                <fmt:message key="" bundle="${myBoundle}">
-                    <fmt:param value="${param1}"></fmt:param>
-                    <fmt:param value="hello"></fmt:param>
-                </fmt:message>
+                <!-- 使用fmt:message标签输出，如果boundle是字符串，将会把boundle作为basename获取一个bundle。-->
+                &lt;fmt:message key="" bundle="${myBoundle}"&gt;
+                    &lt;fmt:param value="${param1}"/&gt;
+                    &lt;fmt:param value="hello"/&gt;
+                &lt;/fmt:message>
 
                 <!-- 也可以使用el表达式直接输出 -->
                 ${myBoundle.message("userEdit.saveBtn")}
@@ -1118,19 +1171,130 @@
         <p>注：ayada-tools.properties中，凡是var定义的变量都是字符串，凡是set定义的变量系统会认为是一个类名，通过反射创建一个，全局唯一，所有pageContext共用同一个对象。</p>
     </div>
 
-    <h2 class="sk-h2">9 线程模型</h2>
+    <h2 class="sk-h2">9 jsp表达式和el表达式编码</h2>
+    <div class="sk-content">
+        <p>默认情况下所有的jsp表达式和el表达式都会做html编码。有时候页面上有些数据不需要编码，有三种方法可以避免编码。</p>
+        <p class="bb">1. 在el表达式上加#前缀，所有以#开头的el表达式都不会做编码。该方式只针对el表达式生效，jsp表达式不允许使用此方法。</p>
+        <p>例如：${#user.name}</p>
+        <p class="bb">2. 使用c:out标签。</p>
+        <p>所有的标签输出都由标签控制，引擎不做任何处理。</p>
+        <p>例如：&lt;c:out value="${user.name}"/&gt;</p>
+        <p class="bb">3. 使用c:escape标签临时修改编码，处理完再用c:escape改回去。</p>
+        <p>例如：&lt;c:escape encoder="null"/&gt;${user.name}&lt;c:escape encoder="html"/&gt;${user.name}</p>
+    </div>
+
+    <h2 class="sk-h2">10 Ayada的核心对象</h2>
+    <div class="sk-content">
+        <p class="bb">Ayada的核心对象是提供对外的API，外部程序通过核心对象来调用Ayada模板引擎。</p>
+        <table class="sk-grid">
+            <tr>
+                <td style="width: 200px">类</td>
+                <td style="width: 200px">类型</td>
+                <td style="width: 200px">实现</td>
+                <td style="width: 200px">说明</td>
+            </tr>
+            <tr>
+                <td>TemplateContext</td>
+                <td>接口</td>
+                <td>
+                    <p>DefaultTemplateContext</p>
+                </td>
+                <td>
+                    <p>TemplateContext是一个接口，所有对外的API都通过TemplateContext来提供。</p>
+                    <p>TemplateContext负责管理模板相关的上下文，提供创建模板，缓存模板，自动重新加载等功能。</p>
+                </td>
+            </tr>
+            <tr>
+                <td>SourceFactory</td>
+                <td>接口</td>
+                <td>
+                    <p>DefaultSourceFactory</p>
+                    <p>ClassPathSourceFactory</p>
+                    <p>ZipSourceFactory</p>
+                    <p>MemorySourceFactory</p>
+                </td>
+                <td>SourceFactory用来管理模板源文件，提供加载模板，模板修改检测等功能。</td>
+            </tr>
+            <tr>
+                <td>TemplateFactory</td>
+                <td>实现</td>
+                <td>
+                    <p>TemplateFactory</p>
+                    <p>JspTemplateFactory</p>
+                </td>
+                <td><p>TemplateFactory编译模板文件并返回一个模板对象。JspTemplateFactory会将模板对象再次编译为class文件。</p></td>
+            </tr>
+            <tr>
+                <td>ExpressionFactory</td>
+                <td>接口</td>
+                <td>
+                    <p>DefaultExpressionFactory</p>
+                </td>
+                <td><p>ExpressionFactory用来创建el表达式上下文。</p></td>
+            </tr>
+        </table>
+        <p class="bb">代码示例：</p>
+        <div class="sk-code">
+            <pre class="brush: java;">
+            String home = servletContext.getRealPath("/");
+            SourceFactory sourceFactory = new DefaultSourceFactory(home);
+            TemplateFactory templateFactory = new TemplateFactory();
+            TemplateContext templateContext = new DefaultTemplateContext(home);
+            ExpressionFactory expressionFactory = new DefaultExpressionFactory();
+            templateContext.setSourceFactory(sourceFactory);
+            templateContext.setTemplateFactory(templateFactory);
+            templateContext.setExpressionFactory(expressionFactory);
+
+            StringWriter writer = new StringWriter();
+            Map&lt;String, Object&gt; context = new HashMap&lt;String, Object&gt;();
+            context.put("user", user);
+
+            templateContext.execute("/user/userEdit.jsp", context, writer);
+            System.out.println(writer.toString());
+            </pre>
+        </div>
+    </div>
+
+    <h2 class="sk-h2">10 编译模式和预编译</h2>
+    <div class="sk-content">
+        <p class="bb">编译模式需要使用JspTemplateFactory类来构建TemplateContext对象。TemplateContext对象使用TemplateFactory类的实现来加载模板。</p>
+        <p>一般的线上应用在应用重启之后可以通过脚本访问一下指定的url来预热，这种情况不需要预编译。如果你一定要预编译一下，可以通过调用com.skin.ayada.template.PrepareCompiler来进行预编译。</p>
+        <p>PrepareCompiler会扫描指定目录下的所有文件作为模板文件进行编译，编译过程遵循配置项的sourde-pattern规则。也可以指定排除参数来排除不需要预编译的类。</p>
+        <p>PrepareCompiler目前只支持文件系统，如果你使用了其他的方式加载模版文件，可以参考PrepareCompiler重新实现预编译。</p>
+        <p class="bb">预编译的调用方式：</p>
+        <div class="sk-code">
+            <pre class="brush: java;">
+                // 指定sourcePattern，此处指扩展名是jsp的文件作为模版编译，其他扩展名一律作为文本文件处理
+                // 如果此处不指定，将使用默认配置
+                templateContext.getSourceFactory().setSourcePattern("jsp");
+
+                // 预编译必须指定一个已经定义好的模板上下文
+                // 预编译的过程其实就是扫描全部文件，然后从模板上下文中加载模板对象并缓存起来
+                // 如果以后文件又有修改，模板上下文将会重新加载该模板
+                PrepareCompiler prepareCompiler = new PrepareCompiler(templateContext);
+
+                // 排除指定目录和文件，遵循ant格式的路径匹配
+                prepareCompiler.exclude(new String[]{"/resource/**", "/include/**", "/WEB-INF/**"});
+
+                // 开始编译，如果某个模版文件编译失败，将会终止预编译
+                prepareCompiler.compile();
+            </pre>
+        </div>
+    </div>
+
+    <h2 class="sk-h2">10 线程模型</h2>
     <div class="sk-content">
         <p>首先标签不存在线程安全的问题，所有的标签都在安全的线程模型中执行。<b>除非自己实现的标签里面存在不安全的代码。</b></p>
         <p>在解释模式中不存在线程安全的问题。在编译模式下如果开启了java脚本选项，请小心使用类变量。编译模式下所有被编译好的模版对象都是单例的，不是线程安全的，这一点与jsp的运行模式是一致的。</p>
     </div>
 
-    <h2 class="sk-h2">10 代码示例和测试用例</h2>
+    <h2 class="sk-h2">11 代码示例和测试用例</h2>
     <div class="sk-content">
         <p>在源代码的/webapp目录下包含了绝大部分的代码示例和测试用例，这些文件基本上都以某个具体的标签名命名，从文件名就可以很容易看出来是关于那个标签的用法的。</p>
         <p>com.skin.ayada.template.Main是java调用模板引擎的示例，也可以在命令行下调用。</p>
     </div>
 
-    <h2 class="sk-h2">11 其他</h2>
+    <h2 class="sk-h2">12 其他</h2>
     <div class="sk-content">
         <p>很多模版引擎为了提升性能，采用了很多性能优化的手段，例如：动态编译，使用强制类型来避免反射等。
         Ayada也使用了动态编译，由于Ayada是与jsp和jstl完全一致的，所以一些jsp的技术在Ayada里面是完全有效的。
@@ -1147,10 +1311,7 @@
             <li><p>强大的扩展功能，标签很容易扩展；</p></li>
             <li><p>jstl从jsp1.0至今已经10多年了，技术很成熟，功能很完善。</p></li>
         </ul>
-        <p class="bb">jstl相对于其他模版语言：</p>
-        <p>一些模板语言重新定义了一套语法，然后再编译成java代码，甚至还使用了强类型，这样的结果与使用java代码有什么区别呢？而且不但要再学一套新的语法，而且表达式的支持又不如java代码强大。一个简单的jsp编译过程甚至一个正则表达式就能搞定，不需要对java脚本做任何处理即可直接编译为class。重新定义一套语法除了让引擎的实现更麻烦，编译过程更慢，还有什么好处呢？
-        Ayada不定义新的语法，不要求你在模版中使用强类型，虽然你也可以使用。Ayada尽可能在易用性，用户友好和性能之间寻找一个平衡点。</p>
-        <p>模板语言的用户友好，我认为应该包括：</p>
+        <p>Ayada尽可能在易用性，用户友好和性能之间寻找一个平衡点。模板语言的用户友好应该包括：</p>
         <ul>
             <li><p>易用，必须易上手，最好不需要看文档。</p></li>
             <li><p>代码简介，写出来的模版不能混乱不堪很难阅读。</p></li>
@@ -1162,11 +1323,13 @@
             <li><p>统一实现，不同的jsp/servlet容器对jstl并不完全兼容。某些容器对标签属性和el的支持很不友好。这对于那些需要在不同的jsp/servlet容器中运行的应用程序来说很坑。</p></li>
             <li><p>某些功能的实现很麻烦，例如pageContext.include方法是在不同的pageContext中执行，父页面和被include的页面的pageContext是互相隔离的，传递参数只能通过其他方式。Ayada对pageContext.include做了扩展，可以直接传递参数。</p></li>
             <li><p>在非web环境中使用jstl。jstl本身专为web设计，API中直接跟web绑定死了，很难在其他环境中使用。Ayada中移除了web相关的对象，通过约定支持一些web中定义的对象。</p></li>
-            <li><p>jsp中的jstl定义很繁琐，Ayada简化了标签定义。</p></li>
+            <li><p>在jsp中页面和web环境绑定，同样的页面如果想生成静态文件必须修改jsp代码重定向输出到本地文件非常麻烦。使用模版引擎就可以很方便的执行已经编写好的jsp页面输出到指定文件。</p></li>
+            <li><p>jsp中的jstl定义很繁琐，Ayada简化了标签定义。Ayada还提供了action，invoke标签来调用其他模版，将其他模版当成宏使用，实现上仅仅相当于一个方法调用。</p></li>
             <li><p>Ayada基本兼容jstl全部功能，原来使用jsp编写的代码基本上不需要修改就可以直接使用Ayada运行。</p></li>
-            <li><p>Ayada自带的默认标签库扩展了大量常用标签，可以很方便的对代码隔离，避免大量的代码堆砌到一个页面，并且提高了代码可重用性。</p></li>
-            <li><p>Ayada可以禁用java脚本，只使用标签编写，一定程度上可以使web程序避免被人上传jsp木马。</p></li>
-            <li><p>Ayada的el引擎可以任意替换。</p></li>
+            <li><p>Ayada自带的默认标签库扩展了大量常用标签，可以很方便的对代码隔离，避免大量的代码堆砌到一个页面，提高了代码可重用性。</p></li>
+            <li><p>Ayada可以禁用java脚本，只使用标签编写，强制展现层和逻辑层分离，一定程度上也使web程序避免被人上传jsp木马。</p></li>
+            <li><p>Ayada的el引擎可以任意替换，如果你喜欢其他的表达式语言，你可以把默认的el引擎替换为其他实现。</p></li>
+            <li><p>在jsp中所有的jsp表达式和el输出都需要人工编码加上html转码，否则可能被xss注入。Ayada在引擎层默认对所有的jsp表达式和el表达式进行html编码，同时支持自定义转码函数。</p></li>
         </ul>
     </div>
 </div>

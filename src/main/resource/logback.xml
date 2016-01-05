@@ -13,4 +13,8 @@
     <logger name="com.skin.ayada" level="DEBUG" additivity="false">
         <appender-ref ref="stdout"/>
     </logger>
+
+    <logger name="com.skin.ayada.compile.TemplateCompiler" level="WARN" additivity="false">
+        <appender-ref ref="stdout"/>
+    </logger>
 </configuration>

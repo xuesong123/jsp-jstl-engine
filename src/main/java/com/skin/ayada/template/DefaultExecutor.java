@@ -15,10 +15,12 @@ import java.util.List;
 import com.skin.ayada.runtime.ExpressionContext;
 import com.skin.ayada.runtime.JspWriter;
 import com.skin.ayada.runtime.PageContext;
+import com.skin.ayada.statement.Expression;
 import com.skin.ayada.statement.Node;
 import com.skin.ayada.statement.NodeType;
 import com.skin.ayada.statement.Statement;
 import com.skin.ayada.statement.TagNode;
+import com.skin.ayada.statement.Variable;
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTag;
 import com.skin.ayada.tagext.FinallyException;
@@ -100,9 +102,13 @@ public class DefaultExecutor {
                         Object value = expressionContext.getValue(node.getTextContent());
 
                         if(value != null) {
-                            expressionContext.print(out, value);
+                            if("#".equals(((Expression)node).getFlag())) {
+                                out.print(value);
+                            }
+                            else {
+                                expressionContext.print(out, value);
+                            }
                         }
-
                         index++;
                         continue;
                     }
@@ -111,9 +117,13 @@ public class DefaultExecutor {
                         Object value = pageContext.getAttribute(node.getTextContent());
 
                         if(value != null) {
-                            expressionContext.print(out, value);
+                            if("#".equals(((Variable)node).getFlag())) {
+                                out.print(value);
+                            }
+                            else {
+                                expressionContext.print(out, value);
+                            }
                         }
-
                         index++;
                         continue;
                     }

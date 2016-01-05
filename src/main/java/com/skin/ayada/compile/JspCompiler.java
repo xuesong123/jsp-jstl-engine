@@ -30,6 +30,7 @@ import com.skin.ayada.statement.Expression;
 import com.skin.ayada.statement.Node;
 import com.skin.ayada.statement.NodeType;
 import com.skin.ayada.statement.TagNode;
+import com.skin.ayada.statement.Variable;
 import com.skin.ayada.tagext.BodyTag;
 import com.skin.ayada.tagext.DynamicAttributes;
 import com.skin.ayada.tagext.IterationTag;
@@ -263,7 +264,13 @@ public class JspCompiler {
             if(nodeType == NodeType.VARIABLE) {
                 String textContent = node.getTextContent();
                 writer.println(indent + "// VARIABLE: lineNumber: " + node.getLineNumber());
-                writer.println(indent + "expressionContext.print(out, pageContext.getAttribute(\"" + textContent + "\"));");
+
+                if("#".equals(((Variable)node).getFlag())) {
+                    writer.println(indent + "out.write(pageContext.getAttribute(\"" + textContent + "\"));");
+                }
+                else {
+                    writer.println(indent + "expressionContext.print(out, pageContext.getAttribute(\"" + textContent + "\"));");
+                }
 
                 if(this.isTagNode(list, index + 1)) {
                     writer.println();
@@ -274,7 +281,13 @@ public class JspCompiler {
             if(nodeType == NodeType.EXPRESSION) {
                 String textContent = node.getTextContent();
                 writer.println(indent + "// EXPRESSION: lineNumber: " + node.getLineNumber());
-                writer.println(indent + "expressionContext.print(out, expressionContext.getString(\"" + StringUtil.escape(textContent) + "\"));");
+
+                if("#".equals(((Expression)node).getFlag())) {
+                    writer.println(indent + "out.write(expressionContext.getString(\"" + StringUtil.escape(textContent) + "\"));");
+                }
+                else {
+                    writer.println(indent + "expressionContext.print(out, expressionContext.getString(\"" + StringUtil.escape(textContent) + "\"));");
+                }
 
                 if(this.isTagNode(list, index + 1)) {
                     writer.println();
@@ -328,13 +341,11 @@ public class JspCompiler {
                     writer.println(indent + "// " + NodeUtil.getDescription(node));
                     return Tag.EVAL_PAGE;
                 }
-
                 case NodeType.JSP_DIRECTIVE_INCLUDE: {
                     writer.println(indent + "// jsp:directive.include: lineNumber: " + node.getLineNumber());
                     writer.println(indent + "// " + NodeUtil.getDescription(node));
                     return Tag.EVAL_PAGE;
                 }
-
                 case NodeType.JSP_SCRIPTLET: {
                     writer.println(indent + "// jsp:scriptlet: lineNumber: " + node.getLineNumber());
                     writer.println(node.getTextContent());
@@ -342,7 +353,8 @@ public class JspCompiler {
                 }
                 case NodeType.JSP_EXPRESSION: {
                     writer.println(indent + "// jsp:expression: lineNumber: " + node.getLineNumber());
-                    writer.println(indent + "out.print(" + node.getTextContent() + ");");
+                    // writer.println(indent + "out.print(" + node.getTextContent() + ");");
+                    writer.println(indent + "expressionContext.print(out, (" + node.getTextContent() + "));");
                     return Tag.SKIP_BODY;
                 }
             }
@@ -1203,7 +1215,7 @@ public class JspCompiler {
         }
 
         if(parent != null && parent instanceof TagNode) {
-            String className = ((TagNode)node).getTagClassName();
+            String className = ((TagNode)parent).getTagClassName();
             return (FastJstl.has(className) == false);
         }
         return false;

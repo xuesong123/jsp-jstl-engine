@@ -2,7 +2,7 @@ html, body, div, dl, dt, dd, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset
 html, body, img{border: 0px; font-size: 12px;}
 body, input, button, select, textarea{
     color: #444444;
-    font: 14px/1.5 "ËÎÌו", Arial, Helvetica;
+    font: 14px/1.5 Georgia,serif;
 }
 
 body{margin: 0px; padding: 0px; background-color: #ffffff;}
@@ -42,6 +42,75 @@ div.sk-code{
 
 ul.sk-list{list-style-type: disc;}
 ul.sk-list li{display: list-item;}
+
+table.sk-grid{
+    width: 100%;
+    border-spacing: 0px 0px;
+    background-color: #ffffff;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+table.sk-grid td, table.sk-grid th{
+    border: 1px #c0c0c0 solid;
+}
+
+table.sk-grid tr{
+    height: 26px;
+}
+
+table.sk-grid tr.thead{
+    height: 26px;
+}
+
+table.sk-grid tr.thead td, table.sk-grid tr.thead th{
+    line-height: 24px;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: center;
+    color: #0f2c64;
+}
+
+table.sk-grid tr.thead td, table.sk-grid tr.thead h4{
+    padding-left: 4px;
+    font-size: 13px;
+}
+
+table.sk-grid tr.thead td, table.sk-grid tr.thead h4 img{
+    margin-top: -1px;
+}
+
+table.sk-grid tr th{white-space: nowrap;}
+
+table.sk-grid tr td{
+    padding-left: 4px;
+    line-height: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+table.sk-grid tr td.c1, table.sk-grid tr th.c1{
+    width: 40px;
+    padding-left: 0px;
+    background: transparent url(../images/thead.gif) repeat scroll 0px 0px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+table.sk-grid tr td.c2, .table tr th.c2{
+    width: 40px;
+    padding-left: 0px;
+    background-color: #efefef;
+    vertical-align: middle;
+    text-align: center;
+}
+
+table.sk-grid tr.old{background-color: #ffffff;}
+table.sk-grid tr.even{background-color: #f9f9f9;}
+table.sk-grid tr.hover{background-color: #e8f5fe;}
+table.sk-grid tr.clicked{background-color: #ffffdd;}
+table.form tr td{height: 30px; padding-left: 4px; white-space: nowrap;}
+td, th input[type="checkbox"]{}
 
 div.scrolltop{
     width: 20px;

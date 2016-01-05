@@ -18,6 +18,8 @@ package com.skin.ayada.statement;
  * @version 1.0
  */
 public class Expression extends DataNode {
+    private String flag;
+
     public Expression() {
         super(NodeType.EXPR_NAME, NodeType.EXPRESSION);
     }
@@ -35,6 +37,20 @@ public class Expression extends DataNode {
      */
     protected Expression(String nodeName, int nodeType) {
         super(NodeType.EXPR_NAME, NodeType.EXPRESSION);
+    }
+
+    /**
+     * @return the flag
+     */
+    public String getFlag() {
+        return this.flag;
+    }
+
+    /**
+     * @param flag the flag to set
+     */
+    public void setFlag(String flag) {
+        this.flag = flag;
     }
 
     /**

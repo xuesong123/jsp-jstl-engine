@@ -96,6 +96,13 @@ public class Main {
         templateContext.getTemplateFactory().setIgnoreJspTag(false);
         templateContext.getSourceFactory().setSourcePattern("*");
 
+        /*
+        templateContext.getSourceFactory().setSourcePattern("jsp");
+        PrepareCompiler prepareCompiler = new PrepareCompiler(templateContext);
+        prepareCompiler.exclude(new String[]{"/resource/**", "/include/**", "/WEB-INF/**"});
+        prepareCompiler.compile();
+        */
+
         Map<String, Object> context = new HashMap<String, Object>();
         PrintWriter printWriter = new PrintWriter(System.out);
         PageContext pageContext = templateContext.getPageContext(context, printWriter);

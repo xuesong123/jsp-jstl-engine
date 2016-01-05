@@ -206,7 +206,11 @@ public class TemplateFilter implements Filter {
 
             if(templateFactory instanceof JspTemplateFactory) {
                 String jspWork = this.getJspWork(filterConfig);
-                String ignoreJspTag = filterConfig.getInitParameter("ignore-jsptag");
+                String ignoreJspTag = System.getProperty("ayada.compile.ignore-jsptag");
+
+                if(ignoreJspTag == null) {
+                    ignoreJspTag = filterConfig.getInitParameter("ignore-jsptag");
+                }
 
                 if(ignoreJspTag == null) {
                     ignoreJspTag = String.valueOf(TemplateConfig.getIgnoreJspTag());

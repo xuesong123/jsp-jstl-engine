@@ -17,6 +17,8 @@ package com.skin.ayada.statement;
  * @version 1.0
  */
 public class Variable extends DataNode {
+    private String flag;
+
     public Variable() {
         super(NodeType.VARI_NAME, NodeType.VARIABLE);
     }
@@ -34,6 +36,20 @@ public class Variable extends DataNode {
      */
     protected Variable(String nodeName, int nodeType) {
         super(NodeType.VARI_NAME, NodeType.VARIABLE);
+    }
+
+    /**
+     * @return the flag
+     */
+    public String getFlag() {
+        return this.flag;
+    }
+
+    /**
+     * @param flag the flag to set
+     */
+    public void setFlag(String flag) {
+        this.flag = flag;
     }
 
     /**

@@ -8,7 +8,7 @@
 </head>
 <body version="1.0">
 
-<% abc %>
+<% int abc = 1; %>
 
 abc<%=abc%>123
 </body>

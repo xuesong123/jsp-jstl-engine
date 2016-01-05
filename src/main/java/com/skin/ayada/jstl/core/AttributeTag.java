@@ -43,7 +43,6 @@ public class AttributeTag extends BodyTagSupport {
             BodyContent body = this.getBodyContent();
             this.setAttribute(this.name, (body != null ? body.getString() : null));
         }
-
         return Tag.EVAL_PAGE;
     }
 

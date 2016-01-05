@@ -33,7 +33,6 @@ public class ElementTag extends BodyTagSupport {
             this.setElement(this.index, this.value);
             return Tag.SKIP_BODY;
         }
-
         return BodyTag.EVAL_BODY_BUFFERED;
     }
 
@@ -43,7 +42,6 @@ public class ElementTag extends BodyTagSupport {
             BodyContent body = this.getBodyContent();
             this.setElement(this.index, (body != null ? body.getString() : null));
         }
-
         return Tag.EVAL_PAGE;
     }
 
