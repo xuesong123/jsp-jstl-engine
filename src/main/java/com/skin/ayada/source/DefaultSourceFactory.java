@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 
 import com.skin.ayada.util.IO;
+import com.skin.ayada.util.Path;
 
 /**
  * <p>Title: DefaultSourceFactory</p>
@@ -22,6 +23,13 @@ import com.skin.ayada.util.IO;
  * @version 1.0
  */
 public class DefaultSourceFactory extends SourceFactory {
+    public static void main(String[] args) {
+        DefaultSourceFactory sourceFactory = new DefaultSourceFactory();
+        sourceFactory.setHome("D:\\workspace2/ayada\\webapp");
+        sourceFactory.setEncoding("utf-8");
+        sourceFactory.getFile("\\outTest.jsp");
+    }
+
     public DefaultSourceFactory() {
     }
 
@@ -30,20 +38,17 @@ public class DefaultSourceFactory extends SourceFactory {
      */
     public DefaultSourceFactory(String home) {
         super();
-        String path = null;
+        File file = null;
 
         if(home == null) {
-            path = ".";
+            file = new File(".");
         }
         else {
-            path = home;
+            file = new File(home);
         }
 
-        File root = new File(path);
-
         try {
-            path = root.getCanonicalPath();
-            this.setHome(path);
+            this.setHome(this.getStrictPath(file.getCanonicalPath()));
         }
         catch(IOException e) {
             throw new RuntimeException(e);
@@ -104,23 +109,19 @@ public class DefaultSourceFactory extends SourceFactory {
             throw new NullPointerException("path must be not null !");
         }
 
-        File file = new File(this.getHome(), path);
-
-        try {
-            if(file.getCanonicalPath().startsWith(this.getHome()) == false) {
-                throw new RuntimeException(file.getAbsolutePath() + " not exists !");
-            }
-        }
-        catch(Exception e) {
-            throw new RuntimeException(file.getAbsolutePath() + " not exists !");
+        if(!Path.contains(this.getHome(), path)) {
+            throw new RuntimeException("home: " + this.getHome() + ", file: " + path + " not exists !");
         }
 
-        if(file.exists() == false) {
-            throw new RuntimeException(file.getAbsolutePath() + " not exists !");
-        }
+        /**
+         * 原来的代码使用几个不同的File对象构建路径并作检查, 有点重
+         * 改为使用Path类的join方法构建, 较轻
+         */
+        String full = Path.join(this.getHome(), path);
+        File file = new File(full);
 
-        if(file.isFile() == false) {
-            throw new RuntimeException(file.getAbsolutePath() + " not exists !");
+        if(!file.exists() || !file.isFile()) {
+            throw new RuntimeException("home: " + this.getHome() + ", file: " + file.getAbsolutePath() + " not exists !");
         }
         return file;
     }

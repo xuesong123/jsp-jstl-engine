@@ -710,7 +710,6 @@ public class TemplateCompiler extends PageCompiler {
                 if(i == '\n') {
                     this.lineNumber++;
                 }
-
                 buffer.append((char)i);
             }
 
@@ -737,7 +736,6 @@ public class TemplateCompiler extends PageCompiler {
                 node.setClosed(NodeType.PAIR_CLOSED);
                 this.pushNode(stack, list, node);
                 this.popNode(stack, list, node.getNodeName());
-                this.skipCRLF();
             }
             else {
                 JspScriptlet node = new JspScriptlet();

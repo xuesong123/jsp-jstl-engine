@@ -40,27 +40,13 @@ import com.skin.ayada.util.StringUtil;
  * @version 1.0
  */
 public class DefaultTemplateContext implements TemplateContext {
-    private String home;
-    private String encoding;
     private SourceFactory sourceFactory;
     private TemplateFactory templateFactory;
     private ExpressionFactory expressionFactory;
     private ConcurrentHashMap<String, FutureTask<Template>> cache;
     private static final Logger logger = LoggerFactory.getLogger(DefaultTemplateContext.class);
 
-    /**
-     * @param home
-     */
-    public DefaultTemplateContext(String home) {
-        this(home, "UTF-8");
-    }
-
-    /**
-     * @param home
-     */
-    public DefaultTemplateContext(String home, String encoding) {
-        this.home = home;
-        this.encoding = encoding;
+    public DefaultTemplateContext() {
         this.cache = new ConcurrentHashMap<String, FutureTask<Template>>();
     }
 
@@ -75,7 +61,7 @@ public class DefaultTemplateContext implements TemplateContext {
         Template template = this.getTemplate(path);
 
         if(template == null) {
-            throw new Exception(this.home + "/" + path + " not exists!");
+            throw new Exception(path + " not exists!");
         }
         this.execute(template, context, writer);
     }
@@ -104,7 +90,7 @@ public class DefaultTemplateContext implements TemplateContext {
      */
     @Override
     public Template getTemplate(final String path) throws Exception {
-        return this.getTemplate(path, this.encoding);
+        return this.getTemplate(path, null);
     }
 
     /**
@@ -297,34 +283,6 @@ public class DefaultTemplateContext implements TemplateContext {
     public void destory() {
         this.cache.clear();
         this.cache = null;
-    }
-
-    /**
-     * @param home the home to set
-     */
-    public void setHome(String home) {
-        this.home = home;
-    }
-
-    /**
-     * @return the home
-     */
-    public String getHome() {
-        return this.home;
-    }
-
-    /**
-     * @param encoding the encoding to set
-     */
-    public void setEncoding(String encoding) {
-        this.encoding = encoding;
-    }
-
-    /**
-     * @return the encoding
-     */
-    public String getEncoding() {
-        return this.encoding;
     }
 
     /**

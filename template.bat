@@ -34,5 +34,6 @@ GOTO :EOF
 @ECHO.
 
 @REM jar cvfe 1.jar demo.server.http.file.Main *
+rd /s /q build\classes\_tpl
 %JAVA_HOME%\bin\java.exe -cp .;%JRE_JARS%;%APP_JARS% com.skin.ayada.template.Main "%1" "%2" "%3" "%4" "%5" "%6" "%7" "%8" "%9"
 :end

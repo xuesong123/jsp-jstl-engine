@@ -23,6 +23,7 @@ import com.skin.ayada.compile.JspCompiler;
 import com.skin.ayada.config.TemplateConfig;
 import com.skin.ayada.factory.ClassFactory;
 import com.skin.ayada.source.SourceFactory;
+import com.skin.ayada.util.ClassPath;
 import com.skin.ayada.util.IO;
 import com.skin.ayada.util.StringUtil;
 import com.skin.ayada.util.TemplateUtil;
@@ -140,7 +141,7 @@ public class JspTemplateFactory extends TemplateFactory {
         String lib = this.getClassPath();
 
         if(lib == null) {
-            lib = ClassFactory.getClassPath();
+            lib = ClassPath.getClassPath();
         }
 
         if(parent.exists() == false) {
@@ -184,7 +185,7 @@ public class JspTemplateFactory extends TemplateFactory {
             "-nowarn",
             "-g",
             "-encoding", "UTF-8",
-            "-classpath", this.getClassPath(),
+            "-classpath", lib,
             "-Xlint:unchecked",
             srcFile.getCanonicalPath()
         };
@@ -196,21 +197,30 @@ public class JspTemplateFactory extends TemplateFactory {
         javax.tools.JavaCompiler javaCompiler = javax.tools.ToolProvider.getSystemJavaCompiler();
 
         if(javaCompiler == null) {
-            throw new NullPointerException("'javax.tools.JavaCompiler' not found!, please add 'tools.jar' to class_path!");
+            throw new NullPointerException("'javax.tools.JavaCompiler' not found!, please add 'tools.jar' to class path!");
+        }
+
+        if(logger.isDebugEnabled()) {
+            // com.sun.tools.javac.api.JavacTool
+            // javaCompiler.getClass().getResource(javaCompiler.getClass().getSimpleName() + ".class")
+            logger.debug("javaCompiler: {}", javaCompiler.getClass().getName());
+            logger.debug("lib: {}", lib);
         }
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         int status = javaCompiler.run(System.in, outputStream, outputStream, args);
         byte[] data = outputStream.toByteArray();
 
-        if(data != null && data.length > 0) {
-            logger.error(new String(data, "UTF-8"));
-        }
-
         if(status == 0) {
+            if(data != null && data.length > 0) {
+                logger.warn(new String(data, "UTF-8"));
+            }
             return this.load(template, className, new File[]{new File(work)});
         }
         else {
+            if(data != null && data.length > 0) {
+                logger.error(new String(data, "UTF-8"));
+            }
             throw new Exception("compile error: " + status);
         }
     }

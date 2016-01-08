@@ -87,7 +87,7 @@ public class TemplateTest {
             TemplateFactory templateFactory = new TemplateFactory();
             ExpressionFactory expressionFactory = new DefaultExpressionFactory();
 
-            TemplateContext templateContext = new DefaultTemplateContext(home);
+            TemplateContext templateContext = new DefaultTemplateContext();
             templateContext.setSourceFactory(sourceFactory);
             templateContext.setTemplateFactory(templateFactory);
             templateContext.setExpressionFactory(expressionFactory);
@@ -225,7 +225,7 @@ public class TemplateTest {
         TemplateFactory templateFactory = new TemplateFactory();
         ExpressionFactory expressionFactory = new DefaultExpressionFactory();
 
-        TemplateContext templateContext = new DefaultTemplateContext("");
+        TemplateContext templateContext = new DefaultTemplateContext();
         templateContext.setSourceFactory(sourceFactory);
         templateContext.setTemplateFactory(templateFactory);
         templateContext.setExpressionFactory(expressionFactory);
@@ -255,7 +255,7 @@ public class TemplateTest {
             String home = "com/skin/ayada/demo";
             SourceFactory sourceFactory = new ClassPathSourceFactory(home);
             TemplateFactory templateFactory = new TemplateFactory();
-            TemplateContext templateContext = new DefaultTemplateContext("");
+            TemplateContext templateContext = new DefaultTemplateContext();
             templateContext.setSourceFactory(sourceFactory);
             templateContext.setTemplateFactory(templateFactory);
 

@@ -38,7 +38,7 @@ public class ExecutorTest {
     public static void main(String[] args) throws Exception {
         SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
         TemplateFactory templateFactory = new TemplateFactory();
-        TemplateContext templateContext = new DefaultTemplateContext("webapp");
+        TemplateContext templateContext = new DefaultTemplateContext();
         templateContext.setSourceFactory(sourceFactory);
         templateContext.setTemplateFactory(templateFactory);
 

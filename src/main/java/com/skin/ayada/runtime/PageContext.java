@@ -70,6 +70,61 @@ public interface PageContext {
     public Iterator<String> getAttributeNames();
 
     /**
+     * @param name
+     * @return Object
+     */
+    public String getString(String name);
+
+    /**
+     * @param name
+     * @return Object
+     */
+    public boolean getBoolean(String name);
+
+    /**
+     * @param name
+     * @return Byte
+     */
+    public Byte getByte(String name);
+
+    /**
+     * @param name
+     * @return Short
+     */
+    public Short getShort(String name);
+
+    /**
+     * @param name
+     * @return Integer
+     */
+    public Integer getInteger(String name);
+
+    /**
+     * @param name
+     * @return Float
+     */
+    public Float getFloat(String name);
+
+    /**
+     * @param name
+     * @return Double
+     */
+    public Double getDouble(String name);
+
+    /**
+     * @param name
+     * @return Long
+     */
+    public Long getLong(String name);
+
+    /**
+     * @param name
+     * @param type
+     * @return T
+     */
+    public <T> T getValue(String name, Class<T> type);
+
+    /**
      * @param context
      */
     public void setContext(Map<String, Object> context);

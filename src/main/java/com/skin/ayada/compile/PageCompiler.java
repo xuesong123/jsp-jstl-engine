@@ -42,7 +42,7 @@ public class PageCompiler {
         while((i = this.stream.read()) != -1) {
             c = (char)i;
 
-            if(Character.isLetter(c) || Character.isDigit(c) || c == ':' || c == '-' || c == '_') {
+            if(Character.isLetter(c) || Character.isDigit(c) || c == ':' || c == '-' || c == '_' || c == '.') {
                 buffer.append(c);
             }
             else {
@@ -50,7 +50,6 @@ public class PageCompiler {
                 break;
             }
         }
-
         return buffer.toString();
     }
 

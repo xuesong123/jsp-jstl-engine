@@ -45,7 +45,7 @@ public class PrepareCompiler {
      * 
      */
     public void compile() {
-        SourceFactory sourceFactory = templateContext.getSourceFactory();
+        SourceFactory sourceFactory = this.templateContext.getSourceFactory();
         String home = sourceFactory.getHome();
 
         if(sourceFactory instanceof DefaultSourceFactory) {

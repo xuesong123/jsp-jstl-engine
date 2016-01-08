@@ -76,16 +76,6 @@ public interface TemplateContext {
     public PageContext getPageContext(Map<String, Object> context, Writer out, int buffserSize, boolean autoFlush);
 
     /**
-     * @param home
-     */
-    public void setHome(String home);
-
-    /**
-     * @return String
-     */
-    public String getHome();
-
-    /**
      * @param sourceFactory the sourceFactory to set
      */
     public void setSourceFactory(SourceFactory sourceFactory);

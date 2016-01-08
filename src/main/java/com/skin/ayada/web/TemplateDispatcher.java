@@ -90,18 +90,18 @@ public class TemplateDispatcher {
                 context.put(PageContext.TIMEZONE_KEY, timeZone);
             }
 
-            TemplateDispatcher.setAttributes(servletContext, context);
+            TemplateDispatcher.export(servletContext, context);
         }
 
         if(session != null) {
             context.put("session", session);
-            TemplateDispatcher.setAttributes(session, context);
+            TemplateDispatcher.export(session, context);
         }
 
         context.put("request", request);
         context.put("response", response);
         context.put("param", TemplateDispatcher.getParameterMap(request));
-        TemplateDispatcher.setAttributes(request, context);
+        TemplateDispatcher.export(request, context);
         Writer writer = (Writer)(request.getAttribute("template_writer"));
 
         if(writer == null) {
@@ -120,7 +120,7 @@ public class TemplateDispatcher {
      * @param session
      * @param context
      */
-    public static void setAttributes(HttpSession session, Map<String, Object> context) {
+    public static void export(HttpSession session, Map<String, Object> context) {
         java.util.Enumeration<?> enumeration = session.getAttributeNames();
 
         if(enumeration != null) {
@@ -135,7 +135,7 @@ public class TemplateDispatcher {
      * @param servletContext
      * @param context
      */
-    public static void setAttributes(ServletContext servletContext, Map<String, Object> context) {
+    public static void export(ServletContext servletContext, Map<String, Object> context) {
         java.util.Enumeration<?> enumeration = servletContext.getAttributeNames();
 
         if(enumeration != null) {
@@ -150,7 +150,7 @@ public class TemplateDispatcher {
      * @param request
      * @param context
      */
-    public static void setAttributes(HttpServletRequest request, Map<String, Object> context) {
+    public static void export(HttpServletRequest request, Map<String, Object> context) {
         java.util.Enumeration<?> enumeration = request.getAttributeNames();
 
         if(enumeration != null) {

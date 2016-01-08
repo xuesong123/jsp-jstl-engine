@@ -77,7 +77,7 @@ public class ClassGenerator {
     }
 
     public static void test(String home, String file, String className) {
-        TemplateContext templateContext = new DefaultTemplateContext(home);
+        TemplateContext templateContext = new DefaultTemplateContext();
         StringWriter writer = new StringWriter();
         PageContext pageContext = JspFactory.getPageContext(null, writer);
         pageContext.setAttribute("targetClassName", className);

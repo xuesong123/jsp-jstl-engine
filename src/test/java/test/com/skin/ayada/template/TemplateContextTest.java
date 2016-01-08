@@ -43,7 +43,7 @@ public class TemplateContextTest {
         sourceFactory.setHome(home);
         sourceFactory.setSourcePattern(sourcePattern);
 
-        TemplateContext templateContext = new DefaultTemplateContext(home, "UTF-8");
+        TemplateContext templateContext = new DefaultTemplateContext();
         templateContext.setSourceFactory(sourceFactory);
         templateContext.setTemplateFactory(templateFactory);
         templateContext.setExpressionFactory(expressionFactory);

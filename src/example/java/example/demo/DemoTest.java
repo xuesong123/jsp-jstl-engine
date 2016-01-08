@@ -45,7 +45,7 @@ public class DemoTest {
             TemplateFactory templateFactory = new TemplateFactory();
             ExpressionFactory expressionFactory = new DefaultExpressionFactory();
 
-            TemplateContext templateContext = new DefaultTemplateContext(home);
+            TemplateContext templateContext = new DefaultTemplateContext();
             templateContext.setSourceFactory(sourceFactory);
             templateContext.setTemplateFactory(templateFactory);
             templateContext.setExpressionFactory(expressionFactory);

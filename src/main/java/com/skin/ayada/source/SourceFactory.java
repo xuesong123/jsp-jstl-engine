@@ -14,6 +14,7 @@ import java.io.File;
 import java.net.URL;
 
 import com.skin.ayada.config.TemplateConfig;
+import com.skin.ayada.util.Path;
 import com.skin.ayada.util.StringUtil;
 
 /**
@@ -24,6 +25,7 @@ import com.skin.ayada.util.StringUtil;
  */
 public abstract class SourceFactory {
     private String home;
+    private String encoding;
     private String sourcePattern = "jsp,jspf,jspx,tpl";
 
     /**
@@ -109,6 +111,14 @@ public abstract class SourceFactory {
     }
 
     /**
+     * @param path
+     * @return String
+     */
+    public String getStrictPath(String path) {
+        return Path.getStrictPath(path);
+    }
+
+    /**
      * @param home the home to set
      */
     public void setHome(String home) {
@@ -120,6 +130,20 @@ public abstract class SourceFactory {
      */
     public String getHome() {
         return this.home;
+    }
+
+    /**
+     * @return the encoding
+     */
+    public String getEncoding() {
+        return this.encoding;
+    }
+
+    /**
+     * @param encoding the encoding to set
+     */
+    public void setEncoding(String encoding) {
+        this.encoding = encoding;
     }
 
     /**

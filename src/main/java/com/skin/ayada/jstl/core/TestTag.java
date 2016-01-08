@@ -31,6 +31,7 @@ public class TestTag extends TagSupport {
     private double myDouble;
     private long myLong;
     private String myString;
+    private Object myObject;
 
     public TestTag() {
     }
@@ -94,6 +95,7 @@ public class TestTag extends TagSupport {
         out.println("<p>myDouble: " + this.myDouble + "</p>");
         out.println("<p>myLong: " + this.myLong + "</p>");
         out.println("<p>myString: " + this.myString + "</p>");
+        out.println("<p>myObject: " + this.myObject + "</p>");
         out.flush();
     }
 
@@ -212,5 +214,19 @@ public class TestTag extends TagSupport {
      */
     public void setMyString(String myString) {
         this.myString = myString;
+    }
+
+    /**
+     * @return the myObject
+     */
+    public Object getMyObject() {
+        return this.myObject;
+    }
+
+    /**
+     * @param myObject the myObject to set
+     */
+    public void setMyObject(Object myObject) {
+        this.myObject = myObject;
     }
 }

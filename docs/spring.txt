@@ -1,0 +1,202 @@
+spring集成可以采用两种方案
+# 第一种方案
+1. 首先配置spring, 让spring使用jsp方式解析视图
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/template"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+2. 第二步，配置模板过滤器拦截所有/WEB-INF/template/*的请求
+    <filter>
+        <filter-name>TemplateFilter</filter-name>
+        <filter-class>com.skin.ayada.web.filter.TemplateFilter</filter-class>
+        <init-param>
+            <param-name>home</param-name>
+            <param-value>contextPath:/WEB-INF/template</param-value>
+        </init-param>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>utf-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>ignoreJspTag</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>jspWork</param-name>
+            <param-value>contextPath:/WEB-INF/ayada</param-value>
+        </init-param>
+        <init-param>
+            <param-name>sourceFactoryClass</param-name>
+            <param-value>com.skin.ayada.source.DefaultSourceFactory</param-value>
+        </init-param>
+        <init-param>
+            <param-name>templateFactoryClass</param-name>
+            <param-value>com.skin.ayada.template.JspTemplateFactory</param-value>
+        </init-param>
+        <init-param>
+            <param-name>expressionFactoryClass</param-name>
+            <param-value>com.skin.ayada.runtime.DefaultExpressionFactory</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>TemplateFilter</filter-name>
+        <url-pattern>/WEB-INF/template/*</url-pattern>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+
+WebApplicationContext webApplicationContext = ContextLoader.getCurrentWebApplicationContext();
+ServletContext servletContext = webApplicationContext.getServletContext();
+
+# 第二种方案
+1. 在spring中配置模板上下文，并配置ViewResolver
+    <!--
+        home - 模板文件根目录 SourceFactory将从这个目录加载模板
+        encoding - 模板文件编码
+        ignoreJspTag - 是否忽略jsp脚本
+        sourcePattern - 允许的模板扩展名，其他的扩展名将认为是普通文本
+        jspWork - 编译模式有效，编译生成的文件目录
+        sourceFactoryClass - 源码提供者
+        templateFactoryClass - 模板提供者，TemplateFactory是解释模式，JspTemplateFactory是编译模式
+        expressionFactoryClass - el表达式提供者，DefaultExpressionFactory使用ognl
+    -->
+    <bean id="contextFactory" class="com.skin.ayada.web.TemplateContextFactory">
+        <property name="home" value="contextPath:/WEB-INF/template"/>
+        <property name="encoding" value="utf-8"/>
+        <property name="ignoreJspTag" value="true"/>
+        <property name="sourcePattern" value="jsp,jspx"/>
+        <property name="jspWork" value="contextPath:/WEB-INF/ayada"/>
+        <property name="sourceFactoryClass" value="com.skin.ayada.source.DefaultSourceFactory"/>
+        <property name="templateFactoryClass" value="com.skin.ayada.template.JspTemplateFactory"/>
+        <property name="expressionFactoryClass" value="com.skin.ayada.runtime.DefaultExpressionFactory"/>
+    </bean>
+    <bean id="templateContext" factory-bean="contextFactory" factory-method="create"/>
+
+    <bean id="viewResolver" class="com.skin.ayada.web.spring.AyadaViewResolver">
+        <property name="templateContext" ref="templateContext"/>
+        <property name="viewClass" value="com.skin.ayada.web.spring.AyadaView"/>
+        <property name="prefix" value="/WEB-INF/template"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+2. ayada本身并不提供与其他框架的集成，但是提供了集成的源码，请将spring相关的代码放到自己的应用中。
+下面是spring集成相关的ViewResolver源码。
+
+import org.springframework.web.servlet.view.AbstractTemplateViewResolver;
+import org.springframework.web.servlet.view.AbstractUrlBasedView;
+import com.skin.ayada.template.TemplateContext;
+
+public class AyadaViewResolver extends AbstractTemplateViewResolver {
+    TemplateContext templateContext;
+
+    public AyadaViewResolver() {
+        setViewClass(AyadaView.class);
+    }
+
+    /**
+     * @param viewName
+     * @return AbstractUrlBasedView
+     * @throws Exception
+     */
+    protected AbstractUrlBasedView buildView(String viewName) throws Exception {
+        AyadaView ayadaView = (AyadaView)(super.buildView(viewName));
+        ayadaView.setPrefix(this.getPrefix());
+        ayadaView.setTemplateContext(this.templateContext);
+        return ayadaView;
+    }
+
+    /**
+     * @return AyadaView
+     */
+    protected Class<AyadaView> requiredViewClass() {
+        return AyadaView.class;
+    }
+
+    /**
+     * @return the templateContext
+     */
+    public TemplateContext getTemplateContext() {
+        return this.templateContext;
+    }
+
+    /**
+     * @param templateContext the templateContext to set
+     */
+    public void setTemplateContext(TemplateContext templateContext) {
+        this.templateContext = templateContext;
+    }
+}
+
+import java.util.Map;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
+import org.springframework.web.context.ContextLoader;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.servlet.view.AbstractTemplateView;
+import com.skin.ayada.template.TemplateContext;
+import com.skin.ayada.web.TemplateDispatcher;
+
+public class AyadaView extends AbstractTemplateView {
+    String prefix;
+    TemplateContext templateContext;
+
+    public AyadaView() {
+    }
+
+    protected void renderMergedTemplateModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response)
+        throws NoSuchBeanDefinitionException, NoUniqueBeanDefinitionException {
+        if(this.templateContext == null) {
+            this.templateContext = (TemplateContext)(this.getApplicationContext().getBean("templateContext"));
+        }
+
+        String path = this.getUrl().replaceAll("//", "/");
+
+        if(this.prefix != null && this.prefix.length() > 0) {
+            path = path.substring(this.prefix.length());
+        }
+
+        WebApplicationContext webApplicationContext = ContextLoader.getCurrentWebApplicationContext();
+        ServletContext servletContext = webApplicationContext.getServletContext();
+        request.setAttribute("TemplateFilter$servletContext", servletContext);
+
+        try {
+            TemplateDispatcher.dispatch(this.templateContext, request, response, path);
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * @return the prefix
+     */
+    public String getPrefix() {
+        return this.prefix;
+    }
+
+    /**
+     * @param prefix the prefix to set
+     */
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    /**
+     * @return the templateContext
+     */
+    public TemplateContext getTemplateContext() {
+        return this.templateContext;
+    }
+
+    /**
+     * @param templateContext the templateContext to set
+     */
+    public void setTemplateContext(TemplateContext templateContext) {
+        this.templateContext = templateContext;
+    }
+}

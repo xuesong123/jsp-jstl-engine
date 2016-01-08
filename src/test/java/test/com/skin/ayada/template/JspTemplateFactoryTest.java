@@ -66,7 +66,7 @@ public class JspTemplateFactoryTest {
         TemplateFactory templateFactory = new JspTemplateFactory("work", System.getProperty("java.class.path"));
         templateFactory.setIgnoreJspTag(false);
 
-        TemplateContext templateContext = new DefaultTemplateContext("webapp");
+        TemplateContext templateContext = new DefaultTemplateContext();
         templateContext.setSourceFactory(sourceFactory);
         templateContext.setTemplateFactory(templateFactory);
 
@@ -99,7 +99,7 @@ public class JspTemplateFactoryTest {
         String home = "com/skin/ayada/compile";
         SourceFactory sourceFactory = new ClassPathSourceFactory(home);
         TemplateFactory templateFactory = new TemplateFactory();
-        TemplateContext templateContext = new DefaultTemplateContext("");
+        TemplateContext templateContext = new DefaultTemplateContext();
         templateContext.setSourceFactory(sourceFactory);
         templateContext.setTemplateFactory(templateFactory);
 

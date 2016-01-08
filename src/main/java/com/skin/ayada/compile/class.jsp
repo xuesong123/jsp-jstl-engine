@@ -57,6 +57,7 @@ ${jsp.declaration}
      * @throws Throwable
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void _execute(final PageContext pageContext) throws Throwable {
         JspWriter out = pageContext.getOut();
         JspWriter jspWriter = pageContext.getOut();

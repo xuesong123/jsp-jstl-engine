@@ -59,7 +59,7 @@ public class TemplateManager {
     public static TemplateContext create(String home) {
         SourceFactory sourceFactory = new DefaultSourceFactory(home);
         TemplateFactory templateFactory = new TemplateFactory();
-        TemplateContext templateContext = new DefaultTemplateContext(home);
+        TemplateContext templateContext = new DefaultTemplateContext();
         ExpressionFactory expressionFactory = new DefaultExpressionFactory();
         templateContext.setSourceFactory(sourceFactory);
         templateContext.setTemplateFactory(templateFactory);
@@ -71,11 +71,20 @@ public class TemplateManager {
      * @param templateContext
      */
     public static void add(TemplateContext templateContext) {
-        if(cache.get(templateContext.getHome()) == null) {
-            cache.put(templateContext.getHome(), templateContext);
+        String home = null;
+        SourceFactory sourceFactory = templateContext.getSourceFactory();
+
+        if(sourceFactory != null) {
+            home = sourceFactory.getHome();
         }
-        else {
-            throw new RuntimeException("context already exists !");
+
+        if(home != null) {
+            if(cache.get(home) == null) {
+                cache.put(home, templateContext);
+            }
+            else {
+                throw new RuntimeException("context already exists !");
+            }
         }
     }
 }

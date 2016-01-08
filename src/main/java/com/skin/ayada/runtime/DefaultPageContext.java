@@ -21,6 +21,7 @@ import java.util.ResourceBundle;
 import java.util.TimeZone;
 
 import com.skin.ayada.jstl.fmt.LocalizationContext;
+import com.skin.ayada.ognl.util.Empty;
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.template.TemplateContext;
 
@@ -72,12 +73,167 @@ public class DefaultPageContext implements PageContext {
     }
 
     /**
+     * @param key
+     * @param value
+     */
+    public Object setAttribute(String key, Object value) {
+        if(key == null) {
+            return null;
+        }
+
+        if(value != null) {
+            return this.attributes.put(key, value);
+        }
+        return this.attributes.remove(key);
+    }
+
+    /**
+     * @param key
+     * @return Object
+     */
+    public Object getAttribute(String key) {
+        return this.attributes.get(key);
+    }
+
+    /**
+     * @param key
+     */
+    public Object removeAttribute(String key) {
+        return this.attributes.remove(key);
+    }
+
+    /**
      * @return Iterator<String>
      */
     public Iterator<String> getAttributeNames() {
         return this.attributes.keySet().iterator();
     }
 
+    /**
+     * @param name
+     * @return Object
+     */
+    public String getString(String name) {
+        Object value = this.getAttribute(name);
+
+        if(value == null || value instanceof Empty<?, ?>) {
+            return "";
+        }
+        return value.toString();
+    }
+
+    /**
+     * @param name
+     * @return Object
+     */
+    public boolean getBoolean(String name) {
+        Object value = this.getAttribute(name);
+
+        if(value == null) {
+            return false;
+        }
+
+        if(value instanceof Boolean) {
+            return Boolean.TRUE.equals(value);
+        }
+        return false;
+    }
+
+    /**
+     * @param name
+     * @return Byte
+     */
+    public Byte getByte(String name) {
+        Object value = this.getAttribute(name);
+
+        if(value != null && value instanceof Number) {
+            return ((Number)value).byteValue();
+        }
+        return null;
+    }
+
+    /**
+     * @param name
+     * @return Short
+     */
+    public Short getShort(String name) {
+        Object value = this.getAttribute(name);
+
+        if(value != null && value instanceof Number) {
+            return ((Number)value).shortValue();
+        }
+        return null;
+    }
+
+    /**
+     * @param name
+     * @return Integer
+     */
+    public Integer getInteger(String name) {
+        Object value = this.getAttribute(name);
+
+        if(value != null && value instanceof Number) {
+            return ((Number)value).intValue();
+        }
+        return null;
+    }
+
+    /**
+     * @param name
+     * @return Float
+     */
+    public Float getFloat(String name) {
+        Object value = this.getAttribute(name);
+
+        if(value != null && value instanceof Number) {
+            return ((Number)value).floatValue();
+        }
+        return null;
+    }
+
+    /**
+     * @param name
+     * @return Double
+     */
+    public Double getDouble(String name) {
+        Object value = this.getAttribute(name);
+
+        if(value != null && value instanceof Number) {
+            return ((Number)value).doubleValue();
+        }
+        return null;
+    }
+
+    /**
+     * @param name
+     * @return Long
+     */
+    public Long getLong(String name) {
+        Object value = this.getAttribute(name);
+
+        if(value != null && value instanceof Number) {
+            return ((Number)value).longValue();
+        }
+        return null;
+    }
+
+    /**
+     * @param name
+     * @param type
+     * @return T
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T getValue(String name, Class<T> type) {
+        Object value = this.getAttribute(name);
+
+        if(value != null && value.getClass().isAssignableFrom(type)) {
+            return (T)value;
+        }
+        else {
+            return null;
+        }
+    }
+    
     /**
      * @param context
      */
@@ -119,36 +275,6 @@ public class DefaultPageContext implements PageContext {
             }
         }
         return context;
-    }
-
-    /**
-     * @param key
-     * @param value
-     */
-    public Object setAttribute(String key, Object value) {
-        if(key == null) {
-            return null;
-        }
-
-        if(value != null) {
-            return this.attributes.put(key, value);
-        }
-        return this.attributes.remove(key);
-    }
-
-    /**
-     * @param key
-     * @return Object
-     */
-    public Object getAttribute(String key) {
-        return this.attributes.get(key);
-    }
-
-    /**
-     * @param key
-     */
-    public Object removeAttribute(String key) {
-        return this.attributes.remove(key);
     }
 
     /**

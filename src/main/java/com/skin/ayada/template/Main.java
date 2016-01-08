@@ -20,8 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.skin.ayada.config.TemplateConfig;
-import com.skin.ayada.factory.ClassFactory;
 import com.skin.ayada.runtime.PageContext;
+import com.skin.ayada.util.ClassPath;
 import com.skin.ayada.util.TemplateUtil;
 
 /**
@@ -147,7 +147,7 @@ public class Main {
                     work = new File(jspWork);
                 }
 
-                String classPath = ClassFactory.getClassPath();
+                String classPath = ClassPath.getClassPath();
                 System.out.println("CLASS_PATH: " + classPath);
                 JspTemplateFactory jspTemplateFactory = (JspTemplateFactory)templateFactory;
                 jspTemplateFactory.setWork(work.getAbsolutePath());
@@ -158,7 +158,6 @@ public class Main {
         catch(Exception e) {
             logger.warn(e.getMessage(), e);
         }
-
         return templateFactory;
     }
 

@@ -62,7 +62,7 @@ public class TemplateFactory {
         TemplateCompiler compiler = new TemplateCompiler(sourceFactory);
         compiler.setIgnoreJspTag(this.getIgnoreJspTag());
         compiler.setTagLibrary(tagLibrary);
-        Template template = compiler.compile(file, encoding);
+        Template template = compiler.compile(file, (encoding != null ? encoding : sourceFactory.getEncoding()));
         long t2 = System.currentTimeMillis();
 
         if(logger.isDebugEnabled()) {

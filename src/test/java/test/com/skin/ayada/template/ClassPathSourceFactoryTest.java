@@ -40,7 +40,7 @@ public class ClassPathSourceFactoryTest {
 
         StringWriter stringWriter = new StringWriter();
         TemplateFactory templateFactory = new TemplateFactory();
-        TemplateContext templateContext = new DefaultTemplateContext("classPath:/template", "UTF-8");
+        TemplateContext templateContext = new DefaultTemplateContext();
         ExpressionFactory expressionFactory = new DefaultExpressionFactory();
         templateContext.setSourceFactory(sourceFactory);
         templateContext.setTemplateFactory(templateFactory);

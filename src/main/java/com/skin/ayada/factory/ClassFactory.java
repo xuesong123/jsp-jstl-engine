@@ -16,7 +16,6 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.regex.Pattern;
 
 /**
  * <p>Title: ClassFactory</p>
@@ -93,33 +92,5 @@ public class ClassFactory {
         else {
             return new URL[0];
         }
-    }
-
-    /**
-     * @return String
-     */
-    public static String getClassPath() {
-        String boot = System.getProperty("sun.boot.class.path");
-        String classPath = System.getProperty("java.class.path");
-
-        if(boot != null && boot.length() > 0) {
-            classPath = classPath + File.pathSeparatorChar + boot;
-        }
-
-        Pattern pattern = Pattern.compile(String.valueOf(File.pathSeparatorChar));
-        String[] path = pattern.split(classPath);
-        StringBuilder buffer = new StringBuilder();
-
-        for(int i = 0; i < path.length; i++) {
-            File file = new File(path[i]);
-
-            if(file.exists() || file.isDirectory()) {
-                if(buffer.length() > 0) {
-                    buffer.append(File.pathSeparatorChar);
-                }
-                buffer.append(path[i]);
-            }
-        }
-        return buffer.toString();
     }
 }
