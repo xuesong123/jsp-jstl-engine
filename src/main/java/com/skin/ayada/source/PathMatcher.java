@@ -22,9 +22,9 @@ import java.util.StringTokenizer;
  * @version 1.0
  */
 public class PathMatcher {
-	private static final String PATH_SEPARATOR = "/";
+    private static final String PATH_SEPARATOR = "/";
 
-	/**
+    /**
      * Actually match the given <code>path</code> against the given <code>pattern</code>.
      * @param pattern the pattern to match against
      * @param path the path String to test

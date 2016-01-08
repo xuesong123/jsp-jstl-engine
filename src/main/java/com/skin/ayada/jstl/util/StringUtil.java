@@ -32,12 +32,12 @@ public class StringUtil {
      * @return int
      */
     public int length(String source, boolean trim) {
-    	if(trim) {
+        if(trim) {
             return (source != null ? source.trim().length() : 0);
-    	}
-    	else {
+        }
+        else {
             return (source != null ? source.length() : 0);
-    	}
+        }
     }
 
     /**

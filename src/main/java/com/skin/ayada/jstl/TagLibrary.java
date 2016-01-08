@@ -156,7 +156,7 @@ public class TagLibrary {
      * 
      */
     public void clear() {
-    	this.library.clear();
+        this.library.clear();
     }
 
     public void release() {

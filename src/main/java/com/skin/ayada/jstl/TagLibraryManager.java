@@ -48,7 +48,7 @@ public class TagLibraryManager {
         }
 
         if(resource.equals("ayada-taglib-standard")) {
-        	resource = "ayada-taglib-default.xml";
+            resource = "ayada-taglib-default.xml";
         }
 
         String key = prefix + ":" + resource;

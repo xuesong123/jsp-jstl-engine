@@ -706,7 +706,6 @@ public class JspCompiler {
         else {
             writer.println(indent + "// jsp.jstl.core.ChooseTag END");
         }
-
         return Tag.EVAL_PAGE;
     }
 
