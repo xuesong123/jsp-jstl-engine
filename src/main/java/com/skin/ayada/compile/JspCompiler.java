@@ -620,7 +620,14 @@ public class JspCompiler {
 
             if(items != null) {
                 if(items.indexOf("${") > -1) {
-                    writer.println(indent + tagInstanceName + ".setItems(ExpressionUtil.evaluate(expressionContext, \"" + StringUtil.escape(items) + "\", null));");
+                    String varItems = this.getVariable(items);
+
+                    if(varItems != null) {
+                        writer.println(indent + tagInstanceName + ".setItems(pageContext.getAttribute(\"" + varItems + "\"));");
+                    }
+                    else {
+                        writer.println(indent + tagInstanceName + ".setItems(ExpressionUtil.evaluate(expressionContext, \"" + StringUtil.escape(items) + "\", null));");
+                    }
                 }
                 else {
                     writer.println(indent + tagInstanceName + ".setItems(\"" + StringUtil.escape(items) + "\");");

@@ -91,7 +91,7 @@ public class SetTag extends BodyTagSupport {
     public void setProperty(Object object, String name, Object value) throws Exception {
         if(object instanceof Map<?, ?>) {
             Map<Object, Object> map = (Map<Object, Object>)(object);
-            map.put(value, value);
+            map.put(name, value);
         }
         else {
             ClassUtil.setProperty(object, name, value);

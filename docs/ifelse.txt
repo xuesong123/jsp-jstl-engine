@@ -1,0 +1,82 @@
+深入剖析jstl为什么不支持if else
+===============================
+
+这里并不是说if else不能实现，而是说标准的jstl库为什么没有实现。
+标准的jstl库并不支持if else，而是使用choose when来代替if else，由于choose when多了一层结构，使用起来感觉很不爽，为什么标准的jstl库不支持if else呢？
+下面将从jstl的实现机制简单分析一下：
+1. 首先jstl是比较标准的xml，而if else语法并不符合xml结构。比较标准是指很多jsp编译器可以允许你的jstl标签写法不太严格。因为太严格了就不好用。
+    对于任何一个jsp页面，无论是包含html的页面还是普通的文本页面，jsp/jstl编译器对于普通文本和html标签一律认为是文本，而不是作为xml节点来解析。
+    只有jstl的标签才会被作为xml节点处理，编译器要求jstl标签必须是比较严格的xml语法，实际上对于编译器而言是否严格并不重要，编译器也可以支持不严格的语法，是否严格只是语法规范要求。
+    从if else的结构上就能看出来，if else并不符合xml的结构要求。当然也可以把if else改成xml结构，例如：
+    <c:if test="${1 == 1}">
+        Hello !
+    </c:if>
+    <c:elseif test="${1 == 2}">
+        Hi !
+    </c:elseif>
+    <c:else>
+        Hi !
+    </c:else>
+    事实上，struts2的if else标签实现就是这种用法。
+
+2. 第二，jstl的工作原理要求if else必须有一个父节点。从这点上看if else也不符合这个要求。
+    我们先来看一下choose when是怎么实现if else功能的。choose when是两层节点，而if else是一层节点。
+    choose标签是父节点，when标签是子节点。在choose标签内部有一个boolean型的标识变量，初始值为false。
+    当某一个when标签执行的时候它会先检查父标签choose标签的标识变量是否为true，如果为false，则检查自己的test条件是否为true，如果为true，首先置父标签的标识变量为true，然后执行标签体。
+    以此类推，每一个when标签都这样执行，通过这样的机制来保证只有一个when标签被执行。otherwise标签没有test条件，只需要检查choose的标识变量即可。下面是when标签的伪代码：
+    public int startTag() {
+        // 如果不是ChooseTag应该抛出异常
+        ChooseTag chooseTag = (ChooseTag)this.getParent();
+
+        if(chooseTag.flag && this.getTest()) {
+            chooseTag.flag = true;
+            // 执行标签体
+            return Tag.EVAL_PAGE;
+        }
+        else {
+            // 否则忽略标签体的执行
+            return Tag.SKIP_BODY;
+        }
+    }
+
+3. 第三个问题，先来看代码：
+    <c:if test="${1 == 1}">
+        Hello !
+    </c:if>
+****<c:elseif test="${1 == 2}">
+        Hi !
+    </c:elseif>
+    <c:else>
+        Hi !
+    </c:else>
+    这个代码跟上面的代码一样，但是那四个*是什么鬼？那只是四个空格，为了明显期间我把它改成了四个*。
+    有些人可能会疑惑，当我使用choose when的时候并没有输出多余的空格啊。choose when是怎么做到的？
+    jstl的标签在定义的时候都需要指定一个叫做body-content的参数（在tld文件中指定）。这个参数有三个值，分别是：jsp，tagdependent，empty。
+    jsp - 子节点可以是任何内容：jsp脚本，jsp标签，文本内容。
+    tagdependent - 子节点只能是jsp标签，不允许jsp脚本和文本内容。
+    empty - 不允许有任何子节点。
+    我们可以查看任何一个jsp/servlet容器的默认choose标签的tld定义，这个body-content都是tagdependent。这就说明choose标签只允许子节点是标签，所有的文本节点都会在编译期被忽略。
+    这也是when标签必须有choose父标签的第二个原因。
+
+综上所述，由于jstl的实现机制，if else与jstl的实现机制冲突导致if else实现很困难，但这并是说if else无法实现，那该怎么实现呢？
+说一下我的思路：
+1. 定义if标签，当一个if标签开始执行的时候把它放到上下文相关的栈中。并定义一个类似choose标签的标记变量。
+2. 当一个ifelse标签开始执行的时候从栈中取出对应的if标签，检查标记变量，根据标记变量决定是否执行标签体。
+使用栈是因为标签可能嵌套，从中也可以看出实现是比较复杂的，而且无法解决if和else中间的空格问题。
+我没有看过struts2的if else标签是采用的什么机制，但是根据jstl的标签机制我猜它应该也要用到栈。另外它是否存在输出多余空格的问题，我没有测试过。
+
+那么有没有办法比较完美的实现if else呢，例如我们希望if else像下面那样使用：
+    <c:if test="${1 == 1}">
+        Hello !
+    <c:elseif test="${1 == 2}">
+        Hi !
+    <c:else>
+        Hi !
+    </c:if>
+第一，不要求if else必须严格遵循xml规范，可以不闭合；
+第二，不会输出多余的空格。
+答案是可以，但是需要jsp编译器支持，对if else标签特殊处理。这个做法其实还是与jstl的实现机制相冲突的。
+jstl的标签是可以自定义的，编译器支持就意味着if else很难再支持自定义，编译器必须能识别那些标签是if else结构才能做特殊处理。
+
+从上面看，即便实现了if else，由于它与jstl的标签机制冲突，实现起来比较麻烦，而且还可能存在其他问题，总之解决方法并不优雅，所以jstl标准库干脆不支持if else，而是使用choose when代替。
+
