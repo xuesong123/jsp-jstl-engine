@@ -25,11 +25,11 @@ public class PerformanceTest {
      * @param args
      */
     public static void main(String[] args) {
-    	// test4Ayada(new File("webapp\\test4.jsp"), 10000);
-    	// test4Java(10000);
-    	test4Ayada(new File("webapp\\test5.jsp"), 10000);
-    	System.out.println("==========================");
-    	test5Java(10000);
+        // test4Ayada(new File("webapp\\test4.jsp"), 10000);
+        // test4Java(10000);
+        test4Ayada(new File("webapp\\test5.jsp"), 10000);
+        System.out.println("==========================");
+        test5Java(10000);
     }
 
     public static void test3() {
@@ -117,66 +117,66 @@ public class PerformanceTest {
      * 
      */
     public static void test4Java(int count) {
-    	try {
-	    	Map<String, Object> context = new HashMap<String, Object>();
-	    	context.put("name", "test");
-	    	context.put("border", "border=\"1\"");
-	    	context.put("data", getDataList());
+        try {
+            Map<String, Object> context = new HashMap<String, Object>();
+            context.put("name", "test");
+            context.put("border", "border=\"1\"");
+            context.put("data", getDataList());
 
-	    	StringWriter stringWriter = new StringWriter();
+            StringWriter stringWriter = new StringWriter();
 
-	    	/**
-	         * warmed
-	         */
-	        for(int i = 0; i < 100; i++) {
-	        	execute(context, stringWriter);
-	         	stringWriter.getBuffer().setLength(0);
-	        }
+            /**
+             * warmed
+             */
+            for(int i = 0; i < 100; i++) {
+                execute(context, stringWriter);
+                stringWriter.getBuffer().setLength(0);
+            }
 
-	        long t1 = System.currentTimeMillis();
-	        for(int i = 0; i < count; i++) {
-	        	execute(context, stringWriter);
-	        	stringWriter.getBuffer().setLength(0);
-	        }
-	        long t2 = System.currentTimeMillis();
-	        System.out.println("count: " + count + ", run time: " + (t2 - t1));
-    	}
-    	catch(Exception e) {
-    		e.printStackTrace();
-    	}
+            long t1 = System.currentTimeMillis();
+            for(int i = 0; i < count; i++) {
+                execute(context, stringWriter);
+                stringWriter.getBuffer().setLength(0);
+            }
+            long t2 = System.currentTimeMillis();
+            System.out.println("count: " + count + ", run time: " + (t2 - t1));
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
      * 
      */
     public static void test5Java(int count) {
-    	try {
-	    	Map<String, Object> context = new HashMap<String, Object>();
-	    	context.put("name", "test");
-	    	context.put("border", "border=\"1\"");
-	    	context.put("data", getDataList());
+        try {
+            Map<String, Object> context = new HashMap<String, Object>();
+            context.put("name", "test");
+            context.put("border", "border=\"1\"");
+            context.put("data", getDataList());
 
-	    	StringWriter stringWriter = new StringWriter();
+            StringWriter stringWriter = new StringWriter();
 
-	    	/**
-	         * warmed
-	         */
-	        for(int i = 0; i < 100; i++) {
-	        	execute5(context, stringWriter);
-	         	stringWriter.getBuffer().setLength(0);
-	        }
+            /**
+             * warmed
+             */
+            for(int i = 0; i < 100; i++) {
+                execute5(context, stringWriter);
+                stringWriter.getBuffer().setLength(0);
+            }
 
-	        long t1 = System.currentTimeMillis();
-	        for(int i = 0; i < count; i++) {
-	        	execute5(context, stringWriter);
-	        	stringWriter.getBuffer().setLength(0);
-	        }
-	        long t2 = System.currentTimeMillis();
-	        System.out.println("count: " + count + ", run time: " + (t2 - t1));
-    	}
-    	catch(Exception e) {
-    		e.printStackTrace();
-    	}
+            long t1 = System.currentTimeMillis();
+            for(int i = 0; i < count; i++) {
+                execute5(context, stringWriter);
+                stringWriter.getBuffer().setLength(0);
+            }
+            long t2 = System.currentTimeMillis();
+            System.out.println("count: " + count + ", run time: " + (t2 - t1));
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -218,16 +218,16 @@ public class PerformanceTest {
         writer.write("</h1>\n");
 
         for(int i = 0; i < 5; i++) {
-	        writer.write("<table border=\"");
-	        writer.write(border);
-	        writer.write("\">\n    <tr>\n        <th>&#160;</th></tr>\n");
-	
-	        for (String cell : data) {
-	        	writer.write("\r\n        <tr>\r\n            <th>");
-	            writer.write(cell);
-	            writer.write("</th>\r\n        </tr>\r\n    ");
-	        }
-	        writer.write("</table>\n");
+            writer.write("<table border=\"");
+            writer.write(border);
+            writer.write("\">\n    <tr>\n        <th>&#160;</th></tr>\n");
+    
+            for (String cell : data) {
+                writer.write("\r\n        <tr>\r\n            <th>");
+                writer.write(cell);
+                writer.write("</th>\r\n        </tr>\r\n    ");
+            }
+            writer.write("</table>\n");
         }
         writer.write("</div>\n");
     }

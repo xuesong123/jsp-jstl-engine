@@ -111,20 +111,6 @@ public abstract class DataNode extends Node {
     }
 
     /**
-     * @return String
-     */
-    public String trim() {
-        String content = this.buffer.toString().trim();
-        this.buffer.setLength(0);
-        this.buffer.append(content);
-        return content;
-    }
-
-    public void clear() {
-        this.buffer.setLength(0);
-    }
-
-    /**
      * @param content
      */
     public void setTextContent(String content) {
@@ -141,6 +127,27 @@ public abstract class DataNode extends Node {
     @Override
     public String getTextContent() {
         return this.buffer.toString();
+    }
+
+    /**
+     * @return StringBuilder
+     */
+    public StringBuilder getBuffer() {
+        return this.buffer;
+    }
+
+    /**
+     * @return String
+     */
+    public String trim() {
+        String content = this.buffer.toString().trim();
+        this.buffer.setLength(0);
+        this.buffer.append(content);
+        return content;
+    }
+
+    public void clear() {
+        this.buffer.setLength(0);
     }
 
     /**

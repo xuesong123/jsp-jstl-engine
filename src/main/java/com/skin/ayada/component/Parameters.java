@@ -96,7 +96,6 @@ public class Parameters {
         if(value instanceof Character) {
             return (Character)value;
         }
-
         return parseCharacter(value.toString(), defaultValue);
     }
 
@@ -123,7 +122,6 @@ public class Parameters {
         if(value instanceof Boolean) {
             return (Boolean)value;
         }
-
         return parseBoolean(value.toString(), defaultValue);
     }
 
@@ -150,7 +148,6 @@ public class Parameters {
         if(value instanceof Byte) {
             return (Byte)value;
         }
-
         return parseByte(value.toString(), defaultValue);
     }
 
@@ -177,7 +174,6 @@ public class Parameters {
         if(value instanceof Short) {
             return (Short)value;
         }
-
         return parseShort(value.toString(), defaultValue);
     }
 
@@ -204,7 +200,6 @@ public class Parameters {
         if(value instanceof Integer) {
             return (Integer)value;
         }
-
         return parseInt(value.toString(), defaultValue);
     }
 
@@ -231,7 +226,6 @@ public class Parameters {
         if(value instanceof Float) {
             return (Float)value;
         }
-
         return parseFloat(value.toString(), defaultValue);
     }
 
@@ -258,7 +252,6 @@ public class Parameters {
         if(value instanceof Double) {
             return (Double)value;
         }
-
         return parseDouble(value.toString(), defaultValue);
     }
 
@@ -285,7 +278,6 @@ public class Parameters {
         if(value instanceof Long) {
             return (Long)value;
         }
-
         return parseLong(value.toString(), defaultValue);
     }
 
@@ -304,7 +296,6 @@ public class Parameters {
         if(value instanceof Date) {
             return (Date)value;
         }
-
         return parseDate(value.toString(), format);
     }
 
@@ -445,7 +436,6 @@ public class Parameters {
                 }
             }
         }
-
         return result;
     }
 
@@ -466,7 +456,6 @@ public class Parameters {
             catch(NumberFormatException e) {
             }
         }
-
         return result;
     }
 
@@ -485,7 +474,6 @@ public class Parameters {
             catch(NumberFormatException e) {
             }
         }
-
         return result;
     }
 
@@ -504,7 +492,6 @@ public class Parameters {
             catch(NumberFormatException e) {
             }
         }
-
         return result;
     }
 
@@ -523,7 +510,6 @@ public class Parameters {
             catch(NumberFormatException e) {
             }
         }
-
         return result;
     }
 
@@ -542,7 +528,6 @@ public class Parameters {
             catch(NumberFormatException e) {
             }
         }
-
         return result;
     }
 
@@ -561,7 +546,6 @@ public class Parameters {
             catch(NumberFormatException e) {
             }
         }
-
         return result;
     }
 
@@ -580,7 +564,6 @@ public class Parameters {
             catch(NumberFormatException e) {
             }
         }
-
         return result;
     }
 
@@ -600,7 +583,6 @@ public class Parameters {
             catch(java.text.ParseException e) {
             }
         }
-
         return date;
     }
 
@@ -650,7 +632,6 @@ public class Parameters {
         else if(model.equals(java.sql.Timestamp.class)) {
             value = getTimestamp(name, "yyyy-MM-dd hh:mm:ss");
         }
-
         return (T)value;
     }
 

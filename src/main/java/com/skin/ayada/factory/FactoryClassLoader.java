@@ -66,7 +66,6 @@ public class FactoryClassLoader extends ClassLoader {
                 return new FactoryClassLoader(FactoryClassLoader.class.getClassLoader());
             }
         });
-
         return classLoader;
     }
 }

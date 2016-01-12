@@ -160,14 +160,14 @@ public class Template {
     }
 
     /**
-     * @param dependency
+     * @param source
      */
-    public void addDependency(Source dependency) {
-        if(dependency != null) {
+    public void addDependency(Source source) {
+        if(source != null) {
             if(this.dependencies == null) {
                 this.dependencies = new ArrayList<Source>();
             }
-            this.dependencies.add(dependency);
+            this.dependencies.add(source);
         }
     }
 }

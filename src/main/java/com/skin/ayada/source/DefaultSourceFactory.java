@@ -26,7 +26,6 @@ public class DefaultSourceFactory extends SourceFactory {
     public static void main(String[] args) {
         DefaultSourceFactory sourceFactory = new DefaultSourceFactory();
         sourceFactory.setHome("D:\\workspace2/ayada\\webapp");
-        sourceFactory.setEncoding("utf-8");
         sourceFactory.getFile("\\outTest.jsp");
     }
 

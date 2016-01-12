@@ -44,7 +44,6 @@ public class ClassPathClassLoader extends ClassLoader {
         if(clazz == null) {
             throw new ClassNotFoundException();
         }
-
         return clazz;
     }
 
@@ -76,7 +75,6 @@ public class ClassPathClassLoader extends ClassLoader {
                 writableByteChannel.write(buffer);
                 buffer.clear();
             }
-
             return outputStream.toByteArray();
         }
         catch(IOException e) {

@@ -132,7 +132,6 @@ public class JspCompiler {
                 }
             }
         }
-
         writer.flush();
         writer.close();
         return chunkWriter.toString();
@@ -158,7 +157,6 @@ public class JspCompiler {
                 writer.println("\".toCharArray();");
             }
         }
-
         writer.flush();
         writer.close();
         return chunkWriter.toString();
@@ -776,7 +774,6 @@ public class JspCompiler {
             else {
                 writer.println(indent + tagInstanceName + ".setParent((Tag)null);");
             }
-
             writer.println(indent + tagInstanceName + ".setPageContext(pageContext);");
             this.setAttributes(indent, tagClassName, tagInstanceName, node.getAttributes(), writer);
             writer.println(indent + tagInstanceName + ".doStartTag();");
@@ -962,7 +959,6 @@ public class JspCompiler {
             writer.println(indent + parentTagInstanceName + ".setProperty(\"" + name + "\", ((BodyContent)out).getString());");
             writer.println(indent + "out = pageContext.popBody();");
         }
-
         writer.println(indent + "// jsp.jstl.core.PropertyTag END");
         return Tag.EVAL_PAGE;
     }
@@ -1554,13 +1550,15 @@ public class JspCompiler {
         if(node != null) {
             String tagClassName = ((TagNode)node).getTagClassName();
             int k = tagClassName.lastIndexOf(".");
-
+    
             if(k > -1) {
                 return this.getVariableName(node, "_jsp_" + tagClassName.substring(k + 1) + "_");
             }
             return this.getVariableName(node, "_jsp_" + tagClassName + "_");
         }
-        return "_jsp_undefined";
+        else {
+            return "_jsp_undefined";
+        }
     }
 
     /**
@@ -1572,7 +1570,9 @@ public class JspCompiler {
         if(node != null) {
             return prefix + (node.getOffset() + 1);
         }
-        return prefix + "undefined";
+        else {
+            return prefix + "_undefined";
+        }
     }
 
     /**
@@ -1646,7 +1646,9 @@ public class JspCompiler {
             }
             return "ExpressionUtil.evaluate(expressionContext, \"" + StringUtil.escape(expression) + "\", null)";
         }
-        return null;
+        else {
+            return null;
+        }
     }
 
     /**

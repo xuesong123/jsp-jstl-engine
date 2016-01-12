@@ -33,6 +33,13 @@ public interface TemplateContext {
     public void execute(String path, Map<String, Object> context, Writer writer) throws Exception;
 
     /**
+     * @param path
+     * @param context
+     * @param writer
+     */
+    public void execute(String path, String encoding, Map<String, Object> context, Writer writer) throws Exception;
+
+    /**
      * @param template
      * @param context
      * @param writer

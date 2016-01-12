@@ -199,7 +199,6 @@ public class Table {
                 }
             }
         }
-
         return null;
     }
 
@@ -207,7 +206,6 @@ public class Table {
         if(this.primaryKeys != null && !this.primaryKeys.isEmpty()) {
             return this.primaryKeys.get(0);
         }
-
         return null;
     }
 
@@ -223,7 +221,6 @@ public class Table {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -237,7 +234,6 @@ public class Table {
         if(this.columns != null && !this.columns.isEmpty()) {
             count = count + this.columns.size();
         }
-
         return count;
     }
 
@@ -254,7 +250,6 @@ public class Table {
         if(this.columns != null && !this.columns.isEmpty()) {
             list.addAll(this.columns);
         }
-
         return list;
     }
 
@@ -289,7 +284,6 @@ public class Table {
             Column column = columns.get(size);
             buffer.append(column.getColumnName());
         }
-
         buffer.append(")");
         return buffer.toString();
     }
@@ -315,7 +309,6 @@ public class Table {
             buffer.append(column.getColumnName());
             buffer.append("=?");
         }
-
         return buffer.toString();
     }
 
@@ -386,7 +379,6 @@ public class Table {
 
             buffer.append("\r\n");
         }
-
         buffer.append(");");
         return buffer.toString();
     }
@@ -408,7 +400,6 @@ public class Table {
             Column column = columns.get(size);
             buffer.append(column.getColumnName());
         }
-
         buffer.append(" FROM ").append(this.getTableName());
         return buffer.toString();
     }
@@ -429,7 +420,6 @@ public class Table {
         if(buffer.length() > length) {
             return buffer.substring(0, length);
         }
-
         return buffer.toString();
     }
 
@@ -451,7 +441,6 @@ public class Table {
                 buffer.append(ch);
             }
         }
-
         return buffer.toString();
     }
 

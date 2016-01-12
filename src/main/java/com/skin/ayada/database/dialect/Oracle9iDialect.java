@@ -10,6 +10,9 @@
  */
 package com.skin.ayada.database.dialect;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.skin.ayada.database.Column;
 
 /**
@@ -20,6 +23,8 @@ import com.skin.ayada.database.Column;
  * @version 1.0
  */
 public class Oracle9iDialect extends OracleDialect {
+    private static final Logger logger = LoggerFactory.getLogger(Oracle9iDialect.class);
+
     /**
      * @return String
      */
@@ -112,9 +117,8 @@ public class Oracle9iDialect extends OracleDialect {
             return "java.math.BigDecimal";
         }
         else {
-            System.out.println("Warnning: Unknown DataType: " + column.getTableName() + "." + column.getColumnName() + ": " + typeName);
+            logger.warn("Warnning: Unknown DataType: " + column.getTableName() + "." + column.getColumnName() + ": " + typeName);
         }
-
         return result;
     }
 }

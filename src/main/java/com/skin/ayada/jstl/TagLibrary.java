@@ -77,14 +77,16 @@ public class TagLibrary {
      * @param tagName
      * @param className
      * @param bodyContent
+     * @param ignoreWhitespace
      * @param description
      */
-    public void setup(String tagName, String className, int bodyContent, String description) {
+    public void setup(String tagName, String className, int bodyContent, boolean ignoreWhitespace, String description) {
         TagInfo tagInfo = this.library.get(tagName);
 
         if(tagInfo != null) {
             tagInfo.setTagClass(className);
             tagInfo.setBodyContent(bodyContent);
+            tagInfo.setIgnoreWhitespace(ignoreWhitespace);
             tagInfo.setDescription(description);
         }
         else {
@@ -92,6 +94,7 @@ public class TagLibrary {
             tagInfo.setName(tagName);
             tagInfo.setTagClass(className);
             tagInfo.setBodyContent(bodyContent);
+            tagInfo.setIgnoreWhitespace(ignoreWhitespace);
             tagInfo.setDescription(description);
             this.library.put(tagName, tagInfo);
         }
@@ -101,10 +104,11 @@ public class TagLibrary {
      * @param tagName
      * @param className
      * @param bodyContent
+     * @param ignoreWhitespace
      * @param description
      */
-    public void setup(String tagName, String className, String bodyContent, String description) {
-        this.setup(tagName, className, TagInfo.getBodyContent(bodyContent), description);
+    public void setup(String tagName, String className, String bodyContent, String ignoreWhitespace, String description) {
+        this.setup(tagName, className, TagInfo.getBodyContent(bodyContent), !"false".equals(ignoreWhitespace), description);
     }
 
     /**

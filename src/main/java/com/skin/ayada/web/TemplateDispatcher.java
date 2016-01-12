@@ -10,24 +10,26 @@
  */
 package com.skin.ayada.web;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.template.Template;
 import com.skin.ayada.template.TemplateContext;
+import com.skin.ayada.template.TemplateManager;
+import com.skin.ayada.util.DateUtil;
+import com.skin.ayada.util.StringUtil;
 
 /**
  * <p>Title: TemplateDispatcher</p>
@@ -37,23 +39,147 @@ import com.skin.ayada.template.TemplateContext;
  * @version 1.0
  */
 public class TemplateDispatcher {
+    private String home;
+    private String encoding;
+    private String contentType;
+    private ServletContext servletContext;
+    private TemplateContext templateContext;
     private static final Logger logger = LoggerFactory.getLogger(TemplateDispatcher.class);
 
     /**
-     * @param templateContext
-     * @param request
-     * @param response
-     * @param page
+     * @param filterConfig
+     * @return TemplateDispatcher
+     * @throws ServletException
      */
-    public static void dispatch(TemplateContext templateContext, HttpServletRequest request, HttpServletResponse response, String page) throws ServletException, IOException {
-        if(logger.isDebugEnabled()) {
-            logger.debug("dispatch: " + page);
+    public static TemplateDispatcher create(FilterConfig filterConfig) throws ServletException {
+        String home = filterConfig.getInitParameter("home");
+        String encoding = filterConfig.getInitParameter("encoding");
+        String contentType = filterConfig.getInitParameter("contentType");
+        ServletContext servletContext = filterConfig.getServletContext();
+
+        if(home == null) {
+            home = "/";
         }
 
+        if(home.startsWith("contextPath:")) {
+            home = home.substring(12);
+            home = servletContext.getRealPath(home);
+        }
+
+        if(encoding == null) {
+            encoding = "UTF-8";
+        }
+
+        if(contentType == null) {
+            contentType = "text/html; charset=UTF-8";
+        }
+
+        if(logger.isInfoEnabled()) {
+            logger.info("jsp.home: " + home);
+        }
+
+        TemplateContextFactory contextFactory = new TemplateContextFactory();
+        contextFactory.setHome(home);
+        contextFactory.setEncoding(filterConfig.getInitParameter("encoding"));
+        contextFactory.setSourcePattern(filterConfig.getInitParameter("sourcePattern"));
+        contextFactory.setJspWork(filterConfig.getInitParameter("jspWork"));
+        contextFactory.setZipFile(filterConfig.getInitParameter("zipFile"));
+        contextFactory.setIgnoreJspTag(filterConfig.getInitParameter("ignoreJspTag"));
+        contextFactory.setClassPath(filterConfig.getInitParameter("classPath"));
+        contextFactory.setSourceFactoryClass(filterConfig.getInitParameter("sourceFactoryClass"));
+        contextFactory.setTemplateFactoryClass(filterConfig.getInitParameter("templateFactoryClass"));
+        contextFactory.setExpressionFactoryClass(filterConfig.getInitParameter("expressionFactoryClass"));
+        TemplateContext templateContext = contextFactory.create();
+        TemplateManager.add(templateContext);
+
+        TemplateDispatcher templateDispatcher = new TemplateDispatcher();
+        templateDispatcher.setHome(home);
+        templateDispatcher.setEncoding(encoding);
+        templateDispatcher.setContentType(contentType);
+        templateDispatcher.setServletContext(servletContext);
+        templateDispatcher.setTemplateContext(templateContext);
+        return templateDispatcher;
+    }
+
+    /**
+     * @param servletConfig
+     * @return TemplateDispatcher
+     * @throws ServletException
+     */
+    public static TemplateDispatcher create(ServletConfig servletConfig) throws ServletException {
+        String home = servletConfig.getInitParameter("home");
+        String encoding = servletConfig.getInitParameter("encoding");
+        String contentType = servletConfig.getInitParameter("contentType");
+        ServletContext servletContext = servletConfig.getServletContext();
+
+        if(home == null) {
+            home = "/";
+        }
+
+        if(home.startsWith("contextPath:")) {
+            home = home.substring(12);
+            home = servletContext.getRealPath(home);
+        }
+
+        if(encoding == null) {
+            encoding = "UTF-8";
+        }
+
+        if(contentType == null) {
+            contentType = "text/html; charset=UTF-8";
+        }
+
+        if(logger.isInfoEnabled()) {
+            logger.info("jsp.home: " + home);
+        }
+
+        TemplateContextFactory contextFactory = new TemplateContextFactory();
+        contextFactory.setHome(home);
+        contextFactory.setEncoding(servletConfig.getInitParameter("encoding"));
+        contextFactory.setSourcePattern(servletConfig.getInitParameter("sourcePattern"));
+        contextFactory.setJspWork(servletConfig.getInitParameter("jspWork"));
+        contextFactory.setZipFile(servletConfig.getInitParameter("zipFile"));
+        contextFactory.setIgnoreJspTag(servletConfig.getInitParameter("ignoreJspTag"));
+        contextFactory.setClassPath(servletConfig.getInitParameter("classPath"));
+        contextFactory.setSourceFactoryClass(servletConfig.getInitParameter("sourceFactoryClass"));
+        contextFactory.setTemplateFactoryClass(servletConfig.getInitParameter("templateFactoryClass"));
+        contextFactory.setExpressionFactoryClass(servletConfig.getInitParameter("expressionFactoryClass"));
+        TemplateContext templateContext = contextFactory.create();
+        TemplateManager.add(templateContext);
+
+        TemplateDispatcher templateDispatcher = new TemplateDispatcher();
+        templateDispatcher.setHome(home);
+        templateDispatcher.setEncoding(encoding);
+        templateDispatcher.setContentType(contentType);
+        templateDispatcher.setServletContext(servletContext);
+        templateDispatcher.setTemplateContext(templateContext);
+        return templateDispatcher;
+    }
+
+    /**
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void dispatch(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String path = request.getRequestURI();
+        path = StringUtil.replace(path, "//", "/");
+
+        if(this.home != null && this.home.length() > 1) {
+            if(path.startsWith(this.home)) {
+                path = path.substring(this.home.length());
+            }
+        }
+
+        if(response.getContentType() == null) {
+            response.setContentType(this.contentType);
+        }
+        
         Template template = null;
 
         try {
-            template = templateContext.getTemplate(page);
+            template = this.templateContext.getTemplate(path, this.encoding);
         }
         catch(Exception e) {
             throw new ServletException(e);
@@ -61,170 +187,146 @@ public class TemplateDispatcher {
 
         if(template == null) {
             if(logger.isDebugEnabled()) {
-                logger.debug("404: " + page);
+                logger.debug("404: " + path);
             }
             response.sendError(404);
             return;
         }
 
-        HttpSession session = request.getSession(false);
-        ServletContext servletContext = getServletContext(session, request);
-        Map<String, Object> context = new HashMap<String, Object>();
-
-        // priority: request > session > servletContext
-        if(servletContext != null) {
-            context.put("servletContext", servletContext);
-
-            if(request.getAttribute("TemplateFilter$servletContext") == null) {
-                request.setAttribute("TemplateFilter$servletContext", servletContext);
-            }
-
-            String locale = servletContext.getInitParameter("javax.servlet.jsp.jstl.fmt.locale");
-            String timeZone = servletContext.getInitParameter("javax.servlet.jsp.jstl.fmt.timeZone");
-
-            if(locale != null) {
-                context.put(PageContext.LOCALE_KEY, locale);
-            }
-
-            if(timeZone != null) {
-                context.put(PageContext.TIMEZONE_KEY, timeZone);
-            }
-
-            TemplateDispatcher.export(servletContext, context);
-        }
-
-        if(session != null) {
-            context.put("session", session);
-            TemplateDispatcher.export(session, context);
-        }
-
-        context.put("request", request);
-        context.put("response", response);
-        context.put("param", TemplateDispatcher.getParameterMap(request));
-        TemplateDispatcher.export(request, context);
-        Writer writer = (Writer)(request.getAttribute("template_writer"));
-
-        if(writer == null) {
-            writer = response.getWriter();
-        }
+        Request.setServletContext(request, this.servletContext);
+        Map<String, Object> context = Request.getContext(request, response);
+        Writer writer = Request.getWriter(request, response);
 
         try {
-            templateContext.execute(template, context, writer);
+            this.templateContext.execute(template, context, writer);
         }
-        catch(Throwable e) {
-            throw new ServletException(e);
-        }
-    }
-
-    /**
-     * @param session
-     * @param context
-     */
-    public static void export(HttpSession session, Map<String, Object> context) {
-        java.util.Enumeration<?> enumeration = session.getAttributeNames();
-
-        if(enumeration != null) {
-            while(enumeration.hasMoreElements()) {
-                String key = (String)(enumeration.nextElement());
-                context.put(key, session.getAttribute(key));
+        catch(Exception e) {
+            if(response.isCommitted()) {
+                logger.error(e.getMessage(), e);
             }
-        }
-    }
-
-    /**
-     * @param servletContext
-     * @param context
-     */
-    public static void export(ServletContext servletContext, Map<String, Object> context) {
-        java.util.Enumeration<?> enumeration = servletContext.getAttributeNames();
-
-        if(enumeration != null) {
-            while(enumeration.hasMoreElements()) {
-                String key = (String)(enumeration.nextElement());
-                context.put(key, servletContext.getAttribute(key));
-            }
-        }
-    }
-
-    /**
-     * @param request
-     * @param context
-     */
-    public static void export(HttpServletRequest request, Map<String, Object> context) {
-        java.util.Enumeration<?> enumeration = request.getAttributeNames();
-
-        if(enumeration != null) {
-            while(enumeration.hasMoreElements()) {
-                String key = (String)(enumeration.nextElement());
-                context.put(key, request.getAttribute(key));
-            }
-        }
-    }
-
-    /**
-     * @param session
-     * @param request
-     * @return ServletContext
-     */
-    public static ServletContext getServletContext(HttpSession session, HttpServletRequest request) {
-        ServletContext servletContext = null;
-
-        if(session != null) {
-            servletContext = session.getServletContext();
-        }
-
-        if(servletContext == null) {
-            Object value = request.getAttribute("TemplateFilter$servletContext");
-
-            if(value != null && value instanceof ServletContext) {
-                servletContext = (ServletContext)(value);
-            }
-        }
-        return servletContext;
-    }
-
-    /**
-     * @param request
-     * @return Map<String, Object>
-     */
-    public static Map<String, Object> getParameterMap(HttpServletRequest request) {
-        Map<?, ?> map = request.getParameterMap();
-        Map<String, Object> param = new HashMap<String, Object>();
-
-        if(map != null && map.size() > 0) {
-            for(Map.Entry<?, ?> entry : map.entrySet()) {
-                String key = (String)(entry.getKey());
-                Object value = entry.getValue();
-
-                if(value instanceof String[]) {
-                    String[] values = (String[])value;
-
-                    if(values.length > 0) {
-                        if(values.length > 1) {
-                            param.put(key, values);
-                        }
-                        else {
-                            param.put(key, values[0]);
-                        }
-                    }
-                    continue;
+            else {
+                if(e instanceof ServletException) {
+                    throw (ServletException)e;
                 }
 
-                if(value instanceof List<?>) {
-                    List<?> values = (List<?>)value;
-
-                    if(values.size() > 0) {
-                        if(values.size() > 1) {
-                            param.put(key, values);
-                        }
-                        else {
-                            param.put(key, values.get(0));
-                        }
-                    }
-                    continue;
+                if(e instanceof IOException) {
+                    throw (IOException)e;
                 }
+                throw new ServletException(e);
             }
         }
-        return param;
+    }
+
+    /**
+     * @return String
+     */
+    protected String getTempWork(String prefix) {
+        String work = System.getProperty("java.io.tmpdir");
+
+        if(work == null) {
+            return null;
+        }
+
+        long timeMillis = System.currentTimeMillis();
+        String pattern = "yyyyMMddHHmmss";
+        String name = prefix;
+
+        if(name == null || name.length() < 1 || name.equals("/")) {
+            name = "";
+        }
+        else {
+            name = name.replace('\\', '.');
+            name = name.replace('/', '.');
+        }
+
+        if(name.length() > 0) {
+            name = "ayada_" + name + "_";
+        }
+        else {
+            name = "ayada_";
+        }
+
+        File file = new File(work, name + DateUtil.format(timeMillis, pattern));
+
+        while(file.exists()) {
+            timeMillis += 1000;
+            file = new File(work, name + DateUtil.format(timeMillis, pattern));
+        }
+        return file.getAbsolutePath();
+    }
+
+    public void destroy() {
+        this.templateContext.destory();
+        this.templateContext = null;
+    }
+
+    /**
+     * @return the home
+     */
+    public String getHome() {
+        return this.home;
+    }
+
+    /**
+     * @param home the home to set
+     */
+    public void setHome(String home) {
+        this.home = home;
+    }
+
+    /**
+     * @return the encoding
+     */
+    public String getEncoding() {
+        return this.encoding;
+    }
+
+    /**
+     * @param encoding the encoding to set
+     */
+    public void setEncoding(String encoding) {
+        this.encoding = encoding;
+    }
+
+    /**
+     * @return the contentType
+     */
+    public String getContentType() {
+        return this.contentType;
+    }
+
+    /**
+     * @param contentType the contentType to set
+     */
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    /**
+     * @return the servletContext
+     */
+    public ServletContext getServletContext() {
+        return this.servletContext;
+    }
+
+    /**
+     * @param servletContext the servletContext to set
+     */
+    public void setServletContext(ServletContext servletContext) {
+        this.servletContext = servletContext;
+    }
+
+    /**
+     * @return the templateContext
+     */
+    public TemplateContext getTemplateContext() {
+        return this.templateContext;
+    }
+
+    /**
+     * @param templateContext the templateContext to set
+     */
+    public void setTemplateContext(TemplateContext templateContext) {
+        this.templateContext = templateContext;
     }
 }

@@ -58,19 +58,13 @@ public class PageCompiler {
      * @return String
      */
     public Map<String, String> getAttributes() {
-        return this.getAttributes(this.stream);
-    }
-
-    /**
-     * read node name, after read nodeName
-     * @return String
-     */
-    public Map<String, String> getAttributes(StringStream stream) {
         int i;
+        char quote;
         String name = null;
         String value = null;
         StringBuilder buffer = new StringBuilder();
         Map<String, String> attributes = new LinkedHashMap<String, String>();
+        StringStream stream = this.stream;
 
         while((i = stream.peek()) != -1) {
             // skip invalid character
@@ -161,13 +155,14 @@ public class PageCompiler {
                 break;
             }
 
-            char quote = ' ';
-
             if(i == '"') {
                 quote = '"';
             }
             else if(i == '\'') {
                 quote = '\'';
+            }
+            else {
+                quote = ' ';
             }
 
             if(quote == ' ') {
@@ -197,7 +192,6 @@ public class PageCompiler {
                     }
                 }
             }
-
             value = this.decode(buffer.toString());
             attributes.put(name, value);
             buffer.setLength(0);
@@ -258,10 +252,8 @@ public class PageCompiler {
                             catch(NumberFormatException e) {
                                 buffer.append(new String(c, i + 2, j - i - 2));
                             }
-
                             i = j;
                         }
-
                         break;
                     }
                 }
@@ -273,7 +265,6 @@ public class PageCompiler {
                 buffer.append(c[i]);
             }
         }
-
         return buffer.toString();
     }
 

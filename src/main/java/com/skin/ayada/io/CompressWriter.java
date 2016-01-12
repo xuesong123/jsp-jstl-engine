@@ -61,7 +61,6 @@ public class CompressWriter extends Writer {
                 j++;
             }
         }
-
         this.out.write(buffer, 0, j);
     }
 

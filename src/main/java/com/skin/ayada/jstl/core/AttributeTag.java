@@ -33,7 +33,6 @@ public class AttributeTag extends BodyTagSupport {
             this.setAttribute(this.name, this.value);
             return Tag.SKIP_BODY;
         }
-
         return BodyTag.EVAL_BODY_BUFFERED;
     }
 

@@ -151,42 +151,74 @@
     </div>
     <h3 class="sk-h3">3.1 指令系统</h2>
     <div class="sk-content">
-        <p>Ayada的指令共有6个，都是编译指令，只在编译期生效。</p>
+        <p>Ayada的指令共有6个，都是编译指令，只在编译期生效。所有的编译指令都会删除掉指令前的空格和指令后的回车。</p>
     </div>
+
+    <h4 class="sk-h4">t:taglib 导入标签库</h4>
     <div class="sk-content">
-        <p class="bb">t:taglib</p>
         <div class="sk-code">
             <pre class="brush: xml;">
             &lt;t:taglib prefix="c" uri="http://localhost/tags/ayada-mytag"/&gt;
             </pre>
         </div>
-        <p>t:taglib 指令是编译指令，只在编译期生效，用来导入标签库。编译器根据uri指定的路径到classpath下加载指定的标签库。</p>
+        <p>编译器根据uri指定的路径到classpath下加载指定的标签库。</p>
         <p>例如上面的代码将会在classpath路径下加载/tags/ayada-mytag.xml文件。</p>
-    </div>
-    <div class="sk-content">
-        <p class="bb">t:import</p>
+        <p class="bb">标签定义示例：</p>
         <div class="sk-code">
             <pre class="brush: xml;">
-            &lt;t:import name="c:if" className="com.skin.ayada.jstl.core.IfTag" bodyContent="tagdependent" description="if标签"/&gt;
+                &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+                &lt;taglib&gt;
+                    &lt;tlib-version&gt;1.0&lt;/tlib-version&gt;
+                    &lt;--
+                        标签定义支持两种方式
+                        1. 节点定义
+                        2. 属性定义
+                    --&gt;
+                    &lt;tag&gt;
+                        &lt;name&gt;c:set&lt;/name&gt;
+                        &lt;tag-class&gt;com.skin.ayada.jstl.core.SetTag&lt;/tag-class&gt;
+                        &lt;body-content&gt;jsp&lt;/body-content&gt;
+                        &lt;ignore-whitespace&gt;true&lt;/ignore-whitespace&gt;
+                        &lt;description&gt;&lt;/description&gt;
+                    &lt;/tag&gt;
+                    &lt;tag name="io:mkdir" tag-class="com.skin.ayada.jstl.io.MakeDirTag"
+                        body-content="empty" ignore-whitespace="true" description=""/&gt;
+                &lt;/taglib&gt;
+            </pre>
+            <p>name: 必选，标签名。</p>
+            <p>tag-class: 必选，标签实现类。</p>
+            <p>body-content: 可选，标签内容类型，默认是jsp。</p>
+            <p>ignore-whitespace: 可选，是否忽略前导空格和后缀回车。前导空格包括空格和\t，不包括回车。后缀回车包括\r和\n，不包括回车和\t。默认为true。</p>
+            <p>description: 可选，标签描述 。</p>
+        </div>
+    </div>
+    <h4 class="sk-h4">t:import 导入一个标签</h4>
+    <div class="sk-content">
+        <div class="sk-code">
+            <pre class="brush: xml;">
+            &lt;t:import name="c:if" className="com.skin.ayada.jstl.core.IfTag"
+                bodyContent="tagdependent" ignoreWhitespace="true" description="if标签"/&gt;
             </pre>
         </div>
         <p>bodyContent - 取值只能是：tagdependent|jsp|empty</p>
         <p>jsp - 子节点可以是任何内容。这个也是默认值。</p>
         <p>tagdependent - 子节点只能是标签，任何文本内容都会在编译期被忽略掉。</p>
         <p>empty - 不允许存在任何子节点。节点内的任何内容都会在编译期被忽略掉。</p>
-        <p>t:import 指令是编译指令，只在编译期生效，用来导入一个标签。</p>
+        <p>ignoreWhitespace - 是否忽略前导空格和后缀回车。前导空格包括空格和\t，不包括回车。后缀回车包括\r和\n，不包括回车和\t。</p>
     </div>
+
+    <h4 class="sk-h4">t:rename 将已经导入的标签重命名为新的名字</h4>
     <div class="sk-content">
-        <p class="bb">t:rename</p>
         <div class="sk-code">
             <pre class="brush: xml;">
             &lt;t:rename name="d:if" from="c:if"/&gt;
             </pre>
         </div>
-        <p>t:rename 指令是编译指令，将已经导入的标签重命名为新的名字。只针对重命名之后的内容生效。该指令之前的内容仍将使用之前的标签名。</p>
+        <p>只针对重命名之后的内容生效。该指令之前的内容仍将使用之前的标签名。</p>
     </div>
+
+    <h4 class="sk-h4">t:include 包含一个文件</h4>
     <div class="sk-content">
-        <p class="bb">t:include</p>
         <div class="sk-code">
             <pre class="brush: xml;">
             &lt;t:include file="/include/script.html" type="script" encoding="UTF-8"/&gt;
@@ -200,24 +232,26 @@
         <p>Ayada同时支持jsp中的include指令和jsp:include标签。建议采用jsp语法编写，这样即使不采用Ayada，你的代码仍然可以通过容器执行。</p>
         <p>但是Ayada的t:include指令和c:include都做了扩展，功能增强，支持静态包含和传递参数，如果你希望使用Ayada的扩展功能，就必须使用Ayada的标签。</p>
     </div>
+
+    <h4 class="sk-h4">t:text 文本指令</h4>
     <div class="sk-content">
-        <p class="bb">t:text</p>
         <div class="sk-code">
             <pre class="brush: xml;">
             &lt;t:text escape="xml"&gt;&lt;c:if test="${1==1}"&gt;hello&lt;/c:if&gt;&lt;/t:text&gt;
             </pre>
         </div>
         <p>escape - 可选 是否做xml编码。</p>
-        <p>t:text 指令是编译指令，其中的任何内容都作为文本处理，不允许嵌套。</p>
+        <p>t:text 其中的任何内容都作为文本处理，不允许嵌套。</p>
     </div>
+
+    <h4 class="sk-h4">t:comment 注释指令</h4>
     <div class="sk-content">
-        <p class="bb">t:comment</p>
         <div class="sk-code">
             <pre class="brush: xml;">
             &lt;t:comment&gt;&lt;c:if test="${1==1}"&gt;hello&lt;/c:if&gt;&lt;/t:comment&gt;
             </pre>
         </div>
-        <p>t:comment 指令是编译指令，其中的任何内容都作为注释被忽略，不允许嵌套。</p>
+        <p>t:comment 其中的任何内容都作为注释被忽略，不允许嵌套。</p>
     </div>
 
     <h3 class="sk-h3">3.2 内置的标签列表</h3>
@@ -1109,6 +1143,7 @@
         <p class="bb">全局变量定义和工具类定义都在classpath下的ayada-tools.properties文件中定义，会合并Ayada自带的默认配置。该配置文件支持@import指令，并且可以直接书写中文不需要做unicode编码。</p>
         <p>默认配置ayada-tools-default.properties在ayada-1.0.0.x.jar包中定义。</p>
         <p>ayada-tools.properties文件支持两种语法：var定义一个字符串变量，set定义一个类实例。</p>
+        <p>全局变量的配置通过DefaultExpressionFactory类来加载，如果自定义了ExpressionFactory，那么需要自己加载全局变量。</p>
         <p class="bb">常用工具类</p>
         <p>默认的配置定义了一些常用的工具类：</p>
         <div class="sk-code">
@@ -1199,7 +1234,24 @@
         <p>例如：&lt;c:escape encoder="null"/&gt;${user.name}&lt;c:escape encoder="html"/&gt;${user.name}</p>
     </div>
 
-    <h2 class="sk-h2">10 Ayada的核心对象</h2>
+    <h2 class="sk-h2">10 格式控制规则</h2>
+    <div class="sk-content">
+        <p>Ayada支持精细的控制输出格式，避免多余的空格和回车。</p>
+        <p>一般情况下，模板引擎对于空格和回车的控制都比较困难，原因是因为模板引擎不知道什么时候该忽略空格和回车。
+        因为很难确定该如何处理空格和回车，jsp引擎一般都遵循忠实的输出空格和回车的规则。如果希望控制输出格式，模板编写者需要自己组织代码格式，通过严格的代码格式来控制空格和回车。
+        但是这样会导致模板本身的代码结构很不好，很可能为了避免空格而使代码堆砌在一起。
+        jsp2.0在page指令中引入了一个新的属性trimDirectiveWhitespaces用来处理指令多余的空格，应该是不支持标签和jsp脚本的空格的。</p>
+        <p>Ayada对标签定义做了扩展，可以通过对标签定义如何处理标签前后的空格和回车，并对jsp脚本和jsp指令均做了空格和回车的处理。</p>
+        <p>下面是Ayada的处理规则：</p>
+        <ul class="sk-list">
+            <li><p>jsp指令、jsp生命、jsp脚本、Ayada指令，都会统一删除掉前导空格和后缀回车。不支持配置，统一处理。</p></li>
+            <li><p>标签配置增加ignore-whitespace选项，可选值[true|false]，如果是true，删除掉前导空格和后面的回车。默认是true。t:import指令对应的属性是ignoreWhitespace。</p></li>
+        </ul>
+        <p>前导空格包括空格和\t符。</p>
+        <p>后缀回车包括\r和\n</p>
+    </div>
+
+    <h2 class="sk-h2">11 Ayada的核心对象</h2>
     <div class="sk-content">
         <p class="bb">Ayada的核心对象是提供对外的API，外部程序通过核心对象来调用Ayada模板引擎。</p>
         <table class="sk-grid">
@@ -1271,10 +1323,10 @@
         </div>
     </div>
 
-    <h2 class="sk-h2">10 编译模式和预编译</h2>
+    <h2 class="sk-h2">12 编译模式和预编译</h2>
     <div class="sk-content">
         <p class="bb">编译模式需要使用JspTemplateFactory类来构建TemplateContext对象。TemplateContext对象使用TemplateFactory类的实现来加载模板。</p>
-        <p>一般的线上应用在应用重启之后可以通过脚本访问一下指定的url来预热，这种情况不需要预编译。如果你一定要预编译一下，可以通过调用com.skin.ayada.template.PrepareCompiler来进行预编译。</p>
+        <p>一般的线上应用在应用重启之后可以通过脚本访问一下指定的url来预热，这种情况不需要预编译。如果一定要预编译一下，可以通过调用com.skin.ayada.template.PrepareCompiler来进行预编译。</p>
         <p>PrepareCompiler会扫描指定目录下的所有文件作为模板文件进行编译，编译过程遵循配置项的sourde-pattern规则。也可以指定排除参数来排除不需要预编译的类。</p>
         <p>PrepareCompiler目前只支持文件系统，如果你使用了其他的方式加载模版文件，可以参考PrepareCompiler重新实现预编译。</p>
         <p class="bb">预编译的调用方式：</p>
@@ -1298,19 +1350,19 @@
         </div>
     </div>
 
-    <h2 class="sk-h2">10 线程模型</h2>
+    <h2 class="sk-h2">13 线程模型</h2>
     <div class="sk-content">
         <p>首先标签不存在线程安全的问题，所有的标签都在安全的线程模型中执行。<b>除非自己实现的标签里面存在不安全的代码。</b></p>
         <p>在解释模式中不存在线程安全的问题。在编译模式下如果开启了java脚本选项，请小心使用类变量。编译模式下所有被编译好的模版对象都是单例的，不是线程安全的，这一点与jsp的运行模式是一致的。</p>
     </div>
 
-    <h2 class="sk-h2">11 代码示例和测试用例</h2>
+    <h2 class="sk-h2">14 代码示例和测试用例</h2>
     <div class="sk-content">
         <p>在源代码的/webapp目录下包含了绝大部分的代码示例和测试用例，这些文件基本上都以某个具体的标签名命名，从文件名就可以很容易看出来是关于那个标签的用法的。</p>
         <p>com.skin.ayada.template.Main是java调用模板引擎的示例，也可以在命令行下调用。</p>
     </div>
 
-    <h2 class="sk-h2">12 其他</h2>
+    <h2 class="sk-h2">15 其他</h2>
     <div class="sk-content">
         <p>很多模版引擎为了提升性能，采用了很多性能优化的手段，例如：动态编译，使用强制类型来避免反射等。
         Ayada也使用了动态编译，由于Ayada是与jsp和jstl完全一致的，所以一些jsp的技术在Ayada里面是完全有效的。

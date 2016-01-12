@@ -56,7 +56,6 @@ public class ListTag extends TagSupport implements ElementTagSupport {
             this.pageContext.setAttribute(this.name, this.list);
             return Tag.EVAL_BODY_INCLUDE;
         }
-
         return Tag.SKIP_BODY;
     }
 

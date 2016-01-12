@@ -58,7 +58,6 @@ public class BeanTag extends TagSupport implements Tag, ConstructorTagSupport, P
         else {
             bean = ClassUtil.getInstance(this.className);
         }
-
         ClassUtil.setProperties(bean, this.properties);
         this.pageContext.setAttribute(this.name, bean);
         return Tag.EVAL_PAGE;

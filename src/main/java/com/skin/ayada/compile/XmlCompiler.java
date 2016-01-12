@@ -130,7 +130,7 @@ public class XmlCompiler {
 
     /**
      * @param list
-     * @return
+     * @return Map<String, String>
      */
     private Map<String, String> getNamespaces(List<Node> list) {
         Node node = null;

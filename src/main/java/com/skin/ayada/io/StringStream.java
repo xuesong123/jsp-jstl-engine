@@ -167,7 +167,6 @@ public class StringStream {
                 break;
             }
         }
-
         this.position = index;
         return new String(this.buffer, offset, index - offset);
     }
@@ -210,7 +209,6 @@ public class StringStream {
                 return false;
             }
         }
-
         return true;
     }
 

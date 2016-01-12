@@ -103,7 +103,6 @@ public class ClassUtil {
         for(int i = 0; i < values.length; i++) {
             types[i] = values[i].getClass();
         }
-
         return types;
     }
 
@@ -169,7 +168,6 @@ public class ClassUtil {
                 }
             }
         }
-
         return null;
     }
 
@@ -260,7 +258,6 @@ public class ClassUtil {
         if(value != null) {
             return value.toString().equals("true");
         }
-
         return Boolean.FALSE;
     }
 
@@ -274,7 +271,6 @@ public class ClassUtil {
         if(i != null) {
             return i.byteValue();
         }
-
         return null;
     }
 
@@ -288,7 +284,6 @@ public class ClassUtil {
         if(i != null) {
             return i.shortValue();
         }
-
         return null;
     }
 
@@ -308,7 +303,6 @@ public class ClassUtil {
                 return content.charAt(0);
             }
         }
-
         return null;
     }
 
@@ -328,7 +322,6 @@ public class ClassUtil {
                 return d.intValue();
             }
         }
-
         return null;
     }
 
@@ -348,7 +341,6 @@ public class ClassUtil {
                 return d.floatValue();
             }
         }
-
         return null;
     }
 
@@ -368,7 +360,6 @@ public class ClassUtil {
             catch(NumberFormatException e) {
             }
         }
-
         return null;
     }
 
@@ -395,10 +386,8 @@ public class ClassUtil {
             }
             catch(NumberFormatException e) {
             }
-
             return l;
         }
-
         return null;
     }
 
@@ -414,7 +403,6 @@ public class ClassUtil {
         if(value != null) {
             return value.toString();
         }
-
         return null;
     }
 
@@ -437,7 +425,6 @@ public class ClassUtil {
             catch(java.text.ParseException e) {
             }
         }
-
         return null;
     }
 
@@ -469,7 +456,6 @@ public class ClassUtil {
         else if(length <= f5.length()) {
             return f5;
         }
-
         return f3;
     }
 }

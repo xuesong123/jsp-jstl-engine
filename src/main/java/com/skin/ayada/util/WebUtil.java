@@ -1,7 +1,7 @@
 /*
  * $RCSfile: WebUtil.java,v $$
  * $Revision: 1.1 $
- * $Date: 2016-1-6 $
+ * $Date: 2013-03-10 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -47,7 +47,7 @@ public class WebUtil {
         }
 
         try {
-            String realPath = getStrictPath(new File(root, path).getCanonicalPath());
+            String realPath = Path.getStrictPath(new File(root, path).getCanonicalPath());
 
             if(realPath.startsWith(root)) {
                 return realPath;
@@ -174,7 +174,7 @@ public class WebUtil {
             }
             
             if(root != null) {
-                return getStrictPath(root.getCanonicalPath());
+                return Path.getStrictPath(root.getCanonicalPath());
             }
         }
         catch (Exception e) {
@@ -190,7 +190,7 @@ public class WebUtil {
      */
     private static File getParent(File file, String name) {
         try {
-            String path = getStrictPath(file.getCanonicalPath());
+            String path = Path.getStrictPath(file.getCanonicalPath());
             int k = path.indexOf(name);
     
             if(k > -1) {
@@ -201,16 +201,5 @@ public class WebUtil {
             logger.warn(e.getMessage(), e);
         }
         return null;
-    }
-
-    /**
-     * @param path
-     * @return String
-     */
-    private static String getStrictPath(String path) {
-        String temp = path;
-        temp = StringUtil.replace(temp, "\\", "/");
-        temp = StringUtil.replace(temp, "//", "/");
-        return temp;
     }
 }

@@ -158,6 +158,9 @@ public class TagLibraryFactory {
                     else if(nodeName.equals("body-content")) {
                         tagInfo.setBodyContent(TagInfo.getBodyContent(n.getTextContent()));
                     }
+                    else if(nodeName.equals("ignore-whitespace")) {
+                        tagInfo.setIgnoreWhitespace(!"false".equals(n.getTextContent()));
+                    }
                     else if(nodeName.equals("description")) {
                         tagInfo.setDescription(n.getTextContent().trim());
                     }
@@ -179,6 +182,9 @@ public class TagLibraryFactory {
                 }
                 else if(nodeName.equals("body-content")) {
                     tagInfo.setBodyContent(TagInfo.getBodyContent(n.getNodeValue().trim()));
+                }
+                else if(nodeName.equals("ignore-whitespace")) {
+                    tagInfo.setIgnoreWhitespace(!"false".equals(n.getTextContent()));
                 }
                 else if(nodeName.equals("description")) {
                     tagInfo.setDescription(n.getNodeValue().trim());

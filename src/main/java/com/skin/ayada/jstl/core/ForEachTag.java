@@ -163,7 +163,6 @@ public class ForEachTag extends LoopTagSupport {
             if(this.index < this.length) {
                 return Array.get(this.array, this.index++);
             }
-
             return null;
         }
 
@@ -223,7 +222,6 @@ public class ForEachTag extends LoopTagSupport {
             if(this.begin <= this.end) {
                 return new Integer(this.begin++);
             }
-
             return null;
         }
 

@@ -5,42 +5,49 @@
         <name>c:dependent</name>
         <tag-class>com.skin.ayada.jstl.core.DependentTag</tag-class>
         <body-content>tagdependent</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:command</name>
         <tag-class>com.skin.ayada.jstl.core.DependentTag</tag-class>
         <body-content>tagdependent</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:if</name>
         <tag-class>com.skin.ayada.jstl.core.IfTag</tag-class>
         <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:set</name>
         <tag-class>com.skin.ayada.jstl.core.SetTag</tag-class>
         <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:remove</name>
         <tag-class>com.skin.ayada.jstl.core.RemoveTag</tag-class>
         <body-content>empty</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:out</name>
         <tag-class>com.skin.ayada.jstl.core.OutTag</tag-class>
         <body-content>jsp</body-content>
+        <ignore-whitespace>false</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:ifout</name>
         <tag-class>com.skin.ayada.jstl.core.IfOutTag</tag-class>
         <body-content>empty</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
@@ -53,66 +60,84 @@
         <name>c:catch</name>
         <tag-class>com.skin.ayada.jstl.core.CatchTag</tag-class>
         <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
+        <description></description>
+    </tag>
+    <tag>
+        <name>c:for</name>
+        <tag-class>com.skin.ayada.jstl.core.ForEachTag</tag-class>
+        <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:each</name>
         <tag-class>com.skin.ayada.jstl.core.ForEachTag</tag-class>
         <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:forEach</name>
         <tag-class>com.skin.ayada.jstl.core.ForEachTag</tag-class>
         <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:forTokens</name>
         <tag-class>com.skin.ayada.jstl.core.ForTokensTag</tag-class>
         <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:choose</name>
         <tag-class>com.skin.ayada.jstl.core.ChooseTag</tag-class>
         <body-content>tagdependent</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:when</name>
         <tag-class>com.skin.ayada.jstl.core.WhenTag</tag-class>
         <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:otherwise</name>
         <tag-class>com.skin.ayada.jstl.core.OtherwiseTag</tag-class>
         <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:continue</name>
         <tag-class>com.skin.ayada.jstl.core.ContinueTag</tag-class>
         <body-content>empty</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:break</name>
         <tag-class>com.skin.ayada.jstl.core.BreakTag</tag-class>
         <body-content>empty</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:comment</name>
         <tag-class>com.skin.ayada.jstl.core.CommentTag</tag-class>
         <body-content>empty</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:escape</name>
         <tag-class>com.skin.ayada.jstl.core.EscapeTag</tag-class>
         <body-content>empty</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
@@ -125,174 +150,210 @@
         <name>c:exit</name>
         <tag-class>com.skin.ayada.jstl.core.ExitTag</tag-class>
         <body-content>empty</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:buffer</name>
         <tag-class>com.skin.ayada.jstl.core.BufferTag</tag-class>
         <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:bean</name>
         <tag-class>com.skin.ayada.jstl.core.BeanTag</tag-class>
         <body-content>tagdependent</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:param</name>
         <tag-class>com.skin.ayada.jstl.core.ParameterTag</tag-class>
         <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:property</name>
         <tag-class>com.skin.ayada.jstl.core.PropertyTag</tag-class>
         <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:attribute</name>
         <tag-class>com.skin.ayada.jstl.core.AttributeTag</tag-class>
         <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:constructor</name>
         <tag-class>com.skin.ayada.jstl.core.ConstructorTag</tag-class>
         <body-content>empty</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:map</name>
         <tag-class>com.skin.ayada.jstl.core.MapTag</tag-class>
         <body-content>tagdependent</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:list</name>
         <tag-class>com.skin.ayada.jstl.core.ListTag</tag-class>
         <body-content>tagdependent</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:entry</name>
         <tag-class>com.skin.ayada.jstl.core.AttributeTag</tag-class>
         <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:element</name>
         <tag-class>com.skin.ayada.jstl.core.ElementTag</tag-class>
         <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:execute</name>
         <tag-class>com.skin.ayada.jstl.core.ExecuteTag</tag-class>
         <body-content>empty</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:xml</name>
         <tag-class>com.skin.ayada.jstl.core.OutputTag</tag-class>
         <body-content>tagdependent</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:output</name>
         <tag-class>com.skin.ayada.jstl.core.OutputTag</tag-class>
         <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
+        <description></description>
+    </tag>
+    <tag>
+        <name>c:cache</name>
+        <tag-class>com.skin.ayada.jstl.core.CacheTag</tag-class>
+        <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:include</name>
         <tag-class>com.skin.ayada.taglib.ActionTag</tag-class>
         <body-content>tagdependent</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:invoke</name>
         <tag-class>com.skin.ayada.taglib.ActionTag</tag-class>
         <body-content>tagdependent</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:layout</name>
         <tag-class>com.skin.ayada.taglib.ActionTag</tag-class>
         <body-content>tagdependent</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:action</name>
         <tag-class>com.skin.ayada.taglib.ActionTag</tag-class>
         <body-content>tagdependent</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:test</name>
         <tag-class>com.skin.ayada.jstl.core.TestTag</tag-class>
         <body-content>empty</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:tryCatchTest</name>
         <tag-class>com.skin.ayada.jstl.core.TryCatchTestTag</tag-class>
         <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>c:scrollpage</name>
         <tag-class>com.skin.ayada.taglib.ScrollPage</tag-class>
         <body-content>empty</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>f:substring</name>
         <tag-class>com.skin.ayada.jstl.fmt.SubstringTag</tag-class>
         <body-content>empty</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>fmt:formatDate</name>
         <tag-class>com.skin.ayada.jstl.fmt.DateFormatTag</tag-class>
         <body-content>empty</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>fmt:formatNumber</name>
         <tag-class>com.skin.ayada.jstl.fmt.NumberFormatTag</tag-class>
         <body-content>empty</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>fmt:parseDate</name>
         <tag-class>com.skin.ayada.jstl.fmt.ParseDateTag</tag-class>
         <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>fmt:parseNumber</name>
         <tag-class>com.skin.ayada.jstl.fmt.ParseNumberTag</tag-class>
         <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>fmt:setTimeZone</name>
         <tag-class>com.skin.ayada.jstl.fmt.SetTimeZoneTag</tag-class>
         <body-content>empty</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>fmt:timeZone</name>
         <tag-class>com.skin.ayada.jstl.fmt.TimeZoneTag</tag-class>
         <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>fmt:setLocale</name>
         <tag-class>com.skin.ayada.jstl.fmt.SetLocaleTag</tag-class>
         <body-content>empty</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
@@ -305,58 +366,67 @@
         <name>fmt:setBundle</name>
         <tag-class>com.skin.ayada.jstl.fmt.SetBundleTag</tag-class>
         <body-content>empty</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>fmt:message</name>
         <tag-class>com.skin.ayada.jstl.fmt.MessageTag</tag-class>
         <body-content>tagdependent</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>fmt:param</name>
         <tag-class>com.skin.ayada.jstl.fmt.FmtParamTag</tag-class>
         <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>sql:connect</name>
         <tag-class>com.skin.ayada.jstl.sql.ConnectTag</tag-class>
         <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>sql:execute</name>
         <tag-class>com.skin.ayada.jstl.sql.SqlTag</tag-class>
         <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>sql:query</name>
         <tag-class>com.skin.ayada.jstl.sql.QueryTag</tag-class>
         <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>sql:parse</name>
         <tag-class>com.skin.ayada.jstl.sql.CreateParseTag</tag-class>
         <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>sql:create</name>
         <tag-class>com.skin.ayada.jstl.sql.CreateParseTag</tag-class>
         <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
     <tag>
         <name>sql:insert</name>
         <tag-class>com.skin.ayada.jstl.sql.InsertParseTag</tag-class>
         <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
         <description></description>
     </tag>
-    <tag name="jsp:include" tag-class="com.skin.ayada.taglib.ActionTag" body-content="" description=""/>
-    <tag name="io:copy" tag-class="com.skin.ayada.jstl.io.CopyTag" body-content="tagdependent" description=""/>
-    <tag name="io:delete" tag-class="com.skin.ayada.jstl.io.DeleteTag" body-content="tagdependent" description=""/>
-    <tag name="io:mkdir" tag-class="com.skin.ayada.jstl.io.MakeDirTag" body-content="empty" description=""/>
+    <tag name="jsp:include" tag-class="com.skin.ayada.taglib.ActionTag" body-content="tagdependent" ignore-whitespace="true" description=""/>
+    <tag name="io:copy" tag-class="com.skin.ayada.jstl.io.CopyTag" body-content="tagdependent" ignore-whitespace="true" description=""/>
+    <tag name="io:delete" tag-class="com.skin.ayada.jstl.io.DeleteTag" body-content="tagdependent" ignore-whitespace="true" description=""/>
+    <tag name="io:mkdir" tag-class="com.skin.ayada.jstl.io.MakeDirTag" body-content="empty" ignore-whitespace="true" description=""/>
 </taglib>

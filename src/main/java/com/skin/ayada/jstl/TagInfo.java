@@ -20,11 +20,17 @@ public class TagInfo {
     private String name;
     private String tagClass;
     private int bodyContent;
+    private boolean ignoreWhitespace;
     private String description;
 
     public static final int JSP = 0;
     public static final int TAGDEPENDENT = 1;
     public static final int EMPTY = 2;
+
+    public TagInfo() {
+        this.bodyContent = JSP;
+        this.ignoreWhitespace = true;
+    }
 
     /**
      * @return the name
@@ -69,6 +75,20 @@ public class TagInfo {
     }
 
     /**
+     * @param ignoreWhitespace the ignoreWhitespace to set
+     */
+    public void setIgnoreWhitespace(boolean ignoreWhitespace) {
+        this.ignoreWhitespace = ignoreWhitespace;
+    }
+
+    /**
+     * @return the ignoreWhitespace
+     */
+    public boolean getIgnoreWhitespace() {
+        return this.ignoreWhitespace;
+    }
+
+    /**
      * @return the description
      */
     public String getDescription() {
@@ -99,7 +119,6 @@ public class TagInfo {
         else if(type.equals("empty")) {
             return EMPTY;
         }
-
         return JSP;
     }
 

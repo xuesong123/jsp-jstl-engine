@@ -58,7 +58,19 @@ public class DefaultTemplateContext implements TemplateContext {
      */
     @Override
     public void execute(String path, Map<String, Object> context, Writer writer) throws Exception {
-        Template template = this.getTemplate(path);
+        this.execute(path, "utf-8", context, writer);
+    }
+
+    /**
+     * @param path
+     * @param encoding
+     * @param context
+     * @param writer
+     * @throws Exception
+     */
+    @Override
+    public void execute(String path, String encoding, Map<String, Object> context, Writer writer) throws Exception {
+        Template template = this.getTemplate(path, encoding);
 
         if(template == null) {
             throw new Exception(path + " not exists!");
@@ -90,7 +102,7 @@ public class DefaultTemplateContext implements TemplateContext {
      */
     @Override
     public Template getTemplate(final String path) throws Exception {
-        return this.getTemplate(path, null);
+        return this.getTemplate(path, "utf-8");
     }
 
     /**

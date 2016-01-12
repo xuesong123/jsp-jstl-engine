@@ -25,7 +25,6 @@ import com.skin.ayada.util.StringUtil;
  */
 public abstract class SourceFactory {
     private String home;
-    private String encoding;
     private String sourcePattern = "jsp,jspf,jspx,tpl";
 
     /**
@@ -130,20 +129,6 @@ public abstract class SourceFactory {
      */
     public String getHome() {
         return this.home;
-    }
-
-    /**
-     * @return the encoding
-     */
-    public String getEncoding() {
-        return this.encoding;
-    }
-
-    /**
-     * @param encoding the encoding to set
-     */
-    public void setEncoding(String encoding) {
-        this.encoding = encoding;
     }
 
     /**
