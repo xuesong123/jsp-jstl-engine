@@ -127,6 +127,13 @@
         <description></description>
     </tag>
     <tag>
+        <name>c:join</name>
+        <tag-class>com.skin.ayada.jstl.core.JoinTag</tag-class>
+        <body-content>empty</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
+        <description></description>
+    </tag>
+    <tag>
         <name>c:comment</name>
         <tag-class>com.skin.ayada.jstl.core.CommentTag</tag-class>
         <body-content>empty</body-content>

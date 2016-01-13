@@ -19,7 +19,7 @@ package test.com.skin.ayada.web.struts2;
  */
 public class Struts2Result /* extends StrutsResultSupport */ {
     private String contentType;
-    
+
     /**
     private ReflectionProvider reflectionProvider;
     protected void doExecute(String uri, ActionInvocation invocation) throws Exception {
@@ -37,7 +37,7 @@ public class Struts2Result /* extends StrutsResultSupport */ {
         // request.setAttribute("TemplateFilter$servletContext", this.servletContext);
         // TemplateDispatcher.dispatch(this.templateContext, request, response, path);
     }
-    
+
 
     @Inject
     public void setReflectionProvider(ReflectionProvider reflectionProvider) {

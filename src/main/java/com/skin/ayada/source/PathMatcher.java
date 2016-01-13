@@ -319,12 +319,12 @@ public class PathMatcher {
         StringTokenizer stringTokenizer = new StringTokenizer(content, delimiters);
         while (stringTokenizer.hasMoreTokens()) {
             String token = stringTokenizer.nextToken().trim();
-            
+
             if (token.length() > 0) {
                 tokens.add(token);
             }
         }
-        
+
         String[] array = new String[tokens.size()];
         tokens.toArray(array);
         return array;

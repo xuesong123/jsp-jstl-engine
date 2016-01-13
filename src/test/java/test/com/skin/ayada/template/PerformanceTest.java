@@ -114,7 +114,7 @@ public class PerformanceTest {
     }
 
     /**
-     * 
+     *
      */
     public static void test4Java(int count) {
         try {
@@ -147,7 +147,7 @@ public class PerformanceTest {
     }
 
     /**
-     * 
+     *
      */
     public static void test5Java(int count) {
         try {
@@ -221,7 +221,7 @@ public class PerformanceTest {
             writer.write("<table border=\"");
             writer.write(border);
             writer.write("\">\n    <tr>\n        <th>&#160;</th></tr>\n");
-    
+
             for (String cell : data) {
                 writer.write("\r\n        <tr>\r\n            <th>");
                 writer.write(cell);

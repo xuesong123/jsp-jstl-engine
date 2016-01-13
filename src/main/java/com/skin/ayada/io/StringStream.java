@@ -106,20 +106,6 @@ public class StringStream {
     }
 
     /**
-     * @param length
-     * @return int
-     */
-    public int skip(int length) {
-        if(this.position + length <= this.length) {
-            this.position = this.position + length;
-            return length;
-        }
-        int index = this.position;
-        this.position = this.length;
-        return this.length - index;
-    }
-
-    /**
      * @param cbuf
      * @return int
      */
@@ -169,6 +155,20 @@ public class StringStream {
         }
         this.position = index;
         return new String(this.buffer, offset, index - offset);
+    }
+
+    /**
+     * @param length
+     * @return int
+     */
+    public int skip(int length) {
+        if(this.position + length <= this.length) {
+            this.position = this.position + length;
+            return length;
+        }
+        int index = this.position;
+        this.position = this.length;
+        return this.length - index;
     }
 
     /**

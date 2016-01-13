@@ -29,7 +29,7 @@ import com.skin.ayada.template.Template;
 import com.skin.ayada.template.TemplateContext;
 import com.skin.ayada.template.TemplateManager;
 import com.skin.ayada.util.DateUtil;
-import com.skin.ayada.util.StringUtil;
+import com.skin.ayada.util.Path;
 
 /**
  * <p>Title: TemplateDispatcher</p>
@@ -40,6 +40,7 @@ import com.skin.ayada.util.StringUtil;
  */
 public class TemplateDispatcher {
     private String home;
+    private String prefix;
     private String encoding;
     private String contentType;
     private ServletContext servletContext;
@@ -53,17 +54,22 @@ public class TemplateDispatcher {
      */
     public static TemplateDispatcher create(FilterConfig filterConfig) throws ServletException {
         String home = filterConfig.getInitParameter("home");
+        String prefix = filterConfig.getInitParameter("prefix");
         String encoding = filterConfig.getInitParameter("encoding");
         String contentType = filterConfig.getInitParameter("contentType");
         ServletContext servletContext = filterConfig.getServletContext();
 
         if(home == null) {
-            home = "/";
+            home = "contextPath:/";
         }
 
         if(home.startsWith("contextPath:")) {
             home = home.substring(12);
             home = servletContext.getRealPath(home);
+        }
+
+        if(prefix != null) {
+            prefix = Path.getStrictPath(prefix);
         }
 
         if(encoding == null) {
@@ -90,10 +96,10 @@ public class TemplateDispatcher {
         contextFactory.setTemplateFactoryClass(filterConfig.getInitParameter("templateFactoryClass"));
         contextFactory.setExpressionFactoryClass(filterConfig.getInitParameter("expressionFactoryClass"));
         TemplateContext templateContext = contextFactory.create();
-        TemplateManager.add(templateContext);
 
         TemplateDispatcher templateDispatcher = new TemplateDispatcher();
         templateDispatcher.setHome(home);
+        templateDispatcher.setPrefix(prefix);
         templateDispatcher.setEncoding(encoding);
         templateDispatcher.setContentType(contentType);
         templateDispatcher.setServletContext(servletContext);
@@ -108,17 +114,22 @@ public class TemplateDispatcher {
      */
     public static TemplateDispatcher create(ServletConfig servletConfig) throws ServletException {
         String home = servletConfig.getInitParameter("home");
+        String prefix = servletConfig.getInitParameter("prefix");
         String encoding = servletConfig.getInitParameter("encoding");
         String contentType = servletConfig.getInitParameter("contentType");
         ServletContext servletContext = servletConfig.getServletContext();
 
         if(home == null) {
-            home = "/";
+            home = "contextPath:/";
         }
 
         if(home.startsWith("contextPath:")) {
             home = home.substring(12);
             home = servletContext.getRealPath(home);
+        }
+
+        if(prefix != null) {
+            prefix = Path.getStrictPath(prefix);
         }
 
         if(encoding == null) {
@@ -149,6 +160,7 @@ public class TemplateDispatcher {
 
         TemplateDispatcher templateDispatcher = new TemplateDispatcher();
         templateDispatcher.setHome(home);
+        templateDispatcher.setPrefix(prefix);
         templateDispatcher.setEncoding(encoding);
         templateDispatcher.setContentType(contentType);
         templateDispatcher.setServletContext(servletContext);
@@ -163,26 +175,30 @@ public class TemplateDispatcher {
      * @throws IOException
      */
     public void dispatch(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String path = request.getRequestURI();
-        path = StringUtil.replace(path, "//", "/");
+        String path = Path.getStrictPath(request.getRequestURI());
 
-        if(this.home != null && this.home.length() > 1) {
-            if(path.startsWith(this.home)) {
-                path = path.substring(this.home.length());
+        if(this.prefix != null && this.prefix.length() > 1) {
+            if(path.startsWith(this.prefix)) {
+                path = path.substring(this.prefix.length());
             }
         }
 
         if(response.getContentType() == null) {
             response.setContentType(this.contentType);
         }
-        
+
         Template template = null;
 
         try {
             template = this.templateContext.getTemplate(path, this.encoding);
         }
         catch(Exception e) {
-            throw new ServletException(e);
+            if(e instanceof RuntimeException) {
+                throw (RuntimeException)e;
+            }
+            else {
+                throw new ServletException(e);
+            }
         }
 
         if(template == null) {
@@ -205,14 +221,18 @@ public class TemplateDispatcher {
                 logger.error(e.getMessage(), e);
             }
             else {
-                if(e instanceof ServletException) {
+                if(e instanceof RuntimeException) {
+                    throw (RuntimeException)e;
+                }
+                else if(e instanceof ServletException) {
                     throw (ServletException)e;
                 }
-
-                if(e instanceof IOException) {
+                else if(e instanceof IOException) {
                     throw (IOException)e;
                 }
-                throw new ServletException(e);
+                else {
+                    throw new ServletException(e);
+                }
             }
         }
     }
@@ -272,6 +292,20 @@ public class TemplateDispatcher {
      */
     public void setHome(String home) {
         this.home = home;
+    }
+
+    /**
+     * @return the prefix
+     */
+    public String getPrefix() {
+        return this.prefix;
+    }
+
+    /**
+     * @param prefix the prefix to set
+     */
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
     }
 
     /**

@@ -17,9 +17,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.skin.ayada.io.FileItem;
 import com.skin.ayada.source.DefaultSourceFactory;
 import com.skin.ayada.source.PathMatcher;
 import com.skin.ayada.source.SourceFactory;
+import com.skin.ayada.util.Path;
 
 /**
  * <p>Title: PrepareCompiler</p>
@@ -42,7 +44,7 @@ public class PrepareCompiler {
     }
 
     /**
-     * 
+     *
      */
     public void compile() {
         SourceFactory sourceFactory = this.templateContext.getSourceFactory();
@@ -57,20 +59,65 @@ public class PrepareCompiler {
     }
 
     /**
+     * non-recursion
      * @param dir
      */
     public void compile(String home, File dir) {
+        int index = 0;
+        List<FileItem> stack = new ArrayList<FileItem>();
+        stack.add(new FileItem(dir));
+
+        try {
+            while(!stack.isEmpty()) {
+                index = stack.size() - 1;
+                FileItem fileItem = stack.get(index);
+                String path = Path.getRelativePath(home, fileItem.getAbsolutePath());
+
+                if(!this.match(this.excludes, path)) {
+                    if(fileItem.isDirectory()) {
+                        if(fileItem.getFlag() == 0) {
+                            fileItem.setFlag(1);
+                            File[] files = fileItem.getFile().listFiles();
+
+                            for(int j = files.length - 1; j > -1; j--) {
+                                stack.add(new FileItem(files[j]));
+                            }
+                        }
+                        else {
+                            stack.remove(index);
+                        }
+                    }
+                    else {
+                        stack.remove(index);
+                        logger.info("compile - home: {}, file: {}", home, path);
+                        this.templateContext.getTemplate(path);
+                    }
+                }
+                else {
+                    stack.remove(index);
+                    logger.info("exclude - home: {}, file: {}", home, path);
+                }
+            }
+        }
+        catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * recursion process
+     * @param dir
+     */
+    public void compile2(String home, File dir) {
         File[] files = dir.listFiles();
 
-        for(File file : files) {
-            try {
-                String path = file.getCanonicalPath();
-                path = path.replace('\\', '/');
-                path = path.substring(home.length());
+        try {
+            for(File file : files) {
+                String path = Path.getRelativePath(home, file.getAbsolutePath());
 
                 if(!this.match(this.excludes, path)) {
                     if(file.isDirectory()) {
-                        compile(home, file);
+                        compile2(home, file);
                     }
                     else {
                         logger.info("compile - home: {}, file: {}", home, path);
@@ -80,10 +127,10 @@ public class PrepareCompiler {
                 else {
                     logger.info("exclude - home: {}, file: {}", home, path);
                 }
-            } catch (Exception e) {
-                logger.error(e.getMessage(), e);
-                return;
             }
+        }
+        catch (Exception e) {
+            logger.error(e.getMessage(), e);
         }
     }
 

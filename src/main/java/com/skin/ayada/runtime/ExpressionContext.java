@@ -89,6 +89,62 @@ public interface ExpressionContext {
 
     /**
      * @param out
+     * @param b
+     * @throws IOException
+     */
+    public void print(Writer out, boolean b) throws IOException;
+
+    /**
+     * @param out
+     * @param c
+     * @throws IOException
+     */
+    public void print(Writer out, char c) throws IOException;
+
+    /**
+     * @param out
+     * @param b
+     * @throws IOException
+     */
+    public void print(Writer out, byte b) throws IOException;
+
+    /**
+     * @param out
+     * @param s
+     * @throws IOException
+     */
+    public void print(Writer out, short s) throws IOException;
+
+    /**
+     * @param out
+     * @param i
+     * @throws IOException
+     */
+    public void print(Writer out, int i) throws IOException;
+
+    /**
+     * @param out
+     * @param f
+     * @throws IOException
+     */
+    public void print(Writer out, float f) throws IOException;
+
+    /**
+     * @param out
+     * @param d
+     * @throws IOException
+     */
+    public void print(Writer out, double d) throws IOException;
+
+    /**
+     * @param out
+     * @param l
+     * @throws IOException
+     */
+    public void print(Writer out, long l) throws IOException;
+
+    /**
+     * @param out
      * @param content
      * @throws IOException
      */

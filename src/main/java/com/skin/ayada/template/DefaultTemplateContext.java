@@ -14,7 +14,6 @@ import java.io.Writer;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.concurrent.CancellationException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
@@ -131,7 +130,12 @@ public class DefaultTemplateContext implements TemplateContext {
                             return templateFactory.create(sourceFactory, realPath, encoding);
                         }
                         catch(Exception e) {
-                            throw new RuntimeException(e);
+                            if(e instanceof RuntimeException) {
+                                throw (RuntimeException)e;
+                            }
+                            else {
+                                throw new RuntimeException(e);
+                            }
                         }
                     }
                 };
@@ -149,13 +153,20 @@ public class DefaultTemplateContext implements TemplateContext {
             try {
                 template = f.get();
             }
-            catch(CancellationException e) {
-                this.cache.remove(realPath, f);
-                throw e;
-            }
             catch(Exception e) {
                 this.cache.remove(realPath, f);
-                throw e;
+                Throwable t = e.getCause();
+
+                if(t == null) {
+                    throw e;
+                }
+
+                if(t instanceof Exception) {
+                    throw (Exception)t;
+                }
+                else {
+                    throw new Exception(t);
+                }
             }
 
             if(template != null) {

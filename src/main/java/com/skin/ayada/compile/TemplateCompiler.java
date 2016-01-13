@@ -273,6 +273,7 @@ public class TemplateCompiler extends PageCompiler {
             }
         }
         else if(n == '%') {
+            this.stream.read();
             this.jspCompile(stack, list);
         }
         else if(n != '!') {
@@ -488,6 +489,117 @@ public class TemplateCompiler extends PageCompiler {
     }
 
     /**
+     * @param stack
+     * @param list
+     */
+    private void jspCompile(Stack<Node> stack, List<Node> list) throws Exception {
+        int i = this.stream.read();
+
+        if(i == -1) {
+            throw new Exception("at line #" + this.lineNumber + " The 'jsp:scriptlet' direction must be ends with '%>'");
+        }
+
+        if(i == '@') {
+            if(list.size() > 0) {
+                this.clip(list.get(list.size() - 1), 1);
+            }
+
+            String nodeName = null;
+            int ln = this.getLineNumber();
+            Map<String, String> attributes = this.getAttributes();
+
+            if(this.stream.peek(-2) != '%' && this.stream.peek(-1) != '%') {
+                throw new Exception("at line #" + this.lineNumber + " The 'jsp:directive' direction must be ends with '%>'");
+            }
+
+            if(attributes.get("page") != null) {
+                nodeName = NodeType.JSP_DIRECTIVE_PAGE_NAME;
+                attributes.remove("page");
+            }
+            else if(attributes.get("taglib") != null) {
+                nodeName = NodeType.JSP_DIRECTIVE_TAGLIB_NAME;
+            }
+            else if(attributes.get("include") != null) {
+                nodeName = NodeType.JSP_DIRECTIVE_INCLUDE_NAME;
+                String path = attributes.get("file");
+                this.include(stack, list, path, null, null);
+            }
+            else {
+                throw new Exception("Unknown jsp directive at line #" + this.lineNumber + " - <%@ " + NodeUtil.toString(attributes) + "%>");
+            }
+
+            if(this.ignoreJspTag == false) {
+                JspDirective node = JspDirective.getInstance(nodeName);
+                node.setOffset(list.size());
+                node.setLineNumber(ln);
+                node.setAttributes(attributes);
+                node.setClosed(NodeType.SELF_CLOSED);
+                this.pushNode(stack, list, node);
+                this.popNode(stack, list, nodeName);
+            }
+        }
+        else if(i == '!'){
+            int ln = this.lineNumber;
+            String scriptlet = this.readScriptlet();
+
+            if(list.size() > 0) {
+                this.clip(list.get(list.size() - 1), 1);
+            }
+
+            if(!this.isEmpty(scriptlet)) {
+                JspDeclaration node = new JspDeclaration();
+                node.append(scriptlet);
+                node.setOffset(list.size());
+                node.setLineNumber(ln);
+                node.setClosed(NodeType.PAIR_CLOSED);
+                this.pushNode(stack, list, node);
+                this.popNode(stack, list, node.getNodeName());
+            }
+        }
+        else if(i == '=') {
+            int ln = this.lineNumber;
+            String expression = this.readScriptlet();
+
+            if(!this.isEmpty(expression)) {
+                JspExpression node = new JspExpression();
+                node.append(expression);
+                node.setOffset(list.size());
+                node.setLineNumber(ln);
+                node.setClosed(NodeType.PAIR_CLOSED);
+                this.pushNode(stack, list, node);
+                this.popNode(stack, list, node.getNodeName());
+            }
+            else {
+                throw new Exception("at line #" + this.lineNumber + " Invalid jsp expression!");
+            }
+        }
+        else {
+            this.stream.back();
+
+            int ln = this.lineNumber;
+            String scriptlet = this.readScriptlet();
+
+            if(list.size() > 0) {
+                this.clip(list.get(list.size() - 1), 1);
+            }
+
+            if(this.ignoreJspTag) {
+                return;
+            }
+
+            if(!this.isEmpty(scriptlet)) {
+                JspScriptlet node = new JspScriptlet();
+                node.append(scriptlet);
+                node.setOffset(list.size());
+                node.setLineNumber(ln);
+                node.setClosed(NodeType.PAIR_CLOSED);
+                this.pushNode(stack, list, node);
+                this.popNode(stack, list, node.getNodeName());
+            }
+        }
+    }
+
+    /**
      * @param nodeName
      * @return boolean
      */
@@ -517,6 +629,34 @@ public class TemplateCompiler extends PageCompiler {
             i++;
         }
         return (i > 0 ? source.substring(i) : source);
+    }
+
+    /**
+     * @param content
+     * @return boolean
+     */
+    public boolean isEmpty(String content) {
+        int i = 0;
+        int length = content.length();
+
+        while(i < length && content.charAt(i) <= ' ') {
+            i++;
+        }
+        return (i >= length);
+    }
+
+    /**
+     * @param content
+     * @return boolean
+     */
+    public boolean isEmpty(StringBuilder content) {
+        int i = 0;
+        int length = content.length();
+
+        while(i < length && content.charAt(i) <= ' ') {
+            i++;
+        }
+        return (i >= length);
     }
 
     /**
@@ -560,6 +700,32 @@ public class TemplateCompiler extends PageCompiler {
                 break;
             }
         }
+    }
+
+    /**
+     * @return String
+     */
+    public String readScriptlet() {
+        int i = 0;
+        int ln = this.lineNumber;
+        StringBuilder buffer = new StringBuilder();
+
+        this.skipCRLF();
+        while((i = this.stream.read()) != -1) {
+            if(i == '%' && this.stream.peek() == '>') {
+                this.stream.read();
+                break;
+            }
+            if(i == '\n') {
+                this.lineNumber++;
+            }
+            buffer.append((char)i);
+        }
+
+        if(this.stream.peek(-2) != '%' && this.stream.peek(-1) != '%') {
+            throw new RuntimeException("at line #" + ln + " The 'jsp:directive' direction must be ends with '%>'");
+        }
+        return buffer.toString();
     }
 
     /**
@@ -680,122 +846,6 @@ public class TemplateCompiler extends PageCompiler {
             return true;
         }
         return false;
-    }
-
-    /**
-     * @param stack
-     * @param list
-     */
-    private void jspCompile(Stack<Node> stack, List<Node> list) throws Exception {
-        int i = this.stream.read();
-        i = this.stream.read();
-
-        if(i == '@') {
-            if(list.size() > 0) {
-                this.clip(list.get(list.size() - 1), 1);
-            }
-
-            i = this.stream.read();
-            int lineNumber = this.getLineNumber();
-            String nodeName = null;
-            Map<String, String> attributes = this.getAttributes();
-
-            if(attributes.get("page") != null) {
-                nodeName = NodeType.JSP_DIRECTIVE_PAGE_NAME;
-                attributes.remove("page");
-            }
-            else if(attributes.get("taglib") != null) {
-                nodeName = NodeType.JSP_DIRECTIVE_TAGLIB_NAME;
-            }
-            else if(attributes.get("include") != null) {
-                nodeName = NodeType.JSP_DIRECTIVE_INCLUDE_NAME;
-                String path = attributes.get("file");
-                this.include(stack, list, path, null, null);
-            }
-            else {
-                throw new Exception("Unknown jsp directive at line #" + this.lineNumber + " - <%@ " + NodeUtil.toString(attributes));
-            }
-
-            if(this.ignoreJspTag == false) {
-                JspDirective node = JspDirective.getInstance(nodeName);
-                node.setOffset(list.size());
-                node.setLineNumber(lineNumber);
-                node.setAttributes(attributes);
-                node.setClosed(NodeType.SELF_CLOSED);
-                this.pushNode(stack, list, node);
-                this.popNode(stack, list, nodeName);
-            }
-            this.skipCRLF();
-        }
-        else {
-            int t = i;
-            StringBuilder buffer = new StringBuilder();
-
-            if(i != '!' && i != '=' && i != '\r' && i != '\n') {
-                buffer.append((char)i);
-            }
-
-            if(i == '\n') {
-                this.lineNumber++;
-            }
-
-            this.skipCRLF();
-            int ln = this.lineNumber;
-
-            while((i = this.stream.read()) != -1) {
-                if(i == '%' && this.stream.peek() == '>') {
-                    this.stream.read();
-                    break;
-                }
-                if(i == '\n') {
-                    this.lineNumber++;
-                }
-                buffer.append((char)i);
-            }
-
-            if(this.ignoreJspTag) {
-                this.skipCRLF();
-                return;
-            }
-
-            if(t == '!') {
-                if(list.size() > 0) {
-                    this.clip(list.get(list.size() - 1), 1);
-                }
-
-                JspDeclaration node = new JspDeclaration();
-                node.append(buffer.toString());
-                node.setOffset(list.size());
-                node.setLineNumber(ln);
-                node.setClosed(NodeType.PAIR_CLOSED);
-                this.pushNode(stack, list, node);
-                this.popNode(stack, list, node.getNodeName());
-                this.skipCRLF();
-            }
-            else if(t == '=') {
-                JspExpression node = new JspExpression();
-                node.append(buffer.toString());
-                node.setOffset(list.size());
-                node.setLineNumber(ln);
-                node.setClosed(NodeType.PAIR_CLOSED);
-                this.pushNode(stack, list, node);
-                this.popNode(stack, list, node.getNodeName());
-            }
-            else {
-                if(list.size() > 0) {
-                    this.clip(list.get(list.size() - 1), 1);
-                }
-
-                JspScriptlet node = new JspScriptlet();
-                node.append(buffer.toString());
-                node.setOffset(list.size());
-                node.setLineNumber(ln);
-                node.setClosed(NodeType.PAIR_CLOSED);
-                this.pushNode(stack, list, node);
-                this.popNode(stack, list, node.getNodeName());
-                this.skipCRLF();
-            }
-        }
     }
 
     /**
@@ -1098,13 +1148,24 @@ public class TemplateCompiler extends PageCompiler {
             Node node = list.get(i);
             int nodeType = node.getNodeType();
 
-            if(nodeType != NodeType.TAG_NODE) {
-                continue;
+            if(nodeType == NodeType.TAG_NODE) {
+                TagInfo tagInfo = tagLibrary.getTagInfo(node.getNodeName());
+
+                if(tagInfo.getIgnoreWhitespace()) {
+                    if(i > 0) {
+                        this.clip(list.get(i - 1), 1);
+                    }
+
+                    if(i + 1 < size) {
+                        this.clip(list.get(i + 1), 2);
+                    }
+                }
             }
-
-            TagInfo tagInfo = tagLibrary.getTagInfo(node.getNodeName());
-
-            if(tagInfo.getIgnoreWhitespace()) {
+            else if(nodeType == NodeType.JSP_DECLARATION
+                    || nodeType == NodeType.JSP_SCRIPTLET
+                    || nodeType == NodeType.JSP_DIRECTIVE_PAGE
+                    || nodeType == NodeType.JSP_DIRECTIVE_TAGLIB
+                    || nodeType == NodeType.JSP_DIRECTIVE_INCLUDE) {
                 if(i > 0) {
                     this.clip(list.get(i - 1), 1);
                 }
@@ -1112,6 +1173,9 @@ public class TemplateCompiler extends PageCompiler {
                 if(i + 1 < size) {
                     this.clip(list.get(i + 1), 2);
                 }
+            }
+            else {
+                continue;
             }
         }
     }
@@ -1134,7 +1198,7 @@ public class TemplateCompiler extends PageCompiler {
 
             for(j = buffer.length() - 1; j > -1; j--) {
                 c = buffer.charAt(j);
-    
+
                 if(c == ' ' || c == '\t') {
                     continue;
                 }
@@ -1152,8 +1216,12 @@ public class TemplateCompiler extends PageCompiler {
             for(int length = buffer.length(); j < length; j++) {
                 c = buffer.charAt(j);
 
-                if(c == '\r' || c == '\n') {
+                if(c == '\r') {
                     continue;
+                }
+                else if(c == '\n') {
+                    j++;
+                    break;
                 }
                 else {
                     break;

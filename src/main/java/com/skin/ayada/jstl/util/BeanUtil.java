@@ -103,6 +103,33 @@ public class BeanUtil {
     }
 
     /**
+     * @param value
+     * @param elements
+     * @return boolean
+     */
+    public boolean exists(Object value, Object ... elements) {
+        if(value == null || elements == null || elements.length < 1) {
+            return false;
+        }
+
+        for(int i = 0, length = elements.length; i < length; i++) {
+            if(value.equals(elements[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param value
+     * @param elements
+     * @return boolean
+     */
+    public boolean notExists(Object value, Object ... elements) {
+        return !this.exists(value, elements);
+    }
+
+    /**
      * @param source
      * @param target
      * @return boolean

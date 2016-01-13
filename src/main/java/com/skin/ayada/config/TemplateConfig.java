@@ -74,4 +74,11 @@ public class TemplateConfig {
     public static boolean getFashJstl() {
         return instance.getBoolean("ayada.compile.fast-jstl");
     }
+
+    /**
+     * @return String
+     */
+    public static String getJavaTemplate() {
+        return instance.getString("ayada.compile.java-template");
+    }
 }

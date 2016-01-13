@@ -1121,8 +1121,8 @@
         <p>Ayada的配置项只有5个：</p>
         <div class="sk-code">
             <pre class="brush: bash;">
-                # 默认的模板文件加载器。
-                ayada.compile.source-factory=com.skin.ayada.template.DefaultSourceFactory
+                # 默认的编译模版。非必选项，在编译模式下，使用该模板生成java文件，如果没有配置使用默认值。
+                ayada.compile.java-template=com/skin/ayada/compile/class.jsp
 
                 # 模板文件扩展名，其他扩展名将被认为是静态文本。
                 ayada.compile.source-pattern=jsp,jspf,jspx,tpl
@@ -1137,6 +1137,7 @@
                 ayada.compile.fast-jstl=true
             </pre>
         </div>
+        <p>注：所有的配置项都不是必选项，只有在需要修改配置项的时候才需要存在配置文件，否则连配置文件都不需要。</p>
     </div>
     <h2 class="sk-h2">7 全局变量和工具类</h2>
     <div class="sk-content">
@@ -1208,7 +1209,7 @@
     <h2 class="sk-h2">8 缺省的timeZone和loacl</h2>
     <div class="sk-content">
         <p>Ayada支持设置默认的timeZone和loacl，pageContext中都包含对应的get/set方法，这两个参数在国际化中使用。</p>
-        <p>当然你也可以通过fmt:setTimeZone和fmt:setLocale标签重置这些值。fmt:setTimeZone和fmt:setLocale标签只针对当前页面生效。</p>
+        <p>也可以通过fmt:setTimeZone和fmt:setLocale标签重置这些值。fmt:setTimeZone和fmt:setLocale标签只针对当前页面生效。</p>
         <p>对应的配置文件是：ayada-tools.properties，需要放在应用的classpath下。</p>
         <div class="sk-code">
             <pre class="brush: bash;">

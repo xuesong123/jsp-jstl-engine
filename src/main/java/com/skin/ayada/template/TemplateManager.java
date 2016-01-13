@@ -79,11 +79,15 @@ public class TemplateManager {
         }
 
         if(home != null) {
-            if(cache.get(home) == null) {
+            TemplateContext context = cache.get(home);
+
+            if(context == null) {
                 cache.put(home, templateContext);
             }
             else {
-                throw new RuntimeException("context already exists !");
+                if(context != templateContext) {
+                    throw new RuntimeException("context already exists !");
+                }
             }
         }
     }

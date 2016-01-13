@@ -39,7 +39,7 @@ public class PrepareCompilerTest {
             jspTemplateFactory.setWork(new File("work").getAbsolutePath());
             jspTemplateFactory.setClassPath(classPath);
             jspTemplateFactory.setIgnoreJspTag(false);
-    
+
             templateContext.setTemplateFactory(jspTemplateFactory);
             templateContext.getTemplateFactory().setIgnoreJspTag(false);
             templateContext.getSourceFactory().setSourcePattern("*");

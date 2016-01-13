@@ -165,14 +165,14 @@ public class WebUtil {
             if(path == null) {
                 return null;
             }
-            
+
             File file = new File(path);
             File root = getParent(file, "/WEB-INF/classes");
-            
+
             if(root == null) {
                 root = getParent(file, "/WEB-INF/lib");
             }
-            
+
             if(root != null) {
                 return Path.getStrictPath(root.getCanonicalPath());
             }
@@ -192,7 +192,7 @@ public class WebUtil {
         try {
             String path = Path.getStrictPath(file.getCanonicalPath());
             int k = path.indexOf(name);
-    
+
             if(k > -1) {
                 return new File(path.substring(0, k));
             }

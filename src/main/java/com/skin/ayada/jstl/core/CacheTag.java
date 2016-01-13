@@ -75,7 +75,7 @@ public class CacheTag extends BodyTagSupport {
                 }
                 CacheTag.setContent(this.cache, this.getKey(), this.getExpires(), content);
             }
-    
+
             try {
                 this.pageContext.getOut().write(content);
             }
@@ -126,7 +126,7 @@ public class CacheTag extends BodyTagSupport {
             logger.error(e.getMessage(), e);
         }
     }
-    
+
     /**
      * @return the cache
      */

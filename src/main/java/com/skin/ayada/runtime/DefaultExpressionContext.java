@@ -210,6 +210,86 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
     }
 
     /**
+     * @param out
+     * @param b
+     * @throws IOException
+     */
+    @Override
+    public void print(Writer out, boolean b) throws IOException {
+        out.write(String.valueOf(b));
+    }
+
+    /**
+     * @param out
+     * @param c
+     * @throws IOException
+     */
+    @Override
+    public void print(Writer out, char c) throws IOException {
+        out.write(String.valueOf(c));
+    }
+
+    /**
+     * @param out
+     * @param b
+     * @throws IOException
+     */
+    @Override
+    public void print(Writer out, byte b) throws IOException {
+        out.write(String.valueOf(b));
+    }
+
+    /**
+     * @param out
+     * @param s
+     * @throws IOException
+     */
+    @Override
+    public void print(Writer out, short s) throws IOException {
+        out.write(String.valueOf(s));
+    }
+
+    /**
+     * @param out
+     * @param i
+     * @throws IOException
+     */
+    @Override
+    public void print(Writer out, int i) throws IOException {
+        out.write(String.valueOf(i));
+    }
+
+    /**
+     * @param out
+     * @param f
+     * @throws IOException
+     */
+    @Override
+    public void print(Writer out, float f) throws IOException {
+        out.write(String.valueOf(f));
+    }
+
+    /**
+     * @param out
+     * @param d
+     * @throws IOException
+     */
+    @Override
+    public void print(Writer out, double d) throws IOException {
+        out.write(String.valueOf(d));
+    }
+
+    /**
+     * @param out
+     * @param l
+     * @throws IOException
+     */
+    @Override
+    public void print(Writer out, long l) throws IOException {
+        out.write(String.valueOf(l));
+    }
+
+    /**
      * @param content
      * @throws IOException
      */
@@ -233,11 +313,16 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
     @Override
     public void print(Writer out, Object content) throws IOException {
         if(content != null) {
-            if(this.encoder != null) {
-                out.write(this.encoder.encode(content.toString()));
+            if(content instanceof Number || content instanceof Boolean) {
+                out.write(content.toString());
             }
             else {
-                out.write(content.toString());
+                if(this.encoder != null) {
+                    out.write(this.encoder.encode(content.toString()));
+                }
+                else {
+                    out.write(content.toString());
+                }
             }
         }
     }

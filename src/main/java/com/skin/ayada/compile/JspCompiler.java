@@ -10,9 +10,6 @@
  */
 package com.skin.ayada.compile;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.util.Date;
@@ -24,8 +21,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.skin.ayada.Version;
+import com.skin.ayada.config.TemplateConfig;
 import com.skin.ayada.io.CharBuffer;
 import com.skin.ayada.io.ChunkWriter;
+import com.skin.ayada.resource.ClassPathResource;
 import com.skin.ayada.statement.Expression;
 import com.skin.ayada.statement.Node;
 import com.skin.ayada.statement.NodeType;
@@ -55,10 +54,12 @@ import com.skin.ayada.util.TagUtil;
  */
 public class JspCompiler {
     private boolean fastJstl = true;
-    private static final String JAVA_TEMPLATE = JspCompiler.getJavaTemplate("class.jsp");
+    private static final String JAVA_TEMPLATE = JspCompiler.getJavaTemplate();
     private static final Logger logger = LoggerFactory.getLogger(JspCompiler.class);
 
-    public String compile(Template template, String className, String packageName) {
+    public String compile(Template template, String packageName, String className) {
+        logger.info("compile: {}.{}", packageName, className);
+
         Date date = new Date();
         String jspDirective = this.getJspDirective(template);
         String jspDeclaration = this.getJspDeclaration(template);
@@ -1550,7 +1551,7 @@ public class JspCompiler {
         if(node != null) {
             String tagClassName = ((TagNode)node).getTagClassName();
             int k = tagClassName.lastIndexOf(".");
-    
+
             if(k > -1) {
                 return this.getVariableName(node, "_jsp_" + tagClassName.substring(k + 1) + "_");
             }
@@ -1652,38 +1653,17 @@ public class JspCompiler {
     }
 
     /**
-     * @param resource
      * @return String
      */
-    public static String getJavaTemplate(String resource) {
-        InputStreamReader inputStreamReader = null;
-        InputStream inputStream = JspCompiler.class.getResourceAsStream(resource);
+    public static String getJavaTemplate() {
+        String resource = TemplateConfig.getJavaTemplate();
 
-        try {
-            StringBuilder buffer = new StringBuilder(2048);
-            inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
-
-            int length = 0;
-            char[] cbuf = new char[2048];
-
-            while((length = inputStreamReader.read(cbuf)) > 0) {
-                buffer.append(cbuf, 0, length);
-            }
-            return buffer.toString();
+        if(resource != null) {
+            return ClassPathResource.getResourceAsString(resource);
         }
-        catch(IOException e) {
-            logger.warn(e.getMessage(), e);
+        else {
+            return ClassPathResource.getResourceAsString("com/skin/ayada/compile/class.jsp");
         }
-        finally {
-            if(inputStream != null) {
-                try {
-                    inputStream.close();
-                }
-                catch(IOException e) {
-                }
-            }
-        }
-        return null;
     }
 
     /**

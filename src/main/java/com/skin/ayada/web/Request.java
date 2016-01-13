@@ -126,7 +126,7 @@ public class Request {
      * @param request
      * @param response
      * @return Writer
-     * @throws IOException 
+     * @throws IOException
      */
     public static Writer getWriter(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Writer writer = (Writer)(request.getAttribute(JSP_WRITER));

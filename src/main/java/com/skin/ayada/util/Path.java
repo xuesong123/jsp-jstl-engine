@@ -38,20 +38,20 @@ public class Path {
         System.out.println("result: " + Path.join("mytest/mytest", ".\\a\\..\\..\\..\\..\\..\\b.txt"));
 
         /**
-         * 
+         *
          */
         System.out.println("result: " + Path.join("/home/mytest", ""));
         System.out.println("result: " + Path.join("mytest/mytest", ""));
         System.out.println("result: " + Path.join("////////", ""));
 
         /**
-         * 
+         *
          */
         System.out.println("contains: " + Path.contains("D:\\workspace2/ayada\\webapp", "\\..\\outTest.jsp"));
         System.out.println("contains: " + Path.contains("D:\\workspace2/ayada\\webapp", "\\outTest.jsp"));
-        
+
         /**
-         * 
+         *
          */
         System.out.println("strictPath: " + Path.getStrictPath("D:"));
         System.out.println("strictPath: " + Path.getStrictPath("D:\\"));
@@ -63,7 +63,7 @@ public class Path {
         System.out.println("strictPath: " + Path.getStrictPath("///////"));
 
         /**
-         * 
+         *
          */
         System.out.println("parent: " + Path.getParent("D:\\"));
         System.out.println("parent: " + Path.getParent("D:\\a.html"));
@@ -74,6 +74,11 @@ public class Path {
         System.out.println("parent: " + Path.getParent("///////a/b/c/"));
         System.out.println("parent: " + Path.getParent("////////"));
         System.out.println("parent: " + Path.getParent("\\\\\\\\"));
+
+        /**
+         *
+         */
+        System.out.println(Path.contains("D:\\workspace2\\generator\\webapp\\template", "/template/generator/frame.jsp"));
     }
 
     /**
@@ -103,7 +108,7 @@ public class Path {
      */
     public static String getParent(String path) {
         List<String> parts = split(path);
-        
+
         if(parts.size() > 0) {
             if(parts.size() == 1) {
                 String root = parts.get(0);
@@ -116,7 +121,7 @@ public class Path {
                 }
             }
             else {
-                parts.remove(parts.size() - 1);    
+                parts.remove(parts.size() - 1);
             }
             return join(parts);
         }
@@ -146,6 +151,21 @@ public class Path {
             }
         }
         return buffer.toString();
+    }
+
+    /**
+     * @param parent
+     * @param child
+     * @return String
+     */
+    public static String getRelativePath(String parent, String child) {
+        String full = join(child, "");
+        String temp = join(parent, "");
+
+        if(full.startsWith(temp)) {
+            return full.substring(temp.length());
+        }
+        return null;
     }
 
     /**
@@ -204,7 +224,7 @@ public class Path {
             buffer.deleteCharAt(buffer.length() - 1);
         }
         return buffer.toString();
-    } 
+    }
 
     /**
      * @param stack
@@ -218,7 +238,7 @@ public class Path {
             if(name.equals("..")) {
                 if(stack.size() > 0) {
                     String parent = stack.get(stack.size() - 1);
-    
+
                     if(!parent.endsWith(":")) {
                         stack.remove(stack.size() - 1);
                     }

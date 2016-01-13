@@ -158,7 +158,7 @@ public class JspTemplateFactory extends TemplateFactory {
         boolean fastJstl = TemplateConfig.getFashJstl();
         JspCompiler jspCompiler = new JspCompiler();
         jspCompiler.setFastJstl(fastJstl);
-        String source = jspCompiler.compile(template, simpleName, packageName);
+        String source = jspCompiler.compile(template, packageName, simpleName);
         this.write(source, srcFile);
         this.write(this.getTemplateDescription(template), tplFile);
         File[] files = classFile.getParentFile().listFiles();

@@ -122,7 +122,7 @@ public class TemplateContextFactory {
                 logger.info("templateFactory: " + templateFactory.getClass().getName());
                 logger.info("expressionFactory: " + expressionFactory.getClass().getName());
             }
-    
+
             TemplateContext templateContext = new DefaultTemplateContext();
             templateContext.setSourceFactory(sourceFactory);
             templateContext.setTemplateFactory(templateFactory);
