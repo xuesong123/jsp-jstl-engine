@@ -76,6 +76,14 @@
                         &lt;param-value&gt;/template&lt;/param-value&gt;
                     &lt;/init-param&gt;
                     &lt;init-param&gt;
+                        &lt;param-name&gt;prefix&lt;/param-name&gt;
+                        &lt;param-value&gt;/template&lt;/param-value&gt;
+                    &lt;/init-param&gt;
+                    &lt;init-param&gt;
+                        &lt;param-name&gt;encoding&lt;/param-name&gt;
+                        &lt;param-value&gt;utf-8&lt;/param-value&gt;
+                    &lt;/init-param&gt;
+                    &lt;init-param&gt;
                         &lt;param-name&gt;template-factory&lt;/param-name&gt;
                         &lt;param-value&gt;com.skin.ayada.template.JspTemplateFactory&lt;/param-value&gt;
                     &lt;/init-param&gt;
@@ -151,7 +159,7 @@
     </div>
     <h3 class="sk-h3">3.1 指令系统</h2>
     <div class="sk-content">
-        <p>Ayada的指令共有6个，都是编译指令，只在编译期生效。所有的编译指令都会删除掉指令前的空格和指令后的回车。</p>
+        <p>Ayada的指令共有6个，都是编译指令，只在编译期生效。所有的编译指令都会删除掉指令前的空格和指令后的回车。关于如何处理标签和指令的空格和回车请参考下文相关章节。</p>
     </div>
 
     <h4 class="sk-h4">t:taglib 导入标签库</h4>
@@ -188,7 +196,7 @@
             <p>name: 必选，标签名。</p>
             <p>tag-class: 必选，标签实现类。</p>
             <p>body-content: 可选，标签内容类型，默认是jsp。</p>
-            <p>ignore-whitespace: 可选，是否忽略前导空格和后缀回车。前导空格包括空格和\t，不包括回车。后缀回车包括\r和\n，不包括回车和\t。默认为true。</p>
+            <p>ignore-whitespace: 可选，是否忽略前导空格和后缀回车。前导空格包括空格和\t，不包括回车。后缀回车包括\r和\n，不包括空格和\t。默认为true。</p>
             <p>description: 可选，标签描述 。</p>
         </div>
     </div>
@@ -200,11 +208,14 @@
                 bodyContent="tagdependent" ignoreWhitespace="true" description="if标签"/&gt;
             </pre>
         </div>
-        <p>bodyContent - 取值只能是：tagdependent|jsp|empty</p>
+        <p>className - 可选，如果为空则使用之前已经导入过的该标签的class，className为空适合重新定义bodyContent。</p>
+        <p>bodyContent - 可选，如果为空则使用默认值jsp。</p>
+        <p>ignoreWhitespace - 可选，默认为true。</p>
+        <p>bodyContent取值只能是：tagdependent|jsp|empty</p>
         <p>jsp - 子节点可以是任何内容。这个也是默认值。</p>
         <p>tagdependent - 子节点只能是标签，任何文本内容都会在编译期被忽略掉。</p>
         <p>empty - 不允许存在任何子节点。节点内的任何内容都会在编译期被忽略掉。</p>
-        <p>ignoreWhitespace - 是否忽略前导空格和后缀回车。前导空格包括空格和\t，不包括回车。后缀回车包括\r和\n，不包括回车和\t。</p>
+        <p>ignoreWhitespace - 是否忽略前导空格和后缀回车。前导空格包括空格和\t，不包括回车。后缀回车包括\r和\n，不包括空格和\t。</p>
     </div>
 
     <h4 class="sk-h4">t:rename 将已经导入的标签重命名为新的名字</h4>
@@ -225,7 +236,7 @@
             </pre>
         </div>
         <p>file - 必选 文件路径。</p>
-        <p>type - 可选 取值: script|static，script: 被包含的文件是将会作为模板文件编译，static: 被包含文件作为普通的文本内容，无论它是什么内容。此处指定的type优先级高于配置文件指定的source-pattern。如果未指定type，将根据扩展名自动处理。</p>
+        <p>type - 可选 取值: script|static，script: 被包含的文件作为模板文件编译，static: 被包含文件作为普通的文本内容，无论它是什么内容。此处指定的type优先级高于配置文件指定的source-pattern。如果未指定type，将根据扩展名自动处理。</p>
         <p>encoding - 可选 文件编码，如果不指定将使用TemplateContext指定的文件编码。</p>
         <p>t:include 指令是编译指令， 在编译期包含一个文件，先包含进来再一起编译。注意与系统提供的c:include，c:invoke，c:action区别。</p>
         <p>t:include 相当于jsp中的include指令，c:include相当于jsp中的jsp:include标签。t:include是指令，c:include是标签。</p>
@@ -240,7 +251,7 @@
             &lt;t:text escape="xml"&gt;&lt;c:if test="${1==1}"&gt;hello&lt;/c:if&gt;&lt;/t:text&gt;
             </pre>
         </div>
-        <p>escape - 可选 是否做xml编码。</p>
+        <p>escape - 可选，是否做xml编码。是在编译期编码。</p>
         <p>t:text 其中的任何内容都作为文本处理，不允许嵌套。</p>
     </div>
 
@@ -264,7 +275,7 @@
                     <td style="width: 200px">标签</td>
                     <td style="width: 200px">实现</td>
                     <td style="width: 200px">类型</td>
-                    <td style="width: 200px">示例</td>
+                    <td style="width: 200px">说明&示例</td>
                 </tr>
                 <tr>
                     <td>c:dependent</td>
@@ -373,6 +384,20 @@
                     <td><p>暂不支持的功能。</p></td>
                 </tr>
                 <tr>
+                    <td>c:join</td>
+                    <td>com.skin.ayada.jstl.core.JoinTag</td>
+                    <td>empty</td>
+                    <td>
+                        <p>items - 数组，或者逗号分隔字符串，或者list，或者iterator，或者map。遵循forEach标签的items定义。如果指定了items就不能再指定value和repeat，二者互斥。</p>
+                        <p>value - 任何数据类型，要重复的内容。</p>
+                        <p>repeat - 重复次数。</p>
+                        <p>separator - 分隔符。</p>
+                        <p>nullable - 是否显示null值，只针对指定了items时有效。</p>
+                        <p>例如：&lt;c:join value="?" repeat="5" separator=", "/&gt;</p>
+                        <p>输出：?, ?, ?, ?, ?</p>
+                    </td>
+                </tr>
+                <tr>
                     <td>c:comment</td>
                     <td>com.skin.ayada.jstl.core.CommentTag</td>
                     <td>empty</td>
@@ -406,6 +431,8 @@
                     <td>jsp</td>
                     <td>
                         <p>实现了BodyTagSupport接口</p>
+                        <p>var - 必选，变量名，如果未指定，内容将不会执行，因为没有必要执行。</p>
+                        <p>将标签内的内容执行之后放到pageContext中，name是该内容的引用名。</p>
                     </td>
                 </tr>
                 <tr>
@@ -507,6 +534,17 @@
                     <td>com.skin.ayada.jstl.core.OutputTag</td>
                     <td>jsp</td>
                     <td><p>输出内容到指定文件，请参考下文。</p></td>
+                </tr>
+                <tr>
+                    <td>c:cache</td>
+                    <td>com.skin.ayada.jstl.core.CacheTag</td>
+                    <td>jsp</td>
+                    <td>
+                        <p>缓存标签。</p>
+                        <p>cache - 可选，缓存实现类，不需要实现任何接口，只要存在setCache和getCache方法即可。如果为空，则从pageContext里自动获取名称为cacheClient的对象。如果也获取不到，则执行内容。</p>
+                        <p>key - 缓存数据的key。</p>
+                        <p>expires - 缓存时间。</p>
+                    </td>
                 </tr>
                 <tr>
                     <td>c:include</td>
@@ -626,55 +664,75 @@
                     <td>sql:connect</td>
                     <td>com.skin.ayada.jstl.sql.ConnectTag</td>
                     <td>jsp</td>
-                    <td>&nbsp;</td>
+                    <td>
+                        <p>建立一个数据库链接，实现了tryCacheTag，只有该标签创建的连接才会在finally里面关闭，如果是外部传入的连接则不关闭，遵循谁创建谁关闭原则。</p>
+                        <p>该标签有多种使用方式，请参考webapp/command.jsp</p>
+                    </td>
                 </tr>
                 <tr>
                     <td>sql:execute</td>
                     <td>com.skin.ayada.jstl.sql.SqlTag</td>
                     <td>jsp</td>
-                    <td>&nbsp;</td>
+                    <td>
+                        <p>执行指定的sql。</p>
+                        <p>该标签有多种使用方式，请参考webapp/command.jsp</p>
+                    </td>
                 </tr>
                 <tr>
                     <td>sql:query</td>
                     <td>com.skin.ayada.jstl.sql.QueryTag</td>
                     <td>jsp</td>
-                    <td>&nbsp;</td>
+                    <td>
+                        <p>执行sql查询。请参考webapp/command.jsp。</p>
+                    </td>
                 </tr>
                 <tr>
                     <td>sql:parse</td>
                     <td>com.skin.ayada.jstl.sql.CreateParseTag</td>
                     <td>jsp</td>
-                    <td>&nbsp;</td>
+                    <td>
+                        <p>解析create语句。请参考webapp/command.jsp。</p>
+                    </td>
                 </tr>
                 <tr>
                     <td>sql:create</td>
                     <td>com.skin.ayada.jstl.sql.CreateParseTag</td>
                     <td>jsp</td>
-                    <td>&nbsp;</td>
+                    <td>
+                        <p>解析create语句。请参考webapp/command.jsp。</p>
+                    </td>
                 </tr>
                 <tr>
                     <td>sql:insert</td>
                     <td>com.skin.ayada.jstl.sql.InsertParseTag</td>
                     <td>jsp</td>
-                    <td>&nbsp;</td>
+                    <td>
+                        <p>解析insert语句。请参考webapp/command.jsp。</p>
+                    </td>
                 </tr>
                 <tr>
                     <td>io:copy</td>
                     <td>com.skin.ayada.jstl.io.CopyTag</td>
                     <td>tagdependent</td>
-                    <td>&nbsp;</td>
+                    <td>
+                        <p>拷贝文件或者目录到指定位置。</p>
+                    </td>
                 </tr>
                 <tr>
                     <td>io:delete</td>
                     <td>com.skin.ayada.jstl.io.DeleteTag</td>
                     <td>tagdependent</td>
-                    <td>&nbsp;</td>
+                    <td>
+                        <p>删除文件或者目录。</p>
+                    </td>
                 </tr>
                 <tr>
                     <td>io:mkdir</td>
                     <td>com.skin.ayada.jstl.io.MakeDirTag</td>
                     <td>empty</td>
-                    <td>&nbsp;</td>
+                    <td>
+                        <p>创建一个目录。</p>
+                    </td>
                 </tr>
             </table>
         </div>
@@ -689,8 +747,9 @@
         <div class="sk-code"><pre class="brush: xml;">&lt;c:escape encoder="${myHtmlEncoder}"/&gt;</div>
         <p>参数encoder接受两种参数：</p>
         <p>对象: 必须实现com.skin.ayada.runtime.ELEncoder。</p>
-        <p>字符串: 目前默认支持只xml或者html。</p>
-        <p>一般情况下不需要设置，默认对el表达式做html编码之后输出。如果不需要对输出做编码，可以使用c:out标签输出。</p>
+        <p>字符串: xml|html|null。</p>
+        <p>一般情况下不需要设置，默认对el表达式做html编码之后输出。如果不需要对输出做编码，可以使用c:out标签输出或者在el表达式前面加#。</p>
+        <p>如果设置为空，则之后的所有el和jsp表达式都不再做编码，直到重新设置。</p>
     </div>
 
     <h4 class="sk-h4">c:print</h4>
@@ -703,8 +762,9 @@
 
     <h4 class="sk-h4">c:exit</h4>
     <div class="sk-content">
-        <div class="sk-code"><pre class="brush: xml;">&lt;c:exit/&gt;</div>
+        <div class="sk-code"><pre class="brush: xml;">&lt;c:exit test="${1 == 1}"/&gt;</div>
         <p>立即终止当前页面渲染。</p>
+        <p>test - 可选，默认为true。</p>
     </div>
 
     <h3 class="sk-h3">c:buffer</h3>
@@ -738,7 +798,7 @@
                     &lt;c:entry name="a" value="${myVar1}"/&gt;
                     &lt;c:entry name="b" value="${myVar2}"/&gt;
                     &lt;c:entry name="c" value="${myVar3}"/&gt;
-                &lt;/c:bean&gt;
+                &lt;/c:map&gt;
             </pre>
         </div>
         <p>name：java.lang.String - 必选 map名称。</p>
@@ -1245,7 +1305,7 @@
         <p>Ayada对标签定义做了扩展，可以通过对标签定义如何处理标签前后的空格和回车，并对jsp脚本和jsp指令均做了空格和回车的处理。</p>
         <p>下面是Ayada的处理规则：</p>
         <ul class="sk-list">
-            <li><p>jsp指令、jsp生命、jsp脚本、Ayada指令，都会统一删除掉前导空格和后缀回车。不支持配置，统一处理。</p></li>
+            <li><p>jsp指令、jsp声明、jsp脚本、Ayada指令，都会统一删除掉前导空格和后缀回车。不支持配置，统一处理。</p></li>
             <li><p>标签配置增加ignore-whitespace选项，可选值[true|false]，如果是true，删除掉前导空格和后面的回车。默认是true。t:import指令对应的属性是ignoreWhitespace。</p></li>
         </ul>
         <p>前导空格包括空格和\t符。</p>
