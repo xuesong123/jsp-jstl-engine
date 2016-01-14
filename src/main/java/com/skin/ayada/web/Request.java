@@ -12,6 +12,7 @@ package com.skin.ayada.web;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,18 +41,24 @@ public class Request {
      * @return Map<String, Object>
      */
     public static Map<String, Object> getContext(HttpServletRequest request, HttpServletResponse response) {
+        return getContext((ServletContext)null, request, response);
+    }
+
+    /**
+     * @param request
+     * @param response
+     * @return Map<String, Object>
+     */
+    public static Map<String, Object> getContext(ServletContext servletContext, HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession(false);
-        ServletContext servletContext = getServletContext(session, request);
         Map<String, Object> context = new HashMap<String, Object>();
+
+        if(servletContext == null) {
+            servletContext = getServletContext(session, request);
+        }
 
         // priority: request > session > servletContext
         if(servletContext != null) {
-            context.put("servletContext", servletContext);
-
-            if(request.getAttribute(SERVLET_CONTEXT) == null) {
-                request.setAttribute(SERVLET_CONTEXT, servletContext);
-            }
-
             String locale = servletContext.getInitParameter("javax.servlet.jsp.jstl.fmt.locale");
             String timeZone = servletContext.getInitParameter("javax.servlet.jsp.jstl.fmt.timeZone");
 
@@ -66,13 +73,15 @@ public class Request {
         }
 
         if(session != null) {
-            context.put("session", session);
             Request.export(session, context);
         }
 
+        context.put("session", session);
         context.put("request", request);
         context.put("response", response);
-        context.put("param", Request.getParameterMap(request));
+        context.put("servletContext", servletContext);
+        context.put("params", Request.getParameterMap(request));
+        context.put("headers", Request.getHttpHeader(request));
         Request.export(request, context);
         return context;
     }
@@ -174,6 +183,7 @@ public class Request {
      * @param context
      */
     public static void export(HttpServletRequest request, Map<String, Object> context) {
+        String contextPath = request.getContextPath();
         java.util.Enumeration<?> enumeration = request.getAttributeNames();
 
         if(enumeration != null) {
@@ -182,6 +192,48 @@ public class Request {
                 context.put(key, request.getAttribute(key));
             }
         }
+
+        if(contextPath == null || contextPath.equals("/")) {
+            context.put("contextPath", "");
+        }
+        else {
+            context.put("contextPath", context);
+        }
+    }
+
+    /**
+     * @param request
+     * @return HttpHeader
+     */
+    public static HttpHeader getHttpHeader(HttpServletRequest request) {
+        HttpHeader httpHeader = new HttpHeader();
+        java.util.Enumeration<?> enumeration = request.getHeaderNames();
+
+        if(enumeration != null) {
+            while(enumeration.hasMoreElements()) {
+                String name = (String)(enumeration.nextElement());
+                httpHeader.addHeader(name, request.getHeaders(name));
+            }
+        }
+        return httpHeader;
+    }
+
+    /**
+     * @param request
+     * @return Map<String, List<Object>>
+     */
+    public static Map<String, List<Object>> getHttpHeaderMap(HttpServletRequest request) {
+        java.util.Enumeration<?> enumeration = request.getHeaderNames();
+        Map<String, List<Object>> headers = new HashMap<String, List<Object>>();
+
+        if(enumeration != null) {
+            while(enumeration.hasMoreElements()) {
+                String name = (String)(enumeration.nextElement());
+                List<Object> values = list(request.getHeaders(name));
+                headers.put(name, values);
+            }
+        }
+        return headers;
     }
 
     /**
@@ -227,5 +279,20 @@ public class Request {
             }
         }
         return param;
+    }
+
+    /**
+     * @param enumeration
+     * @return
+     */
+    private static List<Object> list(java.util.Enumeration<?> enumeration) {
+        List<Object> list = new ArrayList<Object>();
+
+        if(enumeration != null) {
+            while(enumeration.hasMoreElements()) {
+                list.add(enumeration.nextElement());
+            }
+        }
+        return list;
     }
 }

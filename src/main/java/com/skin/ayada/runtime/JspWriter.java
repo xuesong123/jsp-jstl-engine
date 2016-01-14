@@ -85,6 +85,17 @@ public class JspWriter extends Writer {
     }
 
     /**
+     * @param object
+     * @throws IOException
+     */
+    public void write(Object object) throws IOException {
+        if(object != null) {
+            char[] cbuf = object.toString().toCharArray();
+            this.write(cbuf, 0, cbuf.length);
+        }
+    }
+
+    /**
      * @param b
      */
     public void print(boolean b) throws IOException {

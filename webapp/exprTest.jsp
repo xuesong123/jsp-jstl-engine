@@ -1,5 +1,12 @@
 <c:escape encoder="xml"/>
 <c:set var="myString" value="<h1>test</h1>"/>
-${myString}
+expr: ${?myString}
+text: ${#myString}
+html: ${&myString}
+html: ${myString}
 <c:escape encoder="null"/>
-${myString}
+text: ${myString}
+
+${?}
+${#}
+${&}

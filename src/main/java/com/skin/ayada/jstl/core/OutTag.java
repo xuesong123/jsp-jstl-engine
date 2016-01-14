@@ -100,7 +100,7 @@ public class OutTag extends BodyTagSupport {
      * @param source
      * @return String
      */
-    private static String escape(String source) {
+    public static String escape(String source) {
         if(source == null) {
             return "";
         }

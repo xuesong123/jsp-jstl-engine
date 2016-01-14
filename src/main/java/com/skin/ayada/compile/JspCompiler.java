@@ -58,7 +58,9 @@ public class JspCompiler {
     private static final Logger logger = LoggerFactory.getLogger(JspCompiler.class);
 
     public String compile(Template template, String packageName, String className) {
-        logger.info("compile: {}.{}", packageName, className);
+        if(logger.isDebugEnabled()) {
+            logger.debug("compile: {}.{}", packageName, className);
+        }
 
         Date date = new Date();
         String jspDirective = this.getJspDirective(template);
@@ -265,7 +267,7 @@ public class JspCompiler {
                 writer.println(indent + "// VARIABLE: lineNumber: " + node.getLineNumber());
 
                 if("#".equals(((Variable)node).getFlag())) {
-                    writer.println(indent + "out.write(pageContext.getAttribute(\"" + textContent + "\"));");
+                    writer.println(indent + "out.print(pageContext.getAttribute(\"" + textContent + "\"));");
                 }
                 else {
                     writer.println(indent + "expressionContext.print(out, pageContext.getAttribute(\"" + textContent + "\"));");

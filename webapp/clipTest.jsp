@@ -1,5 +1,7 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 
+<t:taglib prefix="d" uri="http://localhost/ayada-taglib-standard"/>
+
 <%@ include file="/include/header.jsp"%>
 
 <%int a=1; %>
@@ -31,6 +33,8 @@
     <t:comment>
         输出缓存的内容
     </t:comment>
+
+
 <p>test</p>
 ### 4
 
@@ -51,6 +55,12 @@
      }
 </jsp:scriptlet>
 
+c:remove的bodyContent为empty, 之前的版本有一个bug, 成对闭合的标签如果bodyContent为empty的时候，会忽略掉结束标签后面的所有回车。如果写成自关闭则没有这个问题。
+该问题已经修复。
+<c:remove var="a"></c:remove>
+
+
+
 ## 6
 这是一个格式处理的测试页面，测试编译程序的clip函数是否正确。
 编译程序对标签的处理规则：
@@ -66,4 +76,4 @@
 
 2. 第二次扫描，根据标签的bodyContent定义清除标签内的文本节点或者。
 
-总的原则是：标签或者脚本所占的行不输出。即：把标签或者脚本所占的行删除之后就是最终输出的格式。 
+总的原则是：标签或者脚本所占的行不输出。即：把标签或者脚本所占的行删除之后就是最终输出的格式。

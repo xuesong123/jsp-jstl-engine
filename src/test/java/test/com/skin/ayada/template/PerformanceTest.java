@@ -17,7 +17,7 @@ import com.skin.ayada.template.TemplateManager;
 import com.skin.ayada.util.ClassPath;
 
 /**
- * @author weixian
+ * @author xuesong.net
  * @version 1.0
  */
 public class PerformanceTest {

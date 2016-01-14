@@ -2,7 +2,8 @@ html, body, div, dl, dt, dd, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset
 html, body, img{border: 0px; font-size: 12px;}
 body, input, button, select, textarea{
     color: #444444;
-    font: 14px/1.5 Georgia,serif;
+    /* font: 14px/1.5 Georgia,serif; */
+    font-size: 14px;
 }
 
 body{margin: 0px; padding: 0px; background-color: #ffffff;}
@@ -13,7 +14,6 @@ h1.sk-h1{
     line-height: 2.5em;
     font-weight: bold;
     text-align: left;
-    color: #000000;
 }
 
 h1.sk-h1 span.lemma{float: left; width: auto; height: 40px; line-height: 40px; font-size: 30px; line-height: 40px;}
@@ -21,7 +21,6 @@ h1.sk-h1 span.lemma{float: left; width: auto; height: 40px; line-height: 40px; f
 h2.sk-h2{
     line-height: 2.0em;
     text-align: left;
-    color: #000000;
 }
 
 h2.sk-h2 a{color: #888888;}

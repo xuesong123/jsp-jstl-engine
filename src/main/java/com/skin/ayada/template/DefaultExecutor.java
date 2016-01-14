@@ -92,45 +92,56 @@ public class DefaultExecutor {
                     node = statement.getNode();
                     nodeType = node.getNodeType();
 
-                    if(nodeType == NodeType.TEXT) {
-                        out.write(node.getTextContent());
-                        index++;
-                        continue;
-                    }
-
-                    if(nodeType == NodeType.EXPRESSION) {
-                        Object value = expressionContext.getValue(node.getTextContent());
-
-                        if(value != null) {
-                            if("#".equals(((Expression)node).getFlag())) {
-                                out.print(value);
-                            }
-                            else {
-                                expressionContext.print(out, value);
-                            }
+                    switch (nodeType) {
+                        case NodeType.TEXT: {
+                            out.write(node.getTextContent());
+                            index++;
+                            continue;
                         }
-                        index++;
-                        continue;
-                    }
+                        case NodeType.EXPRESSION: {
+                            Object value = expressionContext.getValue(node.getTextContent());
 
-                    if(nodeType == NodeType.VARIABLE) {
-                        Object value = pageContext.getAttribute(node.getTextContent());
-
-                        if(value != null) {
-                            if("#".equals(((Variable)node).getFlag())) {
-                                out.print(value);
+                            if(value != null) {
+                                if("#".equals(((Expression)node).getFlag())) {
+                                    out.print(value);
+                                }
+                                else {
+                                    expressionContext.print(out, value);
+                                }
                             }
-                            else {
-                                expressionContext.print(out, value);
-                            }
+                            index++;
+                            continue;
                         }
-                        index++;
-                        continue;
-                    }
+                        case NodeType.VARIABLE: {
+                            Object value = pageContext.getAttribute(node.getTextContent());
 
-                    if(nodeType != NodeType.TAG_NODE) {
-                        index++;
-                        continue;
+                            if(value != null) {
+                                if("#".equals(((Variable)node).getFlag())) {
+                                    out.print(value);
+                                }
+                                else {
+                                    expressionContext.print(out, value);
+                                }
+                            }
+                            index++;
+                            continue;
+                        }
+                        case NodeType.JSP_DIRECTIVE_PAGE:
+                        case NodeType.JSP_DIRECTIVE_TAGLIB:
+                        case NodeType.JSP_DIRECTIVE_INCLUDE:
+                        case NodeType.JSP_DECLARATION:
+                        case NodeType.JSP_SCRIPTLET:
+                        case NodeType.JSP_EXPRESSION: {
+                            index += 2;
+                            continue;
+                        }
+                        case NodeType.TAG_NODE: {
+                            break;
+                        }
+                        default: {
+                            index = index + node.getLength();
+                            continue;
+                        }
                     }
 
                     if(node.getOffset() == index) {

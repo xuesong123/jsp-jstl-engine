@@ -31,7 +31,7 @@
     <div class="sk-content">
         <p>Ayada是一个Java版的采用jstl语法的模板引擎。所有的实现均与jsp中的jstl一样。对于习惯使用jstl的人来说几乎没有任何学习成本。</p>
         <ul class="sk-list">
-            <li><p>简单，学习成本低，对于使用jstl的人来说没有任何学习成本。</p></li>
+            <li><p>语法完全同jsp语法，支持java脚本和jstl标签，对于使用jstl的人来说没有任何学习成本。</p></li>
             <li><p>零配置，不需要任何配置文件，也可以指定配置文件，配置文件简单明了。</p></li>
             <li><p>可插拔的模块设计，模板加载方式，el引擎，运行模式均可通过不同的实现替换。</p></li>
             <li><p>多种方式自定义标签，原生的java代码自定义标签或者直接通过页面自定义标签。</p></li>
@@ -137,7 +137,7 @@
                 }
 
                 // 模版上下文对象
-                TemplateContext templateContext = new DefaultTemplateContext(realPath, "UTF-8");
+                TemplateContext templateContext = new DefaultTemplateContext();
                 templateContext.setSourceFactory(sourceFactory);
                 templateContext.setTemplateFactory(templateFactory);
                 templateContext.setExpressionFactory(expressionFactory);
@@ -267,7 +267,7 @@
 
     <h3 class="sk-h3">3.2 内置的标签列表</h3>
     <div class="sk-content">
-        <p>内置标签是Ayada内置的常用标签，你也可以重新定义一套自己的标签库并使用。关于自定义标签请参考<a href="#6.1.1">6.1.1 自定义标签</a>章节。</p>
+        <p>内置标签是Ayada内置的常用标签，你也可以重新定义一套自己的标签库并使用。关于自定义标签请参考<a href="#cp_5">5 自定义标签</a>章节。</p>
         <p>凡是实现了BodyContentSupport接口的都意味者你可以在子节点里面写任意内容。</p>
         <div class="sk-code">
             <table class="sk-grid">
@@ -388,7 +388,8 @@
                     <td>com.skin.ayada.jstl.core.JoinTag</td>
                     <td>empty</td>
                     <td>
-                        <p>items - 数组，或者逗号分隔字符串，或者list，或者iterator，或者map。遵循forEach标签的items定义。如果指定了items就不能再指定value和repeat，二者互斥。</p>
+                        <p>items - 数组，或者逗号分隔字符串，或者list，或者iterator，或者map。遵循forEach标签的items定义。</p>
+                        <p>如果指定了items就不能再指定value和repeat，二者互斥。</p>
                         <p>value - 任何数据类型，要重复的内容。</p>
                         <p>repeat - 重复次数。</p>
                         <p>separator - 分隔符。</p>
@@ -401,7 +402,10 @@
                     <td>c:comment</td>
                     <td>com.skin.ayada.jstl.core.CommentTag</td>
                     <td>empty</td>
-                    <td><p>其中的任何内容都不会执行，直接跳过。与t:comment相同，但是c:comment会存在，但不执行。t:comment运行期根本就不存在。</p></td>
+                    <td>
+                        <p>其中的任何内容都不会执行，直接跳过。</p>
+                        <p>与t:comment相同，但是c:comment会存在，但不执行。t:comment运行期根本就不存在。</p>
+                    </td>
                 </tr>
                 <tr>
                     <td>c:escape</td>
@@ -541,7 +545,8 @@
                     <td>jsp</td>
                     <td>
                         <p>缓存标签。</p>
-                        <p>cache - 可选，缓存实现类，不需要实现任何接口，只要存在setCache和getCache方法即可。如果为空，则从pageContext里自动获取名称为cacheClient的对象。如果也获取不到，则执行内容。</p>
+                        <p>cache - 可选，缓存实现类，不需要实现任何接口，只要存在setCache和getCache方法即可。</p>
+                        <p>如果为空，则从pageContext里自动获取名称为cacheClient的对象。如果也获取不到，则执行内容。</p>
                         <p>key - 缓存数据的key。</p>
                         <p>expires - 缓存时间。</p>
                     </td>
@@ -640,32 +645,32 @@
                     <td>fmt:bundle</td>
                     <td>com.skin.ayada.jstl.fmt.BundleTag</td>
                     <td>jsp</td>
-                    <td>&nbsp;</td>
+                    <td><p>国际化相关</p></td>
                 </tr>
                 <tr>
                     <td>fmt:setBundle</td>
                     <td>com.skin.ayada.jstl.fmt.SetBundleTag</td>
                     <td>empty</td>
-                    <td>&nbsp;</td>
+                    <td><p>国际化相关</p></td>
                 </tr>
                 <tr>
                     <td>fmt:message</td>
                     <td>com.skin.ayada.jstl.fmt.MessageTag</td>
                     <td>tagdependent</td>
-                    <td>&nbsp;</td>
+                    <td><p>国际化相关</p></td>
                 </tr>
                 <tr>
                     <td>fmt:param</td>
                     <td>com.skin.ayada.jstl.fmt.FmtParamTag</td>
                     <td>jsp</td>
-                    <td>&nbsp;</td>
+                    <td><p>国际化相关</p></td>
                 </tr>
                 <tr>
                     <td>sql:connect</td>
                     <td>com.skin.ayada.jstl.sql.ConnectTag</td>
                     <td>jsp</td>
                     <td>
-                        <p>建立一个数据库链接，实现了tryCacheTag，只有该标签创建的连接才会在finally里面关闭，如果是外部传入的连接则不关闭，遵循谁创建谁关闭原则。</p>
+                        <p>建立一个数据库链接，实现了tryCacheTag，只有该标签创建的连接才会在finally里面关闭，<br/>如果是外部传入的连接则不关闭，遵循谁创建谁关闭原则。</p>
                         <p>该标签有多种使用方式，请参考webapp/command.jsp</p>
                     </td>
                 </tr>
@@ -1003,9 +1008,10 @@
         <div class="sk-code"><pre class="brush: xml;">&lt;h1&gt;${user.name}&lt;/h1&gt;</pre></div>
     </div>
 
+    <a name="cp_5"></a>
     <h2 class="sk-h2">5. 自定义标签</h2>
     <div class="sk-content">
-        <p>Ayada的API与jstl的API基本保持一致，除了包名不一样其他的类名都完全一致，类结构也一模一样。所以只需参考jstl的自定义标签即可。webapp目录下包含了绝大部分的代码示例和测试用例，这些文件基本上都以某个具体的标签名命名，从文件名就可以很容易看出来是关于那个标签的用法的。唯一需要做的是把引入的jstl的类的包名替换成Ayada的包名即可。</p>
+        <p>Ayada的API与jstl的API基本保持一致，除了包名不一样其他的类名都完全一致，类结构也一模一样。所以只需参考jstl的自定义标签即可。webapp目录下包含了绝大部分的代码示例和测试用例，这些文件基本上都以某个具体的标签名命名，从文件名就可以很容易看出来是关于那个标签的用法的。唯一需要做的是把引入的jstl的类的包名替换成Ayada的包名。</p>
         <p>在Jsp2.0中，自定义标签可以使用tag文件直接定义，不需要写java代码。Ayada不支持这种方式，Ayada建议使用另外的一种方式定义。直接使用Ayada的c:action引入一个模板即可，并且支持参数传递。这样实现的好处是不需要对这种标签专门编译，引擎实现简单。而且c:action功能更加强大。具体请参考c:action标签。</p>
         <p>还有一种方案是采用java代码编写标签，这种方式要求对jstl标签的API比较熟悉，对标签的生命周期很了解。好处是功能实现都封装在java类里面。</p>
         <p>下面是c:out标签的默认实现，示例代码：</p>
@@ -1299,7 +1305,7 @@
     <div class="sk-content">
         <p>Ayada支持精细的控制输出格式，避免多余的空格和回车。</p>
         <p>一般情况下，模板引擎对于空格和回车的控制都比较困难，原因是因为模板引擎不知道什么时候该忽略空格和回车。
-        因为很难确定该如何处理空格和回车，jsp引擎一般都遵循忠实的输出空格和回车的规则。如果希望控制输出格式，模板编写者需要自己组织代码格式，通过严格的代码格式来控制空格和回车。
+        由于很难确定该如何处理空格和回车，jsp引擎一般都遵循忠实的输出空格和回车的规则。如果希望控制输出格式，模板编写者需要自己组织代码格式，通过严格的代码格式来控制空格和回车。
         但是这样会导致模板本身的代码结构很不好，很可能为了避免空格而使代码堆砌在一起。
         jsp2.0在page指令中引入了一个新的属性trimDirectiveWhitespaces用来处理指令多余的空格，应该是不支持标签和jsp脚本的空格的。</p>
         <p>Ayada对标签定义做了扩展，可以通过对标签定义如何处理标签前后的空格和回车，并对jsp脚本和jsp指令均做了空格和回车的处理。</p>
@@ -1309,7 +1315,14 @@
             <li><p>标签配置增加ignore-whitespace选项，可选值[true|false]，如果是true，删除掉前导空格和后面的回车。默认是true。t:import指令对应的属性是ignoreWhitespace。</p></li>
         </ul>
         <p>前导空格包括空格和\t符。</p>
-        <p>后缀回车包括\r和\n</p>
+        <p>后缀回车包括\r和\n。只删除第一个回车换行。</p>
+        <p>&nbsp;</p>
+        <p>编译程序在编译出来所有节点列表之后，会对节点列表进行两次扫描：</p>
+        <p>1. 第一次扫描，根据标签的ignoreWhitespace定义决定是否对标签做格式处理。</p>
+        <p>如果ignoreWhitespace为true，则删除标签的前导空格，前导空格是指标签前面的第一个文本节点的尾空格。</p>
+        <p>删除标签之后的第一个回车换行符。标签的开始节点和结束节点都按照这个的规则处理。所有的jsp指令、脚本、声明也按照这个规则处理。</p>
+        <p>2. 第二次扫描，根据标签的bodyContent定义清除标签内的文本节点或者。</p>
+        <p class="bb">总的原则是：标签或者脚本所占的行不输出。即：把标签或者脚本所占的行删除之后就是最终输出的格式。</p>
     </div>
 
     <h2 class="sk-h2">11 Ayada的核心对象</h2>
@@ -1368,7 +1381,7 @@
             String home = servletContext.getRealPath("/");
             SourceFactory sourceFactory = new DefaultSourceFactory(home);
             TemplateFactory templateFactory = new TemplateFactory();
-            TemplateContext templateContext = new DefaultTemplateContext(home);
+            TemplateContext templateContext = new DefaultTemplateContext();
             ExpressionFactory expressionFactory = new DefaultExpressionFactory();
             templateContext.setSourceFactory(sourceFactory);
             templateContext.setTemplateFactory(templateFactory);
@@ -1411,35 +1424,134 @@
         </div>
     </div>
 
-    <h2 class="sk-h2">13 线程模型</h2>
+    <h2 class="sk-h2">13 高级功能</h2>
+    <div class="sk-content">
+        <p>Ayada允许你直接操作编译出来的模板，你甚至可以通过编码来构建一个可执行的模板对象。Ayada的模板对象异常简单，它是一个list结构，而不是常规的树形结构。</p>
+        <p>list结构的节点列表使得解释执行或者生成java代码都很方便。</p>
+        <p>例如下面的文档：</p>
+        <div class="sk-code">
+            <pre class="brush: java;">
+            &lt;h1&gt;这是一个节点列表示例&lt;/h1&gt;
+            &lt;c:if test="${1 == 1}"&gt;
+                &lt;c:if test="${1 == 1}"&gt;
+                    ${userName} - Hello World !
+                &lt;/c:if&gt;
+            &lt;/c:if&gt;
+            &lt;p&gt;结束了&lt;/p&gt;
+            </pre>
+        </div>
+        <p>编译之后的存储结构：</p>
+        <div class="sk-code">
+            <pre class="brush: text;">
+            0   [TEXT]: &lt;h1&gt;这是一个节点列表示例&lt;/h1&gt;\r\n
+            1   [NODE]: &lt;c:if lineNumber="2" offset="1" length="7" tagClass="com.skin.ayada.jstl.core.IfTag" tagFactory="_tpl.com.skin.ayada.jstl.core.factory.IfTagFactory" test="${1 == 1}"&gt;
+            2   [NODE]: &lt;c:if lineNumber="3" offset="2" length="5" tagClass="com.skin.ayada.jstl.core.IfTag" tagFactory="_tpl.com.skin.ayada.jstl.core.factory.IfTagFactory" test="${1 == 1}"&gt;
+            3   [TEXT]:         
+            4   [VARI]: ${userName}
+            5   [TEXT]:  - Hello World !\r\n
+            6   [NODE]: &lt;/c:if&gt;
+            7   [NODE]: &lt;/c:if&gt;
+            8   [TEXT]: &lt;p&gt;结束了&lt;/p&gt;\r\n
+            </pre>
+        </div>
+        <p>下面是解释执行的伪代码：</p>
+        <p>由于jstl规范定义的标签的生命周期的复杂性，详细的执行过程要比下面复杂一些，具体可参考com.skin.ayada.template.DefaultExecutor。</p>
+        <p>编译为java文件的过程可参考com.skin.ayada.compile.JspCompiler。</p>
+        <div class="sk-code">
+            <pre class="brush: java;">
+            List&lt;Node&gt; list = template.getNodes();
+            int i = 0;
+            int length = list.size();
+
+            while(i < length) {
+                out = pageContext.getOut();
+                Node node = list.get(i);
+
+                // 文本节点直接输出
+                if(node.nodeType == NodeType.TEXT) {
+                    i++;
+                    out.write(node.getTextContent());
+                    continue;
+                }
+
+                // 简单表达式，不需要调用el引擎
+                if(node.nodeType == NodeType.VARIABLE) {
+                    i++;
+                    out.write(pageContext.getAttribute(node.getTextContent()));
+                    continue;
+                }
+
+                // 表达式节点
+                if(node.nodeType == NodeType.EXPRESSION) {
+                    i++;
+                    out.write(expressionContext.getValue(node.getTextContent()));
+                    continue;
+                }
+
+                TagNode tag = (TagNode)node;
+
+                if(tag.getOffset() == i) {
+                    tag.setPageContext(pageContext);
+                    tag.setParent(tag.getParent());
+                    int flag = this.doStartTag(tag);
+
+                    // 标签返回值是忽略标签体
+                    if(flag == Tag.SKIP_BODY) {
+                        i = i + tag.getLength() - 1;
+                        continue;
+                    }
+
+                    // 标签返回值是终止渲染
+                    if(flag == Tag.SKIP_PAGE) {
+                        i = length;
+                        continue;
+                    }
+                }
+                else {
+                    this.doEndTag(tag);
+                }
+                i++;
+            }
+            out.flush();
+            </pre>
+        </div>
+        <p>编译之后会把节点对象存储为一个List对象，上面是打印出来的节点对象列表。其中每一个Node对象都有offset和length属性，offset属性表示当前节点在list中的下标。length属性表示当前节点对象的长度。</p>
+        <p>当解释执行的时候，遍历list，如果是文本节点直接输出。如果是表达式节点则计算之后输出，如果是标签节点则按照标签的生命周期规范调用。</p>
+        <p>经测试解释执行的性能比编译为class执行性能低30%。</p>
+        <p>编译为java类的时候与上面的过程相同，只不过是输出为代码。</p>
+        <p>list结构的节点列表使得解释执行非常方便，如果是树形结构，在处理标签节点的时候由于jstl标签生命周期的规范定义导致调用非常麻烦，流程不好控制，要么使用栈要么使用递归，实现复杂且性能不好。</p>
+        <p>为了尽可能的少调用el引擎，在编译期会对el表达式做检查，如果是简单的el表达式，即符合java命名规则的表达式，会编译为Variable对象，而不是Expression对象。</p>
+        <p>当解释执行的时候对于Variable节点可以直接调用out.write(pageContext.getAttribute(node.getTextContent()));</p>
+        <p>当编译的时候可以直接生成类似的代码。</p>
+    </div>
+
+    <h2 class="sk-h2">14 线程模型</h2>
     <div class="sk-content">
         <p>首先标签不存在线程安全的问题，所有的标签都在安全的线程模型中执行。<b>除非自己实现的标签里面存在不安全的代码。</b></p>
         <p>在解释模式中不存在线程安全的问题。在编译模式下如果开启了java脚本选项，请小心使用类变量。编译模式下所有被编译好的模版对象都是单例的，不是线程安全的，这一点与jsp的运行模式是一致的。</p>
     </div>
 
-    <h2 class="sk-h2">14 代码示例和测试用例</h2>
+    <h2 class="sk-h2">15 代码示例和测试用例</h2>
     <div class="sk-content">
         <p>在源代码的/webapp目录下包含了绝大部分的代码示例和测试用例，这些文件基本上都以某个具体的标签名命名，从文件名就可以很容易看出来是关于那个标签的用法的。</p>
         <p>com.skin.ayada.template.Main是java调用模板引擎的示例，也可以在命令行下调用。</p>
     </div>
 
-    <h2 class="sk-h2">15 其他</h2>
+    <h2 class="sk-h2">16 其他</h2>
     <div class="sk-content">
-        <p>很多模版引擎为了提升性能，采用了很多性能优化的手段，例如：动态编译，使用强制类型来避免反射等。
-        Ayada也使用了动态编译，由于Ayada是与jsp和jstl完全一致的，所以一些jsp的技术在Ayada里面是完全有效的。
-        Ayada支持两种模式执行模版：解释模式和编译模式。解释模式直接在内存中通过解释执行来渲染结果。编译模式会先编译为java文件，再把java文件编译为class文件加载到jvm执行。
-        </p>
-        </p>另一方面，Ayada不可能采用某些优化技术。例如使用强制类型避免反射等。
+        <p>Ayada支持两种模式执行模版：解释模式和编译模式。解释模式直接在内存中通过解释执行来渲染结果。编译模式会先编译为java文件，再把java文件编译为class加载到jvm执行。</p>
+        <p>通常模版引擎为了提升性能，会采用很多性能优化的手段，例如：动态编译，使用强制类型来避免反射等。Ayada也使用了动态编译，由于Ayada是与jsp和jstl完全一致的，所以一些jsp的技术在Ayada里面是完全有效的。</p>
+        <p>另一方面，Ayada不可能采用某些优化技术。例如使用强制类型避免反射等。
         Ayada建议使用标签编写模版而不是使用java脚本。标签和el表达式都是不强制类型的。所以反射调用在ayada里面不可避免。
-        如果追求极致性能，那么可以全部使用java将脚本编写模版，这样可以完全避免反射，但是那样的话使用模版引擎又有什么意义呢？
-        为了性能而牺牲功能或者为了功能大大的降低性能都不可取。</p>
+        如果追求极致性能，那么可以全部使用java将脚本编写模版，这样可以完全避免反射，但是那样的话使用模版引擎又有什么意义呢？还是建议使用标签编写。</p>
         <p class="bb">jstl语法的优点：</p>
         <ul>
             <li><p>jstl天然就是xml，与html无缝融合，不影响一些可视化编辑器；</p></li>
             <li><p>jstl编写出的模板代码简洁可读性好，对用户友好；</p></li>
-            <li><p>强大的扩展功能，标签很容易扩展；</p></li>
+            <li><p>强大的可扩展功能，标签可以封装一些常用组件，很好的提高了代码复用；</p></li>
             <li><p>jstl从jsp1.0至今已经10多年了，技术很成熟，功能很完善。</p></li>
         </ul>
+        <p>当然使用标签编写会牺牲一些性能，但是权衡利弊，牺牲一些性能还是值得的。实际上很多系统真正影响性能的地方都不在展现层。</p>
         <p>Ayada尽可能在易用性，用户友好和性能之间寻找一个平衡点。模板语言的用户友好应该包括：</p>
         <ul>
             <li><p>易用，必须易上手，最好不需要看文档。</p></li>

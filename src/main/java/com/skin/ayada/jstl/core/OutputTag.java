@@ -37,18 +37,17 @@ public class OutputTag extends BodyTagSupport {
 
     @Override
     public int doEndTag() throws Exception {
-        String content = null;
         BodyContent bodyContent = this.getBodyContent();
 
         if(bodyContent != null) {
-            content = bodyContent.getString();
+            String content = bodyContent.getString();
 
             if(this.trim) {
                 content = content.trim();
             }
 
             if(this.escapeXml) {
-                content = this.escape(content);
+                content = OutTag.escape(content);
             }
 
             if(this.encoding == null) {
@@ -65,52 +64,6 @@ public class OutputTag extends BodyTagSupport {
             }
         }
         return EVAL_PAGE;
-    }
-
-    /**
-     * @param source
-     * @return String
-     */
-    private String escape(String source) {
-        if(source == null) {
-            return "";
-        }
-
-        char c;
-        StringBuilder buffer = new StringBuilder();
-
-        for(int i = 0, size = source.length(); i < size; i++) {
-            c = source.charAt(i);
-
-            switch (c) {
-                case '&': {
-                    buffer.append("&amp;");
-                    break;
-                }
-                case '"': {
-                    buffer.append("&quot;");
-                    break;
-                }
-                case '<': {
-                    buffer.append("&lt;");
-                    break;
-                }
-                case '>': {
-                    buffer.append("&gt;");
-                    break;
-                }
-                case '\'': {
-                    buffer.append("&#39;");
-                    break;
-                }
-                default : {
-                    buffer.append(c);
-                    break;
-                }
-            }
-        }
-
-        return buffer.toString();
     }
 
     /**

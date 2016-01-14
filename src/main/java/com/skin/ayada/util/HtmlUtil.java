@@ -53,7 +53,6 @@ public class HtmlUtil {
                     break;
             }
         }
-
         return buffer.toString();
     }
 
@@ -123,7 +122,6 @@ public class HtmlUtil {
                 buffer.append(c[i]);
             }
         }
-
         return buffer.toString();
     }
 
@@ -160,7 +158,6 @@ public class HtmlUtil {
             }
         }
         while(true);
-
         return buffer.toString();
     }
 }

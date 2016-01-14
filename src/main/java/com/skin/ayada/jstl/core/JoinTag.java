@@ -44,7 +44,7 @@ public class JoinTag extends TagSupport {
 
             while(this.iterator.hasNext()) {
                 element = this.iterator.next();
-                
+
                 if(element == null) {
                     if(this.nullable) {
                         buffer.append("null");

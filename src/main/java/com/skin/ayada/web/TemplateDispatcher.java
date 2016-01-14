@@ -210,7 +210,7 @@ public class TemplateDispatcher {
         }
 
         Request.setServletContext(request, this.servletContext);
-        Map<String, Object> context = Request.getContext(request, response);
+        Map<String, Object> context = Request.getContext(this.servletContext, request, response);
         Writer writer = Request.getWriter(request, response);
 
         try {

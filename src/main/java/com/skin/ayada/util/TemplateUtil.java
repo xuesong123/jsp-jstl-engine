@@ -47,30 +47,31 @@ public class TemplateUtil {
      * @param writer
      */
     public static void print(Template template, PrintWriter writer) {
+        String format = "%-4s";
         List<Node> list = template.getNodes();
 
         for(int i = 0, size = list.size(); i < size; i++) {
             Node node = list.get(i);
 
             if(node.getNodeType() == NodeType.TEXT) {
-                writer.println("[TEXT]: " + StringUtil.escape(node.getTextContent()));
+                writer.println(String.format(format, i) + "[TEXT]: " + StringUtil.escape(node.getTextContent()));
                 continue;
             }
 
             if(node.getNodeType() == NodeType.VARIABLE) {
-                writer.println("[VARI]: ${" + StringUtil.escape(node.getTextContent()) + "}");
+                writer.println(String.format(format, i) + "[VARI]: ${" + StringUtil.escape(node.getTextContent()) + "}");
                 continue;
             }
 
             if(node.getNodeType() == NodeType.EXPRESSION) {
-                writer.println("[EXPR]: ${" + StringUtil.escape(node.getTextContent()) + "}");
+                writer.println(String.format(format, i) + "[EXPR]: ${" + StringUtil.escape(node.getTextContent()) + "}");
                 continue;
             }
 
             if(node.getLength() == 0) {
                 break;
             }
-            writer.println("[NODE]: " + TemplateUtil.toString(node, i, false));
+            writer.println(String.format(format, i) + "[NODE]: " + TemplateUtil.toString(node, i, false));
         }
         writer.flush();
     }
