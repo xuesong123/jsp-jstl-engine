@@ -285,7 +285,6 @@ public class ExtendExecutor {
                 }
             }
         }
-
         return flag;
     }
 
@@ -363,7 +362,6 @@ public class ExtendExecutor {
                 return parent;
             }
         }
-
         return null;
     }
 
@@ -386,7 +384,6 @@ public class ExtendExecutor {
 
             parent = parent.getParent();
         }
-
         return null;
     }
 
@@ -419,7 +416,6 @@ public class ExtendExecutor {
                 statements[i] = statement;
             }
         }
-
         return statements;
     }
 }

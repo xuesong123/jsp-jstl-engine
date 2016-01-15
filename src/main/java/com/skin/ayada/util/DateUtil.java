@@ -41,7 +41,6 @@ public class DateUtil {
         }
         catch(ParseException e) {
         }
-
         return null;
     }
 
@@ -168,7 +167,6 @@ public class DateUtil {
                 result = (y1 - y2) + " \u5e74\u4ee5\u524d";
             }
         }
-
         return result;
     }
 }

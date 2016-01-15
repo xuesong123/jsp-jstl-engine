@@ -57,7 +57,6 @@ public class MapTag extends TagSupport implements AttributeTagSupport, DynamicAt
             this.pageContext.setAttribute(this.name, this.map);
             return Tag.EVAL_BODY_INCLUDE;
         }
-
         return Tag.SKIP_BODY;
     }
 

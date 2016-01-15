@@ -49,7 +49,6 @@ public class BundleTag extends TagSupport implements TryCatchFinally {
         else if(this.oldPrefix != null) {
             this.pageContext.removeAttribute(BUNDLE_PREFIX_KEY);
         }
-
         return Tag.EVAL_BODY_INCLUDE;
     }
 
@@ -78,7 +77,6 @@ public class BundleTag extends TagSupport implements TryCatchFinally {
         if(locale == null) {
             throw new RuntimeException("locale must be not null ! please set attribute 'com.skin.ayada.locale' !");
         }
-
         return BundleManager.getInstance().getBundle(basename, locale);
     }
 

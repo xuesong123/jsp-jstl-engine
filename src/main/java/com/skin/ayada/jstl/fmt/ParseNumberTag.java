@@ -63,7 +63,6 @@ public class ParseNumberTag extends BodyTagSupport {
         else {
             SetTag.setValue(this.pageContext, this.var, this.scope, value);
         }
-
         return Tag.EVAL_PAGE;
     }
 

@@ -105,10 +105,8 @@ public abstract class FileTag extends TagSupport {
                     break;
                 }
             }
-
             return path.substring(i + 1);
         }
-
         return "";
     }
 
@@ -122,7 +120,6 @@ public abstract class FileTag extends TagSupport {
         if(i > -1) {
             return path.substring(i + 1);
         }
-
         return "";
     }
 

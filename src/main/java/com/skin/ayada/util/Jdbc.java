@@ -49,7 +49,6 @@ public class Jdbc {
         catch(ClassNotFoundException e) {
             throw new SQLException(e);
         }
-
         return DriverManager.getConnection(url, userName, password);
     }
 
@@ -75,7 +74,6 @@ public class Jdbc {
         catch(ClassNotFoundException e) {
             throw new SQLException(e.getMessage());
         }
-
         return DriverManager.getConnection(url, properties);
     }
 
@@ -156,7 +154,6 @@ public class Jdbc {
                 name.append(c);
             }
         }
-
         return properties;
     }
 

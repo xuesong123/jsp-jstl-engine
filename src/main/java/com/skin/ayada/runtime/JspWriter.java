@@ -26,10 +26,10 @@ public class JspWriter extends Writer {
     private char[] buffer;
     private int bufferSize = 8192;
     private boolean autoFlush = false;
-    private static final char[] CRLF = new char[]{'\r', '\n'};
-    private static final char[] NULL = new char[]{'n', 'u', 'l', 'l'};
-    private static final char[] TRUE = new char[]{'t', 'r', 'u', 'e'};
-    private static final char[] FALSE = new char[]{'f', 'a', 'l', 's', 'e'};
+    private static final char[] CRLF = "\r\n".toCharArray();
+    private static final char[] NULL = "null".toCharArray();
+    private static final char[] TRUE = "true".toCharArray();
+    private static final char[] FALSE = "false".toCharArray();
 
     /**
      * @param out

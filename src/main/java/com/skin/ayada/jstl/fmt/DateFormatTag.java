@@ -42,7 +42,6 @@ public class DateFormatTag extends TagSupport {
             if(this.var != null) {
                 this.pageContext.setAttribute(this.var, null);
             }
-
             return Tag.EVAL_PAGE;
         }
 
@@ -126,7 +125,6 @@ public class DateFormatTag extends TagSupport {
         else {
             this.pageContext.setAttribute(this.var, value);
         }
-
         return Tag.EVAL_PAGE;
     }
 
@@ -149,7 +147,6 @@ public class DateFormatTag extends TagSupport {
         if((value instanceof String)) {
             return TimeZone.getTimeZone((String)value);
         }
-
         return null;
     }
 

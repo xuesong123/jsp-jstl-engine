@@ -72,7 +72,6 @@ public class NumberFormatTag extends TagSupport {
         else {
             SetTag.setValue(this.pageContext, this.var, this.scope, result);
         }
-
         return Tag.EVAL_PAGE;
     }
 
@@ -140,7 +139,6 @@ public class NumberFormatTag extends TagSupport {
         if(this.maxFractionDigits > 0) {
             format.setMaximumFractionDigits(this.maxFractionDigits);
         }
-
         return format;
     }
 

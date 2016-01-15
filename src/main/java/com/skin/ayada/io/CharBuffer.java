@@ -24,9 +24,9 @@ public class CharBuffer {
     private CharBuffer next;
     private CharBuffer tail;
     private char[] temp = new char[4];
-    private static final char[] NULL = new char[]{'n', 'u', 'l', 'l'};
-    private static final char[] TRUE = new char[]{'t', 'r', 'u', 'e'};
-    private static final char[] FALSE = new char[]{'f', 'a', 'l', 's', 'e'};
+    private static final char[] NULL = "null".toCharArray();
+    private static final char[] TRUE = "true".toCharArray();
+    private static final char[] FALSE = "false".toCharArray();
 
     /**
      * @param bufferSize

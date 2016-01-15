@@ -71,7 +71,6 @@ public class IO {
             while((length = inputStreamReader.read(buffer, 0, bufferSize)) > -1) {
                 result.append(buffer, 0, length);
             }
-
             return result.toString();
         }
         finally {

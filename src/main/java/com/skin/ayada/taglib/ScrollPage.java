@@ -141,7 +141,6 @@ public class ScrollPage extends TagSupport {
             for(int i = 0; i < length; i++) {
                 result[i] = i + 1;
             }
-
             return result;
         }
 

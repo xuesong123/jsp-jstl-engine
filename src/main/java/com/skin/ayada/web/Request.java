@@ -50,17 +50,18 @@ public class Request {
      * @return Map<String, Object>
      */
     public static Map<String, Object> getContext(ServletContext servletContext, HttpServletRequest request, HttpServletResponse response) {
+        ServletContext application = servletContext;
         HttpSession session = request.getSession(false);
         Map<String, Object> context = new HashMap<String, Object>();
 
-        if(servletContext == null) {
-            servletContext = getServletContext(session, request);
+        if(application == null) {
+            application = getServletContext(session, request);
         }
 
         // priority: request > session > servletContext
-        if(servletContext != null) {
-            String locale = servletContext.getInitParameter("javax.servlet.jsp.jstl.fmt.locale");
-            String timeZone = servletContext.getInitParameter("javax.servlet.jsp.jstl.fmt.timeZone");
+        if(application != null) {
+            String locale = application.getInitParameter("javax.servlet.jsp.jstl.fmt.locale");
+            String timeZone = application.getInitParameter("javax.servlet.jsp.jstl.fmt.timeZone");
 
             if(locale != null) {
                 context.put(LOCALE, locale);
@@ -69,7 +70,7 @@ public class Request {
             if(timeZone != null) {
                 context.put(TIMEZONE, timeZone);
             }
-            Request.export(servletContext, context);
+            Request.export(application, context);
         }
 
         if(session != null) {
@@ -79,7 +80,7 @@ public class Request {
         context.put("session", session);
         context.put("request", request);
         context.put("response", response);
-        context.put("servletContext", servletContext);
+        context.put("servletContext", application);
         context.put("params", Request.getParameterMap(request));
         context.put("headers", Request.getHttpHeader(request));
         Request.export(request, context);

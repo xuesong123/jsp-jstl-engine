@@ -185,7 +185,6 @@ public class Main {
                 buffer.deleteCharAt(buffer.length() - 1);
             }
         }
-
         return buffer.toString();
     }
 

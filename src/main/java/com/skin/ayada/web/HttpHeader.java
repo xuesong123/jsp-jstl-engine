@@ -191,6 +191,7 @@ public class HttpHeader implements java.util.Map<String, HeaderEntry>, java.lang
     /**
      * @see java.lang.Object#toString()
      */
+    @Override
     public String toString() {
         StringBuilder buffer = new StringBuilder();
 

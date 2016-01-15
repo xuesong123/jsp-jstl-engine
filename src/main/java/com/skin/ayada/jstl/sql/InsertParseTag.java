@@ -101,7 +101,6 @@ public class InsertParseTag extends BodyTagSupport {
                 map.put(column.getColumnName(), column);
             }
         }
-
         return map;
     }
 

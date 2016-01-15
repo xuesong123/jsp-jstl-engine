@@ -33,7 +33,6 @@ public class PropertyTag extends BodyTagSupport {
             this.setAttribute(this.name, this.value);
             return Tag.SKIP_BODY;
         }
-
         return BodyTag.EVAL_BODY_BUFFERED;
     }
 
@@ -43,7 +42,6 @@ public class PropertyTag extends BodyTagSupport {
             BodyContent body = this.getBodyContent();
             this.setAttribute(this.name, (body != null ? body.getString() : null));
         }
-
         return Tag.EVAL_PAGE;
     }
 

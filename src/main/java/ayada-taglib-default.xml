@@ -148,6 +148,13 @@
         <description></description>
     </tag>
     <tag>
+        <name>c:setEncoder</name>
+        <tag-class>com.skin.ayada.jstl.core.SetEncoderTag</tag-class>
+        <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
+        <description></description>
+    </tag>
+    <tag>
         <name>c:print</name>
         <tag-class>com.skin.ayada.jstl.core.PrintTag</tag-class>
         <body-content>empty</body-content>

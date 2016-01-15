@@ -69,7 +69,6 @@ public class ParseDateTag extends BodyTagSupport {
         else {
             this.pageContext.setAttribute(this.var, value);
         }
-
         return Tag.EVAL_PAGE;
     }
 
@@ -142,7 +141,6 @@ public class ParseDateTag extends BodyTagSupport {
         if(timeZone != null) {
             format.setTimeZone(timeZone);
         }
-
         return format;
     }
 
@@ -158,7 +156,6 @@ public class ParseDateTag extends BodyTagSupport {
         if((value instanceof String)) {
             return TimeZone.getTimeZone((String)value);
         }
-
         return null;
     }
 
@@ -183,7 +180,6 @@ public class ParseDateTag extends BodyTagSupport {
         if(style.equals("full")) {
             return DateFormat.FULL;
         }
-
         throw new Exception("illegal date style: " + style);
     }
 

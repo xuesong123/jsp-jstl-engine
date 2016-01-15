@@ -217,7 +217,6 @@ public class JspTemplateFactoryTest {
         }
         catch(Exception e) {
         }
-
         return stringWriter.toString();
     }
 
@@ -248,7 +247,6 @@ public class JspTemplateFactoryTest {
                 }
             }
         }
-
         return buffer.toString();
     }
 

@@ -60,7 +60,6 @@ public class QueryTag extends TagSupport implements IterationTag, TryCatchFinall
             this.pageContext.setAttribute(this.var, this.resultSet);
             return EVAL_BODY_INCLUDE;
         }
-
         return SKIP_BODY;
     }
 
@@ -77,7 +76,6 @@ public class QueryTag extends TagSupport implements IterationTag, TryCatchFinall
             this.count++;
             return EVAL_BODY_AGAIN;
         }
-
         return SKIP_BODY;
     }
 

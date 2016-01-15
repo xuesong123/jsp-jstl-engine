@@ -75,7 +75,6 @@ public class MySql {
         catch(ClassNotFoundException e) {
             throw new SQLException(e.getMessage());
         }
-
         return DriverManager.getConnection(url, userName, password);
     }
 

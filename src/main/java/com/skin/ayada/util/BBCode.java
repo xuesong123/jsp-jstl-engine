@@ -121,7 +121,6 @@ public class BBCode {
                 break;
             }
         }
-
         return buffer.toString();
     }
 
@@ -166,10 +165,8 @@ public class BBCode {
                     array[i] = HtmlUtil.encode(attr);
                 }
             }
-
             return evaluate(html, array);
         }
-
         return "";
     }
 
@@ -206,7 +203,6 @@ public class BBCode {
                 buffer.append(c);
             }
         }
-
         return buffer.toString();
     }
 
@@ -242,7 +238,6 @@ public class BBCode {
                 }
             }
         }
-
         return "";
     }
 
@@ -314,7 +309,6 @@ public class BBCode {
                 break;
             }
         }
-
         return HtmlUtil.encode(buffer.toString());
     }
 
@@ -436,7 +430,6 @@ public class BBCode {
                 }
             }
         }
-
         return map;
     }
 }

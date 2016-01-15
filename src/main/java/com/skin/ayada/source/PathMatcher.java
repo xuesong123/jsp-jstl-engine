@@ -155,7 +155,6 @@ public class PathMatcher {
                 return false;
             }
         }
-
         return true;
     }
 
@@ -301,7 +300,6 @@ public class PathMatcher {
                 return false;
             }
         }
-
         return true;
     }
 

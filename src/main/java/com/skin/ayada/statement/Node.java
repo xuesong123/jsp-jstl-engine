@@ -201,7 +201,6 @@ public abstract class Node {
                 buffer.setLength(buffer.length() - 1);
             }
         }
-
         return buffer.toString();
     }
 

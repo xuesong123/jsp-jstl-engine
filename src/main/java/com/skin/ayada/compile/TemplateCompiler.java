@@ -89,7 +89,7 @@ public class TemplateCompiler extends PageCompiler {
         long t2 = System.currentTimeMillis();
 
         if(logger.isDebugEnabled()) {
-            logger.debug("load source: " + (t2 - t1));
+            logger.debug("load source: {}, path: {}" + (t2 - t1), path);
         }
 
         if(source == null) {
@@ -131,7 +131,7 @@ public class TemplateCompiler extends PageCompiler {
                 this.startTag(stack, list);
             }
             else if(i == '$' && this.stream.peek() == '{') {
-                i = this.stream.read();
+                this.stream.read();
                 String flag = null;
                 int ln = this.lineNumber;
                 String expression = this.readExpression();
@@ -426,49 +426,6 @@ public class TemplateCompiler extends PageCompiler {
     }
 
     /**
-     * @param buffer
-     */
-    private String readText() {
-        int i = 0;
-        StringBuilder buffer = new StringBuilder();
-
-        while((i = this.stream.read()) != -1) {
-            if(i == '<' || i == '$') {
-                this.stream.back();
-                break;
-            }
-            else {
-                if(i == '\n') {
-                    this.lineNumber++;
-                }
-                buffer.append((char)i);
-            }
-        }
-        return buffer.toString();
-    }
-
-    /**
-     * @return String
-     */
-    private String readExpression() {
-        int i = 0;
-        StringBuilder buffer = new StringBuilder();
-
-        while((i = this.stream.read()) != -1) {
-            if(i == '}') {
-                break;
-            }
-            else {
-                if(i == '\n') {
-                    this.lineNumber++;
-                }
-                buffer.append((char)i);
-            }
-        }
-        return buffer.toString();
-    }
-
-    /**
      * @param stack
      * @param list
      */
@@ -566,269 +523,6 @@ public class TemplateCompiler extends PageCompiler {
             this.pushNode(stack, list, node);
             this.popNode(stack, list, node.getNodeName());
         }
-    }
-
-    /**
-     * @param nodeName
-     * @return boolean
-     */
-    private boolean isDirective(String nodeName) {
-        if(nodeName.startsWith("t:")) {
-            return (nodeName.equals(TPL_DIRECTIVE_TAGLIB)
-                    || nodeName.equals(TPL_DIRECTIVE_IMPORT)
-                    || nodeName.equals(TPL_DIRECTIVE_INCLUDE)
-                    || nodeName.equals(TPL_DIRECTIVE_TEXT)
-                    || nodeName.equals(TPL_DIRECTIVE_COMMENT));
-        }
-        return false;
-    }
-
-    /**
-     * @param source
-     */
-    public String ltrim(String source) {
-        if(source == null) {
-            return "";
-        }
-
-        int i = 0;
-        int length = source.length();
-
-        while(i < length && source.charAt(i) <= ' ') {
-            i++;
-        }
-        return (i > 0 ? source.substring(i) : source);
-    }
-
-    /**
-     * @param content
-     * @return boolean
-     */
-    public boolean isEmpty(String content) {
-        int i = 0;
-        int length = content.length();
-
-        while(i < length && content.charAt(i) <= ' ') {
-            i++;
-        }
-        return (i >= length);
-    }
-
-    /**
-     * @param content
-     * @return boolean
-     */
-    public boolean isEmpty(StringBuilder content) {
-        int i = 0;
-        int length = content.length();
-
-        while(i < length && content.charAt(i) <= ' ') {
-            i++;
-        }
-        return (i >= length);
-    }
-
-    /**
-     * skip line
-     */
-    public void skipLine() {
-        int i = -1;
-
-        while((i = this.stream.read()) != -1) {
-            if(i == '\n') {
-                this.lineNumber++;
-                break;
-            }
-        }
-    }
-
-    /**
-     * skip crlf
-     */
-    public void skipCRLF() {
-        int i = -1;
-
-        while((i = this.stream.peek()) != -1) {
-            if(i == '\r') {
-                this.stream.read();
-                continue;
-            }
-
-            if(i == '\n') {
-                this.lineNumber++;
-                this.stream.read();
-                continue;
-            }
-            else {
-                break;
-            }
-        }
-    }
-
-    /**
-     * skip whitespace
-     */
-    public void skipWhitespace() {
-        int i;
-        while((i = this.stream.peek()) != -1) {
-            if(i <= ' ') {
-                if(i == '\n') {
-                    this.lineNumber++;
-                }
-
-                this.stream.read();
-                continue;
-            }
-            else {
-                break;
-            }
-        }
-    }
-
-    /**
-     * @return String
-     */
-    public String readScriptlet() {
-        int i = 0;
-        int ln = this.lineNumber;
-        StringBuilder buffer = new StringBuilder();
-
-        this.skipCRLF();
-        while((i = this.stream.read()) != -1) {
-            if(i == '%' && this.stream.peek() == '>') {
-                this.stream.read();
-                break;
-            }
-            if(i == '\n') {
-                this.lineNumber++;
-            }
-            buffer.append((char)i);
-        }
-
-        if(this.stream.peek(-2) != '%' && this.stream.peek(-1) != '%') {
-            throw new RuntimeException("at line #" + ln + " The 'jsp:directive' direction must be ends with '%>'");
-        }
-        return buffer.toString();
-    }
-
-    /**
-     * @param nodeName
-     * @return String
-     */
-    public String readNodeContent(String nodeName) {
-        int i = 0;
-        int offset = this.stream.getPosition();
-        int end = this.stream.length();
-
-        while((i = this.stream.read()) != -1) {
-            if(i == '<' && this.stream.peek() == '/') {
-                this.stream.read();
-
-                if(this.match(nodeName)) {
-                    end = this.stream.getPosition() - 2;
-                    this.stream.skip(nodeName.length());
-
-                    while((i = this.stream.read()) != -1) {
-                        if(i == '\n') {
-                            this.lineNumber++;
-                        }
-
-                        if(i == '>') {
-                            break;
-                        }
-                    }
-                    break;
-                }
-            }
-            else {
-                if(i == '\n') {
-                    this.lineNumber++;
-                }
-            }
-        }
-        return this.stream.getString(offset, end - offset);
-    }
-
-    /**
-     * @param nodeName
-     * @return String
-     */
-    public String readNodeContent2(String nodeName) {
-        int i = 0;
-        int depth = 0;
-        int offset = this.stream.getPosition();
-        int end = this.stream.length();
-
-        while((i = this.stream.read()) != -1) {
-            if(i == '<') {
-                if(this.stream.peek() == '/') {
-                    this.stream.read();
-
-                    if(this.match(nodeName)) {
-                        if(depth == 0) {
-                            end = this.stream.getPosition() - 2;
-                            this.stream.skip(nodeName.length());
-                            while((i = this.stream.read()) != -1) {
-                                if(i == '\n') {
-                                    this.lineNumber++;
-                                }
-
-                                if(i == '>') {
-                                    break;
-                                }
-                            }
-                            break;
-                        }
-                        else {
-                            this.stream.skip(nodeName.length());
-                            while((i = this.stream.read()) != -1) {
-                                if(i == '\n') {
-                                    this.lineNumber++;
-                                }
-
-                                if(i == '>') {
-                                    break;
-                                }
-                            }
-                            depth--;
-                        }
-                    }
-                }
-                else {
-                    if(this.match(nodeName)) {
-                        depth++;
-                    }
-                }
-            }
-            else {
-                if(i == '\n') {
-                    this.lineNumber++;
-                }
-            }
-        }
-        return this.stream.getString(offset, end - offset);
-    }
-
-    /**
-     * @param nodeName
-     * @return boolean
-     */
-    public boolean match(String nodeName) {
-        int i = 0;
-        int length = nodeName.length();
-
-        for(i = 0; i < length; i++) {
-            if(this.stream.peek(i) != nodeName.charAt(i)) {
-                return false;
-            }
-        }
-
-        int c = this.stream.peek(i);
-
-        if(c == ' ' || c == '\r' || c == '\n' || c == '\t' || c == '/' || c == '>') {
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -1231,6 +925,333 @@ public class TemplateCompiler extends PageCompiler {
             }
             buffer.delete(0, j);
         }
+    }
+
+    /**
+     * @param buffer
+     */
+    private String readText() {
+        int i = 0;
+        StringBuilder buffer = new StringBuilder();
+
+        while((i = this.stream.read()) != -1) {
+            if(i == '<') {
+                this.stream.back();
+                break;
+            }
+            else if(i == '$' && this.stream.peek() == '{') {
+                this.stream.back();
+                break;
+            }
+            else {
+                if(i == '\n') {
+                    this.lineNumber++;
+                }
+                buffer.append((char)i);
+            }
+        }
+        return buffer.toString();
+    }
+
+    /**
+     * @return String
+     */
+    private String readExpression() {
+        int i = 0;
+        StringBuilder buffer = new StringBuilder();
+
+        while((i = this.stream.read()) != -1) {
+            if(i == '}') {
+                break;
+            }
+            else {
+                if(i == '\n') {
+                    this.lineNumber++;
+                }
+                buffer.append((char)i);
+            }
+        }
+        return buffer.toString();
+    }
+
+    /**
+     * @return String
+     */
+    public String readScriptlet() {
+        int i = 0;
+        int ln = this.lineNumber;
+        StringBuilder buffer = new StringBuilder();
+
+        this.skipCRLF();
+        while((i = this.stream.read()) != -1) {
+            if(i == '%' && this.stream.peek() == '>') {
+                this.stream.read();
+                break;
+            }
+            if(i == '\n') {
+                this.lineNumber++;
+            }
+            buffer.append((char)i);
+        }
+
+        if(this.stream.peek(-2) != '%' && this.stream.peek(-1) != '%') {
+            throw new RuntimeException("at line #" + ln + " The 'jsp:directive' direction must be ends with '%>'");
+        }
+        return buffer.toString();
+    }
+
+    /**
+     * @param nodeName
+     * @return String
+     */
+    public String readNodeContent(String nodeName) {
+        int i = 0;
+        int offset = this.stream.getPosition();
+        int end = this.stream.length();
+
+        while((i = this.stream.read()) != -1) {
+            if(i == '<' && this.stream.peek() == '/') {
+                this.stream.read();
+
+                if(this.match(nodeName)) {
+                    end = this.stream.getPosition() - 2;
+                    this.stream.skip(nodeName.length());
+
+                    while((i = this.stream.read()) != -1) {
+                        if(i == '\n') {
+                            this.lineNumber++;
+                        }
+
+                        if(i == '>') {
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+            else {
+                if(i == '\n') {
+                    this.lineNumber++;
+                }
+            }
+        }
+        return this.stream.getString(offset, end - offset);
+    }
+
+    /**
+     * @param nodeName
+     * @return String
+     */
+    public String readNodeContent2(String nodeName) {
+        int i = 0;
+        int depth = 0;
+        int offset = this.stream.getPosition();
+        int end = this.stream.length();
+
+        while((i = this.stream.read()) != -1) {
+            if(i == '<') {
+                if(this.stream.peek() == '/') {
+                    this.stream.read();
+
+                    if(this.match(nodeName)) {
+                        if(depth == 0) {
+                            end = this.stream.getPosition() - 2;
+                            this.stream.skip(nodeName.length());
+                            while((i = this.stream.read()) != -1) {
+                                if(i == '\n') {
+                                    this.lineNumber++;
+                                }
+
+                                if(i == '>') {
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                        else {
+                            this.stream.skip(nodeName.length());
+                            while((i = this.stream.read()) != -1) {
+                                if(i == '\n') {
+                                    this.lineNumber++;
+                                }
+
+                                if(i == '>') {
+                                    break;
+                                }
+                            }
+                            depth--;
+                        }
+                    }
+                }
+                else {
+                    if(this.match(nodeName)) {
+                        depth++;
+                    }
+                }
+            }
+            else {
+                if(i == '\n') {
+                    this.lineNumber++;
+                }
+            }
+        }
+        return this.stream.getString(offset, end - offset);
+    }
+
+    /**
+     * @param nodeName
+     * @return boolean
+     */
+    private boolean isDirective(String nodeName) {
+        if(nodeName.startsWith("t:")) {
+            return (nodeName.equals(TPL_DIRECTIVE_TAGLIB)
+                    || nodeName.equals(TPL_DIRECTIVE_IMPORT)
+                    || nodeName.equals(TPL_DIRECTIVE_INCLUDE)
+                    || nodeName.equals(TPL_DIRECTIVE_TEXT)
+                    || nodeName.equals(TPL_DIRECTIVE_COMMENT));
+        }
+        return false;
+    }
+
+    /**
+     * @param source
+     */
+    public String ltrim(String source) {
+        if(source == null) {
+            return "";
+        }
+
+        int i = 0;
+        int length = source.length();
+
+        while(i < length && source.charAt(i) <= ' ') {
+            i++;
+        }
+        return (i > 0 ? source.substring(i) : source);
+    }
+
+    /**
+     * @param content
+     * @return boolean
+     */
+    public boolean isEmpty(String content) {
+        int i = 0;
+        int length = content.length();
+
+        while(i < length && content.charAt(i) <= ' ') {
+            i++;
+        }
+        return (i >= length);
+    }
+
+    /**
+     * @param content
+     * @return boolean
+     */
+    public boolean isEmpty(StringBuilder content) {
+        int i = 0;
+        int length = content.length();
+
+        while(i < length && content.charAt(i) <= ' ') {
+            i++;
+        }
+        return (i >= length);
+    }
+
+    /**
+     * skip line
+     */
+    public void skipLine() {
+        int i = -1;
+
+        while((i = this.stream.read()) != -1) {
+            if(i == '\n') {
+                this.lineNumber++;
+                break;
+            }
+        }
+    }
+
+    /**
+     * skip crlf
+     */
+    public void skipCRLF() {
+        int i = -1;
+
+        while((i = this.stream.peek()) != -1) {
+            if(i == '\r') {
+                this.stream.read();
+                continue;
+            }
+
+            if(i == '\n') {
+                this.lineNumber++;
+                this.stream.read();
+                continue;
+            }
+            else {
+                break;
+            }
+        }
+    }
+
+    /**
+     * skip whitespace
+     */
+    public void skipWhitespace() {
+        int i;
+        while((i = this.stream.peek()) != -1) {
+            if(i <= ' ') {
+                if(i == '\n') {
+                    this.lineNumber++;
+                }
+
+                this.stream.read();
+                continue;
+            }
+            else {
+                break;
+            }
+        }
+    }
+
+    /**
+     * @param c
+     */
+    public void skip(char c) {
+        int i = 0;
+
+        while((i = this.stream.read()) != -1) {
+            if(i != c) {
+                this.stream.back();
+                break;
+            }
+            if(c == '\n') {
+                this.lineNumber++;
+            }
+        }
+    }
+
+    /**
+     * @param nodeName
+     * @return boolean
+     */
+    public boolean match(String nodeName) {
+        int i = 0;
+        int length = nodeName.length();
+
+        for(i = 0; i < length; i++) {
+            if(this.stream.peek(i) != nodeName.charAt(i)) {
+                return false;
+            }
+        }
+
+        int c = this.stream.peek(i);
+
+        if(c == ' ' || c == '\r' || c == '\n' || c == '\t' || c == '/' || c == '>') {
+            return true;
+        }
+        return false;
     }
 
     /**

@@ -10,6 +10,7 @@
  */
 package com.skin.ayada.runtime;
 
+import com.skin.ayada.jstl.util.EscapeEncoder;
 import com.skin.ayada.jstl.util.HtmlEncoder;
 
 /**
@@ -21,16 +22,26 @@ import com.skin.ayada.jstl.util.HtmlEncoder;
  */
 public class ELEncoderFactory {
     private static final HtmlEncoder htmlEncoder = new HtmlEncoder();
+    private static final EscapeEncoder escapeEncoder = new EscapeEncoder();
 
     /**
      * @param name
      * @return ELEncoder
      */
     public static ELEncoder getELEncoder(String name) {
-        if(name != null && (name.equals("xml") || name.equals("html"))) {
+        if(name == null) {
+            return null;
+        }
+
+        if((name.equals("xml") || name.equals("html"))) {
             return htmlEncoder;
         }
-        return null;
+        else if((name.equals("code"))) {
+            return escapeEncoder;
+        }
+        else {
+            return null;
+        }
     }
 
     /**

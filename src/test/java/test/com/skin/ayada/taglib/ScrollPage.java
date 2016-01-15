@@ -39,7 +39,6 @@ public class ScrollPage extends TagSupport {
         }
         catch(java.io.IOException e) {
         }
-
         return EVAL_PAGE;
     }
 
@@ -144,7 +143,6 @@ public class ScrollPage extends TagSupport {
             for(int i = 0; i < length; i++) {
                 result[i] = i + 1;
             }
-
             return result;
         }
 
@@ -186,7 +184,6 @@ public class ScrollPage extends TagSupport {
                 result[i - start] = i;
             }
         }
-
         return result;
     }
 
@@ -221,7 +218,6 @@ public class ScrollPage extends TagSupport {
             s = e + d;
         }
         while(true);
-
         return buffer.toString();
     }
 

@@ -33,7 +33,6 @@ public class ParameterTag extends BodyTagSupport {
             this.setParameter(this.name, this.value);
             return Tag.SKIP_BODY;
         }
-
         return BodyTag.EVAL_BODY_BUFFERED;
     }
 
@@ -43,7 +42,6 @@ public class ParameterTag extends BodyTagSupport {
             BodyContent body = this.getBodyContent();
             this.setParameter(this.name, (body != null ? body.getString() : null));
         }
-
         return Tag.EVAL_PAGE;
     }
 

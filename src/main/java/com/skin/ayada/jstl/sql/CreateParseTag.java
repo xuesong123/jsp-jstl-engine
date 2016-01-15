@@ -53,7 +53,6 @@ public class CreateParseTag extends BodyTagSupport {
         if(this.file != null) {
             return Tag.SKIP_BODY;
         }
-
         return BodyTag.EVAL_BODY_BUFFERED;
     }
 
@@ -94,7 +93,6 @@ public class CreateParseTag extends BodyTagSupport {
                 this.pageContext.setAttribute(this.name, list);
             }
         }
-
         return Tag.EVAL_PAGE;
     }
 
@@ -111,7 +109,6 @@ public class CreateParseTag extends BodyTagSupport {
                 map.put(column.getColumnName(), column);
             }
         }
-
         return map;
     }
 
@@ -148,7 +145,6 @@ public class CreateParseTag extends BodyTagSupport {
         catch(Exception e) {
             logger.warn(e.getMessage(), e);
         }
-
         return dialect;
     }
 

@@ -32,7 +32,6 @@ public class RemoveTag extends BodyTagSupport {
         if(this.var != null) {
             this.pageContext.removeAttribute(this.var);
         }
-
         return Tag.SKIP_BODY;
     }
 

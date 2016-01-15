@@ -190,7 +190,6 @@ public class ExpressionUtil {
                 if(node instanceof Expression) {
                     return expressionContext.getValue(node.getTextContent());
                 }
-
                 return node.getTextContent();
             }
             Object value = null;
@@ -402,7 +401,6 @@ public class ExpressionUtil {
                 if(i == length - 2 && (c == 'e' || c == 'E') && Character.isDigit(source.charAt(length - 1))) {
                     return 4;
                 }
-
                 return 0;
             }
         }

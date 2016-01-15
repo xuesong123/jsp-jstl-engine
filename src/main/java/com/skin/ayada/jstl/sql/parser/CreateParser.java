@@ -50,7 +50,6 @@ public class CreateParser {
         while((table = this.parse(stream)) != null) {
             list.add(table);
         }
-
         return list;
     }
 
@@ -102,13 +101,11 @@ public class CreateParser {
             if(token.equalsIgnoreCase("NOT") == false) {
                 throw new RuntimeException("except keyword 'NOT'!");
             }
-
             token = this.getToken(stream);
 
             if(token.equalsIgnoreCase("EXISTS") == false) {
                 throw new RuntimeException("except keyword 'EXISTS'!");
             }
-
             tableName = this.getTableName(stream);
         }
 
@@ -252,7 +249,6 @@ public class CreateParser {
                     throw new RuntimeException("unknown keyword '" + token + "'!");
                 }
             }
-
             table.addColumn(column);
         }
 
@@ -261,7 +257,6 @@ public class CreateParser {
                 break;
             }
         }
-
         return table;
     }
 
@@ -323,7 +318,6 @@ public class CreateParser {
                 throw new RuntimeException("column '" + word + "', except '" + quoto + "': found '" + (char)c);
             }
         }
-
         return word;
     }
 
@@ -343,7 +337,6 @@ public class CreateParser {
         }
         catch(NumberFormatException e) {
         }
-
         return null;
     }
 
@@ -372,7 +365,6 @@ public class CreateParser {
                 buffer.append((char)i);
             }
         }
-
         return buffer.toString();
     }
 
@@ -403,10 +395,8 @@ public class CreateParser {
                     break;
                 }
             }
-
             return this.getToken(stream);
         }
-
         return token;
     }
 
@@ -510,7 +500,6 @@ public class CreateParser {
         if(i == '_') {
             return true;
         }
-
         return (i >= 97 && i <= 122) || (i >= 65 && i <= 90);
     }
 
@@ -518,7 +507,6 @@ public class CreateParser {
         if(i == '_') {
             return true;
         }
-
         return (i >= 48 && i <= 57) || (i >= 97 && i <= 122) || (i >= 65 && i <= 90);
     }
 
@@ -577,7 +565,6 @@ public class CreateParser {
         if(name.endsWith("_")) {
             buf.append("_");
         }
-
         return buf.toString();
     }
 
@@ -651,7 +638,6 @@ public class CreateParser {
 
             buffer.append("\r\n");
         }
-
         buffer.append(");");
         return buffer.toString();
     }

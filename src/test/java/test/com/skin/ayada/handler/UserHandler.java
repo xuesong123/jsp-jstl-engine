@@ -49,7 +49,6 @@ public class UserHandler {
             user.setAge(i);
             userList.add(user);
         }
-
         return userList;
     }
 }

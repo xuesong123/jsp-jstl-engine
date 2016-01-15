@@ -42,7 +42,6 @@ public class WhenTag extends ConditionalTagSupport {
             chooseTag.finish();
             return EVAL_BODY_INCLUDE;
         }
-
         return SKIP_BODY;
     }
 

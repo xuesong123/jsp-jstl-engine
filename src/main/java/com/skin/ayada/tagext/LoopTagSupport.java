@@ -381,7 +381,6 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
         if(this.loopStatus == null) {
             this.loopStatus = new Status();
         }
-
         return this.loopStatus;
     }
 

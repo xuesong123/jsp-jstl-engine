@@ -53,7 +53,6 @@ public class TestBodyTag extends BodyTagSupport {
             catch(IOException e) {
             }
         }
-
         return EVAL_PAGE;
     }
 }

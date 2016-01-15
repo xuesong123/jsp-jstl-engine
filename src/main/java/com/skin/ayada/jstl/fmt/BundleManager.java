@@ -107,7 +107,6 @@ public class BundleManager {
                         if(resourceBundle != null) {
                             return new LocalizationContext(resourceBundle, locale);
                         }
-
                         return null;
                     }
                     catch(Exception e) {
@@ -133,7 +132,6 @@ public class BundleManager {
         catch(Exception e) {
             logger.warn(e.getMessage(), e);
         }
-
         return localizationContext;
     }
 
@@ -161,7 +159,6 @@ public class BundleManager {
             buffer.append("_");
             buffer.append(variant);
         }
-
         return buffer.toString();
     }
 
@@ -198,7 +195,6 @@ public class BundleManager {
                 }
             }
         }
-
         return null;
     }
 

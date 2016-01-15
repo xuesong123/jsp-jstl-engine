@@ -153,7 +153,6 @@ public class Scriptlet {
             buffer.append(" */ ");
             buffer.append(parameterName);
         }
-
         return buffer.toString();
     }
 
@@ -214,7 +213,6 @@ public class Scriptlet {
                 buffer.append(", ");
             }
         }
-
         return buffer.toString();
     }
 
@@ -240,7 +238,6 @@ public class Scriptlet {
 
             buffer.append("*/ ");
         }
-
         return buffer.toString();
     }
 }

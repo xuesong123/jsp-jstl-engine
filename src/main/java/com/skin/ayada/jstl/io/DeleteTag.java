@@ -35,7 +35,6 @@ public class DeleteTag extends FileTag {
         else {
             this.execute(new File(this.file));
         }
-
         return Tag.EVAL_PAGE;
     }
 

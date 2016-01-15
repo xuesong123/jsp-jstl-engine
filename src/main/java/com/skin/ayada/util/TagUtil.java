@@ -67,7 +67,6 @@ public class TagUtil {
                 Object argument = ExpressionUtil.evaluate(expressionContext, value, Object.class);
                 dynamicAttributes.setDynamicAttribute(name, argument);
             }
-
             return;
         }
 
@@ -116,7 +115,6 @@ public class TagUtil {
                 }
             }
         }
-
         return null;
     }
 }

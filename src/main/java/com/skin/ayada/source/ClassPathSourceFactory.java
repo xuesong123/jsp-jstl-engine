@@ -93,7 +93,6 @@ public class ClassPathSourceFactory extends SourceFactory {
         }
         catch(Exception e) {
         }
-
         return (url != null);
     }
 

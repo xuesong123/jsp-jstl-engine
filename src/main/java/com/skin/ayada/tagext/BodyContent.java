@@ -72,7 +72,6 @@ public class BodyContent extends JspWriter {
      */
     @Override
     public void setBufferSize(int bufferSize) {
-        throw new UnsupportedOperationException();
     }
 
     /**
@@ -105,9 +104,6 @@ public class BodyContent extends JspWriter {
     public void clear() throws IOException {
         if(this.writer == null) {
             this.buffer.getBuffer().setLength(0);
-        }
-        else {
-            throw new IOException("Unsupported operation: clear !");
         }
     }
 

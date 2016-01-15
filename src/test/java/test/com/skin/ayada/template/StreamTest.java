@@ -201,7 +201,6 @@ public class StreamTest {
             attributes.put(name, value);
             buffer.setLength(0);
         }
-
         return attributes;
     }
 
@@ -246,7 +245,6 @@ public class StreamTest {
                 }
             }
         }
-
         return stream.getString(offset, end - offset);
     }
 
@@ -309,7 +307,6 @@ public class StreamTest {
                 }
             }
         }
-
         return stream.getString(offset, end - offset);
     }
 
@@ -332,7 +329,6 @@ public class StreamTest {
         if(c == ' ' || c == '\r' || c == '\n' || c == '\t' || c == '/' || c == '>') {
             return true;
         }
-
         return false;
     }
 
@@ -363,7 +359,6 @@ public class StreamTest {
                 b = true;
             }
         }
-
         return buffer.toString();
     }
 }

@@ -48,7 +48,6 @@ public class SubstringTag extends BodyTagSupport {
         }
         catch(IOException e) {
         }
-
         return Tag.EVAL_PAGE;
     }
 
@@ -98,7 +97,6 @@ public class SubstringTag extends BodyTagSupport {
         if(size < count && padding != null) {
             buffer.append(padding);
         }
-
         return buffer.toString();
     }
 

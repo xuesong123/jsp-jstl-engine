@@ -167,7 +167,6 @@ public class AssistTest {
         catch(IllegalAccessException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 

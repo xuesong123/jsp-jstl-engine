@@ -407,7 +407,6 @@ public class Config {
             catch(NumberFormatException e) {
             }
         }
-
         return result;
     }
 

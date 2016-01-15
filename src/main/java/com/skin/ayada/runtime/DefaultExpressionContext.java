@@ -216,7 +216,7 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
      */
     @Override
     public void print(Writer out, boolean b) throws IOException {
-        out.write(String.valueOf(b));
+        out.write((b ? "true": "false"));
     }
 
     /**
@@ -226,7 +226,7 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
      */
     @Override
     public void print(Writer out, char c) throws IOException {
-        out.write(String.valueOf(c));
+        out.write(new char[]{c}, 0, 1);
     }
 
     /**
@@ -236,7 +236,7 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
      */
     @Override
     public void print(Writer out, byte b) throws IOException {
-        out.write(String.valueOf(b));
+        out.write(Integer.toString(b, 10));
     }
 
     /**
@@ -246,7 +246,7 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
      */
     @Override
     public void print(Writer out, short s) throws IOException {
-        out.write(String.valueOf(s));
+        out.write(Integer.toString(s, 10));
     }
 
     /**
@@ -256,7 +256,7 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
      */
     @Override
     public void print(Writer out, int i) throws IOException {
-        out.write(String.valueOf(i));
+        out.write(Integer.toString(i));
     }
 
     /**
@@ -266,7 +266,7 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
      */
     @Override
     public void print(Writer out, float f) throws IOException {
-        out.write(String.valueOf(f));
+        out.write(Float.toString(f));
     }
 
     /**
@@ -276,7 +276,7 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
      */
     @Override
     public void print(Writer out, double d) throws IOException {
-        out.write(String.valueOf(d));
+        out.write(Double.toString(d));
     }
 
     /**
@@ -286,7 +286,7 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
      */
     @Override
     public void print(Writer out, long l) throws IOException {
-        out.write(String.valueOf(l));
+        out.write(Long.toString(l));
     }
 
     /**

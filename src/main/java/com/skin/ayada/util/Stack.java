@@ -60,7 +60,6 @@ public class Stack<E> {
         if(e == null) {
             throw new IllegalStateException("");
         }
-
         return e;
     }
 
@@ -75,7 +74,6 @@ public class Stack<E> {
             this.index--;
             return e;
         }
-
         return null;
     }
 
@@ -99,7 +97,6 @@ public class Stack<E> {
         if(i > -1 && i <= this.index) {
             return (E)(this.stack[i]);
         }
-
         return null;
     }
 

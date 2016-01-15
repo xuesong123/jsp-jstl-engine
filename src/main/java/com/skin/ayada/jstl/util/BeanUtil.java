@@ -138,7 +138,6 @@ public class BeanUtil {
         if(source != null && target != null) {
             return source.equals(target);
         }
-
         return (source == target);
     }
 
@@ -284,7 +283,6 @@ public class BeanUtil {
                     }
                 }
             }
-
             return buffer.toString();
         }
     }

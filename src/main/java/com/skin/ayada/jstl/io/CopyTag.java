@@ -41,7 +41,6 @@ public class CopyTag extends FileTag {
                 this.execute(new File(this.file));
             }
         }
-
         return Tag.EVAL_PAGE;
     }
 

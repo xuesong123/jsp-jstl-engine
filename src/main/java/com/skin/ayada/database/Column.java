@@ -86,7 +86,6 @@ public class Column {
         if(this.table != null) {
             return this.table.getTableName();
         }
-
         return null;
     }
 
@@ -94,7 +93,6 @@ public class Column {
         if(this.table != null) {
             return this.table.getAlias();
         }
-
         return null;
     }
 

@@ -708,11 +708,9 @@ public class InsertParser {
                 if(i == length - 2 && (c == 'e' || c == 'E') && Character.isDigit(source.charAt(length - 1))) {
                     return 4;
                 }
-
                 return 0;
             }
         }
-
         return (d == 0 ? type : d);
     }
 

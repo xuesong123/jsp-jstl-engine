@@ -31,7 +31,6 @@ public class TryCatchTestTag extends TagSupport implements TryCatchFinally {
             System.out.println("TryCatchTestTag.doStartTag throws Exception !");
             throw new RuntimeException("TryCatchTestTag.doStartTag throws Exception !");
         }
-
         return Tag.EVAL_PAGE;
     }
 
@@ -46,7 +45,6 @@ public class TryCatchTestTag extends TagSupport implements TryCatchFinally {
             System.out.println("TryCatchTestTag.doEndTag throws Exception !");
             throw new RuntimeException("TryCatchTestTag.doEndTag throws Exception !");
         }
-
         return Tag.EVAL_PAGE;
     }
 
@@ -91,7 +89,6 @@ public class TryCatchTestTag extends TagSupport implements TryCatchFinally {
                 }
             }
         }
-
         return false;
     }
 

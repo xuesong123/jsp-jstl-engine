@@ -88,7 +88,6 @@ public class LocalizationContext {
         if(this.locale != null) {
             return new MessageFormat(result, this.locale).format(args);
         }
-
         return new MessageFormat(result).format(args);
     }
 

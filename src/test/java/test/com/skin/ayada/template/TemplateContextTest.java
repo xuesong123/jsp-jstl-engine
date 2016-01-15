@@ -10,9 +10,12 @@
  */
 package test.com.skin.ayada.template;
 
+import java.io.File;
 import java.io.StringWriter;
 import java.util.HashMap;
+import java.util.Map;
 
+import com.skin.ayada.io.ChunkWriter;
 import com.skin.ayada.runtime.DefaultExpressionFactory;
 import com.skin.ayada.runtime.ExpressionFactory;
 import com.skin.ayada.source.DefaultSourceFactory;
@@ -21,6 +24,8 @@ import com.skin.ayada.template.DefaultTemplateContext;
 import com.skin.ayada.template.Template;
 import com.skin.ayada.template.TemplateContext;
 import com.skin.ayada.template.TemplateFactory;
+import com.skin.ayada.template.TemplateManager;
+import com.skin.ayada.util.IO;
 
 /**
  * <p>Title: TemplateContextTest</p>
@@ -35,22 +40,52 @@ public class TemplateContextTest {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        String sourcePattern = "jsp,jspx";
-        String home = "E:\\WorkSpace\\test\\webapp\\template";
-        SourceFactory sourceFactory = new DefaultSourceFactory();
-        TemplateFactory templateFactory = new TemplateFactory();
-        ExpressionFactory expressionFactory = new DefaultExpressionFactory();
-        sourceFactory.setHome(home);
-        sourceFactory.setSourcePattern(sourcePattern);
+        test2();
+    }
+    
+    public static void test1() {
+        try {
+           String sourcePattern = "jsp,jspx";
+           String home = "E:\\WorkSpace\\test\\webapp\\template";
+           SourceFactory sourceFactory = new DefaultSourceFactory();
+           TemplateFactory templateFactory = new TemplateFactory();
+           ExpressionFactory expressionFactory = new DefaultExpressionFactory();
+           sourceFactory.setHome(home);
+           sourceFactory.setSourcePattern(sourcePattern);
+    
+           TemplateContext templateContext = new DefaultTemplateContext();
+           templateContext.setSourceFactory(sourceFactory);
+           templateContext.setTemplateFactory(templateFactory);
+           templateContext.setExpressionFactory(expressionFactory);
+    
+           StringWriter writer = new StringWriter();
+           Template template = templateContext.getTemplate("/test.jsp");
+           templateContext.execute(template, new HashMap<String, Object>(), writer);
+           System.out.println(writer.toString());
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public static void test2() {
+        ChunkWriter writer = new ChunkWriter(4096);
 
-        TemplateContext templateContext = new DefaultTemplateContext();
-        templateContext.setSourceFactory(sourceFactory);
-        templateContext.setTemplateFactory(templateFactory);
-        templateContext.setExpressionFactory(expressionFactory);
+        try {
+            File file = new File("D:\\workspace2\\generator\\webapp\\config\\template\\skin\\\\model.jsp");
+            File parent = file.getCanonicalFile().getParentFile();
+            String work = parent.getAbsolutePath();
+            TemplateContext templateContext = TemplateManager.create(work);
 
-        StringWriter writer = new StringWriter();
-        Template template = templateContext.getTemplate("/test.jsp");
-        templateContext.execute(template, new HashMap<String, Object>(), writer);
-        System.out.println(writer.toString());
+            Map<String, Object> context = new HashMap<String, Object>();
+            templateContext.execute(file.getName(), context, writer);
+            templateContext.destory();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            IO.close(writer);
+        }
     }
 }

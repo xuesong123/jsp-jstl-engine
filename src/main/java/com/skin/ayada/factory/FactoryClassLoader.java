@@ -43,7 +43,6 @@ public class FactoryClassLoader extends ClassLoader {
         catch(ClassNotFoundException e) {
             logger.warn(e.getMessage(), e);
         }
-
         return null;
     }
 
