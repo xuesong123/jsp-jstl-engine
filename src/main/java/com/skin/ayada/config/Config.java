@@ -104,7 +104,7 @@ public class Config {
      * @return Boolean
      */
     public Boolean getBoolean(String name) {
-        return this.getBoolean(name, null);
+        return this.getBoolean(name, Boolean.FALSE);
     }
 
     /**
@@ -595,8 +595,22 @@ public class Config {
     /**
      * @param map
      */
-    public void setValues(Map<String, String> map) {
+    public void setConfig(Map<String, String> map) {
         this.parameters.putAll(map);
+    }
+
+    /**
+     * @param config
+     */
+    public void extend(Config config) {
+        this.parameters.putAll(config.parameters);
+    }
+
+    /**
+     * @param config
+     */
+    public void copy(Config config) {
+        this.parameters.putAll(config.parameters);
     }
 
     /**

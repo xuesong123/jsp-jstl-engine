@@ -19,17 +19,18 @@ package com.skin.ayada.config;
 public class TemplateConfig {
     private static final Config instance = TemplateConfig.create();
 
+    /**
+     * @return Config
+     */
     public static Config getInstance() {
         return instance;
     }
 
+    /**
+     * @return Config
+     */
     public static Config create() {
-        Config config = ConfigFactory.getConfig("ayada.properties", Config.class);
-
-        if(config.size() < 1) {
-            config = ConfigFactory.getConfig("ayada-default.properties", Config.class);
-        }
-        return config;
+        return ConfigFactory.load(new String[]{"ayada-default.properties", "ayada.properties"}, Config.class);
     }
 
     /**
@@ -58,21 +59,21 @@ public class TemplateConfig {
      * @return boolean
      */
     public static boolean getStandardLibrary() {
-        return instance.getBoolean("ayada.compile.standard-library");
+        return instance.getBoolean("ayada.compile.standard-library", Boolean.TRUE);
     }
 
     /**
      * @return boolean
      */
     public static boolean getIgnoreJspTag() {
-        return instance.getBoolean("ayada.compile.ignore-jsptag");
+        return instance.getBoolean("ayada.compile.ignore-jsptag", Boolean.FALSE);
     }
 
     /**
      * @return boolean
      */
     public static boolean getFashJstl() {
-        return instance.getBoolean("ayada.compile.fast-jstl");
+        return instance.getBoolean("ayada.compile.fast-jstl", Boolean.TRUE);
     }
 
     /**

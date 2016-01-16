@@ -41,16 +41,28 @@ public class ConfigFactory {
      * @return T
      */
     public static <T extends Config> T getConfig(String resource, Class<T> type) {
+        return load(new String[]{resource}, type);
+    }
+
+    /**
+     * @param <T>
+     * @param resources
+     * @param type
+     * @return T
+     */
+    public static <T extends Config> T load(String[] resources, Class<T> type) {
         try {
-            Map<String, String> map = PropertyResource.load(resource, "UTF-8");
             T config = type.newInstance();
-            config.setValues(map);
+
+            for(String resource : resources) {
+                Map<String, String> map = PropertyResource.load(resource, "UTF-8");
+                config.setConfig(map);
+            }
             return config;
         }
         catch(Exception e) {
-            logger.warn(e.getMessage(), e);
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     /**
