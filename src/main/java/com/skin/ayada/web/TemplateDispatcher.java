@@ -81,9 +81,15 @@ public class TemplateDispatcher {
             contentType = "text/html; charset=UTF-8";
         }
 
-        if(logger.isInfoEnabled()) {
-            logger.info("jsp.home: " + home);
-        }
+        logger.info("name: {}", name);
+        logger.info("page.home: {}", home);
+        logger.info("page.prefix: {}", prefix);
+        logger.info("page.encoding: {}", encoding);
+        logger.info("page.contentType: {}", contentType);
+        logger.info("page.work: " + filterConfig.getInitParameter("jspWork"));
+        logger.info("page.sourceFactory: " + filterConfig.getInitParameter("sourceFactoryClass"));
+        logger.info("page.templateFactory: " + filterConfig.getInitParameter("templateFactoryClass"));
+        logger.info("page.expressionFactory: " + filterConfig.getInitParameter("expressionFactoryClass"));
 
         TemplateContextFactory contextFactory = new TemplateContextFactory();
         contextFactory.setHome(home);
@@ -96,7 +102,7 @@ public class TemplateDispatcher {
         contextFactory.setTemplateFactoryClass(filterConfig.getInitParameter("templateFactoryClass"));
         contextFactory.setExpressionFactoryClass(filterConfig.getInitParameter("expressionFactoryClass"));
         TemplateContext templateContext = contextFactory.create();
-
+        
         TemplateDispatcher templateDispatcher = new TemplateDispatcher();
         templateDispatcher.setName(name);
         templateDispatcher.setPrefix(prefix);
@@ -145,9 +151,15 @@ public class TemplateDispatcher {
             contentType = "text/html; charset=UTF-8";
         }
 
-        if(logger.isInfoEnabled()) {
-            logger.info("jsp.home: " + home);
-        }
+        logger.info("name: {}", name);
+        logger.info("page.home: {}", home);
+        logger.info("page.prefix: {}", prefix);
+        logger.info("page.encoding: {}", encoding);
+        logger.info("page.contentType: {}", contentType);
+        logger.info("page.work: " + servletConfig.getInitParameter("jspWork"));
+        logger.info("page.sourceFactory: " + servletConfig.getInitParameter("sourceFactoryClass"));
+        logger.info("page.templateFactory: " + servletConfig.getInitParameter("templateFactoryClass"));
+        logger.info("page.expressionFactory: " + servletConfig.getInitParameter("expressionFactoryClass"));
 
         TemplateContextFactory contextFactory = new TemplateContextFactory();
         contextFactory.setHome(home);
