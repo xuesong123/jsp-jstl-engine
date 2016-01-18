@@ -39,7 +39,7 @@ import com.skin.ayada.util.Path;
  * @version 1.0
  */
 public class TemplateDispatcher {
-    private String home;
+    private String name;
     private String prefix;
     private String encoding;
     private String contentType;
@@ -53,6 +53,7 @@ public class TemplateDispatcher {
      * @throws ServletException
      */
     public static TemplateDispatcher create(FilterConfig filterConfig) throws ServletException {
+        String name = filterConfig.getInitParameter("name");
         String home = filterConfig.getInitParameter("home");
         String prefix = filterConfig.getInitParameter("prefix");
         String encoding = filterConfig.getInitParameter("encoding");
@@ -86,7 +87,6 @@ public class TemplateDispatcher {
 
         TemplateContextFactory contextFactory = new TemplateContextFactory();
         contextFactory.setHome(home);
-        contextFactory.setEncoding(filterConfig.getInitParameter("encoding"));
         contextFactory.setSourcePattern(filterConfig.getInitParameter("sourcePattern"));
         contextFactory.setJspWork(filterConfig.getInitParameter("jspWork"));
         contextFactory.setZipFile(filterConfig.getInitParameter("zipFile"));
@@ -98,12 +98,16 @@ public class TemplateDispatcher {
         TemplateContext templateContext = contextFactory.create();
 
         TemplateDispatcher templateDispatcher = new TemplateDispatcher();
-        templateDispatcher.setHome(home);
+        templateDispatcher.setName(name);
         templateDispatcher.setPrefix(prefix);
         templateDispatcher.setEncoding(encoding);
         templateDispatcher.setContentType(contentType);
         templateDispatcher.setServletContext(servletContext);
         templateDispatcher.setTemplateContext(templateContext);
+
+        if(name != null) {
+            servletContext.setAttribute(name, templateDispatcher);
+        }
         return templateDispatcher;
     }
 
@@ -113,6 +117,7 @@ public class TemplateDispatcher {
      * @throws ServletException
      */
     public static TemplateDispatcher create(ServletConfig servletConfig) throws ServletException {
+        String name = servletConfig.getInitParameter("name");
         String home = servletConfig.getInitParameter("home");
         String prefix = servletConfig.getInitParameter("prefix");
         String encoding = servletConfig.getInitParameter("encoding");
@@ -146,7 +151,6 @@ public class TemplateDispatcher {
 
         TemplateContextFactory contextFactory = new TemplateContextFactory();
         contextFactory.setHome(home);
-        contextFactory.setEncoding(servletConfig.getInitParameter("encoding"));
         contextFactory.setSourcePattern(servletConfig.getInitParameter("sourcePattern"));
         contextFactory.setJspWork(servletConfig.getInitParameter("jspWork"));
         contextFactory.setZipFile(servletConfig.getInitParameter("zipFile"));
@@ -159,12 +163,16 @@ public class TemplateDispatcher {
         TemplateManager.add(templateContext);
 
         TemplateDispatcher templateDispatcher = new TemplateDispatcher();
-        templateDispatcher.setHome(home);
+        templateDispatcher.setName(name);
         templateDispatcher.setPrefix(prefix);
         templateDispatcher.setEncoding(encoding);
         templateDispatcher.setContentType(contentType);
         templateDispatcher.setServletContext(servletContext);
         templateDispatcher.setTemplateContext(templateContext);
+
+        if(name != null) {
+            servletContext.setAttribute(name, templateDispatcher);
+        }
         return templateDispatcher;
     }
 
@@ -176,15 +184,26 @@ public class TemplateDispatcher {
      */
     public void dispatch(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = Path.getStrictPath(request.getRequestURI());
+        this.dispatch(request, response, path);
+    }
+
+    /**
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void dispatch(HttpServletRequest request, HttpServletResponse response, String page) throws ServletException, IOException {
+        String path = page;
+
+        if(logger.isDebugEnabled()) {
+            logger.debug("prefix: {}, page: {}", this.prefix, page);
+        }
 
         if(this.prefix != null && this.prefix.length() > 1) {
             if(path.startsWith(this.prefix)) {
                 path = path.substring(this.prefix.length());
             }
-        }
-
-        if(response.getContentType() == null) {
-            response.setContentType(this.contentType);
         }
 
         Template template = null;
@@ -203,7 +222,7 @@ public class TemplateDispatcher {
 
         if(template == null) {
             if(logger.isDebugEnabled()) {
-                logger.debug("404: " + path);
+                logger.debug("404: " + page);
             }
             response.sendError(404);
             return;
@@ -214,6 +233,9 @@ public class TemplateDispatcher {
         Writer writer = Request.getWriter(request, response);
 
         try {
+            if(response.getContentType() == null && this.contentType != null) {
+                response.setContentType(this.contentType);
+            }
             this.templateContext.execute(template, context, writer);
         }
         catch(Exception e) {
@@ -281,24 +303,17 @@ public class TemplateDispatcher {
     }
 
     /**
-     * @return the home
+     * @param name the name to set
      */
-    public String getHome() {
-        return this.home;
+    public void setName(String name) {
+        this.name = name;
     }
-
+    
     /**
-     * @param home the home to set
+     * @return the name
      */
-    public void setHome(String home) {
-        this.home = home;
-    }
-
-    /**
-     * @return the prefix
-     */
-    public String getPrefix() {
-        return this.prefix;
+    public String getName() {
+        return this.name;
     }
 
     /**
@@ -309,10 +324,10 @@ public class TemplateDispatcher {
     }
 
     /**
-     * @return the encoding
+     * @return the prefix
      */
-    public String getEncoding() {
-        return this.encoding;
+    public String getPrefix() {
+        return this.prefix;
     }
 
     /**
@@ -323,10 +338,10 @@ public class TemplateDispatcher {
     }
 
     /**
-     * @return the contentType
+     * @return the encoding
      */
-    public String getContentType() {
-        return this.contentType;
+    public String getEncoding() {
+        return this.encoding;
     }
 
     /**
@@ -337,10 +352,10 @@ public class TemplateDispatcher {
     }
 
     /**
-     * @return the servletContext
+     * @return the contentType
      */
-    public ServletContext getServletContext() {
-        return this.servletContext;
+    public String getContentType() {
+        return this.contentType;
     }
 
     /**
@@ -351,10 +366,10 @@ public class TemplateDispatcher {
     }
 
     /**
-     * @return the templateContext
+     * @return the servletContext
      */
-    public TemplateContext getTemplateContext() {
-        return this.templateContext;
+    public ServletContext getServletContext() {
+        return this.servletContext;
     }
 
     /**
@@ -362,5 +377,12 @@ public class TemplateDispatcher {
      */
     public void setTemplateContext(TemplateContext templateContext) {
         this.templateContext = templateContext;
+    }
+
+    /**
+     * @return the templateContext
+     */
+    public TemplateContext getTemplateContext() {
+        return this.templateContext;
     }
 }

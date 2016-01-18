@@ -38,7 +38,6 @@ import com.skin.ayada.util.WebUtil;
  */
 public class TemplateContextFactory {
     private String home;
-    private String encoding;
     private String sourcePattern;
     private String jspWork;
     private String zipFile;
@@ -55,10 +54,6 @@ public class TemplateContextFactory {
     public TemplateContext create() {
         if(this.home.startsWith("contextPath:")) {
             this.home = WebUtil.getRealPath(this.home.substring(12).trim());
-        }
-
-        if(this.encoding == null) {
-            this.encoding = "utf-8";
         }
 
         if(this.sourcePattern == null) {
@@ -99,7 +94,6 @@ public class TemplateContextFactory {
 
         if(logger.isInfoEnabled()) {
             logger.info("home: {}", this.home);
-            logger.info("encoding: {}", this.encoding);
             logger.info("sourcePattern: {}", this.sourcePattern);
             logger.info("jspWork: {}", this.jspWork);
             logger.info("zipFile: {}", this.zipFile);
@@ -199,20 +193,6 @@ public class TemplateContextFactory {
      */
     public void setHome(String home) {
         this.home = home;
-    }
-
-    /**
-     * @return the encoding
-     */
-    public String getEncoding() {
-        return this.encoding;
-    }
-
-    /**
-     * @param encoding the encoding to set
-     */
-    public void setEncoding(String encoding) {
-        this.encoding = encoding;
     }
 
     /**

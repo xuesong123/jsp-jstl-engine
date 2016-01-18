@@ -146,7 +146,6 @@ public class Jdbc {
                     catch(UnsupportedEncodingException e) {
                     }
                 }
-
                 name.setLength(0);
                 value.setLength(0);
             }

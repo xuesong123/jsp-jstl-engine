@@ -1106,11 +1106,14 @@ public class TemplateCompiler extends PageCompiler {
         if(nodeName.startsWith("t:")) {
             return (nodeName.equals(TPL_DIRECTIVE_TAGLIB)
                     || nodeName.equals(TPL_DIRECTIVE_IMPORT)
+                    || nodeName.equals(TPL_DIRECTIVE_RENAME)
                     || nodeName.equals(TPL_DIRECTIVE_INCLUDE)
                     || nodeName.equals(TPL_DIRECTIVE_TEXT)
                     || nodeName.equals(TPL_DIRECTIVE_COMMENT));
         }
-        return false;
+        else {
+            return false;
+        }
     }
 
     /**
