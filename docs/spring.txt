@@ -85,12 +85,265 @@ ServletContext servletContext = webApplicationContext.getServletContext();
 2. ayada本身并不提供与其他框架的集成，但是提供了集成的源码，请将spring相关的代码放到自己的应用中。
 下面是spring集成相关的ViewResolver源码。
 
+package com.skin.ayada.web.spring;
+
+import javax.servlet.ServletContext;
+
+import org.springframework.web.context.ServletContextAware;
+
+import com.skin.ayada.template.TemplateContext;
+import com.skin.ayada.web.TemplateContextFactory;
+import com.skin.ayada.web.TemplateDispatcher;
+
+public class DispatcherFactory implements ServletContextAware {
+    private String name;
+    private String home;
+    private String prefix;
+    private String encoding;
+    private String contentType;
+    private String sourcePattern;
+    private String jspWork;
+    private String zipFile;
+    private String ignoreJspTag;
+    private String classPath;
+    private String sourceFactoryClass;
+    private String templateFactoryClass;
+    private String expressionFactoryClass;
+    private ServletContext servletContext;
+
+    /**
+     * @return TemplateDispatcher
+     */
+    public TemplateDispatcher create() {
+        TemplateContextFactory contextFactory = new TemplateContextFactory();
+        contextFactory.setHome(home);
+        contextFactory.setSourcePattern(this.getSourcePattern());
+        contextFactory.setJspWork(this.getJspWork());
+        contextFactory.setZipFile(this.getZipFile());
+        contextFactory.setIgnoreJspTag(this.getIgnoreJspTag());
+        contextFactory.setClassPath(this.getClassPath());
+        contextFactory.setSourceFactoryClass(this.getSourceFactoryClass());
+        contextFactory.setTemplateFactoryClass(this.getTemplateFactoryClass());
+        contextFactory.setExpressionFactoryClass(this.getExpressionFactoryClass());
+
+        TemplateContext templateContext = contextFactory.create();
+        TemplateDispatcher templateDispatcher = new TemplateDispatcher();
+        templateDispatcher.setName(this.name);
+        templateDispatcher.setPrefix(this.prefix);
+        templateDispatcher.setEncoding(this.encoding);
+        templateDispatcher.setContentType(contentType);
+        templateDispatcher.setServletContext(this.servletContext);
+        templateDispatcher.setTemplateContext(templateContext);
+
+        if(this.name != null) {
+            this.servletContext.setAttribute(this.name, templateDispatcher);
+        }
+        return templateDispatcher;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name){
+        this.name = name;
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return this.name;
+    }
+
+    /**
+     * @param home the home to set
+     */
+    public void setHome(String home) {
+        this.home = home;
+    }
+
+    /**
+     * @return the home
+     */
+    public String getHome() {
+        return this.home;
+    }
+
+    /**
+     * @param prefix the prefix to set
+     */
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    /**
+     * @return the prefix
+     */
+    public String getPrefix() {
+        return this.prefix;
+    }
+
+    /**
+     * @param encoding the encoding to set
+     */
+    public void setEncoding(String encoding) {
+        this.encoding = encoding;
+    }
+
+    /**
+     * @return the encoding
+     */
+    public String getEncoding() {
+        return this.encoding;
+    }
+
+    /**
+     * @param contentType the contentType to set
+     */
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    /**
+     * @return the contentType
+     */
+    public String getContentType() {
+        return this.contentType;
+    }
+
+    /**
+     * @param sourcePattern the sourcePattern to set
+     */
+    public void setSourcePattern(String sourcePattern) {
+        this.sourcePattern = sourcePattern;
+    }
+
+    /**
+     * @return the sourcePattern
+     */
+    public String getSourcePattern() {
+        return this.sourcePattern;
+    }
+
+    /**
+     * @param jspWork the jspWork to set
+     */
+    public void setJspWork(String jspWork) {
+        this.jspWork = jspWork;
+    }
+
+    /**
+     * @return the jspWork
+     */
+    public String getJspWork() {
+        return this.jspWork;
+    }
+
+    /**
+     * @param ignoreJspTag the ignoreJspTag to set
+     */
+    public void setIgnoreJspTag(String ignoreJspTag) {
+        this.ignoreJspTag = ignoreJspTag;
+    }
+
+    /**
+     * @return the ignoreJspTag
+     */
+    public String getIgnoreJspTag() {
+        return this.ignoreJspTag;
+    }
+
+    /**
+     * @param zipFile the zipFile to set
+     */
+    public void setZipFile(String zipFile) {
+        this.zipFile = zipFile;
+    }
+
+    /**
+     * @return the zipFile
+     */
+    public String getZipFile() {
+        return this.zipFile;
+    }
+
+    /**
+     * @param classPath the classPath to set
+     */
+    public void setClassPath(String classPath) {
+        this.classPath = classPath;
+    }
+
+    /**
+     * @return the classPath
+     */
+    public String getClassPath() {
+        return this.classPath;
+    }
+
+    /**
+     * @param sourceFactoryClass the sourceFactoryClass to set
+     */
+    public void setSourceFactoryClass(String sourceFactoryClass) {
+        this.sourceFactoryClass = sourceFactoryClass;
+    }
+
+    /**
+     * @return the sourceFactoryClass
+     */
+    public String getSourceFactoryClass() {
+        return this.sourceFactoryClass;
+    }
+
+    /**
+     * @param templateFactoryClass the templateFactoryClass to set
+     */
+    public void setTemplateFactoryClass(String templateFactoryClass) {
+        this.templateFactoryClass = templateFactoryClass;
+    }
+
+    /**
+     * @return the templateFactoryClass
+     */
+    public String getTemplateFactoryClass() {
+        return this.templateFactoryClass;
+    }
+
+    /**
+     * @param expressionFactoryClass the expressionFactoryClass to set
+     */
+    public void setExpressionFactoryClass(String expressionFactoryClass) {
+        this.expressionFactoryClass = expressionFactoryClass;
+    }
+
+    /**
+     * @return the expressionFactoryClass
+     */
+    public String getExpressionFactoryClass() {
+        return this.expressionFactoryClass;
+    }
+
+    /**
+     * @param servletContext the servletContext to set
+     */
+    public void setServletContext(ServletContext servletContext) {
+        this.servletContext = servletContext;
+    }
+
+    /**
+     * @return the servletContext
+     */
+    public ServletContext getServletContext() {
+        return this.servletContext;
+    }
+}
+
 import org.springframework.web.servlet.view.AbstractTemplateViewResolver;
 import org.springframework.web.servlet.view.AbstractUrlBasedView;
 import com.skin.ayada.template.TemplateContext;
 
 public class AyadaViewResolver extends AbstractTemplateViewResolver {
-    TemplateContext templateContext;
+    private TemplateDispatcher templateDispatcher;
 
     public AyadaViewResolver() {
         setViewClass(AyadaView.class);
@@ -103,8 +356,7 @@ public class AyadaViewResolver extends AbstractTemplateViewResolver {
      */
     protected AbstractUrlBasedView buildView(String viewName) throws Exception {
         AyadaView ayadaView = (AyadaView)(super.buildView(viewName));
-        ayadaView.setPrefix(this.getPrefix());
-        ayadaView.setTemplateContext(this.templateContext);
+        ayadaView.setTemplateDispatcher(this.templateDispatcher);
         return ayadaView;
     }
 
@@ -116,17 +368,17 @@ public class AyadaViewResolver extends AbstractTemplateViewResolver {
     }
 
     /**
-     * @return the templateContext
+     * @return the templateDispatcher
      */
-    public TemplateContext getTemplateContext() {
-        return this.templateContext;
+    public TemplateDispatcher getTemplateDispatcher() {
+        return this.templateDispatcher;
     }
 
     /**
-     * @param templateContext the templateContext to set
+     * @param templateDispatcher the templateDispatcher to set
      */
-    public void setTemplateContext(TemplateContext templateContext) {
-        this.templateContext = templateContext;
+    public void setTemplateDispatcher(TemplateDispatcher templateDispatcher) {
+        this.templateDispatcher = templateDispatcher;
     }
 }
 
@@ -143,30 +395,19 @@ import com.skin.ayada.template.TemplateContext;
 import com.skin.ayada.web.TemplateDispatcher;
 
 public class AyadaView extends AbstractTemplateView {
-    String prefix;
-    TemplateContext templateContext;
+    private TemplateDispatcher templateDispatcher;
 
     public AyadaView() {
     }
 
     protected void renderMergedTemplateModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response)
         throws NoSuchBeanDefinitionException, NoUniqueBeanDefinitionException {
-        if(this.templateContext == null) {
-            this.templateContext = (TemplateContext)(this.getApplicationContext().getBean("templateContext"));
+        if(this.templateDispatcher == null) {
+            this.templateDispatcher = (TemplateDispatcher)(this.getApplicationContext().getBean("templateDispatcher"));
         }
-
-        String path = this.getUrl().replaceAll("//", "/");
-
-        if(this.prefix != null && this.prefix.length() > 0) {
-            path = path.substring(this.prefix.length());
-        }
-
-        WebApplicationContext webApplicationContext = ContextLoader.getCurrentWebApplicationContext();
-        ServletContext servletContext = webApplicationContext.getServletContext();
-        request.setAttribute("TemplateFilter$servletContext", servletContext);
 
         try {
-            TemplateDispatcher.dispatch(this.templateContext, request, response, path);
+            this.templateDispatcher.dispatch(request, response, this.getUrl());
         }
         catch (Exception e) {
             throw new RuntimeException(e);
@@ -174,30 +415,16 @@ public class AyadaView extends AbstractTemplateView {
     }
 
     /**
-     * @return the prefix
+     * @return the templateDispatcher
      */
-    public String getPrefix() {
-        return this.prefix;
+    public TemplateDispatcher getTemplateDispatcher() {
+        return this.templateDispatcher;
     }
 
     /**
-     * @param prefix the prefix to set
+     * @param templateDispatcher the templateDispatcher to set
      */
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
-    }
-
-    /**
-     * @return the templateContext
-     */
-    public TemplateContext getTemplateContext() {
-        return this.templateContext;
-    }
-
-    /**
-     * @param templateContext the templateContext to set
-     */
-    public void setTemplateContext(TemplateContext templateContext) {
-        this.templateContext = templateContext;
+    public void setTemplateDispatcher(TemplateDispatcher templateDispatcher) {
+        this.templateDispatcher = templateDispatcher;
     }
 }

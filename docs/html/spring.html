@@ -1,0 +1,518 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>spring集成</title>
+<meta name="keywords" content="test"/>
+<meta name="description" content="test"/>
+<meta name="robots" content="all"/>
+<meta name="googlebot" content="all"/>
+<meta name="baiduspider" content="all"/>
+<meta name="copyright" content="All Rights Reserved 版权所有 test"/>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"/>
+<link rel="shortcut icon" href="/favicon.ico"/>
+<link rel="stylesheet" type="text/css" href="resource/css/doc.css"/>
+<link type="text/css" rel="stylesheet" href="resource/sh/style/shCoreEclipse.css"/>
+<link type="text/css" rel="stylesheet" href="resource/sh/style/shThemeEclipse.css"/>
+<script type="text/javascript" src="resource/sh/shCore.js"></script>
+<script type="text/javascript" src="resource/sh/shAutoloader.js"></script>
+</head>
+<body>
+<div class="wrap">
+    <div class="navbar">
+        <em class="home"></em><a href="/index.html">home</a>
+        <em></em><a href="/index.html">index</a>
+    </div>
+</div>
+<div class="wrap">
+    <h1 class="sk-h1">Spring集成</h1>
+    <div class="dir"></div>
+    <h2 class="sk-h2">1 第一种方案</h2>
+    <div class="sk-content">
+        <p>1. 首先配置spring, 让spring使用jsp方式解析视图</p>
+        <div class="sk-code">
+            <pre class="brush: xml;">
+                &lt;bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver"&gt;
+                    &lt;property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/&gt;
+                    &lt;property name="prefix" value="/WEB-INF/template"/&gt;
+                    &lt;property name="suffix" value=".jsp"/&gt;
+                &lt;/bean&gt;
+            </pre>
+        </div>
+        <p>2. 第二步，配置模板过滤器拦截所有/WEB-INF/template/*的请求</p>
+        <div class="sk-code">
+            <pre class="brush: xml;">
+                &lt;filter&gt;
+                    &lt;filter-name&gt;TemplateFilter&lt;/filter-name&gt;
+                    &lt;filter-class&gt;com.skin.ayada.web.filter.TemplateFilter&lt;/filter-class&gt;
+                    &lt;init-param&gt;
+                        &lt;param-name&gt;home&lt;/param-name&gt;
+                        &lt;param-value&gt;contextPath:/WEB-INF/template&lt;/param-value&gt;
+                    &lt;/init-param&gt;
+                    &lt;init-param&gt;
+                        &lt;param-name&gt;encoding&lt;/param-name&gt;
+                        &lt;param-value&gt;utf-8&lt;/param-value&gt;
+                    &lt;/init-param&gt;
+                    &lt;init-param&gt;
+                        &lt;param-name&gt;ignoreJspTag&lt;/param-name&gt;
+                        &lt;param-value&gt;true&lt;/param-value&gt;
+                    &lt;/init-param&gt;
+                    &lt;init-param&gt;
+                        &lt;param-name&gt;jspWork&lt;/param-name&gt;
+                        &lt;param-value&gt;contextPath:/WEB-INF/ayada&lt;/param-value&gt;
+                    &lt;/init-param&gt;
+                    &lt;init-param&gt;
+                        &lt;param-name&gt;sourceFactoryClass&lt;/param-name&gt;
+                        &lt;param-value&gt;com.skin.ayada.source.DefaultSourceFactory&lt;/param-value&gt;
+                    &lt;/init-param&gt;
+                    &lt;init-param&gt;
+                        &lt;param-name&gt;templateFactoryClass&lt;/param-name&gt;
+                        &lt;param-value&gt;com.skin.ayada.template.JspTemplateFactory&lt;/param-value&gt;
+                    &lt;/init-param&gt;
+                    &lt;init-param&gt;
+                        &lt;param-name&gt;expressionFactoryClass&lt;/param-name&gt;
+                        &lt;param-value&gt;com.skin.ayada.runtime.DefaultExpressionFactory&lt;/param-value&gt;
+                    &lt;/init-param&gt;
+                &lt;/filter&gt;
+                &lt;filter-mapping&gt;
+                    &lt;filter-name&gt;TemplateFilter&lt;/filter-name&gt;
+                    &lt;url-pattern&gt;/WEB-INF/template/*&lt;/url-pattern&gt;
+                    &lt;dispatcher&gt;FORWARD&lt;/dispatcher&gt;
+                    &lt;dispatcher&gt;ERROR&lt;/dispatcher&gt;
+                &lt;/filter-mapping&gt;
+            </pre>
+        </div>
+    </div>
+    <h2 class="sk-h2">2 第二种方案</h2>
+    <div class="sk-content">
+        <p>1. 在spring中配置模板上下文，并配置ViewResolver</p>
+        <div class="sk-code">
+            <pre class="brush: xml;">
+                &lt;!--
+                    home - 模板文件根目录 SourceFactory将从这个目录加载模板
+                    prefix - 路径前缀，ViewResolver中配置的前缀
+                    encoding - 模板文件编码
+                    ignoreJspTag - 是否忽略jsp脚本
+                    sourcePattern - 允许的模板扩展名，其他的扩展名将认为是普通文本
+                    jspWork - 编译模式有效，编译生成的文件目录
+                    sourceFactoryClass - 源码提供者
+                    templateFactoryClass - 模板提供者，TemplateFactory是解释模式，JspTemplateFactory是编译模式
+                    expressionFactoryClass - el表达式提供者，DefaultExpressionFactory使用ognl
+                --&gt;
+                &lt;bean id="dispatcherFactory" class="com.skin.ayada.web.spring.DispatcherFactory"&gt;
+                    &lt;property name="home" value="contextPath:/WEB-INF/template"/&gt;
+                    &lt;property name="prefix" value="/WEB-INF/template"/&gt;
+                    &lt;property name="encoding" value="utf-8"/&gt;
+                    &lt;property name="ignoreJspTag" value="true"/&gt;
+                    &lt;property name="jspWork" value="contextPath:/WEB-INF/ayada"/&gt;
+                    &lt;property name="sourceFactoryClass" value="com.skin.ayada.source.DefaultSourceFactory"/&gt;
+                    &lt;property name="templateFactoryClass" value="com.skin.ayada.template.JspTemplateFactory"/&gt;
+                    &lt;property name="expressionFactoryClass" value="com.skin.ayada.runtime.DefaultExpressionFactory"/&gt;
+                &lt;/bean&gt;
+                &lt;bean id="templateDispatcher" factory-bean="dispatcherFactory" factory-method="create"/&gt;
+
+                &lt;bean id="viewResolver" class="com.skin.ayada.web.spring.AyadaViewResolver"&gt;
+                    &lt;property name="templateDispatcher" ref="templateDispatcher"/&gt;
+                    &lt;property name="viewClass" value="com.skin.ayada.web.spring.AyadaView"/&gt;
+                    &lt;property name="prefix" value="/WEB-INF/template"/&gt;
+                    &lt;property name="suffix" value=".jsp"/&gt;
+                &lt;/bean&gt;
+            </pre>
+        </div>
+        <p>2. ayada本身并不提供与其他框架的集成，但是提供了集成的源码，请将spring相关的代码放到自己的应用中。</p>
+        <p>下面是spring集成相关的ViewResolver源码。</p>
+        <div class="sk-code">
+            <pre class="brush: java;">
+                package com.skin.ayada.web.spring;
+
+                import javax.servlet.ServletContext;
+
+                import org.springframework.web.context.ServletContextAware;
+
+                import com.skin.ayada.template.TemplateContext;
+                import com.skin.ayada.web.TemplateContextFactory;
+                import com.skin.ayada.web.TemplateDispatcher;
+
+                public class DispatcherFactory implements ServletContextAware {
+                    private String name;
+                    private String home;
+                    private String prefix;
+                    private String encoding;
+                    private String contentType;
+                    private String sourcePattern;
+                    private String jspWork;
+                    private String zipFile;
+                    private String ignoreJspTag;
+                    private String classPath;
+                    private String sourceFactoryClass;
+                    private String templateFactoryClass;
+                    private String expressionFactoryClass;
+                    private ServletContext servletContext;
+
+                    /**
+                     * @return TemplateDispatcher
+                     */
+                    public TemplateDispatcher create() {
+                        TemplateContextFactory contextFactory = new TemplateContextFactory();
+                        contextFactory.setHome(home);
+                        contextFactory.setSourcePattern(this.getSourcePattern());
+                        contextFactory.setJspWork(this.getJspWork());
+                        contextFactory.setZipFile(this.getZipFile());
+                        contextFactory.setIgnoreJspTag(this.getIgnoreJspTag());
+                        contextFactory.setClassPath(this.getClassPath());
+                        contextFactory.setSourceFactoryClass(this.getSourceFactoryClass());
+                        contextFactory.setTemplateFactoryClass(this.getTemplateFactoryClass());
+                        contextFactory.setExpressionFactoryClass(this.getExpressionFactoryClass());
+
+                        TemplateContext templateContext = contextFactory.create();
+                        TemplateDispatcher templateDispatcher = new TemplateDispatcher();
+                        templateDispatcher.setName(this.name);
+                        templateDispatcher.setPrefix(this.prefix);
+                        templateDispatcher.setEncoding(this.encoding);
+                        templateDispatcher.setContentType(contentType);
+                        templateDispatcher.setServletContext(this.servletContext);
+                        templateDispatcher.setTemplateContext(templateContext);
+
+                        if(this.name != null) {
+                            this.servletContext.setAttribute(this.name, templateDispatcher);
+                        }
+                        return templateDispatcher;
+                    }
+
+                    /**
+                     * @param name the name to set
+                     */
+                    public void setName(String name){
+                        this.name = name;
+                    }
+
+                    /**
+                     * @return the name
+                     */
+                    public String getName() {
+                        return this.name;
+                    }
+
+                    /**
+                     * @param home the home to set
+                     */
+                    public void setHome(String home) {
+                        this.home = home;
+                    }
+
+                    /**
+                     * @return the home
+                     */
+                    public String getHome() {
+                        return this.home;
+                    }
+
+                    /**
+                     * @param prefix the prefix to set
+                     */
+                    public void setPrefix(String prefix) {
+                        this.prefix = prefix;
+                    }
+
+                    /**
+                     * @return the prefix
+                     */
+                    public String getPrefix() {
+                        return this.prefix;
+                    }
+
+                    /**
+                     * @param encoding the encoding to set
+                     */
+                    public void setEncoding(String encoding) {
+                        this.encoding = encoding;
+                    }
+
+                    /**
+                     * @return the encoding
+                     */
+                    public String getEncoding() {
+                        return this.encoding;
+                    }
+
+                    /**
+                     * @param contentType the contentType to set
+                     */
+                    public void setContentType(String contentType) {
+                        this.contentType = contentType;
+                    }
+
+                    /**
+                     * @return the contentType
+                     */
+                    public String getContentType() {
+                        return this.contentType;
+                    }
+
+                    /**
+                     * @param sourcePattern the sourcePattern to set
+                     */
+                    public void setSourcePattern(String sourcePattern) {
+                        this.sourcePattern = sourcePattern;
+                    }
+
+                    /**
+                     * @return the sourcePattern
+                     */
+                    public String getSourcePattern() {
+                        return this.sourcePattern;
+                    }
+
+                    /**
+                     * @param jspWork the jspWork to set
+                     */
+                    public void setJspWork(String jspWork) {
+                        this.jspWork = jspWork;
+                    }
+
+                    /**
+                     * @return the jspWork
+                     */
+                    public String getJspWork() {
+                        return this.jspWork;
+                    }
+
+                    /**
+                     * @param ignoreJspTag the ignoreJspTag to set
+                     */
+                    public void setIgnoreJspTag(String ignoreJspTag) {
+                        this.ignoreJspTag = ignoreJspTag;
+                    }
+
+                    /**
+                     * @return the ignoreJspTag
+                     */
+                    public String getIgnoreJspTag() {
+                        return this.ignoreJspTag;
+                    }
+
+                    /**
+                     * @param zipFile the zipFile to set
+                     */
+                    public void setZipFile(String zipFile) {
+                        this.zipFile = zipFile;
+                    }
+
+                    /**
+                     * @return the zipFile
+                     */
+                    public String getZipFile() {
+                        return this.zipFile;
+                    }
+
+                    /**
+                     * @param classPath the classPath to set
+                     */
+                    public void setClassPath(String classPath) {
+                        this.classPath = classPath;
+                    }
+
+                    /**
+                     * @return the classPath
+                     */
+                    public String getClassPath() {
+                        return this.classPath;
+                    }
+
+                    /**
+                     * @param sourceFactoryClass the sourceFactoryClass to set
+                     */
+                    public void setSourceFactoryClass(String sourceFactoryClass) {
+                        this.sourceFactoryClass = sourceFactoryClass;
+                    }
+
+                    /**
+                     * @return the sourceFactoryClass
+                     */
+                    public String getSourceFactoryClass() {
+                        return this.sourceFactoryClass;
+                    }
+
+                    /**
+                     * @param templateFactoryClass the templateFactoryClass to set
+                     */
+                    public void setTemplateFactoryClass(String templateFactoryClass) {
+                        this.templateFactoryClass = templateFactoryClass;
+                    }
+
+                    /**
+                     * @return the templateFactoryClass
+                     */
+                    public String getTemplateFactoryClass() {
+                        return this.templateFactoryClass;
+                    }
+
+                    /**
+                     * @param expressionFactoryClass the expressionFactoryClass to set
+                     */
+                    public void setExpressionFactoryClass(String expressionFactoryClass) {
+                        this.expressionFactoryClass = expressionFactoryClass;
+                    }
+
+                    /**
+                     * @return the expressionFactoryClass
+                     */
+                    public String getExpressionFactoryClass() {
+                        return this.expressionFactoryClass;
+                    }
+
+                    /**
+                     * @param servletContext the servletContext to set
+                     */
+                    public void setServletContext(ServletContext servletContext) {
+                        this.servletContext = servletContext;
+                    }
+
+                    /**
+                     * @return the servletContext
+                     */
+                    public ServletContext getServletContext() {
+                        return this.servletContext;
+                    }
+                }
+
+                import org.springframework.web.servlet.view.AbstractTemplateViewResolver;
+                import org.springframework.web.servlet.view.AbstractUrlBasedView;
+                import com.skin.ayada.template.TemplateContext;
+
+                public class AyadaViewResolver extends AbstractTemplateViewResolver {
+                    private TemplateDispatcher templateDispatcher;
+
+                    public AyadaViewResolver() {
+                        setViewClass(AyadaView.class);
+                    }
+
+                    /**
+                     * @param viewName
+                     * @return AbstractUrlBasedView
+                     * @throws Exception
+                     */
+                    protected AbstractUrlBasedView buildView(String viewName) throws Exception {
+                        AyadaView ayadaView = (AyadaView)(super.buildView(viewName));
+                        ayadaView.setTemplateDispatcher(this.templateDispatcher);
+                        return ayadaView;
+                    }
+
+                    /**
+                     * @return AyadaView
+                     */
+                    protected Class&lt;AyadaView&gt; requiredViewClass() {
+                        return AyadaView.class;
+                    }
+
+                    /**
+                     * @return the templateDispatcher
+                     */
+                    public TemplateDispatcher getTemplateDispatcher() {
+                        return this.templateDispatcher;
+                    }
+
+                    /**
+                     * @param templateDispatcher the templateDispatcher to set
+                     */
+                    public void setTemplateDispatcher(TemplateDispatcher templateDispatcher) {
+                        this.templateDispatcher = templateDispatcher;
+                    }
+                }
+
+                import java.util.Map;
+                import javax.servlet.ServletContext;
+                import javax.servlet.http.HttpServletRequest;
+                import javax.servlet.http.HttpServletResponse;
+                import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+                import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
+                import org.springframework.web.context.ContextLoader;
+                import org.springframework.web.context.WebApplicationContext;
+                import org.springframework.web.servlet.view.AbstractTemplateView;
+                import com.skin.ayada.template.TemplateContext;
+                import com.skin.ayada.web.TemplateDispatcher;
+
+                public class AyadaView extends AbstractTemplateView {
+                    private TemplateDispatcher templateDispatcher;
+
+                    public AyadaView() {
+                    }
+
+                    protected void renderMergedTemplateModel(Map&lt;String, Object&gt; model, HttpServletRequest request, HttpServletResponse response)
+                        throws NoSuchBeanDefinitionException, NoUniqueBeanDefinitionException {
+                        if(this.templateDispatcher == null) {
+                            this.templateDispatcher = (TemplateDispatcher)(this.getApplicationContext().getBean("templateDispatcher"));
+                        }
+
+                        try {
+                            this.templateDispatcher.dispatch(request, response, this.getUrl());
+                        }
+                        catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    /**
+                     * @return the templateDispatcher
+                     */
+                    public TemplateDispatcher getTemplateDispatcher() {
+                        return this.templateDispatcher;
+                    }
+
+                    /**
+                     * @param templateDispatcher the templateDispatcher to set
+                     */
+                    public void setTemplateDispatcher(TemplateDispatcher templateDispatcher) {
+                        this.templateDispatcher = templateDispatcher;
+                    }
+                }
+            </pre>
+        </div>
+    </div>
+</div>
+<div class="h20" style="height: 200px;"></div>
+<div class="scrolltop" onclick="window.scrollTo(0, 0)"></div>
+<script type="text/javascript">
+<!--
+function path() {
+    var args = arguments;
+    var result = [];
+
+    for(var i = 0; i < args.length; i++) {
+        result.push(args[i].replace("@", "resource/sh/"));
+    }
+    return result;
+};
+
+var args = path(
+    "applescript            @shBrushAppleScript.js",
+    "actionscript3 as3      @shBrushAS3.js",
+    "bash shell             @shBrushBash.js",
+    "coldfusion cf          @shBrushColdFusion.js",
+    "cpp c                  @shBrushCpp.js",
+    "c# c-sharp csharp      @shBrushCSharp.js",
+    "css                    @shBrushCss.js",
+    "delphi pascal          @shBrushDelphi.js",
+    "diff patch pas         @shBrushDiff.js",
+    "erl erlang             @shBrushErlang.js",
+    "groovy                 @shBrushGroovy.js",
+    "java                   @shBrushJava.js",
+    "jfx javafx             @shBrushJavaFX.js",
+    "js jscript javascript  @shBrushJScript.js",
+    "perl pl                @shBrushPerl.js",
+    "php                    @shBrushPhp.js",
+    "text plain             @shBrushPlain.js",
+    "py python              @shBrushPython.js",
+    "ruby rails ror rb      @shBrushRuby.js",
+    "sass scss              @shBrushSass.js",
+    "scala                  @shBrushScala.js",
+    "sql                    @shBrushSql.js",
+    "vb vbnet               @shBrushVb.js",
+    "xml xhtml xslt html    @shBrushXml.js"
+);
+SyntaxHighlighter.autoloader.apply(null, args);
+SyntaxHighlighter.all();
+//-->
+</script>
+</body>
+</html>

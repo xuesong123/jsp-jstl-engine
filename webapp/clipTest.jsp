@@ -1,6 +1,15 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 
 <t:taglib prefix="d" uri="http://localhost/ayada-taglib-standard"/>
+### 1
+    <p>
+            <c:if test="${1 == 1}">Hello world !</c:if>
+    </p>
+
+### 2
+    <p>
+            <c:any><c:if test="${1 == 1}">Hello world !</c:if></c:any>
+    </p>
 
 <%@ include file="/include/header.jsp"%>
 
@@ -15,9 +24,6 @@
                <c:forEach var="myVar" items="1,2,3">
     <p>${myVar}</p>
              </c:forEach>
-
-
-
 ### 2
 <c:choose>
     <c:when test="${1 == 1}">
@@ -63,7 +69,7 @@ c:remove的bodyContent为empty, 之前的版本有一个bug, 成对闭合的标�
 
 ## 6
 这是一个格式处理的测试页面，测试编译程序的clip函数是否正确。
-编译程序对标签的处理规则：
+格式处理必须有一个规则，这样编译程序才知道如何处理空格和回车。编译程序对标签的处理规则：
 1. jsp指令、jsp生命、jsp脚本、Ayada指令，都会统一删除掉前导空格和后缀回车。不支持配置，统一处理。
 2. 标签配置增加ignore-whitespace选项，可选值[true|false]，如果是true，删除掉前导空格和后面的回车。默认是true。t:import指令对应的属性是ignoreWhitespace。
 前导空格包括空格和\t符。
@@ -77,3 +83,36 @@ c:remove的bodyContent为empty, 之前的版本有一个bug, 成对闭合的标�
 2. 第二次扫描，根据标签的bodyContent定义清除标签内的文本节点或者。
 
 总的原则是：标签或者脚本所占的行不输出。即：把标签或者脚本所占的行删除之后就是最终输出的格式。
+
+这个规则会导致一些输出可能不符合编写者的意图，例如：
+<div>
+    <div>
+        <c:if test="${1 == 1}"><p>hello</p></c:if>
+    </div>
+</div>
+我们希望的输出格式应该是如下的样子：
+<div>
+    <div>
+        <p>hello</p>
+    </div>
+</div>
+但由于上面对格式的处理规则：标签必须独占一行，导致输出是下面的样子：
+<div>
+    <div>
+<p>hello</p>    </div>
+</div>
+一个简单的解决办法是把标签独占一行，改成如下的样子：
+<div>
+    <div>
+        <c:if test="${1 == 1}">
+        <p>hello</p>
+        </c:if>
+    </div>
+</div>
+对于这种代码形式，如果希望输出符合我们的期望，就必须引入新的规则，问题是这个规则无法定义。
+假设，如果一个标签内的文本内容和标签处于同一行，那么我们就不处理格式，那面下面的代码依然存在问题：
+<div>
+    <div>
+        <c:if test="${1 == 1}"><c:if test="${1 == 1}"><p>hello</p></c:if></c:if>
+    </div>
+</div>

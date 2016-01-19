@@ -2,8 +2,15 @@
 <taglib>
     <tlib-version>1.0</tlib-version>
     <tag>
+        <name>c:any</name>
+        <tag-class>com.skin.ayada.jstl.core.DefaultTag</tag-class>
+        <body-content>jsp</body-content>
+        <ignore-whitespace>false</ignore-whitespace>
+        <description></description>
+    </tag>
+    <tag>
         <name>c:dependent</name>
-        <tag-class>com.skin.ayada.jstl.core.DependentTag</tag-class>
+        <tag-class>com.skin.ayada.jstl.core.DefaultTag</tag-class>
         <body-content>tagdependent</body-content>
         <ignore-whitespace>true</ignore-whitespace>
         <description></description>

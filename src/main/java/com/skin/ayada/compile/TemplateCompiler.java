@@ -1321,7 +1321,6 @@ public class TemplateCompiler extends PageCompiler {
             if(this.dependencies == null) {
                 this.dependencies = new ArrayList<Source>();
             }
-
             this.dependencies.add(dependency);
         }
     }

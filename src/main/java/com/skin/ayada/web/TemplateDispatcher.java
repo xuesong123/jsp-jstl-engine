@@ -10,10 +10,10 @@
  */
 package com.skin.ayada.web;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletConfig;
@@ -27,8 +27,6 @@ import org.slf4j.LoggerFactory;
 
 import com.skin.ayada.template.Template;
 import com.skin.ayada.template.TemplateContext;
-import com.skin.ayada.template.TemplateManager;
-import com.skin.ayada.util.DateUtil;
 import com.skin.ayada.util.Path;
 
 /**
@@ -45,6 +43,21 @@ public class TemplateDispatcher {
     private String contentType;
     private ServletContext servletContext;
     private TemplateContext templateContext;
+    private static final String[] PARAMETERS = new String[]{
+        "name",
+        "home",
+        "prefix",
+        "encoding",
+        "contentType",
+        "sourcePattern",
+        "jspWork",
+        "zipFile",
+        "classPath",
+        "ignoreJspTag",
+        "sourceFactoryClass",
+        "templateFactoryClass",
+        "expressionFactoryClass"
+    };
     private static final Logger logger = LoggerFactory.getLogger(TemplateDispatcher.class);
 
     /**
@@ -53,33 +66,43 @@ public class TemplateDispatcher {
      * @throws ServletException
      */
     public static TemplateDispatcher create(FilterConfig filterConfig) throws ServletException {
-        String name = filterConfig.getInitParameter("name");
-        String home = filterConfig.getInitParameter("home");
-        String prefix = filterConfig.getInitParameter("prefix");
-        String encoding = filterConfig.getInitParameter("encoding");
-        String contentType = filterConfig.getInitParameter("contentType");
-        String sourcePattern = filterConfig.getInitParameter("sourcePattern");
-        String jspWork = filterConfig.getInitParameter("jspWork");
-        String zipFile = filterConfig.getInitParameter("zipFile");
+        Properties properties = getProperties(filterConfig);
         ServletContext servletContext = filterConfig.getServletContext();
+        return create(servletContext, properties);
+    }
+
+    /**
+     * @param servletConfig
+     * @return TemplateDispatcher
+     * @throws ServletException
+     */
+    public static TemplateDispatcher create(ServletConfig servletConfig) throws ServletException {
+        Properties properties = getProperties(servletConfig);
+        ServletContext servletContext = servletConfig.getServletContext();
+        return create(servletContext, properties);
+    }
+
+    /**
+     * @param properties
+     * @return TemplateDispatcher
+     */
+    public static TemplateDispatcher create(ServletContext servletContext, Properties properties) {
+        String name = properties.getProperty("name");
+        String home = properties.getProperty("home");
+        String prefix = properties.getProperty("prefix");
+        String encoding = properties.getProperty("encoding");
+        String contentType = properties.getProperty("contentType");
+        String sourcePattern = properties.getProperty("sourcePattern");
+        String jspWork = properties.getProperty("jspWork");
+        String zipFile = properties.getProperty("zipFile");
+        String classPath = properties.getProperty("classPath");
+        String ignoreJspTag = properties.getProperty("ignoreJspTag");
+        String sourceFactoryClass = properties.getProperty("sourceFactoryClass");
+        String templateFactoryClass = properties.getProperty("templateFactoryClass");
+        String expressionFactoryClass = properties.getProperty("expressionFactoryClass");
 
         if(home == null) {
             home = "contextPath:/";
-        }
-
-        if(home.startsWith("contextPath:")) {
-            home = home.substring(12);
-            home = servletContext.getRealPath(home);
-        }
-
-        if(jspWork != null && jspWork.startsWith("contextPath:")) {
-            jspWork = jspWork.substring(12);
-            jspWork = servletContext.getRealPath(jspWork);
-        }
-
-        if(zipFile != null && zipFile.startsWith("contextPath:")) {
-            zipFile = zipFile.substring(12);
-            zipFile = servletContext.getRealPath(zipFile);
         }
 
         if(prefix != null) {
@@ -94,27 +117,31 @@ public class TemplateDispatcher {
             contentType = "text/html; charset=UTF-8";
         }
 
-        logger.info("name: {}", name);
-        logger.info("page.home: {}", home);
-        logger.info("page.work: {}", jspWork);
-        logger.info("page.prefix: {}", prefix);
-        logger.info("page.encoding: {}", encoding);
-        logger.info("page.contentType: {}", contentType);
-        logger.info("page.sourceFactory: " + filterConfig.getInitParameter("sourceFactoryClass"));
-        logger.info("page.templateFactory: " + filterConfig.getInitParameter("templateFactoryClass"));
-        logger.info("page.expressionFactory: " + filterConfig.getInitParameter("expressionFactoryClass"));
-        logger.info("file.zip: {}", zipFile);
+        if(logger.isInfoEnabled()) {
+            logger.info("name: {}", name);
+            logger.info("page.home: {}", home);
+            logger.info("page.work: {}", jspWork);
+            logger.info("page.prefix: {}", prefix);
+            logger.info("page.encoding: {}", encoding);
+            logger.info("page.contentType: {}", contentType);
+            logger.info("page.classPath: {}", classPath);
+            logger.info("page.ignoreJspTag: {}", ignoreJspTag);
+            logger.info("page.sourceFactory: {}", sourceFactoryClass);
+            logger.info("page.templateFactory: {}", templateFactoryClass);
+            logger.info("page.expressionFactory: {}", expressionFactoryClass);
+            logger.info("file.zip: {}", zipFile);
+        }
 
         TemplateContextFactory contextFactory = new TemplateContextFactory();
         contextFactory.setHome(home);
         contextFactory.setJspWork(jspWork);
         contextFactory.setSourcePattern(sourcePattern);
         contextFactory.setZipFile(zipFile);
-        contextFactory.setIgnoreJspTag(filterConfig.getInitParameter("ignoreJspTag"));
-        contextFactory.setClassPath(filterConfig.getInitParameter("classPath"));
-        contextFactory.setSourceFactoryClass(filterConfig.getInitParameter("sourceFactoryClass"));
-        contextFactory.setTemplateFactoryClass(filterConfig.getInitParameter("templateFactoryClass"));
-        contextFactory.setExpressionFactoryClass(filterConfig.getInitParameter("expressionFactoryClass"));
+        contextFactory.setIgnoreJspTag(ignoreJspTag);
+        contextFactory.setClassPath(classPath);
+        contextFactory.setSourceFactoryClass(sourceFactoryClass);
+        contextFactory.setTemplateFactoryClass(templateFactoryClass);
+        contextFactory.setExpressionFactoryClass(expressionFactoryClass);
         TemplateContext templateContext = contextFactory.create();
 
         TemplateDispatcher templateDispatcher = new TemplateDispatcher();
@@ -132,88 +159,37 @@ public class TemplateDispatcher {
     }
 
     /**
-     * @param servletConfig
-     * @return TemplateDispatcher
-     * @throws ServletException
+     * @param filterConfig
+     * @return Properties
      */
-    public static TemplateDispatcher create(ServletConfig servletConfig) throws ServletException {
-        String name = servletConfig.getInitParameter("name");
-        String home = servletConfig.getInitParameter("home");
-        String prefix = servletConfig.getInitParameter("prefix");
-        String encoding = servletConfig.getInitParameter("encoding");
-        String contentType = servletConfig.getInitParameter("contentType");
-        String sourcePattern = servletConfig.getInitParameter("sourcePattern");
-        String jspWork = servletConfig.getInitParameter("jspWork");
-        String zipFile = servletConfig.getInitParameter("zipFile");
-        ServletContext servletContext = servletConfig.getServletContext();
+    protected static Properties getProperties(FilterConfig filterConfig) {
+        Properties properties = new Properties();
 
-        if(home == null) {
-            home = "contextPath:/";
+        for(String name : PARAMETERS) {
+            String value = filterConfig.getInitParameter(name);
+
+            if(value != null) {
+                properties.setProperty(name, value);
+            }
         }
+        return properties;
+    }
 
-        if(home.startsWith("contextPath:")) {
-            home = home.substring(12);
-            home = servletContext.getRealPath(home);
+    /**
+     * @param servletConfig
+     * @return Properties
+     */
+    protected static Properties getProperties(ServletConfig servletConfig) {
+        Properties properties = new Properties();
+
+        for(String name : PARAMETERS) {
+            String value = servletConfig.getInitParameter(name);
+
+            if(value != null) {
+                properties.setProperty(name, value);
+            }
         }
-
-        if(jspWork != null && jspWork.startsWith("contextPath:")) {
-            jspWork = jspWork.substring(12);
-            jspWork = servletContext.getRealPath(jspWork);
-        }
-
-        if(zipFile != null && zipFile.startsWith("contextPath:")) {
-            zipFile = zipFile.substring(12);
-            zipFile = servletContext.getRealPath(zipFile);
-        }
-
-        if(prefix != null) {
-            prefix = Path.getStrictPath(prefix);
-        }
-
-        if(encoding == null) {
-            encoding = "UTF-8";
-        }
-
-        if(contentType == null) {
-            contentType = "text/html; charset=UTF-8";
-        }
-
-        logger.info("name: {}", name);
-        logger.info("page.home: {}", home);
-        logger.info("page.work: {}", jspWork);
-        logger.info("page.prefix: {}", prefix);
-        logger.info("page.encoding: {}", encoding);
-        logger.info("page.contentType: {}", contentType);
-        logger.info("page.sourceFactory: " + servletConfig.getInitParameter("sourceFactoryClass"));
-        logger.info("page.templateFactory: " + servletConfig.getInitParameter("templateFactoryClass"));
-        logger.info("page.expressionFactory: " + servletConfig.getInitParameter("expressionFactoryClass"));
-        logger.info("file.zip: {}", zipFile);
-
-        TemplateContextFactory contextFactory = new TemplateContextFactory();
-        contextFactory.setHome(home);
-        contextFactory.setSourcePattern(sourcePattern);
-        contextFactory.setJspWork(jspWork);
-        contextFactory.setZipFile(zipFile);
-        contextFactory.setIgnoreJspTag(servletConfig.getInitParameter("ignoreJspTag"));
-        contextFactory.setClassPath(servletConfig.getInitParameter("classPath"));
-        contextFactory.setSourceFactoryClass(servletConfig.getInitParameter("sourceFactoryClass"));
-        contextFactory.setTemplateFactoryClass(servletConfig.getInitParameter("templateFactoryClass"));
-        contextFactory.setExpressionFactoryClass(servletConfig.getInitParameter("expressionFactoryClass"));
-        TemplateContext templateContext = contextFactory.create();
-        TemplateManager.add(templateContext);
-
-        TemplateDispatcher templateDispatcher = new TemplateDispatcher();
-        templateDispatcher.setName(name);
-        templateDispatcher.setPrefix(prefix);
-        templateDispatcher.setEncoding(encoding);
-        templateDispatcher.setContentType(contentType);
-        templateDispatcher.setServletContext(servletContext);
-        templateDispatcher.setTemplateContext(templateContext);
-
-        if(name != null) {
-            servletContext.setAttribute(name, templateDispatcher);
-        }
-        return templateDispatcher;
+        return properties;
     }
 
     /**
@@ -240,39 +216,25 @@ public class TemplateDispatcher {
             logger.debug("prefix: {}, page: {}", this.prefix, page);
         }
 
-        if(this.prefix != null && this.prefix.length() > 1) {
-            if(path.startsWith(this.prefix)) {
-                path = path.substring(this.prefix.length());
-            }
+        if(this.prefix != null && this.prefix.length() > 1 && path.startsWith(this.prefix)) {
+            path = path.substring(this.prefix.length());
         }
-
-        Template template = null;
 
         try {
-            template = this.templateContext.getTemplate(path, this.encoding);
-        }
-        catch(Exception e) {
-            if(e instanceof RuntimeException) {
-                throw (RuntimeException)e;
-            }
-            else {
-                throw new ServletException(e);
-            }
-        }
+            Template template = this.templateContext.getTemplate(path, this.encoding);
 
-        if(template == null) {
-            if(logger.isDebugEnabled()) {
-                logger.debug("404: " + page);
+            if(template == null) {
+                if(logger.isDebugEnabled()) {
+                    logger.debug("404: " + page);
+                }
+                response.sendError(404);
+                return;
             }
-            response.sendError(404);
-            return;
-        }
 
-        Request.setServletContext(request, this.servletContext);
-        Map<String, Object> context = Request.getContext(this.servletContext, request, response);
-        Writer writer = Request.getWriter(request, response);
+            Request.setServletContext(request, this.servletContext);
+            Map<String, Object> context = Request.getContext(this.servletContext, request, response);
+            Writer writer = Request.getWriter(request, response);
 
-        try {
             if(response.getContentType() == null && this.contentType != null) {
                 response.setContentType(this.contentType);
             }
@@ -297,44 +259,6 @@ public class TemplateDispatcher {
                 }
             }
         }
-    }
-
-    /**
-     * @return String
-     */
-    protected String getTempWork(String prefix) {
-        String work = System.getProperty("java.io.tmpdir");
-
-        if(work == null) {
-            return null;
-        }
-
-        long timeMillis = System.currentTimeMillis();
-        String pattern = "yyyyMMddHHmmss";
-        String name = prefix;
-
-        if(name == null || name.length() < 1 || name.equals("/")) {
-            name = "";
-        }
-        else {
-            name = name.replace('\\', '.');
-            name = name.replace('/', '.');
-        }
-
-        if(name.length() > 0) {
-            name = "ayada_" + name + "_";
-        }
-        else {
-            name = "ayada_";
-        }
-
-        File file = new File(work, name + DateUtil.format(timeMillis, pattern));
-
-        while(file.exists()) {
-            timeMillis += 1000;
-            file = new File(work, name + DateUtil.format(timeMillis, pattern));
-        }
-        return file.getAbsolutePath();
     }
 
     public void destroy() {

@@ -72,47 +72,96 @@
                     &lt;filter-name&gt;TemplateFilter&lt;/filter-name&gt;
                     &lt;filter-class&gt;com.skin.ayada.web.filter.TemplateFilter&lt;/filter-class&gt;
                     &lt;init-param&gt;
+                        &lt;param-name&gt;name&lt;/param-name&gt;
+                        &lt;param-value&gt;templateFilter&lt;/param-value&gt;
+                    &lt;/init-param&gt;
+                    &lt;init-param&gt;
                         &lt;param-name&gt;home&lt;/param-name&gt;
-                        &lt;param-value&gt;/template&lt;/param-value&gt;
+                        &lt;param-value&gt;contextPath:/WEB-INF/template&lt;/param-value&gt;
                     &lt;/init-param&gt;
                     &lt;init-param&gt;
                         &lt;param-name&gt;prefix&lt;/param-name&gt;
-                        &lt;param-value&gt;/template&lt;/param-value&gt;
+                        &lt;param-value&gt;/WEB-INF/template&lt;/param-value&gt;
                     &lt;/init-param&gt;
                     &lt;init-param&gt;
                         &lt;param-name&gt;encoding&lt;/param-name&gt;
                         &lt;param-value&gt;utf-8&lt;/param-value&gt;
                     &lt;/init-param&gt;
                     &lt;init-param&gt;
-                        &lt;param-name&gt;templatefactoryClass&lt;/param-name&gt;
-                        &lt;param-value&gt;com.skin.ayada.template.JspTemplateFactory&lt;/param-value&gt;
+                        &lt;param-name&gt;ignoreJspTag&lt;/param-name&gt;
+                        &lt;param-value&gt;true&lt;/param-value&gt;
                     &lt;/init-param&gt;
                     &lt;init-param&gt;
                         &lt;param-name&gt;jspWork&lt;/param-name&gt;
-                        &lt;param-value&gt;context: /WEB-INF/ayada&lt;/param-value&gt;
+                        &lt;param-value&gt;contextPath:/WEB-INF/ayada&lt;/param-value&gt;
+                    &lt;/init-param&gt;
+                    &lt;init-param&gt;
+                        &lt;param-name&gt;sourceFactoryClass&lt;/param-name&gt;
+                        &lt;param-value&gt;com.skin.ayada.source.DefaultSourceFactory&lt;/param-value&gt;
+                    &lt;/init-param&gt;
+                    &lt;init-param&gt;
+                        &lt;param-name&gt;templateFactoryClass&lt;/param-name&gt;
+                        &lt;param-value&gt;com.skin.ayada.template.JspTemplateFactory&lt;/param-value&gt;
+                    &lt;/init-param&gt;
+                    &lt;init-param&gt;
+                        &lt;param-name&gt;expressionFactoryClass&lt;/param-name&gt;
+                        &lt;param-value&gt;com.skin.ayada.runtime.DefaultExpressionFactory&lt;/param-value&gt;
                     &lt;/init-param&gt;
                 &lt;/filter&gt;
                 &lt;filter-mapping&gt;
                     &lt;filter-name&gt;TemplateFilter&lt;/filter-name&gt;
-                    &lt;url-pattern&gt;/template/*&lt;/url-pattern&gt;
+                    &lt;url-pattern&gt;/WEB-INF/template/*&lt;/url-pattern&gt;
                     &lt;dispatcher&gt;FORWARD&lt;/dispatcher&gt;
                     &lt;dispatcher&gt;ERROR&lt;/dispatcher&gt;
                 &lt;/filter-mapping&gt;
             </pre>
         </div>
-        <p>对应的servlet</p>
+        <p class="bb">支持的参数列表</p>
+        <p>name - 可选，TemplateDispatcher的名称，如果指定的话可以通过servletContext.getAttribute(name)获取到一个TemplateDispatcher对象。</p>
+        <p>home - 可选，模板文件的根目录，其他的目录不允许访问。默认是应用的根目录。</p>
+        <p>prefix - 可选，前缀，TemplateDispatcher会把指定的前缀去掉之后调用执行，因为前缀是指定给Filter用的。前缀应该与Filter的拦截前缀是一致的。</p>
+        <p>encoding - 可选，模板文件的文件编码。</p>
+        <p>contentType - 可选，如果指定会自动调用response.setContentType。只在response.getContentType为空的情况下调用。</p>
+        <p>sourcePattern - 可选，模板文件的扩展名。</p>
+        <p>jspWork - 可选，只在编译模式下有效，如果是编译模式，生成的class文件目录。</p>
+        <p>zipFile - 可选，如果指定了ZipSourceFactory，则使用该参数加载zip或者jar文件。</p>
+        <p>classPath - 可选，只在编译模式下有效，编译的时候使用的类路径，一般会自动识别，不需要手动设置。</p>
+        <p>ignoreJspTag - 可选，只在编译模式下有效，是否支持java脚本，默认为true。</p>
+        <p>sourceFactoryClass - 可选，使用的模板文件加载器。</p>
+        <p>templateFactoryClass - 可选，模板加载器，对应的JspTemplateFactory会编译为class再执行。</p>
+        <p>expressionFactoryClass - 可选，el表达式上下文工厂，通过它指定使用的el表达式引擎，默认是ognl。</p>
 
+        <p class="bb">对应的servlet</p>
         <div class="sk-code">
             <pre class="brush: java;">
             public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+                // 从request中获取userId.
+                long userId = 10001L;
+                User user = UserService.getById(userId);
+
+                // 将user对象放到request中。
+                // TemplateFilter拦截到该请求的时候会自动从ServletContext、HttpSession、HttpServletRequest获取全部属性值
+                // 放到Ayada的pageContext中，然后调用模板引擎执行。
+                request.setAttribute("user", user);
+
                 // TemplateFilter会拦截所有/template开头的请求作为模板处理。
-                this.forward(request, response, "/template/hello.jsp");
+                this.forward(request, response, "/WEB-INF/template/hello.jsp");
             }
             </pre>
         </div>
+        <p class="bb">hello.jsp</p>
+        <div class="sk-code">
+            <pre class="brush: xml;">
+                <h1>Hello, ${user.name} !</h1>
+            </pre>
+        </div>
+    </div>
+    <h3 class="sk-h3">2.4 与Spring集成</h3>
+    <div class="sk-content">
+        <p>请参考<a href="spring.html" target="_blank">与Spring集成</a>。</p>
     </div>
 
-    <h3 class="sk-h3">2.3 自定义模板引擎</h3>
+    <h3 class="sk-h3">2.4 自定义模板引擎</h3>
     <div class="sk-content">
         <div class="sk-code">
             <pre class="brush: java;">
@@ -129,12 +178,6 @@
                 ExpressionFactory expressionFactory = new DefaultExpressionFactory();
                 sourceFactory.setHome("D:\\myapp\template");
                 sourceFactory.setSourcePattern("jsp,jspx");
-
-                if(logger.isInfoEnabled()) {
-                    logger.info("sourceFactory: " + sourceFactory.getClass().getName());
-                    logger.info("templateFactory: " + templateFactory.getClass().getName());
-                    logger.info("expressionFactory: " + expressionFactory.getClass().getName());
-                }
 
                 // 模版上下文对象
                 TemplateContext templateContext = new DefaultTemplateContext();
@@ -1572,6 +1615,16 @@
             <li><p>Ayada的el引擎可以任意替换，如果你喜欢其他的表达式语言，你可以把默认的el引擎替换为其他实现。</p></li>
             <li><p>在jsp中所有的jsp表达式和el输出都需要人工编码加上html转码，否则可能被xss注入。Ayada在引擎层默认对所有的jsp表达式和el表达式进行html编码，同时支持自定义转码函数。</p></li>
         </ul>
+    </div>
+    <h2 class="sk-h2">17 Ayada的实现原理</h2>
+    <div class="sk-content">
+        <p>首先Ayada的实现原理非常简单，没有使用到任何高大上的技术，都是最基本的java基础知识。</p>
+        <p>虽然源代码大概有200多个类，但实际上核心实现类只有三个：TemplateCompiler、DefaultExecutor、JspCompiler，其他大部分的类都是用来组织引擎如何工作的。</p>
+        <p>JspCompiler只有在编译为class的时候才会使用到，实际上关键实现只有两个。</p>
+        <p>TemplateCompiler把一个模板文件编译为一个list结构的node列表，编译过程其实就是字符串解析，稍微看一下就能看懂，核心过程就是一个while循环，里面三个if分支。</p>
+        <p>while循环依次读入一个个的字符，如果是&lt;就认为是节点开始，如果是${就认为是表达式开始，否则就认为是文本，根据三种情况生成三种节点，按照解析顺序放入list中，最后返回该list。</p>
+        <p>DefaultExecutor是负责解释执行的，上面章节已经给出了伪代码。</p>
+        <p>JspCompiler是负责把节点列表编译为一个java类，代码大概有1700行左右，绝大部分代码都是在做性能优化，尽可能生成高效的java代码，如果除去优化的代码，可能一半的代码量都不到。</p>
     </div>
 </div>
 <div class="h20" style="height: 200px;"></div>

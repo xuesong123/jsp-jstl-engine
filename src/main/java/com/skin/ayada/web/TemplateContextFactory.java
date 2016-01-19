@@ -10,6 +10,8 @@
  */
 package com.skin.ayada.web;
 
+import java.io.File;
+
 import javax.servlet.ServletException;
 
 import org.slf4j.Logger;
@@ -27,6 +29,7 @@ import com.skin.ayada.template.TemplateContext;
 import com.skin.ayada.template.TemplateFactory;
 import com.skin.ayada.template.TemplateManager;
 import com.skin.ayada.util.ClassUtil;
+import com.skin.ayada.util.DateUtil;
 import com.skin.ayada.util.WebUtil;
 
 /**
@@ -162,8 +165,14 @@ public class TemplateContextFactory {
         TemplateFactory templateFactory = TemplateFactory.getTemplateFactory(this.templateFactoryClass);
 
         if(templateFactory instanceof JspTemplateFactory) {
+            String work = this.jspWork;
+
+            if(work == null) {
+                work = this.getTempWork("");
+            }
+
             JspTemplateFactory jspTemplateFactory = (JspTemplateFactory)templateFactory;
-            jspTemplateFactory.setWork(this.jspWork);
+            jspTemplateFactory.setWork(work);
             jspTemplateFactory.setClassPath(this.classPath);
             jspTemplateFactory.setIgnoreJspTag("true".equals(this.ignoreJspTag));
         }
@@ -179,6 +188,44 @@ public class TemplateContextFactory {
             return (ExpressionFactory)(ClassUtil.getInstance(this.expressionFactoryClass));
         }
         return new DefaultExpressionFactory();
+    }
+
+    /**
+     * @return String
+     */
+    protected String getTempWork(String prefix) {
+        String work = WebUtil.getRealPath("/WEB-INF");
+
+        if(work == null) {
+            return null;
+        }
+
+        long timeMillis = System.currentTimeMillis();
+        String pattern = "yyyyMMddHHmmss";
+        String name = prefix;
+
+        if(name == null || name.length() < 1 || name.equals("/")) {
+            name = "";
+        }
+        else {
+            name = name.replace('\\', '.');
+            name = name.replace('/', '.');
+        }
+
+        if(name.length() > 0) {
+            name = "ayada_" + name + "_";
+        }
+        else {
+            name = "ayada_";
+        }
+
+        File file = new File(work, name + DateUtil.format(timeMillis, pattern));
+
+        while(file.exists()) {
+            timeMillis += 1000;
+            file = new File(work, name + DateUtil.format(timeMillis, pattern));
+        }
+        return file.getAbsolutePath();
     }
 
     /**
