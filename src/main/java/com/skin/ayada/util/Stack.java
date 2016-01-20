@@ -47,7 +47,6 @@ public class Stack<E> {
             System.arraycopy(this.stack, 0, temp, 0, length);
             this.stack = temp;
         }
-
         this.stack[this.index] = e;
     }
 

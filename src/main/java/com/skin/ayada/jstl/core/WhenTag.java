@@ -52,8 +52,4 @@ public class WhenTag extends ConditionalTagSupport {
     public int doEndTag() {
         return EVAL_PAGE;
     }
-
-    public void setTest(boolean b) {
-        this.setCondition(b);
-    }
 }

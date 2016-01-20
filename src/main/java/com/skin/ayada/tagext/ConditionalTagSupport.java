@@ -18,38 +18,38 @@ package com.skin.ayada.tagext;
  * @version 1.0
  */
 public abstract class ConditionalTagSupport extends TagSupport {
-    private boolean condition = false;
+    private boolean test = false;
 
     public ConditionalTagSupport() {
-        this.condition = false;
+        this.test = false;
     }
 
     /**
-     * @param condition
+     * @param test
      */
-    public ConditionalTagSupport(boolean condition) {
-        this.condition = condition;
+    public ConditionalTagSupport(boolean test) {
+        this.test = test;
     }
 
     /**
      * @return boolean
      */
     public boolean condition() {
-        return this.condition;
+        return this.test;
     }
 
     /**
-     * @return the condition
+     * @return the test
      */
-    public boolean getCondition() {
-        return this.condition;
+    public boolean getTest() {
+        return this.test;
     }
 
     /**
-     * @param condition the condition to set
+     * @param test the test to set
      */
-    public void setCondition(boolean condition) {
-        this.condition = condition;
+    public void setTest(boolean test) {
+        this.test = test;
     }
 
     /**

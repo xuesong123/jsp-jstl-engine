@@ -40,6 +40,7 @@ import com.skin.ayada.statement.Variable;
 import com.skin.ayada.template.Template;
 import com.skin.ayada.util.HtmlUtil;
 import com.skin.ayada.util.NodeUtil;
+import com.skin.ayada.util.Path;
 import com.skin.ayada.util.Stack;
 
 /**
@@ -95,7 +96,9 @@ public class TemplateCompiler extends PageCompiler {
         if(source == null) {
             throw new NullPointerException("source \"" + path + "\" not exists !");
         }
-        return this.compile(source);
+        Template template = this.compile(source);
+        source.setSource((String)null);
+        return template;
     }
 
     /**
@@ -128,7 +131,7 @@ public class TemplateCompiler extends PageCompiler {
 
         while((i = this.stream.read()) != -1) {
             if(i == '<') {
-                this.startTag(stack, list);
+                this.startTag(source, stack, list);
             }
             else if(i == '$' && this.stream.peek() == '{') {
                 this.stream.read();
@@ -201,10 +204,12 @@ public class TemplateCompiler extends PageCompiler {
     }
 
     /**
+     * @param source
      * @param stack
      * @param list
+     * @throws Exception
      */
-    public void startTag(Stack<Node> stack, List<Node> list) throws Exception {
+    public void startTag(Source source, Stack<Node> stack, List<Node> list) throws Exception {
         int n = this.stream.read();
 
         if(n == '/') {
@@ -238,7 +243,7 @@ public class TemplateCompiler extends PageCompiler {
             }
         }
         else if(n == '%') {
-            this.jspCompile(stack, list);
+            this.jspCompile(source, stack, list);
         }
         else if(n == '!') {
             this.pushTextNode(stack, list, "<!", this.lineNumber);
@@ -315,7 +320,7 @@ public class TemplateCompiler extends PageCompiler {
                 String file = attributes.get("file");
                 String type = attributes.get("type");
                 String encoding = attributes.get("encoding");
-                this.include(stack, list, file, type, encoding);
+                this.include(stack, list, source.getPath(), file, type, encoding);
                 this.skipLine();
                 return;
             }
@@ -426,10 +431,12 @@ public class TemplateCompiler extends PageCompiler {
     }
 
     /**
+     * @param source
      * @param stack
      * @param list
+     * @throws Exception
      */
-    private void jspCompile(Stack<Node> stack, List<Node> list) throws Exception {
+    private void jspCompile(Source source, Stack<Node> stack, List<Node> list) throws Exception {
         int i = this.stream.read();
 
         if(i == -1) {
@@ -459,7 +466,7 @@ public class TemplateCompiler extends PageCompiler {
             else if(attributes.get("include") != null) {
                 nodeName = NodeType.JSP_DIRECTIVE_INCLUDE_NAME;
                 String path = attributes.get("file");
-                this.include(stack, list, path, null, null);
+                this.include(stack, list, source.getPath(), path, null, null);
             }
             else {
                 throw new Exception("Unknown jsp directive at line #" + this.lineNumber + " - <%@ " + NodeUtil.toString(attributes) + "%>");
@@ -611,24 +618,26 @@ public class TemplateCompiler extends PageCompiler {
     /**
      * @param stack
      * @param list
+     * @param work
+     * @param file
      * @param type
-     * @param path
-     * @param charset
+     * @param encoding
      * @throws Exception
      */
-    public void include(Stack<Node> stack, List<Node> list, String path, String type, String charset) throws Exception {
-        if(path == null) {
-            throw new Exception("t:include error: attribute 'file' not exists !");
+    public void include(Stack<Node> stack, List<Node> list, String work, String file, String type, String encoding) throws Exception {
+        if(logger.isDebugEnabled()) {
+            logger.debug("work: {}, file: {}", work, file);
         }
 
-        if(path.charAt(0) != '/') {
-            throw new Exception("t:include error: file must be starts with '/'");
+        if(file == null) {
+            throw new Exception("t:include error: attribute 'file' not exists !");
         }
 
         int index = list.size();
         Node parent = stack.peek();
-        String encoding = (charset != null ? charset : "UTF-8");
-        Source source = this.getSourceFactory().getSource(path, encoding);
+        String path = this.getAbsolutePath(work, file);
+        String charset = (encoding != null ? encoding : "UTF-8");
+        Source source = this.getSourceFactory().getSource(path, charset);
         int sourceType = Source.valueOf(type, source.getType());
 
         if(sourceType == Source.STATIC) {
@@ -665,7 +674,24 @@ public class TemplateCompiler extends PageCompiler {
             list.add(node);
             index++;
         }
-        this.getDependencies().addAll(compiler.getDependencies());
+        this.addDependency(compiler.getDependencies());
+    }
+
+    /**
+     * @param work
+     * @param file
+     * @return String
+     */
+    private String getAbsolutePath(String work, String file) {
+        String path = Path.getStrictPath(file);
+
+        if(path.startsWith("/")) {
+            return path;
+        }
+        else {
+            String parent = Path.getParent(work);
+            return Path.join(parent, path);
+        }
     }
 
     /**
@@ -1311,6 +1337,18 @@ public class TemplateCompiler extends PageCompiler {
      */
     public void setDependencies(List<Source> dependencies) {
         this.dependencies = dependencies;
+    }
+
+    /**
+     * @param dependencies
+     */
+    public void addDependency(List<Source> dependencies) {
+        if(dependencies != null && dependencies.size() > 0) {
+            if(this.dependencies == null) {
+                this.dependencies = new ArrayList<Source>();
+            }
+            this.dependencies.addAll(dependencies);
+        }
     }
 
     /**

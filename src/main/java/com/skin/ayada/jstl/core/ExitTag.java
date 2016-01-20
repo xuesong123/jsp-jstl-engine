@@ -33,8 +33,4 @@ public class ExitTag extends ConditionalTagSupport {
         }
         return EVAL_PAGE;
     }
-
-    public void setTest(boolean b) {
-        this.setCondition(b);
-    }
 }

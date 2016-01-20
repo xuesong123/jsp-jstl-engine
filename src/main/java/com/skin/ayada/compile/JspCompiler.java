@@ -25,6 +25,7 @@ import com.skin.ayada.config.TemplateConfig;
 import com.skin.ayada.io.CharBuffer;
 import com.skin.ayada.io.ChunkWriter;
 import com.skin.ayada.resource.ClassPathResource;
+import com.skin.ayada.source.Source;
 import com.skin.ayada.statement.Expression;
 import com.skin.ayada.statement.Node;
 import com.skin.ayada.statement.NodeType;
@@ -42,6 +43,7 @@ import com.skin.ayada.util.DateUtil;
 import com.skin.ayada.util.ExpressionUtil;
 import com.skin.ayada.util.HtmlUtil;
 import com.skin.ayada.util.NodeUtil;
+import com.skin.ayada.util.Path;
 import com.skin.ayada.util.StringUtil;
 import com.skin.ayada.util.TagUtil;
 
@@ -68,15 +70,17 @@ public class JspCompiler {
         String methodBody = this.getMethodBody(template);
         String subClassBody = this.getSubClassBody(template);
         String staticDeclaration = this.getStaticDeclaration(template);
+        String dependencies = this.getDependencies(template);
 
         Map<String, String> context = new HashMap<String, String>();
         context.put("java.className", className);
         context.put("java.packageName", packageName);
         context.put("build.date", DateUtil.format(date, "yyyy-MM-dd"));
         context.put("build.time", DateUtil.format(date, "yyyy-MM-dd HH:mm:ss SSS"));
-        context.put("template.home", StringUtil.replace(template.getHome(), "\\", "/"));
-        context.put("template.path", StringUtil.replace(template.getPath(), "\\", "/"));
+        context.put("template.home", Path.getStrictPath(template.getHome()));
+        context.put("template.path", Path.getStrictPath(template.getPath()));
         context.put("template.lastModified", DateUtil.format(template.getLastModified(), "yyyy-MM-dd HH:mm:ss SSS"));
+        context.put("template.dependencies", dependencies);
         context.put("options.fastJstl", String.valueOf(this.fastJstl));
         context.put("compiler.version", Version.getVersion());
         context.put("jsp.directive.import", jspDirective);
@@ -85,6 +89,28 @@ public class JspCompiler {
         context.put("jsp.subclass.body", subClassBody);
         context.put("jsp.static.declaration", staticDeclaration);
         return this.replace(JAVA_TEMPLATE, context);
+    }
+    
+    /**
+     * @param template
+     * @return String
+     */
+    public String getDependencies(Template template) {
+        StringBuilder buffer = new StringBuilder();
+        List<Source> dependencies = template.getDependencies();
+
+        if(dependencies != null) {
+            for(Source source : dependencies) {
+                buffer.append(" * -- ");
+                buffer.append(Path.getStrictPath("/" + source.getPath()));
+                buffer.append("\r\n");
+            }
+
+            if(buffer.length() > 0) {
+                buffer.delete(buffer.length() - 2, buffer.length());
+            }
+        }
+        return buffer.toString();
     }
 
     /**
@@ -1675,16 +1701,16 @@ public class JspCompiler {
      */
     public String replace(String source, Map<String, String> context) {
         char c;
+        int length = source.length();
         StringBuilder name = new StringBuilder();
         CharBuffer result = new CharBuffer(4096);
 
-        for(int i = 0; i < source.length(); i++) {
+        for(int i = 0; i < length; i++) {
             c = source.charAt(i);
 
-            if(c == '$' && i < source.length() - 1 && source.charAt(i + 1) == '{') {
-                for(int j = i + 2; j < source.length(); j++) {
-                    i = j;
-                    c = source.charAt(j);
+            if(c == '$' && i < length - 1 && source.charAt(i + 1) == '{') {
+                for(i = i + 2; i < length; i++) {
+                    c = source.charAt(i);
 
                     if(c == '}') {
                         String value = context.get(name.toString());

@@ -28,10 +28,8 @@ public class IfTag extends ConditionalTagSupport {
         if(this.condition() == true) {
             return EVAL_BODY_INCLUDE;
         }
-        return SKIP_BODY;
-    }
-
-    public void setTest(boolean b) {
-        this.setCondition(b);
+        else {
+            return SKIP_BODY;
+        }
     }
 }

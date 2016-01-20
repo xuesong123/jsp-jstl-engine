@@ -626,6 +626,7 @@ public class DefaultPageContext implements PageContext {
         this.attributes.clear();
         this.expressionContext.release();
         this.attributes = null;
+        this.templateContext = null;
         this.expressionContext = null;
         this.out = null;
     }

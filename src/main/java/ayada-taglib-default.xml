@@ -450,4 +450,7 @@
     <tag name="io:copy" tag-class="com.skin.ayada.jstl.io.CopyTag" body-content="tagdependent" ignore-whitespace="true" description=""/>
     <tag name="io:delete" tag-class="com.skin.ayada.jstl.io.DeleteTag" body-content="tagdependent" ignore-whitespace="true" description=""/>
     <tag name="io:mkdir" tag-class="com.skin.ayada.jstl.io.MakeDirTag" body-content="empty" ignore-whitespace="true" description=""/>
+    <tag name="s:if" tag-class="com.skin.ayada.jstl.ext.IfTag" body-content="jsp" ignore-whitespace="true"/>
+    <tag name="s:elseif" tag-class="com.skin.ayada.jstl.ext.ElseIfTag" body-content="jsp" ignore-whitespace="true"/>
+    <tag name="s:else" tag-class="com.skin.ayada.jstl.ext.ElseTag" body-content="jsp" ignore-whitespace="true"/>
 </taglib>

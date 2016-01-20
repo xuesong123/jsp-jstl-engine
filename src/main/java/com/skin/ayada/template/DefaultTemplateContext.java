@@ -39,6 +39,7 @@ import com.skin.ayada.util.StringUtil;
  * @version 1.0
  */
 public class DefaultTemplateContext implements TemplateContext {
+    private int reload;
     private SourceFactory sourceFactory;
     private TemplateFactory templateFactory;
     private ExpressionFactory expressionFactory;
@@ -46,6 +47,7 @@ public class DefaultTemplateContext implements TemplateContext {
     private static final Logger logger = LoggerFactory.getLogger(DefaultTemplateContext.class);
 
     public DefaultTemplateContext() {
+        this.reload = 0;
         this.cache = new ConcurrentHashMap<String, FutureTask<Template>>();
     }
 
@@ -170,8 +172,9 @@ public class DefaultTemplateContext implements TemplateContext {
             }
 
             if(template != null) {
-                if(!create && this.getLastModified(template)) {
+                if(!create && this.reload == 0 && this.getLastModified(template)) {
                     this.cache.remove(realPath, f);
+                    template.destroy();
                     template = null;
                 }
                 else {
@@ -306,6 +309,20 @@ public class DefaultTemplateContext implements TemplateContext {
     public void destory() {
         this.cache.clear();
         this.cache = null;
+    }
+
+    /**
+     * @param reload the reload to set
+     */
+    public void setReload(int reload) {
+        this.reload = reload;
+    }
+    
+    /**
+     * @return the reload
+     */
+    public int getReload() {
+        return this.reload;
     }
 
     /**

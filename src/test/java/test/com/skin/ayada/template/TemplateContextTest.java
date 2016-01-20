@@ -40,9 +40,9 @@ public class TemplateContextTest {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        test2();
+        test3();
     }
-    
+
     public static void test1() {
         try {
            String sourcePattern = "jsp,jspx";
@@ -80,6 +80,26 @@ public class TemplateContextTest {
             Map<String, Object> context = new HashMap<String, Object>();
             templateContext.execute(file.getName(), context, writer);
             templateContext.destory();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            IO.close(writer);
+        }
+    }
+
+    public static void test3() {
+        StringWriter writer = new StringWriter();
+
+        try {
+            String work = "D:\\workspace2\\ayada\\webapp";
+            TemplateContext templateContext = TemplateManager.create(work);
+
+            Map<String, Object> context = new HashMap<String, Object>();
+            templateContext.execute("/user/userList.jsp", context, writer);
+            templateContext.destory();
+            System.out.println(writer.toString());
         }
         catch(Exception e) {
             e.printStackTrace();

@@ -25,6 +25,7 @@ public class Path {
         /**
          * windows
          */
+        System.out.println("-------------------- test join --------------------");
         System.out.println("result: " + Path.join("D:\\mytest", "a\\..\\b.txt"));
         System.out.println("result: " + Path.join("D:\\mytest", "a\\..\\.\\b.txt"));
         System.out.println("result: " + Path.join("D:\\mytest\\.\\", "a\\..\\.\\b.txt"));
@@ -34,12 +35,17 @@ public class Path {
         /**
          * unix
          */
+        System.out.println("-------------------- test join --------------------");
         System.out.println("result: " + Path.join("/home/mytest", ".\\a\\..\\..\\..\\..\\..\\b.txt"));
         System.out.println("result: " + Path.join("mytest/mytest", ".\\a\\..\\..\\..\\..\\..\\b.txt"));
+        System.out.println("result: " + Path.getParent("/user/user.jsp"));
+        System.out.println("result: " + Path.join("/user/", "../include/header.jsp"));
+        System.out.println("result: " + Path.join("/user", "../include/header.jsp"));
 
         /**
          *
          */
+        System.out.println("-------------------- test join --------------------");
         System.out.println("result: " + Path.join("/home/mytest", ""));
         System.out.println("result: " + Path.join("mytest/mytest", ""));
         System.out.println("result: " + Path.join("////////", ""));
@@ -47,17 +53,20 @@ public class Path {
         /**
          *
          */
+        System.out.println("-------------------- test contains --------------------");
         System.out.println("contains: " + Path.contains("D:\\workspace2/ayada\\webapp", "\\..\\outTest.jsp"));
         System.out.println("contains: " + Path.contains("D:\\workspace2/ayada\\webapp", "\\outTest.jsp"));
 
         /**
          *
          */
+        System.out.println("-------------------- test getStrictPath --------------------");
         System.out.println("strictPath: " + Path.getStrictPath("D:"));
         System.out.println("strictPath: " + Path.getStrictPath("D:\\"));
         System.out.println("strictPath: " + Path.getStrictPath("D:\\test///a\\b.html"));
         System.out.println("strictPath: " + Path.getStrictPath("////test///a\\b.html"));
         System.out.println("strictPath: " + Path.getStrictPath("test///a\\b.html"));
+        System.out.println("strictPath: " + Path.getStrictPath("../../../../test///a\\b.html"));
         System.out.println("strictPath: " + Path.getStrictPath("//////home/user//\\test///a\\b.html"));
         System.out.println("strictPath: " + Path.getStrictPath("//////home/user//\\test///"));
         System.out.println("strictPath: " + Path.getStrictPath("///////"));
@@ -65,6 +74,7 @@ public class Path {
         /**
          *
          */
+        System.out.println("-------------------- test getParent --------------------");
         System.out.println("parent: " + Path.getParent("D:\\"));
         System.out.println("parent: " + Path.getParent("D:\\a.html"));
         System.out.println("parent: " + Path.getParent("D:\\a\\b\\c.html"));

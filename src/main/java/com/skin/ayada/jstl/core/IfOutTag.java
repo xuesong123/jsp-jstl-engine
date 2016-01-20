@@ -39,13 +39,6 @@ public class IfOutTag extends ConditionalTagSupport {
     }
 
     /**
-     * @param b
-     */
-    public void setTest(boolean b) {
-        this.setCondition(b);
-    }
-
-    /**
      * @return the value1
      */
     public Object getValue1() {

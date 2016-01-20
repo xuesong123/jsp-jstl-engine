@@ -170,4 +170,19 @@ public class Template {
             this.dependencies.add(source);
         }
     }
+
+    public void destroy() {
+        this.home = null;
+        this.path = null;
+
+        if(this.nodes != null) {
+            this.nodes.clear();
+            this.nodes = null;
+        }
+
+        if(this.dependencies != null) {
+            this.dependencies.clear();
+            this.dependencies = null;
+        }
+    }
 }
