@@ -8,6 +8,11 @@
 
 ### 2
     <p>
+            <c:if test="${1 == 1}" t:clip="false">Hello world !</c:if>
+    </p>
+
+### 3
+    <p>
             <c:any><c:if test="${1 == 1}">Hello world !</c:if></c:any>
     </p>
 
@@ -109,10 +114,18 @@ c:remove的bodyContent为empty, 之前的版本有一个bug, 成对闭合的标�
         </c:if>
     </div>
 </div>
-对于这种代码形式，如果希望输出符合我们的期望，就必须引入新的规则，问题是这个规则无法定义。
-假设，如果一个标签内的文本内容和标签处于同一行，那么我们就不处理格式，那面下面的代码依然存在问题：
+
+第二种方法是使用t:clip属性指令，当一个标签使用了t:clip指令时，标签将不做任何格式处理，该指令只对标签有效；
 <div>
     <div>
-        <c:if test="${1 == 1}"><c:if test="${1 == 1}"><p>hello</p></c:if></c:if>
+        <c:if test="${1 == 1}" t:clip="false"><p>hello</p></c:if>
     </div>
 </div>
+
+第三种方法是使用c:any标签再包一层，c:any标签事实上什么都不做，但是它的ignoreWhitespace定义为false，这样通过外层标签可以使内层标签起到不做格式处理的作用。
+<div>
+    <div>
+        <c:any><c:if test="${1 == 1}"><p>hello</p></c:if></c:any>
+    </div>
+</div>
+其中第一种方法和第二种方法都不会对性能有任何影响。第三种方法由于多了一层标签，将会多一层处理。

@@ -137,7 +137,12 @@ public abstract class Node {
      * @param value
      */
     public void setAttribute(String name, String value) {
-        this.attributes.put(name, value);
+        if(value != null) {
+            this.attributes.put(name, value);
+        }
+        else {
+            this.attributes.remove(name);
+        }
     }
 
     /**
@@ -146,6 +151,13 @@ public abstract class Node {
      */
     public String getAttribute(String name) {
         return this.attributes.get(name);
+    }
+
+    /**
+     * @param name
+     */
+    public void removeAttribute(String name) {
+        this.attributes.remove(name);
     }
 
     /**

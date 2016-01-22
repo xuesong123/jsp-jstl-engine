@@ -85,17 +85,16 @@ public class TemplateCompiler extends PageCompiler {
      * @return Template
      */
     public Template compile(String path, String encoding) throws Exception {
-        long t1 = System.currentTimeMillis();
-        Source source = this.getSourceFactory().getSource(path, encoding);
-        long t2 = System.currentTimeMillis();
-
         if(logger.isDebugEnabled()) {
-            logger.debug("load source: {}, path: {}" + (t2 - t1), path);
+            logger.debug("load source: path: {}", path);
         }
+
+        Source source = this.getSourceFactory().getSource(path, encoding);
 
         if(source == null) {
             throw new NullPointerException("source \"" + path + "\" not exists !");
         }
+
         Template template = this.compile(source);
         source.setSource((String)null);
         return template;
@@ -122,11 +121,10 @@ public class TemplateCompiler extends PageCompiler {
         }
 
         int i;
-        long t1 = System.currentTimeMillis();
-        Stack<Node> stack = new Stack<Node>();
-        List<Node> list = new ArrayList<Node>();
         this.lineNumber = 1;
         this.stream = new StringStream(source.getSource());
+        Stack<Node> stack = new Stack<Node>();
+        List<Node> list = new ArrayList<Node>();
         this.skipWhitespace();
 
         while((i = this.stream.read()) != -1) {
@@ -189,16 +187,6 @@ public class TemplateCompiler extends PageCompiler {
         if(stack.peek() != null) {
             Node node = stack.peek();
             throw new Exception("Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node) + " not match !");
-        }
-
-        if(logger.isDebugEnabled()) {
-            long t2 = System.currentTimeMillis();
-            Template template = this.getTemplate(source, list, this.tagLibrary);
-            long t3 = System.currentTimeMillis();
-
-            logger.debug("tpl compile time: " + (t2 - t1));
-            logger.debug("create tagFactory: " + (t3 - t2));
-            return template;
         }
         return this.getTemplate(source, list, this.tagLibrary);
     }
@@ -543,13 +531,14 @@ public class TemplateCompiler extends PageCompiler {
         if(parent != null) {
             node.setParent(parent);
         }
-
         stack.push(node);
         list.add(node);
 
+        /**
         if(logger.isDebugEnabled()) {
             logger.debug("[push][node] parent: " + (parent != null ? parent.getNodeName() : "null") + ", nodeName: [" + node.getNodeName() + "]");
         }
+        */
     }
 
     /**
@@ -569,10 +558,12 @@ public class TemplateCompiler extends PageCompiler {
             node.setLength(list.size() - node.getOffset() + 1);
             list.add(node);
 
+            /**
             if(logger.isDebugEnabled()) {
                 Node parent = node.getParent();
                 logger.debug("[pop ][node] parent: " + (parent != null ? parent.getNodeName() : "null") + ", nodeName: [/" + node.getNodeName() + "]");
             }
+            */
         }
         else {
             throw new Exception("Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node) + " not match !");
@@ -871,9 +862,10 @@ public class TemplateCompiler extends PageCompiler {
             int nodeType = node.getNodeType();
 
             if(nodeType == NodeType.TAG_NODE) {
+                String clip = node.getAttribute("t:clip");
                 TagInfo tagInfo = tagLibrary.getTagInfo(node.getNodeName());
 
-                if(tagInfo.getIgnoreWhitespace()) {
+                if(tagInfo.getIgnoreWhitespace() && !"false".equals(clip)) {
                     if(i > 0) {
                         this.clip(list.get(i - 1), 1);
                     }
@@ -881,6 +873,10 @@ public class TemplateCompiler extends PageCompiler {
                     if(i + 1 < size) {
                         this.clip(list.get(i + 1), 2);
                     }
+                }
+
+                if(i != node.getOffset()) {
+                    node.removeAttribute("t:clip");
                 }
             }
             else if(nodeType == NodeType.JSP_DECLARATION
