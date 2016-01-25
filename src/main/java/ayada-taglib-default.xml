@@ -137,7 +137,7 @@
         <name>c:join</name>
         <tag-class>com.skin.ayada.jstl.core.JoinTag</tag-class>
         <body-content>empty</body-content>
-        <ignore-whitespace>true</ignore-whitespace>
+        <ignore-whitespace>false</ignore-whitespace>
         <description></description>
     </tag>
     <tag>

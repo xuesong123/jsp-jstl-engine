@@ -630,6 +630,7 @@ public class TemplateCompiler extends PageCompiler {
         String charset = (encoding != null ? encoding : "UTF-8");
         Source source = this.getSourceFactory().getSource(path, charset);
         int sourceType = Source.valueOf(type, source.getType());
+        source.setType(sourceType);
 
         if(sourceType == Source.STATIC) {
             TextNode textNode = new TextNode();
@@ -640,10 +641,10 @@ public class TemplateCompiler extends PageCompiler {
             textNode.append(source.getSource());
             list.add(textNode);
             this.addDependency(source);
+            source.setSource((String)null);
             return;
         }
 
-        source.setType(sourceType);
         TemplateCompiler compiler = new TemplateCompiler(this.sourceFactory);
         compiler.setTagLibrary(this.getTagLibrary());
         Template template = compiler.compile(source);

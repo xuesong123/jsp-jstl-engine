@@ -150,6 +150,23 @@ public class ClassUtil {
     }
 
     /**
+     * @param bean
+     * @param name
+     * @return Object
+     * @throws Exception
+     */
+    public static Object getProperty(Object bean, String name) throws Exception {
+        if(bean == null) {
+            return null;
+        }
+
+        Class<?> type = bean.getClass();
+        String methodName = "get" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
+        Method method = type.getMethod(methodName, new Class[0]);
+        return method.invoke(bean, new Object[0]);
+    }
+
+    /**
      * @param type
      * @param methodName
      * @return Method

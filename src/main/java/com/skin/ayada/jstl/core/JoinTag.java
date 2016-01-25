@@ -10,9 +10,12 @@
  */
 package com.skin.ayada.jstl.core;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import com.skin.ayada.tagext.TagSupport;
+import com.skin.ayada.util.ClassUtil;
 
 /**
  * <p>Title: JoinTag</p>
@@ -24,6 +27,7 @@ import com.skin.ayada.tagext.TagSupport;
 public class JoinTag extends TagSupport {
     private Object items;
     private Iterator<?> iterator;
+    private String property;
     private Object value;
     private int repeat;
     private String separator;
@@ -41,6 +45,7 @@ public class JoinTag extends TagSupport {
         if(this.hasItems) {
             Object element = null;
             this.iterator = ForEachTag.getIterator(this.items);
+            this.iterator = JoinTag.getIterator(this.iterator, this.property);
 
             while(this.iterator.hasNext()) {
                 element = this.iterator.next();
@@ -78,6 +83,33 @@ public class JoinTag extends TagSupport {
     }
 
     /**
+     * @return Iterator<?>
+     */
+    private static Iterator<?> getIterator(Iterator<?> iterator, String property) {
+        if(iterator == null) {
+            return new ArrayList<Object>().iterator();
+        }
+
+        if(property == null || property.trim().length() < 1) {
+            return iterator;
+        }
+
+        Object element = null;
+        List<Object> list = new ArrayList<Object>();
+
+        while(iterator.hasNext()) {
+            try {
+                element = ClassUtil.getProperty(iterator.next(), property);
+            }
+            catch (Exception e) {
+                element = null;
+            }
+            list.add(element);
+        }
+        return list.iterator();
+    }
+
+    /**
      * @param items the items to set
      */
     public void setItems(Object items) {
@@ -90,6 +122,20 @@ public class JoinTag extends TagSupport {
      */
     public Object getItems() {
         return this.items;
+    }
+
+    /**
+     * @param property the property to set
+     */
+    public void setProperty(String property) {
+        this.property = property;
+    }
+
+    /**
+     * @return the property
+     */
+    public String getProperty() {
+        return this.property;
     }
 
     /**
