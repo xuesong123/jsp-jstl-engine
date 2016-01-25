@@ -1568,19 +1568,26 @@
         <p>当编译的时候可以直接生成类似的代码。</p>
     </div>
 
-    <h2 class="sk-h2">14 线程模型</h2>
+    <h2 class="sk-h2">14 不支持的语法</h2>
+    <div class="sk-content">
+        <p>Ayada对jsp某些语法不支持，例如：</p>
+        <p>&lt;c:out value="&lt;%=request.getContextPath()%&gt;"/&gt;</p>
+        <p>Ayada不支持在标签内使用jsp脚本，因为Ayada一开始只提供在解释模式下运行，编译模式是后来添加的。以后可能会提供对这种写法的支持，暂时不支持。</p>
+    </div>
+
+    <h2 class="sk-h2">15 线程模型</h2>
     <div class="sk-content">
         <p>首先标签不存在线程安全的问题，所有的标签都在安全的线程模型中执行。<b>除非自己实现的标签里面存在不安全的代码。</b></p>
         <p>在解释模式中不存在线程安全的问题。在编译模式下如果开启了java脚本选项，请小心使用类变量。编译模式下所有被编译好的模版对象都是单例的，不是线程安全的，这一点与jsp的运行模式是一致的。</p>
     </div>
 
-    <h2 class="sk-h2">15 代码示例和测试用例</h2>
+    <h2 class="sk-h2">16 代码示例和测试用例</h2>
     <div class="sk-content">
         <p>在源代码的/webapp目录下包含了绝大部分的代码示例和测试用例，这些文件基本上都以某个具体的标签名命名，从文件名就可以很容易看出来是关于那个标签的用法的。</p>
         <p>com.skin.ayada.template.Main是java调用模板引擎的示例，也可以在命令行下调用。</p>
     </div>
 
-    <h2 class="sk-h2">16 其他</h2>
+    <h2 class="sk-h2">17 其他</h2>
     <div class="sk-content">
         <p>Ayada支持两种模式执行模版：解释模式和编译模式。解释模式直接在内存中通过解释执行来渲染结果。编译模式会先编译为java文件，再把java文件编译为class加载到jvm执行。</p>
         <p>通常模版引擎为了提升性能，会采用很多性能优化的手段，例如：动态编译，使用强制类型来避免反射等。Ayada也使用了动态编译，由于Ayada是与jsp和jstl完全一致的，所以一些jsp的技术在Ayada里面是完全有效的。</p>
@@ -1616,7 +1623,7 @@
             <li><p>在jsp中所有的jsp表达式和el输出都需要人工编码加上html转码，否则可能被xss注入。Ayada在引擎层默认对所有的jsp表达式和el表达式进行html编码，同时支持自定义转码函数。</p></li>
         </ul>
     </div>
-    <h2 class="sk-h2">17 Ayada的实现原理</h2>
+    <h2 class="sk-h2">18 Ayada的实现原理</h2>
     <div class="sk-content">
         <p>首先Ayada的实现原理非常简单，没有使用到任何高大上的技术，都是最基本的java基础知识。</p>
         <p>虽然源代码大概有200多个类，但实际上核心实现类只有三个：TemplateCompiler、DefaultExecutor、JspCompiler，其他大部分的类都是用来组织引擎如何工作的。</p>
