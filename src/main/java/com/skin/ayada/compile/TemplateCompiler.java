@@ -470,7 +470,7 @@ public class TemplateCompiler extends PageCompiler {
         }
         else if(i == '!'){
             int ln = this.lineNumber;
-            String scriptlet = this.readScriptlet();
+            String scriptlet = this.readJspScriptlet();
 
             if(list.size() > 0) {
                 this.clip(list.get(list.size() - 1), 1);
@@ -484,9 +484,20 @@ public class TemplateCompiler extends PageCompiler {
             this.pushNode(stack, list, node);
             this.popNode(stack, list, node.getNodeName());
         }
+        else if(i == '-'){
+            i = this.stream.read();
+
+            if(i == '-') {
+                this.readJspComment();
+                this.skipLine();
+            }
+            else {
+                throw new Exception("bad jsp syntax at line #" + this.lineNumber + ": <%-");
+            }
+        }
         else if(i == '=') {
             int ln = this.lineNumber;
-            String expression = this.readScriptlet();
+            String expression = this.readJspScriptlet();
 
             if(!this.isEmpty(expression)) {
                 JspExpression node = new JspExpression();
@@ -504,7 +515,7 @@ public class TemplateCompiler extends PageCompiler {
         else {
             this.stream.back();
             int ln = this.lineNumber;
-            String scriptlet = this.readScriptlet();
+            String scriptlet = this.readJspScriptlet();
 
             if(list.size() > 0) {
                 this.clip(list.get(list.size() - 1), 1);
@@ -1000,7 +1011,34 @@ public class TemplateCompiler extends PageCompiler {
     /**
      * @return String
      */
-    public String readScriptlet() {
+    public String readJspComment() {
+        int i = 0;
+        int ln = this.lineNumber;
+        StringBuilder buffer = new StringBuilder();
+
+        while((i = this.stream.read()) != -1) {
+            if(i == '-' && this.stream.match("-%>")) {
+                this.stream.read();
+                this.stream.read();
+                this.stream.read();
+                break;
+            }
+            if(i == '\n') {
+                this.lineNumber++;
+            }
+            buffer.append((char)i);
+        }
+
+        if(this.stream.peek(-4) != '-' || this.stream.peek(-3) != '-' || this.stream.peek(-2) != '%' || this.stream.peek(-1) != '>') {
+            throw new RuntimeException("at line #" + ln + " The 'jsp:comment' direction must be ends with '--%>'");
+        }
+        return buffer.toString();
+    }
+
+    /**
+     * @return String
+     */
+    public String readJspScriptlet() {
         int i = 0;
         int ln = this.lineNumber;
         StringBuilder buffer = new StringBuilder();
@@ -1017,7 +1055,7 @@ public class TemplateCompiler extends PageCompiler {
             buffer.append((char)i);
         }
 
-        if(this.stream.peek(-2) != '%' && this.stream.peek(-1) != '%') {
+        if(this.stream.peek(-2) != '%' || this.stream.peek(-1) != '>') {
             throw new RuntimeException("at line #" + ln + " The 'jsp:directive' direction must be ends with '%>'");
         }
         return buffer.toString();
