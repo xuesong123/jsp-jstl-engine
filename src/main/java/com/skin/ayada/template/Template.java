@@ -55,7 +55,7 @@ public class Template {
 
     /**
      * @param pageContext
-     * @throws Throwable
+     * @throws Exception
      */
     public void execute(final PageContext pageContext) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();

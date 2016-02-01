@@ -44,7 +44,7 @@ public abstract class JspTemplate extends Template {
 
     /**
      * @param pageContext
-     * @throws Throwable
+     * @throws Exception
      */
     @Override
     public void execute(final PageContext pageContext) throws Exception {

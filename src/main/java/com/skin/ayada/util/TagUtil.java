@@ -34,7 +34,6 @@ public class TagUtil {
     /**
      * @param tagName
      * @return Tag
-     * @throws Exception
      */
     public static Tag create(String tagName) {
         TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();

@@ -405,6 +405,27 @@
         <description></description>
     </tag>
     <tag>
+        <name>csv:each</name>
+        <tag-class>com.skin.ayada.jstl.core.CSVTag</tag-class>
+        <body-content>jsp</body-content>
+        <ignore-whitespace>false</ignore-whitespace>
+        <description></description>
+    </tag>
+    <tag>
+        <name>csv:each</name>
+        <tag-class>com.skin.ayada.jstl.csv.CSVTag</tag-class>
+        <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
+        <description></description>
+    </tag>
+    <tag>
+        <name>csv:dataSet</name>
+        <tag-class>com.skin.ayada.jstl.csv.DataSetTag</tag-class>
+        <body-content>jsp</body-content>
+        <ignore-whitespace>true</ignore-whitespace>
+        <description></description>
+    </tag>
+    <tag>
         <name>sql:connect</name>
         <tag-class>com.skin.ayada.jstl.sql.ConnectTag</tag-class>
         <body-content>jsp</body-content>

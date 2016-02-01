@@ -57,7 +57,6 @@ public class FactoryClassLoader extends ClassLoader {
 
     /**
      * @return FactoryClassLoader
-     * @throws ClassNotFoundException
      */
     public static FactoryClassLoader getInstance() {
         FactoryClassLoader classLoader = AccessController.doPrivileged(new PrivilegedAction<FactoryClassLoader>() {
