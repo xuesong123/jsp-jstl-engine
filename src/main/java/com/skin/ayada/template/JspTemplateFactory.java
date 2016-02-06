@@ -25,6 +25,7 @@ import com.skin.ayada.factory.ClassFactory;
 import com.skin.ayada.source.SourceFactory;
 import com.skin.ayada.util.ClassPath;
 import com.skin.ayada.util.IO;
+import com.skin.ayada.util.Path;
 import com.skin.ayada.util.StringUtil;
 import com.skin.ayada.util.TemplateUtil;
 
@@ -45,6 +46,8 @@ public class JspTemplateFactory extends TemplateFactory {
         String path = "/default/a.b.jsp";
         path = "/test.jsp";
         path = "/!.jsp";
+        path = "/404.jsp";
+        path = "/_404.jsp";
 
         String className = jtf.getClassName(path);
         String simpleName = jtf.getSimpleName(className);
@@ -267,7 +270,7 @@ public class JspTemplateFactory extends TemplateFactory {
      * @return String
      */
     protected String getRootPath(String home) {
-        String temp = StringUtil.replace(home.trim(), "\\", "/");
+        String temp = Path.getStrictPath(home.trim());
 
         if(temp.endsWith("/")) {
             temp = temp.substring(0, temp.length() - 1);
@@ -286,7 +289,7 @@ public class JspTemplateFactory extends TemplateFactory {
      * @return String
      */
     protected String getClassName(String path) {
-        String className = StringUtil.replace(path, "\\", "/");
+        String className = Path.getStrictPath(path);
         int k = className.lastIndexOf(".");
 
         if(k > -1) {
@@ -297,7 +300,7 @@ public class JspTemplateFactory extends TemplateFactory {
         String simpleName = this.getJavaIdentifier(array[array.length - 1]);
 
         if(simpleName.length() < 1) {
-            throw new RuntimeException("UnsupportFileNameException: file \"" + path + "\"");
+            throw new RuntimeException("BadFileNameException: file \"" + path + "\"");
         }
 
         StringBuilder buffer = new StringBuilder(this.getPrefix());
@@ -326,6 +329,11 @@ public class JspTemplateFactory extends TemplateFactory {
             c = name.charAt(i);
 
             if(Character.isJavaIdentifierPart(c)) {
+                if(buffer.length() < 1) {
+                    if(c == '_' || !Character.isJavaIdentifierStart(c)) {
+                        buffer.append("_");
+                    }
+                }
                 buffer.append(c);
             }
         }
