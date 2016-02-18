@@ -65,7 +65,7 @@ public class ExpressionUtil {
         if(value instanceof Boolean) {
             return Boolean.TRUE.equals(value);
         }
-        return false;
+        return (value.toString().equals("true"));
     }
 
     /**
@@ -79,7 +79,7 @@ public class ExpressionUtil {
         if(value != null && value instanceof Number) {
             return ((Number)value).byteValue();
         }
-        return null;
+        return (Byte)(ClassUtil.cast(value, Byte.class));
     }
 
     /**
@@ -93,7 +93,7 @@ public class ExpressionUtil {
         if(value != null && value instanceof Number) {
             return ((Number)value).shortValue();
         }
-        return null;
+        return (Short)(ClassUtil.cast(value, Short.class));
     }
 
     /**
@@ -107,7 +107,7 @@ public class ExpressionUtil {
         if(value != null && value instanceof Number) {
             return ((Number)value).intValue();
         }
-        return null;
+        return (Integer)(ClassUtil.cast(value, Integer.class));
     }
 
     /**
@@ -121,7 +121,7 @@ public class ExpressionUtil {
         if(value != null && value instanceof Number) {
             return ((Number)value).floatValue();
         }
-        return null;
+        return (Float)(ClassUtil.cast(value, Float.class));
     }
 
     /**
@@ -135,7 +135,7 @@ public class ExpressionUtil {
         if(value != null && value instanceof Number) {
             return ((Number)value).doubleValue();
         }
-        return null;
+        return (Double)(ClassUtil.cast(value, Double.class));
     }
 
     /**
@@ -149,7 +149,7 @@ public class ExpressionUtil {
         if(value != null && value instanceof Number) {
             return ((Number)value).longValue();
         }
-        return null;
+        return (Long)(ClassUtil.cast(value, Long.class));
     }
 
     /**

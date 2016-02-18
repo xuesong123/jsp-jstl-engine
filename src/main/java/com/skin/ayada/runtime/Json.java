@@ -1,7 +1,7 @@
 /*
- * $RCSfile: ELEncoder.java,v $$
+ * $RCSfile: Json.java,v $$
  * $Revision: 1.1 $
- * $Date: 2014-10-06 $
+ * $Date: 2014-04-16 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -11,16 +11,22 @@
 package com.skin.ayada.runtime;
 
 /**
- * <p>Title: ELEncoder</p>
+ * <p>Title: Json</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2006</p>
  * @author xuesong.net
  * @version 1.0
  */
-public interface ELEncoder {
+public interface Json {
     /**
-     * @param content
+     * @param source
+     * @return Object
+     */
+    public Object parse(String source);
+
+    /**
+     * @param object
      * @return String
      */
-    public String encode(String content);
+    public String stringify(Object object);
 }

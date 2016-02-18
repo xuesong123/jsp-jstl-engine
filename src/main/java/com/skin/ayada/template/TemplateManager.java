@@ -86,7 +86,7 @@ public class TemplateManager {
             }
             else {
                 if(context != templateContext) {
-                    throw new RuntimeException("context already exists !");
+                    throw new RuntimeException("context already exists, home: " + home);
                 }
             }
         }

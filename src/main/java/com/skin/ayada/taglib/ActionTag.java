@@ -12,6 +12,9 @@ package com.skin.ayada.taglib;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.skin.ayada.component.Parameters;
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.tagext.AttributeTagSupport;
@@ -35,6 +38,7 @@ public class ActionTag extends TagSupport implements ParameterTagSupport, Attrib
         "request", "response", "session", "servletContext",
         PageContext.LOCALE_KEY, PageContext.TIMEZONE_KEY
     };
+    private static final Logger logger = LoggerFactory.getLogger(ActionTag.class);
 
     @Override
     public int doStartTag() throws Exception {
@@ -55,6 +59,7 @@ public class ActionTag extends TagSupport implements ParameterTagSupport, Attrib
         context.putAll(this.parameters.getParameters());
 
         if(this.className != null) {
+            logger.debug("include: {}", this.className);
             Map<String, Object> data = ActionDispatcher.dispatch(this.pageContext, this.parameters, this.className, this.method);
 
             if(data != null) {
@@ -62,7 +67,8 @@ public class ActionTag extends TagSupport implements ParameterTagSupport, Attrib
             }
         }
 
-        if(this.getPage() != null) {
+        if(this.page != null) {
+            logger.debug("include: {}", this.page);
             this.pageContext.include(this.getPage(), context);
         }
         return Tag.EVAL_PAGE;

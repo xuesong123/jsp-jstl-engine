@@ -86,7 +86,6 @@ public class TagUtil {
                 if(arg == null && parameterType.isPrimitive()) {
                     continue;
                 }
-
                 method.invoke(tag, new Object[]{arg});
             }
             else {
