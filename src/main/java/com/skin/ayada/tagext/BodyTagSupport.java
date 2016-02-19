@@ -53,10 +53,16 @@ public class BodyTagSupport extends TagSupport implements BodyTag {
         super.release();
     }
 
+    /**
+     * @return BodyContent
+     */
     public BodyContent getBodyContent() {
         return this.bodyContent;
     }
 
+    /**
+     * @return JspWriter
+     */
     public JspWriter getPreviousOut() {
         return this.bodyContent.getEnclosingWriter();
     }

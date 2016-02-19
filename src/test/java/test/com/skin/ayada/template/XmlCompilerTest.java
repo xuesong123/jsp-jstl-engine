@@ -27,6 +27,9 @@ import com.skin.ayada.util.IO;
  * @version 1.0
  */
 public class XmlCompilerTest {
+    /**
+     * @param args
+     */
     public static void main(String[] args) {
         try {
             test1();
@@ -36,6 +39,9 @@ public class XmlCompilerTest {
         }
     }
 
+    /**
+     * @throws Exception
+     */
     public static void test1() throws Exception {
         SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
         TemplateFactory templateFactory = new TemplateFactory();

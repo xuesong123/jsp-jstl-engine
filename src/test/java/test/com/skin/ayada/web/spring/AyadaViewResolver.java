@@ -20,6 +20,9 @@ package test.com.skin.ayada.web.spring;
 public class AyadaViewResolver {
     String templateContext;
 
+    /**
+     *
+     */
     public AyadaViewResolver() {
         // setViewClass(AyadaView.class);
     }

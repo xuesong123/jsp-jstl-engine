@@ -31,6 +31,9 @@ public class TemplateServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private TemplateDispatcher templateDispatcher;
 
+    /**
+     *
+     */
     public TemplateServlet() {
     }
 

@@ -745,7 +745,7 @@ public class DataSet {
                     default : {
                         buffer.append(c); break;
                     }
-                }   
+                }
             }
         }
         return buffer.toString();
@@ -835,7 +835,7 @@ public class DataSet {
             else {
                 flag = true;
             }
-            
+
             if(prepare) {
                 sql.append("?");
             }

@@ -17,6 +17,9 @@ package com.skin.ayada.statement;
  * @version 1.0
  */
 public class JspExpression extends DataNode {
+    /**
+     *
+     */
     public JspExpression() {
         super(NodeType.JSP_EXPRESSION_NAME, NodeType.JSP_EXPRESSION);
         this.setClosed(NodeType.PAIR_CLOSED);

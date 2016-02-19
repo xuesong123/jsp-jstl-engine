@@ -283,7 +283,9 @@ public class DefaultExecutor {
 
     /**
      * @param statement
+     * @param pageContext
      * @return int
+     * @throws Exception
      */
     public static int doStartTag(final Statement statement, final PageContext pageContext) throws Exception {
         Tag tag = statement.getTag();

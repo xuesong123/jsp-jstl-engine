@@ -146,6 +146,9 @@ public abstract class DataNode extends Node {
         return content;
     }
 
+    /**
+     * clear the buffer
+     */
     public void clear() {
         this.buffer.setLength(0);
     }

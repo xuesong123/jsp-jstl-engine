@@ -94,6 +94,7 @@ public class ForEachTag extends LoopTagSupport {
 
     /**
      * @param object
+     * @return Iterator<?>
      */
     @SuppressWarnings("unchecked")
     public static Iterator<?> getIterator(Object object) {
@@ -143,12 +144,16 @@ public class ForEachTag extends LoopTagSupport {
      * <p>Copyright: Copyright (c) 2006</p>
      * @author xuesong.net
      * @version 1.0
+     * @param <E>
      */
     public static class ArrayIterator<E> implements Iterator<Object> {
         private Object array;
         private int index;
         private int length;
 
+        /**
+         * @param array
+         */
         public ArrayIterator(Object array) {
             this.index = 0;
             this.array = array;
@@ -177,10 +182,14 @@ public class ForEachTag extends LoopTagSupport {
      * <p>Copyright: Copyright (c) 2006</p>
      * @author xuesong.net
      * @version 1.0
+     * @param <E>
      */
     public static class EnuIterator<E> implements Iterator<E> {
-        public Enumeration<E> enumeration;
+        private Enumeration<E> enumeration;
 
+        /**
+         * @param enumeration
+         */
         public EnuIterator(Enumeration<E> enumeration) {
             this.enumeration = enumeration;
         }
@@ -204,6 +213,7 @@ public class ForEachTag extends LoopTagSupport {
      * <p>Copyright: Copyright (c) 2006</p>
      * @author xuesong.net
      * @version 1.0
+     * @param <E>
      */
     public static class RangeIterator<E> implements Iterator<Integer> {
         private int begin;
@@ -278,6 +288,7 @@ public class ForEachTag extends LoopTagSupport {
      * <p>Copyright: Copyright (c) 2006</p>
      * @author xuesong.net
      * @version 1.0
+     * @param <E>
      */
     public static class NullIterator<E> implements Iterator<E> {
         public boolean hasNext() {

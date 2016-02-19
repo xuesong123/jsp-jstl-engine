@@ -60,6 +60,10 @@ public class SqlTagTest {
         }
     }
 
+    /**
+     * @return Connection
+     * @throws SQLException
+     */
     public static Connection getConnection() throws SQLException {
         return MySql.connect("localhost", "3306", "mytest", "root", "1234");
     }

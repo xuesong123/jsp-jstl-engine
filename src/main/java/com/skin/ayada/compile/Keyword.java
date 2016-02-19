@@ -20,7 +20,7 @@ import java.util.Map;
  * @version 1.0
  */
 public class Keyword {
-    public static final Map<String, String> map = new HashMap<String, String>();
+    private static final Map<String, String> map = new HashMap<String, String>();
 
     static{
         String[] keywords = new String[]{

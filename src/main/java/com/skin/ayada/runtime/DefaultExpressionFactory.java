@@ -159,6 +159,10 @@ public class DefaultExpressionFactory implements ExpressionFactory {
         private String name;
         private Object value;
 
+        /**
+         * @param name
+         * @param value
+         */
         public Entry(String name, Object value) {
             this.name = name;
             this.value = value;
@@ -193,6 +197,9 @@ public class DefaultExpressionFactory implements ExpressionFactory {
         }
     }
 
+    /**
+     * @param attributes
+     */
     public static void print(Map<String, Object> attributes) {
         System.out.println("---------- objects ----------");
 

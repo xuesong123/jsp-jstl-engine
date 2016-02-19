@@ -22,9 +22,11 @@ import java.util.Set;
  * @version 1.0
  */
 public class Config {
-    public static final long serialVersionUID = 1L;
     private Map<String, String> parameters = new LinkedHashMap<String, String>();
 
+    /**
+     * new instance
+     */
     public Config() {
     }
 
@@ -53,6 +55,7 @@ public class Config {
 
     /**
      * @param name
+     * @param defaultValue
      * @return String
      */
     public String getValue(String name, String defaultValue) {

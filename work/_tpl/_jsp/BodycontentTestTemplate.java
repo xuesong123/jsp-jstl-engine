@@ -159,13 +159,13 @@ public class BodycontentTestTemplate extends JspTemplate {
         jspWriter.flush();
     }
 
-    public static final char[] _jsp_string_9 = "<html>\r\n<head>\r\n<title>test</title>\r\n</head>\r\n<body version=\"1.0\">\r\n<p>".toCharArray();
-    public static final char[] _jsp_string_12 = "</p>\r\n<p>".toCharArray();
-    public static final char[] _jsp_string_14 = "<span>".toCharArray();
-    public static final char[] _jsp_string_16 = "</span>".toCharArray();
-    public static final char[] _jsp_string_18 = "</p>\r\n<p>".toCharArray();
-    public static final char[] _jsp_string_20 = "<span>".toCharArray();
-    public static final char[] _jsp_string_22 = "</span>".toCharArray();
-    public static final char[] _jsp_string_24 = "</p>\r\n</body>\r\n</html>".toCharArray();
+    private static final char[] _jsp_string_9 = "<html>\r\n<head>\r\n<title>test</title>\r\n</head>\r\n<body version=\"1.0\">\r\n<p>".toCharArray();
+    private static final char[] _jsp_string_12 = "</p>\r\n<p>".toCharArray();
+    private static final char[] _jsp_string_14 = "<span>".toCharArray();
+    private static final char[] _jsp_string_16 = "</span>".toCharArray();
+    private static final char[] _jsp_string_18 = "</p>\r\n<p>".toCharArray();
+    private static final char[] _jsp_string_20 = "<span>".toCharArray();
+    private static final char[] _jsp_string_22 = "</span>".toCharArray();
+    private static final char[] _jsp_string_24 = "</p>\r\n</body>\r\n</html>".toCharArray();
 
 }

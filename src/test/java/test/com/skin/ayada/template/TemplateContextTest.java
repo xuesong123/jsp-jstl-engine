@@ -43,6 +43,9 @@ public class TemplateContextTest {
         test3();
     }
 
+    /**
+     *
+     */
     public static void test1() {
         try {
            String sourcePattern = "jsp,jspx";
@@ -52,12 +55,12 @@ public class TemplateContextTest {
            ExpressionFactory expressionFactory = new DefaultExpressionFactory();
            sourceFactory.setHome(home);
            sourceFactory.setSourcePattern(sourcePattern);
-    
+
            TemplateContext templateContext = new DefaultTemplateContext();
            templateContext.setSourceFactory(sourceFactory);
            templateContext.setTemplateFactory(templateFactory);
            templateContext.setExpressionFactory(expressionFactory);
-    
+
            StringWriter writer = new StringWriter();
            Template template = templateContext.getTemplate("/test.jsp");
            templateContext.execute(template, new HashMap<String, Object>(), writer);
@@ -67,7 +70,10 @@ public class TemplateContextTest {
             e.printStackTrace();
         }
     }
-    
+
+    /**
+     *
+     */
     public static void test2() {
         ChunkWriter writer = new ChunkWriter(4096);
 
@@ -89,6 +95,9 @@ public class TemplateContextTest {
         }
     }
 
+    /**
+     *
+     */
     public static void test3() {
         StringWriter writer = new StringWriter();
 

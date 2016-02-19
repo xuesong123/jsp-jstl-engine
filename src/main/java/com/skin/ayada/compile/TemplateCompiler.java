@@ -56,19 +56,19 @@ public class TemplateCompiler extends PageCompiler {
     private boolean ignoreJspTag = true;
     private List<Source> dependencies;
 
-    public static final String JSP_DIRECTIVE_PAGE    = "jsp:directive.page";
-    public static final String JSP_DIRECTIVE_TAGLIB  = "jsp:directive.taglib";
-    public static final String JSP_DIRECTIVE_INCLUDE = "jsp:directive.include";
-    public static final String JSP_DECLARATION       = "jsp:declaration";
-    public static final String JSP_SCRIPTLET         = "jsp:scriptlet";
-    public static final String JSP_EXPRESSION        = "jsp:expression";
+    protected static final String JSP_DIRECTIVE_PAGE    = "jsp:directive.page";
+    protected static final String JSP_DIRECTIVE_TAGLIB  = "jsp:directive.taglib";
+    protected static final String JSP_DIRECTIVE_INCLUDE = "jsp:directive.include";
+    protected static final String JSP_DECLARATION       = "jsp:declaration";
+    protected static final String JSP_SCRIPTLET         = "jsp:scriptlet";
+    protected static final String JSP_EXPRESSION        = "jsp:expression";
 
-    public static final String TPL_DIRECTIVE_TAGLIB  = "t:taglib";
-    public static final String TPL_DIRECTIVE_IMPORT  = "t:import";
-    public static final String TPL_DIRECTIVE_RENAME  = "t:rename";
-    public static final String TPL_DIRECTIVE_INCLUDE = "t:include";
-    public static final String TPL_DIRECTIVE_TEXT    = "t:text";
-    public static final String TPL_DIRECTIVE_COMMENT = "t:comment";
+    protected static final String TPL_DIRECTIVE_TAGLIB  = "t:taglib";
+    protected static final String TPL_DIRECTIVE_IMPORT  = "t:import";
+    protected static final String TPL_DIRECTIVE_RENAME  = "t:rename";
+    protected static final String TPL_DIRECTIVE_INCLUDE = "t:include";
+    protected static final String TPL_DIRECTIVE_TEXT    = "t:text";
+    protected static final String TPL_DIRECTIVE_COMMENT = "t:comment";
     private static final Logger logger = LoggerFactory.getLogger(TemplateCompiler.class);
 
     /**
@@ -83,6 +83,7 @@ public class TemplateCompiler extends PageCompiler {
      * @param path
      * @param encoding
      * @return Template
+     * @throws Exception
      */
     public Template compile(String path, String encoding) throws Exception {
         if(logger.isDebugEnabled()) {
@@ -700,6 +701,7 @@ public class TemplateCompiler extends PageCompiler {
     /**
      * @param prefix
      * @param uri
+     * @throws Exception
      */
     public void loadTagLibrary(String prefix, String uri) throws Exception {
         if(prefix == null || prefix.trim().length() < 1) {
@@ -752,9 +754,11 @@ public class TemplateCompiler extends PageCompiler {
     }
 
     /**
+     * @param source
      * @param list
      * @param tagLibrary
      * @return Template
+     * @throws Exception
      */
     public Template getTemplate(Source source, List<Node> list, TagLibrary tagLibrary) throws Exception {
         List<Node> nodes = this.compact(list, tagLibrary);
@@ -787,6 +791,7 @@ public class TemplateCompiler extends PageCompiler {
      * @param list
      * @param tagLibrary
      * @return List<Node>
+     * @throws Exception
      */
     public List<Node> compact(List<Node> list, TagLibrary tagLibrary) throws Exception {
         this.clip(list, tagLibrary);
@@ -1179,6 +1184,7 @@ public class TemplateCompiler extends PageCompiler {
 
     /**
      * @param source
+     * @return String
      */
     public String ltrim(String source) {
         if(source == null) {

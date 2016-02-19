@@ -20,6 +20,10 @@ import java.io.IOException;
  * @version 1.0
  */
 public class Test2 {
+    /**
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
         /*
         int num = 3;
@@ -32,6 +36,9 @@ public class Test2 {
         test1();
     }
 
+    /**
+     * @throws IOException
+     */
     public static void test1() throws IOException {
         int num = 0;
         java.io.InputStreamReader inputStreamReader = new java.io.InputStreamReader(System.in);

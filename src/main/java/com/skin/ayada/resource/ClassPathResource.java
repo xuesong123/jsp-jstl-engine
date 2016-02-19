@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
  * @version 1.0
  */
 public class ClassPathResource {
-    public static final ClassLoader classLoader = ClassPathResource.class.getClassLoader();
+    private static final ClassLoader classLoader = ClassPathResource.class.getClassLoader();
     private static final Logger logger = LoggerFactory.getLogger(ClassPathResource.class);
 
     /**
@@ -51,6 +51,10 @@ public class ClassPathResource {
         return null;
     }
 
+    /**
+     * @param name
+     * @return InputStream
+     */
     public static InputStream getResourceAsStream(String name) {
         return classLoader.getResourceAsStream(name);
     }

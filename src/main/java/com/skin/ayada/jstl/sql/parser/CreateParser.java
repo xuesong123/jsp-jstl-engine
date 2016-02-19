@@ -28,6 +28,9 @@ import com.skin.ayada.io.StringStream;
 public class CreateParser {
     private Dialect dialect;
 
+    /**
+     *
+     */
     public CreateParser() {
     }
 
@@ -402,6 +405,7 @@ public class CreateParser {
 
     /**
      * skip whitespace
+     * @param stream
      */
     public void skipWhitespace(StringStream stream) {
         int i = 0;
@@ -496,6 +500,10 @@ public class CreateParser {
         }
     }
 
+    /**
+     * @param i
+     * @return boolean
+     */
     public boolean isSqlIdentifierStart(int i) {
         if(i == '_') {
             return true;
@@ -503,6 +511,10 @@ public class CreateParser {
         return (i >= 97 && i <= 122) || (i >= 65 && i <= 90);
     }
 
+    /**
+     * @param i
+     * @return boolean
+     */
     public boolean isSqlIdentifierPart(int i) {
         if(i == '_') {
             return true;

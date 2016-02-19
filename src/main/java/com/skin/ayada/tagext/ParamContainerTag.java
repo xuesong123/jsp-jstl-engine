@@ -18,5 +18,8 @@ package com.skin.ayada.tagext;
  * @version 1.0
  */
 public interface ParamContainerTag {
+    /**
+     * @param value
+     */
     public abstract void addParam(Object value);
 }

@@ -144,6 +144,8 @@ public class StringUtil {
     /**
      * @param source
      * @param limit
+     * @param trim
+     * @param ignoreWhitespace
      * @return String[]
      */
     public static String[] split(String source, String limit, boolean trim, boolean ignoreWhitespace) {

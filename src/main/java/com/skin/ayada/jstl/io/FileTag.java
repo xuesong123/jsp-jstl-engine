@@ -25,7 +25,7 @@ import com.skin.ayada.tagext.TagSupport;
  * @version 1.0
  */
 public abstract class FileTag extends TagSupport {
-    public String file;
+    protected String file;
 
     @Override
     public int doStartTag() throws Exception {
@@ -87,6 +87,7 @@ public abstract class FileTag extends TagSupport {
 
     /**
      * @param file
+     * @throws IOException
      */
     public abstract void process(File file) throws IOException;
 

@@ -71,6 +71,10 @@ public class TestUtil {
         return buffer.toString();
     }
 
+    /**
+     * @param name
+     * @return String
+     */
     public String uncamel(String name) {
         if(name.equalsIgnoreCase("id")) {
             return "id";

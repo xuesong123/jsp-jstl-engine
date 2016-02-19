@@ -138,10 +138,16 @@ public class TagLibrary {
         return this.library;
     }
 
+    /**
+     *
+     */
     public void println() {
         this.println("taglib");
     }
 
+    /**
+     * @param name
+     */
     public void println(String name) {
         if(name == null) {
             System.out.println("=============== taglib ===============");
@@ -163,6 +169,9 @@ public class TagLibrary {
         this.library.clear();
     }
 
+    /**
+     *
+     */
     public void release() {
         this.library.clear();
         this.library = null;

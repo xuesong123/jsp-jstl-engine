@@ -30,18 +30,27 @@ public class Table {
     private String className;
     private String variableName;
     private String remarks;
-
     private List<Column> primaryKeys;
     private List<Column> columns;
 
+    /**
+     *
+     */
     public Table() {
         this(null, null);
     }
 
+    /**
+     * @param tableName
+     */
     public Table(String tableName) {
         this(tableName, null);
     }
 
+    /**
+     * @param tableName
+     * @param alias
+     */
     public Table(String tableName, String alias) {
         this.alias = alias;
         this.tableName = tableName;
@@ -49,6 +58,9 @@ public class Table {
         this.columns = new ArrayList<Column>();
     }
 
+    /**
+     * @param t
+     */
     public Table(Table t) {
         this();
 
@@ -77,102 +89,178 @@ public class Table {
         }
     }
 
+    /**
+     * @return the alias
+     */
     public String getAlias() {
         return this.alias;
     }
 
+    /**
+     * @param alias the alias to set
+     */
     public void setAlias(String alias) {
         this.alias = alias;
     }
 
+    /**
+     * @return the tableCode
+     */
     public String getTableCode() {
         return this.tableCode;
     }
 
+    /**
+     * @param tableCode the tableCode to set
+     */
     public void setTableCode(String tableCode) {
         this.tableCode = tableCode;
     }
 
+    /**
+     * @return the tableName
+     */
     public String getTableName() {
         return this.tableName;
     }
 
+    /**
+     * @param tableName the tableName to set
+     */
     public void setTableName(String tableName) {
         this.tableName = tableName;
     }
 
+    /**
+     * @return the tableType
+     */
     public String getTableType() {
         return this.tableType;
     }
 
+    /**
+     * @param tableType the tableType to set
+     */
     public void setTableType(String tableType) {
         this.tableType = tableType;
     }
 
+    /**
+     * @return the queryName
+     */
     public String getQueryName() {
         return this.queryName;
     }
 
+    /**
+     * @param queryName the queryName to set
+     */
     public void setQueryName(String queryName) {
         this.queryName = queryName;
     }
 
+    /**
+     * @return the className
+     */
     public String getClassName() {
         return this.className;
     }
 
+    /**
+     * @param className the className to set
+     */
     public void setClassName(String className) {
         this.className = className;
     }
 
+    /**
+     * @return the variableName
+     */
     public String getVariableName() {
         return this.variableName;
     }
 
+    /**
+     * @param variableName the variableName to set
+     */
     public void setVariableName(String variableName) {
         this.variableName = variableName;
     }
 
+    /**
+     * @return the remarks
+     */
     public String getRemarks() {
         return this.remarks;
     }
 
+    /**
+     * @param remarks the remarks to set
+     */
     public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
 
+    /**
+     * @return the primaryKeys
+     */
     public List<Column> getPrimaryKeys() {
         return this.primaryKeys;
     }
 
+    /**
+     * @param primaryKeys the primaryKeys to set
+     */
     public void setPrimaryKeys(List<Column> primaryKeys) {
         this.primaryKeys = primaryKeys;
     }
 
+    /**
+     * @return the columns
+     */
     public List<Column> getColumns() {
         return this.columns;
     }
 
+    /**
+     * @param columns the columns to set
+     */
     public void setColumns(List<Column> columns) {
         this.columns = columns;
     }
 
+    /**
+     * @param column
+     */
     public void addPrimaryKey(Column column) {
         this.primaryKeys.add(column);
     }
 
+    /**
+     * @param column
+     */
     public void addColumn(Column column) {
         this.columns.add(column);
     }
 
+    /**
+     * @param column
+     */
     public void removeColumn(Column column) {
         this.columns.remove(column);
     }
 
+    /**
+     * @param column
+     */
     public void removePrimaryKey(Column column) {
         this.primaryKeys.remove(column);
     }
 
+    /**
+     * @param columnName
+     * @return Column
+     */
     public Column getColumn(String columnName) {
         if(columnName != null) {
             List<Column> list = this.getPrimaryKeys();
@@ -202,6 +290,9 @@ public class Table {
         return null;
     }
 
+    /**
+     * @return Column
+     */
     public Column getPrimaryKey() {
         if(this.primaryKeys != null && !this.primaryKeys.isEmpty()) {
             return this.primaryKeys.get(0);
@@ -209,6 +300,10 @@ public class Table {
         return null;
     }
 
+    /**
+     * @param column
+     * @return boolean
+     */
     public boolean contains(Column column) {
         if(this.primaryKeys != null && !this.primaryKeys.isEmpty()) {
             if(this.primaryKeys.contains(column)) {
@@ -224,6 +319,9 @@ public class Table {
         return false;
     }
 
+    /**
+     * @return count
+     */
     public int getColumnCount() {
         int count = 0;
 

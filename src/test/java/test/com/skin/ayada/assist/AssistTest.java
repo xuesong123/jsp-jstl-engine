@@ -76,6 +76,9 @@ public class AssistTest {
         }
     }
 
+    /**
+     *
+     */
     public static void test3() {
         ClassPool classPool = ClassPool.getDefault();
 
@@ -88,6 +91,9 @@ public class AssistTest {
         }
     }
 
+    /**
+     *
+     */
     public static void test2() {
         ClassPool pool = ClassPool.getDefault();
 
@@ -119,7 +125,9 @@ public class AssistTest {
         }
     }
 
-
+    /**
+     *
+     */
     public static void test1() {
         ClassPool pool = ClassPool.getDefault();
 
@@ -154,6 +162,11 @@ public class AssistTest {
         }
     }
 
+    /**
+     * @param className
+     * @param bytes
+     * @return Object
+     */
     public static Object getInstance(String className, byte[] bytes) {
         FactoryClassLoader factoryClassLoader = FactoryClassLoader.getInstance();
         Class<?> clazz = factoryClassLoader.create(className, bytes);
@@ -170,6 +183,13 @@ public class AssistTest {
         return null;
     }
 
+    /**
+     * @param object
+     * @param methodName
+     * @param types
+     * @param parameters
+     * @throws Throwable
+     */
     public static void invoke(Object object, String methodName, Class<?>[] types, Object[] parameters) throws Throwable {
         Method method = object.getClass().getMethod(methodName, types);
         method.invoke(object, parameters);

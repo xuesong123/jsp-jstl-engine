@@ -76,6 +76,11 @@ public class ClassGenerator {
         }
     }
 
+    /**
+     * @param home
+     * @param file
+     * @param className
+     */
     public static void test(String home, String file, String className) {
         TemplateContext templateContext = new DefaultTemplateContext();
         StringWriter writer = new StringWriter();

@@ -31,6 +31,10 @@ import com.skin.ayada.util.StringUtil;
  * @version 1.0
  */
 public class XmlCompiler {
+    /**
+     * @param template
+     * @return String
+     */
     public String compile(Template template) {
         StringWriter stringWriter = new StringWriter();
         PrintWriter writer = new PrintWriter(stringWriter);

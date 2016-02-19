@@ -50,7 +50,8 @@ public class IO {
     /**
      * @param inputStream
      * @param charset
-     * @return bufferSize
+     * @param bufferSize
+     * @return String
      * @throws IOException
      */
     public static String read(InputStream inputStream, String charset, int bufferSize) throws IOException {

@@ -20,6 +20,7 @@ package com.skin.ayada.jstl.util;
 public class BBCode {
     /**
      * @param name
+     * @param attributes
      * @param value
      * @return String
      */
@@ -37,6 +38,7 @@ public class BBCode {
 
     /**
      * @param name
+     * @param attributes
      * @param value
      * @return String
      */

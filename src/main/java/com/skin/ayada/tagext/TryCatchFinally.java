@@ -23,6 +23,7 @@ public interface TryCatchFinally {
      * This method may throw an exception (the same or a new one) that will be propagated further up the nest chain. If an exception is thrown, doFinally() will be invoked.
      * This method is intended to be used to respond to an exceptional condition.
      * @param throwable
+     * @throws java.lang.Throwable
      */
     public void doCatch(Throwable throwable) throws java.lang.Throwable;
 

@@ -20,6 +20,9 @@ package com.skin.ayada.statement;
 public class Expression extends DataNode {
     private String flag;
 
+    /**
+     *
+     */
     public Expression() {
         super(NodeType.EXPR_NAME, NodeType.EXPRESSION);
     }

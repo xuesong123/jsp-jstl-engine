@@ -53,6 +53,7 @@ public class SqlPlus {
 
     /**
      * @param connection
+     * @param logListener
      */
     public SqlPlus(Connection connection, LogListener logListener) {
         this.connection = connection;
@@ -60,6 +61,7 @@ public class SqlPlus {
     }
 
     /**
+     * @param inputStream
      * @param encoding
      * @throws IOException
      */
@@ -77,6 +79,7 @@ public class SqlPlus {
     /**
      * @param file
      * @param encoding
+     * @throws Exception
      * @throws IOException
      */
     public void execute(File file, String encoding) throws Exception {
@@ -109,6 +112,8 @@ public class SqlPlus {
 
     /**
      * @param reader
+     * @param encoding
+     * @throws Exception
      */
     public void execute(Reader reader, String encoding) throws Exception {
         Statement statement = null;

@@ -29,6 +29,9 @@ import com.skin.ayada.jstl.util.BeanUtil;
  * @version 1.0
  */
 public class OgnlTest {
+    /**
+     * @param args
+     */
     public static void main(String[] args) {
         try {
             BeanUtil ognlUtil = new BeanUtil();

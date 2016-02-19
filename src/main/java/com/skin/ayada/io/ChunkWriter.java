@@ -63,6 +63,9 @@ public class ChunkWriter extends Writer {
     public void flush() throws IOException {
     }
 
+    /**
+     *
+     */
     public void free() {
         this.buffer.free();
     }

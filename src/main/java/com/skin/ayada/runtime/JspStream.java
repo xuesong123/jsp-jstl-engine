@@ -84,6 +84,7 @@ public class JspStream extends OutputStream {
 
     /**
      * @param b
+     * @throws IOException
      */
     public void print(boolean b) throws IOException {
         if(b) {
@@ -96,6 +97,7 @@ public class JspStream extends OutputStream {
 
     /**
      * @param c
+     * @throws IOException
      */
     public void print(char c) throws IOException {
         byte[] bytes = String.valueOf(c).getBytes();
@@ -104,6 +106,7 @@ public class JspStream extends OutputStream {
 
     /**
      * @param cbuf
+     * @throws IOException
      */
     public void print(char[] cbuf) throws IOException {
         byte[] bytes = new String(cbuf, 0, cbuf.length).getBytes();
@@ -112,6 +115,7 @@ public class JspStream extends OutputStream {
 
     /**
      * @param d
+     * @throws IOException
      */
     public void print(double d) throws IOException {
         byte[] bytes = String.valueOf(d).getBytes();
@@ -120,6 +124,7 @@ public class JspStream extends OutputStream {
 
     /**
      * @param f
+     * @throws IOException
      */
     public void print(float f) throws IOException {
         byte[] bytes = String.valueOf(f).getBytes();
@@ -128,6 +133,7 @@ public class JspStream extends OutputStream {
 
     /**
      * @param i
+     * @throws IOException
      */
     public void print(int i) throws IOException {
         byte[] bytes = String.valueOf(i).getBytes();
@@ -136,6 +142,7 @@ public class JspStream extends OutputStream {
 
     /**
      * @param l
+     * @throws IOException
      */
     public void print(long l) throws IOException {
         byte[] bytes = String.valueOf(l).getBytes();
@@ -144,6 +151,7 @@ public class JspStream extends OutputStream {
 
     /**
      * @param content
+     * @throws IOException
      */
     public void print(String content) throws IOException {
         if(content != null) {
@@ -154,6 +162,7 @@ public class JspStream extends OutputStream {
 
     /**
      * @param value
+     * @throws IOException
      */
     public void print(Object value) throws IOException {
         if(value != null) {
@@ -164,6 +173,8 @@ public class JspStream extends OutputStream {
 
     /**
      * @param value
+     * @param nullable
+     * @throws IOException
      */
     public void print(Object value, boolean nullable) throws IOException {
         if(value != null) {
@@ -178,7 +189,7 @@ public class JspStream extends OutputStream {
     }
 
     /**
-     *
+     * @throws IOException
      */
     public void println() throws IOException {
         this.write(CRLF, 0, 2);
@@ -186,6 +197,7 @@ public class JspStream extends OutputStream {
 
     /**
      * @param b
+     * @throws IOException
      */
     public void println(boolean b) throws IOException {
         if(b) {
@@ -199,6 +211,7 @@ public class JspStream extends OutputStream {
 
     /**
      * @param c
+     * @throws IOException
      */
     public void println(char c) throws IOException {
         byte[] bytes = String.valueOf(c).getBytes();
@@ -208,6 +221,7 @@ public class JspStream extends OutputStream {
 
     /**
      * @param cbuf
+     * @throws IOException
      */
     public void println(char[] cbuf) throws IOException {
         byte[] bytes = new String(cbuf, 0, cbuf.length).getBytes();
@@ -217,6 +231,7 @@ public class JspStream extends OutputStream {
 
     /**
      * @param d
+     * @throws IOException
      */
     public void println(double d) throws IOException {
         byte[] bytes = String.valueOf(d).getBytes();
@@ -226,6 +241,7 @@ public class JspStream extends OutputStream {
 
     /**
      * @param f
+     * @throws IOException
      */
     public void println(float f) throws IOException {
         byte[] bytes = String.valueOf(f).getBytes();
@@ -235,6 +251,7 @@ public class JspStream extends OutputStream {
 
     /**
      * @param i
+     * @throws IOException
      */
     public void println(int i) throws IOException {
         byte[] bytes = String.valueOf(i).getBytes();
@@ -244,6 +261,7 @@ public class JspStream extends OutputStream {
 
     /**
      * @param l
+     * @throws IOException
      */
     public void println(long l) throws IOException {
         byte[] bytes = String.valueOf(l).getBytes();
@@ -253,6 +271,7 @@ public class JspStream extends OutputStream {
 
     /**
      * @param content
+     * @throws IOException
      */
     public void println(String content) throws IOException {
         if(content != null) {
@@ -264,6 +283,7 @@ public class JspStream extends OutputStream {
 
     /**
      * @param value
+     * @throws IOException
      */
     public void println(Object value) throws IOException {
         if(value != null) {
@@ -275,6 +295,8 @@ public class JspStream extends OutputStream {
 
     /**
      * @param value
+     * @param nullable
+     * @throws IOException
      */
     public void println(Object value, boolean nullable) throws IOException {
         if(value != null) {

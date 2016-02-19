@@ -22,9 +22,20 @@ public class Source {
     private String source;
     private int type;
     private long lastModified;
+
+    /**
+     *
+     */
     public static final int STATIC = 0;
+
+    /**
+     *
+     */
     public static final int SCRIPT = 1;
 
+    /**
+     *
+     */
     public Source() {
     }
 
@@ -55,6 +66,7 @@ public class Source {
 
     /**
      * @param type
+     * @param defaultValue
      * @return int
      */
     public static int valueOf(String type, int defaultValue) {

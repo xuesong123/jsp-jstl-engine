@@ -36,6 +36,9 @@ public class FileTest {
         new FileScan2(new File("docs\\2.txt")).scan(new File("src\\test\\java"));
     }
 
+    /**
+     * @param dir
+     */
     public static void scan1(File dir) {
         List<File> stack = new ArrayList<File>();
         stack.add(dir);
@@ -62,6 +65,9 @@ public class FileTest {
         System.out.println("dirCount: " + dirCount + ", fileCount: " + fileCount);
     }
 
+    /**
+     * @param dir
+     */
     public static void scan2(File dir) {
         File[] files = dir.listFiles();
         System.out.println(" dir: " + dir.getAbsolutePath());

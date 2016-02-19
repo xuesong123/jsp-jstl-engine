@@ -75,6 +75,7 @@ public class TagLibraryFactory {
      * @param prefix
      * @param resource
      * @return Map<String, TagInfo>
+     * @throws Exception
      */
     public static Map<String, TagInfo> load(String prefix, String resource) throws Exception {
         ClassLoader classLoader = TagLibraryFactory.class.getClassLoader();
@@ -99,6 +100,7 @@ public class TagLibraryFactory {
 
     /**
      * @param inputStream
+     * @return Map<String, TagInfo>
      * @throws Exception
      */
     public static Map<String, TagInfo> parse(InputStream inputStream) throws Exception {

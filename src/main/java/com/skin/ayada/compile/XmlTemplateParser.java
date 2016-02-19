@@ -46,6 +46,11 @@ import com.skin.ayada.util.StringUtil;
  * @version 1.0
  */
 public class XmlTemplateParser {
+    /**
+     * @param reader
+     * @return Template
+     * @throws Exception
+     */
     public Template parse(Reader reader) throws Exception {
         try {
             if(reader == null) {
@@ -87,6 +92,8 @@ public class XmlTemplateParser {
 
     /**
      * @param node
+     * @param parent
+     * @param list
      * @return com.skin.ayada.statement.Node
      */
     public com.skin.ayada.statement.Node convert(Node node, com.skin.ayada.statement.Node parent, List<com.skin.ayada.statement.Node> list) {

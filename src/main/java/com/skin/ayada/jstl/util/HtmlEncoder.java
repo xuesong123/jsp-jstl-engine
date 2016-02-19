@@ -21,6 +21,9 @@ import com.skin.ayada.util.HtmlUtil;
  * @version 1.0
  */
 public class HtmlEncoder implements ELEncoder {
+    /**
+     *
+     */
     public HtmlEncoder() {
     }
 

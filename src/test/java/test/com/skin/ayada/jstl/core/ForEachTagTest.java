@@ -25,6 +25,9 @@ import com.skin.ayada.tagext.Tag;
  * @version 1.0
  */
 public class ForEachTagTest {
+    /**
+     * @param args
+     */
     public static void main(String[] args) {
         try {
             test2();
@@ -34,6 +37,9 @@ public class ForEachTagTest {
         }
     }
 
+    /**
+     * @throws Exception
+     */
     public static void test1() throws Exception {
         StringWriter out = new StringWriter();
         PageContext pageContext = JspFactory.getPageContext(out);
@@ -49,6 +55,9 @@ public class ForEachTagTest {
         }
     }
 
+    /**
+     * @throws Exception
+     */
     public static void test2() throws Exception {
         StringWriter out = new StringWriter();
         PageContext pageContext = JspFactory.getPageContext(out);

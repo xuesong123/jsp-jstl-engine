@@ -21,8 +21,13 @@ import java.util.Set;
  * <p>Copyright: Copyright (c) 2006</p>
  * @author xuesong.net
  * @version 1.0
+ * @param <K>
+ * @param <V>
  */
 public class Empty<K, V> implements Map<K, V> {
+    /**
+     *
+     */
     public Empty() {
     }
 

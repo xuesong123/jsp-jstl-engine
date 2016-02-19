@@ -20,11 +20,34 @@ import java.util.Calendar;
  * @version 1.0
  */
 public class Version {
+    /**
+     *
+     */
     public static final int LEVEL = 4;
+
+    /**
+     *
+     */
     public static final int majorVersion = 1;
+
+    /**
+     *
+     */
     public static final int minorVersion = 12;
+
+    /**
+     *
+     */
     public static final String name = "ayada";
+
+    /**
+     *
+     */
     public static final String developer = "skin";
+
+    /**
+     *
+     */
     public static final String version = getVersion();
 
     /**
@@ -74,6 +97,7 @@ public class Version {
     /**
      * @param majorVersion
      * @param minorVersion
+     * @param level
      * @return String
      */
     public static String getVersion(int majorVersion, int minorVersion, int level) {

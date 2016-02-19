@@ -19,6 +19,9 @@ import com.skin.ayada.tagext.ConditionalTagSupport;
  * @version 1.0
  */
 public class ExitTag extends ConditionalTagSupport {
+    /**
+     *
+     */
     public ExitTag() {
         super(true);
     }

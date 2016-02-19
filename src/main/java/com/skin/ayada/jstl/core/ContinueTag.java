@@ -25,6 +25,9 @@ public class ContinueTag extends TagSupport {
         return Tag.CONTINUE;
     }
 
+    /**
+     * @return boolean
+     */
     public static boolean getTrue() {
         return true;
     }

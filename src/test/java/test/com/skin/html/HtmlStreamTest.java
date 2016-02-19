@@ -28,6 +28,9 @@ public class HtmlStreamTest {
         test1();
     }
 
+    /**
+     *
+     */
     public static void test1() {
         Stack<String> stack = new Stack<String>();
 

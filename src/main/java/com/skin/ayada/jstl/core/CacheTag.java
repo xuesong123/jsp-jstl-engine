@@ -110,6 +110,7 @@ public class CacheTag extends BodyTagSupport {
     /**
      * @param cache
      * @param key
+     * @param expires
      * @param content
      */
     public static void setContent(Object cache, String key, int expires, String content) {

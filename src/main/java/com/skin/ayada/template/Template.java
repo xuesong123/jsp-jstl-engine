@@ -38,6 +38,9 @@ public class Template {
     private List<Source> dependencies;
     private static final Logger logger = LoggerFactory.getLogger(Template.class);
 
+    /**
+     *
+     */
     public Template() {
     }
 
@@ -171,6 +174,9 @@ public class Template {
         }
     }
 
+    /**
+     *
+     */
     public void destroy() {
         this.home = null;
         this.path = null;

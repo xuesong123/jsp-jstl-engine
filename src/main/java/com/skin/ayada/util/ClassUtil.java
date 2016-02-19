@@ -109,6 +109,7 @@ public class ClassUtil {
     /**
      * @param bean
      * @param properties
+     * @throws Exception
      */
     public static void setProperties(Object bean, Map<String, Object> properties) throws Exception {
         if(properties == null || properties.size() < 1) {
@@ -124,6 +125,7 @@ public class ClassUtil {
      * @param bean
      * @param name
      * @param value
+     * @throws Exception
      */
     public static void setProperty(Object bean, String name, Object value) throws Exception {
         if(bean == null) {

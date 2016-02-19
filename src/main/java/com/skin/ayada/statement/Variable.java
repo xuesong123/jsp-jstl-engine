@@ -19,6 +19,9 @@ package com.skin.ayada.statement;
 public class Variable extends DataNode {
     private String flag;
 
+    /**
+     *
+     */
     public Variable() {
         super(NodeType.VARI_NAME, NodeType.VARIABLE);
     }

@@ -20,6 +20,9 @@ package com.skin.ayada.tagext;
 public abstract class ConditionalTagSupport extends TagSupport {
     private boolean test = false;
 
+    /**
+     *
+     */
     public ConditionalTagSupport() {
         this.test = false;
     }

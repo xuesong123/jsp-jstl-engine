@@ -29,6 +29,7 @@ public interface JspFragment {
 
     /**
      * @param out
+     * @throws Exception
      */
     public void invoke(Writer out) throws Exception;
 }

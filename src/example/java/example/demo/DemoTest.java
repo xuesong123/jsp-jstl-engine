@@ -38,6 +38,9 @@ public class DemoTest {
         classPathTest();
     }
 
+    /**
+     *
+     */
     public static void classPathTest() {
         try {
             String home = "example/demo";

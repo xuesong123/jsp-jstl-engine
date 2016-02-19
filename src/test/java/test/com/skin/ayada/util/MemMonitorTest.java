@@ -25,6 +25,9 @@ import com.skin.ayada.util.MemMonitor;
  * @version 1.0
  */
 public class MemMonitorTest {
+    /**
+     * @param args
+     */
     public static void main(String[] args) {
         OutputStream outputStream = null;
 

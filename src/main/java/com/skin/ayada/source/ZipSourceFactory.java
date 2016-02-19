@@ -30,6 +30,9 @@ import com.skin.ayada.util.IO;
 public class ZipSourceFactory extends SourceFactory {
     private String file;
 
+    /**
+     *
+     */
     public ZipSourceFactory() {
     }
 

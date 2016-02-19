@@ -51,6 +51,7 @@ public class TagUtil {
      * @param tag
      * @param attributes
      * @param expressionContext
+     * @throws Exception
      */
     public static void setAttributes(Tag tag, Map<String, String> attributes, ExpressionContext expressionContext) throws Exception {
         if(attributes == null || attributes.size() < 1) {

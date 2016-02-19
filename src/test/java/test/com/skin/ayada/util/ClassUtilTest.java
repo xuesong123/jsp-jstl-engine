@@ -25,6 +25,9 @@ import com.skin.ayada.util.ClassUtil;
  * @version 1.0
  */
 public class ClassUtilTest {
+    /**
+     * @param args
+     */
     public static void main(String[] args) {
         TestTag tag = new TestTag();
         Map<String, Object> properties = new HashMap<String, Object>();

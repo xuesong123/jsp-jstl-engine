@@ -24,6 +24,9 @@ public class FileItem {
     private int flag;
     private File file;
 
+    /**
+     * @param file
+     */
     public FileItem(File file) {
         this.flag = 0;
         this.file = file;
@@ -78,6 +81,10 @@ public class FileItem {
         return this.file.getAbsolutePath();
     }
 
+    /**
+     * @return String
+     * @throws IOException
+     */
     public String getCanonicalPath() throws IOException {
         return this.file.getCanonicalPath();
     }

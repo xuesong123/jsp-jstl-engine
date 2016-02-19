@@ -35,6 +35,10 @@ import com.skin.ayada.template.TemplateFactory;
  * @version 1.0
  */
 public class ExecutorTest {
+    /**
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
         SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
         TemplateFactory templateFactory = new TemplateFactory();

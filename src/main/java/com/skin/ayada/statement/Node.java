@@ -264,6 +264,7 @@ public abstract class Node {
 
     /**
      * @param index
+     * @param sort
      * @return String
      */
     public String toString(int index, boolean sort) {

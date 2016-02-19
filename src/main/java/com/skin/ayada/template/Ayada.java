@@ -63,6 +63,7 @@ public class Ayada {
      * @param source
      * @param context
      * @param writer
+     * @throws Exception
      */
     public static void execute(String source, Map<String, Object> context, Writer writer) throws Exception {
         Template template = templateFactory.compile(source);

@@ -29,10 +29,16 @@ import com.skin.ayada.util.NodeUtil;
  * @version 1.0
  */
 public class ExpressionTest {
+    /**
+     * @param args
+     */
     public static void main(String[] args) {
         test1();
     }
 
+    /**
+     *
+     */
     public static void test1() {
         TemplateContext templateContext = TemplateManager.getTemplateContext("webapp");
 
@@ -52,6 +58,9 @@ public class ExpressionTest {
         System.out.println(value);
     }
 
+    /**
+     *
+     */
     public static void test2() {
         /*
         float floatValue = 2.0f;
@@ -98,6 +107,9 @@ public class ExpressionTest {
         }
     }
 
+    /**
+     *
+     */
     public static void test3() {
         List<Node> list = ExpressionUtil.parse("123${abc}xyz");
         System.out.println(NodeUtil.getDescription(list));

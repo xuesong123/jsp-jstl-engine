@@ -28,8 +28,19 @@ import com.skin.ayada.tagext.BodyContent;
  * @version 1.0
  */
 public interface PageContext {
+    /**
+     *
+     */
     public static final String LOCALE_KEY = "com.skin.ayada.locale";
+
+    /**
+     *
+     */
     public static final String TIMEZONE_KEY = "com.skin.ayada.time-zone";
+
+    /**
+     *
+     */
     public static final String BUNDLE_KEY = "com.skin.ayada.bundle";
 
     /**
@@ -43,13 +54,14 @@ public interface PageContext {
     public void setOut(JspWriter out);
 
     /**
-     * @return the out
+     * @return JspWriter
      */
     public JspWriter getOut();
 
     /**
      * @param key
      * @param value
+     * @return Object
      */
     public Object setAttribute(String key, Object value);
 
@@ -61,6 +73,7 @@ public interface PageContext {
 
     /**
      * @param key
+     * @return Object
      */
     public Object removeAttribute(String key);
 
@@ -230,21 +243,28 @@ public interface PageContext {
     /**
      * @param bodyContent
      * @param escapeXml
+     * @throws IOException
      */
     public void print(BodyContent bodyContent, boolean escapeXml) throws IOException;
 
     /**
      * @param page
+     * @throws Exception
      */
     public void include(String page) throws Exception;
 
     /**
      * @param page
+     * @param context
+     * @throws Exception
      */
     public void include(String page, Map<String, Object> context) throws Exception;
 
     /**
      * @param page
+     * @param context
+     * @param out
+     * @throws Exception
      */
     public void include(String page, Map<String, Object> context, Writer out) throws Exception;
 

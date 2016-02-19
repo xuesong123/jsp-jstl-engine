@@ -83,6 +83,7 @@ public class TemplateDispatcher {
     }
 
     /**
+     * @param servletContext
      * @param properties
      * @return TemplateDispatcher
      */
@@ -206,6 +207,7 @@ public class TemplateDispatcher {
     /**
      * @param request
      * @param response
+     * @param page
      * @throws ServletException
      * @throws IOException
      */
@@ -261,6 +263,9 @@ public class TemplateDispatcher {
         }
     }
 
+    /**
+     *
+     */
     public void destroy() {
         this.templateContext.destory();
         this.templateContext = null;
@@ -272,7 +277,7 @@ public class TemplateDispatcher {
     public void setName(String name) {
         this.name = name;
     }
-    
+
     /**
      * @return the name
      */

@@ -18,6 +18,9 @@ package com.skin.ayada.statement;
  * @version 1.0
  */
 public class JspDirective extends DataNode {
+    /**
+     *
+     */
     public JspDirective() {
         super(NodeType.JSP_DIRECTIVE_PAGE_NAME, NodeType.JSP_DIRECTIVE_PAGE);
     }
@@ -38,6 +41,7 @@ public class JspDirective extends DataNode {
     }
 
     /**
+     * @param nodeName
      * @return JspDirective
      */
     public static JspDirective getInstance(String nodeName) {

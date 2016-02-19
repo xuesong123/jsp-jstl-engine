@@ -154,6 +154,8 @@ public class TemplateUtil {
 
     /**
      * @param node
+     * @param index
+     * @param closed
      * @return String
      */
     public static String toString(Node node, int index, boolean closed) {

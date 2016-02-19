@@ -60,6 +60,7 @@ public class PrepareCompiler {
 
     /**
      * non-recursion
+     * @param home
      * @param dir
      */
     public void compile(String home, File dir) {
@@ -106,6 +107,7 @@ public class PrepareCompiler {
 
     /**
      * recursion process
+     * @param home
      * @param dir
      */
     public void compile2(String home, File dir) {

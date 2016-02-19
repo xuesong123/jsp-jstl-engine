@@ -30,7 +30,14 @@ import javax.servlet.http.HttpSession;
  * @version 1.0
  */
 public class Request {
+    /**
+     *
+     */
     public static final String LOCALE = "com.skin.ayada.locale";
+
+    /**
+     *
+     */
     public static final String TIMEZONE = "com.skin.ayada.time-zone";
     private static final String SERVLET_CONTEXT = "com.skin.ayada.web.servletContext";
     private static final String JSP_WRITER = "com.skin.ayada.web.jspWriter";
@@ -45,6 +52,7 @@ public class Request {
     }
 
     /**
+     * @param servletContext
      * @param request
      * @param response
      * @return Map<String, Object>

@@ -21,6 +21,10 @@ public class StringStream {
     private int position;
     private char[] buffer;
     private boolean closed;
+
+    /**
+     * end of stream
+     */
     public static final int EOF = -1;
 
     /**
@@ -187,6 +191,7 @@ public class StringStream {
 
     /**
      * skip crlf
+     * @return int
      */
     public int skipCRLF() {
         int i = -1;
@@ -213,6 +218,7 @@ public class StringStream {
 
     /**
      * skip whitespace
+     * @return int
      */
     public int skipWhitespace() {
         int index = this.position;
@@ -241,6 +247,7 @@ public class StringStream {
 
     /**
      * @param search
+     * @return boolean
      */
     public boolean match(String search) {
         int i = 0;

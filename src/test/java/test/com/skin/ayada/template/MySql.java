@@ -105,7 +105,7 @@ public class MySql {
     }
 
     /**
-     * @param statement
+     * @param connection
      */
     public static void close(Connection connection) {
         if(connection != null) {

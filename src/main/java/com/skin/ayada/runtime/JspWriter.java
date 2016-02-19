@@ -97,6 +97,7 @@ public class JspWriter extends Writer {
 
     /**
      * @param b
+     * @throws IOException
      */
     public void print(boolean b) throws IOException {
         if(b) {
@@ -109,6 +110,7 @@ public class JspWriter extends Writer {
 
     /**
      * @param c
+     * @throws IOException
      */
     public void print(char c) throws IOException {
         this.write(new char[]{c}, 0, 1);
@@ -116,6 +118,7 @@ public class JspWriter extends Writer {
 
     /**
      * @param cbuf
+     * @throws IOException
      */
     public void print(char[] cbuf) throws IOException {
         this.write(cbuf, 0, cbuf.length);
@@ -123,6 +126,7 @@ public class JspWriter extends Writer {
 
     /**
      * @param d
+     * @throws IOException
      */
     public void print(double d) throws IOException {
         this.write(Double.toString(d));
@@ -130,6 +134,7 @@ public class JspWriter extends Writer {
 
     /**
      * @param f
+     * @throws IOException
      */
     public void print(float f) throws IOException {
         this.write(Float.toString(f));
@@ -137,6 +142,7 @@ public class JspWriter extends Writer {
 
     /**
      * @param i
+     * @throws IOException
      */
     public void print(int i) throws IOException {
         this.write(Integer.toString(i));
@@ -144,6 +150,7 @@ public class JspWriter extends Writer {
 
     /**
      * @param l
+     * @throws IOException
      */
     public void print(long l) throws IOException {
         this.write(Long.toString(l));
@@ -151,6 +158,7 @@ public class JspWriter extends Writer {
 
     /**
      * @param content
+     * @throws IOException
      */
     public void print(String content) throws IOException {
         if(content != null) {
@@ -160,6 +168,7 @@ public class JspWriter extends Writer {
 
     /**
      * @param value
+     * @throws IOException
      */
     public void print(Object value) throws IOException {
         if(value != null) {
@@ -169,6 +178,8 @@ public class JspWriter extends Writer {
 
     /**
      * @param value
+     * @param nullable
+     * @throws IOException
      */
     public void print(Object value, boolean nullable) throws IOException {
         if(value != null) {
@@ -182,7 +193,7 @@ public class JspWriter extends Writer {
     }
 
     /**
-     *
+     * @throws IOException
      */
     public void println() throws IOException {
         this.write(CRLF, 0, 2);
@@ -190,6 +201,7 @@ public class JspWriter extends Writer {
 
     /**
      * @param b
+     * @throws IOException
      */
     public void println(boolean b) throws IOException {
         if(b) {
@@ -203,6 +215,7 @@ public class JspWriter extends Writer {
 
     /**
      * @param c
+     * @throws IOException
      */
     public void println(char c) throws IOException {
         this.write(new char[]{c}, 0, 1);
@@ -211,6 +224,7 @@ public class JspWriter extends Writer {
 
     /**
      * @param cbuf
+     * @throws IOException
      */
     public void println(char[] cbuf) throws IOException {
         this.write(cbuf, 0, cbuf.length);
@@ -219,6 +233,7 @@ public class JspWriter extends Writer {
 
     /**
      * @param d
+     * @throws IOException
      */
     public void println(double d) throws IOException {
         this.write(String.valueOf(d));
@@ -227,6 +242,7 @@ public class JspWriter extends Writer {
 
     /**
      * @param f
+     * @throws IOException
      */
     public void println(float f) throws IOException {
         this.write(Float.toString(f));
@@ -235,6 +251,7 @@ public class JspWriter extends Writer {
 
     /**
      * @param i
+     * @throws IOException
      */
     public void println(int i) throws IOException {
         this.write(Integer.toString(i));
@@ -243,6 +260,7 @@ public class JspWriter extends Writer {
 
     /**
      * @param l
+     * @throws IOException
      */
     public void println(long l) throws IOException {
         this.write(Long.toString(l));
@@ -251,6 +269,7 @@ public class JspWriter extends Writer {
 
     /**
      * @param content
+     * @throws IOException
      */
     public void println(String content) throws IOException {
         if(content != null) {
@@ -261,6 +280,7 @@ public class JspWriter extends Writer {
 
     /**
      * @param value
+     * @throws IOException
      */
     public void println(Object value) throws IOException {
         if(value != null) {
@@ -271,6 +291,8 @@ public class JspWriter extends Writer {
 
     /**
      * @param value
+     * @param nullable
+     * @throws IOException
      */
     public void println(Object value, boolean nullable) throws IOException {
         if(value != null) {

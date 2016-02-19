@@ -46,6 +46,9 @@ public class DefaultTemplateContext implements TemplateContext {
     private ConcurrentHashMap<String, FutureTask<Template>> cache;
     private static final Logger logger = LoggerFactory.getLogger(DefaultTemplateContext.class);
 
+    /**
+     *
+     */
     public DefaultTemplateContext() {
         this.reload = 0;
         this.cache = new ConcurrentHashMap<String, FutureTask<Template>>();
@@ -317,7 +320,7 @@ public class DefaultTemplateContext implements TemplateContext {
     public void setReload(int reload) {
         this.reload = reload;
     }
-    
+
     /**
      * @return the reload
      */

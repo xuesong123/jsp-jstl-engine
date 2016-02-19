@@ -29,13 +29,16 @@ public interface TemplateContext {
      * @param path
      * @param context
      * @param writer
+     * @throws Exception
      */
     public void execute(String path, Map<String, Object> context, Writer writer) throws Exception;
 
     /**
      * @param path
+     * @param encoding
      * @param context
      * @param writer
+     * @throws Exception
      */
     public void execute(String path, String encoding, Map<String, Object> context, Writer writer) throws Exception;
 
@@ -43,6 +46,7 @@ public interface TemplateContext {
      * @param template
      * @param context
      * @param writer
+     * @throws Exception
      */
     public void execute(Template template, Map<String, Object> context, Writer writer) throws Exception;
 
@@ -55,6 +59,7 @@ public interface TemplateContext {
 
     /**
      * @param path
+     * @param encoding
      * @return Template
      * @throws Exception
      */

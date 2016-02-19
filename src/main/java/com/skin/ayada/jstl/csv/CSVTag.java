@@ -102,7 +102,7 @@ public class CSVTag extends TagSupport implements IterationTag, TryCatchFinally 
      */
     protected static Reader getReader(File file, String encoding) throws IOException {
         Reader reader = null;
-        
+
         if(encoding == null) {
             reader = new InputStreamReader(new FileInputStream(file));
         }

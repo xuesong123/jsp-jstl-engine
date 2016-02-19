@@ -23,12 +23,18 @@ import com.skin.ayada.util.Path;
  * @version 1.0
  */
 public class DefaultSourceFactory extends SourceFactory {
+    /**
+     * @param args
+     */
     public static void main(String[] args) {
         DefaultSourceFactory sourceFactory = new DefaultSourceFactory();
         sourceFactory.setHome("D:\\workspace2/ayada\\webapp");
         sourceFactory.getFile("\\outTest.jsp");
     }
 
+    /**
+     *
+     */
     public DefaultSourceFactory() {
     }
 

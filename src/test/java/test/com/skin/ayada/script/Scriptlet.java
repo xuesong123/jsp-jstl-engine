@@ -127,7 +127,7 @@ public class Scriptlet {
     }
 
     /**
-     * @param constructor
+     * @param type
      * @return String
      */
     public static String getConstructorParameter(Class<?> type) {

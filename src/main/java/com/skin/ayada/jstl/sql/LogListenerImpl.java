@@ -23,6 +23,9 @@ import com.skin.ayada.util.LogListener;
 public class LogListenerImpl implements LogListener {
     private PrintWriter out;
 
+    /**
+     * @param out
+     */
     public LogListenerImpl(PrintWriter out) {
         this.out = out;
     }

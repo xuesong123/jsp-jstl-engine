@@ -108,6 +108,7 @@ public abstract class AbstractJspFragment implements JspFragment {
 
     /**
      * @param writer
+     * @throws Exception
      */
     public abstract void execute(JspWriter writer) throws Exception;
 }

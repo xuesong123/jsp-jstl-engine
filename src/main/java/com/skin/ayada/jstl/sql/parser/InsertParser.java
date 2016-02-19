@@ -50,6 +50,9 @@ public class InsertParser {
         }
     }
 
+    /**
+     *
+     */
     public static void test() {
         StringBuilder sql = new StringBuilder();
         sql.append("insert into a(`a1`, [a2], 'a3') values ('a', 1, 1)\r\n");
@@ -714,6 +717,10 @@ public class InsertParser {
         return (d == 0 ? type : d);
     }
 
+    /**
+     * @param i
+     * @return boolean
+     */
     public boolean isSqlIdentifierPart(int i) {
         if(i == '_') {
             return true;
@@ -723,6 +730,7 @@ public class InsertParser {
 
     /**
      * @param resultSet
+     * @param pattern
      */
     public void print(List<Record> resultSet, String pattern) {
         for(Record record : resultSet) {

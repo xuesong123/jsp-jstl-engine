@@ -22,6 +22,9 @@ import java.util.Scanner;
  * @version 1.0
  */
 public class Solution {
+    /**
+     * @param args
+     */
     public static void main(String[] args) {
         int[] a = new int[]{
             1,  2,  3,  4,  5,
@@ -37,6 +40,9 @@ public class Solution {
         System.out.println();
     }
 
+    /**
+     * @param args
+     */
     @SuppressWarnings("resource")
     public static void main1(String[] args) {
         Scanner in = new Scanner(System.in);

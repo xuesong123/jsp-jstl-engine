@@ -24,6 +24,9 @@ import java.util.Map;
 public class CacheClient {
     private Map<String, Object> map = new HashMap<String, Object>();
 
+    /**
+     *
+     */
     public CacheClient() {
     }
 

@@ -63,6 +63,7 @@ public class OutTag extends BodyTagSupport {
      * @param out
      * @param value
      * @param escapeXml
+     * @throws IOException
      */
     public static void write(Writer out, Object value, boolean escapeXml) throws IOException {
         if(value != null) {
@@ -81,6 +82,7 @@ public class OutTag extends BodyTagSupport {
      * @param pageContext
      * @param value
      * @param escapeXml
+     * @throws IOException
      */
     public static void print(PageContext pageContext, Object value, boolean escapeXml) throws IOException {
         if(value != null) {

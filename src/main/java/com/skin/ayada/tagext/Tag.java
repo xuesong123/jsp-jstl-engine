@@ -20,20 +20,45 @@ import com.skin.ayada.runtime.PageContext;
  * @version 1.0
  */
 public interface Tag {
+    /**
+     * skip the tag body
+     */
     public static final int SKIP_BODY = 0;
+
+    /**
+     * eval the tag body
+     */
     public static final int EVAL_BODY_INCLUDE = 1;
+
+    /**
+     * exit render
+     */
     public static final int SKIP_PAGE = 5;
+
+    /**
+     * render
+     */
     public static final int EVAL_PAGE = 6;
+
+    /**
+     * continue
+     */
     public static final int CONTINUE = "continue".hashCode();
+
+    /**
+     * break
+     */
     public static final int BREAK    = "break".hashCode();
 
     /**
      * @return int
+     * @throws Exception
      */
     public int doStartTag() throws Exception;
 
     /**
      * @return int
+     * @throws Exception
      */
     public int doEndTag() throws Exception;
 

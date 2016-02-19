@@ -48,11 +48,19 @@ import com.skin.ayada.util.StringUtil;
  * @version 1.0
  */
 public class JspTemplateFactoryTest {
+    /**
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
         // test1("extTest.jsp");
         test1("command.jsp", true);
     }
 
+    /**
+     * @return Template
+     * @throws Exception
+     */
     public static Template getTemplate() throws Exception {
         SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
         TemplateCompiler compiler = new TemplateCompiler(sourceFactory);
@@ -61,6 +69,11 @@ public class JspTemplateFactoryTest {
         return compiler.compile("allTagTest.jsp", "UTF-8");
     }
 
+    /**
+     * @param file
+     * @param execute
+     * @throws Exception
+     */
     public static void test1(String file, boolean execute) throws Exception {
         SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
         TemplateFactory templateFactory = new JspTemplateFactory("work", System.getProperty("java.class.path"));
@@ -95,6 +108,9 @@ public class JspTemplateFactoryTest {
         }
     }
 
+    /**
+     * @throws Exception
+     */
     public static void test2() throws Exception {
         String home = "com/skin/ayada/compile";
         SourceFactory sourceFactory = new ClassPathSourceFactory(home);
@@ -135,6 +151,9 @@ public class JspTemplateFactoryTest {
         System.out.println(format(result));
     }
 
+    /**
+     * @param args
+     */
     public static void test4(String[] args) {
         try {
             String source = IO.read(new File("webapp/allTagTest.jsp"), "UTF-8", 4096);
@@ -147,6 +166,9 @@ public class JspTemplateFactoryTest {
         }
     }
 
+    /**
+     *
+     */
     public static void arrayListTest() {
         ArrayList<String> list = new ArrayList<String>(4);
 
@@ -173,6 +195,9 @@ public class JspTemplateFactoryTest {
         }
     }
 
+    /**
+     * @return Map<String, Integer>
+     */
     public static Map<String, Integer> getNodeType() {
         Map<String, Integer> map = new HashMap<String, Integer>();
         map.put("TEXT", NodeType.TEXT);
@@ -180,6 +205,9 @@ public class JspTemplateFactoryTest {
         return map;
     }
 
+    /**
+     *
+     */
     public static void expressionTest() {
         StringWriter writer = new StringWriter();
         TemplateContext templateContext = TemplateManager.getTemplateContext("webapp");

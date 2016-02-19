@@ -39,6 +39,9 @@ public class DefaultPageContext implements PageContext {
     private TemplateContext templateContext;
     private ExpressionContext expressionContext;
 
+    /**
+     *
+     */
     public DefaultPageContext() {
         this(null);
     }

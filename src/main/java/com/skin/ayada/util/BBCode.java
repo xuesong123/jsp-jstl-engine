@@ -31,8 +31,8 @@ import org.slf4j.LoggerFactory;
 public class BBCode {
     private static Logger logger = LoggerFactory.getLogger(BBCode.class);
     private static final boolean DEBUG = logger.isDebugEnabled();
-    public static final Map<String, String> map = BBCode.load();
-    public static final Map<String, String> sig = new HashMap<String, String>();
+    private static final Map<String, String> map = BBCode.load();
+    private static final Map<String, String> sig = new HashMap<String, String>();
 
     static {
         sig.put("img",   "1");
@@ -126,6 +126,7 @@ public class BBCode {
 
     /**
      * @param name
+     * @param attributes
      * @param value
      * @return String
      */

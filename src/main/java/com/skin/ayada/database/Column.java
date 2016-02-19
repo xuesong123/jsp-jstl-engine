@@ -38,13 +38,23 @@ public class Column {
     private Object value;
     private Table table;
 
+    /**
+     *
+     */
     public Column() {
     }
 
+    /**
+     * @param columnName
+     */
     public Column(String columnName) {
         this(columnName, null);
     }
 
+    /**
+     * @param columnName
+     * @param alias
+     */
     public Column(String columnName, String alias) {
         this.alias = alias;
         this.columnName = columnName;
@@ -52,6 +62,9 @@ public class Column {
         this.nullable = 1;
     }
 
+    /**
+     * @param c
+     */
     public Column(Column c) {
         if(c != null) {
             this.alias = c.alias;
@@ -74,14 +87,23 @@ public class Column {
         }
     }
 
+    /**
+     * @param table
+     */
     public void setTable(Table table) {
         this.table = table;
     }
 
+    /**
+     * @return Table
+     */
     public Table getTable() {
         return this.table;
     }
 
+    /**
+     * @return String
+     */
     public String getTableName() {
         if(this.table != null) {
             return this.table.getTableName();
@@ -89,6 +111,9 @@ public class Column {
         return null;
     }
 
+    /**
+     * @return String
+     */
     public String getTableAlias() {
         if(this.table != null) {
             return this.table.getAlias();
@@ -96,42 +121,72 @@ public class Column {
         return null;
     }
 
+    /**
+     * @return String
+     */
     public String getAlias() {
         return this.alias;
     }
 
+    /**
+     * @param alias
+     */
     public void setAlias(String alias) {
         this.alias = alias;
     }
 
+    /**
+     * @param columnCode
+     */
     public void setColumnCode(String columnCode) {
         this.columnCode = columnCode;
     }
 
+    /**
+     * @return String
+     */
     public String getColumnCode() {
         return this.columnCode;
     }
 
+    /**
+     * @param columnName
+     */
     public void setColumnName(String columnName) {
         this.columnName = columnName;
     }
 
+    /**
+     * @return String
+     */
     public String getColumnName() {
         return this.columnName;
     }
 
+    /**
+     * @return int
+     */
     public int getDataType() {
         return this.dataType;
     }
 
+    /**
+     * @param dataType
+     */
     public void setDataType(int dataType) {
         this.dataType = dataType;
     }
 
+    /**
+     * @return String
+     */
     public String getTypeName() {
         return this.typeName;
     }
 
+    /**
+     * @param typeName
+     */
     public void setTypeName(String typeName) {
         this.typeName = typeName;
     }
@@ -150,90 +205,156 @@ public class Column {
         this.autoIncrement = autoIncrement;
     }
 
+    /**
+     * @return int
+     */
     public int getColumnSize() {
         return this.columnSize;
     }
 
+    /**
+     * @param columnSize
+     */
     public void setColumnSize(int columnSize) {
         this.columnSize = columnSize;
     }
 
+    /**
+     * @return int
+     */
     public int getDecimalDigits() {
         return this.decimalDigits;
     }
 
+    /**
+     * @param decimalDigits
+     */
     public void setDecimalDigits(int decimalDigits) {
         this.decimalDigits = decimalDigits;
     }
 
+    /**
+     * @return String
+     */
     public String getColumnDef() {
         return this.columnDef;
     }
 
+    /**
+     * @param columnDef
+     */
     public void setColumnDef(String columnDef) {
         this.columnDef = columnDef;
     }
 
+    /**
+     * @return String
+     */
     public String getRemarks() {
         return this.remarks;
     }
 
+    /**
+     * @param remarks
+     */
     public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
 
+    /**
+     * @return int
+     */
     public int getNullable() {
         return this.nullable;
     }
 
+    /**
+     * @param nullable
+     */
     public void setNullable(int nullable) {
         this.nullable = nullable;
     }
 
+    /**
+     * @return int
+     */
     public int getPrecision() {
         return this.precision;
     }
 
+    /**
+     * @param precision
+     */
     public void setPrecision(int precision) {
         this.precision = precision;
     }
 
+    /**
+     * @param primaryKey
+     */
     public void setPrimaryKey(boolean primaryKey) {
         this.primaryKey = primaryKey;
     }
 
+    /**
+     * @return boolean
+     */
     public boolean getPrimaryKey() {
         return this.primaryKey;
     }
 
+    /**
+     * @return String
+     */
     public String getVariableName() {
         return this.variableName;
     }
 
+    /**
+     * @param variableName
+     */
     public void setVariableName(String variableName) {
         this.variableName = variableName;
     }
 
+    /**
+     * @return String
+     */
     public String getJavaTypeName() {
         return this.javaTypeName;
     }
 
+    /**
+     * @param javaTypeName
+     */
     public void setJavaTypeName(String javaTypeName) {
         this.javaTypeName = javaTypeName;
     }
 
+    /**
+     * @return String
+     */
     public String getMethodSetter() {
         return this.methodSetter;
     }
 
+    /**
+     * @param methodSetter
+     */
     public void setMethodSetter(String methodSetter) {
         this.methodSetter = methodSetter;
     }
 
+    /**
+     * @return String
+     */
     public String getMethodGetter() {
         return this.methodGetter;
     }
 
+    /**
+     * @param methodGetter
+     */
     public void setMethodGetter(String methodGetter) {
         this.methodGetter = methodGetter;
     }

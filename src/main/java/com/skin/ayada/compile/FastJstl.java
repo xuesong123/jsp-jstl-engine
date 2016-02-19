@@ -59,6 +59,10 @@ public class FastJstl {
         map.put(DateFormatTag.class.getName(), "1");
     }
 
+    /**
+     * @param className
+     * @return boolean
+     */
     public static boolean has(String className) {
         return (map.get(className) != null);
     }

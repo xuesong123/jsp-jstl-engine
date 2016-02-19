@@ -18,6 +18,9 @@ package com.skin.ayada.statement;
  * @version 1.0
  */
 public class TextNode extends DataNode {
+    /**
+     *
+     */
     public TextNode() {
         super(NodeType.TEXT_NAME, NodeType.TEXT);
     }

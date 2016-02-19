@@ -24,6 +24,9 @@ import java.util.Map;
 public class Parameters {
     private Map<String, Object> parameters;
 
+    /**
+     *
+     */
     public Parameters() {
         this.parameters = new HashMap<String, Object>();
     }
@@ -651,6 +654,9 @@ public class Parameters {
         return map;
     }
 
+    /**
+     * clear the parameters
+     */
     public void clear() {
         this.parameters.clear();
     }

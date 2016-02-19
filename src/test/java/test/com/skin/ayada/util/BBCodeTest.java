@@ -10,8 +10,6 @@
  */
 package test.com.skin.ayada.util;
 
-import java.util.Map;
-
 import com.skin.ayada.util.BBCode;
 
 /**
@@ -29,6 +27,9 @@ public class BBCodeTest {
         test1();
     }
 
+    /**
+     *
+     */
     public static void evaluateTest() {
         String source = "<embd ${width=\"#1\"} ${height=\"#2\"}/>";
         String[] replacement = new String[]{"1", "2"};
@@ -36,6 +37,9 @@ public class BBCodeTest {
         System.out.println(result);
     }
 
+    /**
+     *
+     */
     public static void replaceTest() {
         String source = "width=\"#1\"";
         String[] replacement = new String[]{"1", "2"};
@@ -43,6 +47,9 @@ public class BBCodeTest {
         System.out.println(result);
     }
 
+    /**
+     *
+     */
     public static void test1() {
         StringBuilder source = new StringBuilder();
         source.append("[b]12[/b]\r\n");
@@ -122,13 +129,5 @@ public class BBCodeTest {
 
         buffer.append("\"");
         return buffer.toString();
-    }
-
-    public static void printMap() {
-        Map<String, String> map = BBCode.map;
-
-        for(Map.Entry<String, String> entry : map.entrySet()) {
-            System.out.println("map[\"" + entry.getKey() + "\"] = " + quote(entry.getValue()) + ";");
-        }
     }
 }

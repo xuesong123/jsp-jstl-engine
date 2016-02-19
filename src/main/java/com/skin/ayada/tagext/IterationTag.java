@@ -18,6 +18,9 @@ package com.skin.ayada.tagext;
  * @version 1.0
  */
 public interface IterationTag extends Tag {
+    /**
+     *
+     */
     public static final int EVAL_BODY_AGAIN = 2;
 
     /**
@@ -27,6 +30,7 @@ public interface IterationTag extends Tag {
      * The method re-invocations may be lead to different actions because there might have been some changes to shared state, or because of external computation.
      * The JSP container will resynchronize the values of any AT_BEGIN and NESTED variables (defined by the associated TagExtraInfo or TLD) after the invocation of doAfterBody().
      * @return whether additional evaluations of the body are desired
+     * @throws Exception
      */
     public int doAfterBody() throws Exception;
 }

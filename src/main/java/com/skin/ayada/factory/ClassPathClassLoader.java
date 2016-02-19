@@ -28,6 +28,10 @@ import java.nio.channels.WritableByteChannel;
 public class ClassPathClassLoader extends ClassLoader {
     private String classPath;
 
+    /**
+     * @param parent
+     * @param classPath
+     */
     public ClassPathClassLoader(ClassLoader parent, String classPath) {
         super(parent);
         this.classPath = classPath;

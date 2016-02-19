@@ -31,10 +31,14 @@ import com.skin.ayada.statement.Node;
 public abstract class JspTemplate extends Template {
     private static final Logger logger = LoggerFactory.getLogger(JspTemplate.class);
 
+    /**
+     *
+     */
     public JspTemplate() {
     }
 
     /**
+     * @param home
      * @param file
      * @param nodes
      */

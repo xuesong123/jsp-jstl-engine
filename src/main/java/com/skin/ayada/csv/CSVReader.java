@@ -31,10 +31,16 @@ import com.skin.ayada.io.StringStream;
  * @version 1.0
  */
 public class CSVReader {
+    /**
+     * @param args
+     */
     public static void main(String[] args) {
         test3();
     }
 
+    /**
+     * for test
+     */
     public static void test1() {
         InputStream inputStream = null;
         InputStreamReader inputStreamReader = null;
@@ -73,6 +79,9 @@ public class CSVReader {
         }
     }
 
+    /**
+     * for test
+     */
     public static void test2() {
         InputStream inputStream = null;
         InputStreamReader inputStreamReader = null;
@@ -98,6 +107,9 @@ public class CSVReader {
         }
     }
 
+    /**
+     * for test
+     */
     public static void test3() {
         try {
             String source = "2,\"test2\", \"1234\", 1, \"2000-01-01\"";
@@ -115,7 +127,7 @@ public class CSVReader {
      * @param reader
      * @param out
      * @param pattern
-     * @throws IOException 
+     * @throws IOException
      */
     public static void export(Reader reader, PrintWriter out, String pattern) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(reader);
@@ -147,6 +159,7 @@ public class CSVReader {
     /**
      * @param reader
      * @return DataSet
+     * @throws IOException
      */
     public static List<String> next(Reader reader) throws IOException {
         String line = null;
@@ -167,7 +180,7 @@ public class CSVReader {
     /**
      * @param reader
      * @return String
-     * @throws IOException 
+     * @throws IOException
      */
     public static String readLine(Reader reader) throws IOException {
         int c;

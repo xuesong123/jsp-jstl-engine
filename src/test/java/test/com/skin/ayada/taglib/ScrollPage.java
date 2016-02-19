@@ -128,8 +128,8 @@ public class ScrollPage extends TagSupport {
     }
 
     /**
-     * @param pageNo
-     * @param totalPage
+     * @param num
+     * @param pages
      * @param size
      * @return int[]
      */
@@ -222,8 +222,7 @@ public class ScrollPage extends TagSupport {
     }
 
     /**
-     * @param num
-     * @param pages
+     * @param out
      */
     public void print(PrintWriter out) {
         int total = this.getTotal();

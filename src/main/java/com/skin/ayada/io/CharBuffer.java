@@ -39,6 +39,7 @@ public class CharBuffer {
 
     /**
      * @param cbuf
+     * @return CharBuffer
      */
     public CharBuffer append(char[] cbuf) {
         return this.append(cbuf, 0, cbuf.length);
@@ -48,6 +49,7 @@ public class CharBuffer {
      * @param cbuf
      * @param off
      * @param len
+     * @return CharBuffer
      */
     public CharBuffer append(char[] cbuf, int off, int len) {
         int count = 0;
@@ -237,6 +239,9 @@ public class CharBuffer {
         this.tail = tail;
     }
 
+    /**
+     *
+     */
     public void free() {
         CharBuffer next = this;
         CharBuffer temp = this;

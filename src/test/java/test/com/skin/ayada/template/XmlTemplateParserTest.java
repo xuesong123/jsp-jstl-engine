@@ -35,7 +35,7 @@ public class XmlTemplateParserTest {
     }
 
     /**
-     * @param args
+     *
      */
     public static void test1() {
         try {

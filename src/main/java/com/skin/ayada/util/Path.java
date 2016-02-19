@@ -21,6 +21,9 @@ import java.util.List;
  * @version 1.0
  */
 public class Path {
+    /**
+     * @param args
+     */
     public static void main(String[] args) {
         /**
          * windows

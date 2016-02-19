@@ -33,6 +33,9 @@ import com.skin.ayada.util.TemplateUtil;
 public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
+    /**
+     * @param args
+     */
     public static void main(String[] args) {
         String path = null;
         String encoding = "UTF-8";
@@ -188,6 +191,9 @@ public class Main {
         return buffer.toString();
     }
 
+    /**
+     *
+     */
     public static void usage() {
         System.out.println("Usage:");
         System.out.println("    " + Main.class.getName() + " FILE [ENCODING]");

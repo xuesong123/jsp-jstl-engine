@@ -32,6 +32,9 @@ public class PerformanceTest {
         test5Java(10000);
     }
 
+    /**
+     *
+     */
     public static void test3() {
         try {
             File file = new File("webapp\\test3.jsp");
@@ -72,6 +75,11 @@ public class PerformanceTest {
         }
     }
 
+    /**
+     * @param file
+     * @param count
+     *
+     */
     public static void test4Ayada(File file, int count) {
         try {
             TemplateContext templateContext = getTemplateContext(file);
@@ -114,6 +122,7 @@ public class PerformanceTest {
     }
 
     /**
+     * @param count
      *
      */
     public static void test4Java(int count) {
@@ -147,6 +156,7 @@ public class PerformanceTest {
     }
 
     /**
+     * @param count
      *
      */
     public static void test5Java(int count) {

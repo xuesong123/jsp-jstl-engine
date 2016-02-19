@@ -59,6 +59,12 @@ public class JspCompiler {
     private static final String JAVA_TEMPLATE = JspCompiler.getJavaTemplate();
     private static final Logger logger = LoggerFactory.getLogger(JspCompiler.class);
 
+    /**
+     * @param template
+     * @param packageName
+     * @param className
+     * @return String
+     */
     public String compile(Template template, String packageName, String className) {
         if(logger.isDebugEnabled()) {
             logger.debug("compile: {}.{}", packageName, className);
@@ -90,7 +96,7 @@ public class JspCompiler {
         context.put("jsp.static.declaration", staticDeclaration);
         return this.replace(JAVA_TEMPLATE, context);
     }
-    
+
     /**
      * @param template
      * @return String
@@ -180,7 +186,7 @@ public class JspCompiler {
             node = list.get(index);
 
             if(node.getNodeType() == NodeType.TEXT) {
-                writer.print("    public static final char[] " + this.getVariableName(node, "_jsp_string_"));
+                writer.print("    protected static final char[] " + this.getVariableName(node, "_jsp_string_"));
                 writer.print(" = \"");
                 writer.print(StringUtil.escape(node.getTextContent()));
                 writer.println("\".toCharArray();");

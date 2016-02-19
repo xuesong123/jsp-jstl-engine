@@ -198,6 +198,9 @@ public class BundleManager {
         return null;
     }
 
+    /**
+     * @param args
+     */
     public static void main(String[] args) {
         test("ayada_i18n", new Locale("zh", "cn", "myvar"));
     }

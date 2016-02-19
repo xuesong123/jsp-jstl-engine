@@ -20,6 +20,7 @@ package com.skin.ayada.runtime;
 public interface ExpressionFactory {
     /**
      * @param pageContext
+     * @return ExpressionContext
      */
     public ExpressionContext getExpressionContext(PageContext pageContext);
 }

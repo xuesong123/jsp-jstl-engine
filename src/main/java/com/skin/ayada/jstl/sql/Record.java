@@ -59,6 +59,7 @@ public class Record {
 
     /**
      * @param columnName
+     * @param columnValue
      */
     public void addColumn(String columnName, Object columnValue) {
         if(this.columns == null) {
@@ -202,6 +203,7 @@ public class Record {
 
     /**
      * @param columnName
+     * @param columnValue
      */
     public void addOtherColumn(String columnName, Object columnValue) {
         if(this.otherColumns == null) {
@@ -427,6 +429,9 @@ public class Record {
         return buffer.toString();
     }
 
+    /**
+     *
+     */
     public void print() {
         System.out.println("===================== record =====================");
         for(Entry entry : this.columns) {
@@ -444,6 +449,7 @@ public class Record {
 
     /**
      * @param pattern
+     * @param prepared
      * @return String
      */
     public String toString(String pattern, boolean prepared) {

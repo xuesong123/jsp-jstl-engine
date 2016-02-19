@@ -43,7 +43,7 @@ public class ParseJsonTag extends BodyTagSupport {
 
         if(bodyContent != null) {
             String content = bodyContent.getString();
-            
+
             if(json != null) {
                 Object value = json.parse(content);
                 this.pageContext.setAttribute(this.var, value);

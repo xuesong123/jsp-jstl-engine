@@ -23,10 +23,24 @@ public class TagInfo {
     private boolean ignoreWhitespace;
     private String description;
 
+    /**
+     *
+     */
     public static final int JSP = 0;
+
+    /**
+     *
+     */
     public static final int TAGDEPENDENT = 1;
+
+    /**
+     *
+     */
     public static final int EMPTY = 2;
 
+    /**
+     *
+     */
     public TagInfo() {
         this.bodyContent = JSP;
         this.ignoreWhitespace = true;

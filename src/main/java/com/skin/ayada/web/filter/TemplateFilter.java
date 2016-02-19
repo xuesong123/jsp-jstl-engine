@@ -33,6 +33,9 @@ import com.skin.ayada.web.TemplateDispatcher;
 public class TemplateFilter implements Filter {
     private TemplateDispatcher templateDispatcher;
 
+    /**
+     *
+     */
     public TemplateFilter() {
     }
 

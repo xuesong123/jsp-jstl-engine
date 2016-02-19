@@ -30,14 +30,29 @@ public class MessageTag extends BodyTagSupport implements ParamContainerTag {
     private List<Object> parameters;
     private String var;
 
+    /**
+     *
+     */
+    public MessageTag() {
+    }
+
+    /**
+     * @param key
+     */
     public void setKey(String key) {
         this.key = key;
     }
 
+    /**
+     * @param bundle
+     */
     public void setBundle(Object bundle) {
         this.bundle = bundle;
     }
 
+    /**
+     * @param var
+     */
     public void setVar(String var) {
         this.var = var;
     }

@@ -20,6 +20,9 @@ import com.skin.ayada.runtime.ELEncoder;
  * @version 1.0
  */
 public class EscapeEncoder implements ELEncoder {
+    /**
+     *
+     */
     public EscapeEncoder() {
     }
 

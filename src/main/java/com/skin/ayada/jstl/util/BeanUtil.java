@@ -143,6 +143,7 @@ public class BeanUtil {
 
     /**
      * @param c
+     * @return String
      */
     public String toString(Character c) {
         return c.toString();
@@ -150,6 +151,7 @@ public class BeanUtil {
 
     /**
      * @param b
+     * @return String
      */
     public String toString(Boolean b) {
         return (b.toString());
@@ -157,6 +159,7 @@ public class BeanUtil {
 
     /**
      * @param b
+     * @return String
      */
     public String toString(Byte b) {
         return (b.toString());
@@ -164,6 +167,7 @@ public class BeanUtil {
 
     /**
      * @param s
+     * @return String
      */
     public String toString(Short s) {
         return (s.toString());
@@ -171,6 +175,7 @@ public class BeanUtil {
 
     /**
      * @param i
+     * @return String
      */
     public String toString(Integer i) {
         return (i.toString());
@@ -178,6 +183,7 @@ public class BeanUtil {
 
     /**
      * @param f
+     * @return String
      */
     public String toString(Float f) {
         return (f.toString());
@@ -185,6 +191,7 @@ public class BeanUtil {
 
     /**
      * @param d
+     * @return String
      */
     public String toString(Double d) {
         return (d.toString());
@@ -192,6 +199,7 @@ public class BeanUtil {
 
     /**
      * @param l
+     * @return String
      */
     public String toString(Long l) {
         return (l.toString());
@@ -199,6 +207,7 @@ public class BeanUtil {
 
     /**
      * @param date
+     * @return String
      */
     public String toString(Date date) {
         if(date != null) {
@@ -210,6 +219,7 @@ public class BeanUtil {
 
     /**
      * @param object
+     * @return String
      */
     public String toString(Object object) {
         if(object == null) {
@@ -250,6 +260,7 @@ public class BeanUtil {
 
     /**
      * @param c
+     * @return String
      */
     public String toString(Collection<?> c) {
         return toString(c, 0);
@@ -257,6 +268,8 @@ public class BeanUtil {
 
     /**
      * @param c
+     * @param size
+     * @return String
      */
     public String toString(Collection<?> c, int size) {
         if(c == null) {
@@ -289,6 +302,7 @@ public class BeanUtil {
 
     /**
      * @param map
+     * @return String
      */
     public String toString(Map<?, ?> map) {
         return toString(map, 0);
@@ -296,6 +310,8 @@ public class BeanUtil {
 
     /**
      * @param map
+     * @param size
+     * @return String
      */
     public String toString(Map<?, ?> map, int size) {
         if(map == null) {

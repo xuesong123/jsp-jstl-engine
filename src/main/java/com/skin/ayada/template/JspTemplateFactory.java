@@ -41,6 +41,9 @@ public class JspTemplateFactory extends TemplateFactory {
     private String classPath;
     private static final Logger logger = LoggerFactory.getLogger(JspTemplateFactory.class);
 
+    /**
+     * @param args
+     */
     public static void main(String[] args) {
         JspTemplateFactory jtf = new JspTemplateFactory();
         String path = "/default/a.b.jsp";
@@ -61,11 +64,15 @@ public class JspTemplateFactory extends TemplateFactory {
         System.out.println("classPath: " + classPath);
     }
 
+    /**
+     *
+     */
     public JspTemplateFactory() {
     }
 
     /**
      * @param work
+     * @param classPath
      */
     public JspTemplateFactory(String work, String classPath) {
         this.work = work;

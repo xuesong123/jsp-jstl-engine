@@ -25,6 +25,9 @@ public class LocalizationContext {
     private Locale locale;
     private ResourceBundle resourceBundle;
 
+    /**
+     *
+     */
     public LocalizationContext() {
     }
 

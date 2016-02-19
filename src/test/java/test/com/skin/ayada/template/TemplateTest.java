@@ -55,6 +55,9 @@ import com.skin.ayada.util.TemplateUtil;
 public class TemplateTest {
     protected static final Logger logger = LoggerFactory.getLogger(TemplateTest.class);
 
+    /**
+     * @param args
+     */
     public static void main(String[] args) {
         // System.out.println(Object.class.isAssignableFrom(String.class));
         // compareTest(new Object(), "test");
@@ -81,6 +84,10 @@ public class TemplateTest {
         */
     }
 
+    /**
+     * @param home
+     * @param file
+     */
     public static void test(String home, String file) {
         try {
             SourceFactory sourceFactory = new DefaultSourceFactory("webapp");
@@ -149,6 +156,9 @@ public class TemplateTest {
         }
     }
 
+    /**
+     * @param pageContext
+     */
     public static void setTestData(PageContext pageContext) {
         User user = new User();
         user.setUserId(1L);
@@ -160,6 +170,9 @@ public class TemplateTest {
         pageContext.setAttribute("userList", userList);
     }
 
+    /**
+     * @throws Exception
+     */
     public static void test1() throws Exception {
         TemplateContext templateContext = TemplateManager.getTemplateContext("webapp");
 
@@ -185,6 +198,9 @@ public class TemplateTest {
         // System.out.println(writer.toString());
     }
 
+    /**
+     *
+     */
     public static void test2() {
         StringWriter writer = new StringWriter();
         TemplateContext templateContext = TemplateManager.getTemplateContext("webapp");
@@ -202,6 +218,9 @@ public class TemplateTest {
         System.out.println(result.getClass().getName() + ": " + result);
     }
 
+    /**
+     *
+     */
     public static void test3() {
         try {
             StringWriter writer = new StringWriter();
@@ -219,6 +238,9 @@ public class TemplateTest {
         }
     }
 
+    /**
+     *
+     */
     public static void noFileTest() {
         Source source = new Source("webapp", "1.jsp", "<c:out value=\"123\"/>", Source.SCRIPT);
         SourceFactory sourceFactory = new MemorySourceFactory(source);
@@ -250,6 +272,9 @@ public class TemplateTest {
         }
     }
 
+    /**
+     *
+     */
     public static void classPathTest() {
         try {
             String home = "com/skin/ayada/demo";
@@ -277,6 +302,10 @@ public class TemplateTest {
         }
     }
 
+    /**
+     * @param v1
+     * @param v2
+     */
     public static void compareTest(Object v1, Object v2) {
         System.out.println((v1 instanceof Comparable<?>));
         Class<?> t1 = v1.getClass();
@@ -290,6 +319,9 @@ public class TemplateTest {
         }
     }
 
+    /**
+     *
+     */
     public static void stringTest() {
         try {
             TemplateFactory templateFactory = new TemplateFactory();

@@ -30,11 +30,15 @@ public class DefaultJspFragment implements JspFragment {
     private int offset;
     private int length;
 
+    /**
+     *
+     */
     public DefaultJspFragment() {
     }
 
     /**
      * @param template
+     * @param statements
      * @param pageContext
      */
     public DefaultJspFragment(Template template, Statement[] statements, PageContext pageContext) {

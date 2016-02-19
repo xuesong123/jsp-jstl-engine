@@ -29,10 +29,16 @@ public class ChooseTag extends TagSupport {
         return Tag.EVAL_BODY_INCLUDE;
     }
 
+    /**
+     * @return boolean
+     */
     public boolean complete() {
         return this.flag;
     }
 
+    /**
+     *
+     */
     public void finish() {
         this.flag = true;
     }

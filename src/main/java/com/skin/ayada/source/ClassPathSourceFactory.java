@@ -25,6 +25,9 @@ import com.skin.ayada.util.IO;
 public class ClassPathSourceFactory extends SourceFactory {
     private ClassLoader classLoader;
 
+    /**
+     *
+     */
     public ClassPathSourceFactory() {
     }
 

@@ -25,6 +25,9 @@ import javax.servlet.http.HttpServletResponse;
 public class AyadaView {
     String templateContext;
 
+    /**
+     *
+     */
     public AyadaView() {
     }
 

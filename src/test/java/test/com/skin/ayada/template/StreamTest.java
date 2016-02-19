@@ -36,6 +36,9 @@ public class StreamTest {
         System.out.println("content: [" + content + "]");
     }
 
+    /**
+     *
+     */
     public static void test1() {
         StreamTest st = new StreamTest();
         String source = " % \\ / a=\"1\" % b=\"2\" \\ / c=\"3\" d=\"4\" %%///\\\\%>abc</jsp:scriptlet   >abc";
@@ -62,6 +65,7 @@ public class StreamTest {
 
     /**
      * read node name, after read nodeName
+     * @param stream
      * @return String
      */
     public Map<String, String> getAttributes(StringStream stream) {
@@ -206,6 +210,7 @@ public class StreamTest {
 
     /**
      * skip crlf
+     * @param stream
      */
     public void skipCRLF(StringStream stream) {
         while(stream.peek() == '\r') {
@@ -219,6 +224,7 @@ public class StreamTest {
     }
 
     /**
+     * @param stream
      * @param nodeName
      * @return String
      */
@@ -249,6 +255,7 @@ public class StreamTest {
     }
 
     /**
+     * @param stream
      * @param nodeName
      * @return String
      */
@@ -311,6 +318,7 @@ public class StreamTest {
     }
 
     /**
+     * @param stream
      * @param nodeName
      * @return boolean
      */

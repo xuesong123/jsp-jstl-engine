@@ -21,7 +21,7 @@ import java.util.Map;
  * @version 1.0
  */
 public class TagLibraryManager {
-    public static final Map<String, Map<String, TagInfo>> cache = new HashMap<String, Map<String, TagInfo>>();
+    private static final Map<String, Map<String, TagInfo>> cache = new HashMap<String, Map<String, TagInfo>>();
 
     /**
      * @param prefix

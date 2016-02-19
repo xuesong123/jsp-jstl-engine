@@ -35,6 +35,7 @@ public class ConstructorTag extends TagSupport {
      * @param tag
      * @param type
      * @param value
+     * @throws Exception
      */
     public static void setArgument(Tag tag, String type, Object value) throws Exception {
         if(tag instanceof ConstructorTagSupport) {

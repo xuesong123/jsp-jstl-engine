@@ -25,7 +25,7 @@ import test.com.skin.ayada.model.User;
 public class UserHandler {
     /**
      * @param userId
-     * @return
+     * @return User
      */
     public static User getUserById(long userId) {
         User user = new User();

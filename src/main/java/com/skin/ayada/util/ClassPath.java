@@ -21,10 +21,16 @@ import java.util.regex.Pattern;
  * @version 1.0
  */
 public class ClassPath {
+    /**
+     * @param args
+     */
     public static void main(String[] args) {
         System.out.println(getSystemClassPath());
     }
 
+    /**
+     * @return String
+     */
     public static String getClassPath() {
         return WebUtil.getClassPath();
     }

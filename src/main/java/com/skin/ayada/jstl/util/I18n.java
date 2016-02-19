@@ -23,6 +23,9 @@ import com.skin.ayada.jstl.fmt.LocalizationContext;
  * @version 1.0
  */
 public class I18n {
+    /**
+     *
+     */
     public I18n() {
     }
 

@@ -64,6 +64,7 @@ public class BufferTag extends BodyTagSupport {
     }
 
     /**
+     * @param object
      * @param name
      * @param value
      * @throws Exception

@@ -24,10 +24,17 @@ public class HeaderEntry implements java.lang.Cloneable {
     private String name;
     private List<String> values;
 
+    /**
+     * @param name
+     */
     public HeaderEntry(String name) {
         this(name, new String[0]);
     }
 
+    /**
+     * @param name
+     * @param values
+     */
     public HeaderEntry(String name, String[] values) {
         this.name = name;
         this.values = new ArrayList<String>();
@@ -36,6 +43,10 @@ public class HeaderEntry implements java.lang.Cloneable {
         }
     }
 
+    /**
+     * @param name
+     * @param values
+     */
     public HeaderEntry(String name, List<String> values) {
         this.name = name;
         this.values = values;
@@ -66,6 +77,9 @@ public class HeaderEntry implements java.lang.Cloneable {
         this.values.add(value);
     }
 
+    /**
+     * @return String
+     */
     public String getHeader() {
         if(this.values.size() > 0) {
             return this.values.get(0);

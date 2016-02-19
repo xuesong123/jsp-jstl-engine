@@ -33,6 +33,9 @@ public class TestTag extends TagSupport {
     private String myString;
     private Object myObject;
 
+    /**
+     *
+     */
     public TestTag() {
     }
 

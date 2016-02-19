@@ -19,11 +19,15 @@ import java.io.StringWriter;
  * <p>Copyright: Copyright (c) 2006</p>
  * @author xuesong.net
  * @version 1.0
+ * @param <E>
  */
 public class Stack<E> {
     private int index = -1;
     private transient Object[] stack;
 
+    /**
+     *
+     */
     public Stack() {
         this(32);
     }
@@ -91,6 +95,10 @@ public class Stack<E> {
         return this.element(this.index + i);
     }
 
+    /**
+     * @param i
+     * @return E
+     */
     @SuppressWarnings("unchecked")
     public E element(int i) {
         if(i > -1 && i <= this.index) {
@@ -106,6 +114,9 @@ public class Stack<E> {
         return this.index + 1;
     }
 
+    /**
+     *
+     */
     public void print() {
         this.print(new PrintWriter(System.out));
     }

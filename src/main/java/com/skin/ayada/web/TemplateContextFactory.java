@@ -51,9 +51,15 @@ public class TemplateContextFactory {
     private String expressionFactoryClass;
     private static final Logger logger = LoggerFactory.getLogger(TemplateContextFactory.class);
 
+    /**
+     *
+     */
     public TemplateContextFactory() {
     }
 
+    /**
+     * @return TemplateContext
+     */
     public TemplateContext create() {
         if(this.home.startsWith("contextPath:")) {
             this.home = WebUtil.getRealPath(this.home.substring(12).trim());

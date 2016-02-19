@@ -32,6 +32,9 @@ public class MemMonitor {
     private long total = 0L;
     private Object lock = new Object();
 
+    /**
+     *
+     */
     public MemMonitor() {
         this.start = System.currentTimeMillis();
         this.test();

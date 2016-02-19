@@ -26,6 +26,9 @@ import java.util.Set;
 public class HttpHeader implements java.util.Map<String, HeaderEntry>, java.lang.Cloneable {
     private Map<String, HeaderEntry> headers;
 
+    /**
+     *
+     */
     public HttpHeader() {
         this.headers = new LinkedHashMap<String, HeaderEntry>();
     }

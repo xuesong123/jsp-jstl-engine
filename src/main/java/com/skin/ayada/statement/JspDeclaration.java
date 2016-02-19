@@ -17,6 +17,9 @@ package com.skin.ayada.statement;
  * @version 1.0
  */
 public class JspDeclaration extends DataNode {
+    /**
+     *
+     */
     public JspDeclaration() {
         super(NodeType.JSP_DECLARATION_NAME, NodeType.JSP_DECLARATION);
         this.setClosed(NodeType.PAIR_CLOSED);

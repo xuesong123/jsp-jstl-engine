@@ -31,6 +31,9 @@ public class TagLibraryFactoryTest {
         test2();
     }
 
+    /**
+     *
+     */
     public static void test1() {
         TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();
         Map<String, TagInfo> library = tagLibrary.getLibrary();
@@ -55,6 +58,9 @@ public class TagLibraryFactoryTest {
         System.out.println("        ];");
     }
 
+    /**
+     *
+     */
     public static void test2() {
         TagLibrary tagLibrary = TagLibraryFactory.getStandardTagLibrary();
         Map<String, TagInfo> library = tagLibrary.getLibrary();

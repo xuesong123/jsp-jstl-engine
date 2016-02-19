@@ -58,7 +58,7 @@ public class DataSetTag extends BodyTagSupport {
     protected static DataSet getDataSet(Object value) {
         return (DataSet)value;
     }
-    
+
     /**
      * @return the value
      */

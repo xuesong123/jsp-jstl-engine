@@ -42,6 +42,11 @@ public class TagFactoryManager {
         classPool.appendClassPath(new ClassClassPath(DefaultTagFactory.class));
     }
 
+    /**
+     * @param tagName
+     * @param tagClassName
+     * @return Tag
+     */
     public static Tag getTag(String tagName, String tagClassName) {
         TagFactoryManager tagFactoryManager = TagFactoryManager.getInstance();
         TagFactory tagFactory = tagFactoryManager.getTagFactory(tagName, tagClassName);
@@ -61,6 +66,7 @@ public class TagFactoryManager {
     }
 
     /**
+     * @param tagName
      * @param className
      * @return TagFactory
      */
@@ -85,6 +91,7 @@ public class TagFactoryManager {
     }
 
     /**
+     * @param tagName
      * @param className
      * @return TagFactory
      */
