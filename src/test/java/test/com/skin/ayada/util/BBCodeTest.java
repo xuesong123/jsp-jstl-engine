@@ -24,7 +24,7 @@ public class BBCodeTest {
      * @param args
      */
     public static void main(String[] args) {
-        test1();
+        test2();
     }
 
     /**
@@ -78,6 +78,15 @@ public class BBCodeTest {
 
         System.out.println("---------------------------------");
         result = BBCode.remove(source.toString());
+        System.out.println(result);
+    }
+    
+    /**
+     * 
+     */
+    public static void test2() {
+        String source = "[test]134[/test]";
+        String result = BBCode.decode(source);
         System.out.println(result);
     }
 

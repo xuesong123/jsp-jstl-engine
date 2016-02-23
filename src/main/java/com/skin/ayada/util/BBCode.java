@@ -35,11 +35,12 @@ public class BBCode {
     private static final Map<String, String> sig = new HashMap<String, String>();
 
     static {
-        sig.put("img",   "1");
-        sig.put("audio", "1");
-        sig.put("attach", "1");
+        sig.put("img",       "1");
+        sig.put("emot",      "1");
+        sig.put("flash",     "1");
+        sig.put("audio",     "1");
+        sig.put("attach",    "1");
         sig.put("attachimg", "1");
-        sig.put("flash", "1");
     }
 
     /**
@@ -98,7 +99,6 @@ public class BBCode {
                             if(DEBUG) {
                                 logger.debug("[name: " + name + "] --- ERROR ---");
                             }
-
                             begin = k + 1;
                         }
                     }
