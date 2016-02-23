@@ -134,30 +134,81 @@ public class HtmlUtil {
             return "";
         }
 
-        int s = 0;
-        int e = 0;
-        int k = 0;
+        char c;
+        String nodeName = null;
+        StringBuilder temp = new StringBuilder();
         StringBuilder buffer = new StringBuilder();
 
-        do {
-            e = source.indexOf('<', s);
+        for(int i = 0, length = source.length(); i < length; i++) {
+            c = source.charAt(i);
 
-            if(e < 0) {
-                buffer.append(HtmlUtil.encode(source.substring(s)));
-                break;
-            }
-            k = source.indexOf('>', e + 1);
+            if(c == '<') {
+                int j = i + 1;
 
-            if(k > -1) {
-                buffer.append(HtmlUtil.encode(source.substring(s, e)));
-                s = k + 1;
+                for(; j < length; j++) {
+                    c = source.charAt(j);
+
+                    if(Character.isWhitespace(c) || Character.isISOControl(c) || c == '/' || c == '>') {
+                        break;
+                    }
+                    else {
+                        temp.append(Character.toLowerCase(c));
+                    }
+                }
+
+                j = source.indexOf('>', j);
+
+                if(j < 0) {
+                    break;
+                }
+
+                nodeName = temp.toString();
+                temp.setLength(0);
+
+                if(nodeName.equals("script") || nodeName.equals("style")) {
+                    for(j++; j < length; j++) {
+                        c = source.charAt(j);
+
+                        if(c == '<' && j + 1 < length && source.charAt(j + 1) == '/') {
+                            for(j += 2; j < length; j++) {
+                                c = source.charAt(j);
+
+                                if(Character.isWhitespace(c) || Character.isISOControl(c) || c == '/' || c == '>') {
+                                    break;
+                                }
+                                else {
+                                    temp.append(Character.toLowerCase(c));
+                                }
+                            }
+
+                            nodeName = temp.toString();
+                            temp.setLength(0);
+
+                            if(nodeName.equals("script") || nodeName.equals("style")) {
+                                j = source.indexOf('>', j);
+
+                                if(j > -1) {
+                                    j++;
+                                }
+
+                                break;
+                            }
+                            else {
+                                j += 2;
+                            }
+                        }
+                    }
+
+                    if(j < 0) {
+                        break;
+                    }
+                }
+                i = j;
             }
             else {
-                buffer.append(HtmlUtil.encode(source.substring(s)));
-                break;
+                buffer.append(c);
             }
         }
-        while(true);
         return buffer.toString();
     }
 }
