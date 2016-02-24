@@ -18,6 +18,8 @@ package com.skin.ayada.jstl.util;
  * @version 1.0
  */
 public class BBCode {
+    private com.skin.ayada.bbcode.BBCode bbcode = com.skin.ayada.bbcode.BBCode.getInstance();
+    
     /**
      * @param name
      * @param attributes
@@ -25,7 +27,7 @@ public class BBCode {
      * @return String
      */
     public String encode(String name, String attributes, String value) {
-        return com.skin.ayada.util.BBCode.getHtml(name, attributes, value);
+        return this.bbcode.getHtml(name, attributes, value);
     }
 
     /**
@@ -33,7 +35,7 @@ public class BBCode {
      * @return String
      */
     public String decode(String source) {
-        return com.skin.ayada.util.BBCode.decode(source);
+        return this.bbcode.decode(source);
     }
 
     /**
@@ -43,7 +45,7 @@ public class BBCode {
      * @return String
      */
     public String getHtml(String name, String attributes, String value) {
-        return com.skin.ayada.util.BBCode.getHtml(name, attributes, value);
+        return this.bbcode.getHtml(name, attributes, value);
     }
 
     /**
@@ -53,7 +55,7 @@ public class BBCode {
      * @return String
      */
     public String replace(String source, String search, String replacement) {
-        return com.skin.ayada.util.BBCode.replace(source, search, replacement);
+        return com.skin.ayada.bbcode.BBCode.replace(source, search, replacement);
     }
 
     /***
@@ -61,6 +63,6 @@ public class BBCode {
      * @return String
      */
     public String remove(String source) {
-        return com.skin.ayada.util.BBCode.remove(source);
+        return com.skin.ayada.bbcode.BBCode.remove(source);
     }
 }

@@ -8,18 +8,15 @@
  * This software is the proprietary information of Skin, Inc.
  * Use is subject to license terms.
  */
-package com.skin.ayada.util;
+package com.skin.ayada.bbcode;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.skin.ayada.util.HtmlUtil;
 
 /**
  * <p>Title: BBCode</p>
@@ -29,25 +26,73 @@ import org.slf4j.LoggerFactory;
  * @version 1.0
  */
 public class BBCode {
+    private Map<String, String> config;
+    private Map<String, String> closed;
     private static Logger logger = LoggerFactory.getLogger(BBCode.class);
-    private static final boolean DEBUG = logger.isDebugEnabled();
-    private static final Map<String, String> map = BBCode.load();
-    private static final Map<String, String> sig = new HashMap<String, String>();
 
-    static {
-        sig.put("img",       "1");
-        sig.put("emot",      "1");
-        sig.put("flash",     "1");
-        sig.put("audio",     "1");
-        sig.put("attach",    "1");
-        sig.put("attachimg", "1");
+    /**
+     * @param config
+     * @param closed
+     */
+    public BBCode(Map<String, String> config, Map<String, String> closed) {
+        this.config = new HashMap<String, String>();
+        this.closed = new HashMap<String, String>();
+        this.config.putAll(config);
+        this.closed.putAll(closed);
+    }
+
+    /**
+     * @return BBCode
+     */
+    public static BBCode getInstance() {
+        return BBCodeFactory.getInstance();
+    }
+
+    /**
+     * @param name
+     * @param value
+     */
+    public void setConfig(String name, String value) {
+        if(value != null) {
+            this.config.put(name, value);
+        }
+        else {
+            this.config.remove(name);
+        }
+    }
+
+    /**
+     * @param name
+     * @param type
+     */
+    public void setClosed(String name, String type) {
+        if(type != null) {
+            this.closed.put(name, type);
+        }
+        else {
+            this.closed.remove(name);
+        }
+    }
+
+    /**
+     * @return Map<String, String>
+     */
+    public Map<String, String> getConfig() {
+        return this.config;
+    }
+
+    /**
+     * @return Map<String, String>
+     */
+    public Map<String, String> getClosed() {
+        return this.closed;
     }
 
     /**
      * @param source
      * @return String
      */
-    public static String decode(String source) {
+    public String decode(String source) {
         if(source == null) {
             return "";
         }
@@ -81,14 +126,17 @@ public class BBCode {
                         name = content;
                     }
 
-                    if(sig.get(name) != null) {
+                    if(this.closed.get(name) != null) {
+                        /**
+                         * 标签内容是value
+                         */
                         m = source.indexOf("[/" + name + "]", k + 1);
 
                         if(m > -1) {
                             String value = source.substring(k + 1, m);
                             String html = getHtml(name, attributes, value);
 
-                            if(DEBUG) {
+                            if(logger.isDebugEnabled()) {
                                 logger.debug("[name: " + name + ", attributes: " + attributes + ", value: " + value + "]: " + html);
                             }
 
@@ -96,17 +144,19 @@ public class BBCode {
                             begin = m + name.length() + 3;
                         }
                         else {
-                            if(DEBUG) {
+                            if(logger.isDebugEnabled()) {
                                 logger.debug("[name: " + name + "] --- ERROR ---");
                             }
                             begin = k + 1;
                         }
                     }
                     else {
-                        if(DEBUG) {
+                        /**
+                         * 不关心标签内容
+                         */
+                        if(logger.isDebugEnabled()) {
                             logger.debug("[name: " + name + ", attributes: " + attributes + ", value: #null#]: " + getHtml(name, attributes, null));
                         }
-
                         buffer.append(getHtml(name, attributes, null));
                         begin = k + 1;
                     }
@@ -130,8 +180,8 @@ public class BBCode {
      * @param value
      * @return String
      */
-    public static String getHtml(String name, String attributes, String value) {
-        String html = map.get(name);
+    public String getHtml(String name, String attributes, String value) {
+        String html = this.config.get(name);
 
         if(html != null) {
             if(value != null) {
@@ -140,7 +190,6 @@ public class BBCode {
                 if(temp.length() >= 10 && temp.toLowerCase().startsWith("javascript")) {
                     temp = "";
                 }
-
                 html = replace(html, "${value}", HtmlUtil.encode(temp));
             }
             else {
@@ -359,78 +408,5 @@ public class BBCode {
             return "";
         }
         return source;
-    }
-
-    /**
-     * @return Map<String, String>
-     */
-    private static Map<String, String> load() {
-        ClassLoader classLoader = BBCode.class.getClassLoader();
-        Map<String, String> map1 = load(classLoader, "ayada-bbcode-default.properties");
-        Map<String, String> map2 = load(classLoader, "ayada-bbcode.properties");
-        map1.putAll(map2);
-        return map1;
-    }
-
-    /**
-     * @param classLoader
-     * @param resource
-     * @return Map<String, String>
-     */
-    private static Map<String, String> load(ClassLoader classLoader, String resource) {
-        InputStream inputStream = null;
-        InputStreamReader inputStreamReader = null;
-        BufferedReader bufferedReader = null;
-        Map<String, String> map = new LinkedHashMap<String, String>();
-
-        try {
-            inputStream = classLoader.getResourceAsStream(resource);
-
-            if(inputStream == null) {
-                return map;
-            }
-
-            inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
-            bufferedReader = new BufferedReader(inputStreamReader);
-
-            int k = 0;
-            String key = null;
-            String line = null;
-            String value = null;
-            while((line = bufferedReader.readLine()) != null) {
-                line = line.trim();
-
-                if(line.length() < 1) {
-                    continue;
-                }
-
-                if(line.startsWith("#")) {
-                    continue;
-                }
-
-                k = line.indexOf(" ");
-
-                if(k > -1) {
-                    key = line.substring(0, k).trim();
-                    value = line.substring(k + 1).trim();
-
-                    if(key.length() > 0 && value.length() > 0) {
-                        map.put(key, value);
-                    }
-                }
-            }
-        }
-        catch(IOException e) {
-        }
-        finally {
-            if(inputStream != null) {
-                try {
-                    inputStream.close();
-                }
-                catch(IOException e) {
-                }
-            }
-        }
-        return map;
     }
 }

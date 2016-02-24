@@ -10,7 +10,7 @@
  */
 package test.com.skin.ayada.util;
 
-import com.skin.ayada.util.BBCode;
+import com.skin.ayada.bbcode.BBCode;
 
 /**
  * <p>Title: BBCodeTest</p>
@@ -24,27 +24,7 @@ public class BBCodeTest {
      * @param args
      */
     public static void main(String[] args) {
-        test2();
-    }
-
-    /**
-     *
-     */
-    public static void evaluateTest() {
-        String source = "<embd ${width=\"#1\"} ${height=\"#2\"}/>";
-        String[] replacement = new String[]{"1", "2"};
-        String result = BBCode.evaluate(source, replacement);
-        System.out.println(result);
-    }
-
-    /**
-     *
-     */
-    public static void replaceTest() {
-        String source = "width=\"#1\"";
-        String[] replacement = new String[]{"1", "2"};
-        String result = BBCode.replace(source, replacement);
-        System.out.println(result);
+        test1();
     }
 
     /**
@@ -73,7 +53,8 @@ public class BBCodeTest {
         System.out.println("012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789");
         System.out.println(source);
 
-        String result = BBCode.decode(source.toString());
+        BBCode bbcode = BBCode.getInstance();
+        String result = bbcode.decode(source.toString());
         System.out.println(result);
 
         System.out.println("---------------------------------");
@@ -86,7 +67,27 @@ public class BBCodeTest {
      */
     public static void test2() {
         String source = "[test]134[/test]";
-        String result = BBCode.decode(source);
+        String result = BBCode.getInstance().decode(source);
+        System.out.println(result);
+    }
+
+    /**
+     *
+     */
+    public static void evaluateTest() {
+        String source = "<embd ${width=\"#1\"} ${height=\"#2\"}/>";
+        String[] replacement = new String[]{"1", "2"};
+        String result = BBCode.evaluate(source, replacement);
+        System.out.println(result);
+    }
+
+    /**
+     *
+     */
+    public static void replaceTest() {
+        String source = "width=\"#1\"";
+        String[] replacement = new String[]{"1", "2"};
+        String result = BBCode.replace(source, replacement);
         System.out.println(result);
     }
 
