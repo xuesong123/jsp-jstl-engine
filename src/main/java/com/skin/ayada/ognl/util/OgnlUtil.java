@@ -33,14 +33,10 @@ public class OgnlUtil {
      * @param context
      * @param root
      * @return Object
+     * @throws Exception
      */
-    public static Object getValue(String expression, OgnlContext context, Object root) {
-        try {
-            return Ognl.getValue(compile(expression), context, root);
-        }
-        catch(Exception e) {
-            throw new RuntimeException(e);
-        }
+    public static Object getValue(String expression, OgnlContext context, Object root) throws Exception {
+        return Ognl.getValue(compile(expression), context, root);
     }
 
     /**
