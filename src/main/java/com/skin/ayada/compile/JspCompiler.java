@@ -1012,7 +1012,7 @@ public class JspCompiler {
 
         if(node.getOffset() == index) {
             if(value != null) {
-                writer.println(indent + parentTagInstanceName + ".setParameter(\"" + name + "\", " + this.getStringExpression(value, false) + ");");
+                writer.println(indent + parentTagInstanceName + ".setParameter(\"" + name + "\", " + this.getValueExpression(value) + ");");
                 return Tag.SKIP_BODY;
             }
             else if(node.getLength() > 2) {
@@ -1659,7 +1659,9 @@ public class JspCompiler {
                     if(this.isJavaIdentifier(node.getTextContent())) {
                         return "pageContext.getAttribute(\"" + node.getTextContent() + "\")";
                     }
-                    return "ExpressionUtil.evaluate(expressionContext, \"" + StringUtil.escape(expression) + "\", null)";
+                    else {
+                        return "ExpressionUtil.evaluate(expressionContext, \"" + StringUtil.escape(expression) + "\", null)";
+                    }
                 }
                 Object constant = ExpressionUtil.getValue(node.getTextContent());
 
@@ -1679,7 +1681,9 @@ public class JspCompiler {
                     return constant.toString();
                 }
             }
-            return "ExpressionUtil.evaluate(expressionContext, \"" + StringUtil.escape(expression) + "\", null)";
+            else {
+                return "ExpressionUtil.evaluate(expressionContext, \"" + StringUtil.escape(expression) + "\", null)";
+            }
         }
         else {
             return null;
