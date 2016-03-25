@@ -206,7 +206,7 @@ public class Request {
             context.put("contextPath", "");
         }
         else {
-            context.put("contextPath", context);
+            context.put("contextPath", contextPath);
         }
     }
 
