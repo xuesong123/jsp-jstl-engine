@@ -63,7 +63,7 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
             return OgnlUtil.getValue(expression, this, this);
         }
         catch(Exception e) {
-            Object ignoreElException = pageContext.getAttribute("ignoreElException");
+            Object ignoreElException = this.pageContext.getAttribute("ignoreElException");
 
             if("false".equals(ignoreElException)) {
                 throw new RuntimeException(e);

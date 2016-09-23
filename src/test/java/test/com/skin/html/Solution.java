@@ -43,7 +43,6 @@ public class Solution {
     /**
      * @param args
      */
-    @SuppressWarnings("resource")
     public static void main1(String[] args) {
         Scanner in = new Scanner(System.in);
 

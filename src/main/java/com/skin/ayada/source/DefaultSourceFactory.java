@@ -118,10 +118,6 @@ public class DefaultSourceFactory extends SourceFactory {
             throw new RuntimeException("home: " + this.getHome() + ", file: " + path + " not exists !");
         }
 
-        /**
-         * 原来的代码使用几个不同的File对象构建路径并作检查, 有点重
-         * 改为使用Path类的join方法构建, 较轻
-         */
         String full = Path.join(this.getHome(), path);
         File file = new File(full);
 

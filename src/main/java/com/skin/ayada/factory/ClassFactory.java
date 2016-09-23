@@ -59,6 +59,17 @@ public class ClassFactory {
 
     /**
      * @param parent
+     * @param classPaths
+     * @return ClassLoader
+     * @throws IOException
+     */
+    public static ClassLoader getClassLoader(final ClassLoader parent, final File[] classPaths) throws IOException {
+        URL[] repositories = ClassFactory.getRepositories(classPaths);
+        return ClassFactory.getClassLoader(parent, repositories);
+    }
+
+    /**
+     * @param parent
      * @param repositories
      * @return ClassLoader
      */

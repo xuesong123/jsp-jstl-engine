@@ -43,12 +43,12 @@ public class TemplateFactory {
 
     /**
      * @param sourceFactory
-     * @param file
+     * @param path
      * @param encoding
      * @return Template
      * @throws Exception
      */
-    public Template create(SourceFactory sourceFactory, String file, String encoding) throws Exception {
+    public Template create(SourceFactory sourceFactory, String path, String encoding) throws Exception {
         TagLibrary tagLibrary = null;
 
         if(TemplateConfig.getStandardLibrary()) {
@@ -62,7 +62,7 @@ public class TemplateFactory {
         TemplateCompiler compiler = new TemplateCompiler(sourceFactory);
         compiler.setIgnoreJspTag(this.getIgnoreJspTag());
         compiler.setTagLibrary(tagLibrary);
-        Template template = compiler.compile(file, (encoding != null ? encoding : "utf-8"));
+        Template template = compiler.compile(path, (encoding != null ? encoding : "utf-8"));
         long t2 = System.currentTimeMillis();
 
         if(logger.isDebugEnabled()) {

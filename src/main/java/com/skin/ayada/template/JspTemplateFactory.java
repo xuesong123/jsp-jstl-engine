@@ -81,14 +81,14 @@ public class JspTemplateFactory extends TemplateFactory {
 
     /**
      * @param sourceFactory
-     * @param file
+     * @param path
      * @param encoding
      * @return Template
      * @throws Exception
      */
     @Override
-    public Template create(SourceFactory sourceFactory, String file, String encoding) throws Exception {
-        Template template = super.create(sourceFactory, file, encoding);
+    public Template create(SourceFactory sourceFactory, String path, String encoding) throws Exception {
+        Template template = super.create(sourceFactory, path, encoding);
 
         if(logger.isDebugEnabled()) {
             long t1 = System.currentTimeMillis();
