@@ -23,6 +23,7 @@ import com.skin.ayada.jstl.core.ExitTag;
 import com.skin.ayada.jstl.core.ForEachTag;
 import com.skin.ayada.jstl.core.IfTag;
 import com.skin.ayada.jstl.core.OtherwiseTag;
+import com.skin.ayada.jstl.core.OutTag;
 import com.skin.ayada.jstl.core.ParameterTag;
 import com.skin.ayada.jstl.core.PrintTag;
 import com.skin.ayada.jstl.core.PropertyTag;
@@ -43,6 +44,7 @@ public class FastJstl {
     static {
         map.put(IfTag.class.getName(), "1");
         map.put(SetTag.class.getName(), "1");
+        map.put(OutTag.class.getName(), "1");
         map.put(ForEachTag.class.getName(), "1");
         map.put(ChooseTag.class.getName(), "1");
         map.put(WhenTag.class.getName(), "1");

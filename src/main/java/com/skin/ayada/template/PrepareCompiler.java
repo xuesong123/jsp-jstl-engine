@@ -11,6 +11,7 @@
 package com.skin.ayada.template;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +32,7 @@ import com.skin.ayada.util.Path;
  * @version 1.0
  */
 public class PrepareCompiler {
+    private PrintWriter out;
     protected List<String> excludes;
     private TemplateContext templateContext;
     private static final Logger logger = LoggerFactory.getLogger(PrepareCompiler.class);
@@ -90,12 +92,14 @@ public class PrepareCompiler {
                     }
                     else {
                         stack.remove(index);
+                        this.info("compile: " + home + path);
                         logger.info("compile - home: {}, file: {}", home, path);
                         this.templateContext.getTemplate(path);
                     }
                 }
                 else {
                     stack.remove(index);
+                    this.info("exclude: " + home + path);
                     logger.info("exclude - home: {}, file: {}", home, path);
                 }
             }
@@ -122,17 +126,28 @@ public class PrepareCompiler {
                         compile2(home, file);
                     }
                     else {
+                        this.info("compile: " + home + path);
                         logger.info("compile - home: {}, file: {}", home, path);
                         this.templateContext.getTemplate(path);
                     }
                 }
                 else {
+                    this.info("exclude: " + home + path);
                     logger.info("exclude - home: {}, file: {}", home, path);
                 }
             }
         }
         catch (Exception e) {
             logger.error(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * @param message
+     */
+    public void info(String message) {
+        if(this.out != null) {
+            this.out.println(message);
         }
     }
 
@@ -167,5 +182,19 @@ public class PrepareCompiler {
             }
         }
         return false;
+    }
+
+    /**
+     * @return the out
+     */
+    public PrintWriter getOut() {
+        return this.out;
+    }
+
+    /**
+     * @param out the out to set
+     */
+    public void setOut(PrintWriter out) {
+        this.out = out;
     }
 }
