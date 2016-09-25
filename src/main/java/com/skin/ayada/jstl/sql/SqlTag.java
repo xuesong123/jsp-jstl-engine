@@ -15,13 +15,13 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.sql.Connection;
 
+import com.skin.ayada.database.SqlLogger;
+import com.skin.ayada.database.SqlPlus;
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTag;
 import com.skin.ayada.tagext.BodyTagSupport;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.tagext.TagSupport;
-import com.skin.ayada.util.LogListener;
-import com.skin.ayada.util.SqlPlus;
 
 /**
  * <p>Title: SqlTag</p>
@@ -55,8 +55,8 @@ public class SqlTag extends BodyTagSupport {
             throw new NullPointerException("connection must be not null");
         }
 
-        LogListener logListener = SqlTag.getLogListener(this.out);
-        SqlPlus sqlPlus = new SqlPlus(this.connection, logListener);
+        SqlLogger sqlLogger = SqlTag.getSqlLogger(this.out);
+        SqlPlus sqlPlus = new SqlPlus(this.connection, sqlLogger);
         sqlPlus.setHome(this.home);
 
         if(this.encoding == null) {
@@ -101,17 +101,17 @@ public class SqlTag extends BodyTagSupport {
 
     /**
      * @param out
-     * @return Logger
+     * @return SqlLogger
      */
-    public static LogListener getLogListener(Object out) {
-        if(out instanceof LogListener) {
-            return (LogListener)(out);
+    public static SqlLogger getSqlLogger(Object out) {
+        if(out instanceof SqlLogger) {
+            return (SqlLogger)(out);
         }
 
         PrintWriter printWriter = TagSupport.getPrintWriter(out);
 
         if(printWriter != null) {
-            return new LogListenerImpl(printWriter);
+            return new SqlLogger.PrintLogger(printWriter);
         }
         return null;
     }

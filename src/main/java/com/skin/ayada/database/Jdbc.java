@@ -8,7 +8,7 @@
  * This software is the proprietary information of Skin, Inc.
  * Use is subject to license terms.
  */
-package com.skin.ayada.util;
+package com.skin.ayada.database;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;

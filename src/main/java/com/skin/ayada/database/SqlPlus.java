@@ -8,7 +8,7 @@
  * This software is the proprietary information of Skin, Inc.
  * Use is subject to license terms.
  */
-package com.skin.ayada.util;
+package com.skin.ayada.database;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,9 +23,6 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * <p>Title: SqlPlus</p>
  * <p>Description: </p>
@@ -36,8 +33,7 @@ import org.slf4j.LoggerFactory;
 public class SqlPlus {
     private String home;
     private Connection connection;
-    private LogListener logListener;
-    private static final Logger logger = LoggerFactory.getLogger(SqlPlus.class);
+    private SqlLogger logger;
 
     /**
      */
@@ -49,40 +45,36 @@ public class SqlPlus {
      */
     public SqlPlus(Connection connection) {
         this.connection = connection;
+        this.logger = SqlLogger.stdout;
     }
 
     /**
      * @param connection
-     * @param logListener
+     * @param logger
      */
-    public SqlPlus(Connection connection, LogListener logListener) {
+    public SqlPlus(Connection connection, SqlLogger logger) {
         this.connection = connection;
-        this.logListener = logListener;
+        this.logger = logger;
     }
 
     /**
      * @param inputStream
      * @param encoding
      * @throws IOException
+     * @throws SQLException
      */
-    public void execute(InputStream inputStream, String encoding) throws IOException {
+    public void execute(InputStream inputStream, String encoding) throws IOException, SQLException {
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-
-        try {
-            this.execute(inputStreamReader, encoding);
-        }
-        catch(Exception e) {
-            logger.warn(e.getMessage(), e);
-        }
+        this.execute(inputStreamReader, encoding);
     }
 
     /**
      * @param file
      * @param encoding
-     * @throws Exception
      * @throws IOException
+     * @throws SQLException
      */
-    public void execute(File file, String encoding) throws Exception {
+    public void execute(File file, String encoding) throws IOException, SQLException {
         Reader reader = null;
         InputStream inputStream = null;
 
@@ -113,9 +105,10 @@ public class SqlPlus {
     /**
      * @param reader
      * @param encoding
-     * @throws Exception
+     * @throws IOException
+     * @throws SQLException
      */
-    public void execute(Reader reader, String encoding) throws Exception {
+    public void execute(Reader reader, String encoding) throws IOException, SQLException {
         Statement statement = null;
         BufferedReader bufferedReader = null;
 
@@ -341,7 +334,6 @@ public class SqlPlus {
             }
         }
         catch(SQLException e) {
-            logger.warn(e.getMessage(), e);
         }
     }
 
@@ -354,11 +346,11 @@ public class SqlPlus {
             }
         }
         catch(SQLException e) {
-            logger.warn(e.getMessage(), e);
         }
     }
 
     /**
+     * close the connection
      */
     protected void disconnect() {
         try {
@@ -367,7 +359,6 @@ public class SqlPlus {
             }
         }
         catch(SQLException e) {
-            logger.warn(e.getMessage(), e);
         }
     }
 
@@ -456,8 +447,8 @@ public class SqlPlus {
      * @param info
      */
     public void log(String info) {
-        if(this.logListener != null) {
-            this.logListener.log(info);
+        if(this.logger != null) {
+            this.logger.log(info);
         }
     }
 
@@ -476,17 +467,17 @@ public class SqlPlus {
     }
 
     /**
-     * @return the logListener
+     * @return the logger
      */
-    public LogListener getLogListener() {
-        return this.logListener;
+    public SqlLogger getLogger() {
+        return this.logger;
     }
 
     /**
-     * @param logListener the logListener to set
+     * @param logger the logger to set
      */
-    public void setLogListener(LogListener logListener) {
-        this.logListener = logListener;
+    public void setLogger(SqlLogger logger) {
+        this.logger = logger;
     }
 
     /**

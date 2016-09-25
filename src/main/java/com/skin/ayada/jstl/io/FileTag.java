@@ -79,7 +79,6 @@ public abstract class FileTag extends TagSupport {
                         }
                     }
                 }
-
                 this.process(f);
             }
         }

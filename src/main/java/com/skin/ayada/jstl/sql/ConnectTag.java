@@ -13,10 +13,10 @@ package com.skin.ayada.jstl.sql;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import com.skin.ayada.database.Jdbc;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.tagext.TagSupport;
 import com.skin.ayada.tagext.TryCatchFinally;
-import com.skin.ayada.util.Jdbc;
 
 /**
  * <p>Title: ConnectTag</p>
