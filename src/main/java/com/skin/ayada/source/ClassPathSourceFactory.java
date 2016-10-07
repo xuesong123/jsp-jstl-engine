@@ -72,37 +72,14 @@ public class ClassPathSourceFactory extends SourceFactory {
             IO.close(inputStream);
         }
     }
+    
 
-    /**
-     * @param path
-     * @return long
-     */
-    @Override
-    public long getLastModified(String path) {
-        URL url = this.getResource(path);
-        return this.getLastModified(url);
-    }
-
-    /**
-     * @param path
-     * @return boolean
-     */
-    @Override
-    public boolean exists(String path) {
-        URL url = null;
-
-        try {
-            url = this.getResource(path);
-        }
-        catch(Exception e) {
-        }
-        return (url != null);
-    }
 
     /**
      * @param path
      * @return URL
      */
+    @Override
     public URL getResource(String path) {
         if(path == null) {
             throw new RuntimeException("path must be not null !");
@@ -140,6 +117,50 @@ public class ClassPathSourceFactory extends SourceFactory {
             throw new RuntimeException(realPath + " can't access !");
         }
         return realUrl;
+    }
+
+    /**
+     * @param path
+     * @return InputStream
+     */
+    @Override
+    public InputStream getInputStream(String path) {
+        try {
+            URL url = this.getResource(path);
+
+            if(url != null) {
+                return url.openStream();
+            }
+        }
+        catch(IOException e) {
+        }
+        return null;
+    }
+
+    /**
+     * @param path
+     * @return long
+     */
+    @Override
+    public long getLastModified(String path) {
+        URL url = this.getResource(path);
+        return this.getLastModified(url);
+    }
+
+    /**
+     * @param path
+     * @return boolean
+     */
+    @Override
+    public boolean exists(String path) {
+        URL url = null;
+
+        try {
+            url = this.getResource(path);
+        }
+        catch(Exception e) {
+        }
+        return (url != null);
     }
 
     /**

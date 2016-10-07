@@ -200,9 +200,6 @@ public class StringUtil {
             c = source.charAt(i);
 
             switch (c) {
-                case '\'': {
-                    buffer.append("\\\'");break;
-                }
                 case '"': {
                     buffer.append("\\\"");break;
                 }

@@ -34,7 +34,7 @@ public class CopyTag extends FileTag {
         File target = new File(this.todir);
 
         if(source.equals(target) == false) {
-            if(source.isFile()) {
+            if(source.exists() && source.isFile()) {
                 IO.copy(source, new File(this.todir, source.getName()));
             }
             else {

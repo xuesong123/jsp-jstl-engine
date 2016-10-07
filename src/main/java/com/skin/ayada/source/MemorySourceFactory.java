@@ -10,6 +10,10 @@
  */
 package com.skin.ayada.source;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,6 +50,35 @@ public class MemorySourceFactory extends SourceFactory {
     @Override
     public Source getSource(String path, String encoding) {
         return this.cache.get(path);
+    }
+
+    /**
+     * @param path
+     * @return URL
+     */
+    @Override
+    public URL getResource(String path) {
+        return null;
+    }
+
+    /**
+     * @param path
+     * @return InputStream
+     */
+    @Override
+    public InputStream getInputStream(String path) {
+        Source source = this.getSource(path, "utf-8");
+
+        if(source != null) {
+            String content = source.getSource();
+
+            try {
+                return new ByteArrayInputStream(content.getBytes("utf-8"));
+            }
+            catch(IOException e) {
+            }
+        }
+        return null;
     }
 
     /**

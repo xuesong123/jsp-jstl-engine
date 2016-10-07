@@ -186,9 +186,10 @@ public class JspCompiler {
             node = list.get(index);
 
             if(node.getNodeType() == NodeType.TEXT) {
+                String content = StringUtil.escape(node.getTextContent());
                 writer.print("    protected static final char[] " + this.getVariableName(node, "_jsp_string_"));
                 writer.print(" = \"");
-                writer.print(StringUtil.escape(node.getTextContent()));
+                writer.print(content);
                 writer.println("\".toCharArray();");
             }
         }
@@ -1723,7 +1724,7 @@ public class JspCompiler {
                     c = source.charAt(i);
 
                     if(c == '}') {
-                        String value = context.get(name.toString());
+                        String value = context.get(name.toString().trim());
 
                         if(value != null) {
                             result.append(value);

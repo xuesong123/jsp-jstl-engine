@@ -156,7 +156,7 @@ public class JspTemplateFactoryTest {
      */
     public static void test4(String[] args) {
         try {
-            String source = IO.read(new File("webapp/allTagTest.jsp"), "UTF-8", 4096);
+            String source = IO.read(new File("webapp/allTagTest.jsp"), "UTF-8");
             System.out.println(crlf(source));
             System.out.println(StringUtil.escape(source));
             // IO.write(crlf(source).getBytes("UTF-8"), new File("webapp/allTagTest.jsp"));

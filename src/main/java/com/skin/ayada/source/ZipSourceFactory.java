@@ -13,11 +13,10 @@ package com.skin.ayada.source;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import com.skin.ayada.source.Source;
-import com.skin.ayada.source.SourceFactory;
 import com.skin.ayada.util.IO;
 
 /**
@@ -91,6 +90,24 @@ public class ZipSourceFactory extends SourceFactory {
                 }
             }
         }
+    }
+
+    /**
+     * @param path
+     * @return URL
+     */
+    @Override
+    public URL getResource(String path) {
+        return null;
+    }
+
+    /**
+     * @param path
+     * @return InputStream
+     */
+    @Override
+    public InputStream getInputStream(String path) {
+        return null;
     }
 
     /**

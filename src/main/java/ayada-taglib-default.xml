@@ -482,8 +482,8 @@
         <description></description>
     </tag>
     
-    
     <tag name="jsp:include" tag-class="com.skin.ayada.taglib.ActionTag" body-content="tagdependent" ignore-whitespace="true" description=""/>
+    <tag name="io:load" tag-class="com.skin.ayada.jstl.io.LoadTag" body-content="tagdependent" ignore-whitespace="true" description=""/>
     <tag name="io:copy" tag-class="com.skin.ayada.jstl.io.CopyTag" body-content="tagdependent" ignore-whitespace="true" description=""/>
     <tag name="io:delete" tag-class="com.skin.ayada.jstl.io.DeleteTag" body-content="tagdependent" ignore-whitespace="true" description=""/>
     <tag name="io:mkdir" tag-class="com.skin.ayada.jstl.io.MakeDirTag" body-content="empty" ignore-whitespace="true" description=""/>

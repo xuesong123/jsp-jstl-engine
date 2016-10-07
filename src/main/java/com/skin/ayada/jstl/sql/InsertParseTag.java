@@ -64,7 +64,7 @@ public class InsertParseTag extends BodyTagSupport {
                 if(this.charset == null) {
                     this.charset = "UTF-8";
                 }
-                sql = IO.read(new File(this.file), this.charset, 2048);
+                sql = IO.read(new File(this.file), this.charset);
             }
             catch(IOException e) {
             }

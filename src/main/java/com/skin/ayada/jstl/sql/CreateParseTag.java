@@ -69,7 +69,7 @@ public class CreateParseTag extends BodyTagSupport {
                     this.charset = "UTF-8";
                 }
 
-                sql = IO.read(new File(this.file), this.charset, 2048);
+                sql = IO.read(new File(this.file), this.charset);
             }
             catch(IOException e) {
             }

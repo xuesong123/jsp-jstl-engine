@@ -11,6 +11,7 @@
 package com.skin.ayada.source;
 
 import java.io.File;
+import java.io.InputStream;
 import java.net.URL;
 
 import com.skin.ayada.config.TemplateConfig;
@@ -26,6 +27,18 @@ import com.skin.ayada.util.StringUtil;
 public abstract class SourceFactory {
     private String home;
     private String sourcePattern = "jsp,jspf,jspx,tpl";
+
+    /**
+     * @param path
+     * @return URL
+     */
+    public abstract URL getResource(String path);
+
+    /**
+     * @param path
+     * @return InputStream
+     */
+    public abstract InputStream getInputStream(String path);
 
     /**
      * @param path

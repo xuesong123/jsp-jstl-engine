@@ -39,7 +39,7 @@ public class XmlTemplateParserTest {
      */
     public static void test1() {
         try {
-            String source = IO.read(new File("webapp\\allTagTest.xml"), "UTF-8", 4096);
+            String source = IO.read(new File("webapp\\allTagTest.xml"), "UTF-8");
             StringReader stringReader = new StringReader(source);
             XmlTemplateParser xmlTemplateParser = new XmlTemplateParser();
             Template template = xmlTemplateParser.parse(stringReader);

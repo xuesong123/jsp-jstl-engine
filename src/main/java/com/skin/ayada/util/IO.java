@@ -31,16 +31,25 @@ public class IO {
     /**
      * @param file
      * @param charset
-     * @param bufferSize
      * @return String
      * @throws IOException
      */
-    public static String read(File file, String charset, int bufferSize) throws IOException {
+    public static String read(File file, String charset) throws IOException {
         InputStream inputStream = null;
 
         try {
             inputStream = new FileInputStream(file);
-            return read(inputStream, charset, bufferSize);
+
+            int length = (int)(file.length());
+            byte[] buffer = new byte[length];
+            inputStream.read(buffer, 0, length);
+
+            if(charset != null) {
+                return new String(buffer, 0, buffer.length, charset);
+            }
+            else {
+                return new String(buffer, 0, buffer.length);
+            }
         }
         finally {
             close(inputStream);

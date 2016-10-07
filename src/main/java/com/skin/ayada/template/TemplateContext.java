@@ -10,7 +10,9 @@
  */
 package com.skin.ayada.template;
 
+import java.io.InputStream;
 import java.io.Writer;
+import java.net.URL;
 import java.util.Map;
 
 import com.skin.ayada.runtime.ExpressionFactory;
@@ -116,6 +118,18 @@ public interface TemplateContext {
      * @return the expressionFactory
      */
     public ExpressionFactory getExpressionFactory();
+
+    /**
+     * @param path
+     * @return URL
+     */
+    public URL getResource(String path);
+
+    /**
+     * @param path
+     * @return InputStream
+     */
+    public InputStream getInputStream(String path);
 
     /**
      * clear the current TemplateContext

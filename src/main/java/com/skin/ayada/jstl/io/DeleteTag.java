@@ -29,7 +29,7 @@ public class DeleteTag extends FileTag {
     public int doEndTag() throws Exception {
         File source = new File(this.getFile());
 
-        if(source.isFile()) {
+        if(source.exists() && source.isFile()) {
             source.delete();
         }
         else {

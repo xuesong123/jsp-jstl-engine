@@ -11,7 +11,9 @@
 package com.skin.ayada.runtime;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Writer;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
@@ -246,6 +248,18 @@ public interface PageContext {
      * @throws IOException
      */
     public void print(BodyContent bodyContent, boolean escapeXml) throws IOException;
+
+    /**
+     * @param path
+     * @return URL
+     */
+    public URL getResource(String path);
+
+    /**
+     * @param path
+     * @return InputStream
+     */
+    public InputStream getInputStream(String path);
 
     /**
      * @param page

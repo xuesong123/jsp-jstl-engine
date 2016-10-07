@@ -10,7 +10,9 @@
  */
 package com.skin.ayada.template;
 
+import java.io.InputStream;
 import java.io.Writer;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -262,6 +264,22 @@ public class DefaultTemplateContext implements TemplateContext {
      */
     private ExpressionContext getExpressionContext(PageContext pageContext) {
         return this.getExpressionFactory().getExpressionContext(pageContext);
+    }
+
+    /**
+     * @param path
+     * @return URL
+     */
+    public URL getResource(String path) {
+        return this.sourceFactory.getResource(path);
+    }
+
+    /**
+     * @param path
+     * @return InputStream
+     */
+    public InputStream getInputStream(String path) {
+        return this.sourceFactory.getInputStream(path);
     }
 
     /**

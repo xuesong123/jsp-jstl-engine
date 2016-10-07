@@ -10,6 +10,9 @@
  */
 package com.skin.ayada.template;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,4 +87,47 @@ public abstract class JspTemplate extends Template {
      * @throws Throwable
      */
     public abstract void _execute(final PageContext pageContext) throws Throwable;
+
+    /**
+     * @param clazz
+     * @param name
+     * @return String
+     */
+    public static String load(Class<?> clazz, String name) {
+        return load(clazz, name, "utf-8");
+    }
+    
+    /**
+     * @param clazz
+     * @param name
+     * @param charset
+     * @return String
+     */
+    public static String load(Class<?> clazz, String name, String charset) {
+        InputStream inputStream = clazz.getResourceAsStream(name);
+
+        if(inputStream != null) {
+            try {
+                int length = 0;
+                byte[] buffer = new byte[4096];
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                
+                while((length = inputStream.read(buffer, 0, 4096)) > 0) {
+                    bos.write(buffer, 0, length);
+                }
+                return new String(bos.toByteArray(), charset);
+            }
+            catch(IOException e) {
+                logger.error(e.getMessage(), e);
+            }
+            finally {
+                try {
+                    inputStream.close();
+                }
+                catch (IOException e) {
+                }
+            }
+        }
+        return null;
+    }
 }

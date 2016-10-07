@@ -169,8 +169,8 @@ public class JspTemplateFactory extends TemplateFactory {
         JspCompiler jspCompiler = new JspCompiler();
         jspCompiler.setFastJstl(fastJstl);
         String source = jspCompiler.compile(template, packageName, simpleName);
-        this.write(source, srcFile);
-        this.write(this.getTemplateDescription(template), tplFile);
+        this.write(srcFile, source);
+        this.write(tplFile, this.getTemplateDescription(template));
         File[] files = classFile.getParentFile().listFiles();
 
         if(classFile.exists()) {
@@ -194,7 +194,7 @@ public class JspTemplateFactory extends TemplateFactory {
             "-d", work,
             "-nowarn",
             "-g",
-            "-encoding", "UTF-8",
+            "-encoding", "utf-8",
             "-classpath", lib,
             "-Xlint:unchecked",
             srcFile.getCanonicalPath()
@@ -223,13 +223,15 @@ public class JspTemplateFactory extends TemplateFactory {
 
         if(status == 0) {
             if(data != null && data.length > 0) {
-                logger.warn(new String(data, "UTF-8"));
+                logger.warn(new String(data, "utf-8"));
+                System.out.println(new String(data, "gbk"));
             }
             return this.load(template, className, new File[]{new File(work)});
         }
         else {
             if(data != null && data.length > 0) {
-                logger.error(new String(data, "UTF-8"));
+                logger.error(new String(data, "utf-8"));
+                System.out.println(new String(data, "gbk"));
             }
             throw new Exception("compile error: " + status);
         }
@@ -383,17 +385,17 @@ public class JspTemplateFactory extends TemplateFactory {
     }
 
     /**
-     * @param source
      * @param file
+     * @param source
      * @throws IOException
      */
-    protected void write(String source, File file) throws IOException {
+    protected void write(File file, String source) throws IOException {
         File parent = file.getParentFile();
 
         if(parent.exists() == false) {
             parent.mkdirs();
         }
-        IO.write(file, source.getBytes("UTF-8"));
+        IO.write(file, source.getBytes("utf-8"));
     }
 
     /**

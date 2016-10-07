@@ -11,7 +11,11 @@
 package com.skin.ayada.source;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import com.skin.ayada.util.IO;
 import com.skin.ayada.util.Path;
@@ -62,15 +66,15 @@ public class DefaultSourceFactory extends SourceFactory {
 
     /**
      * @param path
-     * @param encoding
+     * @param charset
      * @return Source
      */
     @Override
-    public Source getSource(String path, String encoding) {
+    public Source getSource(String path, String charset) {
         File file = this.getFile(path);
 
         try {
-            String content = IO.read(file, encoding, 4096);
+            String content = IO.read(file, charset);
             Source source = new Source(this.getHome(), path, content, this.getSourceType(file.getName()));
             source.setLastModified(file.lastModified());
             return source;
@@ -78,6 +82,43 @@ public class DefaultSourceFactory extends SourceFactory {
         catch(IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * @param path
+     * @return URL
+     */
+    @Override
+    public URL getResource(String path) {
+        try {
+            File file = this.getFile(path);
+
+            if(file != null) {
+                return file.toURI().toURL();
+            }
+        }
+        catch (MalformedURLException e) {
+        }
+        return null;
+    }
+
+    /**
+     * @param path
+     * @return InputStream
+     */
+    @Override
+    public InputStream getInputStream(String path) {
+        try {
+            File file = this.getFile(path);
+
+            if(file != null) {
+                return new FileInputStream(file);
+            }
+        }
+        catch(IOException e) {
+        }
+        return null;
+        
     }
 
     /**

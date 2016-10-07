@@ -50,7 +50,7 @@ public class AssistTest {
             String className = "test.com.skin.ayada.template.Test2";
             CtClass ctClass = classPool.makeClass(className);
             Javac javac = new Javac(ctClass);
-            CtMember ctMember = javac.compile(IO.read(new File("test2body.java"), "UTF-8", 4096));
+            CtMember ctMember = javac.compile(IO.read(new File("test2body.java"), "UTF-8"));
 
             System.out.println(ctMember.getClass().getName());
             System.out.println(ctMember.getName());

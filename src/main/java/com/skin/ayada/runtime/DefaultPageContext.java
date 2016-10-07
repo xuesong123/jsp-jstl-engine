@@ -11,7 +11,9 @@
 package com.skin.ayada.runtime;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Writer;
+import java.net.URL;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -585,6 +587,22 @@ public class DefaultPageContext implements PageContext {
             }
         }
         return buffer.toString();
+    }
+
+    /**
+     * @param path
+     * @return URL
+     */
+    public URL getResource(String path) {
+        return this.templateContext.getResource(path);
+    }
+
+    /**
+     * @param path
+     * @return InputStream
+     */
+    public InputStream getInputStream(String path) {
+        return this.templateContext.getInputStream(path);
     }
 
     /**
