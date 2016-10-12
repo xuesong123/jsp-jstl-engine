@@ -81,6 +81,7 @@ public class DefaultPageContext implements PageContext {
     /**
      * @param key
      * @param value
+     * @return Object
      */
     public Object setAttribute(String key, Object value) {
         if(key == null) {
@@ -103,6 +104,7 @@ public class DefaultPageContext implements PageContext {
 
     /**
      * @param key
+     * @return Object
      */
     public Object removeAttribute(String key) {
         return this.attributes.remove(key);
@@ -224,6 +226,7 @@ public class DefaultPageContext implements PageContext {
     }
 
     /**
+     * @param <T>
      * @param name
      * @param type
      * @return T

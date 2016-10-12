@@ -133,6 +133,7 @@ public interface PageContext {
     public Long getLong(String name);
 
     /**
+     * @param <T>
      * @param name
      * @param type
      * @return T

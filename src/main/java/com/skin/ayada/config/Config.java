@@ -512,6 +512,7 @@ public class Config {
     }
 
     /**
+     * @param <T>
      * @param name
      * @param type
      * @return T

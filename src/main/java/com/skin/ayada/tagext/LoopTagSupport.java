@@ -300,6 +300,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * (Purposely inherit JavaDoc and semantics from LoopTag.
      * Subclasses can override this if necessary, but such a need is
      * expected to be rare.)
+     * @return Object
      */
     public Object getCurrent() {
         return this.item;
@@ -311,6 +312,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * over LoopTagStatus, but an effort has been made to simplify
      * implementation of subclasses that are happy with reasonable default
      * behavior.)
+     * @return LoopTagStatus
      */
     public LoopTagStatus getLoopStatus() {
         // local implementation with reasonable default behavior

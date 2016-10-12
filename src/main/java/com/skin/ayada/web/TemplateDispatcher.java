@@ -201,6 +201,11 @@ public class TemplateDispatcher {
      */
     public void dispatch(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = Path.getStrictPath(request.getRequestURI());
+        String contextPath = this.getContextPath(request);
+
+        if(contextPath.length() > 0 && path.startsWith(contextPath)) {
+            path = path.substring(contextPath.length());
+        }
         this.dispatch(request, response, path);
     }
 
@@ -261,6 +266,19 @@ public class TemplateDispatcher {
                 }
             }
         }
+    }
+
+    /**
+     * @param request
+     * @return String
+     */
+    public String getContextPath(HttpServletRequest request) {
+        String contextPath = request.getContextPath();
+
+        if(contextPath == null || contextPath.equals("/")) {
+            return "";
+        }
+        return contextPath;
     }
 
     /**

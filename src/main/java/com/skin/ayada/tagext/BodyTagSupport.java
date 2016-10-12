@@ -37,7 +37,7 @@ public class BodyTagSupport extends TagSupport implements BodyTag {
     }
 
     /**
-     *
+     * @throws Exception
      */
     public void doInitBody() throws Exception {
     }
