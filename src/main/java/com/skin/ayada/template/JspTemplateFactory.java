@@ -224,14 +224,12 @@ public class JspTemplateFactory extends TemplateFactory {
         if(status == 0) {
             if(data != null && data.length > 0) {
                 logger.warn(new String(data, "utf-8"));
-                System.out.println(new String(data, "gbk"));
             }
             return this.load(template, className, new File[]{new File(work)});
         }
         else {
             if(data != null && data.length > 0) {
                 logger.error(new String(data, "utf-8"));
-                System.out.println(new String(data, "gbk"));
             }
             throw new Exception("compile error: " + status);
         }
