@@ -207,7 +207,7 @@ public class JspTemplateFactory extends TemplateFactory {
         javax.tools.JavaCompiler javaCompiler = javax.tools.ToolProvider.getSystemJavaCompiler();
 
         if(javaCompiler == null) {
-            throw new NullPointerException("'javax.tools.JavaCompiler' not found!, please add 'tools.jar' to class path!");
+            throw new ClassNotFoundException("class 'javax.tools.JavaCompiler' not found!, please add 'tools.jar' to class path!");
         }
 
         if(logger.isDebugEnabled()) {
