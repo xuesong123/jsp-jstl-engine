@@ -30,6 +30,9 @@ public class PrintTag extends TagSupport {
     private Object value;
     private static final BeanUtil beanUtil = new BeanUtil();
 
+    /**
+     * @return int
+     */
     @Override
     public int doEndTag() throws Exception {
         print(this.pageContext, this.out, this.value);

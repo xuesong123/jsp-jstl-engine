@@ -255,6 +255,9 @@ public class CharBuffer {
         }
     }
 
+    /**
+     * @return String
+     */
     @Override
     public String toString() {
         int length = this.length();

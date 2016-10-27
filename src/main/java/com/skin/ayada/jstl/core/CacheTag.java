@@ -33,6 +33,9 @@ public class CacheTag extends BodyTagSupport {
     private int expires;
     private static final Logger logger = LoggerFactory.getLogger(CacheTag.class);
 
+    /**
+     * @return int
+     */
     @Override
     public int doStartTag() {
         if(this.key == null || this.getExpires() < 1) {
@@ -62,6 +65,9 @@ public class CacheTag extends BodyTagSupport {
         }
     }
 
+    /**
+     * @return int
+     */
     @Override
     public int doEndTag() {
         BodyContent bodyContent = this.getBodyContent();

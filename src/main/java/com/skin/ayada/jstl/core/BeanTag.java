@@ -34,6 +34,9 @@ public class BeanTag extends TagSupport implements Tag, ConstructorTagSupport, P
     private List<Object> parameters;
     private Map<String, Object> properties;
 
+    /**
+     * @return int
+     */
     @Override
     public int doStartTag() throws Exception {
         if(this.name == null || this.className == null) {
@@ -46,6 +49,9 @@ public class BeanTag extends TagSupport implements Tag, ConstructorTagSupport, P
         return Tag.EVAL_BODY_INCLUDE;
     }
 
+    /**
+     * @return int
+     */
     @Override
     public int doEndTag() throws Exception {
         Object bean = null;

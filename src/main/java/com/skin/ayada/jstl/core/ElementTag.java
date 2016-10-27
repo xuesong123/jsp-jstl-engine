@@ -27,6 +27,9 @@ public class ElementTag extends BodyTagSupport {
     private int index = -1;
     private Object value;
 
+    /**
+     * @return int
+     */
     @Override
     public int doStartTag() {
         if(this.value != null) {
@@ -36,6 +39,9 @@ public class ElementTag extends BodyTagSupport {
         return BodyTag.EVAL_BODY_BUFFERED;
     }
 
+    /**
+     * @return int
+     */
     @Override
     public int doEndTag() {
         if(this.value == null) {
@@ -45,6 +51,9 @@ public class ElementTag extends BodyTagSupport {
         return Tag.EVAL_PAGE;
     }
 
+    /**
+     * 
+     */
     @Override
     public void release() {
         this.index = -1;

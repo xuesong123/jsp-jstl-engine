@@ -28,6 +28,9 @@ public class ListTag extends TagSupport implements ElementTagSupport {
     private String name;
     private List<Object> list;
 
+    /**
+     * @return int
+     */
     @Override
     public int doStartTag() throws Exception {
         super.doStartTag();

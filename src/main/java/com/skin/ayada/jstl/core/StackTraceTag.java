@@ -23,6 +23,10 @@ import com.skin.ayada.tagext.TagSupport;
  * @version 1.0
  */
 public class StackTraceTag extends TagSupport {
+
+    /**
+     * @return int
+     */
     @Override
     public int doStartTag() {
         PrintWriter out = new PrintWriter(this.pageContext.getOut());

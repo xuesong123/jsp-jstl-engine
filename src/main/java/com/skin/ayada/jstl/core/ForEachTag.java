@@ -30,6 +30,9 @@ public class ForEachTag extends LoopTagSupport {
     private Iterator<?> iterator;
     private boolean hasItems = false;
 
+    /**
+     * @throws Exception
+     */
     @Override
     public void prepare() throws Exception {
         if(this.hasItems) {
@@ -160,10 +163,18 @@ public class ForEachTag extends LoopTagSupport {
             this.length = Array.getLength(array);
         }
 
+        /**
+         * @return boolean
+         */
+        @Override
         public boolean hasNext() {
             return this.index < this.length;
         }
 
+        /**
+         * @return Object
+         */
+        @Override
         public Object next() {
             if(this.index < this.length) {
                 return Array.get(this.array, this.index++);
@@ -171,6 +182,9 @@ public class ForEachTag extends LoopTagSupport {
             return null;
         }
 
+        /**
+         * 
+         */
         public void remove() {
             throw new UnsupportedOperationException();
         }
@@ -194,14 +208,25 @@ public class ForEachTag extends LoopTagSupport {
             this.enumeration = enumeration;
         }
 
+        /**
+         * @return boolean
+         */
+        @Override
         public boolean hasNext() {
             return this.enumeration.hasMoreElements();
         }
 
+        /**
+         * @return Object
+         */
+        @Override
         public E next() {
             return this.enumeration.nextElement();
         }
 
+        /**
+         * 
+         */
         public void remove() {
             throw new UnsupportedOperationException();
         }
@@ -224,10 +249,18 @@ public class ForEachTag extends LoopTagSupport {
             this.end = end;
         }
 
+        /**
+         * @return boolean
+         */
+        @Override
         public boolean hasNext() {
             return this.begin <= this.end;
         }
 
+        /**
+         * @return Object
+         */
+        @Override
         public Integer next() {
             if(this.begin <= this.end) {
                 return new Integer(this.begin++);
@@ -235,6 +268,9 @@ public class ForEachTag extends LoopTagSupport {
             return null;
         }
 
+        /**
+         * 
+         */
         public void remove() {
             throw new UnsupportedOperationException();
         }
@@ -260,10 +296,18 @@ public class ForEachTag extends LoopTagSupport {
             this.length = value.length();
         }
 
+        /**
+         * @return boolean
+         */
+        @Override
         public boolean hasNext() {
             return this.index < this.length;
         }
 
+        /**
+         * @return Object
+         */
+        @Override
         public String next() {
             int i = this.index;
             int k = this.value.indexOf(this.delims, this.index);
@@ -277,6 +321,9 @@ public class ForEachTag extends LoopTagSupport {
             return this.value.substring(i).trim();
         }
 
+        /**
+         * 
+         */
         public void remove() {
             throw new UnsupportedOperationException();
         }
@@ -291,14 +338,25 @@ public class ForEachTag extends LoopTagSupport {
      * @param <E>
      */
     public static class NullIterator<E> implements Iterator<E> {
+        /**
+         * @return boolean
+         */
+        @Override
         public boolean hasNext() {
             return false;
         }
 
+        /**
+         * @return Object
+         */
+        @Override
         public E next() {
             return null;
         }
 
+        /**
+         * 
+         */
         public void remove() {
             throw new UnsupportedOperationException();
         }

@@ -20,6 +20,9 @@ import java.io.PrintWriter;
  * @version 1.0
  */
 public interface SqlLogger {
+    /**
+     * the standard out
+     */
     public static final SqlLogger stdout = new SqlLogger() {
         /**
          * @param content

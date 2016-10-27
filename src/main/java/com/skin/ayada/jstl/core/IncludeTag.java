@@ -27,6 +27,9 @@ public class IncludeTag extends TagSupport implements ParameterTagSupport {
     private String page;
     private Map<String, Object> parameters;
 
+    /**
+     * @return int
+     */
     @Override
     public int doStartTag() throws Exception {
         super.doStartTag();
@@ -40,6 +43,9 @@ public class IncludeTag extends TagSupport implements ParameterTagSupport {
         }
     }
 
+    /**
+     * @return int
+     */
     @Override
     public int doEndTag() throws Exception {
         if(this.getPage() != null) {

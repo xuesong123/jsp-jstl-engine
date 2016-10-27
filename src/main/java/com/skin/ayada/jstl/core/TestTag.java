@@ -57,6 +57,9 @@ public class TestTag extends TagSupport {
         this.myString = myString;
     }
 
+    /**
+     * @return int
+     */
     @Override
     public int doStartTag() {
         this.print();

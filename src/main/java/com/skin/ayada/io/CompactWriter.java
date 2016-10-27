@@ -63,11 +63,17 @@ public class CompactWriter extends Writer {
         this.out.write(buffer, 0, j);
     }
 
+    /**
+     * @throws IOException
+     */
     @Override
     public void close() throws IOException {
         this.out.close();
     }
 
+    /**
+     * @throws IOException
+     */
     @Override
     public void flush() throws IOException {
         this.out.flush();

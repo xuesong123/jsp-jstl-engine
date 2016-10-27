@@ -26,6 +26,9 @@ public class JspAttributeTag extends BodyTagSupport {
     private String name;
     private Object value = null;
 
+    /**
+     * @return int
+     */
     @Override
     public int doStartTag() {
         if(this.value != null) {

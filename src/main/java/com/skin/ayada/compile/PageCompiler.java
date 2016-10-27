@@ -59,7 +59,7 @@ public class PageCompiler {
      */
     public Map<String, String> getAttributes() {
         int i;
-        char quote;
+        int quote;
         String name = null;
         String value = null;
         StringBuilder buffer = new StringBuilder();
@@ -163,6 +163,7 @@ public class PageCompiler {
             }
             else {
                 quote = ' ';
+                this.stream.back();
             }
 
             if(quote == ' ') {

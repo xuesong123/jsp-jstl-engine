@@ -25,6 +25,9 @@ public class ConstructorTag extends TagSupport {
     private String type;
     private Object value;
 
+    /**
+     * @return int
+     */
     @Override
     public int doStartTag() throws Exception {
         ConstructorTag.setArgument(this.getParent(), this.type, this.value);

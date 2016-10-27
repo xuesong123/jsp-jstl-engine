@@ -22,6 +22,9 @@ import com.skin.ayada.tagext.TryCatchFinally;
 public class CatchTag extends TagSupport implements TryCatchFinally {
     private String var;
 
+    /**
+     * @throws Throwable
+     */
     @Override
     public void doCatch(Throwable throwable) throws Throwable {
         if(this.var != null) {
@@ -29,6 +32,9 @@ public class CatchTag extends TagSupport implements TryCatchFinally {
         }
     }
 
+    /**
+     * 
+     */
     @Override
     public void doFinally() {
     }

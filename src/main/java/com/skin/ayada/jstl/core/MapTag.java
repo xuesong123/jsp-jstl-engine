@@ -29,6 +29,9 @@ public class MapTag extends TagSupport implements AttributeTagSupport, DynamicAt
     private String name;
     private Map<String, Object> map;
 
+    /**
+     * @return int
+     */
     @Override
     public int doStartTag() throws Exception {
         super.doStartTag();
@@ -60,6 +63,9 @@ public class MapTag extends TagSupport implements AttributeTagSupport, DynamicAt
         return Tag.SKIP_BODY;
     }
 
+    /**
+     * 
+     */
     @Override
     public void release() {
         this.map = null;

@@ -23,6 +23,9 @@ import com.skin.ayada.tagext.TagSupport;
 public class ChooseTag extends TagSupport {
     private boolean flag = false;
 
+    /**
+     * @return int
+     */
     @Override
     public int doStartTag() {
         this.flag = false;

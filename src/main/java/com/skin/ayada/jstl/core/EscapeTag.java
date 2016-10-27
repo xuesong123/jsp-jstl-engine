@@ -26,6 +26,9 @@ import com.skin.ayada.tagext.TagSupport;
 public class EscapeTag extends TagSupport {
     private Object encoder;
 
+    /**
+     * @return int
+     */
     @Override
     public int doStartTag() throws Exception {
         ELEncoder elEncoder = null;

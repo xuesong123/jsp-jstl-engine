@@ -27,6 +27,9 @@ public class SetEncoderTag extends TagSupport {
     private Object encoder;
     private ELEncoder oldEncoder;
 
+    /**
+     * @return int
+     */
     @Override
     public int doStartTag() throws Exception {
         ELEncoder elEncoder = null;

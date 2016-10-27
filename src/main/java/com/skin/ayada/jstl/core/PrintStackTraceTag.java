@@ -27,6 +27,9 @@ public class PrintStackTraceTag extends TagSupport {
     private Throwable throwable;
     private boolean escapeXml = false;
 
+    /**
+     * @return int
+     */
     @Override
     public int doStartTag() throws Exception {
         if(this.throwable != null) {

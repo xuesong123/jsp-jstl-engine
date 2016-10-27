@@ -27,6 +27,9 @@ public class InvokeTag extends TagSupport implements AttributeTagSupport {
     private String page;
     private Map<String, Object> attributes;
 
+    /**
+     * @return int
+     */
     @Override
     public int doStartTag() throws Exception {
         super.doStartTag();
@@ -40,6 +43,9 @@ public class InvokeTag extends TagSupport implements AttributeTagSupport {
         }
     }
 
+    /**
+     * @return int
+     */
     @Override
     public int doEndTag() throws Exception {
         if(this.getPage() != null) {

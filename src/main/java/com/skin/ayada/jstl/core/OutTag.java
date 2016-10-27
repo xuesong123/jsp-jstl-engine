@@ -32,6 +32,9 @@ public class OutTag extends BodyTagSupport {
     private String defaultValue = null;
     private boolean escapeXml = false;
 
+    /**
+     * @return int
+     */
     @Override
     public int doStartTag() throws Exception {
         if(this.value != null) {

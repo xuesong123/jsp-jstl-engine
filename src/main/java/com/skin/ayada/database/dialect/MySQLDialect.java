@@ -25,6 +25,9 @@ import com.skin.ayada.database.Column;
 public class MySQLDialect implements Dialect {
     private static final Logger logger = LoggerFactory.getLogger(MySQLDialect.class);
 
+    /**
+     * @param column
+     */
     @Override
     public String convert(Column column) {
         String result = "String";
@@ -194,11 +197,17 @@ public class MySQLDialect implements Dialect {
         return result;
     }
 
+    /**
+     * @param tableName
+     */
     @Override
     public String getTableName(String tableName) {
         return tableName;
     }
 
+    /**
+     * @param columnName
+     */
     @Override
     public String getColumnName(String columnName) {
         return columnName;

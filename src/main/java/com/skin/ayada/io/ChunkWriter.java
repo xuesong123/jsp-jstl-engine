@@ -29,7 +29,13 @@ public class ChunkWriter extends Writer {
     public ChunkWriter(int bufferSize) {
         this.buffer = new CharBuffer(bufferSize);
     }
-
+    
+    /**
+     * @param cbuf
+     * @param offset
+     * @param length
+     * @throws IOException
+     */
     @Override
     public void write(char[] cbuf, int offset, int length) throws IOException {
         this.buffer.append(cbuf, offset, length);
@@ -70,6 +76,9 @@ public class ChunkWriter extends Writer {
         this.buffer.free();
     }
 
+    /**
+     * @return String
+     */
     @Override
     public String toString() {
         return this.buffer.toString();

@@ -20,6 +20,10 @@ import com.skin.ayada.tagext.TagSupport;
  * @version 1.0
  */
 public class ContinueTag extends TagSupport {
+
+    /**
+     * @return int
+     */
     @Override
     public int doStartTag() {
         return Tag.CONTINUE;

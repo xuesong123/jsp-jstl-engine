@@ -27,6 +27,9 @@ public class AttributeTag extends BodyTagSupport {
     private String name;
     private Object value;
 
+    /**
+     * @return int
+     */
     @Override
     public int doStartTag() {
         if(this.value != null) {
@@ -36,6 +39,9 @@ public class AttributeTag extends BodyTagSupport {
         return BodyTag.EVAL_BODY_BUFFERED;
     }
 
+    /**
+     * @return int
+     */
     @Override
     public int doEndTag() {
         if(this.value == null) {

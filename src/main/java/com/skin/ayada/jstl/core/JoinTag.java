@@ -34,6 +34,9 @@ public class JoinTag extends TagSupport {
     private boolean hasItems = false;
     private boolean nullable = false;
 
+    /**
+     * @return int
+     */
     @Override
     public int doStartTag() throws Exception {
         StringBuilder buffer = new StringBuilder();

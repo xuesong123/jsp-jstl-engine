@@ -30,11 +30,17 @@ public class OutputTag extends BodyTagSupport {
     private boolean out = false;
     private boolean trim = false;
 
+    /**
+     * @return int
+     */
     @Override
     public int doStartTag() throws Exception {
         return BodyTag.EVAL_BODY_BUFFERED;
     }
 
+    /**
+     * @return int
+     */
     @Override
     public int doEndTag() throws Exception {
         BodyContent bodyContent = this.getBodyContent();

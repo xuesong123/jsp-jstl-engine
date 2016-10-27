@@ -25,6 +25,10 @@ import com.skin.ayada.database.Column;
 public class SQLServerDialect implements Dialect {
     private static final Logger logger = LoggerFactory.getLogger(SQLServerDialect.class);
 
+    /**
+     * @param column
+     * @return String
+     */
     public String convert(Column column) {
         String result = "String";
         String typeName = column.getTypeName();
@@ -164,11 +168,17 @@ public class SQLServerDialect implements Dialect {
         return result;
     }
 
+    /**
+     * @param tableName
+     */
     @Override
     public String getTableName(String tableName) {
         return "[" + tableName + "]";
     }
 
+    /**
+     * @param columnName
+     */
     @Override
     public String getColumnName(String columnName) {
         return "[" + columnName + "]";
