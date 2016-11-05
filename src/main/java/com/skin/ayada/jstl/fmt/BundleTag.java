@@ -61,6 +61,9 @@ public class BundleTag extends TagSupport implements TryCatchFinally {
         throw throwable;
     }
 
+    /**
+     * doFinally
+     */
     @Override
     public void doFinally() {
         this.pageContext.setBundle(this.oldBundle);

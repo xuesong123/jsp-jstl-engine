@@ -58,11 +58,21 @@ public class JspStream extends OutputStream {
         this.autoFlush = autoFlush;
     }
 
+    /**
+     * @param b
+     * @throws IOException
+     */
     @Override
     public void write(int b) throws IOException {
         this.write(new byte[]{(byte)b}, 0, 1);
     }
 
+    /**
+     * @param buf
+     * @param offset
+     * @param length
+     * @throws IOException
+     */
     @Override
     public void write(byte[] buf, int offset, int length) throws IOException {
         if(this.autoFlush) {
@@ -381,6 +391,9 @@ public class JspStream extends OutputStream {
         this.clear();
     }
 
+    /**
+     * @throws IOException
+     */
     @Override
     public void flush() throws IOException {
         if(this.position > 0) {
@@ -391,6 +404,9 @@ public class JspStream extends OutputStream {
         this.out.flush();
     }
 
+    /**
+     * @throws IOException
+     */
     @Override
     public void close() throws IOException {
         this.flush();

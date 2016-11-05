@@ -80,6 +80,9 @@ public class JspDirective extends DataNode {
         return new JspDirective(NodeType.JSP_DIRECTIVE_INCLUDE_NAME, NodeType.JSP_DIRECTIVE_INCLUDE);
     }
 
+    /**
+     * clone
+     */
     @Override
     public JspDirective clone() {
         JspDirective node = new JspDirective();

@@ -35,6 +35,10 @@ public class QueryTag extends TagSupport implements IterationTag, TryCatchFinall
     private Statement statement;
     private ResultSet resultSet;
 
+    /**
+     * @return int
+     * @throws Exception
+     */
     @Override
     public int doStartTag() throws Exception {
         if(this.connection == null) {
@@ -65,6 +69,7 @@ public class QueryTag extends TagSupport implements IterationTag, TryCatchFinall
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
     public int doAfterBody() throws Exception {
@@ -79,6 +84,10 @@ public class QueryTag extends TagSupport implements IterationTag, TryCatchFinall
         return SKIP_BODY;
     }
 
+    /**
+     * @param throwable
+     * @throws Exception
+     */
     @Override
     public void doCatch(Throwable throwable) throws Throwable {
         if(throwable != null) {
@@ -86,6 +95,9 @@ public class QueryTag extends TagSupport implements IterationTag, TryCatchFinall
         }
     }
 
+    /**
+     * doFinally
+     */
     @Override
     public void doFinally() {
         Jdbc.close(this.resultSet);

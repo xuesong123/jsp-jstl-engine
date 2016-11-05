@@ -39,11 +39,22 @@ public class TemplateFilter implements Filter {
     public TemplateFilter() {
     }
 
+    /**
+     * @param filterConfig
+     * @throws ServletException
+     */
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         this.templateDispatcher = TemplateDispatcher.create(filterConfig);
     }
 
+    /**
+     * @param servletRequest
+     * @param servletResponse
+     * @param filterChain
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws ServletException, IOException {
         if(!(servletRequest instanceof HttpServletRequest) || !(servletResponse instanceof HttpServletResponse)) {
@@ -55,6 +66,9 @@ public class TemplateFilter implements Filter {
         this.templateDispatcher.dispatch(request, response);
     }
 
+    /**
+     * destroy
+     */
     @Override
     public void destroy() {
         this.templateDispatcher.destroy();

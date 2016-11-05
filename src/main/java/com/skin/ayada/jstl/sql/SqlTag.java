@@ -37,6 +37,10 @@ public class SqlTag extends BodyTagSupport {
     private Object out;
     private Connection connection;
 
+    /**
+     * @return int
+     * @throws Exception
+     */
     @Override
     public int doStartTag() throws Exception {
         return BodyTag.EVAL_BODY_BUFFERED;
@@ -44,6 +48,7 @@ public class SqlTag extends BodyTagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
     public int doEndTag() throws Exception {

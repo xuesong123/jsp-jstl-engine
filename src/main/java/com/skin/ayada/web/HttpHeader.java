@@ -169,12 +169,15 @@ public class HttpHeader implements java.util.Map<String, HeaderEntry>, java.lang
 
     /**
      * @param name
-     * @return List<String>
+     * @return HeaderEntry
      */
     public HeaderEntry getHeaderEntry(String name) {
         return this.headers.get(name.toLowerCase());
     }
 
+    /**
+     * clone
+     */
     @Override
     public HttpHeader clone() {
         HttpHeader httpHeader = new HttpHeader();
@@ -192,7 +195,7 @@ public class HttpHeader implements java.util.Map<String, HeaderEntry>, java.lang
     }
 
     /**
-     * @see java.lang.Object#toString()
+     * @return String
      */
     @Override
     public String toString() {
@@ -209,65 +212,107 @@ public class HttpHeader implements java.util.Map<String, HeaderEntry>, java.lang
         return buffer.toString();
     }
 
+    /**
+     * @return int
+     */
     @Override
     public int size() {
         return this.headers.size();
 
     }
 
+    /**
+     * @return boolean
+     */
     @Override
     public boolean isEmpty() {
         return this.headers.isEmpty();
     }
 
+    /**
+     * @param key
+     * @return boolean
+     */
     @Override
     public boolean containsKey(Object key) {
         return this.headers.containsKey(key);
     }
 
+    /**
+     * @param value
+     * @return boolean
+     */
     @Override
     public boolean containsValue(Object value) {
         return this.headers.containsValue(value);
     }
 
+    /**
+     * @param key
+     * @return HeaderEntry
+     */
     @Override
     public HeaderEntry get(Object key) {
         return this.headers.get(key);
     }
 
+    /**
+     * @param key
+     * @param value
+     * @return HeaderEntry
+     */
     @Override
     public HeaderEntry put(String key, HeaderEntry value) {
         return this.headers.put(key, value);
     }
 
+    /**
+     * @param key
+     * @return HeaderEntry
+     */
     @Override
     public HeaderEntry remove(Object key) {
         return this.headers.remove(key);
     }
 
+    /**
+     * @param map
+     */
     @Override
     public void putAll(Map<? extends String, ? extends HeaderEntry> map) {
         this.headers.putAll(map);
     }
 
+    /**
+     * clear
+     */
     @Override
     public void clear() {
         this.headers.clear();
     }
 
+    /**
+     * @return Set<String>
+     */
     @Override
     public Set<String> keySet() {
         return this.headers.keySet();
 
     }
 
+    /**
+     * @return Collection<HeaderEntry>
+     */
     @Override
     public Collection<HeaderEntry> values() {
         return this.headers.values();
     }
 
+    /**
+     * @return Set<Map.Entry<String, HeaderEntry>>
+     */
     @Override
-    public Set<java.util.Map.Entry<String, HeaderEntry>> entrySet() {
+    public Set<Map.Entry<String, HeaderEntry>> entrySet() {
         return this.headers.entrySet();
     }
 }

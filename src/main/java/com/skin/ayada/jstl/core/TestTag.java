@@ -59,9 +59,10 @@ public class TestTag extends TagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
-    public int doStartTag() {
+    public int doStartTag() throws Exception {
         this.print();
         return SKIP_BODY;
     }

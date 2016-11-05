@@ -29,9 +29,10 @@ public class AttributeTag extends BodyTagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
-    public int doStartTag() {
+    public int doStartTag() throws Exception {
         if(this.value != null) {
             this.setAttribute(this.name, this.value);
             return Tag.SKIP_BODY;
@@ -41,9 +42,10 @@ public class AttributeTag extends BodyTagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
-    public int doEndTag() {
+    public int doEndTag() throws Exception {
         if(this.value == null) {
             BodyContent body = this.getBodyContent();
             this.setAttribute(this.name, (body != null ? body.getString() : null));

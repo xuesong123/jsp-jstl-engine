@@ -23,9 +23,10 @@ import com.skin.ayada.tagext.TagSupport;
 public class ElseTag extends TagSupport {
     /**
      * @return int
+     * @throws Exception
      */
     @Override
-    public int doStartTag() {
+    public int doStartTag() throws Exception {
         IfTag ifTag = IfTag.getIfTag(this.pageContext);
 
         if(ifTag == null) {

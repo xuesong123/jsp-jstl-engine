@@ -49,6 +49,12 @@ public class BodyContent extends JspWriter {
         this.writer = writer;
     }
 
+    /**
+     * @param cbuf
+     * @param offset
+     * @param length
+     * @throws IOException
+     */
     @Override
     public void write(char[] cbuf, int offset, int length) throws IOException {
         if(this.writer != null) {
@@ -100,6 +106,9 @@ public class BodyContent extends JspWriter {
         }
     }
 
+    /**
+     * @throws IOException
+     */
     @Override
     public void clear() throws IOException {
         if(this.writer == null) {
@@ -107,6 +116,9 @@ public class BodyContent extends JspWriter {
         }
     }
 
+    /**
+     * @throws IOException
+     */
     @Override
     public void flush() throws IOException {
         if(this.writer != null) {
@@ -114,6 +126,9 @@ public class BodyContent extends JspWriter {
         }
     }
 
+    /**
+     * @throws IOException
+     */
     @Override
     public void close() throws IOException {
         if(this.writer != null) {

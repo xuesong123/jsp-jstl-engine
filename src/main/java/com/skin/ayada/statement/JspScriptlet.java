@@ -42,6 +42,9 @@ public class JspScriptlet extends DataNode {
         this.setClosed(NodeType.PAIR_CLOSED);
     }
 
+    /**
+     * clone
+     */
     @Override
     public JspScriptlet clone() {
         JspScriptlet node = new JspScriptlet();

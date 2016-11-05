@@ -25,6 +25,9 @@ public class FmtParamTag extends BodyTagSupport {
     private Object value;
     private boolean hasValue;
 
+    /**
+     * doEndTag
+     */
     @Override
     public int doEndTag() throws Exception {
         Object value = null;

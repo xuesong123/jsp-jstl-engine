@@ -42,6 +42,9 @@ public class JspExpression extends DataNode {
         this.setClosed(NodeType.PAIR_CLOSED);
     }
 
+    /**
+     * clone
+     */
     @Override
     public JspExpression clone() {
         JspExpression node = new JspExpression();

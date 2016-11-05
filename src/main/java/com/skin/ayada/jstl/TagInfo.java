@@ -157,6 +157,9 @@ public class TagInfo {
         }
     }
 
+    /**
+     * @return String
+     */
     @Override
     public String toString() {
         StringBuilder buffer = new StringBuilder();

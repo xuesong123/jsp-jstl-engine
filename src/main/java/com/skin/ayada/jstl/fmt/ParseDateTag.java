@@ -35,7 +35,9 @@ public class ParseDateTag extends BodyTagSupport {
     private String timeZone;
     private String scope;
 
-
+    /**
+     * doEndTag
+     */
     @Override
     public int doEndTag() throws Exception {
         String string = null;

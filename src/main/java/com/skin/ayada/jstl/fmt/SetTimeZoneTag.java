@@ -28,6 +28,9 @@ public class SetTimeZoneTag extends TagSupport {
     private Object value;
     private String scope;
 
+    /**
+     * doStartTag
+     */
     @Override
     public int doStartTag() throws Exception {
         TimeZone timeZone = null;

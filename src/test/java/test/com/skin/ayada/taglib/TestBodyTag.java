@@ -24,8 +24,12 @@ import com.skin.ayada.tagext.BodyTagSupport;
  * @version 1.0
  */
 public class TestBodyTag extends BodyTagSupport {
+    /**
+     * @return int
+     * @throws Exception
+     */
     @Override
-    public int doStartTag() {
+    public int doStartTag() throws Exception {
         JspWriter out = this.pageContext.getOut();
 
         try {
@@ -39,9 +43,10 @@ public class TestBodyTag extends BodyTagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
-    public int doEndTag() {
+    public int doEndTag() throws Exception {
         BodyContent bodyContent = this.getBodyContent();
 
         if(bodyContent != null) {

@@ -27,8 +27,12 @@ public class SetBundleTag extends TagSupport {
     private String var;
     private String scope;
 
+    /**
+     * @return int
+     * @throws Exception
+     */
     @Override
-    public int doStartTag() {
+    public int doStartTag() throws Exception {
         LocalizationContext bundle = BundleTag.getBundle(this.pageContext, this.basename);
 
         if(this.var == null) {

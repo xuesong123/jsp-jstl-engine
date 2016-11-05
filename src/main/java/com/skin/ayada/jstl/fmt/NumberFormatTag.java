@@ -41,8 +41,12 @@ public class NumberFormatTag extends TagSupport {
     private String var;
     private String scope;
 
+    /**
+     * @return int
+     * @throws Exception
+     */
     @Override
-    public int doEndTag() {
+    public int doEndTag() throws Exception {
         NumberFormat format = getFormat();
 
         if((this.value != null) && (Double.isNaN(this.value.doubleValue()))) {

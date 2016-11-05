@@ -24,6 +24,7 @@ import com.skin.ayada.tagext.Tag;
 public class MakeDirTag extends FileTag {
     /**
      * @return int
+     * @throws Exception
      */
     @Override
     public int doEndTag() throws Exception {
@@ -31,6 +32,10 @@ public class MakeDirTag extends FileTag {
         return Tag.EVAL_PAGE;
     }
 
+    /**
+     * @param file
+     * @throws IOException
+     */
     @Override
     public void process(File file) throws IOException {
     }

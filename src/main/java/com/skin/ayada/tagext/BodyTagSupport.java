@@ -22,16 +22,27 @@ import com.skin.ayada.runtime.JspWriter;
 public class BodyTagSupport extends TagSupport implements BodyTag {
     protected BodyContent bodyContent;
 
+    /**
+     * @return int
+     * @throws Exception
+     */
     @Override
     public int doStartTag() throws Exception {
         return EVAL_BODY_BUFFERED;
     }
 
+    /**
+     * @return int
+     * @throws Exception
+     */
     @Override
     public int doEndTag() throws Exception {
         return super.doEndTag();
     }
 
+    /**
+     * @param bodyContent
+     */
     public void setBodyContent(BodyContent bodyContent) {
         this.bodyContent = bodyContent;
     }
@@ -42,11 +53,17 @@ public class BodyTagSupport extends TagSupport implements BodyTag {
     public void doInitBody() throws Exception {
     }
 
+    /**
+     * @throws Exception
+     */
     @Override
     public int doAfterBody() throws Exception {
         return SKIP_BODY;
     }
 
+    /**
+     * release
+     */
     @Override
     public void release() {
         this.bodyContent = null;

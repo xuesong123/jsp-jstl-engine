@@ -28,6 +28,9 @@ public class SetLocaleTag extends TagSupport {
     private String variant;
     private String scope;
 
+    /**
+     * doStartTag
+     */
     @Override
     public int doStartTag() throws Exception {
         Locale locale = null;

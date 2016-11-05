@@ -30,9 +30,10 @@ public class SubstringTag extends BodyTagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
-    public int doEndTag() {
+    public int doEndTag() throws Exception {
         String result = null;
 
         if(this.value != null) {

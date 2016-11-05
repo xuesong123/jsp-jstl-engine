@@ -23,9 +23,10 @@ import com.skin.ayada.tagext.Tag;
 public class WhenTag extends ConditionalTagSupport {
     /**
      * @return int
+     * @throws Exception
      */
     @Override
-    public int doStartTag() {
+    public int doStartTag() throws Exception {
         Tag parent = this.getParent();
 
         if(parent == null) {
@@ -47,9 +48,10 @@ public class WhenTag extends ConditionalTagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
-    public int doEndTag() {
+    public int doEndTag() throws Exception {
         return EVAL_PAGE;
     }
 }

@@ -68,6 +68,9 @@ public class TagNode extends Node {
         this.tagFactory = tagFactory;
     }
 
+    /**
+     * clone
+     */
     @Override
     public Node clone() {
         TagNode node = new TagNode(this.getNodeName());

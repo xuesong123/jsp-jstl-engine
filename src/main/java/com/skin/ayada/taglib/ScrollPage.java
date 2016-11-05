@@ -31,8 +31,12 @@ public class ScrollPage extends TagSupport {
     private String pattern;
     private static final int DEFAULT_SIZE = 7;
 
+    /**
+     * @return int
+     * @throws Exception
+     */
     @Override
-    public int doEndTag() {
+    public int doEndTag() throws Exception {
         try {
             String html = this.render();
             this.pageContext.getOut().print(html);

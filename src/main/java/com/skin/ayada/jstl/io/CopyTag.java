@@ -44,6 +44,10 @@ public class CopyTag extends FileTag {
         return Tag.EVAL_PAGE;
     }
 
+    /**
+     * @param file
+     * @throws IOException
+     */
     @Override
     public void process(File file) throws IOException {
         File source = new File(this.getFile());

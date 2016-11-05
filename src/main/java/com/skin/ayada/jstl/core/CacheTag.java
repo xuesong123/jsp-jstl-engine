@@ -35,9 +35,10 @@ public class CacheTag extends BodyTagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
-    public int doStartTag() {
+    public int doStartTag() throws Exception {
         if(this.key == null || this.getExpires() < 1) {
             return BodyTag.EVAL_BODY_BUFFERED;
         }
@@ -67,9 +68,10 @@ public class CacheTag extends BodyTagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
-    public int doEndTag() {
+    public int doEndTag() throws Exception {
         BodyContent bodyContent = this.getBodyContent();
 
         if(bodyContent != null) {

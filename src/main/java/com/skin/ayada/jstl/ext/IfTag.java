@@ -26,9 +26,10 @@ public class IfTag extends ConditionalTagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
-    public int doStartTag() {
+    public int doStartTag() throws Exception {
         Stack<Object> stack = getStack(this.pageContext, true);
         stack.push(this);
 

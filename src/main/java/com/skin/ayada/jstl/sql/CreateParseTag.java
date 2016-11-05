@@ -47,9 +47,10 @@ public class CreateParseTag extends BodyTagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
-    public int doStartTag() {
+    public int doStartTag() throws Exception {
         if(this.file != null) {
             return Tag.SKIP_BODY;
         }
@@ -58,9 +59,10 @@ public class CreateParseTag extends BodyTagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
-    public int doEndTag() {
+    public int doEndTag() throws Exception {
         String sql = null;
 
         if(this.file != null) {

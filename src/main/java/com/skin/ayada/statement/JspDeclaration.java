@@ -42,6 +42,9 @@ public class JspDeclaration extends DataNode {
         this.setClosed(NodeType.PAIR_CLOSED);
     }
 
+    /**
+     * clone
+     */
     @Override
     public JspDeclaration clone() {
         JspDeclaration node = new JspDeclaration();

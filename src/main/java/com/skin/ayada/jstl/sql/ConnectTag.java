@@ -34,6 +34,10 @@ public class ConnectTag extends TagSupport implements TryCatchFinally {
     private Connection connection;
     protected boolean connectionSpecified;
 
+    /**
+     * @return int
+     * @throws Exception
+     */
     @Override
     public int doStartTag() throws Exception {
         if(this.var != null) {
@@ -45,6 +49,10 @@ public class ConnectTag extends TagSupport implements TryCatchFinally {
         return Tag.EVAL_PAGE;
     }
 
+    /**
+     * @param throwable
+     * @throws Exception
+     */
     @Override
     public void doCatch(Throwable throwable) throws Throwable {
         if(throwable != null) {
@@ -53,6 +61,9 @@ public class ConnectTag extends TagSupport implements TryCatchFinally {
         throw new RuntimeException("RuntimeExceptione: UnknownException - null");
     }
 
+    /**
+     * doFinally
+     */
     @Override
     public void doFinally() {
         if(this.connectionSpecified) {

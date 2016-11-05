@@ -27,6 +27,10 @@ public class JsonStringifyTag extends TagSupport {
     private String defaultValue = null;
     private boolean escapeXml = false;
 
+    /**
+     * @return int
+     * @throws Exception
+     */
     @Override
     public int doStartTag() throws Exception {
         if(this.value != null) {

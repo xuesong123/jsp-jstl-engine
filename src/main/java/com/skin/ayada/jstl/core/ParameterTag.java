@@ -29,9 +29,10 @@ public class ParameterTag extends BodyTagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
-    public int doStartTag() {
+    public int doStartTag() throws Exception {
         if(this.value != null) {
             this.setParameter(this.name, this.value);
             return Tag.SKIP_BODY;
@@ -41,9 +42,10 @@ public class ParameterTag extends BodyTagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
-    public int doEndTag() {
+    public int doEndTag() throws Exception {
         if(this.value == null) {
             BodyContent body = this.getBodyContent();
             this.setParameter(this.name, (body != null ? body.getString() : null));

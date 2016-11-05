@@ -33,6 +33,9 @@ public class ParseNumberTag extends BodyTagSupport {
     private boolean integerOnly = false;
     private String scope;
 
+    /**
+     * doEndTag
+     */
     @Override
     public int doEndTag() throws Exception {
         String string = null;

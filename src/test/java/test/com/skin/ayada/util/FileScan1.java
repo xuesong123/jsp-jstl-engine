@@ -28,6 +28,10 @@ public class FileScan1 extends FileScaner{
         super(output);
     }
 
+    /**
+     * @param dir
+     * @param out
+     */
     @Override
     public void doScan(File dir, PrintWriter out) {
         File[] files = dir.listFiles();

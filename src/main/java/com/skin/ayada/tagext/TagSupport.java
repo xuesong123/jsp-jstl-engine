@@ -30,6 +30,7 @@ public class TagSupport implements IterationTag {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
     public int doStartTag() throws Exception {
@@ -38,6 +39,7 @@ public class TagSupport implements IterationTag {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
     public int doAfterBody() throws Exception {
@@ -46,6 +48,7 @@ public class TagSupport implements IterationTag {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
     public int doEndTag() throws Exception {
@@ -72,8 +75,26 @@ public class TagSupport implements IterationTag {
         return null;
     }
 
+    /**
+     * @return String
+     */
+    public String getId() {
+        return this.id;
+    }
+
+    /**
+     * @param id
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    /**
+     * @param tag
+     */
     @Override
-    public void release() {
+    public void setParent(Tag tag) {
+        this.parent = tag;
     }
 
     /**
@@ -100,24 +121,9 @@ public class TagSupport implements IterationTag {
     }
 
     /**
-     * @param tag
+     * release
      */
     @Override
-    public void setParent(Tag tag) {
-        this.parent = tag;
-    }
-
-    /**
-     * @return String
-     */
-    public String getId() {
-        return this.id;
-    }
-
-    /**
-     * @param id
-     */
-    public void setId(String id) {
-        this.id = id;
+    public void release() {
     }
 }

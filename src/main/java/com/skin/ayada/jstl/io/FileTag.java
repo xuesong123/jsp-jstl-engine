@@ -27,6 +27,10 @@ import com.skin.ayada.tagext.TagSupport;
 public abstract class FileTag extends TagSupport {
     protected String file;
 
+    /**
+     * @return int
+     * @throws Exception
+     */
     @Override
     public int doStartTag() throws Exception {
         return Tag.EVAL_PAGE;

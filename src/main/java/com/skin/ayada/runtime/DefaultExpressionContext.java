@@ -38,11 +38,18 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
         this.pageContext = pageContext;
     }
 
+    /**
+     * @param key
+     * @param value
+     */
     @Override
     public Object put(Object key, Object value) {
         return this.pageContext.setAttribute(key.toString(), value);
     }
 
+    /**
+     * @param key
+     */
     @Override
     public Object get(Object key) {
         if(key == null) {
@@ -367,6 +374,9 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
         this.encoder = encoder;
     }
 
+    /**
+     * release
+     */
     public void release() {
         this.pageContext = null;
     }

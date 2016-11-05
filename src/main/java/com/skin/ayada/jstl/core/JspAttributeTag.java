@@ -28,9 +28,10 @@ public class JspAttributeTag extends BodyTagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
-    public int doStartTag() {
+    public int doStartTag() throws Exception {
         if(this.value != null) {
             this.setDynamicAttribute(this.name, this.value);
             return Tag.SKIP_BODY;
@@ -40,9 +41,10 @@ public class JspAttributeTag extends BodyTagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
-    public int doEndTag() {
+    public int doEndTag() throws Exception {
         BodyContent bodyContent = this.getBodyContent();
 
         if(bodyContent != null) {

@@ -40,6 +40,10 @@ public class ActionTag extends TagSupport implements ParameterTagSupport, Attrib
     };
     private static final Logger logger = LoggerFactory.getLogger(ActionTag.class);
 
+    /**
+     * @return int
+     * @throws Exception
+     */
     @Override
     public int doStartTag() throws Exception {
         super.doStartTag();
@@ -53,6 +57,10 @@ public class ActionTag extends TagSupport implements ParameterTagSupport, Attrib
         }
     }
 
+    /**
+     * @return int
+     * @throws Exception
+     */
     @Override
     public int doEndTag() throws Exception {
         Map<String, Object> context = this.pageContext.getContext(EXPORTS);
@@ -72,12 +80,6 @@ public class ActionTag extends TagSupport implements ParameterTagSupport, Attrib
             this.pageContext.include(this.getPage(), context);
         }
         return Tag.EVAL_PAGE;
-    }
-
-    @Override
-    public void release() {
-        super.release();
-        this.parameters.clear();
     }
 
     /**
@@ -152,5 +154,14 @@ public class ActionTag extends TagSupport implements ParameterTagSupport, Attrib
      */
     public void setParameters(Parameters parameters) {
         this.parameters = parameters;
+    }
+
+    /**
+     * release
+     */
+    @Override
+    public void release() {
+        super.release();
+        this.parameters.clear();
     }
 }

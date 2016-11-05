@@ -26,9 +26,10 @@ public class StackTraceTag extends TagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
-    public int doStartTag() {
+    public int doStartTag() throws Exception {
         PrintWriter out = new PrintWriter(this.pageContext.getOut());
         new Exception("StackTrace").printStackTrace(out);
         out.flush();

@@ -28,9 +28,10 @@ public class ImportTag extends TagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
-    public int doStartTag() {
+    public int doStartTag() throws Exception {
         /* this.pageContext.getTagLibrary().setup(this.name, this.className, this.bodyContent, this.description); */
         return Tag.SKIP_BODY;
     }

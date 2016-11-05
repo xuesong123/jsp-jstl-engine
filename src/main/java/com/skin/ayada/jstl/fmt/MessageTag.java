@@ -57,6 +57,9 @@ public class MessageTag extends BodyTagSupport implements ParamContainerTag {
         this.var = var;
     }
 
+    /**
+     * addParam
+     */
     @Override
     public void addParam(Object value) {
         if(this.parameters == null) {
@@ -65,6 +68,9 @@ public class MessageTag extends BodyTagSupport implements ParamContainerTag {
         this.parameters.add(value);
     }
 
+    /**
+     * doEndTag
+     */
     @Override
     public int doEndTag() throws Exception {
         Object[] args = null;
@@ -104,6 +110,9 @@ public class MessageTag extends BodyTagSupport implements ParamContainerTag {
         return Tag.EVAL_PAGE;
     }
 
+    /**
+     * relase
+     */
     @Override
     public void release() {
         this.key = null;

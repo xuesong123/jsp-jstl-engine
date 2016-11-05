@@ -23,9 +23,10 @@ import com.skin.ayada.tagext.TagSupport;
 public class OtherwiseTag extends TagSupport {
     /**
      * @return int
+     * @throws Exception
      */
     @Override
-    public int doStartTag() {
+    public int doStartTag() throws Exception {
         Tag parent = this.getParent();
 
         if(parent == null) {

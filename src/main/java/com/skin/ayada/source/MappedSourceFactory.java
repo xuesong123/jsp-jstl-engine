@@ -27,6 +27,9 @@ import com.skin.ayada.util.Path;
 public class MappedSourceFactory extends DefaultSourceFactory {
     private Map<String, String> mapped;
 
+    /**
+     * default
+     */
     public MappedSourceFactory() {
         this.mapped = new HashMap<String, String>();
     }

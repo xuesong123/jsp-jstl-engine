@@ -37,12 +37,22 @@ public class UserListServlet2 extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private TemplateContext templateContext = null;
 
+    /**
+     * @param servletConfig
+     * @throws ServletException
+     */
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
         String home = servletConfig.getServletContext().getRealPath("/WEB-INF/template");
         this.templateContext = TemplateManager.getTemplateContext(home, true);
     }
 
+    /**
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html; charset=UTF-8");

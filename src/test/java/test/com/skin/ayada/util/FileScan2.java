@@ -32,6 +32,10 @@ public class FileScan2 extends FileScaner{
         super(output);
     }
 
+    /**
+     * @param dir
+     * @param out
+     */
     @Override
     public void doScan(File dir, PrintWriter out) {
         int index = 0;

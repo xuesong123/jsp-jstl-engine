@@ -22,9 +22,10 @@ import com.skin.ayada.tagext.ConditionalTagSupport;
 public class IfTag extends ConditionalTagSupport {
     /**
      * @return int
+     * @throws Exception
      */
     @Override
-    public int doStartTag() {
+    public int doStartTag() throws Exception {
         if(this.condition() == true) {
             return EVAL_BODY_INCLUDE;
         }

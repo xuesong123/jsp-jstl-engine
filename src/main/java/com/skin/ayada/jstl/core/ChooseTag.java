@@ -25,9 +25,10 @@ public class ChooseTag extends TagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
-    public int doStartTag() {
+    public int doStartTag() throws Exception {
         this.flag = false;
         return Tag.EVAL_BODY_INCLUDE;
     }

@@ -26,8 +26,12 @@ import com.skin.ayada.tagext.Tag;
 public class ParseJsonTag extends BodyTagSupport {
     private String var;
 
+    /**
+     * @return int
+     * @throws Exception
+     */
     @Override
-    public int doStartTag() {
+    public int doStartTag() throws Exception {
         if(this.var == null || this.var.trim().length() < 1) {
             return SKIP_BODY;
         }
@@ -36,8 +40,12 @@ public class ParseJsonTag extends BodyTagSupport {
         }
     }
 
+    /**
+     * @return int
+     * @throws Exception
+     */
     @Override
-    public int doEndTag() {
+    public int doEndTag() throws Exception {
         Json json = (Json)(this.pageContext.getAttribute("jsonSupport"));
         BodyContent bodyContent = this.getBodyContent();
 

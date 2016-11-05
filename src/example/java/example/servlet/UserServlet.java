@@ -29,6 +29,12 @@ import example.model.User;
 public class UserServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         long userId = 1L;

@@ -86,6 +86,9 @@ public abstract class SimpleTag implements Tag {
         this.jspBody = jspBody;
     }
 
+    /**
+     * release
+     */
     @Override
     public void release() {
     }

@@ -36,8 +36,12 @@ public class DateFormatTag extends TagSupport {
     private String timeStyle;
     private String type;
 
+    /**
+     * @return int
+     * @throws Exception
+     */
     @Override
-    public int doEndTag() {
+    public int doEndTag() throws Exception {
         if(this.value == null) {
             if(this.var != null) {
                 this.pageContext.setAttribute(this.var, null);

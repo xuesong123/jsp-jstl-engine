@@ -28,9 +28,10 @@ public class ExitTag extends ConditionalTagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
-    public int doStartTag() {
+    public int doStartTag() throws Exception {
         if(this.condition() == true) {
             return SKIP_PAGE;
         }

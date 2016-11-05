@@ -22,9 +22,10 @@ import com.skin.ayada.jstl.ext.IfTag;
 public class ElseIfTag extends IfTag {
     /**
      * @return int
+     * @throws Exception
      */
     @Override
-    public int doStartTag() {
+    public int doStartTag() throws Exception {
         IfTag ifTag = IfTag.getIfTag(this.pageContext);
 
         if(ifTag == null) {

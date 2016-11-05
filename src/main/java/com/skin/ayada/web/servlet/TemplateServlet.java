@@ -32,21 +32,34 @@ public class TemplateServlet extends HttpServlet {
     private TemplateDispatcher templateDispatcher;
 
     /**
-     *
+     * default
      */
     public TemplateServlet() {
     }
 
+    /**
+     * @param servletConfig
+     * @throws ServletException
+     */
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
         this.templateDispatcher = TemplateDispatcher.create(servletConfig);
     }
 
+    /**
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         this.templateDispatcher.dispatch(request, response);
     }
 
+    /**
+     * destroy
+     */
     @Override
     public void destroy() {
         this.templateDispatcher.destroy();

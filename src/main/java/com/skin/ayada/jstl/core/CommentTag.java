@@ -21,12 +21,12 @@ import com.skin.ayada.tagext.TagSupport;
  * @version 1.0
  */
 public class CommentTag extends TagSupport {
-
     /**
      * @return int
+     * @throws Exception
      */
     @Override
-    public int doStartTag() {
+    public int doStartTag() throws Exception {
         return Tag.SKIP_BODY;
     }
 }

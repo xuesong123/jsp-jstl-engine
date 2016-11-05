@@ -294,6 +294,9 @@ public class DefaultTemplateContext implements TemplateContext {
         }, 60L, 300L, TimeUnit.SECONDS);
     }
 
+    /**
+     * clear
+     */
     public synchronized void clear() {
         for(Map.Entry<String, FutureTask<Template>> entry : this.cache.entrySet()) {
             FutureTask<Template> f = entry.getValue();
@@ -327,6 +330,10 @@ public class DefaultTemplateContext implements TemplateContext {
         return temp;
     }
 
+    /**
+     * destory
+     */
+    @Override
     public void destory() {
         this.cache.clear();
         this.cache = null;

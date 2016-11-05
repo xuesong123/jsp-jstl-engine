@@ -29,9 +29,10 @@ public class ElementTag extends BodyTagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
-    public int doStartTag() {
+    public int doStartTag() throws Exception {
         if(this.value != null) {
             this.setElement(this.index, this.value);
             return Tag.SKIP_BODY;
@@ -41,9 +42,10 @@ public class ElementTag extends BodyTagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
-    public int doEndTag() {
+    public int doEndTag() throws Exception {
         if(this.value == null) {
             BodyContent body = this.getBodyContent();
             this.setElement(this.index, (body != null ? body.getString() : null));
