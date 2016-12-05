@@ -10,6 +10,7 @@
  */
 package com.skin.ayada.util;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -53,7 +54,6 @@ public class ClassUtil {
      * @throws ClassNotFoundException
      */
     public static Class<?> getClass(String className) throws ClassNotFoundException {
-
         if(className.equals("boolean")) {
             return boolean.class;
         }
@@ -263,6 +263,38 @@ public class ClassUtil {
             result = value;
         }
         return result;
+    }
+
+    /**
+     * @param source
+     * @return Object[]
+     */
+    public static Object[] getArray(Object source) {
+        if(source instanceof Object[]) {
+            return (Object[])source;
+        }
+
+        if(source == null) {
+            return new Object[0];
+        }
+
+        if(!source.getClass().isArray()) {
+            throw new IllegalArgumentException("Source is not an array: " + source);
+        }
+
+        int length = Array.getLength(source);
+
+        if(length == 0) {
+            return new Object[0];
+        }
+
+        Class<?> type = Array.get(source, 0).getClass();
+        Object[] array = (Object[])(Array.newInstance(type, length));
+
+        for(int i = 0; i < length; i++) {
+            array[i] = Array.get(source, i);
+        }
+        return array;
     }
 
     /**

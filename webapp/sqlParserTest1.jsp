@@ -1,13 +1,16 @@
-<sql:parse name="myTable">
+<sql:parse name="tableList">
 create table `my_table`(
-    `f1`      bigint(20) unsigned not null comment 'Ö÷¼ü',
-    `f2`      datetime not null comment '×¢ÊÍ',
-    `f3`      datetime not null comment '×¢ÊÍ',
+    `f1`      bigint(20) unsigned not null comment 'ä¸»é”®',
+    `f2`      datetime not null comment 'æ³¨é‡Š',
+    `f3`      datetime not null comment 'æ³¨é‡Š',
     primary key (f1)
 );
 </sql:parse>
-<p>table: ${myTable.tableName}</p>
-<c:out value="${myTable.getCreateString('`%s`')}"/>
-<c:out value="${myTable.getQueryString()}"/>
-<c:out value="${myTable.getInsertString()}"/>
-<c:out value="${myTable.getUpdateString()}"/>
+
+<c:forEach items="${tableList}" var="table">
+<p>table: ${table.tableName}</p>
+<c:out value="${table.getCreateString('`%s`')}"/>
+<c:out value="${table.getQueryString()}"/>
+<c:out value="${table.getInsertString()}"/>
+<c:out value="${table.getUpdateString()}"/>
+</c:forEach>
