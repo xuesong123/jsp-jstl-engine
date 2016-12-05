@@ -135,80 +135,146 @@ public class HtmlUtil {
         }
 
         char c;
+        int i = 0;
+        int length = source.length();
         String nodeName = null;
         StringBuilder temp = new StringBuilder();
         StringBuilder buffer = new StringBuilder();
 
-        for(int i = 0, length = source.length(); i < length; i++) {
+        while(i < length) {
             c = source.charAt(i);
 
             if(c == '<') {
-                int j = i + 1;
+                if((i + 3) < length && source.charAt(i + 1) == '!' && source.charAt(i + 2) == '-' && source.charAt(i + 3) == '-') {
+                    i = skipComment(source, i + 4);
+                }
+                else {
+                    i = readNodeName(source, temp, i + 1);
+                    i = source.indexOf('>', i);
 
-                for(; j < length; j++) {
-                    c = source.charAt(j);
-
-                    if(Character.isWhitespace(c) || Character.isISOControl(c) || c == '/' || c == '>') {
+                    if(i < 0) {
                         break;
                     }
-                    else {
-                        temp.append(Character.toLowerCase(c));
+
+                    nodeName = temp.toString();
+                    temp.setLength(0);
+                    i++;
+
+                    if(nodeName.equals("script") || nodeName.equals("style")) {
+                        i = skipContent(source, i);
                     }
                 }
-
-                j = source.indexOf('>', j);
-
-                if(j < 0) {
-                    break;
-                }
-
-                nodeName = temp.toString();
-                temp.setLength(0);
-
-                if(nodeName.equals("script") || nodeName.equals("style")) {
-                    for(j++; j < length; j++) {
-                        c = source.charAt(j);
-
-                        if(c == '<' && j + 1 < length && source.charAt(j + 1) == '/') {
-                            for(j += 2; j < length; j++) {
-                                c = source.charAt(j);
-
-                                if(Character.isWhitespace(c) || Character.isISOControl(c) || c == '/' || c == '>') {
-                                    break;
-                                }
-                                else {
-                                    temp.append(Character.toLowerCase(c));
-                                }
-                            }
-
-                            nodeName = temp.toString();
-                            temp.setLength(0);
-
-                            if(nodeName.equals("script") || nodeName.equals("style")) {
-                                j = source.indexOf('>', j);
-
-                                if(j > -1) {
-                                    j++;
-                                }
-
-                                break;
-                            }
-                            else {
-                                j += 2;
-                            }
-                        }
-                    }
-
-                    if(j < 0) {
-                        break;
-                    }
-                }
-                i = j;
             }
             else {
                 buffer.append(c);
+                i++;
             }
         }
         return buffer.toString();
+    }
+
+    /**
+     * @param source
+     * @param offset
+     * @return int
+     */
+    private static int skipComment(String source, int offset) {
+        char c;
+        int i = offset;
+        int length = source.length();
+
+        while(i < length) {
+            c = source.charAt(i);
+
+            if(c == '-') {
+                if((i + 2) < length && source.charAt(i + 1) == '-' && source.charAt(i + 2) == '>') {
+                    i = i + 3;
+                    break;
+                }
+            }
+            i++;
+        }
+        return i;
+    }
+
+    /**
+     * @param source
+     * @param offset
+     * @return int
+     */
+    private static int skipContent(String source, int offset) {
+        char c;
+        int i = offset;
+        int length = source.length();
+        String nodeName = null;
+        StringBuilder buffer = new StringBuilder();
+
+        while(i < length) {
+            c = source.charAt(i);
+
+            if(c == '<' && i + 1 < length && source.charAt(i + 1) == '/') {
+                i = readNodeName(source, buffer, i + 2);
+                nodeName = buffer.toString().trim();
+                buffer.setLength(0);
+
+                if(nodeName.equals("script") || nodeName.equals("style")) {
+                    break;
+                }
+            }
+            else {
+                i++;
+            }
+        }
+
+        while(i < length) {
+            c = source.charAt(i++);
+
+            if(c == '>') {
+                break;
+            }
+        }
+        return i;
+    }
+
+    /**
+     * @param source
+     * @param buffer
+     * @param offset
+     * @return int
+     */
+    private static int readNodeName(String source, StringBuilder buffer, int offset) {
+        char c;
+        int i = offset;
+        
+        while(i < source.length()) {
+            c = source.charAt(i);
+
+            if(Character.isWhitespace(c) || Character.isISOControl(c) || c == '/' || c == '>') {
+                break;
+            }
+            else {
+                buffer.append(Character.toLowerCase(c));
+                i++;
+            }
+        }
+        return i;
+    }
+
+    /**
+     * @param text
+     * @param length
+     * @return String
+     */
+    protected static String right(String text, int offset, int length) {
+        if(text == null) {
+            return "";
+        }
+
+        if((text.length() - offset) > length) {
+            return text.substring(offset, text.length() - length);
+        }
+        else {
+            return text.substring(offset);
+        }
     }
 }
