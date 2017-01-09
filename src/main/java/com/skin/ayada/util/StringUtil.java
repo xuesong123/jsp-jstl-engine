@@ -112,33 +112,19 @@ public class StringUtil {
         int s = 0;
         int e = 0;
         int d = search.length();
-        String content = source;
         StringBuilder buffer = new StringBuilder();
 
         while(true) {
-            while(true) {
-                e = content.indexOf(search, s);
+            e = source.indexOf(search, s);
 
-                if(e == -1) {
-                    buffer.append(content.substring(s));
-                    break;
-                }
-                buffer.append(content.substring(s, e)).append(replacement);
-                s = e + d;
-            }
-
-            content = buffer.toString();
-            e = content.indexOf(search, 0);
-
-            if(e > -1) {
-                s = 0;
-                buffer.setLength(0);
-            }
-            else {
+            if(e == -1) {
+                buffer.append(source.substring(s));
                 break;
             }
+            buffer.append(source.substring(s, e)).append(replacement);
+            s = e + d;
         }
-        return content;
+        return buffer.toString();
     }
 
     /**

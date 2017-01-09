@@ -35,7 +35,7 @@ public class HtmlTest {
         }
 
         try {
-            String source = IO.read(file, "utf-8", 4096);
+            String source = IO.read(file, "utf-8");
             System.out.println(HtmlUtil.remove(source));
         }
         catch(Exception e) {
