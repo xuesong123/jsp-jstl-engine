@@ -111,4 +111,50 @@ public abstract class AbstractJspFragment implements JspFragment {
      * @throws Exception
      */
     public abstract void execute(JspWriter writer) throws Exception;
+
+    /**
+     * @param tryCatchFinally
+     * @throws Exception
+     */
+    protected final void doCatch(TryCatchFinally tryCatchFinally, Throwable throwable) throws Exception {
+        try {
+            tryCatchFinally.doCatch(throwable);
+        }
+        catch(Throwable t) {
+            if(t instanceof Exception) {
+                throw (Exception)t;
+            }
+            throw new Exception(t);
+        }
+    }
+
+    /**
+     * @param tag
+     * @throws Exception
+     */
+    protected final void doFinally(Tag tag) throws Exception {
+        Exception exception = null;
+
+        if(tag instanceof TryCatchFinally) {
+            try {
+                ((TryCatchFinally)tag).doFinally();
+            }
+            catch(Exception e) {
+                exception = e;
+            }
+        }
+
+        try {
+            tag.release();
+        }
+        catch(Exception e) {
+            if(exception == null) {
+                exception = e;
+            }
+        }
+
+        if(exception != null) {
+            throw exception;
+        }
+    }
 }

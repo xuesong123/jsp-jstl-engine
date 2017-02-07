@@ -25,7 +25,7 @@ public interface TryCatchFinally {
      * @param throwable
      * @throws java.lang.Throwable
      */
-    public void doCatch(Throwable throwable) throws java.lang.Throwable;
+    public void doCatch(Throwable throwable) throws Throwable;
 
     /**
      * Invoked in all cases after doEndTag() for any class implementing Tag, IterationTag or BodyTag. This method is invoked even if an exception has occurred in the BODY of the tag, or in any of the following methods: Tag.doStartTag(), Tag.doEndTag(), IterationTag.doAfterBody() and BodyTag.doInitBody().

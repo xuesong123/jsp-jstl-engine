@@ -43,12 +43,6 @@ public class Main {
         System.out.println("args: " + Main.getArguments(args));
         logger.info("args: {}", Main.getArguments(args));
 
-        /*
-        if(args == null || args.length < 1) {
-            args = new String[]{"D:\\workspace2\\ayada\\webapp\\clipTest.jsp", "UTF-8"};
-        }
-        */
-
         if(args == null || args.length < 1) {
             usage();
         }
@@ -70,6 +64,7 @@ public class Main {
                 execute(path, encoding, templateFactoryClassName);
             }
             catch(Exception e) {
+                e.printStackTrace(System.out);
                 logger.warn(e.getMessage(), e);
             }
         }

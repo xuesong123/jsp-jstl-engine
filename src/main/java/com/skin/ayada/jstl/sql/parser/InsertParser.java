@@ -1,7 +1,7 @@
 /*
- * $RCSfile: JspCompiler.java,v $$
+ * $RCSfile: InsertParser.java,v $
  * $Revision: 1.1 $
- * $Date: 2013-11-08 $
+ * $Date: 2014-03-25 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -11,13 +11,9 @@
 package com.skin.ayada.jstl.sql.parser;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,51 +23,11 @@ import com.skin.ayada.jstl.sql.Record;
 /**
  * <p>Title: InsertParser</p>
  * <p>Description: </p>
- * <p>Copyright: Copyright (c) 2006</p>
+ * <p>Copyright: Copyright (c) 2014</p>
  * @author xuesong.net
  * @version 1.0
  */
 public class InsertParser {
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        try {
-            String sql = read(new File("D:\\workspace\\jartest\\test1.sql"), "UTF-8");
-            InsertParser parser = new InsertParser();
-            List<Record> resultSet = parser.parse(sql.toString());
-
-            for(Record record : resultSet) {
-                System.out.println(record.toString());
-            }
-            // write(new File("test2.sql"), resultSet);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     *
-     */
-    public static void test() {
-        StringBuilder sql = new StringBuilder();
-        sql.append("insert into a(`a1`, [a2], 'a3') values ('a', 1, 1)\r\n");
-        sql.append("insert into a(`a1`, a2, a3) values ('b', 2, 2);\r\n");
-        sql.append("insert into a(`a1`, a2, a3) values ('c', null, 3)");
-
-        try {
-            InsertParser parser = new InsertParser();
-            List<Record> resultSet = parser.parse(sql.toString());
-
-            for(Record record : resultSet) {
-                System.out.println(record.toString());
-            }
-            parser.print(resultSet, "insert into mytable(`b1`, `b2`, `b3`) values (${a1}, ${a2}, ${a3});");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * @param sql
      * @return List<Record>
@@ -82,12 +38,12 @@ public class InsertParser {
         List<Record> resultSet = new ArrayList<Record>();
 
         while(true) {
-            Record record = this.read(stream);
+            List<Record> recordList = this.read(stream);
 
-            if(record == null) {
+            if(recordList == null || recordList.isEmpty()) {
                 break;
             }
-            resultSet.add(record);
+            resultSet.addAll(recordList);
         }
         return resultSet;
     }
@@ -96,19 +52,19 @@ public class InsertParser {
      * @param stream
      * @return Record
      */
-    public Record read(StringStream stream) {
+    public List<Record> read(StringStream stream) {
         String token = null;
 
         /**
          * read insert
          */
-        stream.skipWhitespace();
+        SqlParser.skipComment(stream);
 
         if(stream.eof()) {
             return null;
         }
 
-        token = this.getToken(stream);
+        token = SqlParser.getToken(stream);
 
         if(!token.equalsIgnoreCase("insert")) {
             return null;
@@ -117,43 +73,43 @@ public class InsertParser {
         /**
          * read into
          */
-        stream.skipWhitespace();
-        token = this.getToken(stream);
+        SqlParser.skipComment(stream);
+        token = SqlParser.getToken(stream);
 
         if(!token.equalsIgnoreCase("into")) {
             return null;
         }
 
-        stream.skipWhitespace();
-        String tableName = this.getToken(stream);
-        stream.skipWhitespace();
+        SqlParser.skipComment(stream);
+        stream.tryread("`", true);
+        String tableName = SqlParser.getToken(stream);
+        stream.tryread("`", true);
+        SqlParser.skipComment(stream);
 
         if(stream.read() != '(') {
-            throw new RuntimeException("expect '('!");
+            throw new RuntimeException("expect '(', but found: " + stream.getRemain(30));
         }
 
         String columnName = null;
-        Record record = new Record();
-        record.setTableName(tableName);
         List<String> columns = new ArrayList<String>();
-        List<Object> values = new ArrayList<Object>();
+        List<Record> resultSet = new ArrayList<Record>();
 
         /**
          * read columns
          */
         while(true) {
-            stream.skipWhitespace();
+            SqlParser.skipComment(stream);
 
             if(stream.peek() == ',') {
                 stream.read();
-                stream.skipWhitespace();
+                SqlParser.skipComment(stream);
             }
 
             if(stream.peek() == ')') {
                 break;
             }
 
-            columnName = this.getWord(stream);
+            columnName = SqlParser.getWord(stream);
             columns.add(columnName);
 
             if(columnName.length() < 1) {
@@ -161,20 +117,59 @@ public class InsertParser {
             }
         }
 
-        stream.skipWhitespace();
+        SqlParser.skipComment(stream);
 
         if(stream.read() != ')') {
             throw new RuntimeException("expect ')'!");
         }
 
-        stream.skipWhitespace();
-        token = this.getToken(stream);
+        SqlParser.skipComment(stream);
+        token = SqlParser.getToken(stream);
 
         if(!token.equalsIgnoreCase("values")) {
             throw new RuntimeException("expect keyword 'values'!");
         }
 
-        stream.skipWhitespace();
+        while(true) {
+            List<Object> values = this.readValues(stream);
+
+            if(columns.size() == values.size()) {
+                Record record = new Record();
+                record.setTableName(tableName);
+
+                for(int i = 0; i < columns.size(); i++) {
+                    record.addColumn(columns.get(i), values.get(i));
+                }
+                resultSet.add(record);
+            }
+            else {
+                throw new RuntimeException("column not match: columns.size: " + columns.size() + ", values.size: " + values.size());
+            }
+
+            int end = stream.peek();
+
+            if(end == ',') {
+                stream.read();
+                continue;
+            }
+            else {
+                if(end == ';') {
+                    stream.read();
+                }
+                break;
+            }
+        }
+        return resultSet;
+    }
+    
+    /**
+     * @param stream
+     * @return List<Object>
+     */
+    public List<Object> readValues(StringStream stream) {
+        List<Object> values = new ArrayList<Object>();
+        SqlParser.skipComment(stream);
+
         if(stream.read() != '(') {
             throw new RuntimeException("expect '('!");
         }
@@ -182,11 +177,11 @@ public class InsertParser {
         Object columnValue = null;
 
         while(true) {
-            stream.skipWhitespace();
+            SqlParser.skipComment(stream);
 
             if(stream.peek() == ',') {
                 stream.read();
-                stream.skipWhitespace();
+                SqlParser.skipComment(stream);
             }
 
             if(stream.peek() == ')') {
@@ -196,26 +191,12 @@ public class InsertParser {
             values.add(columnValue);
         }
 
-        stream.skipWhitespace();
+        SqlParser.skipComment(stream);
         if(stream.read() != ')') {
             throw new RuntimeException("expect ')' !");
         }
-
-        stream.skipWhitespace();
-
-        if(stream.peek() == ';') {
-            stream.read();
-        }
-
-        if(columns.size() == values.size()) {
-            for(int i = 0; i < columns.size(); i++) {
-                record.addColumn(columns.get(i), values.get(i));
-            }
-        }
-        else {
-            throw new RuntimeException("column not match: columns.size: " + columns.size() + ", values.size: " + values.size());
-        }
-        return record;
+        SqlParser.skipComment(stream);
+        return values;
     }
 
     /**
@@ -237,7 +218,7 @@ public class InsertParser {
                     c = (char)i;
 
                     if(c == '\\') {
-                        this.escape(stream, buffer);
+                        SqlParser.escape(stream, buffer);
                     }
                     else if(c == '"') {
                         i = stream.read();
@@ -285,84 +266,10 @@ public class InsertParser {
 
     /**
      * @param stream
-     * @return String
-     */
-    public String getToken(StringStream stream) {
-        int c = 0;
-        StringBuilder buffer = new StringBuilder();
-        stream.skipWhitespace();
-
-        while((c = stream.read()) != -1) {
-            if(c <= ' ' || c == '(' || c == ')' || c == ',') {
-                stream.back();
-                break;
-            }
-            else {
-                buffer.append((char)c);
-            }
-        }
-
-        String token = buffer.toString();
-
-        if(token.equals("--")) {
-            while((c = stream.read()) != -1) {
-                if(c == '\n') {
-                    break;
-                }
-            }
-            return this.getToken(stream);
-        }
-        return token;
-    }
-
-    /**
-     * @param stream
-     * @return String
-     */
-    public String getWord(StringStream stream) {
-        int c = 0;
-        char quoto = '\0';
-        StringBuilder buffer = new StringBuilder();
-        stream.skipWhitespace();
-        c = stream.read();
-
-        if(c == '`' || c == '\'' || c == '"' || c == '[') {
-            quoto = (char)c;
-            stream.skipWhitespace();
-        }
-        else {
-            stream.back();
-        }
-
-        while((c = stream.read()) != -1) {
-            if(this.isSqlIdentifierPart(c)) {
-                buffer.append((char)c);
-            }
-            else {
-                stream.back();
-                break;
-            }
-        }
-
-        String word = buffer.toString();
-        stream.skipWhitespace();
-
-        if(quoto != '\0') {
-            c = stream.read();
-
-            if(quoto != c && !(quoto == '[' && c == ']')) {
-                throw new RuntimeException("column '" + word + "', except '" + quoto + "': found '" + (char)c + "'");
-            }
-        }
-        return word;
-    }
-
-    /**
-     * @param stream
      * @return Object
      */
     public Object getColumnValue(StringStream stream) {
-        stream.skipWhitespace();
+        SqlParser.skipComment(stream);
 
         char token;
         StringBuilder buffer = new StringBuilder();
@@ -378,7 +285,7 @@ public class InsertParser {
 
         while((c = stream.read()) != -1) {
             if(c == '\\') {
-                this.unescape(stream, buffer);
+                SqlParser.unescape(stream, buffer);
             }
             else {
                 if(token == ' ') {
@@ -413,165 +320,6 @@ public class InsertParser {
                 return null;
             }
             return this.getValue(value);
-        }
-    }
-
-    /**
-     * @param stream
-     * @param buffer
-     */
-    private void escape(StringStream stream, StringBuilder buffer) {
-        char c = (char)(stream.read());
-
-        if(c != StringStream.EOF) {
-            switch(c) {
-                case 'n': {
-                    buffer.append('\n');
-                    break;
-                }
-                case 't': {
-                    buffer.append('\t');
-                    break;
-                }
-                case 'b': {
-                    buffer.append('\b');
-                    break;
-                }
-                case 'r': {
-                    buffer.append('\r');
-                    break;
-                }
-                case 'f': {
-                    buffer.append('\f');
-                    break;
-                }
-                case '\'': {
-                    buffer.append('\'');
-                    break;
-                }
-                case '\"': {
-                    buffer.append('\"');
-                    break;
-                }
-                case '\\': {
-                    buffer.append('\\');
-                    break;
-                }
-                case 'u': {
-                    char[] cbuf = new char[4];
-                    int i = stream.read(cbuf);
-
-                    if(i == 4) {
-                        String hex = new String(cbuf);
-
-                        try {
-                            Integer value = Integer.parseInt(hex, 16);
-                            buffer.append((char)(value.intValue()));
-                        }
-                        catch(NumberFormatException e) {
-                        }
-                    }
-                    break;
-                }
-                default: {
-                    stream.back();
-
-                    char[] cbuf = new char[3];
-                    int i = stream.read(cbuf);
-
-                    if(i == 3) {
-                        String oct = new String(cbuf);
-
-                        try {
-                            Integer value = Integer.parseInt(oct, 8);
-                            buffer.append((char)(value.intValue()));
-                        }
-                        catch(NumberFormatException e) {
-                        }
-                    }
-                    break;
-                }
-            }
-        }
-    }
-
-    /**
-     * @param stream
-     * @param buffer
-     */
-    private void unescape(StringStream stream, StringBuilder buffer) {
-        int c = stream.read();
-
-        if(c < 0) {
-            return;
-        }
-
-        switch(c) {
-            case 'n':{
-                buffer.append("\n");
-                break;
-            }
-            case 't': {
-                buffer.append("\t");
-                break;
-            }
-            case 'b': {
-                buffer.append("\b");
-                break;
-            }
-            case 'r': {
-                buffer.append("\r");
-                break;
-            }
-            case 'f': {
-                buffer.append("\f");
-                break;
-            }
-            case '\'': {
-                buffer.append("\'");
-                break;
-            }
-            case '\"': {
-                buffer.append("\"");
-                break;
-            }
-            case '\\': {
-                buffer.append("\\");
-                break;
-            }
-            case 'u': {
-                char[] cbuf = new char[4];
-                int length = stream.read(cbuf);
-
-                if(length == 4) {
-                    String hex = new String(cbuf);
-
-                    try {
-                        int value = Integer.parseInt(hex, 16);
-                        buffer.append((char)value);
-                    }
-                    catch(NumberFormatException e) {
-                    }
-                }
-                break;
-            }
-            default: {
-                stream.back();
-                char[] cbuf = new char[3];
-                int length = stream.read(cbuf);
-
-                if(length == 3) {
-                    String hex = new String(cbuf);
-
-                    try {
-                        int value = Integer.parseInt(hex, 8);
-                        buffer.append((char)value);
-                    }
-                    catch(NumberFormatException e) {
-                    }
-                }
-                break;
-            }
         }
     }
 
@@ -718,17 +466,6 @@ public class InsertParser {
     }
 
     /**
-     * @param i
-     * @return boolean
-     */
-    public boolean isSqlIdentifierPart(int i) {
-        if(i == '_') {
-            return true;
-        }
-        return (i >= 48 && i <= 57) || (i >= 97 && i <= 122) || (i >= 65 && i <= 90);
-    }
-
-    /**
      * @param resultSet
      * @param pattern
      */
@@ -780,67 +517,6 @@ public class InsertParser {
             }
         }
         return result.toString();
-    }
-
-    /**
-     * @param file
-     * @param encoding
-     * @return String
-     * @throws IOException
-     */
-    public static String read(File file, String encoding) throws IOException {
-        InputStream inputStream = null;
-
-        try {
-            inputStream = new FileInputStream(file);
-
-            if(encoding != null){
-                return read(new InputStreamReader(inputStream, encoding));
-            }
-            else{
-                return read(new InputStreamReader(inputStream));
-            }
-        }
-        finally {
-            if(inputStream != null) {
-                try {
-                    inputStream.close();
-                }
-                catch(IOException e) {
-                }
-            }
-        }
-    }
-
-    /**
-     * @param inputStream
-     * @param encoding
-     * @return String
-     * @throws IOException
-     */
-    public static String read(InputStream inputStream, String encoding) throws IOException {
-        if(encoding != null){
-            return read(new InputStreamReader(inputStream, encoding));
-        }
-        else{
-            return read(new InputStreamReader(inputStream));
-        }
-    }
-
-    /**
-     * @param reader
-     * @return String
-     * @throws IOException
-     */
-    public static String read(Reader reader) throws IOException {
-        int length = 0;
-        char[] cbuf = new char[4096];
-        StringBuilder buffer = new StringBuilder();
-
-        while((length = reader.read(cbuf)) > 0) {
-            buffer.append(cbuf, 0, length);
-        }
-        return buffer.toString();
     }
 
     /**

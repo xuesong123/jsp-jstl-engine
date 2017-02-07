@@ -1,5 +1,5 @@
 /*
- * $RCSfile: JspCompiler.java,v $$
+ * $RCSfile: JspCompiler.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-11-08 $
  *
@@ -434,52 +434,52 @@ public class JspCompiler {
         int flag = Tag.EVAL_PAGE;
 
         if(this.fastJstl && tagClassName.startsWith("com.skin.ayada.jstl.")) {
-            if(tagClassName.endsWith(".IfTag")) {
+            if(tagClassName.endsWith(".core.IfTag")) {
                 flag = this.writeIfTag(writer, node, index, indent);
             }
-            else if(tagClassName.endsWith(".SetTag")) {
+            else if(tagClassName.endsWith(".core.SetTag")) {
                 flag = this.writeSetTag(writer, node, index, indent);
             }
-            else if(tagClassName.endsWith(".OutTag")) {
+            else if(tagClassName.endsWith(".core.OutTag")) {
                 flag = this.writeOutTag(writer, node, index, indent);
             }
-            else if(tagClassName.endsWith(".ForEachTag")) {
+            else if(tagClassName.endsWith(".core.ForEachTag")) {
                 flag = this.writeForEachTag(writer, node, index, indent);
             }
-            else if(tagClassName.endsWith(".ChooseTag")) {
+            else if(tagClassName.endsWith(".core.ChooseTag")) {
                 flag = this.writeChooseTag(writer, node, index, indent);
             }
-            else if(tagClassName.endsWith(".WhenTag")) {
+            else if(tagClassName.endsWith(".core.WhenTag")) {
                 flag = this.writeWhenTag(writer, node, index, indent);
             }
-            else if(tagClassName.endsWith(".OtherwiseTag")) {
+            else if(tagClassName.endsWith(".core.OtherwiseTag")) {
                 flag = this.writeOtherwiseTag(writer, node, index, indent);
             }
-            else if(tagClassName.endsWith(".CommentTag")) {
+            else if(tagClassName.endsWith(".core.CommentTag")) {
                 flag = this.writeCommentTag(writer, node, index, indent);
             }
-            else if(tagClassName.endsWith(".PrintTag")) {
+            else if(tagClassName.endsWith(".core.PrintTag")) {
                 flag = this.writePrintTag(writer, node, index, indent);
             }
-            else if(tagClassName.endsWith(".AttributeTag")) {
+            else if(tagClassName.endsWith(".core.AttributeTag")) {
                 flag = this.writeAttributeTag(writer, node, index, indent);
             }
-            else if(tagClassName.endsWith(".ElementTag")) {
+            else if(tagClassName.endsWith(".core.ElementTag")) {
                 flag = this.writeElementTag(writer, node, index, indent);
             }
-            else if(tagClassName.endsWith(".ConstructorTag")) {
+            else if(tagClassName.endsWith(".core.ConstructorTag")) {
                 flag = this.writeConstructorTag(writer, node, index, indent);
             }
-            else if(tagClassName.endsWith(".PropertyTag")) {
+            else if(tagClassName.endsWith(".core.PropertyTag")) {
                 flag = this.writePropertyTag(writer, node, index, indent);
             }
-            else if(tagClassName.endsWith(".ParameterTag")) {
+            else if(tagClassName.endsWith(".core.ParameterTag")) {
                 flag = this.writePrameterTag(writer, node, index, indent);
             }
-            else if(tagClassName.endsWith(".ExecuteTag")) {
+            else if(tagClassName.endsWith(".core.ExecuteTag")) {
                 flag = this.writeExecuteTag(writer, node, index, indent);
             }
-            else if(tagClassName.endsWith(".ExitTag")) {
+            else if(tagClassName.endsWith(".core.ExitTag")) {
                 flag = this.writeExitTag(writer, node, index, indent);
             }
             else if(tagClassName.endsWith(".fmt.DateFormatTag")) {
@@ -1099,11 +1099,8 @@ public class JspCompiler {
 
         if(node.getOffset() == index) {
             writer.println(prefix + tagClassName + " " + tagInstanceName + " = new " + tagClassName + "();");
-
-            if(isTryCatchFinallyTag) {
-                writer.println(prefix + "try {");
-                prefix = prefix + "    ";
-            }
+            writer.println(prefix + "try {");
+            prefix = prefix + "    ";
 
             writer.println(prefix + tagInstanceName + ".setPageContext(pageContext);");
 
@@ -1126,7 +1123,6 @@ public class JspCompiler {
                 writer.println();
                 writer.println(prefix + tagInstanceName + ".setJspBody(" + jspFragmentInstanceName + ");");
                 writer.println(prefix + tagInstanceName + ".doTag();");
-                writer.println(prefix + tagInstanceName+ ".release();");
                 return Tag.SKIP_BODY;
             }
             else {
@@ -1155,9 +1151,7 @@ public class JspCompiler {
             }
         }
         else {
-            if(isTryCatchFinallyTag) {
-                prefix = prefix + "    ";
-            }
+            prefix = prefix + "    ";
 
             if(this.isAssignableFrom(tagClassName, SimpleTag.class)) {
             }
@@ -1183,21 +1177,22 @@ public class JspCompiler {
                 }
                 writer.println(prefix + "}");
                 writer.println(prefix + tagInstanceName+ ".doEndTag();");
-                writer.println(prefix + tagInstanceName + ".release();");
             }
 
+            prefix = prefix.substring(4);
+            writer.println(prefix + "}");
+
             if(isTryCatchFinallyTag) {
-                prefix = prefix.substring(4);
-                writer.println(prefix + "}");
                 writer.println(prefix + "catch(Throwable throwable) {");
-                writer.println(prefix + "    try {");
-                writer.println(prefix + "        " + tagInstanceName + ".doCatch(throwable);");
-                writer.println(prefix + "    } catch (Throwable t) {");
-                writer.println(prefix + "        throw new Exception(t);");
-                writer.println(prefix + "    }");
+                writer.println(prefix + "    this.doCatch(" + tagInstanceName + ", throwable);");
                 writer.println(prefix + "}");
                 writer.println(prefix + "finally {");
-                writer.println(prefix + "    " + tagInstanceName + ".doFinally();");
+                writer.println(prefix + "    this.doFinally(" + tagInstanceName + ");");
+                writer.println(prefix + "}");
+            }
+            else {
+                writer.println(prefix + "finally {");
+                writer.println(prefix + "    this.doFinally(" + tagInstanceName + ");");
                 writer.println(prefix + "}");
             }
         }

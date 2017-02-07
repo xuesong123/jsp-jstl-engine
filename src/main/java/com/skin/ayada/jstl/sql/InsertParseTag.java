@@ -93,7 +93,7 @@ public class InsertParseTag extends BodyTagSupport {
      * @return Map<String, Object>
      */
     public Map<String, Object> getMap(Table table) {
-        List<Column> columns = table.listColumns();
+        List<Column> columns = table.getColumns();
         Map<String, Object> map = new LinkedHashMap<String, Object>();
 
         if(columns != null) {

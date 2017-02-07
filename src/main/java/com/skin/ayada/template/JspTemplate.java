@@ -23,6 +23,8 @@ import org.slf4j.LoggerFactory;
 import com.skin.ayada.runtime.JspWriter;
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.statement.Node;
+import com.skin.ayada.tagext.Tag;
+import com.skin.ayada.tagext.TryCatchFinally;
 
 /**
  * <p>Title: Template</p>
@@ -87,6 +89,52 @@ public abstract class JspTemplate extends Template {
      * @throws Throwable
      */
     public abstract void _execute(final PageContext pageContext) throws Throwable;
+
+    /**
+     * @param tryCatchFinally
+     * @throws Exception
+     */
+    protected final void doCatch(TryCatchFinally tryCatchFinally, Throwable throwable) throws Exception {
+        try {
+            tryCatchFinally.doCatch(throwable);
+        }
+        catch(Throwable t) {
+            if(t instanceof Exception) {
+                throw (Exception)t;
+            }
+            throw new Exception(t);
+        }
+    }
+
+    /**
+     * @param tag
+     * @throws Exception
+     */
+    protected final void doFinally(Tag tag) throws Exception {
+        Exception exception = null;
+
+        if(tag instanceof TryCatchFinally) {
+            try {
+                ((TryCatchFinally)tag).doFinally();
+            }
+            catch(Exception e) {
+                exception = e;
+            }
+        }
+
+        try {
+            tag.release();
+        }
+        catch(Exception e) {
+            if(exception == null) {
+                exception = e;
+            }
+        }
+
+        if(exception != null) {
+            throw exception;
+        }
+    }
 
     /**
      * @param clazz

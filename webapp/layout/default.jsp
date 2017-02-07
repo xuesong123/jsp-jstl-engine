@@ -13,7 +13,7 @@
 <body>
 <div class="wrap">
     <div class="header">
-        <c:out value="${header}"/>
+        <c:out value="${header}" t:clip="true"/>
     </div>
 </div>
 <div class="wrap">

@@ -1,4 +1,4 @@
-<c:invoke page="/tags/layout.jsp">
+<c:invoke page="/layout/default.jsp">
     <c:attribute name="title" value="base layout test"/>
     <c:attribute name="header">
         <ul>

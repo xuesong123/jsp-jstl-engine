@@ -1,5 +1,5 @@
 /*
- * $RCSfile: DefaultExecutor.java,v $$
+ * $RCSfile: DefaultExecutor.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-19 $
  *
@@ -23,7 +23,6 @@ import com.skin.ayada.statement.TagNode;
 import com.skin.ayada.statement.Variable;
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTag;
-import com.skin.ayada.tagext.FinallyException;
 import com.skin.ayada.tagext.IterationTag;
 import com.skin.ayada.tagext.SimpleTag;
 import com.skin.ayada.tagext.Tag;
@@ -86,12 +85,12 @@ public class DefaultExecutor {
             int nodeType = NodeType.UNKNOWN;
 
             while(index < end) {
-                try {
-                    out = pageContext.getOut();
-                    statement = statements[index];
-                    node = statement.getNode();
-                    nodeType = node.getNodeType();
+                out = pageContext.getOut();
+                statement = statements[index];
+                node = statement.getNode();
+                nodeType = node.getNodeType();
 
+                try {
                     switch (nodeType) {
                         case NodeType.TEXT: {
                             out.write(node.getTextContent());
@@ -144,9 +143,9 @@ public class DefaultExecutor {
                         }
                     }
 
-                    if(node.getOffset() == index) {
-                        Tag tag = statement.getTag();
+                    Tag tag = statement.getTag();
 
+                    if(node.getOffset() == index) {
                         if(tag == null) {
                             tag = ((TagNode)node).getTagFactory().create();
                             tag.setPageContext(pageContext);
@@ -176,33 +175,16 @@ public class DefaultExecutor {
                         flag = doStartTag(statement, pageContext);
 
                         if(flag == Tag.SKIP_BODY) {
-                            // goto end tag, then execute doEndTag();
                             index = node.getOffset() + node.getLength() - 1;
                             continue;
                         }
-
-                        if(flag == Tag.SKIP_PAGE) {
-                            /**
-                             * Tag.SKIP_PAGE: Valid return value for doEndTag().
-                             * throw new java.lang.IllegalStateException("SKIP_PAGE: " + flag);
-                             */
-                            Statement s = getTryCatchFinallyStatement(statements, index);
-
-                            if(s != null) {
-                                statement = s;
-                                node = statement.getNode();
-                                TryCatchFinally tryCatchFinally = (TryCatchFinally)(statement.getTag());
-
-                                if(tryCatchFinally != null) {
-                                    try {
-                                        tryCatchFinally.doFinally();
-                                    }
-                                    catch(Throwable throwable) {
-                                        throw new FinallyException(throwable);
-                                    }
-                                }
-                            }
+                        else if(flag == Tag.SKIP_PAGE) {
+                            doExit(statement);
                             break;
+                        }
+                        else {
+                            index++;
+                            continue;
                         }
                     }
                     else {
@@ -212,56 +194,32 @@ public class DefaultExecutor {
                             index = node.getOffset() + 1;
                             continue;
                         }
-
-                        if(flag == Tag.SKIP_PAGE) {
-                            Statement s = getTryCatchFinallyStatement(statements, index);
-
-                            if(s != null) {
-                                statement = s;
-                                node = statement.getNode();
-                                TryCatchFinally tryCatchFinally = (TryCatchFinally)(statement.getTag());
-
-                                if(tryCatchFinally != null) {
-                                    try {
-                                        tryCatchFinally.doFinally();
-                                    }
-                                    catch(Throwable throwable) {
-                                        throw new FinallyException(throwable);
-                                    }
-                                }
-                            }
+                        else if(flag == Tag.SKIP_PAGE) {
+                            doExit(statement);
                             break;
+                        }
+                        else {
+                            doFinally(tag);
+                            index++;
+                            continue;
                         }
                     }
                 }
                 catch(Throwable throwable) {
-                    if(throwable instanceof FinallyException) {
+                    /**
+                     * 如果退出时发生了异常
+                     */
+                    if(throwable instanceof ExitException) {
                         throw throwable.getCause();
                     }
 
-                    Statement s = getTryCatchFinallyStatement(statements, index);
-
-                    if(s == null) {
-                        throw throwable;
+                    if(throwable instanceof FinallyException) {
+                        index = doCatch(statement.getParent(), throwable.getCause());
                     }
-
-                    Tag t = s.getTag();
-                    Node n = s.getNode();
-                    TryCatchFinally tryCatchFinally = (TryCatchFinally)(t);
-
-                    if(tryCatchFinally == null) {
-                        throw throwable;
-                    }
-
-                    try {
-                        tryCatchFinally.doCatch(throwable);
-                    }
-                    finally {
-                        tryCatchFinally.doFinally();
-                        index = n.getOffset() + n.getLength();
+                    else {
+                        index = doCatch(statement, throwable);
                     }
                 }
-                index++;
             }
             jspWriter.flush();
         }
@@ -287,7 +245,7 @@ public class DefaultExecutor {
      * @return int
      * @throws Exception
      */
-    public static int doStartTag(final Statement statement, final PageContext pageContext) throws Exception {
+    private static int doStartTag(final Statement statement, final PageContext pageContext) throws Exception {
         Tag tag = statement.getTag();
         int flag = tag.doStartTag();
         statement.setStartTagFlag(flag);
@@ -343,86 +301,129 @@ public class DefaultExecutor {
                 }
             }
         }
-
-        int flag = tag.doEndTag();
-
-        if(tag instanceof TryCatchFinally) {
-            try {
-                ((TryCatchFinally)tag).doFinally();
-            }
-            catch(Throwable throwable) {
-                throw new FinallyException(throwable);
-            }
-        }
-        tag.release();
-        return flag;
-    }
-
-    /**
-     * @param tag
-     * @throws FinallyException
-     */
-    public static void doFinally(Tag tag) throws FinallyException {
-        if(tag instanceof TryCatchFinally) {
-            try {
-                ((TryCatchFinally)tag).doFinally();
-            }
-            catch(Throwable throwable) {
-                throw new FinallyException(throwable);
-            }
-        }
+        return tag.doEndTag();
     }
 
     /**
      * @param statement
-     * @param target
-     * @return Tag
+     * @param throwable
+     * @return int
+     * @throws Throwable
      */
-    public static Statement getParent(Statement statement, Class<?> target) {
-        Statement parent = statement;
+    private static int doCatch(final Statement statement, final Throwable throwable) throws Throwable {
+        Statement current = statement;
+        Throwable exception = throwable;
 
-        while(parent != null && (parent = parent.getParent()) != null) {
-            if(parent.getTag().getClass() == target) {
-                return parent;
+        while(current != null) {
+            Tag tag = current.getTag();
+            Throwable error = null;
+
+            try {
+                if(tag instanceof TryCatchFinally) {
+                    ((TryCatchFinally)tag).doCatch(exception);
+                }
+            }
+            catch(Throwable t) {
+                error = t;
+            }
+            finally {
+                try {
+                    doFinally(tag);
+                }
+                catch(Throwable t) {
+                    error = t.getCause();
+                }
+            }
+
+            if(error != null) {
+                exception = error;
+                current = current.getParent();
+            }
+            else {
+                exception = null;
+                break;
             }
         }
-        return null;
+
+        if(exception != null) {
+            throw exception;
+        }
+
+        /**
+         * 只要exception == null, current一定不为null
+         * 需要检查是因为编译器的代码检查
+         */
+        if(current != null) {
+            Node node = current.getNode();
+            return (node.getOffset() + node.getLength());
+        }
+        return -999;
     }
 
     /**
-     * @param statements
-     * @param index
-     * @return Tag
+     * @param statement
+     * @throws Throwable
      */
-    public static Statement getTryCatchFinallyStatement(final Statement[] statements, int index) {
-        Node node = statements[index].getNode();
-        Node parent = node;
+    private static void doExit(final Statement statement) throws Throwable {
+        Statement current = statement;
+        Throwable exception = null;
 
-        while(parent != null) {
-            Statement statement = statements[parent.getOffset()];
-            Tag tag = statement.getTag();
+        while(current != null) {
+            Tag tag = current.getTag();
 
-            if(tag instanceof TryCatchFinally) {
-                return statement;
+            try {
+                doFinally(tag);
             }
-            parent = parent.getParent();
+            catch(Throwable t) {
+                exception = t.getCause();
+            }
+            current = current.getParent();
         }
-        return null;
+
+        if(exception != null) {
+            throw new ExitException(exception);
+        }
+    }
+
+    /**
+     * @param tag
+     * @throws Exception
+     */
+    private static void doFinally(final Tag tag) throws Exception {
+        Exception exception = null;
+
+        if(tag instanceof TryCatchFinally) {
+            try {
+                ((TryCatchFinally)tag).doFinally();
+            }
+            catch(Exception e) {
+                exception = e;
+            }
+        }
+
+        try {
+            tag.release();
+        }
+        catch(Exception e) {
+            if(exception == null) {
+                exception = e;
+            }
+        }
+
+        if(exception != null) {
+            throw new FinallyException(exception);
+        }
     }
 
     /**
      * @param list
      * @return List<Statement>
      */
-    public static Statement[] getStatements(final List<Node> list) {
+    private static Statement[] getStatements(final List<Node> list) {
         Statement[] statements = new Statement[list.size()];
 
         for(int i = 0, size = list.size(); i < size; i++) {
             Node node = list.get(i);
-
-            if(node.getLength() < 1) {
-                throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node) + " not match !");
-            }
 
             if(node.getOffset() == i) {
                 Node parent = node.getParent();
@@ -431,7 +432,6 @@ public class DefaultExecutor {
                 if(parent != null) {
                     statement.setParent(statements[parent.getOffset()]);
                 }
-
                 statements[i] = statement;
             }
             else {

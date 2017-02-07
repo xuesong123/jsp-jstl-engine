@@ -13,6 +13,7 @@ package com.skin.ayada.database;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>Title: Table</p>
@@ -30,11 +31,12 @@ public class Table {
     private String className;
     private String variableName;
     private String remarks;
-    private List<Column> primaryKeys;
     private List<Column> columns;
+    private List<IndexInfo> indexs;
+    private Map<String, String> attributes;
 
     /**
-     *
+     * default
      */
     public Table() {
         this(null, null);
@@ -54,36 +56,29 @@ public class Table {
     public Table(String tableName, String alias) {
         this.alias = alias;
         this.tableName = tableName;
-        this.primaryKeys = new ArrayList<Column>();
         this.columns = new ArrayList<Column>();
     }
 
     /**
-     * @param t
+     * @param table
      */
-    public Table(Table t) {
+    public Table(Table table) {
         this();
 
-        if(t != null) {
-            this.alias = t.alias;
-            this.tableName = t.tableName;
-            this.tableType = t.tableType;
-            this.remarks = t.remarks;
-            this.queryName = t.queryName;
+        if(table != null) {
+            this.alias = table.alias;
+            this.tableName = table.tableName;
+            this.tableType = table.tableType;
+            this.remarks = table.remarks;
+            this.queryName = table.queryName;
 
-            if(t.primaryKeys != null && !t.primaryKeys.isEmpty()) {
-                for(Iterator<Column> iterator = t.primaryKeys.iterator(); iterator.hasNext();) {
-                    Column c = new Column(iterator.next());
-                    c.setTable(this);
-                    this.primaryKeys.add(c);
-                }
-            }
-
-            if(t.columns != null && t.columns.size() > 0) {
-                for(Column column : t.columns) {
-                    Column c = new Column(column);
-                    c.setTable(this);
-                    this.columns.add(c);
+            if(table.columns != null && !table.columns.isEmpty()) {
+                Iterator<Column> iterator = table.columns.iterator();
+                
+                while(iterator.hasNext()) {
+                    Column column = new Column(iterator.next());
+                    column.setTable(this);
+                    this.columns.add(column);
                 }
             }
         }
@@ -205,21 +200,47 @@ public class Table {
      * @return the primaryKeys
      */
     public List<Column> getPrimaryKeys() {
-        return this.primaryKeys;
-    }
+        List<Column> primaryKeys = new ArrayList<Column>();
 
-    /**
-     * @param primaryKeys the primaryKeys to set
-     */
-    public void setPrimaryKeys(List<Column> primaryKeys) {
-        this.primaryKeys = primaryKeys;
+        if(this.columns != null) {
+            for(Column column : this.columns) {
+                if(column.getPrimaryKey()) {
+                    primaryKeys.add(column);
+                }
+            }
+        }
+        return primaryKeys;
     }
 
     /**
      * @return the columns
      */
     public List<Column> getColumns() {
+        if(this.columns == null) {
+            this.columns = new ArrayList<Column>();
+        }
         return this.columns;
+    }
+
+    /**
+     * @param primaryKey
+     * @return the columns
+     */
+    public List<Column> getColumns(boolean primaryKey) {
+        if(primaryKey) {
+            return this.getColumns();
+        }
+
+        List<Column> list = new ArrayList<Column>();
+
+        if(this.columns != null) {
+            for(Column column : this.columns) {
+                if(!column.getPrimaryKey()) {
+                    list.add(column);
+                }
+            }
+        }
+        return list;
     }
 
     /**
@@ -230,31 +251,65 @@ public class Table {
     }
 
     /**
-     * @param column
+     * @return the indexs
      */
-    public void addPrimaryKey(Column column) {
-        this.primaryKeys.add(column);
+    public List<IndexInfo> getIndexs() {
+        return this.indexs;
+    }
+
+    /**
+     * @param indexs the indexs to set
+     */
+    public void setIndexs(List<IndexInfo> indexs) {
+        this.indexs = indexs;
+    }
+
+    /**
+     * @return the attributes
+     */
+    public Map<String, String> getAttributes() {
+        return this.attributes;
+    }
+
+    /**
+     * @param attributes the attributes to set
+     */
+    public void setAttributes(Map<String, String> attributes) {
+        this.attributes = attributes;
+    }
+
+    /**
+     * @param indexs the indexs to set
+     */
+    public void addIndex(List<IndexInfo> indexs) {
+        if(this.indexs == null) {
+            this.indexs = new ArrayList<IndexInfo>();
+        }
+        this.indexs.addAll(indexs);
+    }
+
+    /**
+     * @param indexInfo
+     */
+    public void addIndex(IndexInfo indexInfo) {
+        if(this.indexs == null) {
+            this.indexs = new ArrayList<IndexInfo>();
+        }
+        this.indexs.add(indexInfo);
     }
 
     /**
      * @param column
      */
-    public void addColumn(Column column) {
+    public void add(Column column) {
         this.columns.add(column);
     }
 
     /**
      * @param column
      */
-    public void removeColumn(Column column) {
+    public void remove(Column column) {
         this.columns.remove(column);
-    }
-
-    /**
-     * @param column
-     */
-    public void removePrimaryKey(Column column) {
-        this.primaryKeys.remove(column);
     }
 
     /**
@@ -263,26 +318,12 @@ public class Table {
      */
     public Column getColumn(String columnName) {
         if(columnName != null) {
-            List<Column> list = this.getPrimaryKeys();
+            List<Column> list = this.getColumns();
 
             if(list != null) {
-                for(Iterator<Column> iterator = list.iterator(); iterator.hasNext();) {
-                    Column c = iterator.next();
-
-                    if(columnName.equals(c.getColumnName())) {
-                        return c;
-                    }
-                }
-            }
-
-            list = this.getColumns();
-
-            if(list != null) {
-                for(Iterator<Column> iterator = list.iterator(); iterator.hasNext();) {
-                    Column c = iterator.next();
-
-                    if(columnName.equals(c.getColumnName())) {
-                        return c;
+                for(Column column : list) {
+                    if(columnName.equals(column.getColumnName())) {
+                        return column;
                     }
                 }
             }
@@ -294,8 +335,14 @@ public class Table {
      * @return Column
      */
     public Column getPrimaryKey() {
-        if(this.primaryKeys != null && !this.primaryKeys.isEmpty()) {
-            return this.primaryKeys.get(0);
+        List<Column> list = this.getColumns();
+
+        if(list != null) {
+            for(Column column : list) {
+                if(column.getPrimaryKey()) {
+                    return column;
+                }
+            }
         }
         return null;
     }
@@ -305,13 +352,7 @@ public class Table {
      * @return boolean
      */
     public boolean contains(Column column) {
-        if(this.primaryKeys != null && !this.primaryKeys.isEmpty()) {
-            if(this.primaryKeys.contains(column)) {
-                return true;
-            }
-        }
-
-        if(this.columns != null && !this.columns.isEmpty()) {
+        if(this.columns != null && this.columns.size() > 0) {
             if(this.columns.contains(column)) {
                 return true;
             }
@@ -320,226 +361,15 @@ public class Table {
     }
 
     /**
-     * @return count
+     * @return int
      */
     public int getColumnCount() {
-        int count = 0;
-
-        if(this.primaryKeys != null && !this.primaryKeys.isEmpty()) {
-            count = count + this.primaryKeys.size();
+        if(this.columns != null) {
+            return this.columns.size();
         }
-
-        if(this.columns != null && !this.columns.isEmpty()) {
-            count = count + this.columns.size();
+        else {
+            return 0;
         }
-        return count;
-    }
-
-    /**
-     * @return List<Column>
-     */
-    public List<Column> listColumns() {
-        List<Column> list = new ArrayList<Column>();
-
-        if(this.primaryKeys != null && !this.primaryKeys.isEmpty()) {
-            list.addAll(this.primaryKeys);
-        }
-
-        if(this.columns != null && !this.columns.isEmpty()) {
-            list.addAll(this.columns);
-        }
-        return list;
-    }
-
-    /**
-     * @return String
-     */
-    public String getInsertString() {
-        List<Column> columns = this.listColumns();
-        StringBuilder buffer = new StringBuilder("INSERT INTO ");
-        buffer.append(this.getTableName());
-        buffer.append("(");
-        int size = columns.size() - 1;
-
-        for(int i = 0; i < size; i++) {
-            Column column = columns.get(i);
-            buffer.append(column.getColumnName()).append(", ");
-        }
-
-        if(size > 0) {
-            Column column = columns.get(size);
-            buffer.append(column.getColumnName());
-        }
-
-        buffer.append(") VALUES (");
-
-        for(int i = 0; i < size; i++) {
-            Column column = columns.get(i);
-            buffer.append(column.getColumnName()).append(", ");
-        }
-
-        if(size > 0) {
-            Column column = columns.get(size);
-            buffer.append(column.getColumnName());
-        }
-        buffer.append(")");
-        return buffer.toString();
-    }
-
-    /**
-     * @return String
-     */
-    public String getUpdateString() {
-        List<Column> columns = this.listColumns();
-        StringBuilder buffer = new StringBuilder("UPDATE ");
-        buffer.append(this.getTableName());
-        buffer.append(" SET ");
-        int size = columns.size() - 1;
-
-        for(int i = 0; i < size; i++) {
-            Column column = columns.get(i);
-            buffer.append(column.getColumnName());
-            buffer.append("=?, ");
-        }
-
-        if(size > 0) {
-            Column column = columns.get(size);
-            buffer.append(column.getColumnName());
-            buffer.append("=?");
-        }
-        return buffer.toString();
-    }
-
-    /**
-     * @return String
-     */
-    public String getCreateString() {
-        return this.getCreateString("%s");
-    }
-
-    /**
-     * @param pattern
-     * @return String
-     */
-    public String getCreateString(String pattern) {
-        int maxLength = 0;
-        String columnName = null;
-        List<Column> columns = this.listColumns();
-        StringBuilder buffer = new StringBuilder();
-        buffer.append("CREATE TABLE ");
-        buffer.append(String.format(pattern, this.getTableName()));
-        buffer.append("(\r\n");
-
-        for(int i = 0, size = columns.size(); i < size; i++) {
-            Column column = columns.get(i);
-            columnName = String.format(pattern, column.getColumnName());
-
-            if(columnName.length() > maxLength) {
-                maxLength = columnName.length();
-            }
-        }
-
-        maxLength = maxLength + 4;
-
-        for(int i = 0, size = columns.size(); i < size; i++) {
-            Column column = columns.get(i);
-            columnName = String.format(pattern, column.getColumnName());
-            buffer.append("    ");
-            buffer.append(this.padding(columnName, maxLength, " "));
-            buffer.append(" ");
-            buffer.append(column.getTypeName());
-
-            if(column.getPrecision() > 0) {
-                buffer.append("(");
-                buffer.append(column.getPrecision());
-                buffer.append(")");
-            }
-
-            if(column.getAutoIncrement() == 1) {
-                buffer.append(" AUTO_INCREMENT");
-            }
-
-            if(column.getNullable() == 0) {
-                buffer.append(" not null");
-            }
-
-            String remarks = column.getRemarks();
-
-            if(remarks != null && remarks.length() > 0) {
-                buffer.append(" comment '");
-                buffer.append(this.escape(remarks));
-                buffer.append("'");
-            }
-
-            if(i < size - 1) {
-                buffer.append(",");
-            }
-
-            buffer.append("\r\n");
-        }
-        buffer.append(");");
-        return buffer.toString();
-    }
-
-    /**
-     * @return String
-     */
-    public String getQueryString() {
-        List<Column> columns = this.listColumns();
-        StringBuilder buffer = new StringBuilder("SELECT ");
-        int size = columns.size() - 1;
-
-        for(int i = 0; i < size; i++) {
-            Column column = columns.get(i);
-            buffer.append(column.getColumnName()).append(", ");
-        }
-
-        if(size > 0) {
-            Column column = columns.get(size);
-            buffer.append(column.getColumnName());
-        }
-        buffer.append(" FROM ").append(this.getTableName());
-        return buffer.toString();
-    }
-
-    /**
-     * @param source
-     * @param length
-     * @param pad
-     * @return String
-     */
-    public String padding(String source, int length, String pad) {
-        StringBuilder buffer = new StringBuilder(source);
-
-        while(buffer.length() < length) {
-            buffer.append(pad);
-        }
-
-        if(buffer.length() > length) {
-            return buffer.substring(0, length);
-        }
-        return buffer.toString();
-    }
-
-    /**
-     * @param source
-     * @return String
-     */
-    private String escape(String source) {
-        char ch;
-        StringBuilder buffer = new StringBuilder();
-
-        for(int i = 0, length = source.length(); i < length; i++) {
-            ch = source.charAt(i);
-
-            if(ch == '\'') {
-                buffer.append("\\'");
-            }
-            else {
-                buffer.append(ch);
-            }
-        }
-        return buffer.toString();
     }
 
     /**

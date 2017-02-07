@@ -9,6 +9,10 @@
         2. 如果父Tag的doFinally方法在执行的时候抛出了异常，那么整个执行过程是否能够正常终止。
         3. 如果父Tag的doFinally方法在执行的时候抛出了异常，显示出来的错误信息是否正确。错误信息应该定位到TryCatchFinally标签上，而不应该定位到返回Tag.SKIP_PAGE的标签上。
 -->
-<c:tryCatchTest exception="doFinally">
-    <c:exit/>
+<c:tryCatchTest name="tc1" exception="doFinally">
+    <c:tryCatchTest name="tc2" exception="doFinally">
+        <c:tryCatchTest name="tc3" exception="doStartTag">
+            <c:exit/>
+        </c:tryCatchTest>
+    </c:tryCatchTest>
 </c:tryCatchTest>

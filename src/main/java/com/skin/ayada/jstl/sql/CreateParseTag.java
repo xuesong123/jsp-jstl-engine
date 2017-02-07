@@ -1,5 +1,5 @@
 /*
- * $RCSfile: CreateParseTag.java,v $$
+ * $RCSfile: CreateParseTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2014-03-25 $
  *
@@ -103,7 +103,7 @@ public class CreateParseTag extends BodyTagSupport {
      * @return Map<String, Object>
      */
     public Map<String, Object> getMap(Table table) {
-        List<Column> columns = table.listColumns();
+        List<Column> columns = table.getColumns();
         Map<String, Object> map = new LinkedHashMap<String, Object>();
 
         if(columns != null) {

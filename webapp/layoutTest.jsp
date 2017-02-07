@@ -1,4 +1,4 @@
-<c:layout page="/tags/layout.jsp">
+<c:layout page="/layout/default.jsp">
     <c:attribute name="title" value="base layout test"/>
     <c:attribute name="header">
         <ul>
@@ -12,7 +12,7 @@
         <p>myString: [<c:out value="${myString}"/>]</p>
     </c:attribute>
     <c:attribute name="footer">
-        <div>copy right</div>
+        <div>copyright</div>
     </c:attribute>
 </c:layout>
 dsafasf133

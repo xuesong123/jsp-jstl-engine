@@ -21,6 +21,7 @@ import com.skin.ayada.tagext.TryCatchFinally;
  * @version 1.0
  */
 public class TryCatchTestTag extends TagSupport implements TryCatchFinally {
+    private String name;
     private String exception;
 
     /**
@@ -28,11 +29,11 @@ public class TryCatchTestTag extends TagSupport implements TryCatchFinally {
      */
     @Override
     public int doStartTag() throws Exception {
-        System.out.println("doStartTag invoked !");
+        System.out.println(this.name + ": doStartTag invoked !");
 
         if(this.contains(this.exception, "doStartTag")) {
-            System.out.println("TryCatchTestTag.doStartTag throws Exception !");
-            throw new RuntimeException("TryCatchTestTag.doStartTag throws Exception !");
+            System.out.println(this.name + ": TryCatchTestTag.doStartTag throws Exception !");
+            throw new RuntimeException(this.name + ": TryCatchTestTag.doStartTag throws Exception !");
         }
         return Tag.EVAL_PAGE;
     }
@@ -42,11 +43,11 @@ public class TryCatchTestTag extends TagSupport implements TryCatchFinally {
      */
     @Override
     public int doEndTag() throws Exception {
-        System.out.println("doEndTag invoked !");
+        System.out.println(this.name + ": doEndTag invoked !");
 
-        if(this.contains(this.exception, "doEndTag")) {
-            System.out.println("TryCatchTestTag.doEndTag throws Exception !");
-            throw new RuntimeException("TryCatchTestTag.doEndTag throws Exception !");
+        if(this.contains(this.exception, this.name + ": doEndTag")) {
+            System.out.println(this.name + ": TryCatchTestTag.doEndTag throws Exception !");
+            throw new RuntimeException(this.name + ": TryCatchTestTag.doEndTag throws Exception !");
         }
         return Tag.EVAL_PAGE;
     }
@@ -57,24 +58,37 @@ public class TryCatchTestTag extends TagSupport implements TryCatchFinally {
      */
     @Override
     public void doCatch(Throwable throwable) throws Throwable {
-        System.out.println("doCatch invoked !");
+        System.out.println(this.name + ": doCatch invoked !");
 
         if(this.contains(this.exception, "doCatch")) {
-            System.out.println("TryCatchTestTag.doCatch throws Exception !");
-            throw new RuntimeException("TryCatchTestTag.doCatch throws Exception !");
+            System.out.println(this.name + ": TryCatchTestTag.doCatch throws Exception !");
+            throw new RuntimeException(this.name + ": TryCatchTestTag.doCatch throws Exception !");
         }
     }
 
     /**
-     * 
+     * doFinally
      */
     @Override
     public void doFinally() {
-        System.out.println("doFinally invoked !");
+        System.out.println(this.name + ": doFinally invoked !");
 
         if(this.contains(this.exception, "doFinally")) {
-            System.out.println("TryCatchTestTag.doFinally throws Exception !");
-            throw new RuntimeException("TryCatchTestTag.doFinally throws Exception !");
+            System.out.println(this.name + ": TryCatchTestTag.doFinally throws Exception !");
+            throw new RuntimeException(this.name + ": TryCatchTestTag.doFinally throws Exception !");
+        }
+    }
+
+    /**
+     * release
+     */
+    @Override
+    public void release() {
+        System.out.println(this.name + ": release invoked !");
+
+        if(this.contains(this.exception, "release")) {
+            System.out.println(this.name + ": TryCatchTestTag.release throws Exception !");
+            throw new RuntimeException(this.name + ": TryCatchTestTag.release throws Exception !");
         }
     }
 
@@ -100,6 +114,20 @@ public class TryCatchTestTag extends TagSupport implements TryCatchFinally {
             }
         }
         return false;
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return this.name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**

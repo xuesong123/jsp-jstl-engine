@@ -882,7 +882,14 @@ public class TemplateCompiler extends PageCompiler {
                 String clip = node.getAttribute("t:clip");
                 TagInfo tagInfo = tagLibrary.getTagInfo(node.getNodeName());
 
-                if(tagInfo.getIgnoreWhitespace() && !"false".equals(clip)) {
+                if(clip == null) {
+                    clip = String.valueOf(tagInfo.getIgnoreWhitespace());
+                }
+
+                /**
+                 * trim whitespace
+                 */
+                if(clip.equals("true")) {
                     if(i > 0) {
                         this.clip(list.get(i - 1), 1);
                     }

@@ -1,5 +1,5 @@
 /*
- * $RCSfile: TemplateManager.java,v $$
+ * $RCSfile: TemplateManager.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-03-10 $
  *
@@ -10,7 +10,9 @@
  */
 package com.skin.ayada.template;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.skin.ayada.runtime.DefaultExpressionFactory;
@@ -90,5 +92,23 @@ public class TemplateManager {
                 }
             }
         }
+    }
+
+    /**
+     * @param templateContext
+     */
+    public static void destory(TemplateContext templateContext) {
+        List<String> keys = new ArrayList<String>();
+
+        for(Map.Entry<String, TemplateContext> entry : cache.entrySet()) {
+            if(templateContext == entry.getValue()) {
+                keys.add(entry.getKey());
+            }
+        }
+
+        for(String key : keys) {
+            cache.remove(key);
+        }
+        templateContext.destory();
     }
 }

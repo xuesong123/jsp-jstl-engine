@@ -21,7 +21,6 @@ import com.skin.ayada.statement.Statement;
 import com.skin.ayada.statement.TagNode;
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTag;
-import com.skin.ayada.tagext.FinallyException;
 import com.skin.ayada.tagext.IterationTag;
 import com.skin.ayada.tagext.SimpleTag;
 import com.skin.ayada.tagext.Tag;
