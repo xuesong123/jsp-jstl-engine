@@ -82,4 +82,11 @@ public class TemplateConfig {
     public static String getJavaTemplate() {
         return instance.getString("ayada.compile.java-template");
     }
+
+    /**
+     * @return String
+     */
+    public static String getCompileWork() {
+        return instance.getString("ayada.compile.work");
+    }
 }

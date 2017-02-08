@@ -10,6 +10,8 @@
  */
 package com.skin.ayada.runtime;
 
+import java.util.Map;
+
 import com.skin.ayada.tagext.Tag;
 
 /**
@@ -23,25 +25,32 @@ public interface TagFactory {
     /**
      * @return Tag
      */
-    public Tag create();
+    Tag create();
 
     /**
      * @param tagName
      */
-    public void setTagName(String tagName);
+    void setTagName(String tagName);
 
     /**
      * @return String
      */
-    public String getTagName();
+    String getTagName();
 
     /**
      * @param className
      */
-    public void setClassName(String className);
+    void setClassName(String className);
 
     /**
      * @return String
      */
-    public String getClassName();
+    String getClassName();
+
+    /**
+     * @param tag
+     * @param attributes
+     * @param expressionContext
+     */
+    void setAttributes(Tag tag, Map<String, String> attributes, ExpressionContext expressionContext);
 }

@@ -42,7 +42,7 @@ public class ExpressionUtil {
      * @return Object
      */
     public static String getString(ExpressionContext expressionContext, String source) {
-        Object value = ExpressionUtil.evaluate(expressionContext, source);
+        Object value = ExpressionUtil.eval(expressionContext, source);
 
         if(value == null || value instanceof Empty<?, ?>) {
             return "";
@@ -56,7 +56,7 @@ public class ExpressionUtil {
      * @return Object
      */
     public static boolean getBoolean(ExpressionContext expressionContext, String source) {
-        Object value = ExpressionUtil.evaluate(expressionContext, source);
+        Object value = ExpressionUtil.eval(expressionContext, source);
 
         if(value == null) {
             return false;
@@ -74,12 +74,12 @@ public class ExpressionUtil {
      * @return Byte
      */
     public static Byte getByte(ExpressionContext expressionContext, String source) {
-        Object value = ExpressionUtil.evaluate(expressionContext, source);
+        Object value = ExpressionUtil.eval(expressionContext, source);
 
         if(value != null && value instanceof Number) {
             return ((Number)value).byteValue();
         }
-        return (Byte)(ClassUtil.cast(value, Byte.class));
+        return ClassUtil.cast(value, Byte.class);
     }
 
     /**
@@ -88,12 +88,12 @@ public class ExpressionUtil {
      * @return Short
      */
     public static Short getShort(ExpressionContext expressionContext, String source) {
-        Object value = ExpressionUtil.evaluate(expressionContext, source);
+        Object value = ExpressionUtil.eval(expressionContext, source);
 
         if(value != null && value instanceof Number) {
             return ((Number)value).shortValue();
         }
-        return (Short)(ClassUtil.cast(value, Short.class));
+        return ClassUtil.cast(value, Short.class);
     }
 
     /**
@@ -102,12 +102,12 @@ public class ExpressionUtil {
      * @return Integer
      */
     public static Integer getInteger(ExpressionContext expressionContext, String source) {
-        Object value = ExpressionUtil.evaluate(expressionContext, source);
+        Object value = ExpressionUtil.eval(expressionContext, source);
 
         if(value != null && value instanceof Number) {
             return ((Number)value).intValue();
         }
-        return (Integer)(ClassUtil.cast(value, Integer.class));
+        return ClassUtil.cast(value, Integer.class);
     }
 
     /**
@@ -116,12 +116,12 @@ public class ExpressionUtil {
      * @return Float
      */
     public static Float getFloat(ExpressionContext expressionContext, String source) {
-        Object value = ExpressionUtil.evaluate(expressionContext, source);
+        Object value = ExpressionUtil.eval(expressionContext, source);
 
         if(value != null && value instanceof Number) {
             return ((Number)value).floatValue();
         }
-        return (Float)(ClassUtil.cast(value, Float.class));
+        return ClassUtil.cast(value, Float.class);
     }
 
     /**
@@ -130,12 +130,12 @@ public class ExpressionUtil {
      * @return Double
      */
     public static Double getDouble(ExpressionContext expressionContext, String source) {
-        Object value = ExpressionUtil.evaluate(expressionContext, source);
+        Object value = ExpressionUtil.eval(expressionContext, source);
 
         if(value != null && value instanceof Number) {
             return ((Number)value).doubleValue();
         }
-        return (Double)(ClassUtil.cast(value, Double.class));
+        return ClassUtil.cast(value, Double.class);
     }
 
     /**
@@ -144,12 +144,12 @@ public class ExpressionUtil {
      * @return Long
      */
     public static Long getLong(ExpressionContext expressionContext, String source) {
-        Object value = ExpressionUtil.evaluate(expressionContext, source);
+        Object value = ExpressionUtil.eval(expressionContext, source);
 
         if(value != null && value instanceof Number) {
             return ((Number)value).longValue();
         }
-        return (Long)(ClassUtil.cast(value, Long.class));
+        return ClassUtil.cast(value, Long.class);
     }
 
     /**
@@ -159,13 +159,44 @@ public class ExpressionUtil {
      * @return Object
      */
     public static Object evaluate(ExpressionContext expressionContext, String expresion, Class<?> resultType) {
-        Object value = evaluate(expressionContext, expresion);
+        Object value = eval(expressionContext, expresion);
 
-        if(resultType != String.class && value instanceof String) {
-            value = getValue((String)value);
+        if(value == null) {
+            return null;
         }
 
         if(resultType != null) {
+            if(value instanceof String) {
+                String text = (String)value;
+
+                if(resultType == String.class) {
+                    return text;
+                }
+                else if(resultType == char.class || resultType == Character.class) {
+                    return text;
+                }
+                else if(resultType == boolean.class || resultType == Boolean.class) {
+                    return text.equals("true");
+                }
+                else if(resultType == byte.class || resultType == Byte.class) {
+                    return getValue(text);
+                }
+                else if(resultType == short.class || resultType == Short.class) {
+                    return getValue(text);
+                }
+                else if(resultType == int.class || resultType == Integer.class) {
+                    return getValue(text);
+                }
+                else if(resultType == float.class || resultType == Float.class) {
+                    return getValue(text);
+                }
+                else if(resultType == double.class || resultType == Double.class) {
+                    return getValue(text);
+                }
+                else if(resultType == long.class || resultType == Long.class) {
+                    return getValue(text);
+                }
+            }
             return ClassUtil.cast(value, resultType);
         }
         return value;
@@ -176,7 +207,7 @@ public class ExpressionUtil {
      * @param expresion
      * @return Object
      */
-    private static Object evaluate(ExpressionContext expressionContext, String expresion) {
+    private static Object eval(ExpressionContext expressionContext, String expresion) {
         if(expresion == null) {
             return null;
         }

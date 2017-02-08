@@ -65,15 +65,7 @@ public abstract class JspTemplate extends Template {
         pageContext.setAttribute("template", map);
 
         try {
-            if(logger.isDebugEnabled()) {
-                long t1 = System.currentTimeMillis();
-                this._execute(pageContext);
-                long t2 = System.currentTimeMillis();
-                logger.debug(this.getPath() + " - render time: " + (t2 - t1));
-            }
-            else {
-                this._execute(pageContext);
-            }
+            this._execute(pageContext);
         }
         catch(Throwable throwable) {
             if(throwable instanceof Exception) {

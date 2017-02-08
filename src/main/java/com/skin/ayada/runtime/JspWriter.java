@@ -397,7 +397,6 @@ public class JspWriter extends Writer {
             this.out.write(this.buffer, 0, this.position);
             this.position = 0;
         }
-
         this.out.flush();
     }
 

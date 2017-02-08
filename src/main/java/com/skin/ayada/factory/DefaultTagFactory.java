@@ -10,12 +10,17 @@
  */
 package com.skin.ayada.factory;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.skin.ayada.runtime.ExpressionContext;
 import com.skin.ayada.runtime.TagFactory;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.util.ClassUtil;
+import com.skin.ayada.util.ExpressionUtil;
+import com.skin.ayada.util.TagUtil;
 
 /**
  * <p>Title: DefaultTagFactory</p>
@@ -72,5 +77,52 @@ public class DefaultTagFactory implements TagFactory {
     @Override
     public String getClassName() {
         return this.className;
+    }
+
+    /**
+     * @param tag
+     * @param attributes
+     * @param expressionContext
+     */
+    @Override
+    public void setAttributes(Tag tag, Map<String, String> attributes, ExpressionContext expressionContext) {
+        try {
+            TagUtil.setAttributes(tag, attributes, expressionContext);
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * @param expressionContext
+     * @param attributes
+     * @param name
+     * @param type
+     * @return Object
+     */
+    protected Object getValue(ExpressionContext expressionContext, Map<String, String> attributes, String name, Class<?> type) {
+        String expression = attributes.get(name);
+        Object value = ExpressionUtil.evaluate(expressionContext, expression, type);
+
+        if(value != null && type.isAssignableFrom(value.getClass())) {
+            return value;
+        }
+        return null;
+    }
+
+    /**
+     * @param expressionContext
+     * @param expression
+     * @param type
+     * @return Object
+     */
+    protected Object getValue(ExpressionContext expressionContext, Object expression, Class<?> type) {
+        Object value = ExpressionUtil.evaluate(expressionContext, (String)expression, type);
+
+        if(value != null && type.isAssignableFrom(value.getClass())) {
+            return value;
+        }
+        return null;
     }
 }

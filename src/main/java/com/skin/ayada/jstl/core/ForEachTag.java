@@ -105,25 +105,25 @@ public class ForEachTag extends LoopTagSupport {
             return new NullIterator<String>();
         }
 
-        if(object instanceof Iterator) {
-            return (Iterator<?>)(object);
+        if(object instanceof Collection<?>) {
+            return ((Collection<?>)object).iterator();
+        }
+
+        if(object instanceof Map<?, ?>) {
+            return ((Map<?, ?>)object).entrySet().iterator();
         }
 
         if(object.getClass().isArray()) {
             return new ArrayIterator<Object>(object);
         }
 
-        if(object instanceof Collection<?>) {
-            return ((Collection<?>)object).iterator();
+        if(object instanceof Iterator) {
+            return (Iterator<?>)(object);
         }
 
         if(object instanceof Enumeration<?>) {
             Enumeration<Object> enu = (Enumeration<Object>)object;
             return new EnuIterator<Object>(enu);
-        }
-
-        if(object instanceof Map<?, ?>) {
-            return ((Map<?, ?>)object).entrySet().iterator();
         }
 
         if(object instanceof String) {

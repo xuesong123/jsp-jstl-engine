@@ -25,11 +25,16 @@ public class PerformanceTest {
      * @param args
      */
     public static void main(String[] args) {
+        // System.out.println(TagFactoryManager.getSetMethodCode(IfTag.class));
         // test4Ayada(new File("webapp\\test4.jsp"), 10000);
         // test4Java(10000);
-        test4Ayada(new File("webapp\\test5.jsp"), 10000);
+        int warmed = 100;
+        int count = 10000;
+        File file = new File("webapp\\test5.jsp");
+
+        test4Interpret(file, warmed, count);
         System.out.println("==========================");
-        test5Java(10000);
+        test4Compile(file, warmed, count);
     }
 
     /**
@@ -77,13 +82,50 @@ public class PerformanceTest {
 
     /**
      * @param file
+     * @param warmed
      * @param count
-     *
      */
-    public static void test4Ayada(File file, int count) {
+    public static void test4Compile(File file, int warmed, int count) {
+        try {
+            TemplateContext templateContext = getJspTemplateContext(file);
+            StringWriter stringWriter = new StringWriter();
+            Map<String, Object> context = new HashMap<String, Object>();
+            PageContext pageContext = templateContext.getPageContext(context, stringWriter);
+            pageContext.setAttribute("name", "test");
+            pageContext.setAttribute("border", "border=\"1\"");
+            pageContext.setAttribute("data", getDataList());
+            Template template = templateContext.getTemplate(file.getName(), "utf-8");
+            System.out.println("template: " + template.getClass().getName());
+
+            /**
+             * warmed
+             */
+            for(int i = 0; i < warmed; i++) {
+                template.execute(pageContext);
+                stringWriter.getBuffer().setLength(0);
+            }
+
+            long t1 = System.currentTimeMillis();
+            for(int i = 0; i < count; i++) {
+                template.execute(pageContext);
+                stringWriter.getBuffer().setLength(0);
+            }
+            long t2 = System.currentTimeMillis();
+            System.out.println("count: " + count + ", run time: " + (t2 - t1));
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * @param file
+     * @param warmed
+     * @param count
+     */
+    public static void test4Interpret(File file, int warmed, int count) {
         try {
             TemplateContext templateContext = getTemplateContext(file);
-
             StringWriter stringWriter = new StringWriter();
             Map<String, Object> context = new HashMap<String, Object>();
             PageContext pageContext = templateContext.getPageContext(context, stringWriter);
@@ -92,18 +134,12 @@ public class PerformanceTest {
             pageContext.setAttribute("border", "border=\"1\"");
             pageContext.setAttribute("data", getDataList());
             Template template = templateContext.getTemplate(file.getName(), "utf-8");
-
-            /**
-             *
-             */
-            template.execute(pageContext);
-            System.out.println(stringWriter.toString());
-            stringWriter.getBuffer().setLength(0);
+            System.out.println("template: " + template.getClass().getName());
 
             /**
              * warmed
              */
-            for(int i = 0; i < 100; i++) {
+            for(int i = 0; i < warmed; i++) {
                 template.execute(pageContext);
                 stringWriter.getBuffer().setLength(0);
             }
@@ -131,7 +167,6 @@ public class PerformanceTest {
             context.put("name", "test");
             context.put("border", "border=\"1\"");
             context.put("data", getDataList());
-
             StringWriter stringWriter = new StringWriter();
 
             /**
@@ -249,10 +284,22 @@ public class PerformanceTest {
      */
     public static TemplateContext getTemplateContext(File file) throws IOException {
         File parent = file.getParentFile();
-        TemplateContext templateContext = TemplateManager.getTemplateContext(parent.getCanonicalPath(), true);
+        TemplateContext templateContext = TemplateManager.create(parent.getCanonicalPath());
+        templateContext.getSourceFactory().setSourcePattern("*");
+        return templateContext;
+    }
+
+    /**
+     * @param file
+     * @return TemplateContext
+     * @throws IOException
+     */
+    public static TemplateContext getJspTemplateContext(File file) throws IOException {
+        File parent = file.getParentFile();
+        TemplateContext templateContext = TemplateManager.create(parent.getCanonicalPath());
         JspTemplateFactory jspTemplateFactory = new JspTemplateFactory();
         String classPath = ClassPath.getClassPath();
-        System.out.println("CLASS_PATH: " + classPath);
+        // System.out.println("CLASS_PATH: " + classPath);
         jspTemplateFactory.setWork(new File("work").getAbsolutePath());
         jspTemplateFactory.setClassPath(classPath);
         jspTemplateFactory.setIgnoreJspTag(false);
@@ -286,7 +333,7 @@ public class PerformanceTest {
     public static List<String> getDataList() {
         List<String> list = new ArrayList<String>();
 
-        for(int i = 0; i < 100; i++) {
+        for(int i = 0; i < 10; i++) {
             list.add(String.valueOf((char)i));
         }
         return list;

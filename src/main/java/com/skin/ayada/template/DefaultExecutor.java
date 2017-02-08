@@ -28,7 +28,6 @@ import com.skin.ayada.tagext.SimpleTag;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.tagext.TryCatchFinally;
 import com.skin.ayada.util.NodeUtil;
-import com.skin.ayada.util.TagUtil;
 
 /**
  * <p>Title: DefaultExecutor</p>
@@ -82,16 +81,14 @@ public class DefaultExecutor {
             int flag = 0;
             int index = offset;
             int end = offset + length;
-            int nodeType = NodeType.UNKNOWN;
 
             while(index < end) {
                 out = pageContext.getOut();
                 statement = statements[index];
                 node = statement.getNode();
-                nodeType = node.getNodeType();
 
                 try {
-                    switch (nodeType) {
+                    switch(node.getNodeType()) {
                         case NodeType.TEXT: {
                             out.write(node.getTextContent());
                             index++;
@@ -143,22 +140,19 @@ public class DefaultExecutor {
                         }
                     }
 
-                    Tag tag = statement.getTag();
-
                     if(node.getOffset() == index) {
-                        if(tag == null) {
-                            tag = ((TagNode)node).getTagFactory().create();
-                            tag.setPageContext(pageContext);
-                            statement.setTag(tag);
-                            Statement parent = statement.getParent();
+                        Tag tag = statement.getTag();
 
-                            if(parent != null) {
-                                tag.setParent(parent.getTag());
-                            }
+                        if(tag == null) {
+                            tag = create(statement, pageContext);
                         }
 
-                        // create - doStartTag
-                        TagUtil.setAttributes(tag, node.getAttributes(), expressionContext);
+                        /**
+                         * 经测试(jdk1.6), 编译模式的执行效率是解释模式的2-3倍
+                         * 此处原来使用TagUtil.setAttributes设置属性, 现改为使用动态编译
+                         * 动态编译在不同的机器上表现不一致, 某些机器上动态编译和反射性能相当, 某些机器上动态编译比反射性能高30%左右
+                         */
+                        ((TagNode)node).getTagFactory().setAttributes(tag, node.getAttributes(), expressionContext);
 
                         if(tag instanceof SimpleTag) {
                             DefaultJspFragment jspFragment = new DefaultJspFragment(template, statements, pageContext);
@@ -199,7 +193,7 @@ public class DefaultExecutor {
                             break;
                         }
                         else {
-                            doFinally(tag);
+                            doFinally(statement.getTag());
                             index++;
                             continue;
                         }
@@ -207,12 +201,23 @@ public class DefaultExecutor {
                 }
                 catch(Throwable throwable) {
                     /**
-                     * 如果退出时发生了异常
+                     * 如果退出时发生了异常, 那么直接抛出异常并退出
+                     * doExit会依次向上执行doFinally和release方法, 确保实现了TryCatchFinally接口的tag都会被释放
+                     * 但是doFinally和release有可能会抛出异常, 当有异常发生的时候, 后发生的异常会覆盖先发生的异常
+                     * 当所有的doFinally和release都被调用完成之后会抛出最后发生的那个异常
+                     * 如果没有发生异常则正常退出
                      */
                     if(throwable instanceof ExitException) {
                         throw throwable.getCause();
                     }
 
+                    /**
+                     * 当doStart, doEnd发生异常时, 该标签的doFinally不会再被调用, 而是直接调用该标签的doCatch
+                     * 当doFinally发生异常时, 异常应该由父标签捕获而不是当前标签的doCatch
+                     * 所以此处当发生了异常调用父标签的doCatch
+                     * doCatch方法执行完会执行doFinally, 如果实现了TryCatchFinally的话
+                     * doCatch执行完之后, 需要跳转到一个新的位置执行, 所以doCatch会返回一个新的指向地址
+                     */
                     if(throwable instanceof FinallyException) {
                         index = doCatch(statement.getParent(), throwable.getCause());
                     }
@@ -221,22 +226,32 @@ public class DefaultExecutor {
                     }
                 }
             }
-            jspWriter.flush();
         }
         catch(Throwable throwable) {
-            if(node != null) {
-                throw new Exception("\"" + template.getPath() + "\" Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node), throwable);
-            }
-
-            if(throwable instanceof Exception) {
-                throw ((Exception)throwable);
-            }
-            throw new Exception(throwable);
+            error(template, node, throwable);
         }
         finally {
             jspWriter.flush();
             pageContext.setOut(jspWriter);
         }
+    }
+
+    /**
+     * @param statement
+     * @param pageContext
+     * @return Tag
+     */
+    private static Tag create(Statement statement, PageContext pageContext) {
+        Node node = statement.getNode();
+        Tag tag = ((TagNode)node).getTagFactory().create();
+        tag.setPageContext(pageContext);
+        statement.setTag(tag);
+        Statement parent = statement.getParent();
+
+        if(parent != null) {
+            tag.setParent(parent.getTag());
+        }
+        return tag;
     }
 
     /**
@@ -413,6 +428,23 @@ public class DefaultExecutor {
         if(exception != null) {
             throw new FinallyException(exception);
         }
+    }
+
+    /**
+     * @param template
+     * @param node
+     * @param throwable
+     * @throws Exception
+     */
+    private static void error(Template template, Node node, Throwable throwable) throws Exception {
+        if(node != null) {
+            throw new Exception("\"" + template.getPath() + "\" Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node), throwable);
+        }
+
+        if(throwable instanceof Exception) {
+            throw ((Exception)throwable);
+        }
+        throw new Exception(throwable);
     }
 
     /**

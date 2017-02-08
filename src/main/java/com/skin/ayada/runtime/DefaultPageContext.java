@@ -157,7 +157,7 @@ public class DefaultPageContext implements PageContext {
         if(value != null && value instanceof Number) {
             return ((Number)value).byteValue();
         }
-        return (Byte)(ClassUtil.cast(value, Byte.class));
+        return ClassUtil.cast(value, Byte.class);
     }
 
     /**
@@ -170,7 +170,7 @@ public class DefaultPageContext implements PageContext {
         if(value != null && value instanceof Number) {
             return ((Number)value).shortValue();
         }
-        return (Short)(ClassUtil.cast(value, Short.class));
+        return ClassUtil.cast(value, Short.class);
     }
 
     /**
@@ -183,7 +183,7 @@ public class DefaultPageContext implements PageContext {
         if(value != null && value instanceof Number) {
             return ((Number)value).intValue();
         }
-        return (Integer)(ClassUtil.cast(value, Integer.class));
+        return ClassUtil.cast(value, Integer.class);
     }
 
     /**
@@ -196,7 +196,7 @@ public class DefaultPageContext implements PageContext {
         if(value != null && value instanceof Number) {
             return ((Number)value).floatValue();
         }
-        return (Float)(ClassUtil.cast(value, Float.class));
+        return ClassUtil.cast(value, Float.class);
     }
 
     /**
@@ -209,7 +209,7 @@ public class DefaultPageContext implements PageContext {
         if(value != null && value instanceof Number) {
             return ((Number)value).doubleValue();
         }
-        return (Double)(ClassUtil.cast(value, Double.class));
+        return ClassUtil.cast(value, Double.class);
     }
 
     /**
@@ -222,7 +222,7 @@ public class DefaultPageContext implements PageContext {
         if(value != null && value instanceof Number) {
             return ((Number)value).longValue();
         }
-        return (Long)(ClassUtil.cast(value, Long.class));
+        return ClassUtil.cast(value, Long.class);
     }
 
     /**

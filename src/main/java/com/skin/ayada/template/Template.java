@@ -15,9 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.source.Source;
 import com.skin.ayada.statement.Node;
@@ -36,7 +33,6 @@ public class Template {
     private long lastModified;
     private List<Node> nodes;
     private List<Source> dependencies;
-    private static final Logger logger = LoggerFactory.getLogger(Template.class);
 
     /**
      *
@@ -66,16 +62,7 @@ public class Template {
         map.put("path", this.path);
         map.put("lastModified", this.lastModified);
         pageContext.setAttribute("template", map);
-
-        if(logger.isDebugEnabled()) {
-            long t1 = System.currentTimeMillis();
-            DefaultExecutor.execute(this, pageContext);
-            long t2 = System.currentTimeMillis();
-            logger.debug(this.getPath() + " - render time: " + (t2 - t1));
-        }
-        else {
-            DefaultExecutor.execute(this, pageContext);
-        }
+        DefaultExecutor.execute(this, pageContext);
     }
 
     /**

@@ -25,7 +25,8 @@ public class MainTest {
      */
     public static void main(String[] args) {
         try {
-            Main.execute("D:\\workspace2\\finder\\webapp\\template\\finder\\finder.jsp", "UTF-8", "com.skin.ayada.template.JspTemplateFactory");
+            Main.execute("webapp\\test4.jsp", "utf-8", (String)null);
+            // Main.execute("D:\\workspace2\\finder\\webapp\\template\\finder\\finder.jsp", "UTF-8", "com.skin.ayada.template.JspTemplateFactory");
         }
         catch(Exception e) {
             e.printStackTrace();

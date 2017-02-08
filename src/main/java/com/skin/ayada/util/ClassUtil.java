@@ -191,11 +191,13 @@ public class ClassUtil {
     }
 
     /**
+     * @param <T>
      * @param type
      * @param value
      * @return Object
      */
-    public static Object cast(Object value, Class<?> type) {
+    @SuppressWarnings("unchecked")
+    public static <T> T cast(Object value, Class<T> type) {
         if(value == null || type == null) {
             return null;
         }
@@ -203,34 +205,34 @@ public class ClassUtil {
         Class<?> clazz = value.getClass();
 
         if(type.isAssignableFrom(clazz)) {
-            return value;
+            return (T)value;
         }
 
         Object result = null;
 
         if(type == char.class || type == Character.class) {
-            return ClassUtil.getCharacter(value);
+            return (T)(ClassUtil.getCharacter(value));
         }
         else if(type == boolean.class || type == Boolean.class) {
-            return ClassUtil.getBoolean(value);
+            return (T)ClassUtil.getBoolean(value);
         }
         else if(type == byte.class || type == Byte.class) {
-            return ClassUtil.getByte(value);
+            return (T)(ClassUtil.getByte(value));
         }
         else if(type == short.class || type == Short.class) {
-            return ClassUtil.getShort(value);
+            return (T)(ClassUtil.getShort(value));
         }
         else if(type == int.class || type == Integer.class) {
-            return ClassUtil.getInteger(value);
+            return (T)(ClassUtil.getInteger(value));
         }
         else if(type == float.class || type == Float.class) {
-            return ClassUtil.getFloat(value);
+            return (T)(ClassUtil.getFloat(value));
         }
         else if(type == double.class || type == Double.class) {
-            return ClassUtil.getDouble(value);
+            return (T)(ClassUtil.getDouble(value));
         }
         else if(type == long.class || type == Long.class) {
-            return ClassUtil.getLong(value);
+            return (T)(ClassUtil.getLong(value));
         }
         else if(type == String.class) {
             result = ClassUtil.getString(value);
@@ -262,7 +264,7 @@ public class ClassUtil {
         else if(type == Object.class) {
             result = value;
         }
-        return result;
+        return ((T)result);
     }
 
     /**
