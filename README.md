@@ -27,6 +27,12 @@ docs/html/index.html
     webapp - 示例代码及测试代码
     work   - 编译模式下生成的代码
 
+Change List 1.0.1.4：
+=================
+1. 功能bug修复, 一个不太容易触发的bug, 当标签实现了TryCatchFinally时, 解释模式下只会执行最近的那个try catch.
+2. 编译模式生成代码调整, 确保release方法在任何时候都会被调用.
+3. 性能优化, 解释模式大幅提升性能较原来提升40% - 50%. 性能测试用例参见: test.com.skin.ayada.template.PerformanceTest
+
 
 Tag Example
 ===================

@@ -1,3 +1,13 @@
+/*
+ * $RCSfile: PerformanceTest.java,v $
+ * $Revision: 1.1 $
+ * $Date: 2013-11-08 $
+ *
+ * Copyright (C) 2008 Skin, Inc. All rights reserved.
+ *
+ * This software is the proprietary information of Skin, Inc.
+ * Use is subject to license terms.
+ */
 package test.com.skin.ayada.template;
 
 import java.io.File;
@@ -16,6 +26,9 @@ import com.skin.ayada.template.TemplateManager;
 import com.skin.ayada.util.ClassPath;
 
 /**
+ * <p>Title: PerformanceTest</p>
+ * <p>Description: </p>
+ * <p>Copyright: Copyright (c) 2006</p>
  * @author xuesong.net
  * @version 1.0
  */
