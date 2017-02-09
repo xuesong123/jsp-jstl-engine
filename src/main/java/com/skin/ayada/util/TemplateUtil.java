@@ -69,7 +69,8 @@ public class TemplateUtil {
             }
 
             if(node.getLength() == 0) {
-                break;
+                writer.println(String.format(format, i) + "[ERRO]: " + TemplateUtil.toString(node, i, false));
+                continue;
             }
             writer.println(String.format(format, i) + "[NODE]: " + TemplateUtil.toString(node, i, false));
         }

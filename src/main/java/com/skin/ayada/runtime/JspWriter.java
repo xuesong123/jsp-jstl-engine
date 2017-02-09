@@ -25,6 +25,8 @@ public class JspWriter extends Writer {
     private int position;
     private char[] buffer;
     private int bufferSize = 8192;
+    private char[] writeBuffer;
+    private final int writeBufferSize = 1024;
     private boolean autoFlush = false;
     private static final char[] CRLF = "\r\n".toCharArray();
     private static final char[] NULL = "null".toCharArray();
@@ -82,7 +84,7 @@ public class JspWriter extends Writer {
             this.position += length;
         }
     }
-
+    
     /**
      * @param str
      * @param offset
@@ -91,8 +93,48 @@ public class JspWriter extends Writer {
      */
     @Override
     public void write(String str, int offset, int length) throws IOException {
-        char[] cbuf = new char[length];
+        char cbuf[] = null;
+
+        if(length <= this.writeBufferSize) {
+            if(this.writeBuffer == null) {
+                this.writeBuffer = new char[this.writeBufferSize];
+            }
+            cbuf = this.writeBuffer;
+        }
+        else {
+            cbuf = new char[length];
+        }
         str.getChars(offset, (offset + length), cbuf, 0);
+        this.write(cbuf, 0, length);
+    }
+
+    /**
+     * @param buffer
+     * @throws IOException
+     */
+    public void write(StringBuilder buffer) throws IOException {
+        this.write(buffer, 0, buffer.length());
+    }
+
+    /**
+     * @param buffer
+     * @param offset
+     * @param length
+     * @throws IOException
+     */
+    public void write(StringBuilder buffer, int offset, int length) throws IOException {
+        char cbuf[] = null;
+
+        if(length <= this.writeBufferSize) {
+            if(this.writeBuffer == null) {
+                this.writeBuffer = new char[this.writeBufferSize];
+            }
+            cbuf = this.writeBuffer;
+        }
+        else {
+            cbuf = new char[length];
+        }
+        buffer.getChars(offset, (offset + length), cbuf, 0);
         this.write(cbuf, 0, length);
     }
 
@@ -102,8 +144,8 @@ public class JspWriter extends Writer {
      */
     public void write(Object object) throws IOException {
         if(object != null) {
-            char[] cbuf = object.toString().toCharArray();
-            this.write(cbuf, 0, cbuf.length);
+            String content = object.toString();
+            this.write(content, 0, content.length());
         }
     }
 
@@ -184,7 +226,8 @@ public class JspWriter extends Writer {
      */
     public void print(Object value) throws IOException {
         if(value != null) {
-            this.write(value.toString());
+            String content = value.toString();
+            this.write(value.toString(), 0, content.length());
         }
     }
 
@@ -195,7 +238,8 @@ public class JspWriter extends Writer {
      */
     public void print(Object value, boolean nullable) throws IOException {
         if(value != null) {
-            this.write(value.toString());
+            String content = value.toString();
+            this.write(value.toString(), 0, content.length());
         }
         else {
             if(nullable) {

@@ -299,8 +299,8 @@ public class JspCompiler {
                 String textContent = node.getTextContent();
                 writer.println(indent + "// VARIABLE: lineNumber: " + node.getLineNumber());
 
-                if("#".equals(((Variable)node).getFlag())) {
-                    writer.println(indent + "out.print(pageContext.getAttribute(\"" + textContent + "\"));");
+                if(((Variable)node).getFlag() == '#') {
+                    writer.println(indent + "out.write(pageContext.getAttribute(\"" + textContent + "\"));");
                 }
                 else {
                     writer.println(indent + "expressionContext.print(out, pageContext.getAttribute(\"" + textContent + "\"));");
@@ -316,7 +316,7 @@ public class JspCompiler {
                 String textContent = node.getTextContent();
                 writer.println(indent + "// EXPRESSION: lineNumber: " + node.getLineNumber());
 
-                if("#".equals(((Expression)node).getFlag())) {
+                if(((Expression)node).getFlag() == '#') {
                     writer.println(indent + "out.write(expressionContext.getString(\"" + StringUtil.escape(textContent) + "\"));");
                 }
                 else {
@@ -589,7 +589,7 @@ public class JspCompiler {
         if(node.getOffset() == index) {
             if(value != null) {
                 writer.println(indent + "com.skin.ayada.jstl.core.OutTag.write(out, " + this.getValueExpression(value) + ", " + escapeXml + ");");
-                 writer.println(indent + "// out.print(" + this.getStringExpression(value, escapeXml) + ");");
+                writer.println(indent + "// out.write(" + this.getStringExpression(value, escapeXml) + ");");
                 return Tag.SKIP_BODY;
             }
             else if(node.getLength() > 2) {
@@ -1214,23 +1214,6 @@ public class JspCompiler {
             }
         }
         return null;
-    }
-
-    /**
-     * @param expression
-     * @return boolean
-     */
-    protected boolean isVariable(String expression) {
-        List<Node> nodes = ExpressionUtil.parse(expression);
-
-        if(nodes.size() == 1) {
-            Node node = nodes.get(0);
-
-            if(node instanceof Expression) {
-                return this.isJavaIdentifier(node.getTextContent());
-            }
-        }
-        return false;
     }
 
     /**

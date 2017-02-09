@@ -8,7 +8,7 @@
  * This software is the proprietary information of Skin, Inc.
  * Use is subject to license terms.
  */
-package com.skin.ayada.source;
+package com.skin.ayada.util;
 
 import java.util.ArrayList;
 import java.util.List;

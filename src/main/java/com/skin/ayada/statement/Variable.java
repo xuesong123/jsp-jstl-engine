@@ -1,5 +1,5 @@
 /*
- * $RCSfile: Variable.java,v $$
+ * $RCSfile: Variable.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-11-21 $
  *
@@ -14,13 +14,15 @@ package com.skin.ayada.statement;
  * <p>Title: Variable</p>
  * <p>Description: </p>
  * <p>Copyright: Copyright (c) 2006</p>
+ * @author xuesong.net
  * @version 1.0
  */
 public class Variable extends DataNode {
-    private String flag;
+    private int flag;
+    private String expression;
 
     /**
-     *
+     * default
      */
     public Variable() {
         super(NodeType.VARI_NAME, NodeType.VARIABLE);
@@ -42,17 +44,48 @@ public class Variable extends DataNode {
     }
 
     /**
+     * @param flag the flag to set
+     */
+    public void setFlag(int flag) {
+        this.flag = flag;
+    }
+
+    /**
      * @return the flag
      */
-    public String getFlag() {
+    public int getFlag() {
         return this.flag;
     }
 
     /**
-     * @param flag the flag to set
+     * @param expression
      */
-    public void setFlag(String flag) {
-        this.flag = flag;
+    public void setExpression(String expression) {
+        this.expression = expression;
+        super.setTextContent(expression);
+    }
+
+    /**
+     * @return the expression
+     */
+    public String getExpression() {
+        return this.expression;
+    }
+
+    /**
+     * @param content
+     */
+    @Override
+    public void setTextContent(String content) {
+        this.setExpression(content);
+    }
+
+    /**
+     * @return String
+     */
+    @Override
+    public String getTextContent() {
+        return this.expression;
     }
 
     /**

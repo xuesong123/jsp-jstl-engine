@@ -123,7 +123,6 @@ public class TagFactoryManager {
             ctClass.setSuperclass(classPool.get(surperClassName));
             CtMethod createMethod = CtNewMethod.make("public " + returnClassName + " create() {return new " + className + "();}", ctClass);
             CtMethod setMethod = CtNewMethod.make(setMethodCode, ctClass);
-
             ctClass.addMethod(createMethod);
             ctClass.addMethod(setMethod);
 
@@ -324,8 +323,9 @@ public class TagFactoryManager {
         }
         return null;
     }
-    
+
     /**
+     * @param className
      * @param bytes
      */
     private void write(String className, byte[] bytes) {

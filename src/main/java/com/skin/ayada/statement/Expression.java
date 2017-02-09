@@ -1,5 +1,5 @@
 /*
- * $RCSfile: Expression.java,v $$
+ * $RCSfile: Expression.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-19 $
  *
@@ -18,10 +18,11 @@ package com.skin.ayada.statement;
  * @version 1.0
  */
 public class Expression extends DataNode {
-    private String flag;
+    private int flag;
+    private String expression;
 
     /**
-     *
+     * default
      */
     public Expression() {
         super(NodeType.EXPR_NAME, NodeType.EXPRESSION);
@@ -43,21 +44,52 @@ public class Expression extends DataNode {
     }
 
     /**
-     * @return the flag
-     */
-    public String getFlag() {
-        return this.flag;
-    }
-
-    /**
      * @param flag the flag to set
      */
-    public void setFlag(String flag) {
+    public void setFlag(int flag) {
         this.flag = flag;
     }
 
     /**
-     * @return TextNode
+     * @return the flag
+     */
+    public int getFlag() {
+        return this.flag;
+    }
+
+    /**
+     * @param expression
+     */
+    public void setExpression(String expression) {
+        this.expression = expression;
+        super.setTextContent(expression);
+    }
+
+    /**
+     * @return the expression
+     */
+    public String getExpression() {
+        return this.expression;
+    }
+
+    /**
+     * @param content
+     */
+    @Override
+    public void setTextContent(String content) {
+        this.setExpression(content);
+    }
+
+    /**
+     * @return String
+     */
+    @Override
+    public String getTextContent() {
+        return this.expression;
+    }
+
+    /**
+     * @return Expression
      */
     @Override
     public Expression clone() {

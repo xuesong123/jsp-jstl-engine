@@ -134,7 +134,7 @@ public class TemplateCompiler extends PageCompiler {
             }
             else if(i == '$' && this.stream.peek() == '{') {
                 this.stream.read();
-                String flag = null;
+                int flag = 0;
                 int ln = this.lineNumber;
                 String expression = this.readExpression();
                 String temp = this.ltrim(expression);
@@ -145,7 +145,7 @@ public class TemplateCompiler extends PageCompiler {
                 }
 
                 if(temp.startsWith("#") || temp.startsWith("&")) {
-                    flag = temp.substring(0, 1);
+                    flag = temp.charAt(0);
                     temp = temp.substring(1);
                 }
 
@@ -159,7 +159,7 @@ public class TemplateCompiler extends PageCompiler {
                         variable.setLength(1);
                         variable.setLineNumber(ln);
                         variable.setFlag(flag);
-                        variable.append(temp);
+                        variable.setExpression(temp);
                         list.add(variable);
                     }
                     else {
@@ -169,7 +169,7 @@ public class TemplateCompiler extends PageCompiler {
                         expr.setLength(1);
                         expr.setLineNumber(ln);
                         expr.setFlag(flag);
-                        expr.append(temp);
+                        expr.setExpression(temp);
                         list.add(expr);
                     }
                 }
@@ -802,7 +802,7 @@ public class TemplateCompiler extends PageCompiler {
             int nodeType = node.getNodeType();
 
             if(nodeType == NodeType.TEXT || nodeType == NodeType.EXPRESSION || nodeType == NodeType.VARIABLE) {
-                if(((DataNode)node).length() > 0) {
+                if(((DataNode)node).getContentLength() > 0) {
                     node.setOffset(nodes.size());
                     node.setLength(1);
                     nodes.add(node);

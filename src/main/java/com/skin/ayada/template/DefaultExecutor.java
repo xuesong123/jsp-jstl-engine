@@ -20,6 +20,7 @@ import com.skin.ayada.statement.Node;
 import com.skin.ayada.statement.NodeType;
 import com.skin.ayada.statement.Statement;
 import com.skin.ayada.statement.TagNode;
+import com.skin.ayada.statement.TextNode;
 import com.skin.ayada.statement.Variable;
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTag;
@@ -67,10 +68,6 @@ public class DefaultExecutor {
      * @throws Exception
      */
     public static void execute(final Template template, final Statement[] statements, final PageContext pageContext, final int offset, final int length) throws Exception {
-        if(length < 1) {
-            return;
-        }
-
         Node node = null;
         JspWriter out = null;
         Statement statement = null;
@@ -90,7 +87,11 @@ public class DefaultExecutor {
                 try {
                     switch(node.getNodeType()) {
                         case NodeType.TEXT: {
-                            out.write(node.getTextContent());
+                            /**
+                             * out.write(StringBuilder buffer)是JspWriter提供的专有方法
+                             * 这样可以减少toString产生的String对象
+                             */
+                            out.write(((TextNode)node).getBuffer());
                             index++;
                             continue;
                         }
@@ -98,8 +99,9 @@ public class DefaultExecutor {
                             Object value = expressionContext.getValue(node.getTextContent());
 
                             if(value != null) {
-                                if("#".equals(((Expression)node).getFlag())) {
-                                    out.print(value);
+                                if(((Expression)node).getFlag() == '#') {
+                                    String content = value.toString();
+                                    out.write(content, 0, content.length());
                                 }
                                 else {
                                     expressionContext.print(out, value);
@@ -112,8 +114,9 @@ public class DefaultExecutor {
                             Object value = pageContext.getAttribute(node.getTextContent());
 
                             if(value != null) {
-                                if("#".equals(((Variable)node).getFlag())) {
-                                    out.print(value);
+                                if(((Variable)node).getFlag() == '#') {
+                                    String content = value.toString();
+                                    out.write(content, 0, content.length());
                                 }
                                 else {
                                     expressionContext.print(out, value);
@@ -228,7 +231,7 @@ public class DefaultExecutor {
             }
         }
         catch(Throwable throwable) {
-            error(template, node, throwable);
+            throw error(template, node, throwable);
         }
         finally {
             jspWriter.flush();
@@ -436,15 +439,15 @@ public class DefaultExecutor {
      * @param throwable
      * @throws Exception
      */
-    private static void error(Template template, Node node, Throwable throwable) throws Exception {
+    private static Exception error(Template template, Node node, Throwable throwable) throws Exception {
         if(node != null) {
-            throw new Exception("\"" + template.getPath() + "\" Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node), throwable);
+            return new Exception("\"" + template.getPath() + "\" Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node), throwable);
         }
 
         if(throwable instanceof Exception) {
-            throw ((Exception)throwable);
+            return ((Exception)throwable);
         }
-        throw new Exception(throwable);
+        return new Exception(throwable);
     }
 
     /**

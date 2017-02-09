@@ -1,5 +1,5 @@
 /*
- * $RCSfile: PrepareTemplateFactory.java,v $$
+ * $RCSfile: PrepareTemplateFactory.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-11-13 $
  *
@@ -53,32 +53,8 @@ public class PrepareTemplateFactory extends JspTemplateFactory {
         String className = this.getClassName(path);
         logger.debug("path: {}, class: {}", path, className);
 
-        Class<?> type = this.getClass(className);
+        Class<?> type = ClassUtil.getClass(className);
         return (JspTemplate)(type.newInstance());
-    }
-
-    /**
-     * @param className
-     * @return Class<?>
-     * @throws ClassNotFoundException
-     */
-    public Class<?> getClass(String className) throws ClassNotFoundException {
-        if(this.classLoader != null) {
-            return this.classLoader.loadClass(className);
-        }
-
-        try {
-            return Thread.currentThread().getContextClassLoader().loadClass(className);
-        }
-        catch(Exception e) {
-        }
-
-        try {
-            return ClassUtil.class.getClassLoader().loadClass(className);
-        }
-        catch(Exception e) {
-        }
-        return Class.forName(className);
     }
 
     /**

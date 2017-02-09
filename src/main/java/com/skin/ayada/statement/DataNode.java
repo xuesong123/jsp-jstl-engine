@@ -156,7 +156,7 @@ public abstract class DataNode extends Node {
     /**
      * @return String
      */
-    public int length() {
+    public int getContentLength() {
         return this.buffer.length();
     }
 

@@ -4,43 +4,43 @@
     <tr>
         <th>&#160;</th>
     </tr>
-    <c:forEach var="cell" items="${data}">
+    <#list data as cell>
         <tr>
-            <th>${#cell}</th>
+            <th>${cell}</th>
         </tr>
-    </c:forEach>
+    </#list>
 </table>
 
 <table border="${border}">
     <tr>
         <th>&#160;</th>
     </tr>
-    <c:forEach var="cell" items="${data}">
+    <#list data as cell>
         <tr>
             <th>${cell}</th>
         </tr>
-    </c:forEach>
+    </#list>
 </table>
 
 <table border="${border}">
     <tr>
         <th>&#160;</th>
     </tr>
-    <c:forEach var="cell" items="${data}">
+    <#list data as cell>
         <tr>
             <th>${cell}</th>
         </tr>
-    </c:forEach>
+    </#list>
 </table>
 
 <table border="${border}">
     <tr>
         <th>&#160;</th>
     </tr>
-    <c:forEach var="cell" items="${data}">
+    <#list data as cell>
         <tr>
             <th>${cell}</th>
         </tr>
-    </c:forEach>
+    </#list>
 </table>
 </div>

@@ -23,13 +23,14 @@ public class HtmlUtil {
      * @return String
      */
     public static String encode(String source) {
-        if(source == null) {
+        if(source == null || source.length() < 1) {
             return "";
         }
 
-        StringBuilder buffer = new StringBuilder();
+        int length = source.length();
+        StringBuilder buffer = new StringBuilder((int)(length * 1.1));
 
-        for(int i = 0, length = source.length(); i < length; i++) {
+        for(int i = 0; i < length; i++) {
             char c = source.charAt(i);
 
             switch(c) {

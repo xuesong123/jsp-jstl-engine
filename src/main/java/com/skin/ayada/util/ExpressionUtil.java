@@ -267,6 +267,7 @@ public class ExpressionUtil {
                 }
 
                 String content = expression.trim();
+                expression.setExpression(content);
 
                 if(content.length() > 0) {
                     if(content.startsWith("?")) {
@@ -290,7 +291,6 @@ public class ExpressionUtil {
                     textNode = new TextNode();
                     list.add(textNode);
                 }
-
                 textNode.append(c);
             }
         }

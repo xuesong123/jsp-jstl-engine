@@ -55,7 +55,6 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
         if(key == null) {
             return EMPTY;
         }
-
         Object value = this.pageContext.getAttribute(key.toString());
         return (value != null ? value : EMPTY);
     }
@@ -95,7 +94,7 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
         Object value = this.getValue(expression);
 
         if(value instanceof Boolean) {
-            return Boolean.TRUE.equals(value);
+            return ((Boolean)value).booleanValue();
         }
         return false;
     }
@@ -240,7 +239,12 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
      */
     @Override
     public void print(Writer out, boolean b) throws IOException {
-        out.write((b ? "true": "false"));
+        if(b) {
+            out.write("true", 0, 4);
+        }
+        else {
+            out.write("false", 0, 5);
+        }
     }
 
     /**
@@ -324,29 +328,29 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
                 out.write(this.encoder.encode(content));
             }
             else {
-                out.write(content);
+                out.write(content, 0, content.length());
             }
         }
     }
 
     /**
      * @param out
-     * @param content
+     * @param object
      * @throws IOException
      */
     @Override
-    public void print(Writer out, Object content) throws IOException {
-        if(content != null) {
-            if(content instanceof Number || content instanceof Boolean) {
-                out.write(content.toString());
+    public void print(Writer out, Object object) throws IOException {
+        if(object != null) {
+            String content = object.toString();
+
+            if(object instanceof Number || object instanceof Boolean) {
+                out.write(content, 0, content.length());
             }
             else {
                 if(this.encoder != null) {
-                    out.write(this.encoder.encode(content.toString()));
+                    content = this.encoder.encode(content);
                 }
-                else {
-                    out.write(content.toString());
-                }
+                out.write(content, 0, content.length());
             }
         }
     }
