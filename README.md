@@ -29,6 +29,13 @@ docs/html/index.html
 
 Change List 1.0.1.4：
 =================
+1.0.1.6：
+1. 重构，与之前版本不兼容。
+2. 默认的el引擎替换为mvel, ognl太慢。其他性能优化. 
+3. bug修复。
+4. 编译模式标签属性支持jsp表达式语法.
+
+1.0.1.4：
 1. 功能bug修复, 一个不太容易触发的bug, 当标签实现了TryCatchFinally时, 解释模式下只会执行最近的那个try catch.
 2. 编译模式生成代码调整, 确保release方法在任何时候都会被调用.
 3. 性能优化, 解释模式大幅提升性能较原来提升40% - 50%. 性能测试用例参见: test.com.skin.ayada.template.PerformanceTest

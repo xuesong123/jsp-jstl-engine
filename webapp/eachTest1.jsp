@@ -1,9 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <c:list name="userList"/>
 
+<c:out value="${123}"/>
+<c:out value="aaa${123}"/>
+<c:out value="${234}aaa"/>
+
 <c:forEach begin="1" end="5" step="1" varStatus="status">
     <c:map name="user">
-        <c:entry name="userName" value="ayada${status.index}"/>
+        <c:entry name="userName" value="${status.index}aaa"/>
         <c:entry name="nickName" value="ayada${status.index}"/>
     </c:map>
 

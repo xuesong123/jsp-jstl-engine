@@ -101,7 +101,7 @@
                     &lt;/init-param&gt;
                     &lt;init-param&gt;
                         &lt;param-name&gt;templateFactoryClass&lt;/param-name&gt;
-                        &lt;param-value&gt;com.skin.ayada.template.JspTemplateFactory&lt;/param-value&gt;
+                        &lt;param-value&gt;com.skin.ayada.runtime.JspTemplateFactory&lt;/param-value&gt;
                     &lt;/init-param&gt;
                     &lt;init-param&gt;
                         &lt;param-name&gt;expressionFactoryClass&lt;/param-name&gt;
@@ -1443,7 +1443,7 @@
     <h2 class="sk-h2">12 编译模式和预编译</h2>
     <div class="sk-content">
         <p class="bb">编译模式需要使用JspTemplateFactory类来构建TemplateContext对象。TemplateContext对象使用TemplateFactory类的实现来加载模板。</p>
-        <p>一般的线上应用在应用重启之后可以通过脚本访问一下指定的url来预热，这种情况不需要预编译。如果一定要预编译一下，可以通过调用com.skin.ayada.template.PrepareCompiler来进行预编译。</p>
+        <p>一般的线上应用在应用重启之后可以通过脚本访问一下指定的url来预热，这种情况不需要预编译。如果一定要预编译一下，可以通过调用com.skin.ayada.runtime.PrepareCompiler来进行预编译。</p>
         <p>PrepareCompiler会扫描指定目录下的所有文件作为模板文件进行编译，编译过程遵循配置项的sourde-pattern规则。也可以指定排除参数来排除不需要预编译的类。</p>
         <p>PrepareCompiler目前只支持文件系统，如果你使用了其他的方式加载模版文件，可以参考PrepareCompiler重新实现预编译。</p>
         <p class="bb">预编译的调用方式：</p>
@@ -1498,7 +1498,7 @@
             </pre>
         </div>
         <p>下面是解释执行的伪代码：</p>
-        <p>由于jstl规范定义的标签的生命周期的复杂性，详细的执行过程要比下面复杂一些，具体可参考com.skin.ayada.template.DefaultExecutor。</p>
+        <p>由于jstl规范定义的标签的生命周期的复杂性，详细的执行过程要比下面复杂一些，具体可参考com.skin.ayada.runtime.DefaultExecutor。</p>
         <p>编译为java文件的过程可参考com.skin.ayada.compile.JspCompiler。</p>
         <div class="sk-code">
             <pre class="brush: java;">
@@ -1584,7 +1584,7 @@
     <h2 class="sk-h2">16 代码示例和测试用例</h2>
     <div class="sk-content">
         <p>在源代码的/webapp目录下包含了绝大部分的代码示例和测试用例，这些文件基本上都以某个具体的标签名命名，从文件名就可以很容易看出来是关于那个标签的用法的。</p>
-        <p>com.skin.ayada.template.Main是java调用模板引擎的示例，也可以在命令行下调用。</p>
+        <p>com.skin.ayada.Main是java调用模板引擎的示例，也可以在命令行下调用。</p>
     </div>
 
     <h2 class="sk-h2">17 其他</h2>

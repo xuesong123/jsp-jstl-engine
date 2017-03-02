@@ -1,0 +1,1 @@
+<sql:connect connection="${myConnection}"></sql:connect>

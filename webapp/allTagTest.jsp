@@ -122,7 +122,7 @@
 <app:test myBoolean="true" myChar="c" myByte="1" myInt="-1.0" myFloat="1.0f" myDouble="1.0d" myLong="1L" myString="Hello"/>
 <app:test myBoolean="false" myChar="c" myByte="243" myInt="-1.0" myFloat="1.0F" myDouble="1.0D" myLong="1L" myString="Hello"/>
 <app:test myInt="-1.0" myFloat="1.0" myDouble="1e3" myLong="1e3" myString="Hello"/>
-<app:test myInt="-1.0" myFloat="1.0" myDouble="1.2e3" myLong="1.2e3" myString="Hello"/>
+<app:test myInt="-1.0" myFloat="1.0" myDouble="1.2e3" myLong="1.2e4" myString="Hello"/>
 
 <h1>app:scrollpage test1</h1>
 <app:scrollpage count="254" pageNum="2" pageSize="10"/>

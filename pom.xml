@@ -6,7 +6,7 @@
     <groupId>com.skin</groupId>
     <artifactId>ayada</artifactId>
     <name>ayada template engine</name>
-    <version>1.0.1.4</version>
+    <version>1.0.1.6</version>
     <packaging>jar</packaging>
 
     <properties> 
@@ -14,7 +14,7 @@
     </properties>
 
     <build>
-        <finalName>ayada-1.0.1.4</finalName>
+        <finalName>ayada-1.0.1.6</finalName>
         <defaultGoal>compile</defaultGoal>
 
         <directory>target</directory>
@@ -128,6 +128,12 @@
             <artifactId>ognl</artifactId>
             <version>3.0.6</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mvel</groupId>
+            <artifactId>mvel2</artifactId>
+            <version>2.3.1.Final</version>
         </dependency>
 
         <dependency>
