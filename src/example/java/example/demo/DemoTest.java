@@ -1,5 +1,5 @@
 /*
- * $RCSfile: DemoTest.java,v $$
+ * $RCSfile: DemoTest.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-11-04 $
  *
@@ -12,16 +12,17 @@ package example.demo;
 
 import java.io.StringWriter;
 
+import com.skin.ayada.ExpressionFactory;
+import com.skin.ayada.PageContext;
+import com.skin.ayada.SourceFactory;
+import com.skin.ayada.Template;
+import com.skin.ayada.TemplateContext;
+import com.skin.ayada.TemplateFactory;
+import com.skin.ayada.TemplateManager;
 import com.skin.ayada.runtime.DefaultExpressionFactory;
-import com.skin.ayada.runtime.ExpressionFactory;
-import com.skin.ayada.runtime.PageContext;
+import com.skin.ayada.runtime.DefaultTemplateContext;
+import com.skin.ayada.runtime.DefaultTemplateFactory;
 import com.skin.ayada.source.ClassPathSourceFactory;
-import com.skin.ayada.source.SourceFactory;
-import com.skin.ayada.template.DefaultTemplateContext;
-import com.skin.ayada.template.Template;
-import com.skin.ayada.template.TemplateContext;
-import com.skin.ayada.template.TemplateFactory;
-import com.skin.ayada.template.TemplateManager;
 import com.skin.ayada.util.TemplateUtil;
 
 /**
@@ -45,7 +46,7 @@ public class DemoTest {
         try {
             String home = "example/demo";
             SourceFactory sourceFactory = new ClassPathSourceFactory(home);
-            TemplateFactory templateFactory = new TemplateFactory();
+            TemplateFactory templateFactory = new DefaultTemplateFactory();
             ExpressionFactory expressionFactory = new DefaultExpressionFactory();
 
             TemplateContext templateContext = new DefaultTemplateContext();

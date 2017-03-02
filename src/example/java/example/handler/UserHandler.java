@@ -1,5 +1,5 @@
 /*
- * $RCSfile: UserHandler.java,v $$
+ * $RCSfile: UserHandler.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-27 $
  *
@@ -13,7 +13,7 @@ package example.handler;
 import java.util.ArrayList;
 import java.util.List;
 
-import example.model.User;
+import com.skin.ayada.test.model.User;
 
 /**
  * <p>Title: UserHandler</p>

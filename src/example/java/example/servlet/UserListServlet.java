@@ -1,5 +1,5 @@
 /*
- * $RCSfile: UserListServlet.java,v $$
+ * $RCSfile: UserListServlet.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-26 $
  *
@@ -18,8 +18,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.skin.ayada.test.model.User;
+
 import example.handler.UserHandler;
-import example.model.User;
 
 
 /**
