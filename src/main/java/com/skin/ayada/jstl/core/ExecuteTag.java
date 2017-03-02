@@ -1,5 +1,5 @@
 /*
- * $RCSfile: ExecuteTag.java,v $$
+ * $RCSfile: ExecuteTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-11-29 $
  *
@@ -25,6 +25,7 @@ public class ExecuteTag extends TagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
     public int doStartTag() throws Exception {

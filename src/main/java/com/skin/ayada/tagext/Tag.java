@@ -1,5 +1,5 @@
 /*
- * $RCSfile: Tag.java,v $$
+ * $RCSfile: Tag.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-19 $
  *
@@ -10,7 +10,7 @@
  */
 package com.skin.ayada.tagext;
 
-import com.skin.ayada.runtime.PageContext;
+import com.skin.ayada.PageContext;
 
 /**
  * <p>Title: Tag</p>

@@ -328,6 +328,15 @@ public class StringStream {
     }
 
     /**
+     * @param start
+     * @param end
+     * @return String
+     */
+    public String substring(int start, int end) {
+        return this.buffer.substring(start, end);
+    }
+
+    /**
      * @param offset
      * @param length
      * @return String

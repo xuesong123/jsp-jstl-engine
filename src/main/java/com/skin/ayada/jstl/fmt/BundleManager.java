@@ -1,5 +1,5 @@
 /*
- * $RCSfile: BundleManager.java,v $$
+ * $RCSfile: BundleManager.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-26 $
  *
@@ -99,7 +99,11 @@ public class BundleManager {
         FutureTask<LocalizationContext> f = this.cache.get(fullName);
 
         if(f == null) {
-            Callable<LocalizationContext> callable = new Callable<LocalizationContext>(){
+            Callable<LocalizationContext> callable = new Callable<LocalizationContext>() {
+                /**
+                 * @throws InterruptedException
+                 */
+                @Override
                 public LocalizationContext call() throws InterruptedException {
                     try {
                         ResourceBundle resourceBundle = getBaseBundle(fullName);

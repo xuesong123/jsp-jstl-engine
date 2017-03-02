@@ -1,5 +1,5 @@
 /*
- * $RCSfile: TemplateConfig.java,v $$
+ * $RCSfile: TemplateConfig.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-10-30 $
  *

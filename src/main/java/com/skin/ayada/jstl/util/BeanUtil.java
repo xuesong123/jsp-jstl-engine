@@ -1,5 +1,5 @@
 /*
- * $RCSfile: BeanUtil.java,v $$
+ * $RCSfile: BeanUtil.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-27 $
  *
@@ -18,8 +18,6 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
-
-import com.skin.ayada.ognl.util.Empty;
 
 /**
  * <p>Title: BeanUtil</p>
@@ -57,7 +55,7 @@ public class BeanUtil {
      * @return boolean
      */
     public boolean isNull(Object value) {
-        return (value == null || value instanceof Empty<?, ?>);
+        return (value == null);
     }
 
     /**

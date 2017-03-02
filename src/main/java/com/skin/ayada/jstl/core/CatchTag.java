@@ -1,5 +1,5 @@
 /*
- * $RCSfile: CatchTag.java,v $$
+ * $RCSfile: CatchTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2014-04-11 $
  *

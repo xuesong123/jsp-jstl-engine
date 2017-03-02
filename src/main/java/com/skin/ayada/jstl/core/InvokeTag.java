@@ -1,5 +1,5 @@
 /*
- * $RCSfile: InvokeTag.java,v $$
+ * $RCSfile: InvokeTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-11-26 $
  *

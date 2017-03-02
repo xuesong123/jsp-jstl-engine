@@ -1,5 +1,5 @@
 /*
- * $RCSfile: BodyTagSupport.java,v $$
+ * $RCSfile: BodyTagSupport.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-19 $
  *
@@ -10,7 +10,7 @@
  */
 package com.skin.ayada.tagext;
 
-import com.skin.ayada.runtime.JspWriter;
+import com.skin.ayada.JspWriter;
 
 /**
  * <p>Title: BodyTagSupport</p>
@@ -43,6 +43,7 @@ public class BodyTagSupport extends TagSupport implements BodyTag {
     /**
      * @param bodyContent
      */
+    @Override
     public void setBodyContent(BodyContent bodyContent) {
         this.bodyContent = bodyContent;
     }
@@ -50,6 +51,7 @@ public class BodyTagSupport extends TagSupport implements BodyTag {
     /**
      * @throws Exception
      */
+    @Override
     public void doInitBody() throws Exception {
     }
 

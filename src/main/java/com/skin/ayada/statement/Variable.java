@@ -93,15 +93,6 @@ public class Variable extends DataNode {
      */
     @Override
     public Variable clone() {
-        Variable node = new Variable();
-        node.setNodeName(this.getNodeName());
-        node.setNodeType(this.getNodeType());
-        node.setOffset(this.getOffset());
-        node.setLength(this.getLength());
-        node.setLineNumber(this.getLineNumber());
-        node.setClosed(this.getClosed());
-        node.setParent(this.getParent());
-        node.append(this.getTextContent());
-        return node;
+        return this.copy(new Variable());
     }
 }

@@ -1,5 +1,5 @@
 /*
- * $RCSfile: LocalizationContext.java,v $$
+ * $RCSfile: LocalizationContext.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-26 $
  *

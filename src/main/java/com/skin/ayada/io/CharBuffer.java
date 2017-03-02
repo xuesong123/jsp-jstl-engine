@@ -1,5 +1,5 @@
 /*
- * $RCSfile: CharBuffer.java,v $$
+ * $RCSfile: CharBuffer.java,v $
  * $Revision: 1.1  $
  * $Date: 2014-6-30  $
  *

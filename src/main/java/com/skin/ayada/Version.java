@@ -1,5 +1,5 @@
 /*
- * $RCSfile: Version.java,v $$
+ * $RCSfile: Version.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-12-21 $
  *
@@ -33,7 +33,7 @@ public class Version {
     /**
      *
      */
-    public static final int minorVersion = 14;
+    public static final int minorVersion = 16;
 
     /**
      *

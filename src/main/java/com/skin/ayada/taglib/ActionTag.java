@@ -1,5 +1,5 @@
 /*
- * $RCSfile: ActionTag.java,v $$
+ * $RCSfile: ActionTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2011-12-09 $
  *
@@ -10,13 +10,13 @@
  */
 package com.skin.ayada.taglib;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.skin.ayada.component.Parameters;
-import com.skin.ayada.runtime.PageContext;
+import com.skin.ayada.PageContext;
 import com.skin.ayada.tagext.AttributeTagSupport;
 import com.skin.ayada.tagext.ParameterTagSupport;
 import com.skin.ayada.tagext.Tag;
@@ -63,7 +63,7 @@ public class ActionTag extends TagSupport implements ParameterTagSupport, Attrib
      */
     @Override
     public int doEndTag() throws Exception {
-        Map<String, Object> context = this.pageContext.getContext(EXPORTS);
+        Map<String, Object> context = this.getContext(this.pageContext, EXPORTS);
         context.putAll(this.parameters.getParameters());
 
         if(this.className != null) {
@@ -80,6 +80,28 @@ public class ActionTag extends TagSupport implements ParameterTagSupport, Attrib
             this.pageContext.include(this.getPage(), context);
         }
         return Tag.EVAL_PAGE;
+    }
+
+    /**
+     * @param pageContext
+     * @param names
+     * @return Map<String, Object>
+     */
+    private Map<String, Object> getContext(PageContext pageContext, String[] names) {
+        Map<String, Object> context = new HashMap<String, Object>();
+
+        if(names != null) {
+            Object value = null;
+
+            for(String name : names) {
+                value = pageContext.getAttribute(name);
+
+                if(value != null) {
+                    context.put(name, value);
+                }
+            }
+        }
+        return context;
     }
 
     /**

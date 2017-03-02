@@ -1,5 +1,5 @@
 /*
- * $RCSfile: DataSetTag.java,v $$
+ * $RCSfile: DataSetTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-04-25 $
  *
@@ -10,7 +10,6 @@
  */
 package com.skin.ayada.jstl.csv;
 
-import com.skin.ayada.csv.DataSet;
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTag;
 import com.skin.ayada.tagext.BodyTagSupport;

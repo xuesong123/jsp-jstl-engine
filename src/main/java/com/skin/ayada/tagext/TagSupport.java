@@ -1,5 +1,5 @@
 /*
- * $RCSfile: TagSupport.java,v $$
+ * $RCSfile: TagSupport.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-19 $
  *
@@ -14,7 +14,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.Writer;
 
-import com.skin.ayada.runtime.PageContext;
+import com.skin.ayada.PageContext;
 
 /**
  * <p>Title: TagSupport</p>

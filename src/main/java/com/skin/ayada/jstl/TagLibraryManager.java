@@ -1,5 +1,5 @@
 /*
- * $RCSfile: TagLibraryFactory.java,v $$
+ * $RCSfile: TagLibraryFactory.java,v $
  * $Revision: 1.1 $
  * $Date: 2014-04-19 $
  *
@@ -58,6 +58,6 @@ public class TagLibraryManager {
             library = TagLibraryFactory.load(prefix, resource + ".xml");
             cache.put(key, library);
         }
-        return library;
+        return TagLibraryFactory.clone(library);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * $RCSfile: ConstructorTagSupport.java,v $$
+ * $RCSfile: ConstructorTagSupport.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-28 $
  *

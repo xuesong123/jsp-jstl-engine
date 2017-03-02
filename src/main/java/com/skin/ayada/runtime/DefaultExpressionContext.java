@@ -1,5 +1,5 @@
 /*
- * $RCSfile: DefaultExpressionContext.java,v $$
+ * $RCSfile: DefaultExpressionContext.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-20 $
  *
@@ -12,12 +12,12 @@ package com.skin.ayada.runtime;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Map;
 
-import ognl.OgnlContext;
-
-import com.skin.ayada.ognl.util.Empty;
-import com.skin.ayada.ognl.util.OgnlUtil;
-import com.skin.ayada.util.HtmlUtil;
+import com.skin.ayada.Encoder;
+import com.skin.ayada.ExpressionContext;
+import com.skin.ayada.util.ClassUtil;
+import com.skin.ayada.util.MVELUtil;
 
 /**
  * <p>Title: DefaultExpressionContext</p>
@@ -26,37 +26,15 @@ import com.skin.ayada.util.HtmlUtil;
  * @author xuesong.net
  * @version 1.0
  */
-public class DefaultExpressionContext extends OgnlContext implements ExpressionContext {
-    private ELEncoder encoder;
-    private PageContext pageContext;
-    private static final Object EMPTY = new Empty<String, Object>();
+public class DefaultExpressionContext implements ExpressionContext {
+    protected Encoder encoder;
+    protected Map<String, Object> context;
 
     /**
-     * @param pageContext
+     * @param context
      */
-    protected DefaultExpressionContext(PageContext pageContext) {
-        this.pageContext = pageContext;
-    }
-
-    /**
-     * @param key
-     * @param value
-     */
-    @Override
-    public Object put(Object key, Object value) {
-        return this.pageContext.setAttribute(key.toString(), value);
-    }
-
-    /**
-     * @param key
-     */
-    @Override
-    public Object get(Object key) {
-        if(key == null) {
-            return EMPTY;
-        }
-        Object value = this.pageContext.getAttribute(key.toString());
-        return (value != null ? value : EMPTY);
+    protected DefaultExpressionContext(Map<String, Object> context) {
+        this.context = context;
     }
 
     /**
@@ -66,23 +44,106 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
     @Override
     public Object getValue(String expression) {
         try {
-            return OgnlUtil.getValue(expression, this, this);
+            return this.evaluate(expression);
         }
         catch(Exception e) {
-            boolean flag = true;
-            Object ignoreElException = this.pageContext.getAttribute("ignoreElException");
-
-            if(ignoreElException != null) {
-                flag = "true".equals(ignoreElException.toString());
-            }
-
-            if(!flag) {
-                throw new RuntimeException(e);
-            }
-            else {
-                return null;
-            }
+            this.error(e);
         }
+        return null;
+    }
+
+    /**
+     * @param expression
+     * @param resultType
+     * @return Object
+     */
+    @Override
+    public Object getValue(String expression, Class<?> resultType) {
+        Object value = this.getValue(expression);
+
+        if(value == null) {
+            return null;
+        }
+
+        if(resultType != null) {
+            if(value instanceof String) {
+                String text = (String)value;
+
+                if(resultType == String.class) {
+                    return text;
+                }
+                else if(resultType == char.class || resultType == Character.class) {
+                    return text;
+                }
+                else if(resultType == boolean.class || resultType == Boolean.class) {
+                    return text.equals("true");
+                }
+                else if(resultType == byte.class || resultType == Byte.class) {
+                    return getValue(text);
+                }
+                else if(resultType == short.class || resultType == Short.class) {
+                    return getValue(text);
+                }
+                else if(resultType == int.class || resultType == Integer.class) {
+                    return getValue(text);
+                }
+                else if(resultType == float.class || resultType == Float.class) {
+                    return getValue(text);
+                }
+                else if(resultType == double.class || resultType == Double.class) {
+                    return getValue(text);
+                }
+                else if(resultType == long.class || resultType == Long.class) {
+                    return getValue(text);
+                }
+            }
+            return ClassUtil.cast(value, resultType);
+        }
+        return value;
+    }
+
+    /**
+     * @param expression
+     * @return Object
+     * @throws Exception
+     */
+    @Override
+    public Object evaluate(String expression) throws Exception {
+        return MVELUtil.getValue(expression, this.getContext());
+    }
+
+    /**
+     * @param name
+     * @return Object
+     */
+    @Override
+    public Object getAttribute(String name) {
+        return this.context.get(name);
+    }
+
+    /**
+     * @param name
+     * @param value
+     */
+    @Override
+    public void setAttribute(String name, Object value) {
+        this.context.put(name, value);
+    }
+
+    /**
+     * @return the Map<String, Object>
+     */
+    @Override
+    public Map<String, Object> getContext() {
+        return this.context;
+    }
+
+    /**
+     * @param context the context to set
+     */
+    @Override
+    public void setContext(Map<String, Object> context) {
+        this.context = context;
     }
 
     /**
@@ -93,23 +154,32 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
     public boolean getBoolean(String expression) {
         Object value = this.getValue(expression);
 
+        if(value == null) {
+            return false;
+        }
+
         if(value instanceof Boolean) {
             return ((Boolean)value).booleanValue();
         }
-        return false;
+        return (value.toString().equals("true"));
     }
 
     /**
      * @param expression
      * @return Byte
      */
+    @Override
     public Byte getByte(String expression) {
         Object value = this.getValue(expression);
+
+        if(value == null) {
+            return null;
+        }
 
         if(value instanceof Number) {
             return ((Number)value).byteValue();
         }
-        return null;
+        return ClassUtil.cast(value, Byte.class);
     }
 
     /**
@@ -123,7 +193,7 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
         if(value instanceof Number) {
             return ((Number)value).shortValue();
         }
-        return null;
+        return ClassUtil.cast(value, Short.class);
     }
 
     /**
@@ -137,7 +207,7 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
         if(value instanceof Number) {
             return ((Number)value).intValue();
         }
-        return null;
+        return ClassUtil.cast(value, Integer.class);
     }
 
     /**
@@ -151,7 +221,7 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
         if(value instanceof Number) {
             return ((Number)value).floatValue();
         }
-        return null;
+        return ClassUtil.cast(value, Float.class);
     }
 
     /**
@@ -165,7 +235,7 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
         if(value instanceof Number) {
             return ((Number)value).doubleValue();
         }
-        return null;
+        return ClassUtil.cast(value, Double.class);
     }
 
     /**
@@ -179,7 +249,7 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
         if(value instanceof Number) {
             return ((Number)value).longValue();
         }
-        return null;
+        return ClassUtil.cast(value, Long.class);
     }
 
     /**
@@ -190,16 +260,18 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
     public Character getCharacter(String expression) {
         Object value = this.getValue(expression);
 
+        if(value == null) {
+            return null;
+        }
+
         if(value instanceof Character) {
             return (Character)value;
         }
 
-        if(value != null) {
-            String content = value.toString();
+        String content = value.toString();
 
-            if(content.length() > 0) {
-                return content.charAt(0);
-            }
+        if(content.length() > 0) {
+            return content.charAt(0);
         }
         return null;
     }
@@ -212,7 +284,7 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
     public String getString(String expression) {
         Object value = this.getValue(expression);
 
-        if(value == null || value instanceof Empty<?, ?>) {
+        if(value == null) {
             return "";
         }
         return value.toString();
@@ -223,13 +295,19 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
      * @return Object
      */
     @Override
-    public String getEscapeString(String expression) {
+    public String getEncodeString(String expression) {
         Object value = this.getValue(expression);
 
-        if(value == null || value instanceof Empty<?, ?>) {
+        if(value == null) {
             return "";
         }
-        return HtmlUtil.encode(value.toString());
+
+        if(this.encoder == null || value instanceof Number || value instanceof Boolean) {
+            return value.toString();
+        }
+        else {
+            return this.encoder.encode(value.toString());
+        }
     }
 
     /**
@@ -356,37 +434,42 @@ public class DefaultExpressionContext extends OgnlContext implements ExpressionC
     }
 
     /**
-     * @return the pageContext
+     * @param e
      */
-    public PageContext getPageContext() {
-        return this.pageContext;
+    public void error(Exception e) {
+        boolean flag = true;
+        Object ignoreElException = this.getAttribute("ignoreElException");
+
+        if(ignoreElException != null) {
+            flag = "true".equals(ignoreElException.toString());
+        }
+
+        if(!flag) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
-     * @param pageContext the pageContext to set
+     * @return Encoder
      */
-    public void setPageContext(PageContext pageContext) {
-        this.pageContext = pageContext;
-    }
-
-    /**
-     * @return ELEncoder
-     */
-    public ELEncoder getEncoder() {
+    @Override
+    public Encoder getEncoder() {
         return this.encoder;
     }
 
     /**
      * @param encoder
      */
-    public void setEncoder(ELEncoder encoder) {
+    @Override
+    public void setEncoder(Encoder encoder) {
         this.encoder = encoder;
     }
 
     /**
      * release
      */
+    @Override
     public void release() {
-        this.pageContext = null;
+        this.context = null;
     }
 }

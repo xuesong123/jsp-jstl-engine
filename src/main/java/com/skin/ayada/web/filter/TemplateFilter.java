@@ -1,5 +1,5 @@
 /*
- * $RCSfile: TemplateFilter.java,v $$
+ * $RCSfile: TemplateFilter.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-27 $
  *
@@ -21,6 +21,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.skin.ayada.util.WebUtil;
 import com.skin.ayada.web.TemplateDispatcher;
 
 /**
@@ -45,7 +46,9 @@ public class TemplateFilter implements Filter {
      */
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+        WebUtil.setServletcontext(filterConfig.getServletContext());
         this.templateDispatcher = TemplateDispatcher.create(filterConfig);
+        
     }
 
     /**

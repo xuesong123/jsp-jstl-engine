@@ -1,5 +1,5 @@
 /*
- * $RCSfile: SqlPlus.java,v $$
+ * $RCSfile: SqlPlus.java,v $
  * $Revision: 1.1 $
  * $Date: 2011-4-11 $
  *
@@ -300,10 +300,9 @@ public class SqlPlus {
     /**
      * @param resultSet
      * @param limit
-     * @throws IOException
      * @throws SQLException
      */
-    private void print(ResultSet resultSet, int limit) throws IOException, SQLException {
+    private void print(ResultSet resultSet, int limit) throws SQLException {
         ResultSetMetaData metaData = resultSet.getMetaData();
         int count = metaData.getColumnCount();
         String[] columnNames = new String[count];

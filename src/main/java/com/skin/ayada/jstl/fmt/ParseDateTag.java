@@ -1,5 +1,5 @@
 /*
- * $RCSfile: DateFormatTag.java,v $$
+ * $RCSfile: DateFormatTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2014-04-11 $
  *

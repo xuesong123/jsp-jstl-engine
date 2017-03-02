@@ -1,5 +1,5 @@
 /*
- * $RCSfile: MemMonitor.java,v $$
+ * $RCSfile: MemMonitor.java,v $
  * $Revision: 1.1 $
  * $Date: 2010-7-24 $
  *

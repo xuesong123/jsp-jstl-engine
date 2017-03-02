@@ -1,5 +1,5 @@
 /*
- * $RCSfile: BundleTag.java,v $$
+ * $RCSfile: BundleTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-26 $
  *
@@ -12,7 +12,7 @@ package com.skin.ayada.jstl.fmt;
 
 import java.util.Locale;
 
-import com.skin.ayada.runtime.PageContext;
+import com.skin.ayada.PageContext;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.tagext.TagSupport;
 import com.skin.ayada.tagext.TryCatchFinally;

@@ -1,5 +1,5 @@
 /*
- * $RCSfile: Path.java,v $$
+ * $RCSfile: Path.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-19 $
  *
@@ -92,6 +92,33 @@ public class Path {
          *
          */
         System.out.println(Path.contains("D:\\workspace2\\generator\\webapp\\template", "/template/generator/frame.jsp"));
+    }
+
+    /**
+     * @param path
+     * @return String
+     */
+    public static String getExtension(String path) {
+        if(path != null && path.length() > 0) {
+            char c = '0';
+            int i = path.length() - 1;
+
+            for(; i > -1; i--) {
+                c = path.charAt(i);
+
+                if(c == '.' ) {
+                    break;
+                }
+                else if(c == '/' || c == '\\' || c == ':') {
+                    break;
+                }
+            }
+
+            if(c == '.') {
+                return path.substring(i + 1);
+            }
+        }
+        return "";
     }
 
     /**

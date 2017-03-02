@@ -1,5 +1,5 @@
 /*
- * $RCSfile: ParameterTagSupport.java,v $$
+ * $RCSfile: ParameterTagSupport.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-28 $
  *

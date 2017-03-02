@@ -1,5 +1,5 @@
 /*
- * $RCSfile: HtmlUtil.java,v $$
+ * $RCSfile: HtmlUtil.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-17 $
  *

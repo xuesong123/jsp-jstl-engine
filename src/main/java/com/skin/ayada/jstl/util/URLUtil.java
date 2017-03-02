@@ -1,5 +1,5 @@
 /*
- * $RCSfile: URLUtil.java,v $$
+ * $RCSfile: URLUtil.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-03-29 $
  *

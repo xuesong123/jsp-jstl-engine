@@ -1,5 +1,5 @@
 /*
- * $RCSfile: PathMatcher.java,v $$
+ * $RCSfile: PathMatcher.java,v $
  * $Revision: 1.1 $
  * $Date: 2014-12-14 $
  *

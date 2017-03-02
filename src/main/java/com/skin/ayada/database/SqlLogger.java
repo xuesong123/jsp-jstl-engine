@@ -1,5 +1,5 @@
 /*
- * $RCSfile: SqlLogger.java,v $$
+ * $RCSfile: SqlLogger.java,v $
  * $Revision: 1.1 $
  * $Date: 2014-3-24 $
  *
@@ -58,6 +58,7 @@ public interface SqlLogger {
         /**
          * @param content
          */
+        @Override
         public void log(String content) {
             this.out.println(content);
             this.out.flush();

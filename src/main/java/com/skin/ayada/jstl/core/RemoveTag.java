@@ -1,5 +1,5 @@
 /*
- * $RCSfile: RemoveTag.java,v $$
+ * $RCSfile: RemoveTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2014-04-11 $
  *
@@ -26,6 +26,7 @@ public class RemoveTag extends BodyTagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
     public int doStartTag() throws Exception {

@@ -1,5 +1,5 @@
 /*
- * $RCSfile: ClassPath.java,v $$
+ * $RCSfile: ClassPath.java,v $
  * $Revision: 1.1 $
  * $Date: 2016-1-7 $
  *

@@ -1,5 +1,5 @@
 /*
- * $RCSfile: CSVReader.java,v $$
+ * $RCSfile: CSVReader.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-04-25 $
  *
@@ -19,8 +19,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.List;
 
-import com.skin.ayada.csv.CSVReader;
-import com.skin.ayada.csv.DataSet;
 import com.skin.ayada.tagext.IterationTag;
 import com.skin.ayada.tagext.TagSupport;
 import com.skin.ayada.tagext.TryCatchFinally;

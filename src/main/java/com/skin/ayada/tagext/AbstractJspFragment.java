@@ -1,5 +1,5 @@
 /*
- * $RCSfile: AbstractJspFragment.java,v $$
+ * $RCSfile: AbstractJspFragment.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-11-19 $
  *
@@ -13,8 +13,8 @@ package com.skin.ayada.tagext;
 import java.io.IOException;
 import java.io.Writer;
 
-import com.skin.ayada.runtime.JspWriter;
-import com.skin.ayada.runtime.PageContext;
+import com.skin.ayada.JspWriter;
+import com.skin.ayada.PageContext;
 
 /**
  * <p>Title: AbstractJspFragment</p>

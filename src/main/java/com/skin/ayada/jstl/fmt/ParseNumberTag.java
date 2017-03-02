@@ -1,5 +1,5 @@
 /*
- * $RCSfile: ParseNumberTag.java,v $$
+ * $RCSfile: ParseNumberTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-10-30 $
  *

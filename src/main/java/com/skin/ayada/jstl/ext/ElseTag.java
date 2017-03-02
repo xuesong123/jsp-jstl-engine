@@ -1,5 +1,5 @@
 /*
- * $RCSfile: ElseTag.java,v $$
+ * $RCSfile: ElseTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2011-12-09 $
  *
@@ -10,7 +10,6 @@
  */
 package com.skin.ayada.jstl.ext;
 
-import com.skin.ayada.jstl.ext.IfTag;
 import com.skin.ayada.tagext.TagSupport;
 
 /**

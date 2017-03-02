@@ -1,5 +1,5 @@
 /*
- * $RCSfile: IfTag.java,v $$
+ * $RCSfile: IfTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-19 $
  *

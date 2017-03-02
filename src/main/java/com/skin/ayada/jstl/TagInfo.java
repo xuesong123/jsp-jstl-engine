@@ -1,5 +1,5 @@
 /*
- * $RCSfile: TagInfo.java,v $$
+ * $RCSfile: TagInfo.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-11-28 $
  *
@@ -16,7 +16,7 @@ package com.skin.ayada.jstl;
  * <p>Copyright: Copyright (c) 2006</p>
  * @version 1.0
  */
-public class TagInfo {
+public class TagInfo implements java.lang.Cloneable {
     private String name;
     private String tagClass;
     private int bodyContent;
@@ -155,6 +155,20 @@ public class TagInfo {
                 return "jsp";
             }
         }
+    }
+
+    /**
+     * 
+     */
+    @Override
+    public TagInfo clone() {
+        TagInfo tagInfo = new TagInfo();
+        tagInfo.setName(this.name);
+        tagInfo.setTagClass(this.tagClass);
+        tagInfo.setBodyContent(this.bodyContent);
+        tagInfo.setIgnoreWhitespace(this.ignoreWhitespace);
+        tagInfo.setDescription(this.description);
+        return tagInfo;
     }
 
     /**

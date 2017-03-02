@@ -1,5 +1,5 @@
 /*
- * $RCSfile: HtmlUtil.java,v $$
+ * $RCSfile: HtmlUtil.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-17 $
  *
@@ -28,33 +28,50 @@ public class HtmlUtil {
         }
 
         int length = source.length();
-        StringBuilder buffer = new StringBuilder((int)(length * 1.1));
+        StringBuilder buffer = null;
 
         for(int i = 0; i < length; i++) {
             char c = source.charAt(i);
 
             switch(c) {
                 case '"':
+                    if(buffer == null) {
+                        buffer = StringUtil.getBuffer(source, 0, i);
+                    }
                     buffer.append("&quot;");
                     break;
                 case '<':
+                    if(buffer == null) {
+                        buffer = StringUtil.getBuffer(source, 0, i);
+                    }
                     buffer.append("&lt;");
                     break;
                 case '>':
+                    if(buffer == null) {
+                        buffer = StringUtil.getBuffer(source, 0, i);
+                    }
                     buffer.append("&gt;");
                     break;
                 case '&':
+                    if(buffer == null) {
+                        buffer = StringUtil.getBuffer(source, 0, i);
+                    }
                     buffer.append("&amp;");
                     break;
                 case '\'':
+                    if(buffer == null) {
+                        buffer = StringUtil.getBuffer(source, 0, i);
+                    }
                     buffer.append("&#39;");
                     break;
                 default:
-                    buffer.append(c);
+                    if(buffer != null) {
+                        buffer.append(c);
+                    }
                     break;
             }
         }
-        return buffer.toString();
+        return (buffer != null ? buffer.toString() : source);
     }
 
     /**

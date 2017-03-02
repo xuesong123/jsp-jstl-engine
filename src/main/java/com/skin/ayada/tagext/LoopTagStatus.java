@@ -1,5 +1,5 @@
 /*
- * $RCSfile: LoopTagStatus.java,v $$
+ * $RCSfile: LoopTagStatus.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-19 $
  *

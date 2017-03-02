@@ -1,5 +1,5 @@
 /*
- * $RCSfile: ${java.className}.java,v $$
+ * $RCSfile: ${java.className}.java,v $
  * $Revision: 1.1 $
  * $Date: ${build.date} $
  *
@@ -20,16 +20,16 @@ ${template.dependencies}
 package ${java.packageName};
 
 import java.io.Writer;
-import com.skin.ayada.runtime.ExpressionContext;
-import com.skin.ayada.runtime.JspWriter;
-import com.skin.ayada.runtime.PageContext;
+import com.skin.ayada.ExpressionContext;
+import com.skin.ayada.JspWriter;
+import com.skin.ayada.PageContext;
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTag;
 import com.skin.ayada.tagext.IterationTag;
 import com.skin.ayada.tagext.JspFragment;
 import com.skin.ayada.tagext.Tag;
-import com.skin.ayada.template.JspTemplate;
-import com.skin.ayada.util.ExpressionUtil;
+import com.skin.ayada.JspTemplate;
+import com.skin.ayada.util.ELUtil;
 ${jsp.directive.import}
 
 /**
@@ -44,7 +44,7 @@ public class ${java.className} extends JspTemplate {
     /**
      * @param args
      */
-    public static void main(String[] args){
+    public static void main(String[] args) {
         java.io.StringWriter writer = new java.io.StringWriter();
         PageContext pageContext = com.skin.ayada.runtime.JspFactory.getPageContext(writer);
         ${java.className} template = new ${java.className}();
@@ -68,6 +68,20 @@ ${jsp.declaration}
         JspWriter out = pageContext.getOut();
         JspWriter jspWriter = pageContext.getOut();
         ExpressionContext expressionContext = pageContext.getExpressionContext();
+
+        /**
+         * 自定义隐含变量, 允许不同的运行环境定义不同的隐含变量
+         * 如果需要定义隐含变量请配置编译模板: ayada.properties
+         * ayada.compile.java-template=com/skin/ayada/compile/class.jsp
+         * 重新指定一个新的模板文件即可
+         * 例如在web环境可定义如下的隐含变量:
+         * 
+         * ServletContext servletContext = (ServletContext)(pageContext.getAttribute("servletContext"));
+         * HttpServletRequest request = (HttpServletRequest)(pageContext.getAttribute("request"));
+         * HttpServletResponse response = (HttpServletResponse)(pageContext.getAttribute("response"));
+         * 注: 隐含变量必须在模板运行之前由应用方注入到pageContext中.
+         */
+
 ${jsp.method.body}
         out.flush();
         jspWriter.flush();

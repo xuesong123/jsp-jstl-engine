@@ -1,5 +1,5 @@
 /*
- * $RCSfile: ZipSourceFactory.java,v $$
+ * $RCSfile: ZipSourceFactory.java,v $
  * $Revision: 1.1 $
  * $Date: 2014-12-10 $
  *
@@ -12,12 +12,15 @@ package com.skin.ayada.source;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import com.skin.ayada.util.IO;
+import com.skin.ayada.Source;
+import com.skin.ayada.SourceFactory;
+import com.skin.ayada.scanner.JarScanner;
+import com.skin.ayada.scanner.Scanner.Visitor;
+import com.skin.ayada.scanner.ZipScanner;
 
 /**
  * <p>Title: ZipSourceFactory</p>
@@ -28,60 +31,47 @@ import com.skin.ayada.util.IO;
  */
 public class ZipSourceFactory extends SourceFactory {
     private String file;
+    private String home;
 
     /**
-     *
+     * @param file
+     * @param home
      */
-    public ZipSourceFactory() {
+    public ZipSourceFactory(String file, String home) {
+        this.file = file;
+        this.home = home;
     }
 
     /**
-     * @param home
+     * @param visitor
+     * @throws Exception
      */
-    public ZipSourceFactory(String home) {
-        this.setHome(home);
+    @Override
+    public void accept(Visitor visitor) throws Exception {
+        ZipScanner.accept(new File(this.file), visitor, this.home);
     }
 
     /**
      * @param path
-     * @param encoding
      * @return Source
      */
     @Override
-    public Source getSource(String path, String encoding) {
+    public Source getSource(String path) {
         ZipFile zipFile = null;
-        InputStream inputStream = null;
-        File file = new File(this.file);
 
         try {
-            String realPath = (this.getHome() + path).replace('\\', '/');
-
-            while(realPath.startsWith("/")) {
-                realPath = realPath.substring(1);
-            }
-
-            zipFile = new ZipFile(file);
-            ZipEntry zipEntry = zipFile.getEntry(realPath);
+            zipFile = this.getZipFile();
+            ZipEntry zipEntry = zipFile.getEntry(path);
 
             if(zipEntry == null) {
-                throw new RuntimeException("file not found: " + realPath);
+                throw new RuntimeException("file not found: " + path);
             }
-
-            inputStream = zipFile.getInputStream(zipEntry);
-            String content = IO.read(inputStream, encoding, 4096);
-            return new Source(this.file + "!/" + realPath, path, content, this.getSourceType(path), file.lastModified());
+            return new Source(this.file, path, this.getSourceType(path), this.getLastModified(path));
         }
         catch(Exception e) {
             throw new RuntimeException(e);
         }
         finally {
-            if(inputStream != null) {
-                try {
-                    inputStream.close();
-                }
-                catch(IOException e) {
-                }
-            }
             if(zipFile != null) {
                 try {
                     zipFile.close();
@@ -98,16 +88,12 @@ public class ZipSourceFactory extends SourceFactory {
      */
     @Override
     public URL getResource(String path) {
-        return null;
-    }
-
-    /**
-     * @param path
-     * @return InputStream
-     */
-    @Override
-    public InputStream getInputStream(String path) {
-        return null;
+        try {
+            return JarScanner.join(new File(this.file).toURI().toURL(), path);
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -126,10 +112,9 @@ public class ZipSourceFactory extends SourceFactory {
     @Override
     public boolean exists(String path) {
         ZipFile zipFile = null;
-        File file = new File(this.file);
 
         try {
-            zipFile = new ZipFile(file);
+            zipFile = this.getZipFile();
             ZipEntry zipEntry = zipFile.getEntry(path);
             return (zipEntry != null);
         }
@@ -148,6 +133,19 @@ public class ZipSourceFactory extends SourceFactory {
     }
 
     /**
+     * @return ZipFile
+     * @throws IOException
+     */
+    protected ZipFile getZipFile() throws IOException {
+        File file = new File(this.file);
+
+        if(file.exists() && file.isFile()) {
+            return new ZipFile(file);
+        }
+        throw new IOException(this.file + "not exists or is not zip file");
+    }
+
+    /**
      * @return the file
      */
     public String getFile() {
@@ -159,5 +157,19 @@ public class ZipSourceFactory extends SourceFactory {
      */
     public void setFile(String file) {
         this.file = file;
+    }
+
+    /**
+     * @return String
+     */
+    public String getHome() {
+        return this.home;
+    }
+
+    /**
+     * @param home
+     */
+    public void setHome(String home) {
+        this.home = home;
     }
 }

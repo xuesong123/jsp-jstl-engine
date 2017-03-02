@@ -1,5 +1,5 @@
 /*
- * $RCSfile: DefaultExpressionFactory.java,v $$
+ * $RCSfile: DefaultExpressionFactory.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-03-18 $
  *
@@ -16,7 +16,11 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.skin.ayada.resource.PropertyResource;
+import com.skin.ayada.Encoder;
+import com.skin.ayada.ExpressionContext;
+import com.skin.ayada.ExpressionFactory;
+import com.skin.ayada.PageContext;
+import com.skin.ayada.config.PropertyResource;
 import com.skin.ayada.util.ClassUtil;
 
 /**
@@ -28,7 +32,16 @@ import com.skin.ayada.util.ClassUtil;
  */
 public class DefaultExpressionFactory implements ExpressionFactory {
     private static final Logger logger = LoggerFactory.getLogger(DefaultExpressionFactory.class);
-    private static final Map<String, Object> attributes = getAttributes("UTF-8");
+    private static final DefaultExpressionFactory instance = new DefaultExpressionFactory();
+    private static final Map<String, Object> attributes = getAttributes("utf-8");
+
+    /**
+     * @param pageContext
+     * @return ExpressionContext
+     */
+    public ExpressionContext create(PageContext pageContext) {
+        return new DefaultExpressionContext(pageContext.getContext());
+    }
 
     /**
      * @param pageContext
@@ -36,7 +49,17 @@ public class DefaultExpressionFactory implements ExpressionFactory {
      */
     @Override
     public ExpressionContext getExpressionContext(PageContext pageContext) {
-        return DefaultExpressionFactory.getDefaultExpressionContext(pageContext);
+        ExpressionContext expressionContext = this.create(pageContext);
+
+        if(attributes != null && attributes.size() > 0) {
+            for(Map.Entry<String, Object> entry : attributes.entrySet()) {
+                pageContext.setAttribute(entry.getKey(), entry.getValue());
+            }
+
+            Encoder encoder = (Encoder)(attributes.get("ELEncoder"));
+            expressionContext.setEncoder(encoder);
+        }
+        return expressionContext;
     }
 
     /**
@@ -44,17 +67,7 @@ public class DefaultExpressionFactory implements ExpressionFactory {
      * @return ExpressionContext
      */
     public static ExpressionContext getDefaultExpressionContext(PageContext pageContext) {
-        ExpressionContext expressionContext = new DefaultExpressionContext(pageContext);
-
-        if(attributes != null && attributes.size() > 0) {
-            for(Map.Entry<String, Object> entry : attributes.entrySet()) {
-                pageContext.setAttribute(entry.getKey(), entry.getValue());
-            }
-
-            ELEncoder encoder = (ELEncoder)(attributes.get("ELEncoder"));
-            expressionContext.setEncoder(encoder);
-        }
-        return expressionContext;
+        return instance.getExpressionContext(pageContext);
     }
 
     /**

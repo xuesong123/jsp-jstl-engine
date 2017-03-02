@@ -1,5 +1,5 @@
 /*
- * $RCSfile: NodeType.java,v $$
+ * $RCSfile: NodeType.java,v $
  * $Revision: 1.1 $
  * $Date: 2012-7-03 $
  *
@@ -44,49 +44,59 @@ public class NodeType {
     public static final int CDATA   = 4;
 
     /**
-     * text
+     * literal
      */
-    public static final int VARIABLE   = 2011;
+    public static final int LITERAL         = 2010;
 
     /**
-     * text
+     * EL ${xxx}
      */
-    public static final int EXPRESSION = 2012;
+    public static final int VARIABLE        = 2020;
 
     /**
-     * text
+     * EL: ${xxx.xxx}
      */
-    public static final int TAG_NODE   = 2013;
-
-    /**
-     * startsWith "<%@" page
-     */
-    public static final int JSP_DIRECTIVE_PAGE    = 2014;
-
-    /**
-     * startsWith "<%@" taglib
-     */
-    public static final int JSP_DIRECTIVE_TAGLIB  = 2015;
-
-    /**
-     * startsWith "<%@" include
-     */
-    public static final int JSP_DIRECTIVE_INCLUDE = 2016;
-
-    /**
-     * startsWith "<%!"
-     */
-    public static final int JSP_DECLARATION = 2017;
+    public static final int EXPRESSION      = 2030;
 
     /**
      * startsWith "<%="
      */
-    public static final int JSP_EXPRESSION  = 2018;
+    public static final int MIX_EXPRESSION  = 2040;
 
     /**
-     * startsWith "<% " [\r|\n]
+     * text
      */
-    public static final int JSP_SCRIPTLET   = 2019;
+    public static final int TAG_NODE        = 2050;
+
+    /**
+     * <%@ page
+     */
+    public static final int JSP_DIRECTIVE_PAGE    = 2060;
+
+    /**
+     * <%@ taglib
+     */
+    public static final int JSP_DIRECTIVE_TAGLIB  = 2070;
+
+    /**
+     * <%@ include file=""%>
+     */
+    public static final int JSP_DIRECTIVE_INCLUDE = 2080;
+
+    /**
+     * <%! ... %>
+     */
+    public static final int JSP_DECLARATION = 2090;
+
+    /**
+     * <%=xxx%>
+     */
+    public static final int JSP_EXPRESSION  = 2100;
+
+    /**
+     * <% .... %>
+     */
+    public static final int JSP_SCRIPTLET   = 2110;
 
     /**
      * startsWith "<% " [\r|\n]
@@ -126,32 +136,32 @@ public class NodeType {
     /**
      * jsp:declaration
      */
-    public static final String JSP_DECLARATION_NAME   = "jsp:declaration";
+    public static final String JSP_DECLARATION_NAME        = "jsp:declaration";
 
     /**
      * jsp:expression
      */
-    public static final String JSP_EXPRESSION_NAME    = "jsp:expression";
+    public static final String JSP_EXPRESSION_NAME         = "jsp:expression";
 
     /**
      * jsp:scriptlet
      */
-    public static final String JSP_SCRIPTLET_NAME      = "jsp:scriptlet";
+    public static final String JSP_SCRIPTLET_NAME          = "jsp:scriptlet";
 
     /**
      * jsp:directive.page
      */
-    public static final String JSP_DIRECTIVE_PAGE_NAME = "jsp:directive.page";
+    public static final String JSP_DIRECTIVE_PAGE_NAME     = "jsp:directive.page";
 
     /**
      * jsp:directive.taglib
      */
-    public static final String JSP_DIRECTIVE_TAGLIB_NAME    = "jsp:directive.taglib";
+    public static final String JSP_DIRECTIVE_TAGLIB_NAME   = "jsp:directive.taglib";
 
     /**
      * jsp:directive.include
      */
-    public static final String JSP_DIRECTIVE_INCLUDE_NAME = "jsp:directive.include";
+    public static final String JSP_DIRECTIVE_INCLUDE_NAME  = "jsp:directive.include";
 
 
     /**

@@ -1,5 +1,5 @@
 /*
- * $RCSfile: TagUtil.java,v $$
+ * $RCSfile: TagUtil.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-19 $
  *
@@ -11,12 +11,12 @@
 package com.skin.ayada.util;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Map;
 
+import com.skin.ayada.ExpressionContext;
 import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.jstl.TagLibraryFactory;
-import com.skin.ayada.runtime.ExpressionContext;
+import com.skin.ayada.statement.Attribute;
 import com.skin.ayada.tagext.DynamicAttributes;
 import com.skin.ayada.tagext.Tag;
 
@@ -53,7 +53,7 @@ public class TagUtil {
      * @param expressionContext
      * @throws Exception
      */
-    public static void setAttributes(Tag tag, Map<String, String> attributes, ExpressionContext expressionContext) throws Exception {
+    public static void setAttributes(Tag tag, Map<String, Attribute> attributes, ExpressionContext expressionContext) throws Exception {
         if(attributes == null || attributes.size() < 1) {
             return;
         }
@@ -61,59 +61,36 @@ public class TagUtil {
         if(tag instanceof DynamicAttributes) {
             DynamicAttributes dynamicAttributes = (DynamicAttributes)tag;
 
-            for(Map.Entry<String, String> entry : attributes.entrySet()) {
+            for(Map.Entry<String, Attribute> entry : attributes.entrySet()) {
                 String name = entry.getKey();
-                String value = entry.getValue();
-                Object argument = ExpressionUtil.evaluate(expressionContext, value, Object.class);
+                Attribute attribute = entry.getValue();
+                Object argument = ELUtil.getValue(expressionContext, attribute, Object.class);
                 dynamicAttributes.setDynamicAttribute(name, argument);
             }
             return;
         }
 
         Class<?> type = tag.getClass();
+        Map<String, Method> setMethodMap = Reflect.getSetMethodMap(type);
 
-        for(Map.Entry<String, String> entry : attributes.entrySet()) {
+        for(Map.Entry<String, Attribute> entry : attributes.entrySet()) {
             String name = entry.getKey();
-            String value = entry.getValue();
-
-            name = "set" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
-            Method method = getSetMethod(type, name);
+            Method method = setMethodMap.get(name);
 
             if(method != null) {
+                Attribute attribute = entry.getValue();
                 Class<?>[] parameterTypes = method.getParameterTypes();
                 Class<?> parameterType = parameterTypes[0];
-                Object arg = ExpressionUtil.evaluate(expressionContext, value, parameterType);
+                Object argument = ELUtil.getValue(expressionContext, attribute, parameterType);
 
-                if(arg == null && parameterType.isPrimitive()) {
+                if(argument == null && parameterType.isPrimitive()) {
                     continue;
                 }
-                method.invoke(tag, new Object[]{arg});
+                method.invoke(tag, new Object[]{argument});
             }
             else {
                 throw new Exception("NoSuchMethodException: " + tag.getClass().getName() + "." + name);
             }
         }
-    }
-
-    /**
-     * @param type
-     * @param methodName
-     * @return Method
-     */
-    public static Method getSetMethod(Class<?> type, String methodName) {
-        Method[] methods = type.getMethods();
-
-        for(Method method : methods) {
-            if(method.getModifiers() != Modifier.PUBLIC) {
-                continue;
-            }
-
-            if(method.getName().equals(methodName)) {
-                if(method.getParameterTypes().length == 1) {
-                    return method;
-                }
-            }
-        }
-        return null;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * $RCSfile: DefaultPageContext.java,v $$
+ * $RCSfile: DefaultPageContext.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-19 $
  *
@@ -22,11 +22,14 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 
+import com.skin.ayada.ExpressionContext;
+import com.skin.ayada.JspWriter;
+import com.skin.ayada.PageContext;
+import com.skin.ayada.TemplateContext;
 import com.skin.ayada.jstl.fmt.LocalizationContext;
-import com.skin.ayada.ognl.util.Empty;
 import com.skin.ayada.tagext.BodyContent;
-import com.skin.ayada.template.TemplateContext;
 import com.skin.ayada.util.ClassUtil;
+import com.skin.ayada.util.HtmlUtil;
 
 /**
  * <p>Title: DefaultPageContext</p>
@@ -60,13 +63,15 @@ public class DefaultPageContext implements PageContext {
     /**
      * @return PageContext
      */
+    @Override
     public PageContext create() {
-        return this.templateContext.getPageContext(null, this.getOut());
+        return this.templateContext.getPageContext((Map<String, Object>)null, this.getOut());
     }
 
     /**
      * @param out the out to set
      */
+    @Override
     public void setOut(JspWriter out) {
         this.out = out;
     }
@@ -74,6 +79,7 @@ public class DefaultPageContext implements PageContext {
     /**
      * @return the out
      */
+    @Override
     public JspWriter getOut() {
         return this.out;
     }
@@ -83,6 +89,7 @@ public class DefaultPageContext implements PageContext {
      * @param value
      * @return Object
      */
+    @Override
     public Object setAttribute(String key, Object value) {
         if(key == null) {
             return null;
@@ -98,6 +105,7 @@ public class DefaultPageContext implements PageContext {
      * @param key
      * @return Object
      */
+    @Override
     public Object getAttribute(String key) {
         return this.attributes.get(key);
     }
@@ -106,6 +114,7 @@ public class DefaultPageContext implements PageContext {
      * @param key
      * @return Object
      */
+    @Override
     public Object removeAttribute(String key) {
         return this.attributes.remove(key);
     }
@@ -113,18 +122,42 @@ public class DefaultPageContext implements PageContext {
     /**
      * @return Iterator<String>
      */
+    @Override
     public Iterator<String> getAttributeNames() {
         return this.attributes.keySet().iterator();
+    }
+
+    /**
+     * @param context
+     */
+    @Override
+    public void setContext(Map<String, Object> context) {
+        if(context != null) {
+            for(Map.Entry<String, Object> entry : context.entrySet()) {
+                if(entry.getValue() != null) {
+                    this.attributes.put(entry.getKey(), entry.getValue());
+                }
+            }
+        }
+    }
+
+    /**
+     * @return Map<String, Object>
+     */
+    @Override
+    public Map<String, Object> getContext() {
+        return this.attributes;
     }
 
     /**
      * @param name
      * @return Object
      */
+    @Override
     public String getString(String name) {
         Object value = this.getAttribute(name);
 
-        if(value == null || value instanceof Empty<?, ?>) {
+        if(value == null) {
             return "";
         }
         return value.toString();
@@ -134,6 +167,7 @@ public class DefaultPageContext implements PageContext {
      * @param name
      * @return Object
      */
+    @Override
     public boolean getBoolean(String name) {
         Object value = this.getAttribute(name);
 
@@ -151,6 +185,7 @@ public class DefaultPageContext implements PageContext {
      * @param name
      * @return Byte
      */
+    @Override
     public Byte getByte(String name) {
         Object value = this.getAttribute(name);
 
@@ -164,6 +199,7 @@ public class DefaultPageContext implements PageContext {
      * @param name
      * @return Short
      */
+    @Override
     public Short getShort(String name) {
         Object value = this.getAttribute(name);
 
@@ -177,6 +213,7 @@ public class DefaultPageContext implements PageContext {
      * @param name
      * @return Integer
      */
+    @Override
     public Integer getInteger(String name) {
         Object value = this.getAttribute(name);
 
@@ -190,6 +227,7 @@ public class DefaultPageContext implements PageContext {
      * @param name
      * @return Float
      */
+    @Override
     public Float getFloat(String name) {
         Object value = this.getAttribute(name);
 
@@ -203,6 +241,7 @@ public class DefaultPageContext implements PageContext {
      * @param name
      * @return Double
      */
+    @Override
     public Double getDouble(String name) {
         Object value = this.getAttribute(name);
 
@@ -216,6 +255,7 @@ public class DefaultPageContext implements PageContext {
      * @param name
      * @return Long
      */
+    @Override
     public Long getLong(String name) {
         Object value = this.getAttribute(name);
 
@@ -231,6 +271,7 @@ public class DefaultPageContext implements PageContext {
      * @param type
      * @return T
      */
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T getValue(String name, Class<T> type) {
         Object value = this.getAttribute(name);
@@ -244,51 +285,9 @@ public class DefaultPageContext implements PageContext {
     }
 
     /**
-     * @param context
-     */
-    public void setContext(Map<String, Object> context) {
-        if(context != null) {
-            for(Map.Entry<String, Object> entry : context.entrySet()) {
-                if(entry.getValue() != null) {
-                    this.attributes.put(entry.getKey(), entry.getValue());
-                }
-            }
-        }
-    }
-
-    /**
-     * @return Map<String, Object>
-     */
-    public Map<String, Object> getContext() {
-        Map<String, Object> context = new HashMap<String, Object>();
-        context.putAll(this.attributes);
-        return context;
-    }
-
-    /**
-     * @param names
-     * @return Map<String, Object>
-     */
-    public Map<String, Object> getContext(String[] names) {
-        Map<String, Object> context = new HashMap<String, Object>();
-
-        if(names != null) {
-            Object value = null;
-
-            for(String name : names) {
-                value = this.getAttribute(name);
-
-                if(value != null) {
-                    context.put(name, value);
-                }
-            }
-        }
-        return context;
-    }
-
-    /**
      * @param timeZone
      */
+    @Override
     public void setTimeZone(TimeZone timeZone) {
         this.setAttribute(PageContext.LOCALE_KEY, timeZone);
     }
@@ -296,6 +295,7 @@ public class DefaultPageContext implements PageContext {
     /**
      * @return TimeZone
      */
+    @Override
     public TimeZone getTimeZone() {
         TimeZone timeZone = null;
         Object value = this.getAttribute(PageContext.TIMEZONE_KEY);
@@ -316,6 +316,7 @@ public class DefaultPageContext implements PageContext {
     /**
      * @param locale
      */
+    @Override
     public void setLocale(Locale locale) {
         this.setAttribute(PageContext.LOCALE_KEY, locale);
     }
@@ -323,6 +324,7 @@ public class DefaultPageContext implements PageContext {
     /**
      * @return Locale
      */
+    @Override
     public Locale getLocale() {
         Locale locale = null;
         Object value = this.getAttribute(PageContext.LOCALE_KEY);
@@ -345,6 +347,7 @@ public class DefaultPageContext implements PageContext {
      * @param variant
      * @return Local
      */
+    @Override
     public Locale getLocale(String value, String variant) {
         int i = 0;
         char ch = '\000';
@@ -390,6 +393,7 @@ public class DefaultPageContext implements PageContext {
     /**
      * @param bundle
      */
+    @Override
     public void setBundle(LocalizationContext bundle) {
         this.setAttribute(PageContext.BUNDLE_KEY, bundle);
     }
@@ -397,6 +401,7 @@ public class DefaultPageContext implements PageContext {
     /**
      * @return LocalizationContext
      */
+    @Override
     public LocalizationContext getBundle() {
         return (LocalizationContext)(this.getAttribute(PageContext.BUNDLE_KEY));
     }
@@ -406,6 +411,7 @@ public class DefaultPageContext implements PageContext {
      * @param args
      * @return String
      */
+    @Override
     public String getLocalizedMessage(String key, Object[] args) {
         LocalizationContext localizationContext = this.getBundle();
         return this.getLocalizedMessage(localizationContext, key, args);
@@ -417,6 +423,7 @@ public class DefaultPageContext implements PageContext {
      * @param args
      * @return String
      */
+    @Override
     public String getLocalizedMessage(LocalizationContext localizationContext, String key, Object[] args) {
         String result = null;
         ResourceBundle bundle = localizationContext.getResourceBundle();
@@ -449,17 +456,17 @@ public class DefaultPageContext implements PageContext {
     }
 
     /**
-     * @return the templateContext
-     */
-    public TemplateContext getTemplateContext() {
-        return this.templateContext;
-    }
-
-    /**
      * @param templateContext the templateContext to set
      */
     public void setTemplateContext(TemplateContext templateContext) {
         this.templateContext = templateContext;
+    }
+
+    /**
+     * @return the templateContext
+     */
+    public TemplateContext getTemplateContext() {
+        return this.templateContext;
     }
 
     /**
@@ -472,6 +479,7 @@ public class DefaultPageContext implements PageContext {
     /**
      * @return ExpressionContext
      */
+    @Override
     public ExpressionContext getExpressionContext() {
         return this.expressionContext;
     }
@@ -503,6 +511,7 @@ public class DefaultPageContext implements PageContext {
     /**
      * @return JspWriter
      */
+    @Override
     public BodyContent pushBody() {
         BodyContent bodyContent = new BodyContent(this.out);
         this.out = bodyContent;
@@ -523,6 +532,7 @@ public class DefaultPageContext implements PageContext {
     /**
      * @return JspWriter
      */
+    @Override
     public JspWriter popBody() {
         if(this.out instanceof BodyContent) {
             BodyContent bodyContent = (BodyContent)(this.out);
@@ -538,64 +548,21 @@ public class DefaultPageContext implements PageContext {
      * @param escapeXml
      * @throws IOException
      */
+    @Override
     public void print(BodyContent bodyContent, boolean escapeXml) throws IOException {
         String content = bodyContent.getString();
 
         if(escapeXml) {
-            content = this.escape(content);
+            content = HtmlUtil.encode(content);
         }
         bodyContent.getEnclosingWriter().write(content);
-    }
-
-    /**
-     * @param source
-     * @return String
-     */
-    private String escape(String source) {
-        if(source == null) {
-            return "";
-        }
-
-        char c;
-        StringBuilder buffer = new StringBuilder();
-
-        for(int i = 0, size = source.length(); i < size; i++) {
-            c = source.charAt(i);
-
-            switch (c) {
-                case '&': {
-                    buffer.append("&amp;");
-                    break;
-                }
-                case '"': {
-                    buffer.append("&quot;");
-                    break;
-                }
-                case '<': {
-                    buffer.append("&lt;");
-                    break;
-                }
-                case '>': {
-                    buffer.append("&gt;");
-                    break;
-                }
-                case '\'': {
-                    buffer.append("&#39;");
-                    break;
-                }
-                default : {
-                    buffer.append(c);
-                    break;
-                }
-            }
-        }
-        return buffer.toString();
     }
 
     /**
      * @param path
      * @return URL
      */
+    @Override
     public URL getResource(String path) {
         return this.templateContext.getResource(path);
     }
@@ -604,6 +571,7 @@ public class DefaultPageContext implements PageContext {
      * @param path
      * @return InputStream
      */
+    @Override
     public InputStream getInputStream(String path) {
         return this.templateContext.getInputStream(path);
     }
@@ -647,6 +615,7 @@ public class DefaultPageContext implements PageContext {
     /**
      * release
      */
+    @Override
     public void release() {
         this.attributes.clear();
         this.expressionContext.release();

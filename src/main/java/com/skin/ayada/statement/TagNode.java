@@ -1,5 +1,5 @@
 /*
- * $RCSfile: TagNode.java,v $$
+ * $RCSfile: TagNode.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-11-08 $
  *
@@ -12,7 +12,7 @@ package com.skin.ayada.statement;
 
 import java.util.Map;
 
-import com.skin.ayada.runtime.TagFactory;
+import com.skin.ayada.TagFactory;
 
 /**
  * <p>Title: TagNode</p>
@@ -79,10 +79,10 @@ public class TagNode extends Node {
         node.setTagClassName(this.tagClassName);
         node.setTagFactory(this.tagFactory);
 
-        Map<String, String> attributes = this.getAttributes();
+        Map<String, Attribute> attributes = this.getAttributes();
 
         if(attributes != null && attributes.size() > 0) {
-            for(Map.Entry<String, String> entry : attributes.entrySet()) {
+            for(Map.Entry<String, Attribute> entry : attributes.entrySet()) {
                 node.setAttribute(entry.getKey(), entry.getValue());
             }
         }
@@ -101,7 +101,7 @@ public class TagNode extends Node {
             buffer.append("<");
             buffer.append(this.getNodeName());
             buffer.append(" lineNumber=\"");
-            buffer.append(this.getLineNumber());
+            buffer.append(this.getLine());
             buffer.append("\" offset=\"");
             buffer.append(this.getOffset());
             buffer.append("\" length=\"");
@@ -120,20 +120,20 @@ public class TagNode extends Node {
                 buffer.append("\"");
             }
 
-            Map<String, String> attributes = this.getAttributes();
+            Map<String, Attribute> attributes = this.getAttributes();
 
             if(attributes != null && attributes.size() > 0) {
                 if(sort == true) {
-                    java.util.TreeMap<String, String> treeMap = new java.util.TreeMap<String, String>();
+                    java.util.TreeMap<String, Attribute> treeMap = new java.util.TreeMap<String, Attribute>();
                     treeMap.putAll(attributes);
                     attributes = treeMap;
                 }
 
-                for(Map.Entry<String, String> entry : attributes.entrySet()) {
+                for(Map.Entry<String, Attribute> entry : attributes.entrySet()) {
                     buffer.append(" ");
                     buffer.append(entry.getKey());
                     buffer.append("=\"");
-                    buffer.append(this.encode(entry.getValue()));
+                    buffer.append(this.encode(entry.getValue().getText()));
                     buffer.append("\"");
                 }
             }

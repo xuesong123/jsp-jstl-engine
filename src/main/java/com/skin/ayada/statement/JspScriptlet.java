@@ -1,5 +1,5 @@
 /*
- * $RCSfile: Scriptlet.java,v $$
+ * $RCSfile: Scriptlet.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-11-11 $
  *
@@ -47,15 +47,6 @@ public class JspScriptlet extends DataNode {
      */
     @Override
     public JspScriptlet clone() {
-        JspScriptlet node = new JspScriptlet();
-        node.setNodeName(this.getNodeName());
-        node.setNodeType(this.getNodeType());
-        node.setOffset(this.getOffset());
-        node.setLength(this.getLength());
-        node.setLineNumber(this.getLineNumber());
-        node.setClosed(this.getClosed());
-        node.setParent(this.getParent());
-        node.append(this.getTextContent());
-        return node;
+        return this.copy(new JspScriptlet());
     }
 }

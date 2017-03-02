@@ -1,5 +1,5 @@
 /*
- * $RCSfile: TagLibraryFactory.java,v $$
+ * $RCSfile: TagLibraryFactory.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-19 $
  *
@@ -35,7 +35,7 @@ import org.xml.sax.InputSource;
  * @version 1.0
  */
 public class TagLibraryFactory {
-    private static final Map<String, TagInfo> map = load();
+    private static final Map<String, TagInfo> standard = load();
     private static final Logger logger = LoggerFactory.getLogger(TagLibraryFactory.class);
 
     /**
@@ -49,6 +49,15 @@ public class TagLibraryFactory {
      * @return TagLibrary
      */
     public static TagLibrary getStandardTagLibrary() {
+        /**
+         * buf fix:
+         * t:rename指令允许在页面范围内修改标签的定义.
+         * 当标签定义被修改之后, 后面再加载的所有标签都被修改了.
+         * 
+         * 标准标签库是不可修改的
+         * 每次调用标准标签库都返回一个复制的标签库
+         */
+        Map<String, TagInfo> map = clone(standard);
         TagLibrary tagLibrary = new TagLibrary();
         tagLibrary.setup(map);
         return tagLibrary;
@@ -205,5 +214,20 @@ public class TagLibraryFactory {
             return null;
         }
         return tagInfo;
+    }
+
+    /**
+     * @param library
+     * @return Map<String, TagInfo>
+     */
+    public static Map<String, TagInfo> clone(Map<String, TagInfo> library) {
+        Map<String, TagInfo> map = new HashMap<String, TagInfo>();
+
+        for(Map.Entry<String, TagInfo> entry : library.entrySet()) {
+            String name = entry.getKey();
+            TagInfo tagInfo = entry.getValue();
+            map.put(name, tagInfo.clone());
+        }
+        return map;
     }
 }

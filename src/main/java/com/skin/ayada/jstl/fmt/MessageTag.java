@@ -1,5 +1,5 @@
 /*
- * $RCSfile: MessageTag.java,v $$
+ * $RCSfile: MessageTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-28 $
  *

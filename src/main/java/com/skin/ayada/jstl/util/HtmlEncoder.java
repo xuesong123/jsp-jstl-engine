@@ -1,5 +1,5 @@
 /*
- * $RCSfile: HtmlEncoder.java,v $$
+ * $RCSfile: HtmlEncoder.java,v $
  * $Revision: 1.1  $
  * $Date: 2014-10-6  $
  *
@@ -10,7 +10,7 @@
  */
 package com.skin.ayada.jstl.util;
 
-import com.skin.ayada.runtime.ELEncoder;
+import com.skin.ayada.Encoder;
 import com.skin.ayada.util.HtmlUtil;
 
 /**
@@ -20,7 +20,7 @@ import com.skin.ayada.util.HtmlUtil;
  * @author xuesong.net
  * @version 1.0
  */
-public class HtmlEncoder implements ELEncoder {
+public class HtmlEncoder implements Encoder {
     /**
      *
      */

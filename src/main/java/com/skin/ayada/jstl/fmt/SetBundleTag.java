@@ -1,5 +1,5 @@
 /*
- * $RCSfile: SetBundleTag.java,v $$
+ * $RCSfile: SetBundleTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-28 $
  *

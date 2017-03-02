@@ -1,5 +1,5 @@
 /*
- * $RCSfile: OutTag.java,v $$
+ * $RCSfile: OutTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-19 $
  *
@@ -13,12 +13,13 @@ package com.skin.ayada.jstl.core;
 import java.io.IOException;
 import java.io.Writer;
 
-import com.skin.ayada.runtime.JspWriter;
-import com.skin.ayada.runtime.PageContext;
+import com.skin.ayada.JspWriter;
+import com.skin.ayada.PageContext;
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTag;
 import com.skin.ayada.tagext.BodyTagSupport;
 import com.skin.ayada.tagext.Tag;
+import com.skin.ayada.util.HtmlUtil;
 
 /**
  * <p>Title: OutTag</p>
@@ -73,7 +74,7 @@ public class OutTag extends BodyTagSupport {
             String content = value.toString();
 
             if(escapeXml) {
-                out.write(escape(content));
+                out.write(HtmlUtil.encode(content));
             }
             else {
                 out.write(content);
@@ -93,57 +94,12 @@ public class OutTag extends BodyTagSupport {
             JspWriter out = pageContext.getOut();
 
             if(escapeXml) {
-                out.print(escape(content));
+                out.print(HtmlUtil.encode(content));
             }
             else {
                 out.print(content);
             }
         }
-    }
-
-    /**
-     * @param source
-     * @return String
-     */
-    public static String escape(String source) {
-        if(source == null) {
-            return "";
-        }
-
-        char c;
-        StringBuilder buffer = new StringBuilder();
-
-        for(int i = 0, size = source.length(); i < size; i++) {
-            c = source.charAt(i);
-
-            switch (c) {
-                case '&': {
-                    buffer.append("&amp;");
-                    break;
-                }
-                case '"': {
-                    buffer.append("&quot;");
-                    break;
-                }
-                case '<': {
-                    buffer.append("&lt;");
-                    break;
-                }
-                case '>': {
-                    buffer.append("&gt;");
-                    break;
-                }
-                case '\'': {
-                    buffer.append("&#39;");
-                    break;
-                }
-                default : {
-                    buffer.append(c);
-                    break;
-                }
-            }
-        }
-        return buffer.toString();
     }
 
     /**

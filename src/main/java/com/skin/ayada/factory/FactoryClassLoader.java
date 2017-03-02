@@ -1,5 +1,5 @@
 /*
- * $RCSfile: FactoryClassLoader.java,v $$
+ * $RCSfile: FactoryClassLoader.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-11-06 $
  *
@@ -60,6 +60,7 @@ public class FactoryClassLoader extends ClassLoader {
      */
     public static FactoryClassLoader getInstance() {
         FactoryClassLoader classLoader = AccessController.doPrivileged(new PrivilegedAction<FactoryClassLoader>() {
+            @Override
             public FactoryClassLoader run() {
                 return new FactoryClassLoader(FactoryClassLoader.class.getClassLoader());
             }

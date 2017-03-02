@@ -1,5 +1,5 @@
 /*
- * $RCSfile: QueryTag.java,v $$
+ * $RCSfile: QueryTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2014-03-25 $
  *
@@ -86,7 +86,7 @@ public class QueryTag extends TagSupport implements IterationTag, TryCatchFinall
 
     /**
      * @param throwable
-     * @throws Exception
+     * @throws Throwable
      */
     @Override
     public void doCatch(Throwable throwable) throws Throwable {

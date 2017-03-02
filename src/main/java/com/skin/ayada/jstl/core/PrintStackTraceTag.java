@@ -1,5 +1,5 @@
 /*
- * $RCSfile: PrintStackTraceTag.java,v $$
+ * $RCSfile: PrintStackTraceTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-11-08 $
  *

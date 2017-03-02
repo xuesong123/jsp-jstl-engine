@@ -25,9 +25,9 @@ import javassist.CtNewMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.skin.ayada.ExpressionContext;
+import com.skin.ayada.TagFactory;
 import com.skin.ayada.config.TemplateConfig;
-import com.skin.ayada.runtime.ExpressionContext;
-import com.skin.ayada.runtime.TagFactory;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.util.ClassUtil;
 import com.skin.ayada.util.IO;
@@ -87,9 +87,7 @@ public class TagFactoryManager {
             tagFactory = this.create(tagName, className);
 
             if(tagFactory == null) {
-                tagFactory = new DefaultTagFactory();
-                tagFactory.setTagName(tagName);
-                tagFactory.setClassName(className);
+                tagFactory = new DefaultTagFactory(className);
             }
 
             if(logger.isDebugEnabled()) {
@@ -128,11 +126,7 @@ public class TagFactoryManager {
 
             byte[] bytes = ctClass.toBytecode();
             this.write(factoryClassName, bytes);
-
-            TagFactory tagFactory = (TagFactory)(this.getInstance(factoryClassName, bytes));
-            tagFactory.setTagName(tagName);
-            tagFactory.setClassName(className);
-            return tagFactory;
+            return (TagFactory)(this.getInstance(factoryClassName, bytes));
         }
         catch(Exception e) {
             logger.warn(e.getMessage(), e);

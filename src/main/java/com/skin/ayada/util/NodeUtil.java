@@ -1,5 +1,5 @@
 /*
- * $RCSfile: NodeUtil.java,v $$
+ * $RCSfile: NodeUtil.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-11-04 $
  *
@@ -13,6 +13,7 @@ package com.skin.ayada.util;
 import java.util.List;
 import java.util.Map;
 
+import com.skin.ayada.statement.Attribute;
 import com.skin.ayada.statement.Node;
 import com.skin.ayada.statement.NodeType;
 
@@ -66,14 +67,14 @@ public class NodeUtil {
 
         buffer.append("<");
         buffer.append(node.getNodeName());
-        Map<String, String> attributes = node.getAttributes();
+        Map<String, Attribute> attributes = node.getAttributes();
 
         if(attributes != null && attributes.size() > 0) {
-            for(Map.Entry<String, String> entrySet : attributes.entrySet()) {
+            for(Map.Entry<String, Attribute> entrySet : attributes.entrySet()) {
                 buffer.append(" ");
                 buffer.append(entrySet.getKey());
                 buffer.append("=\"");
-                buffer.append(HtmlUtil.encode(entrySet.getValue()));
+                buffer.append(HtmlUtil.encode(entrySet.getValue().getText()));
                 buffer.append("\"");
             }
         }
@@ -94,14 +95,14 @@ public class NodeUtil {
      * @param attributes
      * @return String
      */
-    public static String toString(Map<String, String> attributes) {
+    public static String toString(Map<?, ?> attributes) {
         StringBuilder buffer = new StringBuilder();
 
         if(attributes != null && attributes.size() > 0) {
-            for(Map.Entry<String, String> entrySet : attributes.entrySet()) {
+            for(Map.Entry<?, ?> entrySet : attributes.entrySet()) {
                 buffer.append(entrySet.getKey());
                 buffer.append("=\"");
-                buffer.append(entrySet.getValue());
+                buffer.append(entrySet.getValue().toString());
                 buffer.append("\"");
                 buffer.append(" ");
             }

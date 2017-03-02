@@ -1,5 +1,5 @@
 /*
- * $RCSfile: ElementTagSupport.java,v $$
+ * $RCSfile: ElementTagSupport.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-12-13 $
  *

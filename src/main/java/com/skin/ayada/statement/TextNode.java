@@ -1,5 +1,5 @@
 /*
- * $RCSfile: TextNode.java,v $$
+ * $RCSfile: TextNode.java,v $
  * $Revision: 1.1 $
  * $Date: 2012-7-03 $
  *
@@ -50,10 +50,10 @@ public class TextNode extends DataNode {
         node.setNodeType(this.getNodeType());
         node.setOffset(this.getOffset());
         node.setLength(this.getLength());
-        node.setLineNumber(this.getLineNumber());
+        node.setLine(this.getLine());
         node.setClosed(this.getClosed());
         node.setParent(this.getParent());
-        node.append(this.getTextContent());
+        node.setTextContent(this.getTextContent());
         return node;
     }
 }

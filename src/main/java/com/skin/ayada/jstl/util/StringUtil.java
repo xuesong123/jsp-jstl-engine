@@ -1,5 +1,5 @@
 /*
- * $RCSfile: StringUtil.java,v $$
+ * $RCSfile: StringUtil.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-16 $
  *

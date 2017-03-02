@@ -1,5 +1,5 @@
 /*
- * $RCSfile: BodyContent.java,v $$
+ * $RCSfile: BodyContent.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-19 $
  *
@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 
-import com.skin.ayada.runtime.JspWriter;
+import com.skin.ayada.JspWriter;
 
 /**
  * <p>Title: BodyContent</p>

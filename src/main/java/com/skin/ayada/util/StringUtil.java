@@ -1,5 +1,5 @@
 /*
- * $RCSfile: StringUtil.java,v $$
+ * $RCSfile: StringUtil.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-03-02 $
  *
@@ -24,6 +24,67 @@ public class StringUtil {
     private static final String EMPTY = "";
 
     private StringUtil() {
+    }
+
+    /**
+     * @param text
+     * @param c
+     * @return String
+     */
+    public static String trim(String text, char c) {
+        if(text == null) {
+            return EMPTY;
+        }
+
+        int i = 0;
+        int j = text.length();
+
+        while((i < j) && (text.charAt(i) == c)) {
+            i++;
+        }
+
+        while((i < j) && (text.charAt(j - 1) == c)) {
+            j--;
+        }
+        return ((i > 0) || (j < text.length())) ? text.substring(i, j) : text;
+    }
+
+    /**
+     * @param text
+     * @param c
+     * @return String
+     */
+    public static String ltrim(String text, char c) {
+        if(text == null) {
+            return EMPTY;
+        }
+
+        int i = 0;
+        int length = text.length();
+
+        while((i < length) && (text.charAt(i) == c)) {
+            i++;
+        }
+        return (i > 0 ? text.substring(i) : text);
+    }
+
+    /**
+     * @param text
+     * @param c
+     * @return String
+     */
+    public static String rtrim(String text, char c) {
+        if(text == null) {
+            return EMPTY;
+        }
+
+        int i = 0;
+        int j = text.length();
+
+        while((i < j) && (text.charAt(j - 1) == c)) {
+            j--;
+        }
+        return (j < text.length()) ? text.substring(i, j) : text;
     }
 
     /**
@@ -62,10 +123,8 @@ public class StringUtil {
                 else {
                     size--;
                 }
-
                 break;
             }
-
             buffer.append(c);
         }
 
@@ -171,6 +230,39 @@ public class StringUtil {
     }
 
     /**
+     * @param c
+     * @return String
+     */
+    public static String escape(char c) {
+        switch (c) {
+            case '"': {
+                return "\\\"";
+            }
+            case '\r': {
+                return "\\r";
+            }
+            case '\n': {
+                return "\\n";
+            }
+            case '\t': {
+                return "\\t";
+            }
+            case '\b': {
+                return "\\b";
+            }
+            case '\f': {
+                return "\\f";
+            }
+            case '\\': {
+                return "\\\\";
+            }
+            default : {
+                return String.valueOf(c);
+            }
+        }
+    }
+
+    /**
      * @param source
      * @return String
      */
@@ -180,39 +272,70 @@ public class StringUtil {
         }
 
         char c;
-        StringBuilder buffer = new StringBuilder();
+        StringBuilder buffer = null;
 
         for(int i = 0, length = source.length(); i < length; i++) {
             c = source.charAt(i);
 
             switch (c) {
                 case '"': {
-                    buffer.append("\\\"");break;
+                    if(buffer == null) {
+                        buffer = StringUtil.getBuffer(source, 0, i);
+                    }
+                    buffer.append("\\\"");
+                    break;
                 }
                 case '\r': {
-                    buffer.append("\\r");break;
+                    if(buffer == null) {
+                        buffer = StringUtil.getBuffer(source, 0, i);
+                    }
+                    buffer.append("\\r");
+                    break;
                 }
                 case '\n': {
-                    buffer.append("\\n");break;
+                    if(buffer == null) {
+                        buffer = StringUtil.getBuffer(source, 0, i);
+                    }
+                    buffer.append("\\n");
+                    break;
                 }
                 case '\t': {
-                    buffer.append("\\t");break;
+                    if(buffer == null) {
+                        buffer = StringUtil.getBuffer(source, 0, i);
+                    }
+                    buffer.append("\\t");
+                    break;
                 }
                 case '\b': {
-                    buffer.append("\\b");break;
+                    if(buffer == null) {
+                        buffer = StringUtil.getBuffer(source, 0, i);
+                    }
+                    buffer.append("\\b");
+                    break;
                 }
                 case '\f': {
-                    buffer.append("\\f");break;
+                    if(buffer == null) {
+                        buffer = StringUtil.getBuffer(source, 0, i);
+                    }
+                    buffer.append("\\f");
+                    break;
                 }
                 case '\\': {
-                    buffer.append("\\\\");break;
+                    if(buffer == null) {
+                        buffer = StringUtil.getBuffer(source, 0, i);
+                    }
+                    buffer.append("\\\\");
+                    break;
                 }
                 default : {
-                    buffer.append(c);break;
+                    if(buffer != null) {
+                        buffer.append(c);
+                    }
+                    break;
                 }
             }
         }
-        return buffer.toString();
+        return (buffer != null ? buffer.toString() : source);
     }
 
     /**
@@ -269,6 +392,24 @@ public class StringUtil {
             }
         }
         return buffer.toString();
+    }
+
+    /**
+     * @param source
+     * @param offset
+     * @param length
+     * @return StringBuilder
+     */
+    public static StringBuilder getBuffer(String source, int offset, int length) {
+        StringBuilder buffer = new StringBuilder();
+
+        if(length > 0) {
+            char[] cbuf = new char[length];
+            buffer = new StringBuilder((int)(source.length() * 1.2));
+            source.getChars(offset, length, cbuf, 0);
+            buffer.append(cbuf, 0, length);
+        }
+        return buffer;
     }
 
     /**
@@ -332,5 +473,22 @@ public class StringUtil {
             }
         }
         return false;
+    }
+
+    /**
+     * @param source
+     * @return boolean
+     */
+    public static boolean isJavaIdentifier(String source) {
+        if(Character.isJavaIdentifierStart(source.charAt(0)) == false) {
+            return false;
+        }
+
+        for(int i = 0; i < source.length(); i++) {
+            if(Character.isJavaIdentifierPart(source.charAt(i)) == false) {
+                return false;
+            }
+        }
+        return true;
     }
 }

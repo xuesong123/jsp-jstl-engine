@@ -1,5 +1,5 @@
 /*
- * $RCSfile: TemplateDispatcher.java,v $$
+ * $RCSfile: TemplateDispatcher.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-03-10 $
  *
@@ -12,6 +12,8 @@ package com.skin.ayada.web;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.lang.reflect.Method;
+import java.util.Enumeration;
 import java.util.Map;
 import java.util.Properties;
 
@@ -25,8 +27,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.skin.ayada.template.Template;
-import com.skin.ayada.template.TemplateContext;
+import com.skin.ayada.Template;
+import com.skin.ayada.TemplateContext;
+import com.skin.ayada.util.ClassUtil;
 import com.skin.ayada.util.Path;
 
 /**
@@ -43,21 +46,6 @@ public class TemplateDispatcher {
     private String contentType;
     private ServletContext servletContext;
     private TemplateContext templateContext;
-    private static final String[] PARAMETERS = new String[]{
-        "name",
-        "home",
-        "prefix",
-        "encoding",
-        "contentType",
-        "sourcePattern",
-        "jspWork",
-        "zipFile",
-        "classPath",
-        "ignoreJspTag",
-        "sourceFactoryClass",
-        "templateFactoryClass",
-        "expressionFactoryClass"
-    };
     private static final Logger logger = LoggerFactory.getLogger(TemplateDispatcher.class);
 
     /**
@@ -86,25 +74,15 @@ public class TemplateDispatcher {
      * @param servletContext
      * @param properties
      * @return TemplateDispatcher
+     * @throws ServletException
      */
-    public static TemplateDispatcher create(ServletContext servletContext, Properties properties) {
+    public static TemplateDispatcher create(ServletContext servletContext, Properties properties) throws ServletException {
         String name = properties.getProperty("name");
-        String home = properties.getProperty("home");
         String prefix = properties.getProperty("prefix");
         String encoding = properties.getProperty("encoding");
         String contentType = properties.getProperty("contentType");
         String sourcePattern = properties.getProperty("sourcePattern");
-        String jspWork = properties.getProperty("jspWork");
-        String zipFile = properties.getProperty("zipFile");
-        String classPath = properties.getProperty("classPath");
-        String ignoreJspTag = properties.getProperty("ignoreJspTag");
-        String sourceFactoryClass = properties.getProperty("sourceFactoryClass");
-        String templateFactoryClass = properties.getProperty("templateFactoryClass");
-        String expressionFactoryClass = properties.getProperty("expressionFactoryClass");
-
-        if(home == null) {
-            home = "contextPath:/";
-        }
+        String templateContextFactoryClass = properties.getProperty("templateContextFactoryClass");
 
         if(prefix != null) {
             prefix = Path.getStrictPath(prefix);
@@ -120,31 +98,14 @@ public class TemplateDispatcher {
 
         if(logger.isInfoEnabled()) {
             logger.info("name: {}", name);
-            logger.info("page.home: {}", home);
-            logger.info("page.work: {}", jspWork);
             logger.info("page.prefix: {}", prefix);
             logger.info("page.encoding: {}", encoding);
             logger.info("page.contentType: {}", contentType);
-            logger.info("page.classPath: {}", classPath);
-            logger.info("page.ignoreJspTag: {}", ignoreJspTag);
-            logger.info("page.sourceFactory: {}", sourceFactoryClass);
-            logger.info("page.templateFactory: {}", templateFactoryClass);
-            logger.info("page.expressionFactory: {}", expressionFactoryClass);
-            logger.info("file.zip: {}", zipFile);
+            logger.info("page.sourcePattern: {}", sourcePattern);
+            logger.info("page.contextFactory: {}", templateContextFactoryClass);
         }
 
-        TemplateContextFactory contextFactory = new TemplateContextFactory();
-        contextFactory.setHome(home);
-        contextFactory.setJspWork(jspWork);
-        contextFactory.setSourcePattern(sourcePattern);
-        contextFactory.setZipFile(zipFile);
-        contextFactory.setIgnoreJspTag(ignoreJspTag);
-        contextFactory.setClassPath(classPath);
-        contextFactory.setSourceFactoryClass(sourceFactoryClass);
-        contextFactory.setTemplateFactoryClass(templateFactoryClass);
-        contextFactory.setExpressionFactoryClass(expressionFactoryClass);
-        TemplateContext templateContext = contextFactory.create();
-
+        TemplateContext templateContext = getTemplateContext(servletContext, properties);
         TemplateDispatcher templateDispatcher = new TemplateDispatcher();
         templateDispatcher.setName(name);
         templateDispatcher.setPrefix(prefix);
@@ -160,13 +121,53 @@ public class TemplateDispatcher {
     }
 
     /**
+     * @param servletContext
+     * @param properties
+     * @return TemplateContext
+     */
+    protected static TemplateContext getTemplateContext(ServletContext servletContext, Properties properties) throws ServletException {
+        String className = properties.getProperty("templateContextFactoryClass");
+
+        if(className == null || className.trim().length() < 1) {
+            return new TemplateContextFactory().create(servletContext, properties);
+        }
+
+        Method method = null;
+        Object factory = null;
+
+        try {
+            factory = ClassUtil.getInstance(className);
+        }
+        catch (Exception e) {
+            throw new ServletException("class '" + className + "' not found.", e);
+        }
+
+        try {
+            method = factory.getClass().getMethod("create", new Class[]{ServletContext.class, Properties.class});
+            return (TemplateContext)(method.invoke(factory, new Object[]{servletContext, properties}));
+        }
+        catch(Exception e) {
+        }
+
+        try {
+            method = factory.getClass().getMethod("create", new Class[0]);
+            return (TemplateContext)(method.invoke(factory, new Object[0]));
+        }
+        catch(Exception e) {
+            throw new ServletException("method 'create' not found.", e);
+        }
+    }
+
+    /**
      * @param filterConfig
      * @return Properties
      */
     protected static Properties getProperties(FilterConfig filterConfig) {
         Properties properties = new Properties();
+        Enumeration<?> names = filterConfig.getInitParameterNames();
 
-        for(String name : PARAMETERS) {
+        while(names.hasMoreElements()) {
+            String name = (String)(names.nextElement());
             String value = filterConfig.getInitParameter(name);
 
             if(value != null) {
@@ -182,8 +183,10 @@ public class TemplateDispatcher {
      */
     protected static Properties getProperties(ServletConfig servletConfig) {
         Properties properties = new Properties();
-
-        for(String name : PARAMETERS) {
+        Enumeration<?> names = servletConfig.getInitParameterNames();
+        
+        while(names.hasMoreElements()) {
+            String name = (String)(names.nextElement());
             String value = servletConfig.getInitParameter(name);
 
             if(value != null) {

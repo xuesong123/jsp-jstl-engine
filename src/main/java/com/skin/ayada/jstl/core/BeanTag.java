@@ -1,5 +1,5 @@
 /*
- * $RCSfile: BeanTag.java,v $$
+ * $RCSfile: BeanTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-11-26 $
  *
@@ -36,6 +36,7 @@ public class BeanTag extends TagSupport implements Tag, ConstructorTagSupport, P
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
     public int doStartTag() throws Exception {

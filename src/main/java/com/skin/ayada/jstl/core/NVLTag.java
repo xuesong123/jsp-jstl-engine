@@ -1,5 +1,5 @@
 /*
- * $RCSfile: NVLTag.java,v $$
+ * $RCSfile: NVLTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-11-08 $
  *

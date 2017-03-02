@@ -1,5 +1,5 @@
 /*
- * $RCSfile: BufferTag.java,v $$
+ * $RCSfile: BufferTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2014-02-19 $
  *
@@ -28,6 +28,7 @@ public class BufferTag extends BodyTagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
     public int doStartTag() throws Exception {
@@ -39,6 +40,7 @@ public class BufferTag extends BodyTagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
     public int doEndTag() throws Exception {

@@ -1,5 +1,5 @@
 /*
- * $RCSfile: DefaultSourceFactory.java,v $$
+ * $RCSfile: DefaultSourceFactory.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-11-04 $
  *
@@ -14,10 +14,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 
-import com.skin.ayada.util.IO;
+import com.skin.ayada.Source;
+import com.skin.ayada.SourceFactory;
+import com.skin.ayada.scanner.FileScanner;
+import com.skin.ayada.scanner.Scanner.Visitor;
 import com.skin.ayada.util.Path;
 
 /**
@@ -27,17 +29,10 @@ import com.skin.ayada.util.Path;
  * @version 1.0
  */
 public class DefaultSourceFactory extends SourceFactory {
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        DefaultSourceFactory sourceFactory = new DefaultSourceFactory();
-        sourceFactory.setHome("D:\\workspace2/ayada\\webapp");
-        sourceFactory.getFile("\\outTest.jsp");
-    }
+    private String home;
 
     /**
-     *
+     * default
      */
     public DefaultSourceFactory() {
     }
@@ -57,7 +52,7 @@ public class DefaultSourceFactory extends SourceFactory {
         }
 
         try {
-            this.setHome(this.getStrictPath(file.getCanonicalPath()));
+            this.home = this.getStrictPath(file.getCanonicalPath());
         }
         catch(IOException e) {
             throw new RuntimeException(e);
@@ -65,23 +60,24 @@ public class DefaultSourceFactory extends SourceFactory {
     }
 
     /**
+     * @param visitor
+     * @throws Exception
+     */
+    @Override
+    public void accept(Visitor visitor) throws Exception {
+        FileScanner.accept(new File(this.home), visitor);
+    }
+
+    /**
      * @param path
-     * @param charset
      * @return Source
      */
     @Override
-    public Source getSource(String path, String charset) {
+    public Source getSource(String path) {
         File file = this.getFile(path);
-
-        try {
-            String content = IO.read(file, charset);
-            Source source = new Source(this.getHome(), path, content, this.getSourceType(file.getName()));
-            source.setLastModified(file.lastModified());
-            return source;
-        }
-        catch(IOException e) {
-            throw new RuntimeException(e);
-        }
+        Source source = new Source(this.home, path, this.getSourceType(file.getName()));
+        source.setLastModified(file.lastModified());
+        return source;
     }
 
     /**
@@ -97,7 +93,7 @@ public class DefaultSourceFactory extends SourceFactory {
                 return file.toURI().toURL();
             }
         }
-        catch (MalformedURLException e) {
+        catch(Exception e) {
         }
         return null;
     }
@@ -115,10 +111,9 @@ public class DefaultSourceFactory extends SourceFactory {
                 return new FileInputStream(file);
             }
         }
-        catch(IOException e) {
+        catch(Exception e) {
         }
         return null;
-        
     }
 
     /**
@@ -155,16 +150,30 @@ public class DefaultSourceFactory extends SourceFactory {
             throw new NullPointerException("path must be not null !");
         }
 
-        if(!Path.contains(this.getHome(), path)) {
-            throw new RuntimeException("home: " + this.getHome() + ", file: " + path + " not exists !");
+        if(!Path.contains(this.home, path)) {
+            throw new RuntimeException("home: " + this.home + ", file: " + path + " not exists !");
         }
 
-        String full = Path.join(this.getHome(), path);
+        String full = Path.join(this.home, path);
         File file = new File(full);
 
-        if(!file.exists() || !file.isFile()) {
-            throw new RuntimeException("home: " + this.getHome() + ", file: " + file.getAbsolutePath() + " not exists !");
+        if(file.exists() && file.isFile()) {
+            return file;
         }
-        return file;
+        throw new RuntimeException("home: " + this.home + ", file: " + file.getAbsolutePath() + " not exists !");
+    }
+
+    /**
+     * @return the home
+     */
+    public String getHome() {
+        return this.home;
+    }
+
+    /**
+     * @param home the home to set
+     */
+    public void setHome(String home) {
+        this.home = home;
     }
 }

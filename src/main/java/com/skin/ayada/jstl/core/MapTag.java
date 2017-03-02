@@ -1,5 +1,5 @@
 /*
- * $RCSfile: MapTag.java,v $$
+ * $RCSfile: MapTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-11-26 $
  *
@@ -88,6 +88,7 @@ public class MapTag extends TagSupport implements AttributeTagSupport, DynamicAt
      * @param name
      * @param value
      */
+    @Override
     public void setDynamicAttribute(String name, Object value) {
         if(name != null) {
             if(this.map == null) {

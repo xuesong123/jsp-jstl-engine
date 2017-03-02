@@ -1,5 +1,5 @@
 /*
- * $RCSfile: TryCatchFinally.java,v $$
+ * $RCSfile: TryCatchFinally.java,v $
  * $Revision: 1.1 $
  * $Date: 2014-03-25 $
  *

@@ -1,5 +1,5 @@
 /*
- * $RCSfile: SimpleTag.java,v $$
+ * $RCSfile: SimpleTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-11-20 $
  *
@@ -10,7 +10,7 @@
  */
 package com.skin.ayada.tagext;
 
-import com.skin.ayada.runtime.PageContext;
+import com.skin.ayada.PageContext;
 
 /**
  * <p>Title: SimpleTag</p>
@@ -47,6 +47,7 @@ public abstract class SimpleTag implements Tag {
     /**
      * @return the parent
      */
+    @Override
     public Tag getParent() {
         return this.parent;
     }
@@ -54,6 +55,7 @@ public abstract class SimpleTag implements Tag {
     /**
      * @param parent the parent to set
      */
+    @Override
     public void setParent(Tag parent) {
         this.parent = parent;
     }
@@ -68,6 +70,7 @@ public abstract class SimpleTag implements Tag {
     /**
      * @param pageContext the pageContext to set
      */
+    @Override
     public void setPageContext(PageContext pageContext) {
         this.pageContext = pageContext;
     }

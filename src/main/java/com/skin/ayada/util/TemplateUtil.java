@@ -1,5 +1,5 @@
 /*
- * $RCSfile: TemplateUtil.java,v $$
+ * $RCSfile: TemplateUtil.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-11-04 $
  *
@@ -15,10 +15,11 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
+import com.skin.ayada.Template;
+import com.skin.ayada.statement.Attribute;
 import com.skin.ayada.statement.Node;
 import com.skin.ayada.statement.NodeType;
 import com.skin.ayada.statement.TagNode;
-import com.skin.ayada.template.Template;
 
 /**
  * <p>Title: TemplateUtil</p>
@@ -47,32 +48,43 @@ public class TemplateUtil {
      * @param writer
      */
     public static void print(Template template, PrintWriter writer) {
+        print(template.getNodes(), writer);
+    }
+
+    /**
+     * @param list
+     * @param writer
+     */
+    public static void print(List<Node> list, PrintWriter writer) {
         String format = "%-4s";
-        List<Node> list = template.getNodes();
+        String typeName = "[NODE]";
 
         for(int i = 0, size = list.size(); i < size; i++) {
             Node node = list.get(i);
+            int nodeType = node.getNodeType();
 
-            if(node.getNodeType() == NodeType.TEXT) {
-                writer.println(String.format(format, i) + "[TEXT]: " + StringUtil.escape(node.getTextContent()));
-                continue;
+            switch (nodeType) {
+                case NodeType.TEXT: {
+                    typeName = "TEXT";
+                    break;
+                }
+                case NodeType.COMMENT: {
+                    break;
+                }
+                case NodeType.VARIABLE: {
+                    typeName = "VARI";
+                    break;
+                }
+                case NodeType.EXPRESSION: {
+                    typeName = "EXPR";
+                    break;
+                }
+                default: {
+                    typeName = "NODE";
+                    break;
+                }
             }
-
-            if(node.getNodeType() == NodeType.VARIABLE) {
-                writer.println(String.format(format, i) + "[VARI]: ${" + StringUtil.escape(node.getTextContent()) + "}");
-                continue;
-            }
-
-            if(node.getNodeType() == NodeType.EXPRESSION) {
-                writer.println(String.format(format, i) + "[EXPR]: ${" + StringUtil.escape(node.getTextContent()) + "}");
-                continue;
-            }
-
-            if(node.getLength() == 0) {
-                writer.println(String.format(format, i) + "[ERRO]: " + TemplateUtil.toString(node, i, false));
-                continue;
-            }
-            writer.println(String.format(format, i) + "[NODE]: " + TemplateUtil.toString(node, i, false));
+            writer.println(String.format(format, i) + "[" + typeName + "]: " + TemplateUtil.toString(node, i));
         }
         writer.flush();
     }
@@ -147,7 +159,7 @@ public class TemplateUtil {
                 break;
             }
 
-            buffer.append(TemplateUtil.toString(node, i, false));
+            buffer.append(TemplateUtil.toString(node, i));
             buffer.append("\r\n");
         }
         return buffer.toString();
@@ -156,34 +168,102 @@ public class TemplateUtil {
     /**
      * @param node
      * @param index
-     * @param closed
      * @return String
      */
-    public static String toString(Node node, int index, boolean closed) {
+    public static String toString(Node node, int index) {
+        int nodeType = node.getNodeType();
+
+        switch (nodeType) {
+            case NodeType.TEXT: {
+                return StringUtil.escape(node.getTextContent());
+            }
+            case NodeType.COMMENT: {
+                return StringUtil.escape(node.getTextContent());
+            }
+            case NodeType.VARIABLE: 
+            case NodeType.EXPRESSION: {
+                StringBuilder buffer = new StringBuilder();
+                buffer.append("${");
+                buffer.append(StringUtil.escape(node.getTextContent()));
+                buffer.append("}");
+                return buffer.toString();
+            }
+            case NodeType.JSP_DECLARATION: {
+                StringBuilder buffer = new StringBuilder();
+                buffer.append("<jsp:declaration line=\"").append(node.getLine());
+                buffer.append(" offset=\"").append(node.getOffset()).append("\"");
+                buffer.append(" length=\"").append(node.getLength()).append("\"");
+                buffer.append(">");
+                buffer.append(StringUtil.escape(node.getTextContent()));
+                buffer.append("</jsp:declaration>");
+                return buffer.toString();
+            }
+            case NodeType.JSP_DIRECTIVE_PAGE: {
+                StringBuilder buffer = new StringBuilder();
+                buffer.append("<jsp:directive.page line=\"").append(node.getLine()).append("\"");
+                buffer.append(" offset=\"").append(node.getOffset()).append("\"");
+                buffer.append(" length=\"").append(node.getLength()).append("\"");
+
+                if(node.getAttributeValue("contentType") != null) {
+                    buffer.append(" contentType=\"").append(node.getAttributeValue("contentType")).append("\"");
+                }
+
+                if(node.getAttributeValue("import") != null) {
+                    buffer.append(" import=\"").append(node.getAttributeValue("import")).append("\"");
+                }
+                buffer.append("/>");
+                return buffer.toString();
+            }
+            case NodeType.JSP_DIRECTIVE_TAGLIB: {
+                StringBuilder buffer = new StringBuilder();
+                buffer.append("<jsp:directive.taglib line=\"").append(node.getLine()).append("\"");
+                buffer.append(" offset=\"").append(node.getOffset()).append("\"");
+                buffer.append(" length=\"").append(node.getLength()).append("\"");
+                buffer.append(" prefix=\"").append(node.getAttributeValue("prefix")).append("\"");
+                buffer.append(" uri=\"").append(node.getAttributeValue("uri")).append("\"");
+                buffer.append("/>");
+                return buffer.toString();
+            }
+            case NodeType.JSP_DIRECTIVE_INCLUDE: {
+                StringBuilder buffer = new StringBuilder();
+                buffer.append("<jsp:directive.include line=\"").append(node.getLine()).append("\"");
+                buffer.append(" offset=\"").append(node.getOffset()).append("\"");
+                buffer.append(" length=\"").append(node.getLength()).append("\"");
+                buffer.append(" file=\"").append(node.getAttributeValue("file")).append("\"");
+                buffer.append("/>");
+                return buffer.toString();
+            }
+            case NodeType.JSP_SCRIPTLET: {
+                StringBuilder buffer = new StringBuilder();
+                buffer.append("<jsp:scriptlet line=\"").append(node.getLine()).append("\"");
+                buffer.append(" offset=\"").append(node.getOffset()).append("\"");
+                buffer.append(" length=\"").append(node.getLength()).append("\"");
+                buffer.append(">");
+                buffer.append(StringUtil.escape(node.getTextContent()));
+                buffer.append("</jsp:scriptlet>");
+                return buffer.toString();
+            }
+            case NodeType.JSP_EXPRESSION: {
+                StringBuilder buffer = new StringBuilder();
+                buffer.append("<jsp:expression line=\"").append(node.getLine()).append("\"");
+                buffer.append(" offset=\"").append(node.getOffset()).append("\"");
+                buffer.append(" length=\"").append(node.getLength()).append("\"");
+                buffer.append(">");
+                buffer.append(node.getTextContent());
+                buffer.append("</jsp:expression>");
+                return buffer.toString();
+            }
+            default: {
+            }
+        }
+
         StringBuilder buffer = new StringBuilder();
-
-        if(node.getNodeType() == NodeType.TEXT) {
-            buffer.append(node.getTextContent());
-            return buffer.toString();
-        }
-
-        if(node.getNodeType() == NodeType.COMMENT) {
-            buffer.append(node.getTextContent());
-            return buffer.toString();
-        }
-
-        if(node.getNodeType() == NodeType.VARIABLE || node.getNodeType() == NodeType.EXPRESSION) {
-            buffer.append("${");
-            buffer.append(node.getTextContent());
-            buffer.append("}");
-            return buffer.toString();
-        }
 
         if(index == node.getOffset()) {
             buffer.append("<");
             buffer.append(node.getNodeName());
-            buffer.append(" lineNumber=\"");
-            buffer.append(node.getLineNumber());
+            buffer.append(" line=\"");
+            buffer.append(node.getLine());
             buffer.append("\" offset=\"");
             buffer.append(node.getOffset());
             buffer.append("\" length=\"");
@@ -203,24 +283,18 @@ public class TemplateUtil {
                 }
             }
 
-            Map<String, String> attributes = node.getAttributes();
+            Map<String, Attribute> attributes = node.getAttributes();
 
             if(attributes != null && attributes.size() > 0) {
-                for(Map.Entry<String, String> entrySet : attributes.entrySet()) {
+                for(Map.Entry<String, Attribute> entrySet : attributes.entrySet()) {
                     buffer.append(" ");
                     buffer.append(entrySet.getKey());
                     buffer.append("=\"");
-                    buffer.append(StringUtil.escape(HtmlUtil.encode(entrySet.getValue())));
+                    buffer.append(StringUtil.escape(HtmlUtil.encode(entrySet.getValue().getText())));
                     buffer.append("\"");
                 }
             }
-
-            if(closed && node.getClosed() == NodeType.SELF_CLOSED) {
-                buffer.append("/>");
-            }
-            else {
-                buffer.append(">");
-            }
+            buffer.append(">");
         }
         else {
             buffer.append("</");

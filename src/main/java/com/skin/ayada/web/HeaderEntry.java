@@ -1,5 +1,5 @@
 /*
- * $RCSfile: HeaderEntry.java,v $$
+ * $RCSfile: HeaderEntry.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-03-30 $
  *

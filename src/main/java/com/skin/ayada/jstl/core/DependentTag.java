@@ -1,5 +1,5 @@
 /*
- * $RCSfile: DependentTag.java,v $$
+ * $RCSfile: DependentTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2014-03-26 $
  *

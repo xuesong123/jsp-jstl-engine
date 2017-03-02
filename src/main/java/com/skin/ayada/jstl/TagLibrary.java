@@ -1,5 +1,5 @@
 /*
- * $RCSfile: TagLibrary.java,v $$
+ * $RCSfile: TagLibrary.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-19 $
  *

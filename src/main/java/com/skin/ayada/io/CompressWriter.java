@@ -1,5 +1,5 @@
 /*
- * $RCSfile: CompressWriter.java,v $$
+ * $RCSfile: CompressWriter.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-11-17 $
  *

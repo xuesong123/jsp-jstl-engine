@@ -1,5 +1,5 @@
 /*
- * $RCSfile: LoadTag.java,v $$
+ * $RCSfile: LoadTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2016-10-3 $
  *
@@ -14,7 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.skin.ayada.runtime.JspWriter;
+import com.skin.ayada.JspWriter;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.util.IO;
 
@@ -39,9 +39,9 @@ public class LoadTag extends FileTag {
         if(this.file == null && this.path == null) {
             throw new java.lang.IllegalArgumentException("file or path must be not null.");
         }
-        
+
         String content = null;
-        
+
         if(this.file != null) {
             File file = new File(this.getFile());
 

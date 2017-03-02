@@ -1,5 +1,5 @@
 /*
- * $RCSfile: TemplateContextFactory.java,v $$
+ * $RCSfile: TemplateContextFactory.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-27 $
  *
@@ -11,23 +11,23 @@
 package com.skin.ayada.web;
 
 import java.io.File;
+import java.util.Properties;
 
-import javax.servlet.ServletException;
+import javax.servlet.ServletContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.skin.ayada.ExpressionFactory;
+import com.skin.ayada.TemplateContext;
+import com.skin.ayada.TemplateFactory;
+import com.skin.ayada.TemplateManager;
 import com.skin.ayada.config.TemplateConfig;
 import com.skin.ayada.runtime.DefaultExpressionFactory;
-import com.skin.ayada.runtime.ExpressionFactory;
+import com.skin.ayada.runtime.DefaultTemplateContext;
+import com.skin.ayada.runtime.DefaultTemplateFactory;
+import com.skin.ayada.runtime.JspTemplateFactory;
 import com.skin.ayada.source.DefaultSourceFactory;
-import com.skin.ayada.source.SourceFactory;
-import com.skin.ayada.source.ZipSourceFactory;
-import com.skin.ayada.template.DefaultTemplateContext;
-import com.skin.ayada.template.JspTemplateFactory;
-import com.skin.ayada.template.TemplateContext;
-import com.skin.ayada.template.TemplateFactory;
-import com.skin.ayada.template.TemplateManager;
 import com.skin.ayada.util.ClassUtil;
 import com.skin.ayada.util.DateUtil;
 import com.skin.ayada.util.WebUtil;
@@ -40,15 +40,6 @@ import com.skin.ayada.util.WebUtil;
  * @version 1.0
  */
 public class TemplateContextFactory {
-    private String home;
-    private String sourcePattern;
-    private String jspWork;
-    private String zipFile;
-    private String ignoreJspTag;
-    private String classPath;
-    private String sourceFactoryClass;
-    private String templateFactoryClass;
-    private String expressionFactoryClass;
     private static final Logger logger = LoggerFactory.getLogger(TemplateContextFactory.class);
 
     /**
@@ -58,67 +49,71 @@ public class TemplateContextFactory {
     }
 
     /**
+     * @param servletContext
+     * @param properties
      * @return TemplateContext
      */
-    public TemplateContext create() {
-        if(this.home.startsWith("contextPath:")) {
-            this.home = WebUtil.getRealPath(this.home.substring(12).trim());
+    public TemplateContext create(ServletContext servletContext, Properties properties) {
+        String home = properties.getProperty("home");
+        String sourcePattern = properties.getProperty("sourcePattern");
+        String jspWork = properties.getProperty("jspWork");
+        String classPath = properties.getProperty("classPath");
+        String ignoreJspTag = properties.getProperty("ignoreJspTag");
+        String templateFactoryClass = properties.getProperty("templateFactoryClass");
+        String expressionFactoryClass = properties.getProperty("expressionFactoryClass");
+
+        if(home == null) {
+            throw new NullPointerException("'home' must be not null.");
         }
 
-        if(this.sourcePattern == null) {
-            this.sourcePattern = "jsp,jspx";
+        if(home.startsWith("contextPath:")) {
+            home = servletContext.getRealPath(home.substring(12).trim());
         }
 
-        if(this.jspWork != null && this.jspWork.startsWith("contextPath:")) {
-            this.jspWork = WebUtil.getRealPath(this.jspWork.substring(12).trim());
+        if(sourcePattern == null) {
+            sourcePattern = "jsp,jspx";
         }
 
-        if(this.zipFile != null && this.zipFile.startsWith("contextPath:")) {
-            this.zipFile = WebUtil.getRealPath(this.zipFile.substring(12).trim());
+        if(jspWork != null && jspWork.startsWith("contextPath:")) {
+            jspWork = servletContext.getRealPath(jspWork.substring(12).trim());
         }
 
-        if(this.classPath == null) {
-            this.classPath = WebUtil.getClassPath();
+        if(classPath == null) {
+            classPath = WebUtil.getClassPath();
         }
 
-        if(this.ignoreJspTag == null) {
-            this.ignoreJspTag = System.getProperty("ayada.compile.ignore-jsptag");
+        if(ignoreJspTag == null) {
+            ignoreJspTag = System.getProperty("ayada.compile.ignore-jsptag");
         }
 
-        if(this.ignoreJspTag == null) {
-            this.ignoreJspTag = String.valueOf(TemplateConfig.getIgnoreJspTag());
+        if(ignoreJspTag == null) {
+            ignoreJspTag = String.valueOf(TemplateConfig.getIgnoreJspTag());
         }
 
-        if(this.sourceFactoryClass == null) {
-            this.sourceFactoryClass = DefaultSourceFactory.class.getName();
+        if(templateFactoryClass == null) {
+            templateFactoryClass = TemplateFactory.class.getName();
         }
 
-        if(this.templateFactoryClass == null) {
-            this.templateFactoryClass = TemplateFactory.class.getName();
-        }
-
-        if(this.expressionFactoryClass == null) {
-            this.expressionFactoryClass = DefaultExpressionFactory.class.getName();
+        if(expressionFactoryClass == null) {
+            expressionFactoryClass = DefaultExpressionFactory.class.getName();
         }
 
         if(logger.isInfoEnabled()) {
-            logger.info("home: {}", this.home);
-            logger.info("sourcePattern: {}", this.sourcePattern);
-            logger.info("jspWork: {}", this.jspWork);
-            logger.info("zipFile: {}", this.zipFile);
-            logger.info("ignoreJspTag: {}", this.ignoreJspTag);
-            logger.info("classPath: {}", this.classPath);
-            logger.info("sourceFactoryClass: {}", this.sourceFactoryClass);
-            logger.info("templateFactoryClass: {}", this.templateFactoryClass);
-            logger.info("expressionFactoryClass: {}", this.expressionFactoryClass);
+            logger.info("home: {}", home);
+            logger.info("sourcePattern: {}", sourcePattern);
+            logger.info("jspWork: {}", jspWork);
+            logger.info("ignoreJspTag: {}", ignoreJspTag);
+            logger.info("classPath: {}", classPath);
+            logger.info("templateFactoryClass: {}", templateFactoryClass);
+            logger.info("expressionFactoryClass: {}", expressionFactoryClass);
         }
 
         try {
-            SourceFactory sourceFactory = this.getSourceFactory();
-            TemplateFactory templateFactory = this.getTemplateFactory();
-            ExpressionFactory expressionFactory = this.getExpressionFactory();
-            sourceFactory.setHome(this.home);
-            sourceFactory.setSourcePattern(this.sourcePattern);
+            DefaultSourceFactory sourceFactory = new DefaultSourceFactory();
+            TemplateFactory templateFactory = getTemplateFactory(templateFactoryClass, jspWork, classPath, ignoreJspTag);
+            ExpressionFactory expressionFactory = getExpressionFactory(expressionFactoryClass);
+            sourceFactory.setHome(home);
+            sourceFactory.setSourcePattern(sourcePattern);
 
             if(logger.isInfoEnabled()) {
                 logger.info("sourceFactory: " + sourceFactory.getClass().getName());
@@ -140,38 +135,18 @@ public class TemplateContextFactory {
     }
 
     /**
-     * @param filterConfig
-     * @return SourceFactory
-     * @throws ServletException
-     */
-    private SourceFactory getSourceFactory() throws Exception {
-        if(this.sourceFactoryClass != null) {
-            SourceFactory sourceFactory = (SourceFactory)(ClassUtil.getInstance(this.sourceFactoryClass));
-
-            if(sourceFactory instanceof ZipSourceFactory) {
-                if(this.zipFile == null) {
-                    throw new RuntimeException("parameter 'zip-file' must be not null");
-                }
-                ((ZipSourceFactory)sourceFactory).setFile(this.zipFile);
-            }
-            return sourceFactory;
-        }
-        return new DefaultSourceFactory();
-    }
-
-    /**
-     * @param filterConfig
+     * @param className
+     * @param jspWork
+     * @param classPath
+     * @param ignoreJspTag
      * @return TemplateFactory
+     * @throws Exception
      */
-    private TemplateFactory getTemplateFactory() throws Exception {
-        if(this.templateFactoryClass == null) {
-            return new TemplateFactory();
-        }
-
-        TemplateFactory templateFactory = TemplateFactory.getTemplateFactory(this.templateFactoryClass);
+    private TemplateFactory getTemplateFactory(String className, String jspWork, String classPath, String ignoreJspTag) throws Exception {
+        TemplateFactory templateFactory = DefaultTemplateFactory.getTemplateFactory(className);
 
         if(templateFactory instanceof JspTemplateFactory) {
-            String work = this.jspWork;
+            String work = jspWork;
 
             if(work == null) {
                 work = this.getTempWork("");
@@ -179,19 +154,19 @@ public class TemplateContextFactory {
 
             JspTemplateFactory jspTemplateFactory = (JspTemplateFactory)templateFactory;
             jspTemplateFactory.setWork(work);
-            jspTemplateFactory.setClassPath(this.classPath);
-            jspTemplateFactory.setIgnoreJspTag("true".equals(this.ignoreJspTag));
+            jspTemplateFactory.setClassPath(classPath);
+            jspTemplateFactory.setIgnoreJspTag("true".equals(ignoreJspTag));
         }
         return templateFactory;
     }
 
     /**
-     * @param filterConfig
+     * @param className
      * @return TemplateFactory
      */
-    private ExpressionFactory getExpressionFactory() throws Exception {
-        if(this.expressionFactoryClass != null) {
-            return (ExpressionFactory)(ClassUtil.getInstance(this.expressionFactoryClass));
+    private ExpressionFactory getExpressionFactory(String className) throws Exception {
+        if(className != null) {
+            return (ExpressionFactory)(ClassUtil.getInstance(className));
         }
         return new DefaultExpressionFactory();
     }
@@ -232,131 +207,5 @@ public class TemplateContextFactory {
             file = new File(work, name + DateUtil.format(timeMillis, pattern));
         }
         return file.getAbsolutePath();
-    }
-
-    /**
-     * @return the home
-     */
-    public String getHome() {
-        return this.home;
-    }
-
-    /**
-     * @param home the home to set
-     */
-    public void setHome(String home) {
-        this.home = home;
-    }
-
-    /**
-     * @return the sourcePattern
-     */
-    public String getSourcePattern() {
-        return this.sourcePattern;
-    }
-
-    /**
-     * @param sourcePattern the sourcePattern to set
-     */
-    public void setSourcePattern(String sourcePattern) {
-        this.sourcePattern = sourcePattern;
-    }
-
-    /**
-     * @return the jspWork
-     */
-    public String getJspWork() {
-        return this.jspWork;
-    }
-
-    /**
-     * @param jspWork the jspWork to set
-     */
-    public void setJspWork(String jspWork) {
-        this.jspWork = jspWork;
-    }
-
-    /**
-     * @return the ignoreJspTag
-     */
-    public String isIgnoreJspTag() {
-        return this.ignoreJspTag;
-    }
-
-    /**
-     * @param ignoreJspTag the ignoreJspTag to set
-     */
-    public void setIgnoreJspTag(String ignoreJspTag) {
-        this.ignoreJspTag = ignoreJspTag;
-    }
-
-    /**
-     * @return the zipFile
-     */
-    public String getZipFile() {
-        return this.zipFile;
-    }
-
-    /**
-     * @param zipFile the zipFile to set
-     */
-    public void setZipFile(String zipFile) {
-        this.zipFile = zipFile;
-    }
-
-    /**
-     * @return the classPath
-     */
-    public String getClassPath() {
-        return this.classPath;
-    }
-
-    /**
-     * @param classPath the classPath to set
-     */
-    public void setClassPath(String classPath) {
-        this.classPath = classPath;
-    }
-
-    /**
-     * @return the sourceFactoryClass
-     */
-    public String getSourceFactoryClass() {
-        return this.sourceFactoryClass;
-    }
-
-    /**
-     * @param sourceFactoryClass the sourceFactoryClass to set
-     */
-    public void setSourceFactoryClass(String sourceFactoryClass) {
-        this.sourceFactoryClass = sourceFactoryClass;
-    }
-
-    /**
-     * @return the templateFactoryClass
-     */
-    public String getTemplateFactoryClass() {
-        return this.templateFactoryClass;
-    }
-
-    /**
-     * @param templateFactoryClass the templateFactoryClass to set
-     */
-    public void setTemplateFactoryClass(String templateFactoryClass) {
-        this.templateFactoryClass = templateFactoryClass;
-    }
-
-    /**
-     * @return the expressionFactoryClass
-     */
-    public String getExpressionFactoryClass() {
-        return this.expressionFactoryClass;
-    }
-
-    /**
-     * @param expressionFactoryClass the expressionFactoryClass to set
-     */
-    public void setExpressionFactoryClass(String expressionFactoryClass) {
-        this.expressionFactoryClass = expressionFactoryClass;
     }
 }

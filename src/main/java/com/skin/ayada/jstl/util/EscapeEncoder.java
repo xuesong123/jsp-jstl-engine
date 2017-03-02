@@ -1,7 +1,7 @@
 /*
- * $RCSfile: EscapeEncoder.java,v $$
- * $Revision: 1.1  $
- * $Date: 2014-10-6  $
+ * $RCSfile: EscapeEncoder.java,v $
+ * $Revision: 1.1 $
+ * $Date: 2014-10-6 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -10,7 +10,8 @@
  */
 package com.skin.ayada.jstl.util;
 
-import com.skin.ayada.runtime.ELEncoder;
+import com.skin.ayada.Encoder;
+
 
 /**
  * <p>Title: EscapeEncoder</p>
@@ -19,7 +20,7 @@ import com.skin.ayada.runtime.ELEncoder;
  * @author xuesong.net
  * @version 1.0
  */
-public class EscapeEncoder implements ELEncoder {
+public class EscapeEncoder implements Encoder {
     /**
      *
      */

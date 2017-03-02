@@ -1,5 +1,5 @@
 /*
- * $RCSfile: SetTimeZoneTag.java,v $$
+ * $RCSfile: SetTimeZoneTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-28 $
  *
@@ -30,6 +30,7 @@ public class SetTimeZoneTag extends TagSupport {
 
     /**
      * doStartTag
+     * @throws Exception
      */
     @Override
     public int doStartTag() throws Exception {

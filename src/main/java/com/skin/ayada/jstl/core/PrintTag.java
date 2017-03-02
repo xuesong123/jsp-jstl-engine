@@ -1,5 +1,5 @@
 /*
- * $RCSfile: PrintTag.java,v $$
+ * $RCSfile: PrintTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2011-12-09 $
  *
@@ -13,8 +13,8 @@ package com.skin.ayada.jstl.core;
 import java.io.PrintWriter;
 import java.util.Iterator;
 
+import com.skin.ayada.PageContext;
 import com.skin.ayada.jstl.util.BeanUtil;
-import com.skin.ayada.runtime.PageContext;
 import com.skin.ayada.tagext.Tag;
 import com.skin.ayada.tagext.TagSupport;
 
@@ -32,6 +32,7 @@ public class PrintTag extends TagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
     public int doEndTag() throws Exception {

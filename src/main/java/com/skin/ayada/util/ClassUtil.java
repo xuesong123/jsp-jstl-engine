@@ -1,5 +1,5 @@
 /*
- * $RCSfile: ClassUtil.java,v $$
+ * $RCSfile: ClassUtil.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-19 $
  *
@@ -15,7 +15,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -133,8 +136,7 @@ public class ClassUtil {
         }
 
         Class<?> type = bean.getClass();
-        String methodName = "set" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
-        Method method = getSetMethod(type, methodName);
+        Method method = getSetMethod(type, name);
 
         if(method != null) {
             Class<?>[] parameterTypes = method.getParameterTypes();
@@ -147,6 +149,7 @@ public class ClassUtil {
             method.invoke(bean, new Object[]{arg});
         }
         else {
+            String methodName = "set" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
             throw new Exception("NoSuchMethodException: " + type.getName() + "." + methodName);
         }
     }
@@ -170,11 +173,12 @@ public class ClassUtil {
 
     /**
      * @param type
-     * @param methodName
+     * @param name
      * @return Method
      */
-    public static Method getSetMethod(Class<?> type, String methodName) {
+    public static Method getSetMethod(Class<?> type, String name) {
         Method[] methods = type.getMethods();
+        String methodName = "set" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
 
         for(Method method : methods) {
             if(method.getModifiers() != Modifier.PUBLIC) {
@@ -191,6 +195,51 @@ public class ClassUtil {
     }
 
     /**
+     * @param type
+     * @return List<Method>
+     */
+    public static List<Method> getSetMethodList(Class<?> type) {
+        Method[] methods = type.getMethods();
+        List<Method> methodList = new ArrayList<Method>();
+
+        for(Method method : methods) {
+            String name = method.getName();
+
+            if(name.length() <= 3 || !name.startsWith("set")) {
+                continue;
+            }
+
+            if(method.getModifiers() != Modifier.PUBLIC) {
+                continue;
+            }
+
+            Class<?>[] parameterTypes = method.getParameterTypes();
+
+            if(parameterTypes.length != 1) {
+                continue;
+            }
+            methodList.add(method);
+        }
+        return methodList;
+    }
+
+    /**
+     * @param type
+     * @return List<Method>
+     */
+    public static Map<String, Method> getSetMethodMap(Class<?> type) {
+        List<Method> methodList = getSetMethodList(type);
+        Map<String, Method> map = new HashMap<String, Method>();
+
+        for(Method method : methodList) {
+            String name = method.getName();
+            String fieldName = Character.toLowerCase(name.charAt(3)) + name.substring(4);
+            map.put(fieldName, method);
+        }
+        return map;
+    }
+
+    /**
      * @param <T>
      * @param type
      * @param value
@@ -204,6 +253,10 @@ public class ClassUtil {
 
         Class<?> clazz = value.getClass();
 
+        /**
+         *  true: Object.class.isAssignableFrom(String.class)
+         * false: String.class.isAssignableFrom(Object.class)
+         */
         if(type.isAssignableFrom(clazz)) {
             return (T)value;
         }
@@ -364,10 +417,6 @@ public class ClassUtil {
      * @return Integer
      */
     public static Integer getInteger(Object value) {
-        if(value instanceof Number) {
-            return ((Number)value).intValue();
-        }
-
         if(value != null) {
             Double d = getDouble(value);
 
@@ -510,5 +559,183 @@ public class ClassUtil {
             return f5;
         }
         return f3;
+    }
+
+    /**
+     * @param source
+     * @return Object
+     */
+    public static Object guess(String source) {
+        String temp = source.trim();
+
+        if(temp.length() < 1) {
+            return source;
+        }
+
+        Object value = null;
+        int type = getDataType(source);
+
+        switch(type) {
+            case 1: {
+                value = temp.equals("true");
+                break;
+            }
+            case 2: {
+                try {
+                    if(temp.charAt(0) == '+') {
+                        value = Integer.parseInt(temp.substring(1));
+                    }
+                    else {
+                        value = Integer.parseInt(temp);
+                    }
+                }
+                catch(NumberFormatException e) {
+                }
+                break;
+            }
+            case 3:
+            case 4: {
+                try {
+                    value = Double.parseDouble(temp);
+                }
+                catch(NumberFormatException e) {
+                }
+                break;
+            }
+            case 5: {
+                try {
+                    if(temp.endsWith("l") || temp.endsWith("L")) {
+                        value = Long.parseLong(temp.substring(0, temp.length() - 1));
+                    }
+                    else {
+                        value = Long.parseLong(temp);
+                    }
+                }
+                catch(NumberFormatException e) {
+                }
+                break;
+            }
+            default: {
+                value = source;
+                break;
+            }
+        }
+        return value;
+    }
+
+    /**
+     * 1: Boolean
+     * 2: Integer
+     * 3: Float
+     * 4: Double
+     * 5: Long
+     * 9: String
+     * @param content
+     * @return int
+     */
+    public static int getDataType(String content) {
+        String text = content.trim();
+
+        if(text.length() < 1) {
+            return 9;
+        }
+
+        int i = 0;
+        int d = 0;
+        int e = 0;
+        char c = text.charAt(0);
+        int length = text.length();
+
+        if(c == '+' || c == '-') {
+            i++;
+        }
+
+        if(c == 't') {
+            if(text.equals("treu")) {
+                return 1;
+            }
+            else {
+                return 9;
+            }
+        }
+
+        if(c == 'f') {
+            if(text.equals("treu")) {
+                return 1;
+            }
+            else {
+                return 9;
+            }
+        }
+
+        if(c == '.') {
+            d = 1;
+            i++;
+        }
+
+        c = text.charAt(i);
+
+        if(!Character.isDigit(c)) {
+            return 9;
+        }
+
+        for(; i < length; i++) {
+            c = text.charAt(i);
+
+            if(Character.isDigit(c)) {
+                continue;
+            }
+
+            if(c == '.') {
+                if(d == 1 || e == 1) {
+                    /**
+                     * String
+                     */
+                    return 9;
+                }
+                d = 1;
+                continue;
+            }
+
+            if(c == 'e' || c == 'E') {
+                if(e == 1) {
+                    /**
+                     * String
+                     */
+                    return 9;
+                }
+                e = 1;
+                continue;
+            }
+
+            if(c == 'f' || c == 'F') {
+                if(i == length - 1) {
+                    return 4;
+                }
+                else {
+                    return 9;
+                }
+            }
+
+            if(c == 'd' || c == 'D') {
+                if(i == length - 1) {
+                    return 4;
+                }
+                else {
+                    return 9;
+                }
+            }
+
+            if(c == 'l' || c == 'L') {
+                if(d == 0 && e == 0 && i == length - 1) {
+                    return 5;
+                }
+                else {
+                    return 9;
+                }
+            }
+            return 9;
+        }
+        return ((d == 0 && e == 0) ? 2 : 4);
     }
 }

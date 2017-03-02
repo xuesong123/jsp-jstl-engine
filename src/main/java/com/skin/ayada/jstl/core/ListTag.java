@@ -1,5 +1,5 @@
 /*
- * $RCSfile: ListTag.java,v $$
+ * $RCSfile: ListTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-11-26 $
  *

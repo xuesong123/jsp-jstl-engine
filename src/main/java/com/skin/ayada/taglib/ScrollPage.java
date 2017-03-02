@@ -1,5 +1,5 @@
 /*
- * $RCSfile: ScrollPage.java,v $$
+ * $RCSfile: ScrollPage.java,v $
  * $Revision: 1.1  $
  * $Date: 2011-11-3  $
  *

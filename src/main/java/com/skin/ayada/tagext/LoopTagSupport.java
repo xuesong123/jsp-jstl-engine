@@ -302,6 +302,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * expected to be rare.)
      * @return Object
      */
+    @Override
     public Object getCurrent() {
         return this.item;
     }
@@ -314,6 +315,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * behavior.)
      * @return LoopTagStatus
      */
+    @Override
     public LoopTagStatus getLoopStatus() {
         // local implementation with reasonable default behavior
         class Status implements LoopTagStatus {
@@ -322,6 +324,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
              * our JavaDoc from LoopTagSupport; see that class
              * for more information.
              */
+            @Override
             public Object getCurrent() {
                 /**
                  * Access the item through getCurrent() instead of just
@@ -332,22 +335,27 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
                 return (LoopTagSupport.this.getCurrent());
             }
 
+            @Override
             public int getIndex() {
                 return (LoopTagSupport.this.index + LoopTagSupport.this.begin); // our 'index' isn't getIndex()
             }
 
+            @Override
             public int getCount() {
                 return (LoopTagSupport.this.count);
             }
 
+            @Override
             public boolean isFirst() {
                 return (LoopTagSupport.this.index == 0); // our 'index' isn't getIndex()
             }
 
+            @Override
             public boolean isLast() {
                 return LoopTagSupport.this.last; // use cached value
             }
 
+            @Override
             public Integer getBegin() {
                 if(LoopTagSupport.this.beginSpecified) {
                     return Integer.valueOf(LoopTagSupport.this.begin);
@@ -357,6 +365,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
                 }
             }
 
+            @Override
             public Integer getEnd() {
                 if(LoopTagSupport.this.endSpecified) {
                     return Integer.valueOf(LoopTagSupport.this.end);
@@ -366,6 +375,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
                 }
             }
 
+            @Override
             public Integer getStep() {
                 if(LoopTagSupport.this.stepSpecified) {
                     return Integer.valueOf(LoopTagSupport.this.step);
@@ -470,7 +480,10 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
         this.varStatus = null; // when not specified, no variable exported
     }
 
-    /*** Sets 'last' appropriately. */
+    /**
+     * Sets 'last' appropriately.
+     * @throws Exception
+     */
     private void calibrateLast() throws Exception {
         /**
          * the current round is the last one if (a) there are no remaining
@@ -483,6 +496,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * Exposes attributes (formerly scripting variables, but no longer!)
      * if appropriate.  Note that we don't really care, here, whether they're
      * scripting variables or not.
+     * @throws Exception
      */
     private void exposeVariables() throws Exception {
         /**
@@ -534,6 +548,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * item we actually *want* and (b) make sure the index refers to the
      * item associated with the *current* round, not the next one.
      * C'est la vie.)
+     * @throws Exception
      */
     private void discard(int n) throws Exception {
         /**
@@ -553,6 +568,7 @@ public abstract class LoopTagSupport extends TagSupport implements LoopTag, Iter
      * Discards items ignoring subsetting rules.  Useful for discarding
      * items from the beginning (i.e., to implement 'begin') where we
      * don't want factor in the 'begin' value already.
+     * @throws Exception
      */
     private void discardIgnoreSubset(int n) throws Exception {
         int i = n;

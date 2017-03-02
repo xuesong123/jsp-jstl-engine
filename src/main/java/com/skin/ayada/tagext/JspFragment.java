@@ -1,5 +1,5 @@
 /*
- * $RCSfile: JspFragment.java,v $$
+ * $RCSfile: JspFragment.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-11-20 $
  *
@@ -12,7 +12,7 @@ package com.skin.ayada.tagext;
 
 import java.io.Writer;
 
-import com.skin.ayada.runtime.PageContext;
+import com.skin.ayada.PageContext;
 
 /**
  * <p>Title: JspFragment</p>

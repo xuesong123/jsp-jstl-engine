@@ -1,5 +1,5 @@
 /*
- * $RCSfile: SqlParseTag.java,v $$
+ * $RCSfile: SqlParseTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2014-03-25 $
  *
@@ -43,6 +43,7 @@ public class InsertParseTag extends BodyTagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
     public int doStartTag() throws Exception {

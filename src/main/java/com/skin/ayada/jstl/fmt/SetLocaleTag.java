@@ -1,5 +1,5 @@
 /*
- * $RCSfile: SetLocaleTag.java,v $$
+ * $RCSfile: SetLocaleTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-28 $
  *
@@ -30,6 +30,7 @@ public class SetLocaleTag extends TagSupport {
 
     /**
      * doStartTag
+     * @throws Exception
      */
     @Override
     public int doStartTag() throws Exception {

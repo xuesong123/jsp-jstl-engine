@@ -1,5 +1,5 @@
 /*
- * $RCSfile: AttributeTagSupport.java,v $$
+ * $RCSfile: AttributeTagSupport.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-28 $
  *

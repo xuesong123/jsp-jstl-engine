@@ -1,5 +1,5 @@
 /*
- * $RCSfile: TimeZoneTag.java,v $$
+ * $RCSfile: TimeZoneTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-28 $
  *
@@ -30,6 +30,7 @@ public class TimeZoneTag extends TagSupport implements TryCatchFinally {
 
     /**
      * doStartTag
+     * @throws Exception
      */
     @Override
     public int doStartTag() throws Exception {

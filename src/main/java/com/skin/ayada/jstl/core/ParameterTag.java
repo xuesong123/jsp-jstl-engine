@@ -1,5 +1,5 @@
 /*
- * $RCSfile: ParameterTag.java,v $$
+ * $RCSfile: ParameterTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2011-12-09 $
  *

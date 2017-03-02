@@ -1,5 +1,5 @@
 /*
- * $RCSfile: BBCode.java,v $$
+ * $RCSfile: BBCode.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-17 $
  *
@@ -18,8 +18,8 @@ package com.skin.ayada.jstl.util;
  * @version 1.0
  */
 public class BBCode {
-    private com.skin.ayada.bbcode.BBCode bbcode = com.skin.ayada.bbcode.BBCode.getInstance();
-    
+    private com.skin.ayada.jstl.bbcode.BBCode bbcode = com.skin.ayada.jstl.bbcode.BBCode.getInstance();
+
     /**
      * @param name
      * @param attributes
@@ -55,7 +55,7 @@ public class BBCode {
      * @return String
      */
     public String replace(String source, String search, String replacement) {
-        return com.skin.ayada.bbcode.BBCode.replace(source, search, replacement);
+        return com.skin.ayada.jstl.bbcode.BBCode.replace(source, search, replacement);
     }
 
     /***
@@ -63,6 +63,6 @@ public class BBCode {
      * @return String
      */
     public String remove(String source) {
-        return com.skin.ayada.bbcode.BBCode.remove(source);
+        return com.skin.ayada.jstl.bbcode.BBCode.remove(source);
     }
 }

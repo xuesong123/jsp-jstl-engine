@@ -1,5 +1,5 @@
 /*
- * $RCSfile: OutputTag.java,v $$
+ * $RCSfile: OutputTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-11-26 $
  *
@@ -15,6 +15,7 @@ import java.io.File;
 import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTag;
 import com.skin.ayada.tagext.BodyTagSupport;
+import com.skin.ayada.util.HtmlUtil;
 import com.skin.ayada.util.IO;
 
 /**
@@ -32,6 +33,7 @@ public class OutputTag extends BodyTagSupport {
 
     /**
      * @return int
+     * @throws Exception
      */
     @Override
     public int doStartTag() throws Exception {
@@ -53,7 +55,7 @@ public class OutputTag extends BodyTagSupport {
             }
 
             if(this.escapeXml) {
-                content = OutTag.escape(content);
+                content = HtmlUtil.encode(content);
             }
 
             if(this.encoding == null) {

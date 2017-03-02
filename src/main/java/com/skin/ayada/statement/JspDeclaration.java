@@ -1,5 +1,5 @@
 /*
- * $RCSfile: Declaration.java,v $$
+ * $RCSfile: Declaration.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-11-11 $
  *
@@ -47,15 +47,6 @@ public class JspDeclaration extends DataNode {
      */
     @Override
     public JspDeclaration clone() {
-        JspDeclaration node = new JspDeclaration();
-        node.setNodeName(this.getNodeName());
-        node.setNodeType(this.getNodeType());
-        node.setOffset(this.getOffset());
-        node.setLength(this.getLength());
-        node.setLineNumber(this.getLineNumber());
-        node.setClosed(this.getClosed());
-        node.setParent(this.getParent());
-        node.append(this.getTextContent());
-        return node;
+        return this.copy(new JspDeclaration());
     }
 }

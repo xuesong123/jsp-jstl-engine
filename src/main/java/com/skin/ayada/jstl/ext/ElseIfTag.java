@@ -1,5 +1,5 @@
 /*
- * $RCSfile: ElseIfTag.java,v $$
+ * $RCSfile: ElseIfTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2011-12-09 $
  *
@@ -10,7 +10,6 @@
  */
 package com.skin.ayada.jstl.ext;
 
-import com.skin.ayada.jstl.ext.IfTag;
 
 /**
  * <p>Title: ElseIfTag</p>

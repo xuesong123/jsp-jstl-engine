@@ -1,5 +1,5 @@
 /*
- * $RCSfile: XmlTemplateParser.java,v $$
+ * $RCSfile: XmlTemplateParser.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-11-18 $
  *
@@ -24,8 +24,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import com.skin.ayada.TagFactory;
+import com.skin.ayada.Template;
 import com.skin.ayada.factory.TagFactoryManager;
-import com.skin.ayada.runtime.TagFactory;
 import com.skin.ayada.statement.Expression;
 import com.skin.ayada.statement.JspDeclaration;
 import com.skin.ayada.statement.JspDirective;
@@ -35,7 +36,6 @@ import com.skin.ayada.statement.NodeType;
 import com.skin.ayada.statement.TagNode;
 import com.skin.ayada.statement.TextNode;
 import com.skin.ayada.statement.Variable;
-import com.skin.ayada.template.Template;
 import com.skin.ayada.util.NodeUtil;
 import com.skin.ayada.util.StringUtil;
 
@@ -107,37 +107,37 @@ public class XmlTemplateParser {
         }
         else if(nodeName.equals("jsp:declaration")) {
             JspDeclaration jspDeclaration = new JspDeclaration();
-            jspDeclaration.append(StringUtil.unescape(node.getTextContent()));
+            jspDeclaration.setTextContent(StringUtil.unescape(node.getTextContent()));
             jspDeclaration.setClosed(NodeType.PAIR_CLOSED);
             jspNode = jspDeclaration;
         }
         else if(nodeName.equals("jsp:scriptlet")) {
             JspScriptlet jspScriptlet = new JspScriptlet();
-            jspScriptlet.append(StringUtil.unescape(node.getTextContent()));
+            jspScriptlet.setTextContent(StringUtil.unescape(node.getTextContent()));
             jspScriptlet.setClosed(NodeType.PAIR_CLOSED);
             jspNode = jspScriptlet;
         }
         else if(nodeName.equals("jsp:expression")) {
             JspExpression jspExpression = new JspExpression();
-            jspExpression.append(StringUtil.unescape(node.getTextContent()));
+            jspExpression.setTextContent(StringUtil.unescape(node.getTextContent()));
             jspExpression.setClosed(NodeType.PAIR_CLOSED);
             jspNode = jspExpression;
         }
         else if(nodeName.equals("text")) {
             TextNode textNode = new TextNode();
-            textNode.append(StringUtil.unescape(node.getTextContent()));
+            textNode.setTextContent(StringUtil.unescape(node.getTextContent()));
             textNode.setClosed(NodeType.PAIR_CLOSED);
             jspNode = textNode;
         }
         else if(nodeName.equals("expression")) {
             Expression expression = new Expression();
-            expression.append(StringUtil.unescape(node.getTextContent()));
+            expression.setTextContent(StringUtil.unescape(node.getTextContent()));
             expression.setClosed(NodeType.PAIR_CLOSED);
             jspNode = expression;
         }
         else if(nodeName.equals("variable")) {
             Variable variable = new Variable();
-            variable.append(StringUtil.unescape(node.getTextContent()));
+            variable.setTextContent(StringUtil.unescape(node.getTextContent()));
             variable.setClosed(NodeType.PAIR_CLOSED);
             jspNode = variable;
         }
@@ -159,8 +159,8 @@ public class XmlTemplateParser {
             String name = n.getNodeName();
             String value = n.getNodeValue();
 
-            if(name.equals("lineNumber")) {
-                jspNode.setLineNumber(Integer.parseInt(value));
+            if(name.equals("line")) {
+                jspNode.setLine(Integer.parseInt(value));
             }
             else if(name.equals("offset")) {
                 jspNode.setOffset(Integer.parseInt(value));
@@ -236,7 +236,7 @@ public class XmlTemplateParser {
             com.skin.ayada.statement.Node node = list.get(i);
 
             if(node.getLength() == 0) {
-                throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node) + " not match !");
+                throw new RuntimeException("Exception at line #" + node.getLine() + " " + NodeUtil.getDescription(node) + " not match !");
             }
 
             if(node.getNodeType() == NodeType.TAG_NODE && i == node.getOffset()) {

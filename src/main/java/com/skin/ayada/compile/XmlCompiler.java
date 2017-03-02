@@ -1,5 +1,5 @@
 /*
- * $RCSfile: XmlCompiler.java,v $$
+ * $RCSfile: XmlCompiler.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-11-17 $
  *
@@ -16,9 +16,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.skin.ayada.Template;
 import com.skin.ayada.statement.Node;
 import com.skin.ayada.statement.NodeType;
-import com.skin.ayada.template.Template;
 import com.skin.ayada.util.HtmlUtil;
 import com.skin.ayada.util.NodeUtil;
 import com.skin.ayada.util.StringUtil;
@@ -84,28 +84,28 @@ public class XmlCompiler {
             indent = this.getIndent(node);
 
             if(node.getNodeType() == NodeType.TEXT) {
-                writer.write(indent + "<text lineNumber=\"" + node.getLineNumber() + "\" offset=\"" + node.getOffset() + "\" length=\"" + node.getLength() + "\">");
+                writer.write(indent + "<text line=\"" + node.getLine() + "\" offset=\"" + node.getOffset() + "\" length=\"" + node.getLength() + "\">");
                 writer.write(StringUtil.escape(HtmlUtil.encode(node.getTextContent())));
                 writer.println("</text>");
                 continue;
             }
 
             if(node.getNodeType() == NodeType.VARIABLE) {
-                writer.write(indent + "<variable lineNumber=\"" + node.getLineNumber() + "\" offset=\"" + node.getOffset() + "\" length=\"" + node.getLength() + "\">");
+                writer.write(indent + "<variable line=\"" + node.getLine() + "\" offset=\"" + node.getOffset() + "\" length=\"" + node.getLength() + "\">");
                 writer.write(StringUtil.escape(HtmlUtil.encode(node.getTextContent())));
                 writer.println("</variable>");
                 continue;
             }
 
             if(node.getNodeType() == NodeType.EXPRESSION) {
-                writer.write(indent + "<expression lineNumber=\"" + node.getLineNumber() + "\" offset=\"" + node.getOffset() + "\" length=\"" + node.getLength() + "\">");
+                writer.write(indent + "<expression line=\"" + node.getLine() + "\" offset=\"" + node.getOffset() + "\" length=\"" + node.getLength() + "\">");
                 writer.write(StringUtil.escape(HtmlUtil.encode(node.getTextContent())));
                 writer.println("</expression>");
                 continue;
             }
 
             if(node.getLength() == 0) {
-                throw new RuntimeException("Exception at line #" + node.getLineNumber() + " " + NodeUtil.getDescription(node) + " not match !");
+                throw new RuntimeException("Exception at line #" + node.getLine() + " " + NodeUtil.getDescription(node) + " not match !");
             }
 
             if(node.getOffset() == index) {

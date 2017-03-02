@@ -1,5 +1,5 @@
 /*
- * $RCSfile: ClassPathClassLoader.java,v $$
+ * $RCSfile: ClassPathClassLoader.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-11-06 $
  *
@@ -74,7 +74,8 @@ public class ClassFactory {
      * @return ClassLoader
      */
     public static ClassLoader getClassLoader(final ClassLoader parent, final URL[] repositories) {
-        return AccessController.doPrivileged(new PrivilegedAction<ClassLoader>(){
+        return AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
+            @Override
             public ClassLoader run(){
                 if(parent == null) {
                     return new URLClassLoader(repositories);

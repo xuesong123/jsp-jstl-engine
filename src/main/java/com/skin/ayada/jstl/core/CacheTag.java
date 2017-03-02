@@ -1,7 +1,7 @@
 /*
- * $RCSfile: CacheTag.java,v $$
+ * $RCSfile: CacheTag.java,v $
  * $Revision: 1.1 $
- * $Date: 2013-6-8 $
+ * $Date: 2013-06-08 $
  *
  * Copyright (C) 2008 Skin, Inc. All rights reserved.
  *
@@ -20,6 +20,7 @@ import com.skin.ayada.tagext.BodyContent;
 import com.skin.ayada.tagext.BodyTag;
 import com.skin.ayada.tagext.BodyTagSupport;
 import com.skin.ayada.tagext.Tag;
+import com.skin.ayada.util.Reflect;
 
 /**
  * <p>Title: CacheTag</p>
@@ -106,7 +107,7 @@ public class CacheTag extends BodyTagSupport {
 
         try {
             Class<?> type = cache.getClass();
-            Method method = type.getMethod("getCache", new Class<?>[]{String.class});
+            Method method = Reflect.getMethod(type, "getCache", new Class<?>[]{String.class});
             return (String)(method.invoke(cache, new Object[]{key}));
         }
         catch(Exception e) {
@@ -128,7 +129,7 @@ public class CacheTag extends BodyTagSupport {
 
         try {
             Class<?> type = cache.getClass();
-            Method method = type.getMethod("setCache", new Class<?>[]{String.class, int.class, Object.class});
+            Method method = Reflect.getMethod(type, "setCache", new Class<?>[]{String.class, int.class, Object.class});
             method.invoke(cache, new Object[]{key, expires, content});
         }
         catch(Exception e) {

@@ -29,6 +29,7 @@ public class AccessDialect implements Dialect {
      * @param column
      * @return String
      */
+    @Override
     public String convert(Column column) {
         String result = "String";
         String typeName = column.getTypeName();

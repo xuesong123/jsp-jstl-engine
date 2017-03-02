@@ -1,5 +1,5 @@
 /*
- * $RCSfile: Node.java,v $$
+ * $RCSfile: Node.java,v $
  * $Revision: 1.1 $
  * $Date: 2012-7-03 $
  *
@@ -25,10 +25,10 @@ public abstract class Node {
     private int nodeType;
     private int offset;
     private int length;
-    private int lineNumber;
+    private int line;
     private int closed;
     private Node parent;
-    private Map<String, String> attributes;
+    private Map<String, Attribute> attributes;
 
     /**
      * @param nodeName
@@ -45,7 +45,7 @@ public abstract class Node {
         this.nodeName = nodeName;
         this.nodeType = nodeType;
         this.closed   = 1;
-        this.attributes = new LinkedHashMap<String, String>();
+        this.attributes = new LinkedHashMap<String, Attribute>();
     }
 
     /**
@@ -121,22 +121,22 @@ public abstract class Node {
     /**
      * @return int
      */
-    public int getLineNumber() {
-        return this.lineNumber;
+    public int getLine() {
+        return this.line;
     }
 
     /**
-     * @param lineNumber
+     * @param line
      */
-    public void setLineNumber(int lineNumber) {
-        this.lineNumber = lineNumber;
+    public void setLine(int line) {
+        this.line = line;
     }
 
     /**
      * @param name
      * @param value
      */
-    public void setAttribute(String name, String value) {
+    public void setAttribute(String name, Attribute value) {
         if(value != null) {
             this.attributes.put(name, value);
         }
@@ -147,10 +147,49 @@ public abstract class Node {
 
     /**
      * @param name
+     * @param value
+     */
+    public void setAttribute(String name, String value) {
+        if(value != null) {
+            this.attributes.put(name, new Attribute(NodeType.TEXT, name, value));
+        }
+        else {
+            this.attributes.remove(name);
+        }
+    }
+
+    /**
+     * @param name
+     * @return Attribute
+     */
+    public Attribute getAttribute(String name) {
+        return this.attributes.get(name);
+    }
+
+    /**
+     * @param name
+     * @return Object
+     */
+    public Object getAttributeValue(String name) {
+        Attribute attribute = this.attributes.get(name);
+
+        if(attribute != null) {
+            return attribute.getValue();
+        }
+        return null;
+    }
+
+    /**
+     * @param name
      * @return String
      */
-    public String getAttribute(String name) {
-        return this.attributes.get(name);
+    public String getAttributeText(String name) {
+        Attribute attribute = this.attributes.get(name);
+
+        if(attribute != null) {
+            return attribute.getText();
+        }
+        return null;
     }
 
     /**
@@ -163,14 +202,14 @@ public abstract class Node {
     /**
      * @return the attributes
      */
-    public Map<String, String> getAttributes() {
+    public Map<String, Attribute> getAttributes() {
         return this.attributes;
     }
 
     /**
      * @param attributes the attributes to set
      */
-    public void setAttributes(Map<String, String> attributes) {
+    public void setAttributes(Map<String, Attribute> attributes) {
         this.attributes = attributes;
     }
 
@@ -192,7 +231,7 @@ public abstract class Node {
      * @return String
      */
     public String getTextContent() {
-        return null;
+        throw new UnsupportedOperationException("unsupported: " + this.nodeName);
     }
 
     /**
@@ -202,10 +241,10 @@ public abstract class Node {
         StringBuilder buffer = new StringBuilder();
 
         if(this.attributes != null && this.attributes.size() > 0) {
-            for(Map.Entry<String, String> entry : this.attributes.entrySet()) {
+            for(Map.Entry<String, Attribute> entry : this.attributes.entrySet()) {
                 buffer.append(entry.getKey());
                 buffer.append("=\"");
-                buffer.append(entry.getValue());
+                buffer.append(entry.getValue().getValue());
                 buffer.append("\" ");
             }
 
@@ -274,26 +313,26 @@ public abstract class Node {
             buffer.append("<");
             buffer.append(this.getNodeName());
             buffer.append(" lineNumber=\"");
-            buffer.append(this.getLineNumber());
+            buffer.append(this.getLine());
             buffer.append("\" offset=\"");
             buffer.append(this.getOffset());
             buffer.append("\" length=\"");
             buffer.append(this.getLength());
             buffer.append("\"");
-            Map<String, String> attributes = this.getAttributes();
+            Map<String, Attribute> attributes = this.getAttributes();
 
             if(attributes != null && attributes.size() > 0) {
                 if(sort == true) {
-                    java.util.TreeMap<String, String> treeMap = new java.util.TreeMap<String, String>();
+                    java.util.TreeMap<String, Attribute> treeMap = new java.util.TreeMap<String, Attribute>();
                     treeMap.putAll(attributes);
                     attributes = treeMap;
                 }
 
-                for(Map.Entry<String, String> entry : attributes.entrySet()) {
+                for(Map.Entry<String, Attribute> entry : attributes.entrySet()) {
                     buffer.append(" ");
                     buffer.append(entry.getKey());
                     buffer.append("=\"");
-                    buffer.append(this.encode(entry.getValue()));
+                    buffer.append(this.encode(entry.getValue().getText()));
                     buffer.append("\"");
                 }
             }

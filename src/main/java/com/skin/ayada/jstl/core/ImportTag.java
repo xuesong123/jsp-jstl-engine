@@ -1,5 +1,5 @@
 /*
- * $RCSfile: ImportTag.java,v $$
+ * $RCSfile: ImportTag.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-02-26 $
  *

@@ -1,5 +1,5 @@
 /*
- * $RCSfile: WebUtil.java,v $$
+ * $RCSfile: WebUtil.java,v $
  * $Revision: 1.1 $
  * $Date: 2013-03-10 $
  *
@@ -27,7 +27,8 @@ import org.slf4j.LoggerFactory;
  * @version 1.0
  */
 public class WebUtil {
-    private static final String root = guess();
+    private static String root = guess();
+    private static ServletContext servletContext;
     private static final Logger logger = LoggerFactory.getLogger(WebUtil.class);
 
     /**
@@ -201,5 +202,19 @@ public class WebUtil {
             logger.warn(e.getMessage(), e);
         }
         return null;
+    }
+
+    /**
+     * @return the servletcontext
+     */
+    public static ServletContext getServletcontext() {
+        return WebUtil.servletContext;
+    }
+
+    /**
+     * @param servletContext
+     */
+    public static void setServletcontext(ServletContext servletContext) {
+        WebUtil.servletContext = servletContext;
     }
 }

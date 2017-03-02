@@ -1,5 +1,5 @@
 /*
- * $RCSfile: ActionDispatcher.java,v $$
+ * $RCSfile: ActionDispatcher.java,v $
  * $Revision: 1.1 $
  * $Date: 2011-12-09 $
  *
@@ -13,9 +13,8 @@ package com.skin.ayada.taglib;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-import com.skin.ayada.component.Parameters;
-import com.skin.ayada.runtime.PageContext;
-import com.skin.ayada.util.ClassUtil;
+import com.skin.ayada.PageContext;
+import com.skin.ayada.util.Reflect;
 
 /**
  * <p>Title: ActionDispatcher</p>
@@ -35,19 +34,29 @@ public class ActionDispatcher {
      * @return Map<String, Object>
      * @throws Exception
      */
-    @SuppressWarnings("unchecked")
     public static Map<String, Object> dispatch(PageContext pageContext, Parameters parameters, String className, String methodName) throws Exception {
-        Object instance = ClassUtil.getInstance(className);
-        Class<?> type = instance.getClass();
-        Method method = null;
-
         if(methodName != null) {
-            method = type.getMethod(methodName, PARAMETERTYPES);
+            return execute(pageContext, parameters, className, methodName);
         }
         else {
-            method = type.getMethod("execute", PARAMETERTYPES);
+            return execute(pageContext, parameters, className, "execute");
         }
+    }
 
+    /**
+     * @param pageContext
+     * @param parameters
+     * @param className
+     * @param methodName
+     * @return Map<String, Object>
+     * @throws Exception
+     */
+    @SuppressWarnings("unchecked")
+    public static Map<String, Object> execute(PageContext pageContext, Parameters parameters, String className, String methodName) throws Exception {
+        Class<?> type = Reflect.getClass(className);
+        Method method = Reflect.getMethod(type, methodName, PARAMETERTYPES);
+
+        Object instance = type.newInstance();
         Object context = method.invoke(instance, new Object[]{pageContext, parameters});
 
         if(context instanceof Map) {

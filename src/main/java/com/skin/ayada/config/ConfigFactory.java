@@ -1,5 +1,5 @@
 /*
- * $RCSfile: ConfigFactory.java,v $$
+ * $RCSfile: ConfigFactory.java,v $
  * $Revision: 1.1 $
  * $Date: 2009-7-14 $
  *
@@ -20,9 +20,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.skin.ayada.resource.ClassPathResource;
-import com.skin.ayada.resource.PropertyResource;
 
 /**
  * <p>Title: ConfigFactory</p>
