@@ -4,6 +4,7 @@
 <%
     String myTest = "myTest";
 %>
-<c:out value="<%=myTest%>"/>
+<c:out value="<%=myTest + "abc\"n"%>"/>
+<c:out value="abc\r\n&quot;"/>
 <h1>Hello World !</h1>
 

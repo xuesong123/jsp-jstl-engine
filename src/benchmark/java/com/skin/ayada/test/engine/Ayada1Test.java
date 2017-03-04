@@ -12,7 +12,6 @@ package com.skin.ayada.test.engine;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.Map;
 
 import com.skin.ayada.PageContext;
@@ -20,6 +19,7 @@ import com.skin.ayada.Template;
 import com.skin.ayada.TemplateContext;
 import com.skin.ayada.TemplateManager;
 import com.skin.ayada.test.Benchmark;
+import com.skin.ayada.test.TestWriter;
 
 /**
  * <p>Title: Ayada1Test</p>
@@ -62,7 +62,7 @@ public class Ayada1Test implements Benchmark {
      * @throws Exception
      */
     @Override
-    public void execute(String name, Map<String, Object> context, StringWriter stringWriter, int count) throws Exception {
+    public void execute(String name, Map<String, Object> context, TestWriter stringWriter, int count) throws Exception {
         PageContext pageContext = this.templateContext.getPageContext(context, stringWriter);
         pageContext.getExpressionContext().setEncoder(null);
         pageContext.setAttribute("engineName", this.getName());

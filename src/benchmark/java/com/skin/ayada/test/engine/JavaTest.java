@@ -11,13 +11,13 @@
 package com.skin.ayada.test.engine;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.io.Writer;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Map;
 
 import com.skin.ayada.test.Benchmark;
+import com.skin.ayada.test.TestWriter;
 import com.skin.ayada.test.model.Book;
 import com.skin.ayada.test.model.User;
 
@@ -53,7 +53,7 @@ public class JavaTest implements Benchmark {
      * @throws Exception
      */
     @Override
-    public void execute(String name, Map<String, Object> context, StringWriter stringWriter, int count) throws Exception {
+    public void execute(String name, Map<String, Object> context, TestWriter stringWriter, int count) throws Exception {
         context.put("engineName", this.getName());
 
         for(int i = 0; i < count; i++) {

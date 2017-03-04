@@ -1379,7 +1379,7 @@ public class JspCompiler {
                 return "ELUtil.replace(expressionContext, \"" + expression + "\")";
             }
             else if(type == Attribute.JSP_EXPRESSION) {
-                return "(" + expression + ")";
+                return "(" + attribute.getText() + ")";
             }
             else {
                 return "\"" + expression + "\"";
@@ -1492,7 +1492,7 @@ public class JspCompiler {
             }
         }
         else if(type == Attribute.JSP_EXPRESSION) {
-            return "(" + expression + ")";
+            return "(" + attribute.getText() + ")";
         }
         else {
             /**

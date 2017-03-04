@@ -11,7 +11,6 @@
 package com.skin.ayada.test;
 
 import java.io.File;
-import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -93,11 +92,11 @@ public class BenchmarkTest {
 
         for(int i = 0; i < cases.length; i ++) {
             cases[i].init(work);
-            cases[i].execute(fileName, context, new StringWriter(), warm);
+            cases[i].execute(fileName, context, new TestWriter(), warm);
         }
 
         if(cases.length > 0) {
-            cases[0].execute(fileName, context, new StringWriter(), count);
+            cases[0].execute(fileName, context, new TestWriter(), count);
         }
 
         long base = 0;
@@ -112,7 +111,7 @@ public class BenchmarkTest {
             String name = names[i];
             Benchmark benchmark = cases[i];
 
-            long elapsed = this.execute(benchmark, fileName, context, new StringWriter(), count);
+            long elapsed = this.execute(benchmark, fileName, context, new TestWriter(), count);
             long tps = this.getTPS(elapsed, count);
 
             if(i == 0) {
@@ -137,7 +136,7 @@ public class BenchmarkTest {
      * @return long
      * @throws Exception 
      */
-    public long execute(Benchmark benchmark, String name, Map<String, Object> context, StringWriter writer, int count) throws Exception {
+    public long execute(Benchmark benchmark, String name, Map<String, Object> context, TestWriter writer, int count) throws Exception {
         long start = System.currentTimeMillis();
         benchmark.execute(name, context, writer, count);
         return System.currentTimeMillis() - start;

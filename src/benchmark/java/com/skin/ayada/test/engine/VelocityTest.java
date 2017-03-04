@@ -10,7 +10,6 @@
  */
 package com.skin.ayada.test.engine;
 
-import java.io.StringWriter;
 import java.util.Map;
 
 import org.apache.velocity.Template;
@@ -19,6 +18,7 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 
 import com.skin.ayada.test.Benchmark;
+import com.skin.ayada.test.TestWriter;
 
 /**
  * <p>Title: VelocityTest</p>
@@ -64,7 +64,7 @@ public class VelocityTest implements Benchmark {
      * @throws Exception
      */
     @Override
-    public void execute(String name, Map<String, Object> context, StringWriter stringWriter, int count) throws Exception {
+    public void execute(String name, Map<String, Object> context, TestWriter stringWriter, int count) throws Exception {
         context.put("engineName", this.getName());
         Template template = this.velocityEngine.getTemplate(name + ".vm", "utf-8");
         VelocityContext velocityContext = new VelocityContext(context);

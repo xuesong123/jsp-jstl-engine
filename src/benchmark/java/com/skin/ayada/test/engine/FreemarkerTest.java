@@ -11,10 +11,10 @@
 package com.skin.ayada.test.engine;
 
 import java.io.File;
-import java.io.StringWriter;
 import java.util.Map;
 
 import com.skin.ayada.test.Benchmark;
+import com.skin.ayada.test.TestWriter;
 
 import freemarker.cache.FileTemplateLoader;
 import freemarker.cache.TemplateLoader;
@@ -65,7 +65,7 @@ public class FreemarkerTest implements Benchmark {
      * @throws Exception
      */
     @Override
-    public void execute(String name, Map<String, Object> context, StringWriter stringWriter, int count) throws Exception {
+    public void execute(String name, Map<String, Object> context, TestWriter stringWriter, int count) throws Exception {
         context.put("engineName", this.getName());
         Template template = this.configuration.getTemplate(name + ".ftl");
 

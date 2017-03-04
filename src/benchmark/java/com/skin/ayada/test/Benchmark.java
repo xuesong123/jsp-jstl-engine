@@ -10,7 +10,6 @@
  */
 package com.skin.ayada.test;
 
-import java.io.StringWriter;
 import java.util.Map;
 
 /**
@@ -39,5 +38,5 @@ public interface Benchmark {
      * @param count
      * @throws Exception
      */
-    void execute(String name, Map<String, Object> context, StringWriter stringWriter, int count) throws Exception;
+    void execute(String name, Map<String, Object> context, TestWriter stringWriter, int count) throws Exception;
 }

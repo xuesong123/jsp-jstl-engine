@@ -10,14 +10,14 @@
  */
 package com.skin.ayada.test.engine;
 
-import httl.Engine;
-
 import java.io.File;
-import java.io.StringWriter;
 import java.util.Map;
 import java.util.Properties;
 
 import com.skin.ayada.test.Benchmark;
+import com.skin.ayada.test.TestWriter;
+
+import httl.Engine;
 
 /**
  * <p>Title: HttlTest</p>
@@ -64,7 +64,7 @@ public class HttlTest implements Benchmark {
      * @throws Exception
      */
     @Override
-    public void execute(String name, Map<String, Object> context, StringWriter stringWriter, int count) throws Exception {
+    public void execute(String name, Map<String, Object> context, TestWriter stringWriter, int count) throws Exception {
         String fullName = name + ".httl";
         context.put("engineName", this.getName());
 
