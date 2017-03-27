@@ -27,6 +27,7 @@ import com.skin.ayada.TagFactory;
 import com.skin.ayada.Template;
 import com.skin.ayada.config.TemplateConfig;
 import com.skin.ayada.factory.TagFactoryManager;
+import com.skin.ayada.io.Stream;
 import com.skin.ayada.jstl.TagInfo;
 import com.skin.ayada.jstl.TagLibrary;
 import com.skin.ayada.jstl.TagLibraryManager;
@@ -605,12 +606,6 @@ public class JspParser extends Parser {
         }
         stack.push(node);
         list.add(node);
-
-        /**
-        if(logger.isDebugEnabled()) {
-            logger.debug("[push][node] parent: " + (parent != null ? parent.getNodeName() : "null") + ", nodeName: [" + node.getNodeName() + "]");
-        }
-        */
     }
 
     /**
@@ -625,12 +620,6 @@ public class JspParser extends Parser {
             node.setParent(parent);
         }
         list.add(node);
-
-        /**
-        if(logger.isDebugEnabled()) {
-            logger.debug("[push][node] parent: " + (parent != null ? parent.getNodeName() : "null") + ", nodeName: [" + node.getNodeName() + "]");
-        }
-        */
     }
 
     /**
@@ -697,13 +686,6 @@ public class JspParser extends Parser {
             stack.pop();
             node.setLength(list.size() - node.getOffset() + 1);
             list.add(node);
-
-            /**
-            if(logger.isDebugEnabled()) {
-                Node parent = node.getParent();
-                logger.debug("[pop ][node] parent: " + (parent != null ? parent.getNodeName() : "null") + ", nodeName: [/" + node.getNodeName() + "]");
-            }
-            */
         }
         else {
             throw new Exception("Exception at line #" + node.getLine() + " " + NodeUtil.getDescription(node) + " not match !");

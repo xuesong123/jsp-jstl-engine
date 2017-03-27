@@ -1281,6 +1281,9 @@ public class JspCompiler {
                     if(this.isAssignableFrom(tagClassName, TryCatchFinally.class)) {
                       indent += 1;
                     }
+                    else {
+                        indent += 1;
+                    }
                 }
             }
         }
@@ -1295,6 +1298,9 @@ public class JspCompiler {
                 }
 
                 if(this.isAssignableFrom(tagClassName, TryCatchFinally.class)) {
+                    indent += 1;
+                }
+                else {
                     indent += 1;
                 }
             }

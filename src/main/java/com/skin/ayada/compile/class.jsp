@@ -21,6 +21,7 @@ package ${java.packageName};
 
 import java.io.Writer;
 import com.skin.ayada.ExpressionContext;
+import com.skin.ayada.JspTemplate;
 import com.skin.ayada.JspWriter;
 import com.skin.ayada.PageContext;
 import com.skin.ayada.tagext.BodyContent;
@@ -28,7 +29,6 @@ import com.skin.ayada.tagext.BodyTag;
 import com.skin.ayada.tagext.IterationTag;
 import com.skin.ayada.tagext.JspFragment;
 import com.skin.ayada.tagext.Tag;
-import com.skin.ayada.JspTemplate;
 import com.skin.ayada.util.ELUtil;
 ${jsp.directive.import}
 

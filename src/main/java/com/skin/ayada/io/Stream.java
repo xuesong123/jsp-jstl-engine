@@ -8,7 +8,7 @@
  * This software is the proprietary information of Skin, Inc.
  * Use is subject to license terms.
  */
-package com.skin.ayada.compile;
+package com.skin.ayada.io;
 
 import java.io.Closeable;
 import java.io.File;
@@ -334,7 +334,7 @@ public class Stream implements Closeable {
      * skip line
      * @throws IOException
      */
-    protected void skipLine() throws IOException {
+    public void skipLine() throws IOException {
         int i;
 
         while((i = this.read()) != EOF) {
@@ -348,7 +348,7 @@ public class Stream implements Closeable {
      * skip crlf
      * @throws IOException
      */
-    protected void skipCRLF() throws IOException {
+    public void skipCRLF() throws IOException {
         int i;
 
         while((i = this.peek()) != EOF) {
@@ -434,12 +434,16 @@ public class Stream implements Closeable {
     }
 
     /**
-     * @throws IOException
+     * close the stream
      */
     @Override
-    public void close() throws IOException {
+    public void close() {
         if(this.reader != null) {
-            this.reader.close();
+            try {
+                this.reader.close();
+            }
+            catch (IOException e) {
+            }
         }
     }
 }

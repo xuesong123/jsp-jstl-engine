@@ -34,7 +34,7 @@ public class CSVTag extends TagSupport implements IterationTag, TryCatchFinally 
     private String file;
     private String encoding;
     private String content;
-    private Reader reader;
+    private CSVReader reader;
     private String var;
     private List<String> headers;
 
@@ -45,14 +45,14 @@ public class CSVTag extends TagSupport implements IterationTag, TryCatchFinally 
     @Override
     public int doStartTag() throws Exception {
         if(this.file != null) {
-            this.reader = getReader(new File(this.file), this.encoding);
+            this.reader = new CSVReader(new File(this.file), this.encoding);
         }
         else {
-            this.reader = new StringReader(this.content);
+            this.reader = new CSVReader(new StringReader(this.content));
         }
 
-        this.headers = CSVReader.getHeaders(this.reader);
-        List<String> data = CSVReader.next(this.reader);
+        this.headers = this.reader.getHeaders();
+        List<String> data = this.reader.next();
 
         if(this.var != null) {
             this.pageContext.setAttribute(this.var, new DataSet(this.headers, data));
@@ -75,7 +75,7 @@ public class CSVTag extends TagSupport implements IterationTag, TryCatchFinally 
      */
     @Override
     public int doAfterBody() throws Exception {
-        List<String> data = CSVReader.next(this.reader);
+        List<String> data = this.reader.next();
 
         if(data != null) {
             if(this.var != null) {
@@ -103,11 +103,7 @@ public class CSVTag extends TagSupport implements IterationTag, TryCatchFinally 
     @Override
     public void doFinally() {
         if(this.reader != null) {
-            try {
-                this.reader.close();
-            }
-            catch(IOException e) {
-            }
+            this.reader.close();
         }
     }
 

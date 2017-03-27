@@ -790,6 +790,53 @@ public class DataSet {
     }
 
     /**
+     * @param seperator
+     * @return String
+     */
+    public String join(String seperator) {
+        int end = this.data.size() - 1;
+        StringBuilder buffer = new StringBuilder();
+
+        for(int i = 0; i < end; i++) {
+            this.append(buffer, this.data.get(i));
+            buffer.append(seperator);
+        }
+
+        if(end > -1) {
+            this.append(buffer, this.data.get(end));
+        }
+        return buffer.toString();
+    }
+
+    /**
+     * @param buffer
+     * @param text
+     */
+    private void append(StringBuilder buffer, String text) {
+        if(text == null) {
+            return;
+        }
+
+        if(text.indexOf('"') < 0) {
+            buffer.append(text);
+            return;
+        }
+
+        char c;
+        buffer.append("\"");
+
+        for(int i = 0, length = text.length(); i < length; i++) {
+            c = text.charAt(i);
+            buffer.append(c);
+
+            if(c == '"') {
+                buffer.append(c);
+            }
+        }
+        buffer.append("\"");
+    }
+
+    /**
      * @param tableName
      * @return String
      */

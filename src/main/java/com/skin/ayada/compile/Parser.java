@@ -15,6 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.skin.ayada.io.Stream;
 import com.skin.ayada.statement.Attribute;
 import com.skin.ayada.statement.AttributeList;
 import com.skin.ayada.statement.Expression;
