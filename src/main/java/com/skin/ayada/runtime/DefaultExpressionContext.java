@@ -17,7 +17,7 @@ import java.util.Map;
 import com.skin.ayada.Encoder;
 import com.skin.ayada.ExpressionContext;
 import com.skin.ayada.util.ClassUtil;
-import com.skin.ayada.util.MVELUtil;
+import com.skin.ayada.util.OgnlUtil;
 
 /**
  * <p>Title: DefaultExpressionContext</p>
@@ -109,7 +109,7 @@ public class DefaultExpressionContext implements ExpressionContext {
      */
     @Override
     public Object evaluate(String expression) throws Exception {
-        return MVELUtil.getValue(expression, this.getContext());
+        return OgnlUtil.getValue(expression, this.getContext());
     }
 
     /**
