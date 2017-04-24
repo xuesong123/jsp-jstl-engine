@@ -1456,7 +1456,7 @@ public class JspCompiler {
                 return "expressionContext.getString(\"" + expression + "\")";
             }
             else if(expectType == Object.class) {
-                return "expressionContext.getAttribute(\"" + expression + "\")";
+                return "expressionContext.getValue(\"" + expression + "\")";
             }
             else {
                 return "expressionContext.getValue(\"" + expression + "\", " + expectType.getName() + ".class)";

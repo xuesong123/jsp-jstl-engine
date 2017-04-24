@@ -61,6 +61,13 @@ public class DefaultTemplateContext implements TemplateContext {
     }
 
     /**
+     * @param id
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    /**
      * @return String
      */
     @Override

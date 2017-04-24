@@ -54,6 +54,7 @@ public class TemplateContextFactory {
      * @return TemplateContext
      */
     public TemplateContext create(ServletContext servletContext, Properties properties) {
+        String name = properties.getProperty("name");
         String home = properties.getProperty("home");
         String sourcePattern = properties.getProperty("sourcePattern");
         String jspWork = properties.getProperty("jspWork");
@@ -121,7 +122,8 @@ public class TemplateContextFactory {
                 logger.info("expressionFactory: " + expressionFactory.getClass().getName());
             }
 
-            TemplateContext templateContext = new DefaultTemplateContext();
+            DefaultTemplateContext templateContext = new DefaultTemplateContext();
+            templateContext.setId(name);
             templateContext.setSourceFactory(sourceFactory);
             templateContext.setTemplateFactory(templateFactory);
             templateContext.setExpressionFactory(expressionFactory);
