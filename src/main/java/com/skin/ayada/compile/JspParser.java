@@ -102,7 +102,16 @@ public class JspParser extends Parser {
         if(source == null) {
             throw new NullPointerException("source \"" + path + "\" not exists !");
         }
+        return this.parse(source, charset);
+    }
 
+    /**
+     * @param source
+     * @param charset
+     * @return Template
+     * @throws Exception
+     */
+    public Template parse(Source source, String charset) throws Exception {
         this.addDependency(source);
 
         if(source.getType() == Source.STATIC) {
@@ -117,16 +126,7 @@ public class JspParser extends Parser {
             list.add(textNode);
             return this.getTemplate(source, list, this.tagLibrary);
         }
-        return this.parse(source, charset);
-    }
 
-    /**
-     * @param source
-     * @param charset
-     * @return Template
-     * @throws Exception
-     */
-    public Template parse(Source source, String charset) throws Exception {
         InputStream inputStream = this.sourceFactory.getInputStream(source.getPath());
 
         try {
@@ -731,9 +731,9 @@ public class JspParser extends Parser {
             return;
         }
 
-        JspParser compiler = new JspParser(this.sourceFactory);
-        compiler.setTagLibrary(this.getTagLibrary());
-        Template template = compiler.parse(source, charset);
+        JspParser parser = new JspParser(this.sourceFactory);
+        parser.setTagLibrary(this.getTagLibrary());
+        Template template = parser.parse(source, charset);
         List<Node> nodes = template.getNodes();
 
         for(Node node : nodes) {
@@ -752,7 +752,7 @@ public class JspParser extends Parser {
             list.add(node);
             index++;
         }
-        this.addDependency(compiler.getDependencies());
+        this.addDependency(parser.getDependencies());
     }
 
     /**
